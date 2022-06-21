@@ -4,7 +4,7 @@ title: "API - Extension"
 menuTitle: "Extension"
 ---
 
-## Extension&nbsp;<a name="Extension" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Extension&nbsp;<a name="Extension" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Extension](#Extension)
@@ -32,7 +32,7 @@ menuTitle: "Extension"
 
 * * *
 
-### extension.init() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+init" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.init() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+init" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for initializing the controller extension after the route
 parameters have been set on this extension.
 
@@ -40,7 +40,7 @@ parameters have been set on this extension.
 
 * * *
 
-### extension.destroy() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+destroy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.destroy() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+destroy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Finalization callback, called when the controller is being discarded by
 the application. This usually happens when the user navigates to a
 different URL.
@@ -57,7 +57,7 @@ is destroyed by the garbage collector.
 
 * * *
 
-### extension.activate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+activate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.activate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+activate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for activating the extension in the UI. This is the last
 method invoked during controller (and extensions) initialization, called
 after all the promises returned from the [load](#Extension+load) method have
@@ -71,7 +71,7 @@ method completes.
 
 * * *
 
-### extension.deactivate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+deactivate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.deactivate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Extension+deactivate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for deactivating the extension in the UI. This is the first
 method invoked during extension deinitialization. This usually happens
 when the user navigates to a different URL.
@@ -86,7 +86,7 @@ resources obtained in the [activate](#Extension+activate) method.
 
 * * *
 
-### extension.load() ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Extension+load" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.load() ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Extension+load" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback the extension uses to request the resources it needs to render
 its related parts of the view. This method is invoked after the
 [init](#Extension+init) method.
@@ -114,7 +114,7 @@ code of the error.
 
 * * *
 
-### extension.update([prevParams]) ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Extension+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L124" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.update([prevParams]) ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Extension+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L124" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for updating the extension after a route update. This method
 is invoked if the current route has the `onlyUpdate` flag set to `true` and
 the current controller and view match those used by the previously active
@@ -142,7 +142,7 @@ case this method is used.
 
 * * *
 
-### extension.setState(statePatch)&nbsp;<a name="Extension+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L140" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.setState(statePatch)&nbsp;<a name="Extension+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L140" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Patches the state of the controller using this extension by using the
 provided object by copying the provided patch object fields to the
 controller's state object.
@@ -162,7 +162,7 @@ has specified by its [getAllowedStateKeys](#Extension+getAllowedStateKeys) metho
 
 * * *
 
-### extension.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Extension+getState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L147" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Extension+getState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L147" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current state of the controller using this extension.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
@@ -170,7 +170,7 @@ Returns the current state of the controller using this extension.
 
 * * *
 
-### extension.beginStateTransaction()&nbsp;<a name="Extension+beginStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.beginStateTransaction()&nbsp;<a name="Extension+beginStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Starts queueing state patches off the controller state. While the transaction
 is active every {@method setState} call has no effect on the current state.
 
@@ -181,7 +181,7 @@ return state as it was before the transaction.
 
 * * *
 
-### extension.commitStateTransaction()&nbsp;<a name="Extension+commitStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L162" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.commitStateTransaction()&nbsp;<a name="Extension+commitStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L162" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Applies queued state patches to the controller state. All patches are squashed
 and applied with one {@method setState} call.
 
@@ -189,14 +189,14 @@ and applied with one {@method setState} call.
 
 * * *
 
-### extension.cancelStateTransaction()&nbsp;<a name="Extension+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.cancelStateTransaction()&nbsp;<a name="Extension+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Cancels ongoing state transaction. Uncommited state changes are lost.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
 
 * * *
 
-### extension.setPartialState(partialStatePatch)&nbsp;<a name="Extension+setPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L177" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.setPartialState(partialStatePatch)&nbsp;<a name="Extension+setPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L177" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Patches the partial state of the extension. The extension is able
 during its load and update phase receive state from active controller
 using this extension and from previously loaded/updated extensions.
@@ -210,7 +210,7 @@ using this extension and from previously loaded/updated extensions.
 
 * * *
 
-### extension.getPartialState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Extension+getPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.getPartialState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Extension+getPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current partial state of the extension.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
@@ -218,14 +218,14 @@ Returns the current partial state of the extension.
 
 * * *
 
-### extension.clearPartialState()&nbsp;<a name="Extension+clearPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L189" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.clearPartialState()&nbsp;<a name="Extension+clearPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L189" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears the current partial state of the extension and sets it value to empty object.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
 
 * * *
 
-### extension.setPageStateManager(pageStateManager)&nbsp;<a name="Extension+setPageStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L197" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.setPageStateManager(pageStateManager)&nbsp;<a name="Extension+setPageStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L197" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the state manager used to manage the controller's state..
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
@@ -237,21 +237,21 @@ Sets the state manager used to manage the controller's state..
 
 * * *
 
-### extension.switchToStateManager()&nbsp;<a name="Extension+switchToStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L202" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.switchToStateManager()&nbsp;<a name="Extension+switchToStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L202" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Enables using PageStateManager for getting state.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
 
 * * *
 
-### extension.switchToPartialState()&nbsp;<a name="Extension+switchToPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L207" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.switchToPartialState()&nbsp;<a name="Extension+switchToPartialState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L207" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Disables using PageStateManager for getting state.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
 
 * * *
 
-### extension.setRouteParams([params])&nbsp;<a name="Extension+setRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L216" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.setRouteParams([params])&nbsp;<a name="Extension+setRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L216" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the current route parameters. This method is invoked before the
 [init](#Extension+init) method.
 
@@ -264,7 +264,7 @@ Sets the current route parameters. This method is invoked before the
 
 * * *
 
-### extension.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Extension+getRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Extension+getRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current route parameters.
 
 **Kind**: instance method of [<code>Extension</code>](#Extension)  
@@ -272,7 +272,7 @@ Returns the current route parameters.
 
 * * *
 
-### extension.getAllowedStateKeys() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Extension+getAllowedStateKeys" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/extension/Extension.js#L232" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### extension.getAllowedStateKeys() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Extension+getAllowedStateKeys" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/extension/Extension.js#L232" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the names of the state fields that may be manipulated by this
 extension. Manipulations of other fields of the state will be ignored.
 

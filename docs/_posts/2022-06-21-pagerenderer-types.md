@@ -18,28 +18,28 @@ menuTitle: "Types"
 </dd>
 </dl>
 
-## Types : <code>enum</code>&nbsp;<a name="Types" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/Types.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Types : <code>enum</code>&nbsp;<a name="Types" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/Types.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Events constants, which is firing to app.
 
 **Kind**: global enum  
 
 * * *
 
-## RENDER : <code>string</code>&nbsp;<a name="RENDER" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/Types.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## RENDER : <code>string</code>&nbsp;<a name="RENDER" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/Types.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The RENDER type is set if mounting use React.render method.
 
 **Kind**: global constant  
 
 * * *
 
-## HYDRATE : <code>string</code>&nbsp;<a name="HYDRATE" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/Types.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## HYDRATE : <code>string</code>&nbsp;<a name="HYDRATE" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/Types.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The HYDRATE type is set if mounting use React.hydrate method.
 
 **Kind**: global constant  
 
 * * *
 
-## UNMOUNT : <code>string</code>&nbsp;<a name="UNMOUNT" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/Types.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## UNMOUNT : <code>string</code>&nbsp;<a name="UNMOUNT" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/Types.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The UNMOUNT type is set if unmounting use React.unmountComponentAtNode method.
 
 **Kind**: global constant  

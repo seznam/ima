@@ -4,14 +4,14 @@ title: "API - RouteFactory"
 menuTitle: "RouteFactory"
 ---
 
-## RouteFactory&nbsp;<a name="RouteFactory" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/RouteFactory.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## RouteFactory&nbsp;<a name="RouteFactory" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/RouteFactory.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Utility factory used by router to create routes.
 
 **Kind**: global class  
 
 * * *
 
-### routeFactory.createRoute(name, pathExpression, controller, view, options) ⇒ <code>AbstractRoute</code>&nbsp;<a name="RouteFactory+createRoute" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/RouteFactory.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### routeFactory.createRoute(name, pathExpression, controller, view, options) ⇒ <code>AbstractRoute</code>&nbsp;<a name="RouteFactory+createRoute" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/RouteFactory.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create new instance of ima.core.router.AbstractRoute.
 
 **Kind**: instance method of [<code>RouteFactory</code>](#RouteFactory)  

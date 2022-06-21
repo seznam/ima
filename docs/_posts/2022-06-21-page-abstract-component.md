@@ -4,7 +4,7 @@ title: "API - AbstractComponent"
 menuTitle: "AbstractComponent"
 ---
 
-## *AbstractComponent*&nbsp;<a name="AbstractComponent" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## *AbstractComponent*&nbsp;<a name="AbstractComponent" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The base class for all view components.
 
 **Kind**: global abstract class  
@@ -35,7 +35,7 @@ Initializes the component.
 
 * * *
 
-### *abstractComponent.\_utils : <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractComponent+_utils" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.\_utils : <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractComponent+_utils" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The view utilities, initialized lazily upon first use from either
 the context, or the component's props.
 
@@ -43,7 +43,7 @@ the context, or the component's props.
 
 * * *
 
-### *abstractComponent.utils ⇒ <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractComponent+utils" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.utils ⇒ <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractComponent+utils" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the utilities for the view components. The returned value is the
 value bound to the <code>$Utils</code> object container constant.
 
@@ -52,7 +52,7 @@ value bound to the <code>$Utils</code> object container constant.
 
 * * *
 
-### *abstractComponent.localize(key, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+localize" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.localize(key, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+localize" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the localized phrase identified by the specified key. The
 placeholders in the localization phrase will be replaced by the provided
 values.
@@ -68,7 +68,7 @@ values.
 
 * * *
 
-### *abstractComponent.link(name, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+link" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.link(name, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+link" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates an absolute URL using the provided route name (see the
 <code>app/config/routes.js</code> file). The provided parameters will
 replace the placeholders in the route pattern, while the extraneous
@@ -85,7 +85,7 @@ parameters will be appended to the generated URL's query string.
 
 * * *
 
-### *abstractComponent.cssClasses(classRules, includeComponentClassName) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+cssClasses" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.cssClasses(classRules, includeComponentClassName) ⇒ <code>string</code>*&nbsp;<a name="AbstractComponent+cssClasses" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generate a string of CSS classes from the properties of the passed-in
 object that resolve to true.
 
@@ -112,7 +112,7 @@ this.cssClasses({
 
 * * *
 
-### *abstractComponent.fire(eventName, [data])*&nbsp;<a name="AbstractComponent+fire" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.fire(eventName, [data])*&nbsp;<a name="AbstractComponent+fire" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates and sends a new IMA.js DOM custom event from this component.
 
 **Kind**: instance method of [<code>AbstractComponent</code>](#AbstractComponent)  
@@ -125,7 +125,7 @@ Creates and sends a new IMA.js DOM custom event from this component.
 
 * * *
 
-### *abstractComponent.listen(eventTarget, eventName, listener)*&nbsp;<a name="AbstractComponent+listen" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.listen(eventTarget, eventName, listener)*&nbsp;<a name="AbstractComponent+listen" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener for execution whenever an IMA.js
 DOM custom event of the specified name occurs at the specified event
 target.
@@ -141,7 +141,7 @@ target.
 
 * * *
 
-### *abstractComponent.unlisten(eventTarget, eventName, listener)*&nbsp;<a name="AbstractComponent+unlisten" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/AbstractComponent.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractComponent.unlisten(eventTarget, eventName, listener)*&nbsp;<a name="AbstractComponent+unlisten" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/AbstractComponent.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters the provided event listener for an IMA.js DOM custom event
 of the specified name at the specified event target.
 

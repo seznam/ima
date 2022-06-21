@@ -4,7 +4,7 @@ title: "API - GenericError"
 menuTitle: "GenericError"
 ---
 
-## GenericError ⇐ <code>Error</code>&nbsp;<a name="GenericError" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/error/GenericError.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## GenericError ⇐ <code>Error</code>&nbsp;<a name="GenericError" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/error/GenericError.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the [Error](Error) interface, providing more advanced
 error API.
 
@@ -33,19 +33,19 @@ Initializes the generic IMA error.
 
 * * *
 
-### genericError.\_params : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="GenericError+_params" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/error/GenericError.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### genericError.\_params : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="GenericError+_params" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/error/GenericError.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The data providing additional details related to this error.
 
 **Kind**: instance property of [<code>GenericError</code>](#GenericError)  
 
 * * *
 
-### genericError.getHttpStatus()&nbsp;<a name="GenericError+getHttpStatus" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/error/GenericError.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### genericError.getHttpStatus()&nbsp;<a name="GenericError+getHttpStatus" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/error/GenericError.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>GenericError</code>](#GenericError)  
 
 * * *
 
-### genericError.getParams()&nbsp;<a name="GenericError+getParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/error/GenericError.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### genericError.getParams()&nbsp;<a name="GenericError+getParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/error/GenericError.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>GenericError</code>](#GenericError)  
 
 * * *

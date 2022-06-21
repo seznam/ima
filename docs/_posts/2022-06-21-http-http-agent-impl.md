@@ -4,7 +4,7 @@ title: "API - HttpAgentImpl"
 menuTitle: "HttpAgentImpl"
 ---
 
-## HttpAgentImpl&nbsp;<a name="HttpAgentImpl" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## HttpAgentImpl&nbsp;<a name="HttpAgentImpl" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the <code>HttpAgent</code> interface with internal caching
 of completed and ongoing HTTP requests and cookie storage.
 
@@ -81,21 +81,21 @@ http
 
 * * *
 
-### httpAgentImpl.\_proxy : <code>HttpProxy</code>&nbsp;<a name="HttpAgentImpl+_proxy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_proxy : <code>HttpProxy</code>&nbsp;<a name="HttpAgentImpl+_proxy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 HTTP proxy, used to execute the HTTP requests.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_cache : <code>Cache</code>&nbsp;<a name="HttpAgentImpl+_cache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_cache : <code>Cache</code>&nbsp;<a name="HttpAgentImpl+_cache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Internal request cache, used to cache completed request results.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_cookie : <code>CookieStorage</code>&nbsp;<a name="HttpAgentImpl+_cookie" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_cookie : <code>CookieStorage</code>&nbsp;<a name="HttpAgentImpl+_cookie" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Cookie storage, used to keep track of cookies received from the
 server and send them with the subsequent requests to the server.
 
@@ -103,75 +103,75 @@ server and send them with the subsequent requests to the server.
 
 * * *
 
-### httpAgentImpl.\_cacheOptions : <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="HttpAgentImpl+_cacheOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L73" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_cacheOptions : <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="HttpAgentImpl+_cacheOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L73" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Cache options.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_defaultRequestOptions : <code>Object</code>&nbsp;<a name="HttpAgentImpl+_defaultRequestOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_defaultRequestOptions : <code>Object</code>&nbsp;<a name="HttpAgentImpl+_defaultRequestOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Default request options.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_Helper : <code>vendor.$Helper</code>&nbsp;<a name="HttpAgentImpl+_Helper" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L96" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_Helper : <code>vendor.$Helper</code>&nbsp;<a name="HttpAgentImpl+_Helper" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L96" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tha IMA.js helper methods.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_internalCacheOfPromises : <code>Map.&lt;string, Promise.&lt;{status: number, body: \*, params: {method: string, url: string, transformedUrl: string, data: Object.&lt;string, (boolean\|number\|string)&gt;}, headers: Object.&lt;string, string&gt;, cached: boolean}&gt;&gt;</code>&nbsp;<a name="HttpAgentImpl+_internalCacheOfPromises" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L114" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_internalCacheOfPromises : <code>Map.&lt;string, Promise.&lt;{status: number, body: \*, params: {method: string, url: string, transformedUrl: string, data: Object.&lt;string, (boolean\|number\|string)&gt;}, headers: Object.&lt;string, string&gt;, cached: boolean}&gt;&gt;</code>&nbsp;<a name="HttpAgentImpl+_internalCacheOfPromises" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L114" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Internal request cache, used to cache ongoing requests.
 
 **Kind**: instance property of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.get()&nbsp;<a name="HttpAgentImpl+get" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.get()&nbsp;<a name="HttpAgentImpl+get" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.post()&nbsp;<a name="HttpAgentImpl+post" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L127" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.post()&nbsp;<a name="HttpAgentImpl+post" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L127" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.put()&nbsp;<a name="HttpAgentImpl+put" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L139" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.put()&nbsp;<a name="HttpAgentImpl+put" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L139" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.patch()&nbsp;<a name="HttpAgentImpl+patch" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.patch()&nbsp;<a name="HttpAgentImpl+patch" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.delete()&nbsp;<a name="HttpAgentImpl+delete" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.delete()&nbsp;<a name="HttpAgentImpl+delete" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.getCacheKey()&nbsp;<a name="HttpAgentImpl+getCacheKey" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.getCacheKey()&nbsp;<a name="HttpAgentImpl+getCacheKey" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.setDefaultHeader()&nbsp;<a name="HttpAgentImpl+setDefaultHeader" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.setDefaultHeader()&nbsp;<a name="HttpAgentImpl+setDefaultHeader" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.clearDefaultHeaders()&nbsp;<a name="HttpAgentImpl+clearDefaultHeaders" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L193" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.clearDefaultHeaders()&nbsp;<a name="HttpAgentImpl+clearDefaultHeaders" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L193" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
 
 * * *
 
-### httpAgentImpl.\_clone(value) ⇒ <code>\*</code>&nbsp;<a name="HttpAgentImpl+_clone" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L207" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_clone(value) ⇒ <code>\*</code>&nbsp;<a name="HttpAgentImpl+_clone" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L207" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Attempts to clone the provided value, if possible. Values that cannot be
 cloned (e.g. promises) will be simply returned.
 
@@ -186,7 +186,7 @@ cloned (e.g. promises) will be simply returned.
 
 * * *
 
-### httpAgentImpl.\_requestWithCheckCache(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_requestWithCheckCache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L230" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_requestWithCheckCache(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_requestWithCheckCache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L230" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Check cache and if data isnt available then make real request.
 
 **Kind**: instance method of [<code>HttpAgentImpl</code>](#HttpAgentImpl)  
@@ -203,7 +203,7 @@ Check cache and if data isnt available then make real request.
 
 * * *
 
-### httpAgentImpl.\_getCachedData(method, url, data) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_getCachedData" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L260" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_getCachedData(method, url, data) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_getCachedData" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L260" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether an ongoing or completed HTTP request for the specified URL
 and data is present in the internal cache and, if it is, the method
 returns a promise that resolves to the response body parsed as JSON.
@@ -225,7 +225,7 @@ cache.
 
 * * *
 
-### httpAgentImpl.\_request(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_request" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L292" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_request(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_request" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L292" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends a new HTTP request using the specified method to the specified
 url. The request will carry the provided data as query parameters if the
 HTTP method is GET, but the data will be sent as request body for any
@@ -245,7 +245,7 @@ other request method.
 
 * * *
 
-### httpAgentImpl.\_proxyResolved(response) ⇒ <code>HttpAgent~Response</code>&nbsp;<a name="HttpAgentImpl+_proxyResolved" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L314" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_proxyResolved(response) ⇒ <code>HttpAgent~Response</code>&nbsp;<a name="HttpAgentImpl+_proxyResolved" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L314" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles successful completion of an HTTP request by the HTTP proxy.
 
 The method also updates the internal cookie storage with the cookies
@@ -261,7 +261,7 @@ received from the server.
 
 * * *
 
-### httpAgentImpl.\_proxyRejected(error) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_proxyRejected" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L364" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_proxyRejected(error) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpAgentImpl+_proxyRejected" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L364" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles rejection of the HTTP request by the HTTP proxy. The method
 tests whether there are any remaining tries for the request, and if
 there are any, it attempts re-send the request.
@@ -283,7 +283,7 @@ left.
 
 * * *
 
-### httpAgentImpl.\_prepareOptions(options) ⇒ <code>HttpAgent~RequestOptions</code>&nbsp;<a name="HttpAgentImpl+_prepareOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L394" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_prepareOptions(options) ⇒ <code>HttpAgent~RequestOptions</code>&nbsp;<a name="HttpAgentImpl+_prepareOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L394" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Prepares the provided request options object by filling in missing
 options with default values and addding extra options used internally.
 
@@ -299,7 +299,7 @@ options with default values and addding extra options used internally.
 
 * * *
 
-### httpAgentImpl.\_getCacheKeySuffix(method, url, data) ⇒ <code>string</code>&nbsp;<a name="HttpAgentImpl+_getCacheKeySuffix" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L426" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_getCacheKeySuffix(method, url, data) ⇒ <code>string</code>&nbsp;<a name="HttpAgentImpl+_getCacheKeySuffix" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L426" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates cache key suffix for an HTTP request to the specified URL with
 the specified data.
 
@@ -316,7 +316,7 @@ the specified data.
 
 * * *
 
-### httpAgentImpl.\_setCookiesFromResponse(agentResponse)&nbsp;<a name="HttpAgentImpl+_setCookiesFromResponse" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L444" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_setCookiesFromResponse(agentResponse)&nbsp;<a name="HttpAgentImpl+_setCookiesFromResponse" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L444" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets all cookies from the <code>Set-Cookie</code> response header to the
 cookie storage.
 
@@ -329,7 +329,7 @@ cookie storage.
 
 * * *
 
-### httpAgentImpl.\_saveAgentResponseToCache(agentResponse)&nbsp;<a name="HttpAgentImpl+_saveAgentResponseToCache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/http/HttpAgentImpl.js#L466" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgentImpl.\_saveAgentResponseToCache(agentResponse)&nbsp;<a name="HttpAgentImpl+_saveAgentResponseToCache" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/http/HttpAgentImpl.js#L466" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Saves the server response to the cache to be used as the result of the
 next request of the same properties.
 

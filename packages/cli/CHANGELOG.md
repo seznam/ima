@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [18.0.0-rc.2](https://github.com/seznam/ima/compare/v18.0.0-rc.1...v18.0.0-rc.2) (2022-06-21)
+
+
+### Bug Fixes
+
+* 🐛 Removed rogue console.log ([8fa0c5b](https://github.com/seznam/ima/commit/8fa0c5b960b5936cc557748fe325afb15a06d243))
+
+
+
+
+
 # [18.0.0-rc.1](https://github.com/seznam/ima/compare/v18.0.0-rc.0...v18.0.0-rc.1) (2022-06-21)
 
 

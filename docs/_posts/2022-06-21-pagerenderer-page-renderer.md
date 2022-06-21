@@ -4,7 +4,7 @@ title: "API - PageRenderer"
 menuTitle: "PageRenderer"
 ---
 
-## PageRenderer&nbsp;<a name="PageRenderer" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/PageRenderer.js#L5" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageRenderer&nbsp;<a name="PageRenderer" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/PageRenderer.js#L5" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The page renderer is a utility for rendering the page at either the
 client-side or the server-side, handling the differences in the environment.
 
@@ -19,7 +19,7 @@ client-side or the server-side, handling the differences in the environment.
 
 * * *
 
-### pageRenderer.mount(controller, view, pageResources, routeOptions) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, ?&gt;}&gt;</code>&nbsp;<a name="PageRenderer+mount" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/PageRenderer.js#L60" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRenderer.mount(controller, view, pageResources, routeOptions) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, ?&gt;}&gt;</code>&nbsp;<a name="PageRenderer+mount" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/PageRenderer.js#L60" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Renders the page using the provided controller and view. The actual
 behavior of this method differs at the client-side and the at
 server-side in the following way:
@@ -56,7 +56,7 @@ invoked at the client.
 
 * * *
 
-### pageRenderer.update(controller, view, resourcesUpdate, routeOptions) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, \*&gt;}&gt;</code>&nbsp;<a name="PageRenderer+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/PageRenderer.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRenderer.update(controller, view, resourcesUpdate, routeOptions) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, \*&gt;}&gt;</code>&nbsp;<a name="PageRenderer+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/PageRenderer.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles update of the current route that does not replace the current
 controller and view.
 
@@ -83,7 +83,7 @@ resolved.
 
 * * *
 
-### pageRenderer.unmount()&nbsp;<a name="PageRenderer+unmount" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/PageRenderer.js#L114" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRenderer.unmount()&nbsp;<a name="PageRenderer+unmount" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/PageRenderer.js#L114" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Unmounts the view from the DOM.
 
 This method has no effect at the server-side.
@@ -92,7 +92,7 @@ This method has no effect at the server-side.
 
 * * *
 
-### pageRenderer.setState([state])&nbsp;<a name="PageRenderer+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/page/renderer/PageRenderer.js#L124" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRenderer.setState([state])&nbsp;<a name="PageRenderer+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/page/renderer/PageRenderer.js#L124" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the provided state to the currently rendered view.
 
 This method has no effect at the server-side.

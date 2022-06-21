@@ -4,7 +4,7 @@ title: "API - Controller"
 menuTitle: "Controller"
 ---
 
-## Controller&nbsp;<a name="Controller" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Controller&nbsp;<a name="Controller" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Controller](#Controller)
@@ -30,7 +30,7 @@ menuTitle: "Controller"
 
 * * *
 
-### controller.init() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+init" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.init() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+init" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for initializing the controller after the route parameters have
 been set on this controller.
 
@@ -38,7 +38,7 @@ been set on this controller.
 
 * * *
 
-### controller.destroy() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+destroy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.destroy() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+destroy" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Finalization callback, called when the controller is being discarded by
 the application. This usually happens when the user navigates to a
 different URL.
@@ -55,7 +55,7 @@ is destroyed by the garbage collector.
 
 * * *
 
-### controller.activate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+activate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.activate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+activate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for activating the controller in the UI. This is the last
 method invoked during controller initialization, called after all the
 promises returned from the [load](#Controller+load) method have been
@@ -69,7 +69,7 @@ method completes.
 
 * * *
 
-### controller.deactivate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+deactivate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L62" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.deactivate() ⇒ <code>Promise.&lt;undefined&gt;</code> \| <code>undefined</code>&nbsp;<a name="Controller+deactivate" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L62" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for deactivating the controller in the UI. This is the first
 method invoked during controller deinitialization. This usually happens
 when the user navigates to a different URL.
@@ -84,7 +84,7 @@ resources obtained in the [activate](#Controller+activate) method.
 
 * * *
 
-### controller.load() ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+load" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.load() ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+load" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback the controller uses to request the resources it needs to render
 its view. This method is invoked after the [init](#Controller+init)
 method.
@@ -122,7 +122,7 @@ code of the error.
 
 * * *
 
-### controller.update([prevParams]) ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.update([prevParams]) ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> \| <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+update" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for updating the controller after a route update. This method
 is invoked if the current route has the `onlyUpdate` flag set to `true` and
 the current controller and view match those used by the previously active
@@ -150,7 +150,7 @@ in case this method is used.
 
 * * *
 
-### controller.setState(statePatch)&nbsp;<a name="Controller+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L147" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setState(statePatch)&nbsp;<a name="Controller+setState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L147" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Patches the state of this controller using the provided object by
 copying the provided patch object fields to the controller's state
 object.
@@ -176,7 +176,7 @@ method.
 
 * * *
 
-### controller.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Controller+getState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L154" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Controller+getState" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L154" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the controller's current state.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -184,7 +184,7 @@ Returns the controller's current state.
 
 * * *
 
-### controller.beginStateTransaction()&nbsp;<a name="Controller+beginStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.beginStateTransaction()&nbsp;<a name="Controller+beginStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Starts queueing state patches off the controller state. While the transaction
 is active every {@method setState} call has no effect on the current state.
 
@@ -195,7 +195,7 @@ return state as it was before the transaction.
 
 * * *
 
-### controller.commitStateTransaction()&nbsp;<a name="Controller+commitStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L169" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.commitStateTransaction()&nbsp;<a name="Controller+commitStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L169" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Applies queued state patches to the controller state. All patches are squashed
 and applied with one {@method setState} call.
 
@@ -203,14 +203,14 @@ and applied with one {@method setState} call.
 
 * * *
 
-### controller.cancelStateTransaction()&nbsp;<a name="Controller+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L174" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.cancelStateTransaction()&nbsp;<a name="Controller+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L174" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Cancels ongoing state transaction. Uncommited state changes are lost.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
 
 * * *
 
-### controller.addExtension(extension) ⇒ [<code>Controller</code>](#Controller)&nbsp;<a name="Controller+addExtension" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.addExtension(extension) ⇒ [<code>Controller</code>](#Controller)&nbsp;<a name="Controller+addExtension" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Adds the provided extension to this controller. All extensions should be
 added to the controller before the [init](#Controller+init) method is
 invoked.
@@ -225,7 +225,7 @@ invoked.
 
 * * *
 
-### controller.getExtensions() ⇒ <code>Array.&lt;Extension&gt;</code>&nbsp;<a name="Controller+getExtensions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getExtensions() ⇒ <code>Array.&lt;Extension&gt;</code>&nbsp;<a name="Controller+getExtensions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the controller's extensions.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -233,7 +233,7 @@ Returns the controller's extensions.
 
 * * *
 
-### controller.setMetaParams(loadedResources, metaManager, router, dictionary, settings)&nbsp;<a name="Controller+setMetaParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L208" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setMetaParams(loadedResources, metaManager, router, dictionary, settings)&nbsp;<a name="Controller+setMetaParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L208" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback used to configure the meta attribute manager. The method is
 called after the the controller's state has been patched with the all
 loaded resources and the view has been rendered.
@@ -251,7 +251,7 @@ loaded resources and the view has been rendered.
 
 * * *
 
-### controller.setRouteParams([params])&nbsp;<a name="Controller+setRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L216" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setRouteParams([params])&nbsp;<a name="Controller+setRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L216" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the current route parameters. This method is invoked before the
 [init](#Controller+init) method.
 
@@ -264,7 +264,7 @@ Sets the current route parameters. This method is invoked before the
 
 * * *
 
-### controller.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Controller+getRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Controller+getRouteParams" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current route parameters.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -272,7 +272,7 @@ Returns the current route parameters.
 
 * * *
 
-### controller.setPageStateManager(pageStateManager)&nbsp;<a name="Controller+setPageStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L235" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setPageStateManager(pageStateManager)&nbsp;<a name="Controller+setPageStateManager" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L235" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the page state manager. The page state manager manages the
 controller's state. The state manager can be set to `null` if this
 controller loses the right to modify the state of the current page (e.g.
@@ -288,7 +288,7 @@ controller).
 
 * * *
 
-### controller.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Controller+getHttpStatus" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/controller/Controller.js#L243" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Controller+getHttpStatus" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/controller/Controller.js#L243" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the HTTP status code to send to the client, should the
 controller be used at the server-side.
 

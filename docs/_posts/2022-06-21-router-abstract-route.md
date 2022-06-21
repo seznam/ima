@@ -22,7 +22,7 @@ forward slashes from a path expression or a URL path.</p>
 </dd>
 </dl>
 
-## AbstractRoute&nbsp;<a name="AbstractRoute" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## AbstractRoute&nbsp;<a name="AbstractRoute" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Utility for representing and manipulating a single route in the router's
 configuration.
 
@@ -69,7 +69,7 @@ Initializes the route.
 
 * * *
 
-### abstractRoute.\_name : <code>string</code>&nbsp;<a name="AbstractRoute+_name" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L190" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.\_name : <code>string</code>&nbsp;<a name="AbstractRoute+_name" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L190" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The unique name of this route, identifying it among the rest of the
 routes in the application.
 
@@ -77,7 +77,7 @@ routes in the application.
 
 * * *
 
-### abstractRoute.\_pathExpression : <code>any</code>&nbsp;<a name="AbstractRoute+_pathExpression" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L198" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.\_pathExpression : <code>any</code>&nbsp;<a name="AbstractRoute+_pathExpression" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L198" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Path expression used in route matching, to generate valid path with
 provided params and parsing params from current path.
 
@@ -85,7 +85,7 @@ provided params and parsing params from current path.
 
 * * *
 
-### abstractRoute.\_controller : <code>string</code>&nbsp;<a name="AbstractRoute+_controller" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L206" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.\_controller : <code>string</code>&nbsp;<a name="AbstractRoute+_controller" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L206" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The full name of Object Container alias identifying the controller
 associated with this route.
 
@@ -93,7 +93,7 @@ associated with this route.
 
 * * *
 
-### abstractRoute.\_view : <code>React.Component</code>&nbsp;<a name="AbstractRoute+_view" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L214" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.\_view : <code>React.Component</code>&nbsp;<a name="AbstractRoute+_view" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L214" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The full name or Object Container alias identifying the view class
 associated with this route.
 
@@ -101,14 +101,14 @@ associated with this route.
 
 * * *
 
-### abstractRoute.\_options : <code>Object</code>&nbsp;<a name="AbstractRoute+_options" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L238" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.\_options : <code>Object</code>&nbsp;<a name="AbstractRoute+_options" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L238" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The route additional options.
 
 **Kind**: instance property of [<code>AbstractRoute</code>](#AbstractRoute)  
 
 * * *
 
-### abstractRoute.getName() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getName" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L262" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.getName() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getName" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L262" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the unique identifying name of this route.
 
 **Kind**: instance method of [<code>AbstractRoute</code>](#AbstractRoute)  
@@ -116,7 +116,7 @@ Returns the unique identifying name of this route.
 
 * * *
 
-### abstractRoute.getController() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getController" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L273" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.getController() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getController" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L273" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the full name of the controller to use when this route is
 matched by the current URL, or an Object Container-registered alias of
 the controller.
@@ -126,7 +126,7 @@ the controller.
 
 * * *
 
-### abstractRoute.getView() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getView" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L284" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.getView() ⇒ <code>string</code>&nbsp;<a name="AbstractRoute+getView" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L284" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the full name of the view class or an Object
 Container-registered alias for the view class, representing the view to
 use when this route is matched by the current URL.
@@ -136,14 +136,14 @@ use when this route is matched by the current URL.
 
 * * *
 
-### abstractRoute.getOptions() ⇒ <code>Object</code>&nbsp;<a name="AbstractRoute+getOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L310" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.getOptions() ⇒ <code>Object</code>&nbsp;<a name="AbstractRoute+getOptions" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L310" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return route additional options.
 
 **Kind**: instance method of [<code>AbstractRoute</code>](#AbstractRoute)  
 
 * * *
 
-### abstractRoute.getPathExpression() ⇒ <code>any</code>&nbsp;<a name="AbstractRoute+getPathExpression" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L320" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractRoute.getPathExpression() ⇒ <code>any</code>&nbsp;<a name="AbstractRoute+getPathExpression" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L320" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Path expression used in route matching, to generate valid path with
 provided params and parsing params from current path.
 
@@ -152,7 +152,7 @@ provided params and parsing params from current path.
 
 * * *
 
-### *abstractRoute.toPath([params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractRoute+toPath" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L338" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRoute.toPath([params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractRoute+toPath" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L338" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates the URL and query parts of a URL by substituting the route's
 parameter placeholders by the provided parameter value.
 
@@ -171,7 +171,7 @@ placeholders will be appended as the query string.
 
 * * *
 
-### *abstractRoute.matches(path) ⇒ <code>boolean</code>*&nbsp;<a name="AbstractRoute+matches" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L353" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRoute.matches(path) ⇒ <code>boolean</code>*&nbsp;<a name="AbstractRoute+matches" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L353" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the provided URL path matches this route. The provided
 path may contain the query.
 
@@ -185,7 +185,7 @@ path may contain the query.
 
 * * *
 
-### *abstractRoute.extractParameters(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>*&nbsp;<a name="AbstractRoute+extractParameters" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L373" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRoute.extractParameters(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>*&nbsp;<a name="AbstractRoute+extractParameters" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L373" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extracts the parameter values from the provided path. The method
 extracts both the in-path parameters and parses the query, allowing the
 query parameters to override the in-path parameters.
@@ -204,7 +204,7 @@ route.
 
 * * *
 
-### AbstractRoute.pairsToQuery([pairs]) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.pairsToQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### AbstractRoute.pairsToQuery([pairs]) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.pairsToQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 TODO IMA@18 remove static method
 
 Converts array of pairs (tuples) into valid URI query component.
@@ -226,7 +226,7 @@ pairsToQuery(pairs); // => "?a=true&hello%20world=123"
 
 * * *
 
-### AbstractRoute.paramsToQuery(params)&nbsp;<a name="AbstractRoute.paramsToQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### AbstractRoute.paramsToQuery(params)&nbsp;<a name="AbstractRoute.paramsToQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 TODO IMA@18 remove static method
 
 Converts object of key/value pairs to URI query,
@@ -241,7 +241,7 @@ which can be appended to url.
 
 * * *
 
-### AbstractRoute.getQuery(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="AbstractRoute.getQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### AbstractRoute.getQuery(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="AbstractRoute.getQuery" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 TODO IMA@18 remove static method
 
 Extracts and decodes the query parameters from the provided URL path and
@@ -257,7 +257,7 @@ query.
 
 * * *
 
-### AbstractRoute.decodeURIParameter(parameterValue) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.decodeURIParameter" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L128" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### AbstractRoute.decodeURIParameter(parameterValue) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.decodeURIParameter" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L128" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 TODO IMA@18 remove static method
 
 Decoding parameters.
@@ -272,7 +272,7 @@ Decoding parameters.
 
 * * *
 
-### AbstractRoute.getTrimmedPath(path) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.getTrimmedPath" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### AbstractRoute.getTrimmedPath(path) ⇒ <code>string</code>&nbsp;<a name="AbstractRoute.getTrimmedPath" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 TODO IMA@18 remove static method
 
 Trims the trailing forward slash from the provided URL path.
@@ -287,7 +287,7 @@ Trims the trailing forward slash from the provided URL path.
 
 * * *
 
-## LOOSE\_SLASHES\_REGEXP : <code>RegExp</code>&nbsp;<a name="LOOSE_SLASHES_REGEXP" href="https://github.com/seznam/ima/blob/v18.0.0-rc.1/packages/core/src/router/AbstractRoute.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## LOOSE\_SLASHES\_REGEXP : <code>RegExp</code>&nbsp;<a name="LOOSE_SLASHES_REGEXP" href="https://github.com/seznam/ima/blob/v18.0.0-rc.2/packages/core/src/router/AbstractRoute.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match and remove the starting and trailing
 forward slashes from a path expression or a URL path.
 
