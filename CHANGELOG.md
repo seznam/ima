@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [18.0.0-rc.1](https://github.com/seznam/ima/compare/v18.0.0-rc.0...v18.0.0-rc.1) (2022-06-21)
+
+
+### Bug Fixes
+
+* 🐛 Fixed issue with displaying compile errors in overlay ([#210](https://github.com/seznam/ima/issues/210)) ([0e8ba96](https://github.com/seznam/ima/commit/0e8ba9697f8f0ac1cca223766e858e5d8ba5fff8))
+* 🐛 Fixed PostCSS webpack plugins source maps handling ([#209](https://github.com/seznam/ima/issues/209)) ([fe6af03](https://github.com/seznam/ima/commit/fe6af038f091b6929af872ecae4afe7f5e84d78e))
+
+
+### Features
+
+* 🎸 Kill already running app on the same port before launch ([#213](https://github.com/seznam/ima/issues/213)) ([3790164](https://github.com/seznam/ima/commit/3790164bd015f6444943fe76b8dc76d0da6f688d))
+* 🎸 Node 18 native fetch support ([#212](https://github.com/seznam/ima/issues/212)) ([69df0a3](https://github.com/seznam/ima/commit/69df0a3bf334217b051f2cb261adc572f0e5093c))
+
+
+
+
+
 # [18.0.0-rc.0](https://github.com/seznam/ima/compare/v17.12.3...v18.0.0-rc.0) (2022-05-26)
 
 
