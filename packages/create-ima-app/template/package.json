@@ -30,7 +30,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "prettier": "^2.6.0",
-    "react-testing-library-shallow": "0.0.1"
+    "react-testing-library-shallow": "0.0.2"
   },
   "dependencies": {
     "@ima/core": "18.0.0-rc.1",
