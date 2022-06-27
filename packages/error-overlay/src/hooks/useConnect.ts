@@ -1,6 +1,5 @@
 import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { useContext, useEffect, useState } from 'react';
-import { SourceMapConsumer } from 'source-map';
 
 import { OverlayContext } from '@/components';
 import { SourceStorage } from '@/entities';
@@ -20,12 +19,6 @@ function useConnect(serverError: string | null) {
 
   // Subscribe to HMR events
   useEffect(() => {
-    // Needed to enable source map parsing
-    // @ts-expect-error: Not available in typings
-    SourceMapConsumer.initialize({
-      'lib/mappings.wasm': `${publicUrl}/__error-overlay-static/mappings.wasm`,
-    });
-
     // Parse server error
     (async () => {
       if (!serverError) {
@@ -122,7 +115,7 @@ function useConnect(serverError: string | null) {
             });
           }
 
-          // Cleanup wasm allocated sourcemaps
+          // Cleanup sources to force latest on next load
           sourceStorage.cleanup();
         } catch (err) {
           console.error('Unable to parse an error in ima-error-overlay.');

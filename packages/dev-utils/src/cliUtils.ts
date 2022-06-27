@@ -2,7 +2,7 @@ import fs from 'fs';
 
 import chalk from 'chalk';
 import { highlight, fromJson } from 'cli-highlight';
-import { SourceMapConsumer } from 'source-map';
+import { SourceMapConsumer, RawSourceMap } from 'source-map-js';
 import * as stackTraceParser from 'stacktrace-parser';
 import { StatsError } from 'webpack';
 
@@ -41,31 +41,28 @@ async function getSource(
 
     // Try to parse original content
     if (sourceMapUrl && fs.existsSync(sourceMapUrl)) {
-      const rawSourceMap = await fs.promises.readFile(sourceMapUrl, 'utf8');
+      const rawSourceMap = JSON.parse(
+        await fs.promises.readFile(sourceMapUrl, 'utf8')
+      ) as RawSourceMap;
 
-      sourceLines = await SourceMapConsumer.with(
-        rawSourceMap,
-        null,
-        consumer => {
-          const orgPosition = consumer.originalPositionFor({
-            column,
-            line,
-          });
+      const sourceMap = await new SourceMapConsumer(rawSourceMap);
+      const orgPosition = sourceMap.originalPositionFor({
+        column,
+        line,
+      });
 
-          if (orgPosition.source === null || orgPosition.line === null) {
-            return [];
-          }
+      if (orgPosition.source === null || orgPosition.line === null) {
+        return [];
+      }
 
-          const orgSource = consumer.sourceContentFor(orgPosition.source);
+      const orgSource = sourceMap.sourceContentFor(orgPosition.source);
 
-          if (!orgSource) {
-            return [];
-          }
+      if (!orgSource) {
+        return [];
+      }
 
-          // Create source fragment for original content
-          return createSourceFragment(orgPosition.line, orgSource + '', 4);
-        }
-      );
+      // Create source fragment for original content
+      sourceLines = createSourceFragment(orgPosition.line, orgSource + '', 4);
     }
   }
 

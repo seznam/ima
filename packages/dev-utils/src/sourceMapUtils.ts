@@ -2,6 +2,7 @@ import { RE_SOURCE_MAPPING_URL } from './helpers';
 
 /**
  * Extracts sourceMappingURL from the provided file contents.
+ * Based on https://github.com/facebook/create-react-app/blob/main/packages/react-error-overlay/src/utils/getSourceMap.js#L79.
  *
  * @param {string} fileUri The uri of the source file.
  * @param {string} fileContents Source file file contents.
