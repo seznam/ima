@@ -1,5 +1,5 @@
 import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
-import { RawSourceMap, SourceMapConsumer } from 'source-map';
+import { RawSourceMap, SourceMapConsumer } from 'source-map-js';
 
 interface SourceStorageEntry {
   rootDir?: string;
@@ -79,19 +79,9 @@ class SourceStorage {
   }
 
   /**
-   * Empties loaded sources and destroys allocated source maps.
+   * Empties loaded sources maps.
    */
   async cleanup(): Promise<void> {
-    for (const source of this._sourceStorage.values()) {
-      const loadedSource = await source;
-
-      if (!loadedSource || !loadedSource.sourceMap) {
-        continue;
-      }
-
-      loadedSource.sourceMap?.destroy();
-    }
-
     this._sourceStorage.clear();
   }
 

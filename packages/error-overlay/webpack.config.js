@@ -1,7 +1,4 @@
-const path = require('path');
-
 const CompressionPlugin = require('compression-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 
 const { createWebpackConfig } = require('../../createWebpackConfig');
 
@@ -19,16 +16,6 @@ module.exports = createWebpackConfig(baseConfig => {
         },
         threshold: 0,
         minRatio: 0.95,
-      }),
-      new CopyPlugin({
-        patterns: [
-          {
-            from: path.join(
-              path.dirname(require.resolve('source-map')),
-              'lib/mappings.wasm'
-            ),
-          },
-        ],
       }),
     ].filter(Boolean),
   };
