@@ -102,7 +102,7 @@ const dev: HandlerFn = async args => {
     await Promise.all([
       kill(environment.$Server.port),
       kill(devServerConfig.port),
-    ]).then(data => console.log(data));
+    ]);
 
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
