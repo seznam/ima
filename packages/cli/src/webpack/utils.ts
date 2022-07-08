@@ -179,7 +179,6 @@ function createCacheKey(
   hash.update(
     JSON.stringify({
       experimentsSwc: imaConfig.experiments?.swc,
-      experimentsSwcMinimizer: imaConfig.experiments?.swcMinimizer,
       experimentsCss: imaConfig.experiments?.css,
       command: ctx.command,
       forceSPA: ctx.forceSPA,
@@ -223,8 +222,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     imageInlineSizeLimit: 8192,
     watchOptions: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
-      followSymlinks: true,
-      aggregateTimeout: 80,
+      aggregateTimeout: 5,
     },
     babel: async config => config,
     swc: async config => config,

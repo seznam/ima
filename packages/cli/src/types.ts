@@ -195,7 +195,6 @@ export type ImaConfig = {
    */
   experiments?: {
     swc?: boolean; // Enables swc instead of babel (true by default)
-    swcMinimizer?: boolean; // Enables swc minimizer
     css?: boolean; // Enables webpack native CSS support
   };
 };

@@ -211,9 +211,13 @@ export default async (
 
         return `${baseFolder}/${fileNameParts.join('.')}`;
       },
+      chunkFilename: () =>
+        isServer
+          ? `server/chunk.[id].js`
+          : `static/${isEsVersion ? 'js.es' : 'js'}/chunk.[id].js`,
       cssFilename: ({ chunk }) =>
         `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
-      cssChunkFilename: `static/css/[id].css`,
+      cssChunkFilename: `static/css/chunk.[id].css`,
       publicPath: ctx.publicPath ?? imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
@@ -239,11 +243,9 @@ export default async (
       minimize: ctx.command === 'build' && !isServer,
       minimizer: [
         new TerserPlugin({
-          minify: imaConfig.experiments?.swcMinimizer
-            ? TerserPlugin.swcMinify
-            : TerserPlugin.terserMinify,
+          minify: TerserPlugin.swcMinify,
           terserOptions: {
-            ecma: isServer || isEsVersion ? 2016 : 5,
+            ecma: isServer || isEsVersion ? 2020 : 5,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -253,8 +255,8 @@ export default async (
         }),
         new CssMinimizerPlugin(),
       ],
-      moduleIds: 'named',
-      chunkIds: 'named',
+      moduleIds: 'deterministic',
+      chunkIds: 'deterministic',
       ...(!isServer && { runtimeChunk: 'single' }),
       splitChunks: {
         ...(isDevEnv && {
@@ -264,6 +266,7 @@ export default async (
               // Split only JS files
               test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
               name: 'vendors',
+              enforce: true,
               chunks: 'all',
             },
           },
@@ -354,7 +357,14 @@ export default async (
                    */
                   {
                     test: /\.(js|mjs|cjs)$/,
-                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+                    exclude: [
+                      /\bcore-js\b/,
+                      /\bwebpack\/buildin\b/,
+                      /\bcss-loader\b/,
+                      /\bmini-css-extract-plugin\b/,
+                      /\breact-dom-server\b/,
+                      appDir,
+                    ],
                     use: [
                       !isServer && {
                         loader: require.resolve('swc-loader'),
@@ -363,9 +373,15 @@ export default async (
                             targets,
                             mode: 'usage',
                             coreJs: '3.22.7',
+                            bugfixes: true,
                           },
                           module: {
-                            type: 'commonjs',
+                            type: 'es6',
+                          },
+                          jsc: {
+                            parser: {
+                              syntax: 'ecmascript',
+                            },
                           },
                           sourceMaps: useSourceMaps,
                           inlineSourcesContent: useSourceMaps,
@@ -389,9 +405,10 @@ export default async (
                           mode: 'usage',
                           coreJs: '3.22.7',
                           shippedProposals: true,
+                          bugfixes: true,
                         },
                         module: {
-                          type: 'commonjs',
+                          type: 'es6',
                         },
                         jsc: {
                           parser: {

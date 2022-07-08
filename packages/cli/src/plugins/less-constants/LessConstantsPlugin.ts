@@ -104,7 +104,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
     return new Promise((resolve, reject) => {
       webpack(
         {
-          target: 'node16',
+          target: 'node18',
           mode: 'none',
           output: {
             path: outputDir,
