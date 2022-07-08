@@ -357,7 +357,14 @@ export default async (
                    */
                   {
                     test: /\.(js|mjs|cjs)$/,
-                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+                    exclude: [
+                      /\bcore-js\b/,
+                      /\bwebpack\/buildin\b/,
+                      /\bcss-loader\b/,
+                      /\bmini-css-extract-plugin\b/,
+                      /\breact-dom-server\b/,
+                      appDir,
+                    ],
                     use: [
                       !isServer && {
                         loader: require.resolve('swc-loader'),
@@ -369,7 +376,7 @@ export default async (
                             bugfixes: true,
                           },
                           module: {
-                            type: 'commonjs',
+                            type: 'es6',
                           },
                           jsc: {
                             parser: {
