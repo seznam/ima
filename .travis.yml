@@ -1,9 +1,11 @@
 language: node_js
 node_js:
-  - "18"
+  - 18
 
 install:
   - npm ci
+
+dist: focal
 
 jobs:
   include:
