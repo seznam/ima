@@ -64,6 +64,6 @@ We are following [Conventional Commits Specification](https://www.conventionalco
 
 ### Set up the dev environment
 
-Our dev stack expects `node==16` and `npm>=17`.
+Our dev stack expects `node>=18` and `npm>=7`.
 
 To set up, simply run `npm install` from the repo root.
