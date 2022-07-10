@@ -11,6 +11,6 @@ declare global {
 export interface ParsedError {
   name: string;
   message: string;
-  type: 'compile' | 'runtime';
+  type?: 'compile' | 'runtime';
   frames: StackFrame[];
 }

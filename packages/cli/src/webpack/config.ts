@@ -255,8 +255,8 @@ export default async (
         }),
         new CssMinimizerPlugin(),
       ],
-      moduleIds: 'deterministic',
-      chunkIds: 'deterministic',
+      moduleIds: 'named',
+      chunkIds: 'named',
       ...(!isServer && { runtimeChunk: 'single' }),
       splitChunks: {
         ...(isDevEnv && {
@@ -376,7 +376,7 @@ export default async (
                             bugfixes: true,
                           },
                           module: {
-                            type: 'es6',
+                            type: 'commonjs',
                           },
                           jsc: {
                             parser: {

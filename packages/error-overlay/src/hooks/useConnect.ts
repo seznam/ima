@@ -6,6 +6,8 @@ import { SourceStorage } from '@/entities';
 import { ParsedError } from '@/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
+const COMPILE_ERROR_NEEDLES_RE = [/error:\s?module/i, /module\sbuild\sfailed/i];
+
 /**
  * Connects error overlay to __IMA_HMR interface.
  */
@@ -58,6 +60,7 @@ function useConnect(serverError: string | null) {
       window.__IMA_HMR.on('clear', async data => {
         if (
           !data ||
+          !data?.type ||
           (data?.type === 'compile' && lastErrorType === 'compile') ||
           (data?.type === 'runtime' && lastErrorType === 'runtime')
         ) {
@@ -73,9 +76,21 @@ function useConnect(serverError: string | null) {
 
         lastErrorType = data.type;
 
+        /**
+         * The source doesn't know the type of an error.
+         * We nee to try to figure out which type it is before continuing.
+         */
+        if (!lastErrorType) {
+          lastErrorType = COMPILE_ERROR_NEEDLES_RE.some(re =>
+            re.test(data.error?.message || data.error?.stack || '')
+          )
+            ? 'compile'
+            : 'runtime';
+        }
+
         try {
           // Parse compile error
-          if (data.type === 'compile') {
+          if (lastErrorType === 'compile') {
             const parsedError = await parseCompileError(data.error);
 
             if (!parsedError) {
@@ -95,10 +110,10 @@ function useConnect(serverError: string | null) {
             setError({
               name,
               message,
-              type: data.type,
+              type: lastErrorType,
               frames: [frame],
             });
-          } else if (data.type === 'runtime') {
+          } else if (lastErrorType === 'runtime') {
             // Parse runtime error
             const { name, message, stack } = data.error;
             const frames = await mapStackFramesToOriginal(stack, sourceStorage);
@@ -110,7 +125,7 @@ function useConnect(serverError: string | null) {
             setError({
               name,
               message,
-              type: data.type,
+              type: lastErrorType,
               frames,
             });
           }

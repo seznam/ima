@@ -1,10 +1,7 @@
+import { parse } from 'stacktrace-parser';
 import { StatsError } from 'webpack';
 
-import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
 import { CompileError, extractErrorLoc, extractFileUri } from './parserUtils';
-
-const RE_EXTRACT_LOCATIONS_CHROME = /\(((.*):(\d+):(\d+))\)/;
-const RE_EXTRACT_LOCATIONS_FIREFOX = /(.*):(\d+):(\d+)/;
 
 /**
  * General webpack compile error parser which tries to parse all remaining
@@ -28,29 +25,11 @@ function webpackErrorParser(error: StatsError | Error): CompileError {
     compileError.column = column;
     compileError.fileUri = fileUri;
   } else if (error.stack) {
-    const stackLines = error.stack?.split('\n');
+    const parsedStack = parse(error.stack);
 
-    // Extract location from stack trace
-    if (RE_VALID_FRAME_FIREFOX.test(error.stack)) {
-      // Extract important part from stack line
-      const stackLine = stackLines[0].split('@').pop();
-      const match = stackLine?.match(RE_EXTRACT_LOCATIONS_FIREFOX);
-
-      if (match) {
-        compileError.fileUri = match[1];
-        compileError.line = parseInt(match[2]) || undefined;
-        compileError.column = parseInt(match[3]) || undefined;
-      }
-    } else {
-      // Skip first line containing error message.
-      const match = stackLines[1].match(RE_EXTRACT_LOCATIONS_CHROME);
-
-      if (match) {
-        compileError.fileUri = match[2];
-        compileError.line = parseInt(match[3]) || undefined;
-        compileError.column = parseInt(match[4]) || undefined;
-      }
-    }
+    compileError.column = parsedStack[0].column || 1;
+    compileError.fileUri = parsedStack[0].file || '';
+    compileError.line = parsedStack[0].lineNumber || 1;
   }
 
   return compileError;
