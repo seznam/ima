@@ -43,7 +43,7 @@ const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
             <code>
               {sourceFragment.map(line => (
                 <div
-                  key={line.line}
+                  key={`${line.line}${line.source}`}
                   className={clsx('ima-frame__line', {
                     'ima-frame__line--highlight': line.highlight,
                   })}

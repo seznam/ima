@@ -22,11 +22,14 @@ const Header: FunctionComponent<HeaderProps> = ({
   return (
     <div className='ima-header'>
       <div className={clsx('ima-header__type', `ima-header__type--${type}`)}>
-        {type} error
+        {type ? `${type} error` : 'Error'}
       </div>
       <div className='ima-header__meta'>
         <span className='ima-header__name'>{name}: </span>
-        <span className='ima-header__message'>{message}</span>
+        <span
+          className='ima-header__message'
+          dangerouslySetInnerHTML={{ __html: message }}
+        />
       </div>
       {hasCloseButton && <Close onClose={() => onClose()} />}
     </div>
