@@ -18,6 +18,14 @@ if (!$IMA.Test) {
     })
     .catch(error => {
       if (error) {
+        if (
+          $Debug &&
+          typeof window !== 'undefined' &&
+          window?.__IMA_HMR?.emit
+        ) {
+          window.__IMA_HMR.emit('error', { error, type: 'runtime' });
+        }
+
         console.error(error);
       }
     });
