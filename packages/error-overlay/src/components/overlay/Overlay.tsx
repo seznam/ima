@@ -4,6 +4,7 @@ import { FunctionComponent } from 'react';
 import { ParsedError } from '@/types';
 
 export interface OverlayProps {
+  children: React.ReactNode;
   type: ParsedError['type'];
   animate?: boolean;
 }

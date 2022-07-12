@@ -110,7 +110,7 @@ function useConnect(serverError: string | null) {
             setError({
               name,
               message,
-              type: lastErrorType,
+              type: 'compile',
               frames: [frame],
             });
           } else if (lastErrorType === 'runtime') {
@@ -125,7 +125,7 @@ function useConnect(serverError: string | null) {
             setError({
               name,
               message,
-              type: lastErrorType,
+              type: 'runtime',
               frames,
             });
           }
