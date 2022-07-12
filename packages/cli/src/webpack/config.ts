@@ -539,6 +539,22 @@ export default async (
         },
         {
           /**
+           * Allows the use of #!if / #!else / #!elseif / #!endif directives
+           * on client` server, ctx === 'client'|'client.es'|'server' variables
+           * to conditionally exclude parts of the source code for concrete bundles.
+           */
+          test: /\.(js|mjs|jsx|cjs)$/,
+          loader: require.resolve('webpack-preprocessor-loader'),
+          options: {
+            params: {
+              server: isServer,
+              client: !isServer,
+              ctx: ctx.name,
+            },
+          },
+        },
+        {
+          /**
            * Allow interop import of .mjs modules.
            */
           test: /\.mjs$/,

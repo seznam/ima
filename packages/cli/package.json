@@ -73,6 +73,7 @@
     "webpack": "^5.72.1",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-dev-middleware": "^5.3.3",
+    "webpack-preprocessor-loader": "^1.2.0",
     "whatwg-fetch": "^3.6.2",
     "yargs": "^17.5.1"
   },
