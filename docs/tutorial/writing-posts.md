@@ -174,7 +174,7 @@ Now add the following method for creating new posts to the post resource
 ```javascript
 createPost(postData) {
   return this._http
-    .post('http://localhost:3001/static/api/posts.json', postData)
+    .post('http://localhost:3001/static/public/api/posts.json', postData)
     .then(response => this._factory.createEntity(response.body));
 }
 ```
