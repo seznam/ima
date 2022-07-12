@@ -1,7 +1,6 @@
 import { StatsError } from 'webpack';
 
 import {
-  babelLoaderErrorParser,
   cssLoaderErrorParser,
   lessLoaderErrorParser,
   swcLoaderErrorParser,
@@ -20,8 +19,6 @@ function parseCompileError(error: StatsError | Error): CompileError | null {
   // Parse compile errors
   if (error.message?.includes('swc-loader')) {
     return swcLoaderErrorParser(error);
-  } else if (error.message?.includes('babel-loader')) {
-    return babelLoaderErrorParser(error);
   } else if (error.message?.includes('less-loader')) {
     return lessLoaderErrorParser(error);
   } else if (

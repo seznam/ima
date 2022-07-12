@@ -350,168 +350,83 @@ export default async (
                 },
               ],
             },
-            ...(imaConfig.experiments?.swc
-              ? [
-                  /**
-                   * Run node_modules and app JS through swc
-                   */
-                  {
-                    test: /\.(js|mjs|cjs)$/,
-                    exclude: [
-                      /\bcore-js\b/,
-                      /\bwebpack\/buildin\b/,
-                      /\bcss-loader\b/,
-                      /\bmini-css-extract-plugin\b/,
-                      /\breact-dom-server\b/,
-                      appDir,
-                    ],
-                    use: [
-                      !isServer && {
-                        loader: require.resolve('swc-loader'),
-                        options: {
-                          env: {
-                            targets,
-                            mode: 'usage',
-                            coreJs: '3.22.7',
-                            bugfixes: true,
-                          },
-                          module: {
-                            type: 'commonjs',
-                          },
-                          jsc: {
-                            parser: {
-                              syntax: 'ecmascript',
-                            },
-                          },
-                          sourceMaps: useSourceMaps,
-                          inlineSourcesContent: useSourceMaps,
-                        },
+            /**
+             * Run node_modules and app JS through swc
+             */
+            {
+              test: /\.(js|mjs|cjs)$/,
+              exclude: [
+                /\bcore-js\b/,
+                /\bwebpack\/buildin\b/,
+                /\bcss-loader\b/,
+                /\bmini-css-extract-plugin\b/,
+                /\breact-dom-server\b/,
+                appDir,
+              ],
+              use: [
+                !isServer && {
+                  loader: require.resolve('swc-loader'),
+                  options: {
+                    env: {
+                      targets,
+                      mode: 'usage',
+                      coreJs: '3.22.7',
+                      bugfixes: true,
+                    },
+                    module: {
+                      type: 'commonjs',
+                    },
+                    jsc: {
+                      parser: {
+                        syntax: 'ecmascript',
                       },
-                      {
-                        // This injects new plugin loader interface into legacy plugins
-                        loader: 'ima-legacy-plugin-loader',
-                      },
-                    ].filter(Boolean),
+                    },
+                    sourceMaps: useSourceMaps,
+                    inlineSourcesContent: useSourceMaps,
                   },
-                  {
-                    test: /\.(js|mjs|jsx|cjs)$/,
-                    include: appDir,
-                    exclude: /node_modules/,
-                    loader: require.resolve('swc-loader'),
-                    options: await imaConfig.swc(
-                      {
-                        env: {
-                          targets,
-                          mode: 'usage',
-                          coreJs: '3.22.7',
-                          shippedProposals: true,
-                          bugfixes: true,
-                        },
-                        module: {
-                          type: 'es6',
-                        },
-                        jsc: {
-                          parser: {
-                            syntax: 'ecmascript',
-                            jsx: true,
-                          },
-                          transform: {
-                            react: {
-                              runtime: imaConfig.jsxRuntime ?? 'automatic',
-                              development: isDevEnv,
-                              refresh: useHMR,
-                            },
-                          },
-                        },
-                        sourceMaps: useSourceMaps,
-                        inlineSourcesContent: useSourceMaps,
-                      },
-                      ctx
-                    ),
+                },
+                {
+                  // This injects new plugin loader interface into legacy plugins
+                  loader: 'ima-legacy-plugin-loader',
+                },
+              ].filter(Boolean),
+            },
+            {
+              test: /\.(js|mjs|jsx|cjs)$/,
+              include: appDir,
+              exclude: /node_modules/,
+              loader: require.resolve('swc-loader'),
+              options: await imaConfig.swc(
+                {
+                  env: {
+                    targets,
+                    mode: 'usage',
+                    coreJs: '3.22.7',
+                    shippedProposals: true,
+                    bugfixes: true,
                   },
-                ]
-              : [
-                  /**
-                   * Process js of app directory with general babel config
-                   */
-                  {
-                    test: /\.(js|mjs|cjs)$/,
-                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
-                    use: [
-                      !isServer && {
-                        loader: require.resolve('babel-loader'),
-                        options: {
-                          sourceType: 'unambiguous',
-                          babelrc: false,
-                          configFile: false,
-                          cacheDirectory: true,
-                          cacheCompression: false,
-                          compact: !isDevEnv,
-                          targets,
-                          presets: [
-                            [
-                              require.resolve('@babel/preset-env'),
-                              {
-                                bugfixes: true,
-                                modules: false,
-                                useBuiltIns: 'usage',
-                                corejs: { version: '3.22.7' },
-                                exclude: ['transform-typeof-symbol'],
-                              },
-                            ],
-                          ],
-                          sourceMaps: useSourceMaps,
-                          inputSourceMap: useSourceMaps,
-                        },
-                      },
-                      {
-                        // This injects new plugin loader interface into legacy plugins
-                        loader: 'ima-legacy-plugin-loader',
-                      },
-                    ].filter(Boolean),
+                  module: {
+                    type: 'es6',
                   },
-                  {
-                    test: /\.(js|mjs|jsx|cjs)$/,
-                    include: appDir,
-                    exclude: /node_modules/,
-                    loader: require.resolve('babel-loader'),
-                    options: await imaConfig.babel(
-                      {
-                        targets,
-                        babelrc: false,
-                        configFile: false,
-                        cacheDirectory: true,
-                        cacheCompression: false,
-                        compact: !isDevEnv,
-                        presets: [
-                          [
-                            require.resolve('@babel/preset-react'),
-                            {
-                              development: isDevEnv,
-                              runtime: imaConfig.jsxRuntime ?? 'automatic',
-                            },
-                          ],
-                          [
-                            require.resolve('@babel/preset-env'),
-                            {
-                              bugfixes: true,
-                              modules: false,
-                              useBuiltIns: 'usage',
-                              corejs: { version: '3.22.7', proposals: true },
-                              exclude: ['transform-typeof-symbol'],
-                            },
-                          ],
-                        ],
-                        plugins: useHMR
-                          ? [require.resolve('react-refresh/babel')]
-                          : [],
-                        sourceMaps: useSourceMaps,
-                        inputSourceMap: useSourceMaps,
+                  jsc: {
+                    parser: {
+                      syntax: 'ecmascript',
+                      jsx: true,
+                    },
+                    transform: {
+                      react: {
+                        runtime: imaConfig.jsxRuntime ?? 'automatic',
+                        development: isDevEnv,
+                        refresh: useHMR,
                       },
-                      ctx
-                    ),
+                    },
                   },
-                ]),
+                  sourceMaps: useSourceMaps,
+                  inlineSourcesContent: useSourceMaps,
+                },
+                ctx
+              ),
+            },
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */
