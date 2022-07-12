@@ -546,6 +546,10 @@ export default async (
           test: /\.(js|mjs|jsx|cjs)$/,
           loader: require.resolve('webpack-preprocessor-loader'),
           options: {
+            directives: {
+              server: isServer,
+              client: !isServer,
+            },
             params: {
               server: isServer,
               client: !isServer,
