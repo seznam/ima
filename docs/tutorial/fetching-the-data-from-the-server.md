@@ -13,8 +13,8 @@ We won't go into building a REST API server with an actual database storing the
 guestbook posts - that is beyond this tutorial and IMA.js. To give you the idea
 of fetching data from the server, we'll create a more simple alternative.
 
-We'll start by creating the `app/assets/static/api` directory and the
-`app/assets/static/api/posts.json` file with the following content (**copied from
+We'll start by creating the `app/public/api` directory and the
+`app/public/api/posts.json` file with the following content (**copied from
 our home controller and modified**):
 
 ```json
@@ -125,7 +125,7 @@ export default class PostResource {
 
   getEntityList() {
     return this._http
-      .get('http://localhost:3001/static/api/posts.json', {})
+      .get('http://localhost:3001/static/public/api/posts.json', {})
       .then(response => this._factory.createList(response.body));
   }
 }
@@ -320,7 +320,7 @@ but this time fetched from the server! Or are they?
 ## Server-side rendering
 
 If you open your browsers's developer tools, you may notice that the network log does
-not show any request to `http://localhost:3001/static/api/posts.json`.
+not show any request to `http://localhost:3001/static/public/api/posts.json`.
 
 You may remember that IMA.js is an isomorphic JavaScript application stack.
 This means that our application gets rendered at the server first, then it is
@@ -330,7 +330,7 @@ application is "reanimated" at the client-side using the state information.
 IMA.js caches the requests we make using the HTTP service at the server-side
 and sends the serialized cache to the client. The cache is then deserialized at
 the client-side, so the request to
-`http://localhost:3001/static/api/posts.json` we do in our post resource will
+`http://localhost:3001/static/public/api/posts.json` we do in our post resource will
 be resolved from the cache, leading to no additional HTTP request being made.
 
 <hr class="bottom-doc-separator">
