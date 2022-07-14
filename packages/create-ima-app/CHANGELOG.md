@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [18.0.0-rc.3](https://github.com/seznam/ima/compare/v18.0.0-rc.2...v18.0.0-rc.3) (2022-07-14)
+
+
+### Bug Fixes
+
+* 🐛 Improved error reporting to error-overlay ([7eeb707](https://github.com/seznam/ima/commit/7eeb7078061992ef809ac3c45cd5386e1cc780f6))
+
+
+
+
+
 # [18.0.0-rc.2](https://github.com/seznam/ima/compare/v18.0.0-rc.1...v18.0.0-rc.2) (2022-06-21)
 
 **Note:** Version bump only for package create-ima-app

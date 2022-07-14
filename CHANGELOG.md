@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [18.0.0-rc.3](https://github.com/seznam/ima/compare/v18.0.0-rc.2...v18.0.0-rc.3) (2022-07-14)
+
+
+### Bug Fixes
+
+* 🐛 Fixed critical bug in compilation of vendors ([26494ce](https://github.com/seznam/ima/commit/26494ce9539fb9882c48ea80b47d48b5f0befeb8))
+* 🐛 hotfix error overlay runtime error parsing ([947ed6c](https://github.com/seznam/ima/commit/947ed6c52003d7a8e91831a414bd84f9bda13a2c))
+* 🐛 Improved error reporting to error-overlay ([7eeb707](https://github.com/seznam/ima/commit/7eeb7078061992ef809ac3c45cd5386e1cc780f6))
+* 🐛 Replaced source-map with source-map-js ([#218](https://github.com/seznam/ima/issues/218)) ([f201896](https://github.com/seznam/ima/commit/f20189683eae9874b7c2ae1b1d3544d0636a4dcc))
+
+
+### Features
+
+* 🎸 Improved code splitting and swc config ([226fdf0](https://github.com/seznam/ima/commit/226fdf0b9b93ca9a7c176a7910ab24ff6e4946b0))
+* 🎸 Merge language files instead of overwriting ([3ec8ea7](https://github.com/seznam/ima/commit/3ec8ea7873e7dacc3e50103a60475ab1dea671b2))
+
+
+### Performance Improvements
+
+* ⚡️ improved watch and build performance ([cf7ff71](https://github.com/seznam/ima/commit/cf7ff71da8fc227c474fa629bb1f4698811ad6f9))
+
+
+
+
+
 # [18.0.0-rc.2](https://github.com/seznam/ima/compare/v18.0.0-rc.1...v18.0.0-rc.2) (2022-06-21)
 
 
