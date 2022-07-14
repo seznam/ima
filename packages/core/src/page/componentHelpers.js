@@ -143,11 +143,6 @@ export function fire(component, eventName, data = null) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function listen(component, eventTarget, eventName, listener) {
-  if (eventTarget && !eventTarget.addEventListener) {
-    // Safari doesn't have EventTarget
-    eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
-  }
-
   return component.utils.$EventBus.listen(eventTarget, eventName, listener);
 }
 
@@ -163,11 +158,7 @@ export function listen(component, eventTarget, eventName, listener) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function unlisten(component, eventTarget, eventName, listener) {
-  if (eventTarget && !eventTarget.addEventListener) {
-    // Safari doesn't have EventTarget
-    eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
-  }
-
   const eventBus = component.utils.$EventBus;
+
   return eventBus.unlisten(eventTarget, eventName, listener);
 }
