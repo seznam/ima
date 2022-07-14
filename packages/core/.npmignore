@@ -3,3 +3,4 @@
 !package.json
 !transform/**/*
 !polyfill/**/*
+!setupFile.js
