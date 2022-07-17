@@ -420,6 +420,7 @@ export default async (
                               runtime: imaConfig.jsxRuntime ?? 'automatic',
                               development: isDevEnv,
                               refresh: useHMR,
+                              useBuiltins: true,
                             },
                           },
                         },
