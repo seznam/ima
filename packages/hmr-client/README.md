@@ -1,5 +1,12 @@
-# @ima/hmr-client
-> `@ima/cli` webpack HMR and `@ima/error-overlay` companion client.
+<p align="center">
+  <img height="130" src="https://imajs.io/img/imajs-logo.png">
+</p>
+
+<h1 align="center">@ima/hmr-client</h1>
+  <p align="center"><i><code>@ima/cli</code> webpack HMR and <code>@ima/error-overlay</code> companion client.</i>
+</p>
+
+---
 
 Creates **event emitter** on client window `window.__IMA_HMR`, which servers as a communication interface between `@ima/error-overlay`, `webpack-hot-middleware` and the application. It also manages the HMR indicator rendering (little IMA icon in bottom right corner) and HMR reconnections.
 

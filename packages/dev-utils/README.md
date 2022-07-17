@@ -1,5 +1,12 @@
-# @ima/dev-utils
-> Used to share common methods and utils used across other dev packages (@ima/cli, @ima/error-overlay, etc.).
+<p align="center">
+  <img height="130" src="https://imajs.io/img/imajs-logo.png">
+</p>
+
+<h1 align="center">@ima/dev-utils</h1>
+  <p align="center"><i>Used to share common methods and utils used across other dev packages (@ima/cli, @ima/error-overlay, etc.).</i>
+</p>
+
+---
 
 Currently it mainly contains methods for compile and runtime error parsing which are used in multiple other packages.
 
