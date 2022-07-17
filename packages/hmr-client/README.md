@@ -67,3 +67,7 @@ There are 3 events you can listen to/emit:
 - `error` - used to emit and listen to current runtime/compile errors. The listener data format is: `{ error?: StatsError | Error; type: 'compile' | 'runtime'; }`.
 - `clear` - called to clear existing errors and close currently visible error-overlay (usually from ima side to clear resolved runtime errors).
 - `close` - called when user closes currently visible error-overlay.
+
+---
+
+This package is part of the IMA.js application stack, see [imajs.io](https://imajs.io/) for more info about the whole project.

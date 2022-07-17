@@ -21,3 +21,7 @@ import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 - `helpers` - general regexps and other helpers.
 - `sourceFragment` - utility to create source fragment object containing X number of lines of code around highlighted line from provided source.
 - `sourceMapUtils` - utils to extract source map URL from file contents.
+
+---
+
+This package is part of the IMA.js application stack, see [imajs.io](https://imajs.io/) for more info about the whole project.
