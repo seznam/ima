@@ -1,3 +1,23 @@
 # @ima/dev-utils
+> Used to share common methods and utils used across other dev packages (@ima/cli, @ima/error-overlay, etc.).
 
-// TODO IMA@18
+Currently it mainly contains methods for compile and runtime error parsing which are used in multiple other packages.
+
+There's intentionally no "main" export or index file and each utils file has to be imported with it's direct path. This is because some packages are used on client only while others may contain some nodejs specific syntax.
+
+This means that you need to import each utility as:
+```javascript
+import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
+import { FragmentLine } from '@ima/dev-utils/dist/sourceFragment';
+import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
+// ...
+```
+
+
+## Contents
+- `compileErrorParser` - used to parse compile errors from currently used loaders.
+- `cliUtils` - utilities for CLI error formatting.
+- `ErrorOverlayEmitter` - event emitter used in HMR client, however it is located here since the TS types are used in multiple other packages.
+- `helpers` - general regexps and other helpers.
+- `sourceFragment` - utility to create source fragment object containing X number of lines of code around highlighted line from provided source.
+- `sourceMapUtils` - utils to extract source map URL from file contents.
