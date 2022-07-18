@@ -1,6 +1,8 @@
 import HttpStatusCode from './StatusCode';
 import GenericError from '../error/GenericError';
 
+const TIMEOUT_ABORT_REASON = 'TIMEOUT_ABORT';
+
 /**
  * An object representing the complete request parameters used to create and
  * send the HTTP request.
@@ -93,16 +95,32 @@ export default class HttpProxy {
       options
     );
 
+    const REQUEST_TIMEOUT_ERROR = new GenericError(
+      'The HTTP request timed out',
+      {
+        status: HttpStatusCode.TIMEOUT,
+      }
+    );
+
+    if (
+      !(options.abortController || options.fetchOptions?.signal) &&
+      options.timeout
+    ) {
+      const abortController = new AbortController();
+      options.abortController = abortController;
+      options.fetchOptions.signal = abortController.signal;
+    } else if (options.abortController && !options.fetchOptions?.signal) {
+      options.fetchOptions.signal = options.abortController.signal;
+    }
+
     return new Promise((resolve, reject) => {
       let requestTimeoutId;
 
       if (options.timeout) {
         requestTimeoutId = setTimeout(() => {
-          reject(
-            new GenericError('The HTTP request timed out', {
-              status: HttpStatusCode.TIMEOUT,
-            })
-          );
+          options.abortController?.abort(TIMEOUT_ABORT_REASON);
+
+          reject(REQUEST_TIMEOUT_ERROR);
         }, options.timeout);
       }
 
@@ -133,7 +151,12 @@ export default class HttpProxy {
         )
         .then(resolve, reject);
     }).catch(fetchError => {
-      throw this._processError(fetchError, requestParams);
+      if (
+        fetchError.name === 'AbortError' &&
+        options.fetchOptions?.signal?.reason === TIMEOUT_ABORT_REASON
+      ) {
+        throw this._processError(REQUEST_TIMEOUT_ERROR, requestParams);
+      } else throw this._processError(fetchError, requestParams);
     });
   }
 

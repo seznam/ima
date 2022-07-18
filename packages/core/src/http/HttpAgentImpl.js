@@ -464,6 +464,18 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _saveAgentResponseToCache(agentResponse) {
+    // eslint-disable-next-line no-unused-vars
+    const { signal, ...fetchOptions } =
+      agentResponse.params.options.fetchOptions;
+    // eslint-disable-next-line no-unused-vars
+    let { abortController, ...options } = agentResponse.params.options;
+    options.fetchOptions = fetchOptions;
+
+    const clonedAgentResponse = {
+      ...agentResponse,
+      params: { ...agentResponse.params, options },
+    };
+
     let cacheKey = this.getCacheKey(
       agentResponse.params.method,
       agentResponse.params.url,
@@ -472,7 +484,7 @@ export default class HttpAgentImpl extends HttpAgent {
 
     agentResponse.cached = true;
     let ttl = agentResponse.params.options.ttl;
-    this._cache.set(cacheKey, agentResponse, ttl);
+    this._cache.set(cacheKey, clonedAgentResponse, ttl);
     agentResponse.cached = false;
   }
 }

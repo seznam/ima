@@ -239,6 +239,23 @@ describe('ima.core.http.HttpProxy', () => {
         const result = await proxy.request(method, API_URL, DATA, OPTIONS);
         expect(result.body).toBeNull();
       });
+
+      /*it('TODO should call abortController.abort on timeout', async () => {
+        //On request timeout, abortController.abort should be called
+      }
+      it('TODO should create abortController when not provided in options', async () => {
+        //When abortcontroller and abort signal not provided in options, create new Abort Controller
+      }
+      it('TODO should throw generic timed out error when aborted with timeout reason', async () => {
+        //On request timeout, throw generis timed out error, instead of AbortError if abort reason is TIMEOUT_ABORT_REASON
+      }
+      it('TODO should be aborted from external AbortController signal', async () => {
+        //Abort request from external abortcontroller. Signal from abortcontroller is passed through options.fetchOptions
+      }
+      it('TODO should not abort external abort signal on timeout', async () => {
+        //Abort signal from external Abortcontroller should not be aborted on request timeout
+      }
+      */
     });
   });
 
