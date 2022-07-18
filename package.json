@@ -10,6 +10,7 @@
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
+    "./packages/website",
     "./packages/cli",
     "./packages/core",
     "./packages/create-ima-app",
