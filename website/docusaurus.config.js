@@ -27,7 +27,6 @@ const config = {
         docs: {
           path: '../docs',
           routeBasePath: '/',
-          showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/seznam/ima/tree/master/docs',
         },

@@ -21,6 +21,19 @@ const sidebars = {
       'basic-features/seo-and-meta-manager',
       'basic-features/views-and-components',
     ],
+    CLI: [
+      'cli/cli',
+      'cli/compiler-features',
+      'cli/ima.config.js',
+      'cli/plugins-api',
+      {
+        'CLI Plugins': [
+          'cli/plugins/analyze-plugin',
+          'cli/plugins/scramble-css-plugin',
+          'cli/plugins/less-constants-plugin',
+        ],
+      },
+    ],
     Plugins: ['plugins/available-plugins', 'plugins/plugin-interface'],
     Devtools: [
       'devtools/devtools-introduction',

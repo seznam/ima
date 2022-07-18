@@ -11,6 +11,8 @@
   --ifm-code-border-radius: 3px;
   --ifm-container-width: 960px;
   --ifm-container-width-xl: 1180px;
+  --ifm-leading: 1.5rem;
+  --ifm-color-secondary-contrast-background: #f1f3f5;
 }
 
 @media screen and (max-width: 996px) {
