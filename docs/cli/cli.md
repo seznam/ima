@@ -3,7 +3,9 @@ title: 'Introduction to @ima/cli'
 description: 'CLI > Introduction to @ima/cli'
 ---
 
-The **`ima` CLI** allows you to build and watch your application (dev-mode). There are currently 2 supported commands on the CLI - `dev` and `build`. However you can always list available commands by running:
+The **`ima` CLI** allows you to build and watch your application (dev-mode). There are currently 2 supported commands on the CLI - `dev` and `build`.
+
+However you can always list available commands by running:
 
 ```
 npx ima --help
@@ -94,7 +96,7 @@ Similarly you can use the `--verbose` option to show more information during bui
 
 :::
 
-#### Dev server options
+### Dev server options
 
 Following options are used to customize the companion dev server location. These can be useful if you have some special dev environment, where you have an issue with default options.
 

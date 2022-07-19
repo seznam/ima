@@ -36,6 +36,7 @@ const sidebars = {
         'cli/cli',
         'cli/compiler-features',
         'cli/ima.config.js',
+        'cli/advanced-features',
         'cli/plugins-api',
         {
           'CLI Plugins': [

@@ -13,18 +13,26 @@
   --ifm-color-success-lighter: #8ce99a;
   --ifm-color-success-lightest: #d3f9d8;
   --ifm-color-success-contrast-background: #ebfbee;
-  --ifm-heading-color: ##212529;
+  --ifm-color-info-dark: #339af0;
+  --ifm-color-info-darker: #228be6;
+  --ifm-color-info-darkest: #1971c2;
+  --ifm-color-info-light: #4dabf7;
+  --ifm-color-info-lighter: #a5d8ff;
+  --ifm-color-info-lightest: #d0ebff;
+  --ifm-color-info-contrast-background: #e7f5ff;
+  --ifm-heading-color: #111519;
   --ifm-font-color-base: #343a40;
   --ifm-font-color-secondary: #495057;
   --ifm-menu-color: var(--ifm-font-color-secondary);
   --ifm-font-size-base: 100%;
   --ifm-code-font-size: 95%;
   --ifm-code-border-radius: 3px;
-  --ifm-container-width: 960px;
-  --ifm-container-width-xl: 1180px;
+  --ifm-container-width: 860px;
+  --ifm-container-width-xl: 1080px;
   --ifm-color-secondary-contrast-background: #f1f3f5;
   --ifm-menu-link-padding-horizontal: 0.75rem;
   --ifm-menu-link-padding-vertical: 0.3rem;
+  --ifm-h4-font-size: 1.15rem;
 }
 
 @media screen and (max-width: 996px) {
@@ -75,13 +83,15 @@
   font-size: 1.25rem;
 }
 
+.theme-doc-toc-desktop,
 .markdown h1 {
-  margin-block-start: 3rem;
+  margin-top: 5rem;
 }
 
 .menu__list li:last-of-type {
   -webkit-padding-after: 1rem;
-  padding-block-end: 1rem;
+
+  padding-bottom: 1rem;
 }
 
 .menu__link {
@@ -89,14 +99,31 @@
   font-weight: 400;
 }
 
-.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link.menu__link--sublist {
-  font-size: 0.95rem;
+.menu__link:hover {
+  color: var(--ifm-color-primary-dark);
+
+  background: rgba(255, 168, 168, 0.15);
+}
+
+.menu__link.menu__link--sublist {
   font-weight: 700;
   color: var(--ifm-font-color-base);
 }
 
-.menu__link--active {
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link.menu__link--sublist {
+  font-size: 0.95rem;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  font-weight: 500;
   color: var(--ifm-menu-color-active);
+  color: var(--ifm-color-primary-dark);
+
+  background: rgba(255, 168, 168, 0.15);
+}
+
+.menu__list-item-collapsible:hover {
+  background: none;
 }
 
 code:not([class])::before,
@@ -119,5 +146,5 @@ code {
 }
 
 .theme-doc-sidebar-menu.menu__list {
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
 }
