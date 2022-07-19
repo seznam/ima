@@ -1,18 +1,30 @@
 :root {
-  --ifm-color-primary: #dc2626;
-  --ifm-color-primary-dark: #b91c1c;
-  --ifm-color-primary-darker: #991b1b;
-  --ifm-color-primary-darkest: #7f1d1d;
-  --ifm-color-primary-light: #ef4444;
-  --ifm-color-primary-lighter: #f87171;
-  --ifm-color-primary-lightest: #fca5a5;
+  --ifm-color-primary: #fa5252;
+  --ifm-color-primary-dark: #f03e3e;
+  --ifm-color-primary-darker: #e03131;
+  --ifm-color-primary-darkest: #c92a2a;
+  --ifm-color-primary-light: #ff6b6b;
+  --ifm-color-primary-lighter: #ff8787;
+  --ifm-color-primary-lightest: #ffa8a8;
+  --ifm-color-success-dark: #69db7c;
+  --ifm-color-success-darker: #51cf66;
+  --ifm-color-success-darkest: #37b24d;
+  --ifm-color-success-light: #69db7c;
+  --ifm-color-success-lighter: #8ce99a;
+  --ifm-color-success-lightest: #d3f9d8;
+  --ifm-color-success-contrast-background: #ebfbee;
+  --ifm-heading-color: ##212529;
+  --ifm-font-color-base: #343a40;
+  --ifm-font-color-secondary: #495057;
+  --ifm-menu-color: var(--ifm-font-color-secondary);
   --ifm-font-size-base: 100%;
   --ifm-code-font-size: 95%;
   --ifm-code-border-radius: 3px;
   --ifm-container-width: 960px;
   --ifm-container-width-xl: 1180px;
-  --ifm-leading: 1.5rem;
   --ifm-color-secondary-contrast-background: #f1f3f5;
+  --ifm-menu-link-padding-horizontal: 0.75rem;
+  --ifm-menu-link-padding-vertical: 0.3rem;
 }
 
 @media screen and (max-width: 996px) {
@@ -23,18 +35,18 @@
 
 @media screen and (min-width: 997px) {
   :root {
-    --ifm-font-size-base: 17px;
+    --ifm-font-size-base: 16px;
   }
 }
 
 [data-theme="dark"] {
-  --ifm-color-primary: #ef4444;
-  --ifm-color-primary-dark: #dc2626;
-  --ifm-color-primary-darker: #b91c1c;
-  --ifm-color-primary-darkest: #991b1b;
-  --ifm-color-primary-light: #f87171;
-  --ifm-color-primary-lighter: #fca5a5;
-  --ifm-color-primary-lightest: #fecaca;
+  --ifm-color-primary: #ff6b6b;
+  --ifm-color-primary-dark: #f03e3e;
+  --ifm-color-primary-darker: #e03131;
+  --ifm-color-primary-darkest: #c92a2a;
+  --ifm-color-primary-light: #ff6b6b;
+  --ifm-color-primary-lighter: #ff8787;
+  --ifm-color-primary-lightest: #ffa8a8;
 }
 
 .docusaurus-highlight-code-line {
@@ -57,4 +69,55 @@
 .menu__link--sublist {
   font-weight: var(--ifm-font-weight-semibold);
   color: var(--ifm-font-base-color) !important;
+}
+
+.markdown > header + p {
+  font-size: 1.25rem;
+}
+
+.markdown h1 {
+  margin-block-start: 3rem;
+}
+
+.menu__list li:last-of-type {
+  -webkit-padding-after: 1rem;
+  padding-block-end: 1rem;
+}
+
+.menu__link {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link.menu__link--sublist {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ifm-font-color-base);
+}
+
+.menu__link--active {
+  color: var(--ifm-menu-color-active);
+}
+
+code:not([class])::before,
+code:not([class])::after {
+  content: "`";
+
+  user-select: none;
+}
+
+code {
+  border: none;
+  padding: 0;
+
+  font-weight: 600;
+  vertical-align: baseline;
+
+  color: var(--ifm-color-primary-dark);
+
+  background: none;
+}
+
+.theme-doc-sidebar-menu.menu__list {
+  padding: 0.5rem 0;
 }

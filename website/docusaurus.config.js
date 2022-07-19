@@ -25,11 +25,20 @@ const config = {
        */
       ({
         docs: {
+          breadcrumbs: false,
           path: '../docs',
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/seznam/ima/tree/master/docs',
         },
+        // pages: {
+        //   path: 'src/pages',
+        //   routeBasePath: '/',
+        //   mdxPageComponent: '@theme/MDXPage',
+        //   remarkPlugins: [[require('remark-mermaid'), { simple: true }]],
+        // },
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -61,6 +70,11 @@ const config = {
             label: 'Docs',
           },
           {
+            to: 'api',
+            position: 'right',
+            label: 'API',
+          },
+          {
             type: 'search',
             position: 'right',
           },
@@ -72,22 +86,7 @@ const config = {
         ],
       },
       footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Style Guide',
-                to: 'docs/',
-              },
-              {
-                label: 'Second Doc',
-                to: 'docs/doc2/',
-              },
-            ],
-          },
-        ],
+        style: 'light',
         copyright: `Copyright © 1996 - ${new Date().getFullYear()} Seznam.cz a. s.`,
       },
       prism: {
