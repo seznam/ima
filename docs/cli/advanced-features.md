@@ -9,8 +9,6 @@ description: 'CLI > Advanced CLI techniques and other features'
 # polyfill.js
 
 
-# experiments
-
 # GenerateRunnerPlugin
 
 # dynamic imports
