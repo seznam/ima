@@ -464,6 +464,9 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _saveAgentResponseToCache(agentResponse) {
+    //Create copy of agentResponse without AbortController and AbortController signal.
+    //Setting agentResponse with AbortController or signal into cache would result in crash.
+
     // eslint-disable-next-line no-unused-vars
     const { signal, ...fetchOptions } =
       agentResponse.params.options.fetchOptions;
@@ -471,7 +474,7 @@ export default class HttpAgentImpl extends HttpAgent {
     let { abortController, ...options } = agentResponse.params.options;
     options.fetchOptions = fetchOptions;
 
-    const clonedAgentResponse = {
+    const agentResponseCopy = {
       ...agentResponse,
       params: { ...agentResponse.params, options },
     };
@@ -484,7 +487,7 @@ export default class HttpAgentImpl extends HttpAgent {
 
     agentResponse.cached = true;
     let ttl = agentResponse.params.options.ttl;
-    this._cache.set(cacheKey, clonedAgentResponse, ttl);
+    this._cache.set(cacheKey, agentResponseCopy, ttl);
     agentResponse.cached = false;
   }
 }

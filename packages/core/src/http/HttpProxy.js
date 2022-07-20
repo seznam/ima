@@ -1,8 +1,6 @@
 import HttpStatusCode from './StatusCode';
 import GenericError from '../error/GenericError';
 
-const TIMEOUT_ABORT_REASON = 'TIMEOUT_ABORT';
-
 /**
  * An object representing the complete request parameters used to create and
  * send the HTTP request.
@@ -103,14 +101,11 @@ export default class HttpProxy {
     );
 
     if (
-      !(options.abortController || options.fetchOptions?.signal) &&
-      options.timeout
+      options.timeout &&
+      !options.abortController &&
+      !options.fetchOptions?.signal
     ) {
-      const abortController = new AbortController();
-      options.abortController = abortController;
-      options.fetchOptions.signal = abortController.signal;
-    } else if (options.abortController && !options.fetchOptions?.signal) {
-      options.fetchOptions.signal = options.abortController.signal;
+      options.abortController = new AbortController();
     }
 
     return new Promise((resolve, reject) => {
@@ -118,7 +113,7 @@ export default class HttpProxy {
 
       if (options.timeout) {
         requestTimeoutId = setTimeout(() => {
-          options.abortController?.abort(TIMEOUT_ABORT_REASON);
+          options.abortController?.abort(REQUEST_TIMEOUT_ERROR);
 
           reject(REQUEST_TIMEOUT_ERROR);
         }, options.timeout);
@@ -153,10 +148,13 @@ export default class HttpProxy {
     }).catch(fetchError => {
       if (
         fetchError.name === 'AbortError' &&
-        options.fetchOptions?.signal?.reason === TIMEOUT_ABORT_REASON
+        options.fetchOptions?.signal?.reason?.message ===
+          REQUEST_TIMEOUT_ERROR.message
       ) {
         throw this._processError(REQUEST_TIMEOUT_ERROR, requestParams);
-      } else throw this._processError(fetchError, requestParams);
+      }
+
+      throw this._processError(fetchError, requestParams);
     });
   }
 
@@ -401,6 +399,9 @@ export default class HttpProxy {
     if (this._shouldRequestHaveBody(method, data)) {
       requestInit.body = this._transformRequestBody(data, options.headers);
     }
+
+    if (!options.fetchOptions.signal)
+      options.fetchOptions.signal = options.abortController?.signal;
 
     Object.assign(requestInit, options.fetchOptions || {});
 

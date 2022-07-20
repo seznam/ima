@@ -240,6 +240,7 @@ describe('ima.core.http.HttpProxy', () => {
         expect(result.body).toBeNull();
       });
 
+      // TODO IMA@18
       /*it('TODO should call abortController.abort on timeout', async () => {
         //On request timeout, abortController.abort should be called
       }
