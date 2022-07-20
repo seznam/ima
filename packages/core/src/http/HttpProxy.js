@@ -400,8 +400,9 @@ export default class HttpProxy {
       requestInit.body = this._transformRequestBody(data, options.headers);
     }
 
-    if (!options.fetchOptions.signal)
+    if (!options.fetchOptions.signal) {
       options.fetchOptions.signal = options.abortController?.signal;
+    }
 
     Object.assign(requestInit, options.fetchOptions || {});
 

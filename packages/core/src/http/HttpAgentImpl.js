@@ -464,8 +464,10 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _saveAgentResponseToCache(agentResponse) {
-    //Create copy of agentResponse without AbortController and AbortController signal.
-    //Setting agentResponse with AbortController or signal into cache would result in crash.
+    /**
+     * Create copy of agentResponse without AbortController and AbortController signal.
+     * Setting agentResponse with AbortController or signal into cache would result in crash.
+     */
 
     // eslint-disable-next-line no-unused-vars
     const { signal, ...fetchOptions } =
