@@ -2,6 +2,21 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
  */
 const sidebars = {
+  tutorial: [
+    {
+      type: 'category',
+      label: 'Tutorial',
+      collapsed: false,
+      items: [
+        'tutorial/introduction',
+        'tutorial/static-view',
+        'tutorial/adding-some-state',
+        'tutorial/fetching-data',
+        'tutorial/writing-posts',
+        'tutorial/final-polish',
+      ],
+    },
+  ],
   docs: [
     {
       type: 'category',

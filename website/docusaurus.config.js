@@ -31,20 +31,27 @@ const config = {
           showLastUpdateAuthor: true,
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/seznam/ima/tree/master/docs',
+          editUrl: 'https://github.com/seznam/ima/tree/docusaurus/docs',
           remarkPlugins: [
             [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
           ],
         },
-        // pages: {
-        //   path: 'src/pages',
-        //   routeBasePath: '/',
-        //   mdxPageComponent: '@theme/MDXPage',
-        //   remarkPlugins: [require('@docusaurus/remark-plugin-npm2yarn'), [require('remark-mermaid'), { simple: true }]],
-        // },
-        blog: false,
+        pages: {
+          path: 'src/pages',
+          routeBasePath: '/',
+          include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
+        },
+        blog: {
+          routeBasePath: '/',
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+        },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
         },
       }),
     ],
@@ -55,6 +62,11 @@ const config = {
      * @type {import('@docusaurus/preset-classic').ThemeConfig}
      */
     {
+      algolia: {
+        appId: 'YOUR_APP_ID',
+        apiKey: 'YOUR_SEARCH_API_KEY',
+        indexName: 'YOUR_INDEX_NAME',
+      },
       navbar: {
         title: 'IMA.js',
         logo: {
@@ -63,14 +75,16 @@ const config = {
         },
         items: [
           {
-            type: 'docsVersionDropdown',
-            position: 'right',
-          },
-          {
             type: 'doc',
             docId: 'introduction/getting-started',
             position: 'right',
             label: 'Docs',
+          },
+          {
+            type: 'doc',
+            docId: 'tutorial/introduction',
+            position: 'right',
+            label: 'Tutorial',
           },
           {
             to: 'api',
