@@ -97,6 +97,7 @@ const config = {
           },
           {
             href: 'https://github.com/seznam/ima',
+            className: 'header-github-link',
             label: 'GitHub',
             position: 'right',
           },
