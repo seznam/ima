@@ -207,7 +207,7 @@ return {
 
 We added the `pendingPosts` field to our state, which we'll use to keep track
 of the posts that are being submitted to the server. We'll need the **post
-factory** in **our home controller controller** to create the entities representing the pending
+factory** in **our home controller** to create the entities representing the pending
 posts, so let's modify controller's the constructor by adding a new parameter
 and a field for the post factory:
 
@@ -220,7 +220,7 @@ constructor(postService, postFactory) {
 }
 ```
 
-And, of course, we need to updated the `$dependencies` list so OC can inject
+And, of course, we need to update the `$dependencies` list so OC can inject
 PostFactory instance to our constructor as a second argument. so modify the dependencies of the **home
 page controller** (`app/page/home/HomeController.js`) to the following:
 

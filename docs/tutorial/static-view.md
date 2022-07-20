@@ -61,7 +61,7 @@ Now that we know our way around our component, let's replace the contents of
 the `render()` method with the following code:
 
 ```jsx
-return return <div className="l-home container">Hello {'World'}!</div>;
+return <div className="l-home container">Hello {'World'}!</div>;
 ```
 
 The "HTML" code you see is actually an XML markup with JavaScript expressions
@@ -191,7 +191,7 @@ we will just use the CDN-hosted CSS file, since we don't need any of Bootstrap's
 
 In a real application, we strongly recommend you manage these dependencies yourself (for example through npm packages),
 and consider using a custom build that includes only the necessary CSS/JS.
-*this is*
+<!-- *this is* -->
 
 First we need to include a few files to our page. Open the document component
 `app/component/document/DocumentView.jsx` (this is the UI component that renders the basic structure of the HTML document. You'll find more details about it in the [Rendering the whole document](#rendering-the-whole-document) section of this chapter).
