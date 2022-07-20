@@ -11,7 +11,7 @@ The `ima-` packages (even plugins) has been renamed to `@ima/` scoped packages a
 
 All of this can be done automatically for a whole project using following jscodeshift script.
 
-```bash
+```bash npm2yarn
 npx jscodeshift -t node_modules/@ima/core/transform/import-v17.js --extensions jsx,js --ignore-config=.gitignore ./
 ```
 Also replace pathes which contain `ima` to `@ima/core` in `package.json` (setupFiles in jest) and `server.js`.
@@ -69,7 +69,7 @@ export default class MyComponent extends AbstractComponent {
 
 All of this can be done automatically for a whole project using following jscodeshift script.
 
-```bash
+```bash npm2yarn
 npx jscodeshift -t node_modules/@ima/core/transform/context-api-v17.js --extensions jsx,js --ignore-config=.gitignore ./
 ```
 

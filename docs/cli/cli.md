@@ -7,7 +7,7 @@ The **`ima` CLI** allows you to build and watch your application (dev-mode). The
 
 You can always list available commands by running:
 
-```
+```bash npm2yarn
 npx ima --help
 ```
 

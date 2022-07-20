@@ -29,7 +29,7 @@ You can find the core and server library along with many other IMA.js related pa
 To install and run your new IMA.js application, you can use our **`create-ima-app`** npm package.
 Start by running following command:
 
-```bash
+```bash npm2yarn
 npx create-ima-app my-app
 ```
 
@@ -49,7 +49,7 @@ one of our [examples](/examples).
 
 After the installation succeeds, run following commands to start your application:
 
-```bash
+```bash npm2yarn
 cd my-app
 npm run dev
 ```
@@ -154,14 +154,14 @@ git clone [your-application-git-repository]
 Switch to the cloned directory and run the following commands to set-up your
 application - same as in the development mode - and build it:
 
-```bash
+```bash npm2yarn
 npm install
 npm run build
 ```
 
 Now after building your IMA.js application your server is ready to run it. You can start your application using the following command:
 
-```bash
+```bash npm2yarn
 npm run start
 ```
 
@@ -173,7 +173,7 @@ Your application is now running at [`http://localhost:3001/`](http://localhost:3
 It is also possible to deploy your IMA.js application as an SPA (single-page
 application). To do that, run the following command to build your application:
 
-```bash
+```bash npm2yarn
 npm run build:spa
 ```
 

@@ -32,12 +32,15 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/seznam/ima/tree/master/docs',
+          remarkPlugins: [
+            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
+          ],
         },
         // pages: {
         //   path: 'src/pages',
         //   routeBasePath: '/',
         //   mdxPageComponent: '@theme/MDXPage',
-        //   remarkPlugins: [[require('remark-mermaid'), { simple: true }]],
+        //   remarkPlugins: [require('@docusaurus/remark-plugin-npm2yarn'), [require('remark-mermaid'), { simple: true }]],
         // },
         blog: false,
         theme: {
