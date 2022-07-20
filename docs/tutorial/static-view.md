@@ -3,7 +3,7 @@ title: Static View
 description: Tutorial > Static View
 ---
 
-In the [first part](/tutorial/introduction) we went through introduction to IMA.js and initialized our first
+In the [first part](./introduction) we went through introduction to IMA.js and initialized our first
 application using `create-ima-app` command. In the second part of the tutorial
 we'll actually do some coding and prepare basic Views for our guest book application.
 
@@ -13,7 +13,7 @@ Open up the `app/page/home/HomeView.jsx` file in your code editor. You will see 
 single ES2015 class named `HomeView`, extending the `AbstractComponent` class
 (which in turn extends the
 [`React.Component`](https://facebook.github.io/react/docs/component-api.html)
-class). You can read more about components and views in the [documentation](/docs/views-and-components).
+class). You can read more about components and views in the [documentation](../basic-features/views-and-components.md).
 
 Now let's replace the contents of the file with a blank view:
 
@@ -51,7 +51,7 @@ There's also static getter `contextType()` which returns `PageContext`, that
 by default provides the component access to global `$Utils` object in the component context.
 This object is very useful as we can bind custom helper methods to it in the
 `bind.js`file with the help of Object Container. But we'll talk about this a bit more
-[later in this tutorial](/tutorial/fetching-the-data-from-the-server#dependency-injection).
+[later in this tutorial](./fetching-data.md#dependency-injection)
 
 The `render()` method creates and returns a React element that represents the
 view in the UI. Our `render()` method returns `null` because our component does
@@ -285,10 +285,10 @@ Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
 will not be covered by this tutorial, but you can learn more about its interface
-in the API [/api/meta/meta-meta-manager](/api/meta/meta-meta-manager)).
+in the API [/api/meta/meta-meta-manager](/api)).
 
 For more information about `DocumentView` and whole rendering process of IMA.js
-application, [take a look at the documentation](/docs/rendering-process).
+application, [take a look at the documentation](../basic-features/rendering-process.md).
 
 ### Notes on ES2015 modules and IMA.js namespaces
 

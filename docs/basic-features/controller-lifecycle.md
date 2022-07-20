@@ -5,9 +5,8 @@ description: Basic features > Controller lifecycle and it's API
 
 IMA.js **AbstractController** provides a few methods you can implement in order to catch various lifecycle events and react to them. Each method description has *@server* or *@client* notation next to them symbolizing where the method is executed.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-controller.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/diagram-controller.png)
+
 
 ## `init()` *@server/client*
 
@@ -85,7 +84,7 @@ loaded resources from the [`load()`](#load-serverclient) method and the view has
 
 `setMetaParams()` method receives following arguments:
 - **loadedResources** - A plain object representing a map of resource names to resources loaded by the [`load()`](#load-serverclient) method. This is the same object as the one passed to the `setState()` method.
-- **metaManager** - Meta attributes manager instance to configure (See [SEO & MetaManager](/docs/seo-and-meta-manager) page).
+- **metaManager** - Meta attributes manager instance to configure (See [SEO & MetaManager](./seo-and-meta-manager) page).
 - **router** - The current application router.
 - **dictionary** - The current localization dictionary
 - **settings** - The application settings for the current application environment.
@@ -103,7 +102,7 @@ This method is a good place to register any React and DOM event listeners. The c
 ## `update()` *@client*
 
 Callback for updating the controller after a route update. This method
-is invoked if the current [route has the `onlyUpdate = true` flag set](/docs/routing#4-options) and the current controller and view match those used by the previously active route, or, the `onlyUpdate` option of the current route is a callback and returned `true`.
+is invoked if the current [route has the `onlyUpdate = true` flag set](./routing.md#4-options) and the current controller and view match those used by the previously active route, or, the `onlyUpdate` option of the current route is a callback and returned `true`.
 
 The method must return an object with the same semantics as the result
 of the [`load()`](#load-serverclient) method. The controller's state will only be

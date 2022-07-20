@@ -3,7 +3,7 @@ title: Writing Posts
 description: Tutorial > Writing Posts
 ---
 
-In [previous part](/tutorial/fetching-the-data-from-the-server) we created our classes and services to handle data fetching from server.
+In [previous part](./fetching-data.md) we created our classes and services to handle data fetching from server.
 We also learned something about the vital parts of IMA.js - **object container** and **server-side rendering**.
 In this smaller section of the tutorial, we're going to be processing input from user and
 sending those data to the server.
@@ -143,7 +143,7 @@ onPostSubmitted(eventData) {
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
 bus event occurs. For details on how this mechanism works, please reffer to the
-[Emitting events using the EventBus](/tutorial/adding-some-state#2-Emitting-events-using-the-eventbus)
+[Emitting events using the EventBus](./adding-some-state.md#emitting-events-using-the-eventbus)
 section of the third chapter of this tutorial.
 
 Notice that our `onPostSubmitted()` event listener is a public method. This is

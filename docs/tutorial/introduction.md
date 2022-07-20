@@ -96,5 +96,5 @@ server serving our application.
  - Finally, the `build` directory is used as an
 output directory for the built application and its resources.
 
-For more information see the [Application Structure](/docs/getting-started#application-structure)
+For more information see the [Application Structure](../introduction/getting-started.md#application-structure)
 section in the documentation.

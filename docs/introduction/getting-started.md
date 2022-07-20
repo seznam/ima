@@ -40,8 +40,7 @@ npx create-ima-app my-app
 :::
 
 This will bootstrap your new application and install all dependencies. The provided wizard will
-also let you choose the template you wish to start with. You can go with empty blank template or explore
-one of our [examples](/examples).
+also let you choose the template you wish to start with.
 
 - `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello)]
 - `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/feed)]
@@ -56,7 +55,7 @@ npm run dev
 
 Before going ahead, now that your application is running, you can either continue reading this documentation,
 which describes many different parts of IMA.js in detail, take a direct look at the
- [API](/api) or [**start with our tutorial**](/tutorial/introduction).
+ [API](/api) or [**start with our tutorial**](./../tutorial/introduction.md).
 
 ### Available commands
 
@@ -125,9 +124,9 @@ So let's take a closer look at the **contents of the application**:
         - `spa.html` - this is a template for SPA applications.
         - `error.html` - an error page showed in production.
   - `component` - our React components for use in the view. Components are
-  covered in [part 3 of our tutorial](/tutorial/adding-some-state).
+  covered in [part 3 of our tutorial](../tutorial/adding-some-state.md).
   - `config`, `environment.js` - configuration files. For more information see
-    [Configuration](/docs/configuration) page.
+    [Configuration](./configuration) page.
   - `page` - controllers, main views and page-specific Less CSS files for pages
     in our application. Usage of these is configured via routing.
     - `error` - the page shown when the application encounters an error that

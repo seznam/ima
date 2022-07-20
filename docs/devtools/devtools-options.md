@@ -3,11 +3,9 @@ title: Options
 description: Devtools > Available options and customization
 ---
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/devtools-options.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/devtools-options.png)
 
-As we've already talked about in [the introduction section](/docs/devtools-introduction), the devtools
+As we've already talked about in [the introduction section](./devtools-introduction), the devtools
 use special devtools script which defines which parts of IMA.js application should send messages about
 their activity to the IMA.js devtool panel. This code can be easily customized through the extension's options page.
 
@@ -19,7 +17,7 @@ and choosing the "Options" button.
 
 Main concept of the options is that you can create multiple **presets**, where each preset contains a set of **hooks** -
 these are snippets of JavaScript code, that define which parts of IMA.js app should be wrapped in previously mentioned
-[proxies](/docs/devtools-introduction#devtools-script).
+[proxies](./devtools-introduction.md#devtools-script).
 
 > **Note:** Don't forget to always save your changes after doing any changes, otherwise the changes won't propagate.
 
@@ -28,9 +26,7 @@ these are snippets of JavaScript code, that define which parts of IMA.js app sho
 You can create multiple presets or edit existing ones by clicking on the **"Load or Create Preset"** button, where
 you're presented with Presets modal window. Selected presets are **marked bold**.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/devtools-options-presets.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/devtools-options-presets.png)
 
 Notice that there's already a **Default** preset, which is not editable (but can be copied!). This preset
 is read-only and you can't edit it directly. This is so in the future we can safely update the default detection script
@@ -43,9 +39,7 @@ button, or copy exiting one using the duplicate icon.
 
 ## Hooks
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/devtools-options-hooks.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/devtools-options-hooks.png)
 
 Each hook can be individually **enabled/disabled** and has it's own name, description and code. First three are pretty
 self explanatory so we'll talk mostly about the **code** and available API.

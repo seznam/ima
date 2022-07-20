@@ -5,9 +5,8 @@ description: Basic features > Page State and it's usage
 
 Core of each application is the data the app is working with. The data needs to be managed in some manner and user needs to be able to manipulate with the data during application run. IMA.js adopted a React style of state management.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-page-state.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/diagram-page-state.png)
+
 
 A **PageStateManager** class is used for managing **page state** and is in tight cooperation with **PageManager**.
 PageManager need state manager to collect initial state from Controller and registered extension, and to be informed about every state change that happens inside Controller or Extension.
@@ -27,7 +26,7 @@ onVisibilityToggle() {
 ```
 
 ## Initial page state
-First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](/docs/controller-lifecycle#load-serverclient).
+First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](./controller-lifecycle#load-serverclient).
 
 ## Partial state
 Since Extensions also have a word in loading resources it may be necessary to share resources between Controller and Extensions. Here comes partial state into play. It allows you to call `getState` method in `load` method of an Extension. Received state consists of states collected from loaded Controller and Extensions loaded prior to the current Extension. Extensions are loaded in the same order as they were registered in a Controller.
@@ -84,7 +83,7 @@ If you want to see what changes are in queue from the begin of transaction call 
 
 To finish the transaction you have to call `commitStateTransaction()` method. It will squash
 all the patches made during the transaction into a one and apply it to the original state.
-Therefore your application will re-render only once and you'll also receive [state events](/docs/events#stateeventsbefore_change_state) only once.
+Therefore your application will re-render only once and you'll also receive [state events](./events#stateeventsbefore_change_state) only once.
 
 Another way to finish the transaction is to cancel it via `cancelStateTransaction()` method.
 

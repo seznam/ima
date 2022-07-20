@@ -61,4 +61,4 @@ _renderSubmitButton() {
 }
 ```
 
-Dictionary is also registered in [Object Container](/docs/object-container) and thus can be obtained in Controllers, Extensions and other classes constructed through OC.
+Dictionary is also registered in [Object Container](./object-container.md) and thus can be obtained in Controllers, Extensions and other classes constructed through OC.

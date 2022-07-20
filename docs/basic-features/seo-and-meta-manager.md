@@ -3,13 +3,13 @@ title: SEO & Meta Manager
 description: Basic features > SEO & Meta Manager
 ---
 
-If you've read the [Controller lifecycle](/docs/controller-lifecycle) page you've
-probably come along the [`setMetaParams`](/docs/controller-lifecycle#setmetaparams-serverclient)
+If you've read the [Controller lifecycle](./controller-lifecycle) page you've
+probably come along the [`setMetaParams`](./controller-lifecycle.md#setmetaparams-serverclient)
 method. This method is dedicated to set meta information for a specific
 page and you are provided with everything you need *(current state, MetaManager,
 router, dictionary and settings)*.
 
-**MetaManager** is then used in [DocumentView](/docs/rendering-process#documentview) to
+**MetaManager** is then used in [DocumentView](./rendering-process#documentview) to
 set `<title/>`, `<meta/>` and `<link/>` tags.
 
 ## Setting and obtaining information from the MetaManager

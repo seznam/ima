@@ -82,7 +82,7 @@ Environment configuration is resolved on server and passed to the client setting
 
 - `app/config/routes.js` configures your router, mapping routes to the
   controllers and views in your application. For more information see the
-  [Routing](/docs/routing) page.
+  [Routing](../basic-features/routing.md) page.
 
 - `app/config/settings.js` configures your application and IMA.js services. You
   can freely extend the configuration as you like except for the properties
@@ -91,6 +91,6 @@ Environment configuration is resolved on server and passed to the client setting
   automatically inherits values from the `prod` environment.
 
 - and finally, the `app/config/bind.js` configures the
-  [Object container](/docs/object-container).
+  [Object container](../basic-features/object-container.md).
 
 All of these files are necessary and must remain in their locations.

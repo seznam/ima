@@ -43,7 +43,7 @@ export default class HomeController extends AbstractController {
 ```
 
 The `AbstractController` class defines some methods which are executed
-in different parts of it's lifecycle, you can [read more about this in the documentation](/docs/controller-lifecycle)
+in different parts of it's lifecycle, you can [read more about this in the documentation](../basic-features/controller-lifecycle.md)
 One of the main methods you're going to use frequently is the `load()` method.
 
 The `load()` method is called automatically
@@ -466,4 +466,4 @@ specific use-cases, so the Dispatcher logs a warning to the console if there
 are no listeners registered for the fired event in order to notify you of
 possible typos in event names.
 
-As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events)
+As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](../basic-features/events.md)

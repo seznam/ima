@@ -5,33 +5,31 @@ description: Basic features > Page Manager and app rendering
 
 Page Manager is an essential part of IMA.js. It's something like a puppeteer that manipulates with pages and views. Once a router matches URL to one of route's path the page manager takes care of the rest.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-page-manager.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/diagram-page-manager.png)
 
 ## Managing process
 
-If the new matched route has [`onlyUpdate` option](/docs/routing#4-options) set to `true` and the controller and view hasn't changed the route transition is dispatched only through [`update` method](/docs/controller-lifecycle#update-client) of the controller.
+If the new matched route has [`onlyUpdate` option](./routing#4-options) set to `true` and the controller and view hasn't changed the route transition is dispatched only through [`update` method](./controller-lifecycle#update-client) of the controller.
 
 In every other case the manager goes through it's full process:
 
-1. **Unload previous controller and extensions** - To make room for the new, manager has to get rid of the old controller and extensions. First calls [`deactivate` method](/docs/controller-lifecycle#deactivate-client) on every extension registered in the old controller and then the same method on the controller itself.
-Same process follows with [`destroy` method](/docs/controller-lifecycle#destroy-client).
+1. **Unload previous controller and extensions** - To make room for the new, manager has to get rid of the old controller and extensions. First calls [`deactivate` method](./controller-lifecycle#deactivate-client) on every extension registered in the old controller and then the same method on the controller itself.
+Same process follows with [`destroy` method](./controller-lifecycle#destroy-client).
 
-2. **Clear state and unmount view** - After unloading controller and extensions the page state is cleared and view (starting from [ManagedRootView](/docs/rendering-process#managedrootview)) is unmounted. However if the [DocumentView](/docs/rendering-process#documentview), [ViewAdapter](/docs/rendering-process#viewadapter) and [ManagedRootView](/docs/rendering-process#managedrootview) are the same for the new route the view is cleared rather then unmounted. This way you can achieve component persistency.
+2. **Clear state and unmount view** - After unloading controller and extensions the page state is cleared and view (starting from [ManagedRootView](./rendering-process#managedrootview)) is unmounted. However if the [DocumentView](./rendering-process#documentview), [ViewAdapter](./rendering-process#viewadapter) and [ManagedRootView](./rendering-process#managedrootview) are the same for the new route the view is cleared rather then unmounted. This way you can achieve component persistency.
 
-3. **Loading new controller and extensions** - After the manager is done with clearing previous resource it initialises the new ones. First the [`init` method](/docs/controller-lifecycle#init-serverclient) is called on controller then on every extension (Extensions may [be initialised](/docs/extensions#how-to-use-extensions) during the controllers `init` method call).
-When the initialisation is complete manager starts loading resources via `load` method of the controller and extensions. For detailed explanation see the [`load` method documentation](/docs/controller-lifecycle#load-serverclient).
+3. **Loading new controller and extensions** - After the manager is done with clearing previous resource it initialises the new ones. First the [`init` method](./controller-lifecycle#init-serverclient) is called on controller then on every extension (Extensions may [be initialised](./extensions#how-to-use-extensions) during the controllers `init` method call).
+When the initialisation is complete manager starts loading resources via `load` method of the controller and extensions. For detailed explanation see the [`load` method documentation](./controller-lifecycle#load-serverclient).
 
-4. **Rendering new view** - After the `load` method has been called a view for the controller is rendered. It doesn't matter if all promises returned by the `load` method have been resolved. The process of handling promises is described in the [`load` method documentation](/docs/controller-lifecycle#load-serverclient).  Following rendering process is described on a page [Rendering process](/docs/rendering-process) and [View & Components](/docs/views-and-components).
+4. **Rendering new view** - After the `load` method has been called a view for the controller is rendered. It doesn't matter if all promises returned by the `load` method have been resolved. The process of handling promises is described in the [`load` method documentation](./controller-lifecycle#load-serverclient).  Following rendering process is described on a page [Rendering process](./rendering-process) and [View & Components](./views-and-components).
 
 ## Intervene into the process
 
-It's possible for you to intervene into the process before it starts and after it finished. One way is to listen to [`BEFORE_HANDLE_ROUTE`](/docs/events#built-in-events) and [`AFTER_HANDLE_ROUTE`](/docs/events#built-in-events) dispatcher events. However from inside event listeners you cannot intercept or modify the process. For this purpose we've introduced PageManagerHandlers in [v16](/docs/migration-0.16.0)
+It's possible for you to intervene into the process before it starts and after it finished. One way is to listen to [`BEFORE_HANDLE_ROUTE`](./events#built-in-events) and [`AFTER_HANDLE_ROUTE`](./events#built-in-events) dispatcher events. However from inside event listeners you cannot intercept or modify the process. For this purpose we've introduced PageManagerHandlers in [v16](../migration/migration-0.16.0.md)
 
 ### PageManagerHandlers
 
-PageManagerHandler is a simple class that extends `ima/page/handler/PageHandler`. It can obtain dependencies through [dependency injection](/docs/object-container#1-dependency-injection). Each handler should contain 4 methods:
+PageManagerHandler is a simple class that extends `ima/page/handler/PageHandler`. It can obtain dependencies through [dependency injection](./object-container#1-dependency-injection). Each handler should contain 4 methods:
 
 #### 1. `init()` method
 For purpose of initialising.
@@ -60,7 +58,7 @@ and finally the `action` is an object describing what triggered the routing. If 
 
 This method is a counterpart to `handlePreManagedState()` method. It's called after page transition is finished. It receives similar arguments (`managedPage`, `previousManagedPage` and `action`). `previousManagedPage` holds information about previous page.
 
-> **Note:** `handlePreManagedState()` and `handlePostManagedState()` methods can interrupt transition process by throwing an error. The thrown error should be instance of [`GenericError`](/docs/errors) with a status code specified. That way the router can handle thrown error accordingly.
+> **Note:** `handlePreManagedState()` and `handlePostManagedState()` methods can interrupt transition process by throwing an error. The thrown error should be instance of [`GenericError`](./errors) with a status code specified. That way the router can handle thrown error accordingly.
 
 #### 4. `destroy()` method
 For purpose of destructing
@@ -89,7 +87,7 @@ export let init = (ns, oc, config) => {
 
 ## PageNavigationHandler
 
-With introduction of PageManagerHandlers in [v16](/docs/migration-0.16.0) we've moved some functionality to predefined handler [**PageNavigationHandler**](https://github.com/seznam/ima/blob/master/packages/core/src/page/handler/PageNavigationHandler.js). This handler takes care of saving scroll position, restoring scroll position and settings browser's address bar URL. You're free to extend it, override it or whatever else you want.
+With introduction of PageManagerHandlers in [v16](../migration/migration-0.16.0.md) we've moved some functionality to predefined handler [**PageNavigationHandler**](https://github.com/seznam/ima/blob/master/packages/core/src/page/handler/PageNavigationHandler.js). This handler takes care of saving scroll position, restoring scroll position and settings browser's address bar URL. You're free to extend it, override it or whatever else you want.
 
 PageNavigationHandler is registered by default, but when you register your own handlers you need to specify PageNavigationHandler as well.
 

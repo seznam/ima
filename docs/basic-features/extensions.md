@@ -13,9 +13,8 @@ page just like an ordinary controller, except that the modifications are
 restricted to the state fields which the extension explicitly specifies
 using its `getAllowedStateKeys()` method.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/diagram-extensions.png)
+
 
 ## Why use extensions
 
@@ -55,7 +54,7 @@ app/
 In the extension file should be plain `class` extending
 `ima/extension/AbstractExtension` with the same methods as you'd use in the controller. In addition you should implement `getAllowedStateKeys()` method which returns array of keys the extension is allowed to change in controller's state.
 
-> **Note:** List and description of controller methods can be seen in [Controller lifecycle](/docs/controller-lifecycle).
+> **Note:** List and description of controller methods can be seen in [Controller lifecycle](./controller-lifecycle).
 
 ```javascript
 // app/component/gallery/GalleryExtension.js
@@ -74,7 +73,7 @@ export default class GalleryExtension extends AbstractExtension {
 
 All extensions to be used on a page must be added to the current controller
 via `addExtension()` method before the controller is initialized (Good
-place for that is the [`init()`](/docs/controller-lifecycle#init-serverclient) method). After that, the extensions will go
+place for that is the [`init()`](./controller-lifecycle#init-serverclient) method). After that, the extensions will go
 through the same lifecycle as the controller.
 
 ```javascript

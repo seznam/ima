@@ -26,6 +26,7 @@
     "benchmark": "utils/benchmark/benchmark.sh",
     "dev": "node ./utils/scripts/dev.js",
     "build": "turbo run build",
+    "doc": "cd ./website && npm run build",
     "commit": "git-cz",
     "postinstall": "npm run build",
     "lint": "turbo run lint",

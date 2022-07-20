@@ -3,14 +3,12 @@ title: Views & Components
 description: Basic features > Views & Components
 ---
 
-As you may have noticed when a [route is registered](/docs/routing#3-controller-and-view),
+As you may have noticed when a [route is registered](./routing#3-controller-and-view),
 a constructor of **Controller** and **View** is given as a 3rd and 4th argument.
 Controller takes care of loading and managing the data while View is a
 presentation for the data loaded by the Controller.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-view.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/docs/diagram-view.png)
 
 ## Organizing Views and Components
 
@@ -60,8 +58,7 @@ replaced with a newly rendered view.
 ### Route parameters in View
 
 In ideal case Views should only display data loaded in Controller and not even
-care about route parameters. But as nothing is ever ideal we've added [`params`
-object](/docs/routing#2-route-path-and-parameters) to the View props for you.
+care about route parameters. But as nothing is ever ideal we've added [`params` object](./routing.md#2-route-path-and-parameters) to the View props for you.
 
 ```
 // app/config/routes.js
@@ -84,16 +81,16 @@ be functional only after the user-loading promise has been resolved.
 It's clear that data obtained in a Controller are passed down to a View and thus
 affecting how the rendered View looks and what it displays. A problem arises when
 a View wants to tell Controller to load or change something. The solution to this
-are event handling utils [**EventBus**](/docs/events#eventbus) and
-[**Dispatcher**](/docs/events#dispatcher).
+are event handling utils [**EventBus**](./events#eventbus) and
+[**Dispatcher**](./events#dispatcher).
 
 ## Utilities shared across Views and Components
 
 At some point you'll come to a situation when it'd be nice to have a function or set of functions shared between multiple components. Great example would be custom link generation, page elements manipulation (modal, lightbox) or adverts and analytics.
 
-These cases are covered by **ComponentUtils** that allow you to register classes (utilities) that are then shared across every View and Component. Utilities are instantiated through [OC](/docs/object-container) therefore you can get access to other utilities or IMA.js components.
+These cases are covered by **ComponentUtils** that allow you to register classes (utilities) that are then shared across every View and Component. Utilities are instantiated through [OC](./object-container) therefore you can get access to other utilities or IMA.js components.
 
-Example Utility class would look like this. Simple class with [dependency injection](/docs/object-container#1-dependency-injection).
+Example Utility class would look like this. Simple class with [dependency injection](./object-container#1-dependency-injection).
 
 ```javascript
 // app/helper/LightboxHelper.js
@@ -148,11 +145,11 @@ export default class Gallery extends AbstractComponent {
 
 For some heavy-used utilities we've created a shortcut methods in **AbstractComponent**.
 
-- **`link`**`(name, params)` = [**Router.link()**](/docs/routing#linking-to-routes)
-- **`localize`**`(key, params` = [**Dictionary.get()**](/docs/dictionary)
-- **`fire`**`(eventName, data)` = [**EventBus.fire()**](/docs/events#eventbus)
-- **`listen`**`(eventTarget, eventName, listener)` = [**EventBus.listen()**](/docs/events#eventbus)
-- **`unlisten`**`(eventTarget, eventName, listener)` = [**EventBus.unlisten()**](/docs/events#eventbus)
+- **`link`**`(name, params)` = [**Router.link()**](./routing#linking-to-routes)
+- **`localize`**`(key, params` = [**Dictionary.get()**](./dictionary)
+- **`fire`**`(eventName, data)` = [**EventBus.fire()**](./events#eventbus)
+- **`listen`**`(eventTarget, eventName, listener)` = [**EventBus.listen()**](./events#eventbus)
+- **`unlisten`**`(eventTarget, eventName, listener)` = [**EventBus.unlisten()**](./events#eventbus)
 
 One special case would be `cssClasses` shortcut which is by default alias for [**classnames**](https://www.npmjs.com/package/classnames) package. You can overwrite this behaviour by registering you own helper in ComponentUtils under `$CssClasses` alias.
 - **`cssClasses`**`(classRules, includeComponentClassName` = `this.utils.$CssClasses()`

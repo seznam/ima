@@ -96,4 +96,4 @@ var vendors = {
 
 As you can see, creating IMA.js plugin is very easy. You can always check our
 [IMA.js-plugins](https://github.com/seznam/IMA.js-plugins/tree/master) monorepo to take a look at many other already
-existing plugins and how they're implemented, which we describe more in detail [in the documentation](/docs/available-plugins).
+existing plugins and how they're implemented, which we describe more in detail [in the documentation](./available-plugins).
