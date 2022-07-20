@@ -43,8 +43,13 @@ class Logger {
       );
     }
 
-    // Write message
-    process.stdout.write(message);
+    try {
+      // Write message
+      message = message ?? typeof message;
+      process.stdout.write(message);
+    } catch (error) {
+      console.error(error);
+    }
 
     // Write elapsed time if provided
     if (elapsed) {

@@ -63,10 +63,8 @@ function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
         }
       }
     })
-    .on('crash', error => {
+    .on('crash', () => {
       logger.error('Application watcher crashed unexpectedly.');
-      logger.error(error);
-      process.exit(1);
     });
 }
 
