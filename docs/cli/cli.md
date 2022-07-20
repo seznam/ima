@@ -3,9 +3,9 @@ title: 'Introduction to @ima/cli'
 description: 'CLI > Introduction to @ima/cli'
 ---
 
-The **`ima` CLI** allows you to build and watch your application (dev-mode). There are currently 2 supported commands on the CLI - `dev` and `build`.
+The **`ima` CLI** allows you to build and watch your application (dev-mode). There are currently 2 supported commands by the CLI - `dev` and `build`.
 
-However you can always list available commands by running:
+You can always list available commands by running:
 
 ```
 npx ima --help
@@ -17,7 +17,7 @@ npx ima --help
 
 :::
 
-Which should produce following output:
+This should produce following output:
 
 ```
 Usage: ima <command>
@@ -35,15 +35,9 @@ Options:
 
 The `npx ima dev` command starts the application in the **development** mode with HMR, error-overlay, source maps and other debugging tools enabled.
 
-By default the application starts on [http://localhost:3001](http://localhost:3001) with companion dev server running at [http://localhost:3101](http://localhost:3101). These can be further customized through the app **environment** settings and CLI arguments.
+By default the application starts on [http://localhost:3001](http://localhost:3001) with [companion dev server](./advanced-features#dev-server) running at [http://localhost:3101](http://localhost:3101). These can be further customized through the app **environment** settings and CLI arguments.
 
-As with the default command, you can also run `npx ima dev --help` to list all available options that you can pass to the CLI:
-
-:::note
-
-To make the `dev` builds as fast as possible, the CLI builds only the `es` version of the application JS files. To enable build of non-es version, run the cli with `--legacy` option.
-
-:::
+You can also run `npx ima dev --help` to list all available options that you can use:
 
 ```
 ima dev
@@ -72,38 +66,6 @@ Any of the above mentioned options can be combined together in all different com
 
 :::
 
-### CLI options
-
-Most of the following options are also available for `build` command.
-
-- **`--version`** - prints `@ima/cli` version.
-- **`--help`** - prints help dialog.
-- **`--clean`** - deletes `./build` folder before running the application.
-- **`--clearCache`** - clears `./node_modules/.cache` folder. This is used to store webpack filesystem cache and other webpack loader and plugins cache.
-- **`--verbose`** - disables custom CLI logging style in favor of default webpack CLI verbose. This can be usefull for debugging.
-- **`--publicPath`** - overwries the webpack `publicPath` config option.
-- **`--ignoreWarnings`** - ignore reporting of webpack warning messages.
-- **`--open=[true|false]`** - enable/disable auto opening of app URL in the browser window upon start. This is enabled by default.
-- **`--legacy`** - by default the CLI only builds `es` version of JS files. Use this option to enable additional build of non es version.
-- **`--forceSPA`** - forces the application to run in SPA mode.
-
-
-:::tip
-
-When you run into any issues with the application build, you can always run the app with `npx ima dev --clean --clearCache` to make sure that all cache and tmp files are deleted before next build and see if this resolves your issues.
-
-Similarly you can use the `--verbose` option to show more information during build that can aid you in **debugging process** in case anything happens.
-
-:::
-
-### Dev server options
-
-Following options are used to customize the companion dev server location. These can be useful if you have some special dev environment, where you have an issue with default options.
-
-- **`--port=3101`** - dev server port.
-- **`--hostname=localhost`** - dev server hostname.
-- **`--publicUrl=http://localhost:3101`** - dev server public url.
-
 ## Build
 
 Builds the application in production mode with all optimizations enabled (compression, minification, etc.). The `build` command drops some options compared to the `dev` command. While adding few build specific commands. `npx build --help` produces:
@@ -124,10 +86,118 @@ Options:
   --profile         Turn on profiling support in production  [boolean] [default: false]
 ```
 
-- **`--profile`** - disables some optimizations to allow for better debugging while also trying to be as close to the production build as possible. Currently this option disables mangling of classes and functions, which produces more readable stack traces.
-
 :::note
 
 Additionally in comparison with dev command, the build has `clean` option enabled by default.
 
 :::
+
+
+## CLI options
+
+Most of the following options are available for both `dev` and `build` commands, however some may be exclusive to only one of them. You can always use the `--help` argument to show all available options for each command.
+
+:::tip
+
+When you run into any issues with the application build, you can always run the app with `npx ima dev --clean --clearCache` to make sure that all cache and tmp files are deleted before next build and see if this resolves your issues.
+
+Similarly you can use the `--verbose` option to show more information during build that can aid you in **debugging process** in case anything happens.
+
+:::
+
+### --version
+
+Prints `@ima/cli` version.
+
+### --help
+
+Prints help dialog.
+
+### --clean
+
+> `boolean = false`
+
+Deletes `./build` folder before running the application.
+
+:::note
+
+This defaults to `true` for `build` command.
+
+:::
+
+### --clearCache
+
+> `boolean = false`
+
+Clears `./node_modules/.cache` folder. This is used to store webpack filesystem cache and other webpack loader and plugins cache.
+
+### --verbose
+
+> `boolean = false`
+
+Disables custom CLI logging style in favor of default webpack CLI verbose. This can be usefull for debugging.
+
+### --publicPath
+
+> `string`
+
+Overwrite the webpack `publicPath` config option (this also overwrites custom definition in [ima.config.js](./ima.config.js#publicpath).
+
+### --ignoreWarnings
+
+> `boolean = false`
+
+Ignore reporting of webpack warning messages. The CLI automatically caches all existing warnings and shows just new warnings rebuilds in watch mode.
+
+### --open
+
+> `boolean = true`
+
+Enable/disable auto opening of app URL in the browser window on startup.
+
+### --legacy
+
+> `boolean = false`
+
+By default the CLI only builds `es` version of JS files in development mode. Use this option to enable [additional build of non es version](./compiler-features#server-and-client-bundles).
+
+### --forceSPA
+
+> `boolean = false`
+
+Forces the application to run in SPA mode.
+
+### --profile
+
+> `boolean = false`
+
+Disables some optimizations to allow for better debugging while also trying to be as close to the production build as possible. Currently this option disables mangling of classes and functions, which produces more readable stack traces.
+
+
+## Dev server options
+
+Following options are used to customize the companion dev server location (only for `dev` command). These can be useful if you have some special dev environment, where you have an issue with the default configuration.
+
+:::tip
+
+If you provide `port` and `hostname`, you don't need to define the `publicUrl`. The CLI will create it automatically. Unless the publicUrl is completely different than the hostname and port provided.
+
+:::
+
+### --port
+
+> `number`
+
+Dev server port.
+
+### --hostname
+
+> `string`
+
+Dev server hostname, for example: `localhost`, or `127.0.0.1`.
+
+### --publicUrl
+
+> `string`
+
+Dev server public url, for example: `http://localhost:3101`.

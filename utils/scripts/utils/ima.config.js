@@ -28,5 +28,4 @@ module.exports = {
 
     return config;
   },
-
 };

@@ -42,7 +42,7 @@ export default async (
 
   // Define helper variables derived from context
   const isDevEnv = ctx.environment === 'development';
-  const useSourceMaps = !!imaConfig.sourceMap || isDevEnv;
+  const useSourceMaps = !!imaConfig.sourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
@@ -68,8 +68,8 @@ export default async (
 
   // Set correct devtool source maps config
   const devtool = useSourceMaps
-    ? typeof imaConfig.sourceMap === 'string'
-      ? imaConfig.sourceMap
+    ? typeof imaConfig.sourceMaps === 'string'
+      ? imaConfig.sourceMaps
       : 'source-map'
     : false;
 
