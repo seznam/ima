@@ -19,6 +19,7 @@
     "./packages/error-overlay",
     "./packages/helpers",
     "./packages/hmr-client",
+    "./packages/react-page-renderer",
     "./packages/server"
   ],
   "scripts": {

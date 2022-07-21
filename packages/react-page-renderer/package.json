@@ -1,0 +1,44 @@
+{
+  "name": "@ima/react-page-renderer",
+  "version": "18.0.0-rc.0",
+  "description": "IMA.js React page renderer.",
+  "keywords": [
+    "IMA.js",
+    "react-page-renderer"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/react-page-renderer"
+  },
+  "license": "MIT",
+  "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
+  "main": "./dist/index.cjs",
+  "scripts": {
+    "build": "rollup --config",
+    "dev": "rollup --config --watch",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@ima/helpers": "^18.0.0-rc.1",
+    "classnames": "^2.3.1",
+    "memoize-one": "^6.0.0"
+  },
+  "devDependencies": {
+    "@ima/dev-utils": "^18.0.0-rc.1",
+    "@types/webpack-env": "^1.16.3"
+  },
+  "peerDependencies": {
+    "@ima/dev-utils": "^18.0.0-rc.0",
+    "react-dom": ">=16.13",
+    "react": ">=16.13",
+    "webpack": "^5.70.0"
+  }
+}
