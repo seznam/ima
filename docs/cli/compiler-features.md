@@ -3,7 +3,7 @@ title: 'Compiler Features'
 description: 'CLI > Compiler Features'
 ---
 
-The IMA.js CLI uses [webpack](https://webpack.js.org/) behind the scenes to **compile**, **minify** and **run** the application in **dev mode**. It comes pre-configured with some options, plugins and loaders, which we will describe in the following sections.
+The IMA.js CLI uses [webpack](https://webpack.js.org/) behind the scenes to **compile**, **minify** and **run** the application in **dev mode**. It comes pre-configured with some options, plugins and loaders, which are described in the following sections.
 
 ## Server and client bundles
 

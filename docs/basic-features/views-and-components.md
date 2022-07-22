@@ -8,7 +8,7 @@ a constructor of **Controller** and **View** is given as a 3rd and 4th argument.
 Controller takes care of loading and managing the data while View is a
 presentation for the data loaded by the Controller.
 
-![](/docs/diagram-view.png)
+![](/img/docs/diagram-view.png)
 
 ## Organizing Views and Components
 

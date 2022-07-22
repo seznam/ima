@@ -19,7 +19,7 @@ As of now it's only available to [**download**](https://chrome.google.com/websto
 
 ## How it works?
 
-![](/docs/devtools-diagram.png)
+![](/img/docs/devtools-diagram.png)
 
 After you download and enable an IMA.js devtools extension, on **every page load** the extension starts injecting
 very small script (that won't affect any functionality of other pages), which checks for the presence of IMA.js application.

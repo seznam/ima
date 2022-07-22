@@ -3,7 +3,7 @@ title: 'Introduction to @ima/cli'
 description: 'CLI > Introduction to @ima/cli'
 ---
 
-The **`ima` CLI** allows you to build and watch your application (dev-mode). There are currently 2 supported commands by the CLI - `dev` and `build`.
+The **IMA.js CLI** allows you to build and watch your application for changes during development. These features are handle by the only two currently supported commands `build` and `dev`.
 
 You can always list available commands by running:
 

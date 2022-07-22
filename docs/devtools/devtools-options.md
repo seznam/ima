@@ -3,7 +3,7 @@ title: Options
 description: Devtools > Available options and customization
 ---
 
-![](/docs/devtools-options.png)
+![](/img/docs/devtools-options.png)
 
 As we've already talked about in [the introduction section](./devtools-introduction), the devtools
 use special devtools script which defines which parts of IMA.js application should send messages about
@@ -26,7 +26,7 @@ these are snippets of JavaScript code, that define which parts of IMA.js app sho
 You can create multiple presets or edit existing ones by clicking on the **"Load or Create Preset"** button, where
 you're presented with Presets modal window. Selected presets are **marked bold**.
 
-![](/docs/devtools-options-presets.png)
+![](/img/docs/devtools-options-presets.png)
 
 Notice that there's already a **Default** preset, which is not editable (but can be copied!). This preset
 is read-only and you can't edit it directly. This is so in the future we can safely update the default detection script
@@ -39,7 +39,7 @@ button, or copy exiting one using the duplicate icon.
 
 ## Hooks
 
-![](/docs/devtools-options-hooks.png)
+![](/img/docs/devtools-options-hooks.png)
 
 Each hook can be individually **enabled/disabled** and has it's own name, description and code. First three are pretty
 self explanatory so we'll talk mostly about the **code** and available API.

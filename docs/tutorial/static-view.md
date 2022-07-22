@@ -83,7 +83,7 @@ manage to make would likely be lost with the next update of the page's UI.
 
 If everything went well you should see the following page when you refresh your browser:
 
-![](/tutorial/static-view-null.png)
+![](/img/tutorial/static-view-null.png)
 
 ### Guestbook form & SMACSS
 
@@ -250,7 +250,7 @@ by hitting `Ctrl+C` and then re-running the `npm run dev` command if your
 browser cannot access the newly installed resources). In the end of this section
 you should see something like this when you refresh your page.
 
-![](/tutorial/static-view-styling-our-form.png)
+![](/img/tutorial/static-view-styling-our-form.png)
 
 ### Rendering the whole document
 

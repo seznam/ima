@@ -13,7 +13,7 @@ page just like an ordinary controller, except that the modifications are
 restricted to the state fields which the extension explicitly specifies
 using its `getAllowedStateKeys()` method.
 
-![](/docs/diagram-extensions.png)
+![](/img/docs/diagram-extensions.png)
 
 
 ## Why use extensions

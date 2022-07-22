@@ -126,7 +126,7 @@ export default class ObjectContainer {
    * @param {string} name Alias name.
    * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
    *        class constructor or a factory function.
-   * @param {?*[]} [dependencies] The dependencies to pass into the
+   * @param {Array<string|object|function>} [dependencies] The dependencies to pass into the
    *        constructor or factory function.
    * @return {ObjectContainer} This object container.
    */
@@ -228,7 +228,7 @@ export default class ObjectContainer {
    *
    * @template T
    * @param {function(new: T, ...*)} classConstructor The class constructor.
-   * @param {?*[]} dependencies The dependencies to pass into the
+   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
    *        constructor function.
    * @return {ObjectContainer} This object container.
    */
@@ -292,7 +292,7 @@ export default class ObjectContainer {
    *        of the interface representing the service.
    * @param {function(new: Implementation, ...*)} implementationConstructor
    *        The constructor of the class implementing the service interface.
-   * @param {?*[]} dependencies The dependencies to pass into the
+   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
    *        constructor function.
    * @return {ObjectContainer} This object container.
    */
@@ -413,7 +413,7 @@ export default class ObjectContainer {
    * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
    *        of the alias, class, interface, or the class, interface or a
    *        factory function to use.
-   * @param {?*[]} dependencies The dependencies to pass into the
+   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
    *        constructor or factory function.
    * @return {T} Created instance or generated value.
    */
@@ -518,7 +518,7 @@ export default class ObjectContainer {
    * @param {Entry} entry The entry representing the class that should
    *        have its instance created or factory faction to use to create a
    *        value.
-   * @param {*[]} dependencies The dependencies to pass into the
+   * @param (Array<tring|object|function>} dependencies The dependencies to pass into the
    *        constructor or factory function.
    */
   _updateEntryValues(entry, classConstructor, dependencies) {
@@ -533,7 +533,7 @@ export default class ObjectContainer {
    * @template T
    * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
    *        class constructor or factory function.
-   * @param {?*[]} [dependencies] The dependencies to pass into the
+   * @param {Array<string|object|function>} [dependencies] The dependencies to pass into the
    *        constructor or factory function.
    * @param {{ writeable: boolean }} options
    * @return {T} Created instance or generated value.
@@ -567,7 +567,7 @@ export default class ObjectContainer {
    * @param {Entry<T>} entry The entry representing the class that should
    *        have its instance created or factory faction to use to create a
    *        value.
-   * @param {*[]} [dependencies=[]] The dependencies to pass into the
+   * @param (Array<tring|object|function>} [dependencies=[]] The dependencies to pass into the
    *        constructor or factory function.
    * @return {T} Created instance or generated value.
    */
@@ -728,7 +728,7 @@ class Entry {
    *
    * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
    *        class constructor or constant value getter.
-   * @param {*[]} [dependencies=[]] The dependencies to pass into the
+   * @param (Array<tring|object|function>} [dependencies=[]] The dependencies to pass into the
    *        constructor function.
    * @param {?string} referrer Reference to part of application that created
    *        this entry.
@@ -771,7 +771,7 @@ class Entry {
      * Dependencies of the class constructor of the class represented by
      * this entry.
      *
-     * @type {*[]}
+     * @type Array<string|object|function>
      */
     this._dependencies = dependencies || [];
 

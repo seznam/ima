@@ -5,7 +5,7 @@ description: Basic features > Page State and it's usage
 
 Core of each application is the data the app is working with. The data needs to be managed in some manner and user needs to be able to manipulate with the data during application run. IMA.js adopted a React style of state management.
 
-![](/docs/diagram-page-state.png)
+![](/img/docs/diagram-page-state.png)
 
 
 A **PageStateManager** class is used for managing **page state** and is in tight cooperation with **PageManager**.

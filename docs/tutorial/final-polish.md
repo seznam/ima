@@ -145,7 +145,7 @@ With this, the form validation is complete. Feel free to check this in your own 
 and you should see red input fields if the inputs are empty, while the submit button should prevent
 you from submitting an empty content.
 
-![](/tutorial/final-polish-form-validation.png)
+![](/img/tutorial/final-polish-form-validation.png)
 
 So now let's make the posting experience a little bit better.
 
@@ -1061,7 +1061,7 @@ And finally add the following snippet at the end of the file:
 lower left corner. If you followed the tutorial from start,
 the final application should look something like the picture below.
 
-![](/tutorial/final-polish-final.png)
+![](/img/tutorial/final-polish-final.png)
 
 ## Conclusion
 

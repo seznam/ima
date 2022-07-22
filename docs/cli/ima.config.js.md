@@ -5,7 +5,7 @@ description: 'CLI > Customizing the build through ima.config.js'
 
 To additionally customize the build configuration of IMA.js, you can create a `ima.config.js` file in the root of your project (next to package.json).
 
-`ima.config.js` is regular JavaScript module that is loaded during the build configuration initialization (in Node.js environment) and it is not included in the final application bundle.
+`ima.config.js` is regular JavaScript module that is loaded during the build configuration initialization (in Node.js environment) and **it is not included in the final application bundle**.
 
 An example of `ima.config.js` file can look something like this:
 
@@ -59,7 +59,7 @@ Use the `@type` jsdoc annotation to enable ts-types code completions.
 
 ## Configuration options
 
-Below you can find all the configurations that can be defined in `ima.config.js` config file.
+The `ima.config.js` file should export an object with any combination of the following configuration options.
 
 
 ### webpack

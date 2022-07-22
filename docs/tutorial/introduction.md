@@ -51,7 +51,7 @@ npm run dev
 As you can already see from the command line, if everything went well, you can view the basic "hello world"
 application by opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
 
-![](/tutorial/introduction-run-dev.jpg)
+![](/img/tutorial/introduction-run-dev.jpg)
 
 ### Dev server
 By running `npm run dev` you start your application in development mode with a dev server.

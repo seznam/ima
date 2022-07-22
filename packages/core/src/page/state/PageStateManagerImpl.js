@@ -21,12 +21,12 @@ export default class PageStateManagerImpl extends PageStateManager {
     super();
 
     /**
-     * @type {Object<string, *>[]}
+     * @type {Array<Object<string, *>>}
      */
     this._states = [];
 
     /**
-     * @type {Object<string, *>[]}
+     * @type {Array<Object<string, *>>}
      */
     this._statePatchQueue = [];
 

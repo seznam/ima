@@ -29,14 +29,14 @@ export default class PageStateManager {
    * Note that the implementation may limit the size of the recorded history,
    * therefore the complete history may not be available.
    *
-   * @return {Object<string, *>[]} The recorded history of page states.
+   * @return {Array<Object<string, *>>} The recorded history of page states.
    */
   getAllStates() {}
 
   /**
    * Returns queueing state patches off the main state from the begin of transaction.
    *
-   * @return {Object<string, *>[]} State patches from the begin of transaction.
+   * @return {Array<Object<string, *>>} State patches from the begin of transaction.
    */
   getTransactionStatePatches() {}
 

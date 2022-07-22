@@ -7,7 +7,7 @@ The rendering process goes through many points you can customize or take
 advantage of. First thing IMA.js will want to render is a **DocumentView**
 followed by **ViewAdapter** and **ManagedRootView**.
 
-![](/docs/diagram-rendering.png)
+![](/img/docs/diagram-rendering.png)
 
 ## DocumentView
 

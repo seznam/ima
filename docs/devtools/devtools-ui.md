@@ -13,7 +13,7 @@ Main component of our IMA.js devtools is the panel window, that you get after op
 (use the keyboard shortcut `Cmd + Shift + J` on Windows or `Cmd + Option + J` on Mac)
 and clicking on **IMA.js tab** on any IMA.js application website.
 
-![](/docs/devtools-ui.png)
+![](/img/docs/devtools-ui.png)
 
 This tab shows you all **events** (that you defined in the [options](./devtools-options), which we'll talk about later)
 and **method calls** in your application since it's initialization. But there are few other components in this window,
@@ -21,7 +21,7 @@ that offers some additional functionality, so let's take a closer look at each o
 
 ### Search bar
 
-![](/docs/devtools-ui-search.png)
+![](/img/docs/devtools-ui-search.png)
 
 The search bar allows you to **filter all messages** using simple **fuzzy search**. The keywords are currently
 matched with `payload.label`, so searching for values in payloads or any other text, that is not
@@ -31,7 +31,7 @@ You can also use **JS regular expressions** for more advance filtering. To use t
 the searched string between `/(init)/i` backslashes. There's built in validation, where if the RegExp is not correct,
 the input text will be red and no search is performed.
 
-![](/docs/devtools-ui-search-validation.png)
+![](/img/docs/devtools-ui-search-validation.png)
 
 #### Search action buttons
 
@@ -43,11 +43,11 @@ The third one **clears the currently searched text** and
 last one opens a menu, where additional two buttons let's you either **clear whole state** (e.g. all messages are deleted)
 or access additional [options](./devtools-options).
 
-![](/docs/devtools-ui-search-action-btns.png)
+![](/img/docs/devtools-ui-search-action-btns.png)
 
 ### Messages view
 
-![](/docs/devtools-ui-message.png)
+![](/img/docs/devtools-ui-message.png)
 
 This is probably the main part of whole devtools. Here you can see all events and methods
 (that have registered hooks in the [options](./devtools-options)) and time they were called
@@ -62,7 +62,7 @@ than corresponds to whenever all **promises** in the method call are resolved or
 
 ### Data view
 
-![](/docs/devtools-ui-dataview.png)
+![](/img/docs/devtools-ui-dataview.png)
 
 This view has 3 tabs - **Args**, **Payload** and **Events**. Args and Payload are basically shortcut to the last event's `payload.state` in the Events tab.
 Each method call can have one or multiple events, this depends whenever any of the arguments is a promise or not. In case it is, the events is an array
@@ -74,7 +74,7 @@ to these objects.
 
 ## Popup
 
-![](/docs/devtools-ui-popup.png)
+![](/img/docs/devtools-ui-popup.png)
 
 The popup is a simple window that you can see after clicking on the IMA.js extension icon
 in the chrome toolbar. The main purpose of this window is to give you quick toggle to **enable**
