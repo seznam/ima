@@ -6,6 +6,25 @@ import jsdoc2md from 'jsdoc-to-markdown';
 
 const GIT_BASE_URL =
   'https://github.com/seznam/ima/tree/next/packages/core/src';
+const DOC_PREPROCESSORS = [
+  {
+    pattern:
+      /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_., *<>|]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
+    replace: '/**$1@$2 {$3Array<$4>$5}$6*/',
+  },
+  {
+    pattern: /^\sexport\s+\{([\s\S.]+)\};?/gm,
+    replace: '',
+  },
+  {
+    pattern: /^\s*(export\s+default|export)\s+/gm,
+    replace: '',
+  },
+  {
+    pattern: /@private/gm,
+    replace: '',
+  },
+];
 
 const dirname = fileURLToPath(path.dirname(import.meta.url));
 const outputBaseDir = path.resolve(dirname, '../../docs/api');
@@ -37,8 +56,30 @@ async function createCategoryIndex(baseDir, depth) {
   );
 }
 
+/**
+ * Runs preprocessors on file contents to prepare them for
+ * better JSdoc generated output.
+ */
+function preprocess(content) {
+  let oldContent = null;
+
+  while (content !== oldContent) {
+    oldContent = content;
+    for (let preprocessor of DOC_PREPROCESSORS) {
+      let { pattern, replace } = preprocessor;
+      content = content.replace(pattern, replace);
+    }
+  }
+
+  return content;
+}
+
+/**
+ * Generates docs/api markdown files and folder structure
+ * that is loaded in docusaurus.
+ */
 async function main() {
-  // Create clean output dir
+  // Cleanup output dir
   await fs.promises.rm(outputBaseDir, { recursive: true, force: true });
   await fs.promises.mkdir(outputBaseDir, { recursive: true });
 
@@ -63,24 +104,25 @@ async function main() {
 
   // Generate markdown files
   await Promise.all(
-    files.map(async file => {
-      const rootTemplateData = {};
+    files.filter(Boolean).map(async file => {
+      const { name: fileName } = path.parse(file);
+      const relativePath = path.relative(pkgBasePath, file);
+
+      // Run preprocessors on the file contents
+      const source = preprocess(
+        await (await fs.promises.readFile(file)).toString()
+      );
+
+      // Generate template data
       const templateData = (
         await jsdoc2md.getTemplateData({
-          files: file,
+          source,
         })
       ).map(item => {
         if (item.meta) {
-          const { filename, lineno = 1, path: itemPath } = item.meta;
-          const itemRelativePath = path.relative(pkgBasePath, itemPath);
+          const { lineno = 1 } = item.meta;
 
-          item.imaGitUrl = `${GIT_BASE_URL}/${itemRelativePath}/${filename}#L${lineno}`;
-          item.meta.relativePath = itemRelativePath;
-
-          // Parse sidebar metadata
-          rootTemplateData.sidebarLabel = filename.split('.')[0];
-        } else {
-          rootTemplateData.sidebarLabel = item.id;
+          item.imaGitUrl = `${GIT_BASE_URL}/${relativePath}#L${lineno}`;
         }
 
         return item;
@@ -90,12 +132,13 @@ async function main() {
         return;
       }
 
-      // Assign root template data
-      templateData.meta = rootTemplateData;
+      // Assign additional template metadata
+      templateData.meta = {
+        sidebarLabel: fileName.split('.')[0],
+      };
 
-      const relativePath = path.relative(pkgBasePath, file);
-      const { name, dir } = path.parse(relativePath);
-      const docOutputDir = path.join(outputBaseDir, dir);
+      const { dir: relativeDir } = path.parse(relativePath);
+      const docOutputDir = path.join(outputBaseDir, relativeDir);
 
       // Convert jsdoc metdata to markdown
       let markdownContents = await jsdoc2md.render({
@@ -106,13 +149,16 @@ async function main() {
       // Write md file and create directory structure
       await fs.promises.mkdir(docOutputDir, { recursive: true });
       await fs.promises.writeFile(
-        path.join(docOutputDir, `${name}.md`),
+        path.join(docOutputDir, `${fileName}.md`),
         markdownContents
       );
 
       // Create category item metadata index file
-      if (dir) {
-        await createCategoryIndex(docOutputDir, dir.split(path.sep).length);
+      if (relativeDir) {
+        await createCategoryIndex(
+          docOutputDir,
+          relativeDir.split(path.sep).length
+        );
       }
     })
   );
