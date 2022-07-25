@@ -16,7 +16,7 @@ export default class Response {
    */
   constructor() {
     /**
-     * The ExpressJS response object, or {@code null} if running at the
+     * The ExpressJS response object, or `null` if running at the
      * client side.
      *
      * @type {?Express.Response}
@@ -77,7 +77,7 @@ export default class Response {
    * object.
    *
    * @param {?Express.Response} response The ExpressJS response, or
-   *        {@code null} if the code is running at the client side.
+   *        `null` if the code is running at the client side.
    * @param {{
    *          encode: function(string): string=,
    *          decode: function(string): string

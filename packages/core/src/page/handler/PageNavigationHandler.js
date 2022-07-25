@@ -117,7 +117,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
    * state to the history.
    *
    * The state object pushed to or replaced in the history will be an object with the
-   * following structure: {@code {url: string}}. The {@code url} field will
+   * following structure: `{url: string}}. The {@code url` field will
    * be set to the provided URL.
    *
    * @param {string} url The URL.

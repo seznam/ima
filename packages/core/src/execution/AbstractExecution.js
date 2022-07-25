@@ -39,7 +39,7 @@ export default class AbstractExecution extends Execution {
   }
 
   /**
-   * Return {@code true} if the given job can be executed
+   * Return `true` if the given job can be executed
    *
    * @protected
    * @param {function(): Promise} job

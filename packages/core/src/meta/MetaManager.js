@@ -3,16 +3,16 @@
  * to the SEO (search engine optimization) and social network integration.
  *
  * The Meta manager is used to manage the following:
- * - page title, set using the contents of the {@code &lt;title&gt;} element
+ * - page title, set using the contents of the `&lt;title&gt;` element
  * - page links, linking related documents and meta-information, added to the
- *   using {@code &lt;link&gt;} elements
+ *   using `&lt;link&gt;` elements
  * - page meta information:
  *   - the generic named meta information added to the page via
- *     {@code &lt;meta&gt;} elements with the {@code name} attribute, for
- *     example the {@code keywords}.
- *   - specialized meta information added to the page via {@code &lt;meta&gt;}
- *     elements with the {@code property} attribute, for example the OG meta
- *     tags ({@code og:type}, {@code og:image}, etc.).
+ *     `&lt;meta&gt;} elements with the {@code name` attribute, for
+ *     example the `keywords`.
+ *   - specialized meta information added to the page via `&lt;meta&gt;`
+ *     elements with the `property` attribute, for example the OG meta
+ *     tags (`og:type}, {@code og:image`, etc.).
  *
  * @interface
  */
@@ -40,7 +40,7 @@ export default class MetaManager {
    * Set the specified named meta information property.
    *
    * @param {string} name Meta information property name, for example
-   *        {@code keywords}.
+   *        `keywords`.
    * @param {string} value The meta information value.
    */
   setMetaName() {}

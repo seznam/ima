@@ -1,0 +1,16 @@
+---
+{{#orphans ~}}
+  {{#if imaMenuCategory}}
+    category: "{{{imaMenuCategory}}}"
+  {{/if~}}
+  {{#if imaMenuName}}
+    title: "API -
+    {{{imaMenuName}}}" menuTitle: "{{{imaMenuName}}}"
+  {{/if~}}
+{{/orphans~}}
+---
+
+import { GithubLink } from '@site/src/components/GithubLink';
+
+{{>main-index~}}
+{{>all-docs~}}

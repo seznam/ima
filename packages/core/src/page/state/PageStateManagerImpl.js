@@ -5,7 +5,7 @@ import Dispatcher from '../../event/Dispatcher';
 const MAX_HISTORY_LIMIT = 10;
 
 /**
- * The implementation of the {@linkcode PageStateManager} interface.
+ * The implementation of the {@link PageStateManager} interface.
  */
 export default class PageStateManagerImpl extends PageStateManager {
   static get $dependencies() {

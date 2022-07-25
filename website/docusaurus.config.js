@@ -41,9 +41,6 @@ const config = {
           routeBasePath: '/',
           include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
         },
-        blog: {
-          routeBasePath: '/',
-        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -87,7 +84,7 @@ const config = {
             label: 'Tutorial',
           },
           {
-            to: 'api',
+            to: 'api/general/bootstrap',
             position: 'right',
             label: 'API',
           },

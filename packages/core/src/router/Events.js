@@ -5,12 +5,12 @@
  */
 const Events = Object.freeze({
   /**
-   * Router fire event {@code $IMA.$Router.beforeHandleRoute} before page
+   * Router fire event `$IMA.$Router.beforeHandleRoute` before page
    * manager handle the route. Event's data contain
-   * {@code { params: Object<string, string>}, route: ima.core.router.AbstractRoute,
-   * path: string, options: Object<string, *>}}. The {@code path} is current
-   * path, the {@code params} are params extracted from path, the
-   * {@code route} is handle route for path and the {@code options} is route
+   * `{ params: Object<string, string>`, route: ima.core.router.AbstractRoute,
+   * path: string, options: Object<string, *>}}. The `path` is current
+   * path, the `params` are params extracted from path, the
+   * `route} is handle route for path and the {@code options` is route
    * additional options.
    *
    * @const
@@ -19,13 +19,13 @@ const Events = Object.freeze({
   BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
 
   /**
-   * Router fire event {@code $IMA.$Router.afterHandleRoute} after page
+   * Router fire event `$IMA.$Router.afterHandleRoute` after page
    * manager handle the route. Event's data contain
-   * {@code {response: Object<string, *>, params: Object<string, string>},
+   * `{response: Object<string, *>, params: Object<string, string>`,
    * route: ima.core.router.AbstractRoute, path: string, options: Object<string, *>}}.
-   * The {@code response} is page render result. The {@code path} is current
-   * path, the {@code params} are params extracted from path, the
-   * {@code route} is handle route for path and the {@code options} is route
+   * The `response} is page render result. The {@code path` is current
+   * path, the `params` are params extracted from path, the
+   * `route} is handle route for path and the {@code options` is route
    * additional options.
    *
    * @const

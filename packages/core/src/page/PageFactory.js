@@ -19,7 +19,7 @@ export default class PageFactory {
   }
 
   /**
-   * Create new instance of {@linkcode Controller}.
+   * Create new instance of {@link Controller}.
    *
    * @param {(string|function(new:Controller))} controller
    * @return {Controller}

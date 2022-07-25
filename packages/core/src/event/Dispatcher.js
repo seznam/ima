@@ -31,7 +31,7 @@ export default class Dispatcher {
    *
    * @param {string} event The name of the event to listen for.
    * @param {function(*)} listener The event listener to register.
-   * @param {?Object=} scope The object to which the {@code this} keyword
+   * @param {?Object=} scope The object to which the `this` keyword
    *        will be bound in the event listener.
    * @return {Dispatcher} This dispatcher.
    */
@@ -44,7 +44,7 @@ export default class Dispatcher {
    * @param {string} event The name of the event for which the listener
    *        should be deregistered.
    * @param {function(*)} listener The event listener to deregister.
-   * @param {?Object=} scope The object to which the {@code this} keyword
+   * @param {?Object=} scope The object to which the `this` keyword
    *        would be bound in the event listener.
    * @return {Dispatcher} This dispatcher.
    */

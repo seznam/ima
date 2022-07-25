@@ -9,7 +9,7 @@ export default class RouterMiddleware {
    *
    * @param {function(Object<string, string>, function)} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
-   *        and {@code locals} object as second argument. This can be used to pass data
+   *        and `locals` object as second argument. This can be used to pass data
    *        between middlewares.
    */
   constructor(middleware) {
@@ -20,8 +20,8 @@ export default class RouterMiddleware {
     }
 
     /**
-     * Middleware function accepting {@code routeParams} as a first argument, which can be
-     * mutated and {@code locals} object as second argument. This can be used to pass data
+     * Middleware function accepting `routeParams` as a first argument, which can be
+     * mutated and `locals` object as second argument. This can be used to pass data
      * between middlewares.
      *
      * @type {function(Object<string, string>, function)}
