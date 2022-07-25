@@ -176,7 +176,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * Call registered callback function on (@codelink onChange) with newState.
+   * Call registered callback function on (@link onChange) with newState.
    *
    * @param {Object<string, *>} newState
    */

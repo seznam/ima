@@ -12,7 +12,7 @@ if (typeof $Debug !== 'undefined' && $Debug) {
 
 /**
  * The base class for document view components. The document view components
- * create the basic markup, i.e. the `html} or {@code head` elements,
+ * create the basic markup, i.e. the `html` or `head` elements,
  * along with an element that will contain the view associated with the current
  * route.
  *

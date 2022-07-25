@@ -8,11 +8,11 @@
  *   using `&lt;link&gt;` elements
  * - page meta information:
  *   - the generic named meta information added to the page via
- *     `&lt;meta&gt;} elements with the {@code name` attribute, for
+ *     `&lt;meta&gt;} elements with the `name` attribute, for
  *     example the `keywords`.
  *   - specialized meta information added to the page via `&lt;meta&gt;`
  *     elements with the `property` attribute, for example the OG meta
- *     tags (`og:type}, {@code og:image`, etc.).
+ *     tags (`og:type`, `og:image`, etc.).
  *
  * @interface
  */

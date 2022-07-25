@@ -84,7 +84,7 @@ const config = {
             label: 'Tutorial',
           },
           {
-            to: 'api/general/bootstrap',
+            to: 'api/bootstrap',
             position: 'right',
             label: 'API',
           },

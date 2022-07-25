@@ -26,7 +26,7 @@ export default class Execution {
 
   /**
    * Start executing collected jobs. In the end a `Promise` is returned
-   * with a resulting value. On the returned `Promise} a {@code catch`
+   * with a resulting value. On the returned `Promise` a `catch`
    * method can be called to prevent any unwanted interruption.
    *
    * @param {...any} args Arguments to be passed when executing jobs

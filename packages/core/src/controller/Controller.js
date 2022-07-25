@@ -155,16 +155,16 @@ export default class Controller {
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
-   * is active every {@method setState} call has no effect on the current state.
+   * is active every `setState` call has no effect on the current state.
    *
-   * Note that call to {@method getState} after the transaction has begun will
+   * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
   beginStateTransaction() {}
 
   /**
    * Applies queued state patches to the controller state. All patches are squashed
-   * and applied with one {@method setState} call.
+   * and applied with one `setState` call.
    */
   commitStateTransaction() {}
 
