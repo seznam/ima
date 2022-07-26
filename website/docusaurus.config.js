@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/palenight');
  */
 const config = {
   title: 'IMA.js',
-  tagline: 'Isomorphic application in javascript',
+  tagline: 'A Javascript framework for creating isomorphic applications.',
   url: 'https://imajs.io/',
   baseUrl: '/',
   onBrokenLinks: 'warn',

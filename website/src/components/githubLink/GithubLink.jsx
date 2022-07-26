@@ -1,5 +1,6 @@
-// eslint-disable-next-line no-unused-vars
 import React from 'react';
+
+import styles from './githubLink.module.css';
 
 function GithubLink({ url, ...restProps }) {
   if (!url) {
@@ -11,7 +12,7 @@ function GithubLink({ url, ...restProps }) {
       href={url}
       target='_blank'
       rel='noreferrer'
-      className='github-link'
+      className={styles.link}
       {...restProps}
     >
       <svg
@@ -22,7 +23,7 @@ function GithubLink({ url, ...restProps }) {
         strokeWidth='3'
         strokeLinecap='round'
         strokeLinejoin='round'
-        className='github-link__icon'
+        className={styles.icon}
       >
         <path d='M13.5 10.5L21 3' />
         <path d='M16 3h5v5' />

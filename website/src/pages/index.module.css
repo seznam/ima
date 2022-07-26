@@ -1,0 +1,29 @@
+.hero {
+  margin: 3rem 0;
+
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.title {
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 4rem;
+}
+
+.logo {
+  margin-right: 20px;
+  height: 5rem;
+}
