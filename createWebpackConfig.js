@@ -33,7 +33,14 @@ function createWebpackConfig(callback) {
           loader: require.resolve('babel-loader'),
           options: {
             sourceType: 'unambiguous',
-            targets: { chrome: '80', safari: '14' }, // es11
+            targets: {
+              chrome: '80',
+              edge: '80',
+              firefox: '80',
+              opera: '67',
+              safari: '14',
+              ios: '14',
+            }, // es11
             babelrc: false,
             configFile: false,
             cacheDirectory: true,
