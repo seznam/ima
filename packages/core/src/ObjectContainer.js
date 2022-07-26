@@ -361,7 +361,6 @@ export default class ObjectContainer {
   get(name) {
     let entry = this._getEntry(name);
 
-    //TODO if entry undefined, this will crash
     if (entry && entry.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
@@ -491,15 +490,20 @@ export default class ObjectContainer {
       nameToGet = name?.[0];
     }
 
-    if (typeof nameToGet === 'string' && nameToGet.includes('...')) {
+    if (this._isSpreaded(name)) {
       nameToGet = nameToGet.replace('...', '');
     }
 
-    let entry =
-      this._entries.get(nameToGet) ||
-      this._getEntryFromConstant(nameToGet) ||
-      this._getEntryFromNamespace(nameToGet) ||
-      this._getEntryFromClassConstructor(nameToGet);
+    let entry = this._entries.get(nameToGet);
+    entry = entry || this._getEntryFromConstant(nameToGet);
+    entry = entry || this._getEntryFromNamespace(nameToGet);
+    entry = entry || this._getEntryFromClassConstructor(nameToGet);
+
+    if (this._isSpreaded(name) && entry.sharedInstance.length) {
+      entry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
+        this.get(sharedInstance)
+      );
+    }
 
     //TODO
     if (!entry && this._isOptional(name)) {
@@ -533,6 +537,16 @@ export default class ObjectContainer {
         name?.[1]?.optional) ||
       name.includes('?')
     );
+  }
+
+  /**
+   * //TODO docs
+   */
+  _isSpreaded(name) {
+    if (Array.isArray(name)) {
+      name = name?.[0];
+    }
+    return typeof name === 'string' && name.includes('...');
   }
 
   /**
@@ -608,13 +622,15 @@ export default class ObjectContainer {
           ['function', 'string'].indexOf(typeof dependency) > -1 ||
           Array.isArray(dependency)
         ) {
-          //TODO spread cant be within ternary operator
           let retrievedDependency = this.get(dependency);
-          dependencies.push(
-            ...(Array.isArray(retrievedDependency)
-              ? retrievedDependency
-              : [retrievedDependency])
-          );
+          if (
+            Array.isArray(retrievedDependency) &&
+            this._isSpreaded(dependency)
+          ) {
+            dependencies.push(...retrievedDependency);
+          } else {
+            dependencies.push(retrievedDependency);
+          }
         } else {
           dependencies.push(dependency);
         }

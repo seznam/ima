@@ -46,7 +46,7 @@ const MOUSE_LEFT_BUTTON = 0;
  */
 export default class ClientRouter extends AbstractRouter {
   static get $dependencies() {
-    return [Window, ['...$spreadTest', { optional: true }]];
+    return [['...$spreadTest', { optional: true }], Window];
   }
 
   /**
@@ -58,7 +58,7 @@ export default class ClientRouter extends AbstractRouter {
    * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    * @param {Window} window The current global client-side APIs provider.
    */
-  constructor(pageManager, factory, dispatcher, window) {
+  constructor(pageManager, factory, dispatcher, _undef, window) {
     super(pageManager, factory, dispatcher);
 
     /**
