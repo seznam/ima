@@ -1069,7 +1069,7 @@ If all went well, you are currently in front of a finished application. I hope
 you liked the journey and are happy with what you've learned here.
 
 From now I suggest to take a look at our [documentation](../introduction/getting-started.md) which goes into greater
-detail in describing each component of IMA.js development stack or take a direct look at the [API](/api/).
+detail in describing each component of IMA.js development stack or take a direct look at the [API](../api/Bootstrap.md).
 
 If you see any improvements that could be made to this tutorial, or have found
 any mistakes, please let us know by [creating issue](https://github.com/seznam/ima/issues) in our IMA.js monorepo,

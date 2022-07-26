@@ -5,6 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
+    "dev": "docusaurus start",
     "build:api": "node ./scripts/jsdoc2md.mjs",
     "build": "npm run build:api; docusaurus build",
     "swizzle": "docusaurus swizzle",

@@ -55,7 +55,7 @@ npm run dev
 
 Before going ahead, now that your application is running, you can either continue reading this documentation,
 which describes many different parts of IMA.js in detail, take a direct look at the
- [API](/api) or [**start with our tutorial**](./../tutorial/introduction.md).
+ [API](../api/Bootstrap.md) or [**start with our tutorial**](./../tutorial/introduction.md).
 
 ### Available commands
 

@@ -10,13 +10,11 @@ const config = {
   tagline: 'Isomorphic application in javascript',
   url: 'https://imajs.io/',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-
   organizationName: 'seznam',
   projectName: 'ima',
-
   presets: [
     [
       'classic',
@@ -53,7 +51,6 @@ const config = {
       }),
     ],
   ],
-
   themeConfig:
     /**
      * @type {import('@docusaurus/preset-classic').ThemeConfig}

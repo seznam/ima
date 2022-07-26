@@ -1,4 +1,6 @@
+/* eslint-disable no-console */
 import path from 'path';
+import chalk from 'chalk';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { globby } from 'globby';
@@ -79,6 +81,12 @@ function preprocess(content) {
  * that is loaded in docusaurus.
  */
 async function main() {
+  console.log(
+    `${chalk.bold.cyan(
+      'GENERATING'
+    )} the API jsdoc documentation markdown files.`
+  );
+
   // Cleanup output dir
   await fs.promises.rm(outputBaseDir, { recursive: true, force: true });
   await fs.promises.mkdir(outputBaseDir, { recursive: true });
@@ -161,6 +169,12 @@ async function main() {
         );
       }
     })
+  );
+
+  console.log(
+    `${chalk.bold.green(
+      'FINISHED'
+    )}, the documentation files were generated successfully.`
   );
 }
 
