@@ -361,7 +361,7 @@ export default class ObjectContainer {
   get(name) {
     let entry = this._getEntry(name);
 
-    if (entry && entry.sharedInstance === null) {
+    if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
