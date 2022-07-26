@@ -36,6 +36,7 @@
     "@types/webpack-env": "^1.16.3"
   },
   "peerDependencies": {
+    "@ima/core": "^18.0.0-rc.0",
     "@ima/dev-utils": "^18.0.0-rc.0",
     "react-dom": ">=16.13",
     "react": ">=16.13",

@@ -1,9 +1,11 @@
-import AbstractComponent from '@/AbstractComponent';
-import AbstractPureComponent from '@/AbstractPureComponent';
+import AbstractComponent from './AbstractComponent';
+import AbstractPureComponent from './AbstractPureComponent';
 
 declare global {
   var $Debug: boolean
 }
+
+// TODO Move ima classes to core definition file.
 
 export type CssClasses = {
   link(name: string, params: object): string;

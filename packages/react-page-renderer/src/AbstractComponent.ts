@@ -1,8 +1,8 @@
 import { Component, ContextType } from 'react';
 
 import { Utils } from '@/types';
-import * as helpers from '@/componentHelpers';
-import PageContext from '@/PageContext';
+import * as helpers from './componentHelpers';
+import PageContext from './PageContext';
 
 /**
  * The base class for all view components.
@@ -11,6 +11,7 @@ export default abstract class AbstractComponent extends Component<any> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>
 
+  // TODO Maybe remove null and do _utils?: instead.
   private _utils: Utils = null;
 
   /**

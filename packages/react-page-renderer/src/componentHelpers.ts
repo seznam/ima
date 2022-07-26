@@ -3,9 +3,9 @@ import { Component, ContextType, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Utils } from '@/types';
-import AbstractComponent from '@/AbstractComponent';
-import AbstractPureComponent from '@/AbstractPureComponent';
-import PageContext from '@/PageContext';
+import AbstractComponent from './AbstractComponent';
+import AbstractPureComponent from './AbstractPureComponent';
+import PageContext from './PageContext';
 
 /**
  * Retrieves the view utilities from the component's current context or
