@@ -494,10 +494,11 @@ export default class ObjectContainer {
       nameToGet = nameToGet.replace('...', '');
     }
 
-    let entry = this._entries.get(nameToGet);
-    entry = entry || this._getEntryFromConstant(nameToGet);
-    entry = entry || this._getEntryFromNamespace(nameToGet);
-    entry = entry || this._getEntryFromClassConstructor(nameToGet);
+    let entry =
+      this._entries.get(nameToGet) ||
+      this._getEntryFromConstant(nameToGet) ||
+      this._getEntryFromNamespace(nameToGet) ||
+      this._getEntryFromClassConstructor(nameToGet);
 
     if (this._isSpreaded(name) && entry.sharedInstance.length) {
       entry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
