@@ -11,7 +11,7 @@ export default abstract class AbstractPureComponent extends PureComponent<any> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>
 
-  private _utils: Utils = null;
+  private _utils?: Utils;
 
   /**
    * Returns the utilities for the view components. The returned value is the

@@ -11,8 +11,7 @@ export default abstract class AbstractComponent extends Component<any> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>
 
-  // TODO Maybe remove null and do _utils?: instead.
-  private _utils: Utils = null;
+  private _utils?: Utils;
 
   /**
    * Returns the utilities for the view components. The returned value is the
