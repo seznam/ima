@@ -364,7 +364,7 @@ async function createWebpackConfig(
       processCss: false,
       ...args,
     },
-    // Process es5 in build and legacy contexts
+    // Process non-es version in build and legacy contexts
     (args.command === 'build' || args.legacy) && {
       name: 'client',
       isServer: false,

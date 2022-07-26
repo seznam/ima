@@ -1,51 +1,33 @@
-(function (root) {
-  /**
-   * Simple es5-compatible Object.assign polyfill.
-   * Credits goes to MDN.
-   */
-  function assign(target) {
-    var to = Object(target);
-
-    for (var index = 1; index < arguments.length; index++) {
-      var nextSource = arguments[index];
-
-      if (nextSource != null) {
-        for (var nextKey in nextSource) {
-          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-            to[nextKey] = nextSource[nextKey];
-          }
-        }
-      }
-    }
-
-    return to;
-  }
-
+((root) => {
   /**
    * $IMA.Runner can be completely overridden, so we have to shallow merge
    * potential existing object with the default runner.
    */
   root.$IMA = root.$IMA || {};
-  root.$IMA.Runner = assign(
+  root.$IMA.Runner = Object.assign(
     {
       isEsVersion: false,
       source: JSON.parse('#{$Source}'),
       scripts: [],
       loadedScripts: [],
-      // es11 env test scripts
-      testScripts: [
-        'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
-        'return typeof Promise.allSettled === "function"',
-        'return typeof globalThis !== "undefined"',
-        'return typeof 9007199254740991n === "bigint"',
-      ],
+      testSource: {
+        scripts: [
+          // es9 env test scripts
+          'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))() && !!Object.values',
+        ],
+        esScripts: [
+          // es13 env test scripts
+          'return [1,1].findLast(e => e === 1)',
+          'return Object.hasOwn({a:1}, "a")',
+        ]
+      },
 
       /**
        * Handles creation of script elements and their injection to the DOM.
        * It also takes care of testing the browser environment and determining
        * what version should be loaded.
        */
-      initScripts: function () {
+      initScripts: () => {
         var runner = root.$IMA.Runner;
         var scriptsRoot = root.document.getElementById('scripts');
 
@@ -82,13 +64,13 @@
 
             scriptEl.src = src;
 
-            Object.keys(options).forEach(function (attr) {
+            Object.keys(options).forEach((attr) => {
               if (attr === 'fallback' && options.fallback) {
-                scriptEl.onerror = function () {
+                scriptEl.onerror = () => {
                   var optionsCopy = {};
 
                   // Create options copy and skip fallback
-                  Object.keys(options).forEach(function (attr) {
+                  Object.keys(options).forEach((attr) => {
                     if (attr !== 'fallback') {
                       optionsCopy[attr] = options[attr];
                     }
@@ -101,7 +83,7 @@
               }
             });
 
-            scriptEl.onload = function () {
+            scriptEl.onload = () => {
               runner.onLoad(source);
             };
           }
@@ -109,17 +91,21 @@
           scriptsRoot.appendChild(scriptEl);
         }
 
-        runner.isEsVersion = runner.testScripts.every(testScript);
-
         /**
          * Sets concrete scripts to the runner based on the currently
-         * supported ecma script version. Fallback to es5 scripts if
+         * supported ecma script version. Fallback to legacy scripts if
          * there are no sources for the newer versions.
          */
-        if (runner.isEsVersion && runner.source.esScripts) {
+        if (
+          runner.source.esScripts &&
+          runner.testSource.esScripts.every(testScript)
+        ) {
+          runner.isEsVersion = true;
           runner.scripts = runner.source.esScripts;
-        } else {
+        } else if (runner.testSource.scripts.every(testScript)) {
           runner.scripts = runner.source.scripts;
+        } else {
+          return runner.onUnsupported();
         }
 
         // Create script tags
@@ -134,18 +120,18 @@
        * {runtime} placeholders are replaced with the actual runtime code
        * at the build time.
        */
-      run: function () {
+      run: () => {
         var runner = root.$IMA.Runner;
 
         try {
           /**
            * Run es version of the runtime, in case there are any es scripts sources.
-           * Otherwise fallback to the es5 version of the runner.
+           * Otherwise fallback to the legacy version of the runner.
            */
-          if (runner.isEsVersion && runner.source.esScripts) {
+          if (runner.isEsVersion) {
             /**
              * We need to wrap esRuntime code in a string and execute the function
-             * since the code can contain some es5-incompatible syntax, which would
+             * since the code can contain some legacy incompatible syntax, which would
              * break the legacy JS interpreters.
              */
             new Function('<%- esRuntime %>')();
@@ -162,7 +148,7 @@
        * in the scripts array, since only when all of the scripts are
        * loaded, the run callback is called.
        */
-      onLoad: function (script) {
+      onLoad: (script) => {
         var runner = root.$IMA.Runner;
 
         runner.loadedScripts.push(
@@ -178,13 +164,22 @@
        * Optional onError handler. It is triggered in case the runtime
        * code fails to run the application.
        */
-      onError: function (error) {
+      onError: (error) => {
         console.error('IMA Runner ERROR:', error);
 
         // Show compile errors in error-overlay in $Debug
         if (window.__IMA_HMR && window.$Debug) {
           window.__IMA_HMR.emit('error', { error: error });
         }
+      },
+
+      /**
+       * Optional onUnsupported handler. It is triggered in case tests
+       * for es and legacy version fails, which means that the APP runtime
+       * code is never executed.
+       */
+      onUnsupported: () => {
+        console.warn('Unsupported environment, the app runtime was not executed.');
       },
     },
     root.$IMA.Runner || {}

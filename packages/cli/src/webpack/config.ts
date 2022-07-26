@@ -54,16 +54,18 @@ export default async (
   let targets: 'defaults' | Record<string, string> = 'defaults';
 
   if (isEsVersion) {
+    // es13 target
     targets = {
-      chrome: '80',
-      edge: '80',
-      firefox: '80',
-      opera: '67',
-      safari: '14',
-      ios: '14',
+      chrome: '93',
+      opera: '79',
+      firefox: '102',
+      safari: '15.4',
     };
   } else if (isServer) {
     targets = { node: '18' };
+  } else {
+    // es9 target
+    targets = { node: '12' };
   }
 
   // Set correct devtool source maps config
@@ -112,9 +114,10 @@ export default async (
                 [
                   'postcss-preset-env',
                   {
-                    browsers: 'defaults',
+                    browsers: '>0.5%, not dead, not op_mini all, not ie 11',
                     autoprefixer: {
                       flexbox: 'no-2009',
+                      grid: 'autoplace',
                     },
                     stage: 3,
                     features: {
@@ -151,8 +154,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isEsVersion
-      ? ['web', 'es11']
-      : ['web', 'es5'],
+      ? ['web', 'es13']
+      : ['web', 'es9'],
     mode: isDevEnv ? 'development' : 'production',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -164,8 +167,6 @@ export default async (
           }
         : {
             [name]: [
-              // Inject fetch polyfill to es5 bundle
-              !isEsVersion && require.resolve('whatwg-fetch'),
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
@@ -245,7 +246,7 @@ export default async (
         new TerserPlugin({
           minify: TerserPlugin.swcMinify,
           terserOptions: {
-            ecma: isServer || isEsVersion ? 2020 : 5,
+            ecma: isServer || isEsVersion ? 2020 : 2018,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -372,7 +373,7 @@ export default async (
                           env: {
                             targets,
                             mode: 'usage',
-                            coreJs: '3.22.7',
+                            coreJs: 3,
                             bugfixes: true,
                           },
                           module: {
@@ -403,7 +404,7 @@ export default async (
                         env: {
                           targets,
                           mode: 'usage',
-                          coreJs: '3.22.7',
+                          coreJs: 3,
                           shippedProposals: true,
                           bugfixes: true,
                         },
@@ -456,7 +457,7 @@ export default async (
                                 bugfixes: true,
                                 modules: false,
                                 useBuiltIns: 'usage',
-                                corejs: { version: '3.22.7' },
+                                corejs: { version: '3' },
                                 exclude: ['transform-typeof-symbol'],
                               },
                             ],
@@ -498,7 +499,7 @@ export default async (
                               bugfixes: true,
                               modules: false,
                               useBuiltIns: 'usage',
-                              corejs: { version: '3.22.7', proposals: true },
+                              corejs: { version: '3', proposals: true },
                               exclude: ['transform-typeof-symbol'],
                             },
                           ],
