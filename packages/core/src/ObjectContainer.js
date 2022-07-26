@@ -361,11 +361,12 @@ export default class ObjectContainer {
   get(name) {
     let entry = this._getEntry(name);
 
-    if (entry.sharedInstance === null) {
+    //TODO if entry undefined, this will crash
+    if (entry && entry.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
-    return entry.sharedInstance;
+    return entry?.sharedInstance;
   }
 
   /**
@@ -484,14 +485,30 @@ export default class ObjectContainer {
    *         implementation is known to this object container.
    */
   _getEntry(name) {
+    let nameToGet = name;
+
+    if (Array.isArray(name)) {
+      nameToGet = name?.[0];
+    }
+
+    if (typeof nameToGet === 'string' && nameToGet.includes('...')) {
+      nameToGet = nameToGet.replace('...', '');
+    }
+
     let entry =
-      this._entries.get(name) ||
-      this._getEntryFromConstant(name) ||
-      this._getEntryFromNamespace(name) ||
-      this._getEntryFromClassConstructor(name);
+      this._entries.get(nameToGet) ||
+      this._getEntryFromConstant(nameToGet) ||
+      this._getEntryFromNamespace(nameToGet) ||
+      this._getEntryFromClassConstructor(nameToGet);
+
+    //TODO
+    if (!entry && this._isOptional(name)) {
+      // eslint-disable-next-line no-console
+      console.log('Optional, not found :>> ', name);
+    }
 
     if ($Debug) {
-      if (!entry) {
+      if (!entry && !this._isOptional(name)) {
         throw new Error(
           `ima.core.ObjectContainer:_getEntry There is no constant, ` +
             `alias, registered class, registered interface with ` +
@@ -505,6 +522,17 @@ export default class ObjectContainer {
     }
 
     return entry;
+  }
+
+  /**
+   * //TODO docs
+   */
+  _isOptional(name) {
+    return !!(
+      ((Array.isArray(name) || typeof name === 'string') &&
+        name?.[1]?.optional) ||
+      name.includes('?')
+    );
   }
 
   /**
@@ -576,8 +604,17 @@ export default class ObjectContainer {
       dependencies = [];
 
       for (let dependency of entry.dependencies) {
-        if (['function', 'string'].indexOf(typeof dependency) > -1) {
-          dependencies.push(this.get(dependency));
+        if (
+          ['function', 'string'].indexOf(typeof dependency) > -1 ||
+          Array.isArray(dependency)
+        ) {
+          //TODO spread cant be within ternary operator
+          let retrievedDependency = this.get(dependency);
+          dependencies.push(
+            ...(Array.isArray(retrievedDependency)
+              ? retrievedDependency
+              : [retrievedDependency])
+          );
         } else {
           dependencies.push(dependency);
         }

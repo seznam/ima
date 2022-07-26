@@ -68,6 +68,9 @@ export default (ns, oc, config) => {
   oc.constant('$Env', config.$Env);
   oc.constant('$Protocol', config.$Protocol);
   oc.constant('$Secure', config.$Protocol === 'https:');
+
+  oc.constant('$spreadTest', [PageManager, RouteFactory, Dispatcher]);
+
   //*************END CONSTANTS*****************
 
   //*************START IMA**************

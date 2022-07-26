@@ -2,9 +2,9 @@
 
 import AbstractRouter from './AbstractRouter';
 import ActionTypes from './ActionTypes';
-import RouteFactory from './RouteFactory';
+/* import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
+import PageManager from '../page/manager/PageManager'; */
 import Window from '../window/Window';
 
 /**
@@ -46,7 +46,7 @@ const MOUSE_LEFT_BUTTON = 0;
  */
 export default class ClientRouter extends AbstractRouter {
   static get $dependencies() {
-    return [PageManager, RouteFactory, Dispatcher, Window];
+    return [Window, ['...$spreadTest', { optional: true }]];
   }
 
   /**
