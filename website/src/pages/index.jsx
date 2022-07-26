@@ -1,13 +1,20 @@
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import { Star, Gear, Newspaper, Devices, SettingsHorizontal } from 'akar-icons';
+import { Star, Newspaper } from 'akar-icons';
 import clsx from 'clsx';
 import React from 'react';
 
-import { FeaturesGrid, FeaturesSeparator } from '../components/feature';
+import {
+  FeaturesGrid,
+  Separator,
+  ReferencesGrid,
+  OtherFeaturesList,
+} from '../components';
 
-import featuresData from './features.json';
+import featuresData from './data/features.json';
+import notableMentionsData from './data/notableMentions.json';
+import referencesData from './data/references.json';
 import styles from './index.module.css';
 
 export default function Home() {
@@ -42,24 +49,13 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
-        <FeaturesSeparator title='Features' Icon={Star} />
+      <main className={styles.main}>
+        <Separator title='Features' Icon={Star} />
         <FeaturesGrid data={featuresData} />
+        <OtherFeaturesList data={notableMentionsData} />
 
-        <FeaturesSeparator title='Plugins' Icon={Gear} />
-        <FeaturesGrid data={featuresData} />
-
-        <FeaturesSeparator title='References' Icon={Newspaper} />
-        <FeaturesGrid data={featuresData} />
-
-        <FeaturesSeparator title='Platforms' Icon={Devices} />
-        <FeaturesGrid data={featuresData} />
-
-        <FeaturesSeparator
-          title='Used Technologies'
-          Icon={SettingsHorizontal}
-        />
-        <FeaturesGrid data={featuresData} />
+        <Separator title={"Who's using IMA.js"} Icon={Newspaper} />
+        <ReferencesGrid data={referencesData} />
       </main>
     </Layout>
   );

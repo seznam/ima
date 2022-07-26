@@ -1,0 +1,29 @@
+.container {
+  margin: 3rem 1.5rem;
+
+  text-align: center;
+}
+
+.list {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  display: inline-flex;
+
+  margin: 0.3rem 0;
+
+  align-items: center;
+}
+
+.icon {
+  margin-right: 4px;
+
+  color: var(--ifm-color-primary);
+  stroke-width: 3px;
+}

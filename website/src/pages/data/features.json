@@ -21,6 +21,18 @@
   },
   {
     "title": "Bleeding Edge Technologies",
-    "description": "ES2015+ (JSX Harmony), Gulp, Hot Reload and other technologies."
+    "description": "ESNext, Webpack, SWC compiler, HMR and other technologies."
+  },
+  {
+    "title": "Full plugin support",
+    "description": "IMA.js comes with full support for plugins that can be created very easily through very simple interface."
+  },
+  {
+    "title": "Large collection of existing plugins",
+    "description": "We maintain a list of several plugins that are thoroughly tested and used every day on many of our websites here at Seznam.cz along with huge list of other plugins we use internally."
+  },
+  {
+    "title": "Multiple running modes",
+    "description": "Application can be switched between IMA, SPA and MPA modes or combination of all of them."
   }
 ]
