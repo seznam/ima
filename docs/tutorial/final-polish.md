@@ -183,7 +183,7 @@ Next we need to update the `getEntityList()` method in the **post resource** cla
 
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/public/api/posts.json', {})
   .then(response => {
     response.body.forEach(post => (post.isSaved = true));
     return response.body;
@@ -734,7 +734,7 @@ With this issue taken care of, let's resolve the posts refresh race condition.
 ### Posts refresh race condition
 
 To fix our refresh race condition, we'll envelope the server responses and add a timestamp at which
-the response has been generated. Open the `app/assets/static/api/posts.json`
+the response has been generated. Open the `app/public/api/posts.json`
 file and update its contents as follows:
 
 ```json
@@ -809,7 +809,7 @@ Next update the `getEntityList()` method of the post resource
 
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/public/api/posts.json', {})
   .then(response => {
     response.body.posts.forEach(post => (post.isSaved = true));
 

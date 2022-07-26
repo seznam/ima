@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "18.0.0-rc.2",
+  "version": "18.0.0-rc.3",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -30,9 +30,9 @@
   },
   "dependencies": {
     "@gatsbyjs/webpack-hot-middleware": "2.25.2",
-    "@ima/dev-utils": "^18.0.0-rc.1",
-    "@ima/error-overlay": "^18.0.0-rc.1",
-    "@ima/hmr-client": "^18.0.0-rc.1",
+    "@ima/dev-utils": "^18.0.0-rc.3",
+    "@ima/error-overlay": "^18.0.0-rc.3",
+    "@ima/hmr-client": "^18.0.0-rc.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@swc/core": "^1.2.196",
     "ajv": "8.11.0",
