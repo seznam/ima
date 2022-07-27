@@ -178,10 +178,10 @@ function createCacheKey(
    */
   hash.update(
     JSON.stringify({
-      experimentsSwc: imaConfig.experiments?.swc,
       experimentsCss: imaConfig.experiments?.css,
       command: ctx.command,
       forceSPA: ctx.forceSPA,
+      legacy: ctx.legacy,
       profile: ctx.profile,
       publicPath: ctx.publicPath,
       rootDir: ctx.rootDir,
@@ -224,12 +224,8 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
       aggregateTimeout: 5,
     },
-    babel: async config => config,
     swc: async config => config,
     postcss: async config => config,
-    experiments: {
-      swc: true,
-    },
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
