@@ -110,9 +110,7 @@ const dev: HandlerFn = async args => {
 
     logger.info(
       `Running webpack watch compiler${
-        args.legacy
-          ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
-          : ''
+        args.legacy ? ` ${chalk.black.bgCyan('in legacy mode')}` : ''
       }...`
     );
 
@@ -159,7 +157,7 @@ export const builder: CommandBuilder = {
     default: true,
   },
   legacy: {
-    desc: 'Runs application in legacy (es5-compatible) mode',
+    desc: 'Runs application in legacy mode',
     type: 'boolean',
     default: false,
   },

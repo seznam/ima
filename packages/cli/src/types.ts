@@ -101,15 +101,6 @@ export type ImaConfig = {
   ) => Promise<Configuration>;
 
   /**
-   * Function which receives babel-loader config and current context, which can be used for
-   * additional customization or returning completely different babel config.
-   */
-  babel: (
-    config: Record<string, unknown>,
-    ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
-
-  /**
    * Function which receives default app swc-loader config and current context,
    * this can be used for additional customization or returning completely different config.
    */
@@ -187,7 +178,7 @@ export type ImaConfig = {
     | 'hidden-source-map';
 
   /**
-   * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.
+   * Set custom jsxRuntime, the default is 'automatic'.
    */
   jsxRuntime?: 'classic' | 'automatic';
 
@@ -216,7 +207,6 @@ export type ImaConfig = {
    * Some of these may find a way to default configuration in future versions of IMA.js.
    */
   experiments?: {
-    swc?: boolean; // Enables swc instead of babel (true by default)
     css?: boolean; // Enables webpack native CSS support
   };
 };

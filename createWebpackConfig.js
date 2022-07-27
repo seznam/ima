@@ -12,7 +12,7 @@ function createWebpackConfig(callback) {
   };
 
   const config = {
-    target: ['web', 'es11'],
+    target: ['web', 'es2022'],
     mode: ctx.isProduction ? 'production' : 'development',
     stats: 'minimal',
     output: {
@@ -33,7 +33,14 @@ function createWebpackConfig(callback) {
           loader: require.resolve('babel-loader'),
           options: {
             sourceType: 'unambiguous',
-            targets: { chrome: '80', safari: '14' }, // es11
+            targets: {
+              chrome: '80',
+              edge: '80',
+              firefox: '80',
+              opera: '67',
+              safari: '14',
+              ios: '14',
+            }, // es11
             babelrc: false,
             configFile: false,
             cacheDirectory: true,

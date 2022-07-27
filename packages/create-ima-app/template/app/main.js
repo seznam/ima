@@ -33,7 +33,8 @@ if (!$IMA.Test) {
 
 if (module.hot) {
   module.hot.accept((err, { module }) => {
-    module.hot.accept();
+    // Try to accept again and in any case reload on error
+    module.hot.accept(window.location.reload);
   });
 }
 
