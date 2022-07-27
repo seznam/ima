@@ -494,13 +494,17 @@ export default class ObjectContainer {
       nameToGet = nameToGet.replace('...', '');
     }
 
+    if (this._isOptional(nameToGet)) {
+      nameToGet = nameToGet.replace('?', '');
+    }
+
     let entry =
       this._entries.get(nameToGet) ||
       this._getEntryFromConstant(nameToGet) ||
       this._getEntryFromNamespace(nameToGet) ||
       this._getEntryFromClassConstructor(nameToGet);
 
-    if (this._isSpreaded(name) && entry.sharedInstance.length) {
+    if (this._isSpreaded(name) && entry?.sharedInstance.length) {
       entry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
         this.get(sharedInstance)
       );
@@ -534,9 +538,8 @@ export default class ObjectContainer {
    */
   _isOptional(name) {
     return !!(
-      ((Array.isArray(name) || typeof name === 'string') &&
-        name?.[1]?.optional) ||
-      name.includes('?')
+      (Array.isArray(name) && name?.[1]?.optional) ||
+      (typeof name === 'string' && name.includes('?'))
     );
   }
 

@@ -30,6 +30,9 @@ describe('ima.core.ObjectContainer', () => {
     path: { to: { property: constantObjectProperty } },
   };
 
+  let spreadConstantName = 'spreadConstant';
+  let spreadConstantValue = [classConstructor, classConstructor];
+
   let namespacePathUnit = 'test.unit';
   let namespacePathOC = 'test.unit.ObjectContainer';
   ns.namespace(namespacePathUnit);
@@ -335,6 +338,144 @@ describe('ima.core.ObjectContainer', () => {
 
       expect(oc._createInstanceFromEntry).toHaveBeenCalledWith(entry);
     });
+
+    it('should find optional aliased entity', () => {
+      oc.bind(alias, classConstructor);
+      let entry = oc.get('?' + alias);
+
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructor.mockClassConstructor
+      );
+    });
+
+    it('should not find optional aliased entity', () => {
+      let entry = oc.get('?undefined');
+
+      expect(entry).toBeUndefined();
+    });
+
+    it('should not find aliased entity and throw', () => {
+      expect(() => {
+        oc.get('undefined');
+      }).toThrow();
+    });
+
+    it('should find optional entity', () => {
+      oc.bind(alias, classConstructor);
+      let entry = oc.get([alias, { optional: true }]);
+
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructor.mockClassConstructor
+      );
+    });
+
+    it('should not find optional entity', () => {
+      let entry = oc.get(['undefined', { optional: true }]);
+
+      expect(entry).toBeUndefined();
+    });
+
+    it('should find non optional entity', () => {
+      oc.bind(alias, classConstructor);
+      let entry = oc.get([alias, { optional: false }]);
+
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructor.mockClassConstructor
+      );
+    });
+
+    it('should not find non optional entity and throw', () => {
+      expect(() => {
+        oc.get(['undefined', { optional: false }]);
+      }).toThrow();
+    });
+
+    it.skip('should find optional class entity', () => {
+      //TODO [TextHelper, { optional: true }]
+      //1. optional class dep v [] - optional true - existujuca => vrati instanciu classy
+      oc.bind(alias, classConstructor);
+      let entry = oc.get([alias, { optional: true }]);
+
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructor.mockClassConstructor
+      );
+    });
+
+    it.skip('should not find optional class entity', () => {
+      //TODO [TextHelper, { optional: true }]
+      //2. optional class dep v [] - optional true - neexistujuca => vrati undef
+      let entry = oc.get(['undefined', { optional: true }]);
+
+      expect(entry).toBeUndefined();
+    });
+
+    it.skip('should find non optional class entity', () => {
+      //TODO [TextHelper, { optional: true }]
+      //3. optional class dep v [] - optional false - existujuca => vrati instanciu classy
+      oc.bind(alias, classConstructor);
+      let entry = oc.get([alias, { optional: false }]);
+
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructor.mockClassConstructor
+      );
+    });
+
+    it.skip('should not find non optional class entity and throw', () => {
+      //TODO [TextHelper, { optional: true }]
+      //optional class dep v [] - optional false - neexistujuca => error
+      expect(() => {
+        oc.get(['undefined', { optional: false }]);
+      }).toThrow();
+    });
+
+    it('should spread dependencies', () => {
+      oc.bind(alias, classConstructor);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      // eslint-disable-next-line no-unused-vars
+      let entry1 = oc.get('...' + spreadConstantName);
+      // eslint-disable-next-line no-unused-vars
+      let entry2 = oc.get(spreadConstantName);
+
+      expect(entry).toHaveLength(2);
+      //TODO expect(entry[0]).toStrictEqual(classConstructor.mockClassConstructor);
+    });
+
+    it('should spread dependencies with optional parameter', () => {
+      oc.bind(alias, classConstructor);
+      oc.constant(spreadConstantName, [
+        ...spreadConstantValue,
+        ['undefined', { optional: true }],
+      ]);
+
+      let entry = oc.get('...' + spreadConstantName);
+
+      expect(entry).toHaveLength(3);
+      //TODO expect(entry[0]).toStrictEqual(classConstructor.mockClassConstructor);
+      expect(entry[2]).toBeUndefined();
+    });
+
+    it('should throw with undefined spread dependencies', () => {
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      expect(() => {
+        oc.get('...' + spreadConstantName);
+      }).toThrow();
+    });
+
+    it('should not find undefined spread dependencies', () => {
+      oc.constant(spreadConstantName, [[classConstructor, { optional: true }]]);
+
+      let entry = oc.get('...' + spreadConstantName);
+
+      expect(entry).toHaveLength(1);
+      expect(entry[0]).toBeUndefined();
+    });
+
+    /**
+     * 1. constanta s arrayom dependencies - spread => ...rest v constructoru classy, inicializovane deps.
+     * 2. constanta s arrayom dependencies - bez spread => dependency v constructoru ma array dependencies
+     */
   });
 
   describe('_getEntry method', () => {

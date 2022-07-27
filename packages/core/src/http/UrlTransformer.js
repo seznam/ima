@@ -3,7 +3,7 @@
  */
 export default class UrlTransformer {
   static get $dependencies() {
-    return ['?OptionalAliasedEntity', ['TEST', { optional: true }]];
+    return [];
   }
 
   /**
