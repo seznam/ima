@@ -3,6 +3,7 @@ import path from 'path';
 import { URLSearchParams } from 'url';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { browsersWithSupportForEcmaVersion as ecmaTargets } from 'browserslist-generator';
 import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
@@ -26,6 +27,7 @@ import {
   createPolyfillEntry,
   extractLanguages,
   createDevServerConfig,
+  getCurrentCoreJsVersion,
 } from './utils';
 
 /**
@@ -51,21 +53,15 @@ export default async (
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
-  let targets: 'defaults' | Record<string, string> = 'defaults';
+  let targets: Record<string, string> | string[];
+  const coreJsVersion = await getCurrentCoreJsVersion();
 
   if (isEsVersion) {
-    // es13 target
-    targets = {
-      chrome: '93',
-      opera: '79',
-      firefox: '102',
-      safari: '15.4',
-    };
+    targets = ecmaTargets('es2022');
   } else if (isServer) {
     targets = { node: '18' };
   } else {
-    // es9 target
-    targets = { node: '12' };
+    targets = ecmaTargets('es2018');
   }
 
   // Set correct devtool source maps config
@@ -154,8 +150,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isEsVersion
-      ? ['web', 'es13']
-      : ['web', 'es9'],
+      ? ['web', 'es2022']
+      : ['web', 'es2018'],
     mode: isDevEnv ? 'development' : 'production',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -371,7 +367,7 @@ export default async (
                     env: {
                       targets,
                       mode: 'usage',
-                      coreJs: 3,
+                      coreJs: coreJsVersion,
                       bugfixes: true,
                     },
                     module: {
@@ -402,7 +398,7 @@ export default async (
                   env: {
                     targets,
                     mode: 'usage',
-                    coreJs: 3,
+                    coreJs: coreJsVersion,
                     shippedProposals: true,
                     bugfixes: true,
                   },

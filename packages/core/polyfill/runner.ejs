@@ -34,11 +34,11 @@
       loadedScripts: [],
       testSource: {
         scripts: [
-          // es9 env test scripts
+          // es2018 env test scripts
           'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))() && !!Object.values',
         ],
         esScripts: [
-          // es13 env test scripts
+          // es2022 env test scripts
           'return [1,1].findLast(e => e === 1)',
           'return Object.hasOwn({a:1}, "a")',
         ]
