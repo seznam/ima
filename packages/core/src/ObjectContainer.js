@@ -510,12 +510,6 @@ export default class ObjectContainer {
       );
     }
 
-    //TODO
-    if (!entry && this._isOptional(name)) {
-      // eslint-disable-next-line no-console
-      console.log('Optional, not found :>> ', name);
-    }
-
     if ($Debug) {
       if (!entry && !this._isOptional(name)) {
         throw new Error(

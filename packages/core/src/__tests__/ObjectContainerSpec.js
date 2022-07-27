@@ -472,10 +472,8 @@ describe('ima.core.ObjectContainer', () => {
       expect(entry[0]).toBeUndefined();
     });
 
-    /**
-     * 1. constanta s arrayom dependencies - spread => ...rest v constructoru classy, inicializovane deps.
-     * 2. constanta s arrayom dependencies - bez spread => dependency v constructoru ma array dependencies
-     */
+    //TODO
+    it.todo('should not spread dependencies');
   });
 
   describe('_getEntry method', () => {
