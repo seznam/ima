@@ -37,7 +37,6 @@
     "@swc/core": "^1.2.196",
     "ajv": "8.11.0",
     "better-opn": "3.0.2",
-    "browserslist-generator": "^1.0.66",
     "bundle-stats-webpack-plugin": "^3.3.8",
     "chalk": "4.1.2",
     "cli-progress": "^3.11.1",

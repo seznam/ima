@@ -3,7 +3,6 @@ import path from 'path';
 import { URLSearchParams } from 'url';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import { browsersWithSupportForEcmaVersion as ecmaTargets } from 'browserslist-generator';
 import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
@@ -57,11 +56,35 @@ export default async (
   const coreJsVersion = await getCurrentCoreJsVersion();
 
   if (isEsVersion) {
-    targets = ecmaTargets('es2022');
+    // es2022 targets (taken from 'browserslist-generator')
+    targets = [
+      'and_chr >= 91',
+      'chrome >= 91',
+      'and_ff >= 90',
+      'android >= 103',
+      'edge >= 91',
+      'samsung >= 16.0',
+      'safari >= 15',
+      'ios_saf >= 15.1',
+      'opera >= 77',
+      'firefox >= 90',
+    ];
   } else if (isServer) {
     targets = { node: '18' };
   } else {
-    targets = ecmaTargets('es2018');
+    // es2018 targets
+    targets = [
+      'and_chr >= 63',
+      'chrome >= 63',
+      'and_ff >= 58',
+      'android >= 103',
+      'edge >= 79',
+      'samsung >= 8.2',
+      'safari >= 11.1',
+      'ios_saf >= 11.4',
+      'opera >= 50',
+      'firefox >= 58',
+    ];
   }
 
   // Set correct devtool source maps config
