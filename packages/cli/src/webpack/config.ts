@@ -26,6 +26,7 @@ import {
   createPolyfillEntry,
   extractLanguages,
   createDevServerConfig,
+  getCurrentCoreJsVersion,
 } from './utils';
 
 /**
@@ -51,19 +52,39 @@ export default async (
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
-  let targets: 'defaults' | Record<string, string> = 'defaults';
+  let targets: Record<string, string> | string[];
+  const coreJsVersion = await getCurrentCoreJsVersion();
 
   if (isEsVersion) {
-    targets = {
-      chrome: '80',
-      edge: '80',
-      firefox: '80',
-      opera: '67',
-      safari: '14',
-      ios: '14',
-    };
+    // es2022 targets (taken from 'browserslist-generator')
+    targets = [
+      'and_chr >= 91',
+      'chrome >= 91',
+      'and_ff >= 90',
+      'android >= 103',
+      'edge >= 91',
+      'samsung >= 16.0',
+      'safari >= 15',
+      'ios_saf >= 15.1',
+      'opera >= 77',
+      'firefox >= 90',
+    ];
   } else if (isServer) {
     targets = { node: '18' };
+  } else {
+    // es2018 targets
+    targets = [
+      'and_chr >= 63',
+      'chrome >= 63',
+      'and_ff >= 58',
+      'android >= 103',
+      'edge >= 79',
+      'samsung >= 8.2',
+      'safari >= 11.1',
+      'ios_saf >= 11.4',
+      'opera >= 50',
+      'firefox >= 58',
+    ];
   }
 
   // Set correct devtool source maps config
@@ -112,9 +133,10 @@ export default async (
                 [
                   'postcss-preset-env',
                   {
-                    browsers: 'defaults',
+                    browsers: '>0.5%, not dead, not op_mini all, not ie 11',
                     autoprefixer: {
                       flexbox: 'no-2009',
+                      grid: 'autoplace',
                     },
                     stage: 3,
                     features: {
@@ -151,8 +173,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isEsVersion
-      ? ['web', 'es11']
-      : ['web', 'es5'],
+      ? ['web', 'es2022']
+      : ['web', 'es2018'],
     mode: isDevEnv ? 'development' : 'production',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -164,8 +186,6 @@ export default async (
           }
         : {
             [name]: [
-              // Inject fetch polyfill to es5 bundle
-              !isEsVersion && require.resolve('whatwg-fetch'),
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
@@ -245,7 +265,7 @@ export default async (
         new TerserPlugin({
           minify: TerserPlugin.swcMinify,
           terserOptions: {
-            ecma: isServer || isEsVersion ? 2020 : 5,
+            ecma: isServer || isEsVersion ? 2020 : 2018,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -370,7 +390,7 @@ export default async (
                     env: {
                       targets,
                       mode: 'usage',
-                      coreJs: '3.22.7',
+                      coreJs: coreJsVersion,
                       bugfixes: true,
                     },
                     module: {
@@ -401,7 +421,7 @@ export default async (
                   env: {
                     targets,
                     mode: 'usage',
-                    coreJs: '3.22.7',
+                    coreJs: coreJsVersion,
                     shippedProposals: true,
                     bugfixes: true,
                   },

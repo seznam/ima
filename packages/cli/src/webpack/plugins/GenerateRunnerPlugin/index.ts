@@ -101,7 +101,9 @@ class GenerateRunnerPlugin {
     ) {
       const generatedRunner = this._runnerTemplate({
         esRuntime: this._addSlashes(esRuntimeCode),
-        runtime: runtimeCode ?? '// runtime not generated',
+        runtime: runtimeCode
+          ? this._addSlashes(runtimeCode)
+          : '// runtime not generated',
       });
 
       // Clean storage

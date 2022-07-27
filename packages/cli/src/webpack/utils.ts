@@ -360,7 +360,7 @@ async function createWebpackConfig(
       processCss: false,
       ...args,
     },
-    // Process es5 in build and legacy contexts
+    // Process non-es version in build and legacy contexts
     (args.command === 'build' || args.legacy) && {
       name: 'client',
       isServer: false,
@@ -420,6 +420,23 @@ async function createWebpackConfig(
   });
 }
 
+/**
+ * Extracts major.minor version string of currently resolved
+ * core-js from node_modules.
+ */
+async function getCurrentCoreJsVersion() {
+  return JSON.parse(
+    (
+      await fs.promises.readFile(
+        path.resolve(require.resolve('core-js'), '../package.json')
+      )
+    ).toString()
+  )
+    .version.split('.')
+    .slice(0, 2)
+    .join('.');
+}
+
 export {
   resolveEnvironment,
   cleanup,
@@ -431,5 +448,6 @@ export {
   runImaPluginsHook,
   extractLanguages,
   createPolyfillEntry,
+  getCurrentCoreJsVersion,
   IMA_CONF_FILENAME,
 };

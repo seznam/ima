@@ -62,7 +62,6 @@ module.exports = {
   parser: '@babel/eslint-parser',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 6,
     requireConfigFile: false,
     babelOptions: {
       presets: ['@babel/preset-react'],
@@ -71,7 +70,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es2022: true,
   },
   globals: {
     $Debug: true,
