@@ -1,6 +1,4 @@
 language: node_js
-node_js:
-  - 18
 
 install:
   - npm ci
@@ -21,14 +19,13 @@ jobs:
       script: npm run benchmark
     # - name: "Audit"
     #   script: npm audit || echo \"audit found some vulnerabilities.\"
-    - if: tag =~ ^v # Run only for tags
+    - if: branch =~ /^(master|next)$/
       stage: "deploy"
       script:
-        - if [[ "$TRAVIS_TAG" =~ "rc" ]] ; then export DIST_TAG="next" ; fi
         - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
         - npm run release:publish
       skip_cleanup: true
-    - if: tag =~ ^devtools-v # Run only for tags starting with devtools-v
+    - if: tag =~ /^@ima/devtools@.*/ # Run only for @ima/devtools version tags
       stage: "deploy"
       script:
         - CLIENT_ID=${CHROME_CLIENT_ID} CLIENT_SECRET=${CHROME_CLIENT_SECRET} REFRESH_TOKEN=${CHROME_REFRESH_TOKEN} EXTENSION_ID=${CHROME_EXTENSION_ID} npm run release:devtools
