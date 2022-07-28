@@ -490,7 +490,7 @@ export default class ObjectContainer {
       nameToGet = name?.[0];
     }
 
-    if (this._isSpreaded(name)) {
+    if (this._isSpread(name)) {
       nameToGet = nameToGet.replace('...', '');
     }
 
@@ -503,12 +503,6 @@ export default class ObjectContainer {
       this._getEntryFromConstant(nameToGet) ||
       this._getEntryFromNamespace(nameToGet) ||
       this._getEntryFromClassConstructor(nameToGet);
-
-    if (this._isSpreaded(name) && entry?.sharedInstance.length) {
-      entry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
-        this.get(sharedInstance)
-      );
-    }
 
     if ($Debug) {
       if (!entry && !this._isOptional(name)) {
@@ -524,6 +518,17 @@ export default class ObjectContainer {
       }
     }
 
+    if (this._isSpread(name) && entry?.sharedInstance.length) {
+      let spreadEntry = Entry.createFromEntry(entry);
+
+      spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
+        this.get(sharedInstance)
+      );
+
+      this._entries.set(name, spreadEntry);
+      return spreadEntry;
+    }
+
     return entry;
   }
 
@@ -531,7 +536,7 @@ export default class ObjectContainer {
    * //TODO docs
    */
   _isOptional(name) {
-    return !!(
+    return (
       (Array.isArray(name) && name?.[1]?.optional) ||
       (typeof name === 'string' && name.includes('?'))
     );
@@ -540,11 +545,11 @@ export default class ObjectContainer {
   /**
    * //TODO docs
    */
-  _isSpreaded(name) {
+  _isSpread(name) {
     if (Array.isArray(name)) {
       name = name?.[0];
     }
-    return typeof name === 'string' && name.includes('...');
+    return typeof name === 'string' && name.startsWith('...');
   }
 
   /**
@@ -623,7 +628,7 @@ export default class ObjectContainer {
           let retrievedDependency = this.get(dependency);
           if (
             Array.isArray(retrievedDependency) &&
-            this._isSpreaded(dependency)
+            this._isSpread(dependency)
           ) {
             dependencies.push(...retrievedDependency);
           } else {
@@ -865,5 +870,14 @@ class Entry {
 
   get writeable() {
     return this._options.writeable;
+  }
+
+  static createFromEntry(entry) {
+    return new Entry(
+      entry.classConstructor,
+      entry.dependencies,
+      entry.referrer,
+      entry.options
+    );
   }
 }

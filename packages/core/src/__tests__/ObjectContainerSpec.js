@@ -31,7 +31,7 @@ describe('ima.core.ObjectContainer', () => {
   };
 
   let spreadConstantName = 'spreadConstant';
-  let spreadConstantValue = [classConstructor, classConstructor];
+  let spreadConstantValue = [classParent, classParent];
 
   let namespacePathUnit = 'test.unit';
   let namespacePathOC = 'test.unit.ObjectContainer';
@@ -340,12 +340,12 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find optional aliased entity', () => {
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, classParent);
       let entry = oc.get('?' + alias);
 
-      expect(entry.classConstructor).toStrictEqual(
-        classConstructor.mockClassConstructor
-      );
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
     });
 
     it('should not find optional aliased entity', () => {
@@ -361,12 +361,12 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find optional entity', () => {
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, classParent);
       let entry = oc.get([alias, { optional: true }]);
 
-      expect(entry.classConstructor).toStrictEqual(
-        classConstructor.mockClassConstructor
-      );
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
     });
 
     it('should not find optional entity', () => {
@@ -376,12 +376,10 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find non optional entity', () => {
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, classParent);
       let entry = oc.get([alias, { optional: false }]);
 
-      expect(entry.classConstructor).toStrictEqual(
-        classConstructor.mockClassConstructor
-      );
+      expect(entry).not.toStrictEqual(classParent);
     });
 
     it('should not find non optional entity and throw', () => {
@@ -390,59 +388,39 @@ describe('ima.core.ObjectContainer', () => {
       }).toThrow();
     });
 
-    it.skip('should find optional class entity', () => {
-      //TODO [TextHelper, { optional: true }]
-      //1. optional class dep v [] - optional true - existujuca => vrati instanciu classy
-      oc.bind(alias, classConstructor);
-      let entry = oc.get([alias, { optional: true }]);
+    it('should find optional class entity', () => {
+      oc.bind(alias, classParent);
+      let entry = oc.get([classParent, { optional: true }]);
 
-      expect(entry.classConstructor).toStrictEqual(
-        classConstructor.mockClassConstructor
-      );
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
     });
 
-    it.skip('should not find optional class entity', () => {
-      //TODO [TextHelper, { optional: true }]
-      //2. optional class dep v [] - optional true - neexistujuca => vrati undef
-      let entry = oc.get(['undefined', { optional: true }]);
+    it('should not find optional class entity', () => {
+      let entry = oc.get([classParent, { optional: true }]);
 
       expect(entry).toBeUndefined();
     });
 
-    it.skip('should find non optional class entity', () => {
-      //TODO [TextHelper, { optional: true }]
-      //3. optional class dep v [] - optional false - existujuca => vrati instanciu classy
-      oc.bind(alias, classConstructor);
-      let entry = oc.get([alias, { optional: false }]);
-
-      expect(entry.classConstructor).toStrictEqual(
-        classConstructor.mockClassConstructor
-      );
-    });
-
-    it.skip('should not find non optional class entity and throw', () => {
-      //TODO [TextHelper, { optional: true }]
-      //optional class dep v [] - optional false - neexistujuca => error
+    it('should not find non optional class entity and throw', () => {
       expect(() => {
-        oc.get(['undefined', { optional: false }]);
+        oc.get([classParent, { optional: false }]);
       }).toThrow();
     });
 
     it('should spread dependencies', () => {
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, classParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
-      // eslint-disable-next-line no-unused-vars
-      let entry1 = oc.get('...' + spreadConstantName);
-      // eslint-disable-next-line no-unused-vars
-      let entry2 = oc.get(spreadConstantName);
+      let entry = oc.get('...' + spreadConstantName);
 
       expect(entry).toHaveLength(2);
-      //TODO expect(entry[0]).toStrictEqual(classConstructor.mockClassConstructor);
+      expect(entry[0]).not.toStrictEqual(classParent);
     });
 
     it('should spread dependencies with optional parameter', () => {
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, classParent);
       oc.constant(spreadConstantName, [
         ...spreadConstantValue,
         ['undefined', { optional: true }],
@@ -451,7 +429,6 @@ describe('ima.core.ObjectContainer', () => {
       let entry = oc.get('...' + spreadConstantName);
 
       expect(entry).toHaveLength(3);
-      //TODO expect(entry[0]).toStrictEqual(classConstructor.mockClassConstructor);
       expect(entry[2]).toBeUndefined();
     });
 
@@ -464,7 +441,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should not find undefined spread dependencies', () => {
-      oc.constant(spreadConstantName, [[classConstructor, { optional: true }]]);
+      oc.constant(spreadConstantName, [[classParent, { optional: true }]]);
 
       let entry = oc.get('...' + spreadConstantName);
 
@@ -472,8 +449,27 @@ describe('ima.core.ObjectContainer', () => {
       expect(entry[0]).toBeUndefined();
     });
 
-    //TODO
-    it.todo('should not spread dependencies');
+    it('should create new entry when spread', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      let entry1 = oc.get('...' + spreadConstantName);
+      let entry2 = oc.get(spreadConstantName);
+      let entry3 = oc.get('...?' + spreadConstantName);
+
+      expect(entry1[0]).toStrictEqual(entry3[0]);
+      expect(entry1[0]).not.toStrictEqual(entry2[0]);
+    });
+
+    it('should not spread dependencies', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      let entry = oc.get(spreadConstantName);
+
+      expect(entry).toHaveLength(2);
+      expect(entry[0]).toStrictEqual(classParent);
+    });
   });
 
   describe('_getEntry method', () => {
