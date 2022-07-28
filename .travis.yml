@@ -1,3 +1,4 @@
+dist: focal
 language: node_js
 node_js:
   - 18
@@ -5,10 +6,9 @@ node_js:
 install:
   - npm ci
 
-dist: focal
-
 cache:
   directories:
+  - node_modules/.cache/turbo
   - website/.turbo
   - packages/cli/.turbo
   - packages/core/.turbo
