@@ -9,6 +9,9 @@ The IMA.js CLI uses [webpack](https://webpack.js.org/) behind the scenes to **co
 ## Server and client bundles
 
 The CLI creates 3 separate bundles (*2 in dev mode for performance reasons*) with their own configurations. One `server` bundle (used in express for SSR) and two client bundles - `client` and `client.es`, where one targets the `es2018` and the other `es2022` version of the javascript.
+## Server and client bundles
+
+The CLI creates 3 separate bundles (*2 in dev mode for performance reasons*) with their own configurations. One `server` bundle (used in express for SSR) and two client bundles - `client` and `client.es`, where one targets the es9 and the other es13 version of the javascript.
 
 :::tip
 
