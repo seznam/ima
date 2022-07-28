@@ -1,0 +1,16 @@
+.link {
+  display: inline-flex;
+
+  height: 1em;
+
+  align-items: center;
+
+  vertical-align: middle;
+
+  transition: opacity var(--ifm-transition-fast);
+}
+
+.icon {
+  width: auto;
+  height: 75%;
+}

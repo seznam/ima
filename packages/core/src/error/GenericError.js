@@ -13,7 +13,7 @@ export default class GenericError extends Error {
    * @param {string} message The message describing the cause of the error.
    * @param {Object<string, *>=} [params={}] A data map providing additional
    *        details related to the error. It is recommended to set the
-   *        {@code status} field to the HTTP response code that should be sent
+   *        `status` field to the HTTP response code that should be sent
    *        to the client.
    * @param {boolean=} dropInternalStackFrames Whether or not the call stack
    *        frames referring to the constructors of the custom errors should

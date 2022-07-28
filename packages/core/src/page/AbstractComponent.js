@@ -31,7 +31,7 @@ export default class AbstractComponent extends React.Component {
 
   /**
    * Returns the utilities for the view components. The returned value is the
-   * value bound to the {@code $Utils} object container constant.
+   * value bound to the `$Utils` object container constant.
    *
    * @return {Object<string, *>} The utilities for the view components.
    */
@@ -87,10 +87,10 @@ export default class AbstractComponent extends React.Component {
    * @param {(string|Object<string, boolean>)} classRules CSS classes in a
    *        string separated by whitespace, or a map of CSS class names to
    *        boolean values. The CSS class name will be included in the result
-   *        only if the value is {@code true}.
+   *        only if the value is `true`.
    * @param {boolean} includeComponentClassName
    * @return {string} String of CSS classes that had their property resolved
-   *         to {@code true}.
+   *         to `true`.
    */
   cssClasses(classRules, includeComponentClassName = false) {
     return helpers.cssClasses(this, classRules, includeComponentClassName);

@@ -1,9 +1,5 @@
 import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
-import {
-  Configuration,
-  ResolveOptions,
-  WebpackOptionsNormalized,
-} from 'webpack';
+import { Configuration, ResolveOptions, Watching } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 declare global {
@@ -146,14 +142,40 @@ export type ImaConfig = {
    * Custom options passed to webpack watch api interface. For more information see:
    * https://webpack.js.org/configuration/watch/#watchoptions
    */
-  watchOptions: WebpackOptionsNormalized['watchOptions'];
+  watchOptions: Watching['watchOptions'];
 
   /**
    * Set to true (or any preset from https://webpack.js.org/configuration/devtool/#devtool)
    * to enable source maps for production build. (dev/watch tasks always generate
    * source maps to work properly with error overlay).
    */
-  sourceMap?: boolean | string;
+  sourceMaps?:
+    | boolean
+    | 'eval'
+    | 'eval-cheap-source-map'
+    | 'eval-cheap-module-source-map'
+    | 'eval-source-map'
+    | 'cheap-source-map'
+    | 'cheap-module-source-map'
+    | 'source-map'
+    | 'inline-cheap-source-map'
+    | 'inline-cheap-module-source-map'
+    | 'inline-source-map'
+    | 'eval-nosources-cheap-source-map'
+    | 'eval-nosources-cheap-module-source-map'
+    | 'eval-nosources-source-map'
+    | 'inline-nosources-cheap-source-map'
+    | 'inline-nosources-cheap-module-source-map'
+    | 'inline-nosources-source-map'
+    | 'nosources-cheap-source-map'
+    | 'nosources-cheap-module-source-map'
+    | 'nosources-source-map'
+    | 'hidden-nosources-cheap-source-map'
+    | 'hidden-nosources-cheap-module-source-map'
+    | 'hidden-nosources-source-map'
+    | 'hidden-cheap-source-map'
+    | 'hidden-cheap-module-source-map'
+    | 'hidden-source-map';
 
   /**
    * Set custom jsxRuntime, the default is 'automatic'.

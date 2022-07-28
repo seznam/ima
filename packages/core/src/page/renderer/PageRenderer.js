@@ -51,11 +51,11 @@ export default class PageRenderer {
    *           content: ?string,
    *           pageState: Object<string, ?>
    *         }>} A promise that will resolve to information about the
-   *         rendered page. The {@code status} will contain the HTTP status
+   *         rendered page. The `status` will contain the HTTP status
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
-   *         The {@code content} field will contain the rendered markup of
-   *         the page at the server-side, or {@code null} at the client-side.
+   *         The `content` field will contain the rendered markup of
+   *         the page at the server-side, or `null` at the client-side.
    */
   mount() {}
 
@@ -98,11 +98,11 @@ export default class PageRenderer {
    *           content: ?string,
    *           pageState: Object<string, *>
    *         }>} A promise that will resolve to information about the
-   *         rendered page. The {@code status} will contain the HTTP status
+   *         rendered page. The `status` will contain the HTTP status
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
-   *         The {@code content} field will contain the rendered markup of
-   *         the page at the server-side, or {@code null} at the client-side.
+   *         The `content` field will contain the rendered markup of
+   *         the page at the server-side, or `null` at the client-side.
    */
   update() {}
 

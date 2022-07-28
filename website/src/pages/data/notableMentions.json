@@ -1,0 +1,13 @@
+[
+  "Configuration for all your environments in one place with inheritance.",
+  "Out-of-box configurable server-side caching.",
+  "REST API cache.",
+  "Advanced error handling for greater stability and faster development.",
+  "High-fidelity debug mode.",
+  "Dependency injection.",
+  "Analytics plugin, that provides interface to custom analytics, along with FB pixel and Google Analytics plugins.",
+  "Generic REST API client plugin for the IMA application framework",
+  "Plugin to simplify loading 3rd party scripts for the IMA.js application",
+  "Reselect-style page state selector plugin for IMA.js components.",
+  "And many more…"
+]

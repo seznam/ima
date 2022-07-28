@@ -3,8 +3,8 @@ import Storage from './Storage';
 import Window from '../window/Window';
 
 /**
- * Implementation of the {@codelink Storage} interface that relies on the
- * native {@code sessionStorage} DOM storage for storing its entries.
+ * Implementation of the `link Storage` interface that relies on the
+ * native `sessionStorage` DOM storage for storing its entries.
  */
 export default class SessionStorage extends Storage {
   static get $dependencies() {
@@ -195,7 +195,7 @@ class StorageIterator {
   /**
    * Returns the iterator for this object (this iterator). This method
    * implements the iterable protocol and provides compatibility with the
-   * {@code for..of} loops.
+   * `for..of` loops.
    *
    * @return {StorageIterator} This iterator.
    */

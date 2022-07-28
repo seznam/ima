@@ -1,7 +1,7 @@
 /**
- * The {@codelink Storage} is an unordered collection of named values of any
- * type. Values in the storage are named using {@code string} keys. The storage
- * can be therefore thought of as a {@code Map<string, *>}.
+ * The {@link Storage} is an unordered collection of named values of any
+ * type. Values in the storage are named using `string` keys. The storage
+ * can be therefore thought of as a `Map<string, *>`.
  *
  * @interface
  */
@@ -19,20 +19,20 @@ export default class Storage {
   init() {}
 
   /**
-   * Returns {@code true} if the entry identified by the specified key exists
+   * Returns `true` if the entry identified by the specified key exists
    * in this storage.
    *
    * @param {string} key The key identifying the storage entry.
-   * @return {boolean} {@code true} if the storage entry exists.
+   * @return {boolean} `true` if the storage entry exists.
    */
   has() {}
 
   /**
    * Retrieves the value of the entry identified by the specified . The
-   * method returns {@code undefined} if the entry does not exists.
+   * method returns `undefined` if the entry does not exists.
    *
-   * Entries set to the {@code undefined} value can be tested for existence
-   * using the {@codelink has} method.
+   * Entries set to the `undefined` value can be tested for existence
+   * using the `link has` method.
    *
    * @param {string} key The key identifying the storage entry.
    * @return {*} The value of the storage entry.
@@ -71,7 +71,7 @@ export default class Storage {
    * @return {Iterator<string>} An iterator for traversing the keys in this
    *         storage. The iterator also implements the iterable protocol,
    *         returning itself as its own iterator, allowing it to be used in
-   *         a {@code for..of} loop.
+   *         a `for..of` loop.
    */
   keys() {}
 

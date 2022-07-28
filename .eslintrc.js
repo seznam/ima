@@ -3,7 +3,10 @@ module.exports = {
   ignorePatterns: [
     '**/node_modules/**',
     '**/dist/**',
+    '**/build/**',
     '**/docs/**',
+    '**/.turbo/**',
+    '**/.docusaurus/**',
     '**/coverage/**',
     'packages/create-ima-app/examples/todos/assets/**',
   ],
@@ -84,6 +87,7 @@ module.exports = {
     // Import plugin
     {
       files: [
+        'website/**',
         'packages/cli/**',
         'packages/devtools/**',
         'packages/devtools-scripts/**',
@@ -93,14 +97,22 @@ module.exports = {
       ],
       extends: ['plugin:import/recommended'],
       rules: {
-        'import/no-unresolved': ['warn', { ignore: ['^@\\/'] }], // ignore @/* aliases
+        'import/no-unresolved': [
+          'warn',
+          {
+            ignore: [
+              '^@\\/', // ignore @/* aliases
+              '@(docusaurus|theme)',
+            ],
+          },
+        ],
         'import/order': [
           'error',
           {
             groups: ['builtin', 'external', 'internal'],
             pathGroups: [
               {
-                pattern: '{preact|react|svelte}{/**,**}',
+                pattern: '{preact|react|svelte|docusaurus|theme}{/**,**}',
                 group: 'external',
                 position: 'before',
               },
@@ -152,9 +164,18 @@ module.exports = {
         ],
       },
     },
+    // Website/docs overrides
+    {
+      files: ['website/**'],
+      rules: {
+        'react/react-in-jsx-scope': 'error',
+        'react/jsx-uses-react': 'error',
+      },
+    },
     // Other overrides
     {
       files: [
+        'website/scripts/**',
         'packages/cli/**',
         'packages/dev-utils/**',
         'packages/create-ima-app/**',

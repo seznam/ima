@@ -1,5 +1,5 @@
 /**
- * The {@codelink Window} interface defines various utility API for easier
+ * The {@link Window} interface defines various utility API for easier
  * cross-environment usage of various low-level client-side JavaScript APIs
  * available through various global objects.
  *
@@ -7,25 +7,25 @@
  */
 export default class Window {
   /**
-   * Returns {@code true} if invoked at the client side.
+   * Returns `true` if invoked at the client side.
    *
-   * @return {boolean} {@code true} if invoked at the client side.
+   * @return {boolean} `true` if invoked at the client side.
    */
   isClient() {}
 
   /**
-   * Returns {@code true} if the cookies are set and processed with every
+   * Returns `true` if the cookies are set and processed with every
    * HTTP request and response automatically by the environment.
    *
-   * @return {boolean} {@code true} if cookies are handled automatically by
+   * @return {boolean} `true` if cookies are handled automatically by
    *         the environment.
    */
   isCookieEnabled() {}
 
   /**
-   * Returns {@code true} if the session storage is supported.
+   * Returns `true` if the session storage is supported.
    *
-   * @return {boolean} {@code true} if the session storage is supported.
+   * @return {boolean} `true` if the session storage is supported.
    */
   hasSessionStorage() {}
 
@@ -37,35 +37,35 @@ export default class Window {
   setTitle() {}
 
   /**
-   * Returns the current {@code WebSocket} implementation to use.
+   * Returns the current `WebSocket` implementation to use.
    *
    * @deprecated All browsers currently supported by IMA.js support web
    *             sockets, but when used at the server-side, this method
    *             should fail unless web sockets are polyfilled by a 3rd party
    *             library.
-   * @return {function(new: WebSocket)} The current {@code WebSocket}
+   * @return {function(new: WebSocket)} The current `WebSocket`
    *         implementation.
    */
   getWebSocket() {}
 
   /**
-   * Returns the native {@code window} object representing the global context
-   * at the client-side. The method returns {@code undefined} if used at the
+   * Returns the native `window` object representing the global context
+   * at the client-side. The method returns `undefined` if used at the
    * server-side.
    *
-   * @return {(undefined|Window)} The {@code window} object at the
-   *         client-side, or {@code undefined} at the server-side.
+   * @return {(undefined|Window)} The `window` object at the
+   *         client-side, or `undefined` at the server-side.
    */
   getWindow() {}
 
   /**
-   * Returns the native {@code document} object representing any web page loaded
+   * Returns the native `document` object representing any web page loaded
    * in the browser and serves as an entry point into the web page's content
-   * which is the DOM tree at the client-side. The method returns {@code undefined}
+   * which is the DOM tree at the client-side. The method returns `undefined`
    * if used at the server-side.
    *
-   * @return {(undefined|Document)} The {@code document} object at the
-   *         client-side, or {@code undefined} at the server-side.
+   * @return {(undefined|Document)} The `document` object at the
+   *         client-side, or `undefined` at the server-side.
    */
   getDocument() {}
 
@@ -95,7 +95,7 @@ export default class Window {
 
   /**
    * Returns the domain of the current document's URL as
-   * {@code `${protocol}://${host}`}.
+   * ``${protocol}://${host}``.
    *
    * @return {string} The current domain.
    */
@@ -124,19 +124,19 @@ export default class Window {
 
   /**
    * Returns the document's body element. The method returns
-   * {@code undefined} if invoked at the server-side.
+   * `undefined` if invoked at the server-side.
    *
    * @return {(undefined|HTMLBodyElement)} The document's body element, or
-   *         {@code undefined} if invoked at the server side.
+   *         `undefined` if invoked at the server side.
    */
   getBody() {}
 
   /**
-   * Returns the HTML element with the specified {@code id} attribute value.
+   * Returns the HTML element with the specified `id` attribute value.
    *
-   * @param {string} id The value of the {@code id} attribute to look for.
+   * @param {string} id The value of the `id` attribute to look for.
    * @return {?HTMLElement} The element with the specified id, or
-   *         {@code null} if no such element exists.
+   *         `null` if no such element exists.
    */
   getElementById() {}
 
@@ -152,7 +152,7 @@ export default class Window {
    *
    * @param {string} selector The CSS selector.
    * @return {?HTMLElement} The first element matching the CSS selector or
-   *         {@code null} if no such element exists.
+   *         `null` if no such element exists.
    */
   querySelector() {}
 
@@ -215,7 +215,7 @@ export default class Window {
    * event occurs on the specified event target.
    *
    * Registering the same event listener for the same event on the same event
-   * target with the same {@code useCapture} flag value repeatedly has no
+   * target with the same `useCapture` flag value repeatedly has no
    * effect.
    *
    * @param {EventTarget} eventTarget The event target.
@@ -240,7 +240,7 @@ export default class Window {
    * @param {EventTarget} eventTarget The event target.
    * @param {string} event The name of the event.
    * @param {function(Event)} listener The event listener.
-   * @param {boolean=} [useCapture=false] The {@code useCapture} flag value
+   * @param {boolean=} [useCapture=false] The `useCapture` flag value
    *        that was used when the listener was registered.
    */
   unbindEventListener() {}

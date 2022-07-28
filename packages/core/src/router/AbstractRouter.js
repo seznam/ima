@@ -7,7 +7,7 @@ import GenericError from '../error/GenericError';
 import RouterMiddleware from './RouterMiddleware';
 
 /**
- * The basic implementation of the {@codelink Router} interface, providing the
+ * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
  *
  * @abstract
@@ -67,7 +67,7 @@ export default class AbstractRouter extends Router {
 
     /**
      * The current protocol used to access the application, terminated by a
-     * colon (for example {@code https:}).
+     * colon (for example `https:`).
      *
      * @type {string}
      */
@@ -88,7 +88,7 @@ export default class AbstractRouter extends Router {
     this._root = '';
 
     /**
-     * The URL path fragment used as a suffix to the {@code _root} field
+     * The URL path fragment used as a suffix to the `_root` field
      * that specifies the current language.
      *
      * @type {string}
@@ -450,7 +450,7 @@ export default class AbstractRouter extends Router {
    *          viewAdapter: ?function(new: React.Component)=,
    *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The options overrides route options defined in the
-   *        {@code routes.js} configuration file.
+   *        `routes.js` configuration file.
    * @param {{ type: string, event: Event, url: string }} [action] An action
    *        object describing what triggered this routing.
    * @return {Promise<Object<string, *>>} A promise that resolves when the
@@ -492,7 +492,7 @@ export default class AbstractRouter extends Router {
    *
    * @param {string} path The URL path.
    * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>}} The route
-   *         matching the path and middlewares preceding it or {@code {}}
+   *         matching the path and middlewares preceding it or `{}`
    *         (empty object) if no such route exists.
    */
   _getRouteHandlersByPath(path) {
@@ -541,7 +541,7 @@ export default class AbstractRouter extends Router {
   }
 
   /**
-   * Returns path that is stored in private property when a {@code route}
+   * Returns path that is stored in private property when a `route`
    * method is called.
    *
    * @returns {string}

@@ -14,7 +14,7 @@ export default class Request {
    */
   constructor() {
     /**
-     * The current ExpressJS request object, or {@code null} if running at
+     * The current ExpressJS request object, or `null` if running at
      * the client side.
      *
      * @type {?Express.Request}
@@ -26,7 +26,7 @@ export default class Request {
    * Initializes the request using the provided ExpressJS request object.
    *
    * @param {?Express.Request} request The ExpressJS request object
-   *        representing the current request. Use {@code null} at the client
+   *        representing the current request. Use `null` at the client
    *        side.
    */
   init(request) {
@@ -43,9 +43,9 @@ export default class Request {
   }
 
   /**
-   * Returns the {@code Cookie} HTTP header value.
+   * Returns the `Cookie` HTTP header value.
    *
-   * @return {string} The value of the {@code Cookie} header.
+   * @return {string} The value of the `Cookie` header.
    */
   getCookieHeader() {
     return this._request ? this._request.get('Cookie') : '';

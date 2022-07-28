@@ -1,11 +1,11 @@
 ---
-title: "Tutorial - 5. Writing posts"
-layout: "tutorial"
+title: Writing Posts
+description: Tutorial > Writing Posts
 ---
 
-In [previous part](/tutorial/fetching-the-data-from-the-server) we created our classes and services to handle data fetching from server.
+In [previous part](./fetching-data.md) we created our classes and services to handle data fetching from server.
 We also learned something about the vital parts of IMA.js - **object container** and **server-side rendering**.
-In this smaller section of the tutorial, we're going to be processing input from user and 
+In this smaller section of the tutorial, we're going to be processing input from user and
 sending those data to the server.
 
 ## Processing input from user
@@ -70,7 +70,7 @@ We can't forget to define the default state for these two keys:
 ```javascript
 constructor(props, context) {
   super(props, context);
-  
+
   this.state = {
     author: '',
     content: ''
@@ -83,7 +83,7 @@ separately from the main page state maintained by the home page controller.
 
 Now we need to define the `_onChange()` handler. We're going to use the
 `name` attribute of input and textarea fields so both can be handled by defining only one method.
-But feel free to define `onChange` handlers for each input separately, if that suits you better. 
+But feel free to define `onChange` handlers for each input separately, if that suits you better.
 Our `_onChange()` handler will look like this:
 
 ```javascript
@@ -104,7 +104,7 @@ _onSubmit(event) {
     author: this.state.author,
     content: this.state.content
   });
-   
+
   // Reset the state after submitting
   this.setState({
     author: '',
@@ -143,7 +143,7 @@ onPostSubmitted(eventData) {
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
 bus event occurs. For details on how this mechanism works, please reffer to the
-[Emitting events using the EventBus](/tutorial/adding-some-state#2-Emitting-events-using-the-eventbus) 
+[Emitting events using the EventBus](./adding-some-state.md#emitting-events-using-the-eventbus)
 section of the third chapter of this tutorial.
 
 Notice that our `onPostSubmitted()` event listener is a public method. This is
@@ -174,7 +174,7 @@ Now add the following method for creating new posts to the post resource
 ```javascript
 createPost(postData) {
   return this._http
-    .post('http://localhost:3001/static/public/api/posts.json', postData)
+    .post('http://localhost:3001/static/api/posts.json', postData)
     .then(response => this._factory.createEntity(response.body));
 }
 ```
@@ -338,8 +338,3 @@ export default class PostResource {
 Go ahead and check the result in the browser, you will now be able to write new
 posts to our guestbook (which will disappear once you reload the page, since we
 keep the posts only in our HTTP mock).
-
-<hr class="bottom-doc-separator">
-
-With our guestbook working, we can turn to adding some final polish to our
-application in the [6th and last part of the tutorial](/tutorial/final-polish).
