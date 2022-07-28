@@ -9,16 +9,13 @@ dist: focal
 
 jobs:
   include:
-    - name: "Unit Tests"
-      script: npm test
-    - name: "Lint"
-      script: npm run lint
-    - name: "Stylelint"
-      script: npm run stylelint
-    - name: "Docs"
-      script: npm run doc
-    - name: "Benchmark Test"
-      script: npm run benchmark
+    - name: "CI"
+      script:
+      - npm test
+      - npm run lint
+      - npm run stylelint
+      - npm run doc
+      - npm run benchmark
     # - name: "Audit"
     #   script: npm audit || echo \"audit found some vulnerabilities.\"
     - if: tag =~ ^v # Run only for tags
