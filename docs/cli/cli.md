@@ -180,7 +180,7 @@ Following options are used to customize the companion dev server location (only 
 
 :::tip
 
-If you provide `port` and `hostname`, you don't need to define the `publicUrl`. The CLI will create it automatically. Unless the publicUrl is completely different than the hostname and port provided.
+If you provide `port` and `hostname`, you don't need to define the `publicUrl`, the CLI will create it automatically, unless the `publicUrl` is completely different than the `hostname` and `port` provided.
 
 :::
 
