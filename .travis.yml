@@ -8,16 +8,8 @@ install:
 
 cache:
   directories:
-  - node_modules/.cache/turbo
-  - website/.turbo
-  - packages/cli/.turbo
-  - packages/core/.turbo
-  - packages/dev-utils/.turbo
-  - packages/devtools-scripts/.turbo
-  - packages/devtools/.turbo
-  - packages/error-overlay/.turbo
-  - packages/helpers/.turbo
-  - packages/hmr-client/.turbo
+  - "$HOME/.npm"
+  - node_modules/.cache
 
 jobs:
   include:
