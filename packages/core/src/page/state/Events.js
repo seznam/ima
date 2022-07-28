@@ -5,10 +5,10 @@
  */
 const Events = Object.freeze({
   /**
-   * PateStateManager fire event {@code $IMA.$PageStateManager.beforeChangeState} before
+   * PateStateManager fire event `$IMA.$PageStateManager.beforeChangeState` before
    * state is patched. Event's data contain
-   * {@code { oldState: Object<string, *>, newState: Object<string, *>,
-   * pathState:  Object<string, *> }}.
+   * `{ oldState: Object<string, *>, newState: Object<string, *>,
+   * pathState:  Object<string, *> }`.
    *
    * @const
    * @type {string}
@@ -16,8 +16,8 @@ const Events = Object.freeze({
   BEFORE_CHANGE_STATE: '$IMA.$PageStateManager.beforeChangeState',
 
   /**
-   * PateStateManager fire event {@code $IMA.$PageStateManager.afterChangeState} after state
-   * is patched. Event's data contain {@code {newState: Object<string, *>}}.
+   * PateStateManager fire event `$IMA.$PageStateManager.afterChangeState` after state
+   * is patched. Event's data contain `{newState: Object<string, *>}`.
    *
    * @const
    * @type {string}

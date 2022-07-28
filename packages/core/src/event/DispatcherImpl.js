@@ -3,7 +3,7 @@ import GenericError from '../error/GenericError';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
- * the {@codelink _eventListeners} map.
+ * the {@link _eventListeners} map.
  *
  * @const
  * @type {Map<function (*), Set<?Object>>}
@@ -12,7 +12,7 @@ const EMPTY_MAP = Object.freeze(new Map());
 
 /**
  * An empty immutable set of event listener scopes, used for a mismatch in the
- * {@codelink _eventListeners} map.
+ * {@link _eventListeners} map.
  *
  * @const
  * @type {Set<?Object>}
@@ -20,7 +20,7 @@ const EMPTY_MAP = Object.freeze(new Map());
 const EMPTY_SET = Object.freeze(new Set());
 
 /**
- * Default implementation of the {@codelink Dispatcher} interface.
+ * Default implementation of the {@link Dispatcher} interface.
  */
 export default class DispatcherImpl extends Dispatcher {
   static get $dependencies() {

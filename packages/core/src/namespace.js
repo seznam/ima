@@ -8,7 +8,7 @@ export class Namespace {
   /**
    * Initializes the namespace provider.
    *
-   * This is a private constructor, you should use the exported {@code ns}
+   * This is a private constructor, you should use the exported `ns`
    * instance to create and use namespaces (see the examples).
    *
    * @private
@@ -53,7 +53,7 @@ export class Namespace {
    * namespace or terminal value.
    *
    * @param {string} path The namespace path to test.
-   * @return {boolean} {@code true} if the namespace or terminal value exists
+   * @return {boolean} `true` if the namespace or terminal value exists
    *         at the specified path.
    */
   has(path) {

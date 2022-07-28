@@ -26,6 +26,7 @@ import {
   createPolyfillEntry,
   extractLanguages,
   createDevServerConfig,
+  getCurrentCoreJsVersion,
 } from './utils';
 
 /**
@@ -42,7 +43,7 @@ export default async (
 
   // Define helper variables derived from context
   const isDevEnv = ctx.environment === 'development';
-  const useSourceMaps = !!imaConfig.sourceMap || isDevEnv;
+  const useSourceMaps = !!imaConfig.sourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
@@ -51,25 +52,45 @@ export default async (
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
-  let targets: 'defaults' | Record<string, string> = 'defaults';
+  let targets: Record<string, string> | string[];
+  const coreJsVersion = await getCurrentCoreJsVersion();
 
   if (isEsVersion) {
-    targets = {
-      chrome: '80',
-      edge: '80',
-      firefox: '80',
-      opera: '67',
-      safari: '14',
-      ios: '14',
-    };
+    // es2022 targets (taken from 'browserslist-generator')
+    targets = [
+      'and_chr >= 91',
+      'chrome >= 91',
+      'and_ff >= 90',
+      'android >= 103',
+      'edge >= 91',
+      'samsung >= 16.0',
+      'safari >= 15',
+      'ios_saf >= 15.1',
+      'opera >= 77',
+      'firefox >= 90',
+    ];
   } else if (isServer) {
     targets = { node: '18' };
+  } else {
+    // es2018 targets
+    targets = [
+      'and_chr >= 63',
+      'chrome >= 63',
+      'and_ff >= 58',
+      'android >= 103',
+      'edge >= 79',
+      'samsung >= 8.2',
+      'safari >= 11.1',
+      'ios_saf >= 11.4',
+      'opera >= 50',
+      'firefox >= 58',
+    ];
   }
 
   // Set correct devtool source maps config
   const devtool = useSourceMaps
-    ? typeof imaConfig.sourceMap === 'string'
-      ? imaConfig.sourceMap
+    ? typeof imaConfig.sourceMaps === 'string'
+      ? imaConfig.sourceMaps
       : 'source-map'
     : false;
 
@@ -112,9 +133,10 @@ export default async (
                 [
                   'postcss-preset-env',
                   {
-                    browsers: 'defaults',
+                    browsers: '>0.5%, not dead, not op_mini all, not ie 11',
                     autoprefixer: {
                       flexbox: 'no-2009',
+                      grid: 'autoplace',
                     },
                     stage: 3,
                     features: {
@@ -151,8 +173,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isEsVersion
-      ? ['web', 'es11']
-      : ['web', 'es5'],
+      ? ['web', 'es2022']
+      : ['web', 'es2018'],
     mode: isDevEnv ? 'development' : 'production',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -164,8 +186,6 @@ export default async (
           }
         : {
             [name]: [
-              // Inject fetch polyfill to es5 bundle
-              !isEsVersion && require.resolve('whatwg-fetch'),
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
@@ -245,7 +265,7 @@ export default async (
         new TerserPlugin({
           minify: TerserPlugin.swcMinify,
           terserOptions: {
-            ecma: isServer || isEsVersion ? 2020 : 5,
+            ecma: isServer || isEsVersion ? 2020 : 2018,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -350,169 +370,84 @@ export default async (
                 },
               ],
             },
-            ...(imaConfig.experiments?.swc
-              ? [
-                  /**
-                   * Run node_modules and app JS through swc
-                   */
-                  {
-                    test: /\.(js|mjs|cjs)$/,
-                    exclude: [
-                      /\bcore-js\b/,
-                      /\bwebpack\/buildin\b/,
-                      /\bcss-loader\b/,
-                      /\bmini-css-extract-plugin\b/,
-                      /\breact-dom-server\b/,
-                      appDir,
-                    ],
-                    use: [
-                      !isServer && {
-                        loader: require.resolve('swc-loader'),
-                        options: {
-                          env: {
-                            targets,
-                            mode: 'usage',
-                            coreJs: '3.22.7',
-                            bugfixes: true,
-                          },
-                          module: {
-                            type: 'commonjs',
-                          },
-                          jsc: {
-                            parser: {
-                              syntax: 'ecmascript',
-                            },
-                          },
-                          sourceMaps: useSourceMaps,
-                          inlineSourcesContent: useSourceMaps,
-                        },
+            /**
+             * Run node_modules and app JS through swc
+             */
+            {
+              test: /\.(js|mjs|cjs)$/,
+              exclude: [
+                /\bcore-js\b/,
+                /\bwebpack\/buildin\b/,
+                /\bcss-loader\b/,
+                /\bmini-css-extract-plugin\b/,
+                /\breact-dom-server\b/,
+                appDir,
+              ],
+              use: [
+                !isServer && {
+                  loader: require.resolve('swc-loader'),
+                  options: {
+                    env: {
+                      targets,
+                      mode: 'usage',
+                      coreJs: coreJsVersion,
+                      bugfixes: true,
+                    },
+                    module: {
+                      type: 'commonjs',
+                    },
+                    jsc: {
+                      parser: {
+                        syntax: 'ecmascript',
                       },
-                      {
-                        // This injects new plugin loader interface into legacy plugins
-                        loader: 'ima-legacy-plugin-loader',
-                      },
-                    ].filter(Boolean),
+                    },
+                    sourceMaps: useSourceMaps,
+                    inlineSourcesContent: useSourceMaps,
                   },
-                  {
-                    test: /\.(js|mjs|jsx|cjs)$/,
-                    include: appDir,
-                    exclude: /node_modules/,
-                    loader: require.resolve('swc-loader'),
-                    options: await imaConfig.swc(
-                      {
-                        env: {
-                          targets,
-                          mode: 'usage',
-                          coreJs: '3.22.7',
-                          shippedProposals: true,
-                          bugfixes: true,
-                        },
-                        module: {
-                          type: 'es6',
-                        },
-                        jsc: {
-                          parser: {
-                            syntax: 'ecmascript',
-                            jsx: true,
-                          },
-                          transform: {
-                            react: {
-                              runtime: imaConfig.jsxRuntime ?? 'automatic',
-                              development: isDevEnv,
-                              refresh: useHMR,
-                              useBuiltins: true,
-                            },
-                          },
-                        },
-                        sourceMaps: useSourceMaps,
-                        inlineSourcesContent: useSourceMaps,
-                      },
-                      ctx
-                    ),
+                },
+                {
+                  // This injects new plugin loader interface into legacy plugins
+                  loader: 'ima-legacy-plugin-loader',
+                },
+              ].filter(Boolean),
+            },
+            {
+              test: /\.(js|mjs|jsx|cjs)$/,
+              include: appDir,
+              exclude: /node_modules/,
+              loader: require.resolve('swc-loader'),
+              options: await imaConfig.swc(
+                {
+                  env: {
+                    targets,
+                    mode: 'usage',
+                    coreJs: coreJsVersion,
+                    shippedProposals: true,
+                    bugfixes: true,
                   },
-                ]
-              : [
-                  /**
-                   * Process js of app directory with general babel config
-                   */
-                  {
-                    test: /\.(js|mjs|cjs)$/,
-                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
-                    use: [
-                      !isServer && {
-                        loader: require.resolve('babel-loader'),
-                        options: {
-                          sourceType: 'unambiguous',
-                          babelrc: false,
-                          configFile: false,
-                          cacheDirectory: true,
-                          cacheCompression: false,
-                          compact: !isDevEnv,
-                          targets,
-                          presets: [
-                            [
-                              require.resolve('@babel/preset-env'),
-                              {
-                                bugfixes: true,
-                                modules: false,
-                                useBuiltIns: 'usage',
-                                corejs: { version: '3.22.7' },
-                                exclude: ['transform-typeof-symbol'],
-                              },
-                            ],
-                          ],
-                          sourceMaps: useSourceMaps,
-                          inputSourceMap: useSourceMaps,
-                        },
-                      },
-                      {
-                        // This injects new plugin loader interface into legacy plugins
-                        loader: 'ima-legacy-plugin-loader',
-                      },
-                    ].filter(Boolean),
+                  module: {
+                    type: 'es6',
                   },
-                  {
-                    test: /\.(js|mjs|jsx|cjs)$/,
-                    include: appDir,
-                    exclude: /node_modules/,
-                    loader: require.resolve('babel-loader'),
-                    options: await imaConfig.babel(
-                      {
-                        targets,
-                        babelrc: false,
-                        configFile: false,
-                        cacheDirectory: true,
-                        cacheCompression: false,
-                        compact: !isDevEnv,
-                        presets: [
-                          [
-                            require.resolve('@babel/preset-react'),
-                            {
-                              development: isDevEnv,
-                              runtime: imaConfig.jsxRuntime ?? 'automatic',
-                            },
-                          ],
-                          [
-                            require.resolve('@babel/preset-env'),
-                            {
-                              bugfixes: true,
-                              modules: false,
-                              useBuiltIns: 'usage',
-                              corejs: { version: '3.22.7', proposals: true },
-                              exclude: ['transform-typeof-symbol'],
-                            },
-                          ],
-                        ],
-                        plugins: useHMR
-                          ? [require.resolve('react-refresh/babel')]
-                          : [],
-                        sourceMaps: useSourceMaps,
-                        inputSourceMap: useSourceMaps,
+                  jsc: {
+                    parser: {
+                      syntax: 'ecmascript',
+                      jsx: true,
+                    },
+                    transform: {
+                      react: {
+                        runtime: imaConfig.jsxRuntime ?? 'automatic',
+                        development: isDevEnv,
+                        refresh: useHMR,
+                        useBuiltins: true,
                       },
-                      ctx
-                    ),
+                    },
                   },
-                ]),
+                  sourceMaps: useSourceMaps,
+                  inlineSourcesContent: useSourceMaps,
+                },
+                ctx
+              ),
+            },
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */

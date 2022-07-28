@@ -98,7 +98,7 @@ export default class PageRendererFactory {
    *
    * @param {(function(new: React.Component))} view The namespace path
    *        pointing to the view component, or the constructor
-   *        of the {@code React.Component}.
+   *        of the `React.Component`.
    * @return {function(new: React.Component)} The constructor of the view
    *         component.
    */
@@ -114,12 +114,12 @@ export default class PageRendererFactory {
 
   /**
    * Wraps the provided view into the view adapter so it can access the state
-   * passed from controller through the {@code props} property instead of the
-   * {@code state} property.
+   * passed from controller through the `props` property instead of the
+   * `state` property.
    *
    * @param {(function(new: React.Component)|string)} view The namespace path
    *        pointing to the view component, or the constructor
-   *        of the {@code React.Component}.
+   *        of the `React.Component`.
    * @param {{
    *          view: React.Component,
    *          state: Object<string, *>,

@@ -1,8 +1,8 @@
 import Storage from './Storage';
 
 /**
- * Implementation of the {@codelink Storage} interface that relies on the
- * native {@code Map} for storage.
+ * Implementation of the `link Storage` interface that relies on the
+ * native `Map` for storage.
  */
 export default class MapStorage extends Storage {
   static get $dependencies() {
