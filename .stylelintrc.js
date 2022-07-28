@@ -1,6 +1,18 @@
 module.exports = {
   customSyntax: 'postcss-less',
-  ignoreFiles: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx', '**/*.json'],
+  ignoreFiles: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/docs/**',
+    '**/.turbo/**',
+    '**/.docusaurus/**',
+    '**/coverage/**', '**/*.js',
+    '**/*.ts',
+    '**/*.jsx',
+    '**/*.tsx',
+    '**/*.json'
+  ],
   extends: ['stylelint-config-standard', 'stylelint-config-css-modules'],
   plugins: [
     'stylelint-declaration-block-no-ignored-properties',

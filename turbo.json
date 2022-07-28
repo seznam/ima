@@ -3,13 +3,50 @@
   "baseBranch": "origin/master",
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**",
+        "build/**"
+      ],
+      "outputMode": "new-only"
     },
-    "test": {},
-    "lint": {},
-    "stylelint": {},
+    "doc#build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**",
+        "build/**",
+        ".docusaurus/**"
+      ],
+      "outputMode": "new-only"
+    },
+    "test": {
+      "outputs": [],
+      "outputMode": "new-only"
+    },
+    "lint": {
+      "outputs": [],
+      "inputs": [
+        "./**/*.js",
+        "./**/*.jsx",
+        "./**/*.ts",
+        "./**/*.tsx"
+      ],
+      "outputMode": "new-only"
+    },
+    "stylelint": {
+      "outputs": [],
+      "inputs": ["./**/*.less", "./**/*.css"],
+      "outputMode": "new-only"
+    },
     "dev": {
-      "cache": false
+      "cache": false,
+      "outputMode": "new-only"
     }
-  }
+  },
+  "globalDependencies": [
+    "tsconfig.json",
+    ".eslintrc.js",
+    ".stylelintrc.js",
+    "jest.config.js"
+  ]
 }

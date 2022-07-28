@@ -26,9 +26,7 @@
     "benchmark": "utils/benchmark/benchmark.sh",
     "dev": "node ./utils/scripts/dev.js",
     "build": "turbo run build",
-    "doc": "cd ./website && npm run build",
     "commit": "git-cz",
-    "postinstall": "npm run build",
     "lint": "turbo run lint",
     "prepare": "husky install",
     "release": "lerna version --force-publish create-ima-app",
@@ -53,7 +51,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "**/*.{css,less}": "stylelint './**/*.less'"
+    "**/*.{css,less}": "stylelint './**/*.{css,less}'"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

@@ -7,14 +7,24 @@ install:
 
 dist: focal
 
+cache:
+  directories:
+  - website/.turbo
+  - packages/cli/.turbo
+  - packages/core/.turbo
+  - packages/dev-utils/.turbo
+  - packages/devtools-scripts/.turbo
+  - packages/devtools/.turbo
+  - packages/error-overlay/.turbo
+  - packages/helpers/.turbo
+  - packages/hmr-client/.turbo
+  - packages/server/.turbo
+
 jobs:
   include:
     - name: "CI"
       script:
-      - npm test
-      - npm run lint
-      - npm run stylelint
-      - npm run doc
+      - npx turbo run build test lint stylelint
       - npm run benchmark
     # - name: "Audit"
     #   script: npm audit || echo \"audit found some vulnerabilities.\"
