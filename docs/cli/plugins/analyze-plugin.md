@@ -47,8 +47,6 @@ Run the ima build command with `--analyze` argument and pick one of the three pr
 
 ## Options
 
-You can pass any of the following options into the CLI plugin.
-
 ```ts
 new AnalyzePlugin(options: {
   open?: boolean;

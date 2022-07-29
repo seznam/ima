@@ -119,8 +119,6 @@ The scrambling is enabled by default for the `build` command. However you can ex
 
 ## Options
 
-You can pass any of the following options into the CLI plugin.
-
 ```ts
 new ScrambleCssPlugin(options: {
   scrambleCssMinimizerOptions?: {
