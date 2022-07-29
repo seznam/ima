@@ -6,7 +6,7 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { ImaCliPlugin, ImaConfigurationContext } from '../../types';
+import { ImaCliArgs, ImaCliPlugin, ImaConfigurationContext } from '../../types';
 import {
   ScrambleCssMinimizerOptions,
   ScrambleCssMinimizer,
@@ -23,16 +23,15 @@ export interface ScrambleCssPluginOptions {
   scrambleCssMinimizerOptions?: ScrambleCssMinimizerOptions;
 }
 
-/**
- * Plugin additional CLI args, scrambleCss option can be used to explicitly enable/disable
- * scrambling for certain use cases. Enabled by default in production build with other minimizers.
- */
-const scrambleCssPluginSharedCliArgs: CommandBuilder = {
-  scrambleCss: {
-    desc: 'Scrambles (uglifies) classNames in css files',
-    type: 'boolean',
-  },
-};
+function createCliArgs(command: ImaCliArgs['command']): CommandBuilder {
+  return {
+    scrambleCss: {
+      desc: 'Scrambles (uglifies) classNames in css files',
+      type: 'boolean',
+      default: command === 'build',
+    },
+  };
+}
 
 /**
  * Minifies component classnames and generates hashtable of transformed classnames
@@ -43,8 +42,8 @@ class ScrambleCssPlugin implements ImaCliPlugin {
 
   readonly name = 'ScrambleCssPlugin';
   readonly cliArgs = {
-    build: scrambleCssPluginSharedCliArgs,
-    dev: scrambleCssPluginSharedCliArgs,
+    build: createCliArgs('build'),
+    dev: createCliArgs('dev'),
   };
 
   constructor(options: Partial<ScrambleCssPluginOptions> = {}) {
@@ -60,7 +59,10 @@ class ScrambleCssPlugin implements ImaCliPlugin {
       return config;
     }
 
-    // Set default hash table filename (path)
+    /**
+     * Set plugin default options. We need to do this here, rather than in
+     * the constructor since we have to have access to the `config.output.path`.
+     */
     if (
       !this._options.scrambleCssMinimizerOptions?.hashTableFilename ||
       !path.isAbsolute(
@@ -95,34 +97,39 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     );
 
     /**
-     * Force minimizer in development if CLI argument is present.
-     * This will remove all other minimizers except the CSS scrambler
-     * and force minimization in dev mode.
+     * Remove existing hashTable.json so the web does not try
+     * to load css with invalid scrambled CSS.
      */
-    if (ctx.scrambleCss) {
-      config.optimization = {
-        ...config.optimization,
-        minimize: !ctx.isServer,
-        minimizer: [scrambleCssMinimizer],
-      };
-    } else {
-      /**
-       * Remove existing hashTable.json so the web does not try
-       * to load css with invalid scrambled CSS.
-       */
-      if (
-        this._options.scrambleCssMinimizerOptions?.hashTableFilename &&
-        fs.existsSync(
-          this._options.scrambleCssMinimizerOptions?.hashTableFilename
-        )
-      ) {
-        await fs.promises.rm(
-          this._options.scrambleCssMinimizerOptions?.hashTableFilename
-        );
-      }
+    if (
+      this._options.scrambleCssMinimizerOptions?.hashTableFilename &&
+      fs.existsSync(
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename
+      )
+    ) {
+      await fs.promises.rm(
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename
+      );
+    }
 
-      // Add scrambleCSS minimizer
-      config.optimization?.minimizer?.unshift(scrambleCssMinimizer);
+    if (ctx.scrambleCss) {
+      if (ctx.command === 'dev') {
+        /**
+         * Force minimizer in development if CLI argument is present.
+         * This will remove all other minimizers except the CSS scrambler
+         * and force minimization in dev mode.
+         */
+        config.optimization = {
+          ...config.optimization,
+          minimize: !ctx.isServer,
+          minimizer: [scrambleCssMinimizer],
+        };
+      } else {
+        /**
+         * Enable minimizer by default during build, but allow it
+         * to be disabled explicitly using the CLI arg.
+         */
+        config.optimization?.minimizer?.unshift(scrambleCssMinimizer);
+      }
     }
 
     return config;
