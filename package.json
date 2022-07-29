@@ -29,7 +29,7 @@
     "doc": "cd ./website && npm run build",
     "changeset": "changeset add",
     "postinstall": "npm run build",
-    "lint": "turbo run lint",
+    "lint": "eslint --cache './**/*.{js,jsx,ts,tsx}'",
     "prepare": "husky install",
     "release": "npm run release:prepare && npm run release:push",
     "release:prepare": "changeset version",
@@ -38,13 +38,13 @@
     "release:graduate": "changeset pre exit && npm run release",
     "release:next:init": "changeset pre enter rc",
     "release:publish": "changeset publish --no-git-tag",
-    "stylelint": "turbo run stylelint",
-    "test": "turbo run test",
+    "stylelint": "stylelint --cache './**/*.{css,less}'",
+    "test": "jest --onlyChanged",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "**/*.{css,less}": "stylelint './**/*.{css,less}'"
+    "**/*.{js,jsx,ts,tsx}": "eslint",
+    "**/*.{css,less}": "stylelint"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

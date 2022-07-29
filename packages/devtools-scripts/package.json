@@ -31,10 +31,7 @@
   "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup --config",
-    "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "preversion": "npm test"
+    "dev": "rollup --config --watch"
   },
   "dependencies": {
     "to-aop": "^0.5.4"

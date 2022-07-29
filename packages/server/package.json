@@ -19,11 +19,6 @@
   "license": "MIT",
   "author": "Seznam.cz, a.s.",
   "main": "index.js",
-  "scripts": {
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js",
-    "preversion": "npm test"
-  },
   "dependencies": {
     "ejs": "^3.1.6",
     "error-to-json": "^2.0.0",

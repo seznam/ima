@@ -36,12 +36,6 @@
   "bin": {
     "create-ima-app": "./bin/create-ima-app.js"
   },
-  "scripts": {
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "stylelint": "stylelint './**/*.{css,less}'",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "preversion": "npm test"
-  },
   "dependencies": {
     "chalk": "^5.0.1",
     "fs-extra": "^10.1.0"

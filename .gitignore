@@ -9,3 +9,5 @@ jsconfig.json
 ima-app
 storage
 docs/api
+.eslintcache
+.stylelintcache
