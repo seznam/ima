@@ -17,28 +17,16 @@ const helmet = require('helmet');
 const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
 
-function errorToString(error) {
-  const jsonError = errorToJSON(error);
-  let errorString =
-    jsonError && jsonError.message
-      ? jsonError.message
-      : 'Unknown error message';
-
-  try {
-    errorString = JSON.stringify(jsonError);
-  } catch (e) {
-    logger.error(e.message);
-  }
-
-  return errorString;
-}
-
 process.on('uncaughtException', error => {
-  logger.error(`Uncaught Exception:\n${errorToString(error)}`);
+  logger.error('Uncaught Exception', {
+    error,
+  });
 });
 
 process.on('unhandledRejection', error => {
-  logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
+  logger.error('Unhandled promise rejection', {
+    error,
+  });
 });
 
 function renderApp(req, res, next) {

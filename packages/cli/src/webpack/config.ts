@@ -503,6 +503,7 @@ export default async (
             // This needs to run for both client bundles
             new GenerateRunnerPlugin({
               context: ctx,
+              imaConfig,
             }),
 
             processCss &&
