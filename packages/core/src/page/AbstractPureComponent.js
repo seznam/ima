@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import * as helpers from './componentHelpers';
 import Context from './Context';
 
@@ -16,7 +16,7 @@ import Context from './Context';
  * @abstract
  * @see https://facebook.github.io/react/docs/react-api.html#react.purecomponent
  */
-export default class AbstractPureComponent extends React.PureComponent {
+export default class AbstractPureComponent extends PureComponent {
   static get contextType() {
     return Context;
   }

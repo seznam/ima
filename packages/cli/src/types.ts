@@ -203,6 +203,11 @@ export type ImaConfig = {
   languages: Record<string, string[]>;
 
   /**
+   * Disables build of 'client' legacy bundle.
+   */
+  disableLegacyBuild?: boolean;
+
+  /**
    * Experimental configurations which can be enabled individually on specific applications.
    * Some of these may find a way to default configuration in future versions of IMA.js.
    */

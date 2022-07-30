@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component, createElement } from 'react';
 import memoizeOne from 'memoize-one';
 import Context from '../Context';
 
@@ -6,7 +6,7 @@ import Context from '../Context';
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
-export default class ViewAdapter extends React.Component {
+export default class ViewAdapter extends Component {
   static getDerivedStateFromProps(props, state) {
     //we want use props.state only when props changed
     //temp indicator notUsePropsState is set by AbstractPageRenderer
@@ -84,10 +84,10 @@ export default class ViewAdapter extends React.Component {
    * @inheritdoc
    */
   render() {
-    return React.createElement(
+    return createElement(
       Context.Provider,
       { value: this._getContextValue(this.props, this.state) },
-      React.createElement(this._view, this.state)
+      createElement(this._view, this.state)
     );
   }
 }

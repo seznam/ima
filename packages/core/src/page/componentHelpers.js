@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React from 'react';
+import { Component, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
 /**
@@ -105,8 +105,7 @@ export function defaultCssClasses(classRules, component) {
 
   if (
     !extraClasses &&
-    (component instanceof React.Component ||
-      component instanceof React.PureComponent)
+    (component instanceof Component || component instanceof PureComponent)
   ) {
     extraClasses = component.props.className;
   }
