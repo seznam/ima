@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { Component, PureComponent } from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -123,7 +123,8 @@ export function defaultCssClasses(classRules, component) {
  */
 export function fire(component, eventName, data = null) {
   return component.utils.$EventBus.fire(
-    ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
+    // eslint-disable-next-line react/no-find-dom-node
+    findDOMNode(component),
     eventName,
     data
   );
