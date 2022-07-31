@@ -140,7 +140,7 @@ export default class ObjectContainer {
         throw new Error(
           `ima.core.ObjectContainer:bind Object container ` +
             `is locked. You do not have the permission to ` +
-            `create a new alias named ${name}.`
+            `create a new alias named ${this._getDebugName(name)}.`
         );
       }
 
@@ -148,8 +148,10 @@ export default class ObjectContainer {
         throw new Error(
           `ima.core.ObjectContainer:bind The second ` +
             `argument has to be a class constructor function, ` +
-            `but ${classConstructor} was provided. Fix alias ` +
-            `${name} for your bind.js file.`
+            `but ${this._getDebugName(
+              classConstructor
+            )} was provided. Fix alias ` +
+            `${this._getDebugName(name)} for your bind.js file.`
         );
       }
     }
@@ -194,7 +196,7 @@ export default class ObjectContainer {
     if ($Debug) {
       if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
         throw new Error(
-          `ima.core.ObjectContainer:constant The ${name} ` +
+          `ima.core.ObjectContainer:constant The ${this._getDebugName(name)} ` +
             `constant has already been declared and cannot be ` +
             `redefined.`
         );
@@ -202,7 +204,7 @@ export default class ObjectContainer {
 
       if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
         throw new Error(
-          `ima.core.ObjectContainer:constant The ${name} ` +
+          `ima.core.ObjectContainer:constant The ${this._getDebugName(name)} ` +
             `constant can't be declared in plugin. ` +
             `The constant must be define in app/config/bind.js file.`
         );
@@ -238,7 +240,9 @@ export default class ObjectContainer {
         throw new Error(
           `ima.core.ObjectContainer:inject The first ` +
             `argument has to be a class constructor function, ` +
-            `but ${classConstructor} was provided. Fix your ` +
+            `but ${this._getDebugName(
+              classConstructor
+            )} was provided. Fix your ` +
             `bind.js file.`
         );
       }
@@ -249,7 +253,9 @@ export default class ObjectContainer {
       ) {
         throw new Error(
           `ima.core.ObjectContainer:inject The ` +
-            `${classConstructor.name} has already had its ` +
+            `${this._getDebugName(
+              classConstructor.name
+            )} has already had its ` +
             `default dependencies configured, and the object ` +
             `container is currently locked, therefore the ` +
             `dependency configuration cannot be override. The ` +
@@ -305,7 +311,9 @@ export default class ObjectContainer {
         throw new Error(
           'ima.core.ObjectContainer:provide The ' +
             'implementation of the provided interface ' +
-            `(${interfaceConstructor.name}) has already been ` +
+            `(${this._getDebugName(
+              interfaceConstructor.name
+            )}) has already been ` +
             `configured and cannot be overridden.`
         );
       }
@@ -315,8 +323,10 @@ export default class ObjectContainer {
       if (!(prototype instanceof interfaceConstructor)) {
         throw new Error(
           'ima.core.ObjectContainer:provide The specified ' +
-            `class (${implementationConstructor.name}) does not ` +
-            `implement the ${interfaceConstructor.name} ` +
+            `class (${this._getDebugName(
+              implementationConstructor.name
+            )}) does not ` +
+            `implement the ${this._getDebugName(interfaceConstructor.name)} ` +
             `interface.`
         );
       }
@@ -496,9 +506,9 @@ export default class ObjectContainer {
           `ima.core.ObjectContainer:_getEntry There is no constant, ` +
             `alias, registered class, registered interface with ` +
             `configured implementation or namespace entry ` +
-            `identified as: <strong>${
-              name?.toString().split('\n').slice(0, 5).join('\n') ?? name
-            }</strong> Check your bind.js file for ` +
+            `identified as: ${this._getDebugName(
+              name
+            )} Check your bind.js file for ` +
             `typos or register given entry with the object container.`
         );
       }
@@ -675,6 +685,7 @@ export default class ObjectContainer {
 
     let entry = this._createEntry(() => namespaceValue);
     entry.sharedInstance = namespaceValue;
+
     return entry;
   }
 
@@ -697,20 +708,43 @@ export default class ObjectContainer {
    *         `$dependencies`.
    */
   _getEntryFromClassConstructor(classConstructor) {
-    if (
-      typeof classConstructor === 'function' &&
-      Array.isArray(classConstructor.$dependencies)
-    ) {
-      let entry = this._createEntry(
-        classConstructor,
-        classConstructor.$dependencies
-      );
-      this._entries.set(classConstructor, entry);
-
-      return entry;
+    if (typeof classConstructor !== 'function') {
+      return null;
     }
 
-    return null;
+    if (!Array.isArray(classConstructor.$dependencies)) {
+      if ($Debug) {
+        throw new Error(
+          `The class constructor identified as: ${this._getDebugName(
+            classConstructor
+          )} is missing <b>static get $dependencies() {}</b> definition.`
+        );
+      }
+
+      return null;
+    }
+
+    let entry = this._createEntry(
+      classConstructor,
+      classConstructor.$dependencies
+    );
+
+    this._entries.set(classConstructor, entry);
+
+    return entry;
+  }
+
+  /**
+   * Formats name, function, class constructor to more compact
+   * name/message to allow for cleaner debug Error messages.
+   *
+   * @param {any} name
+   * @return {string}
+   */
+  _getDebugName(name) {
+    return `<strong>${
+      name?.toString().split('\n').slice(0, 5).join('\n') ?? name
+    }</strong>`;
   }
 }
 

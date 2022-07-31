@@ -270,8 +270,10 @@ export default class AbstractRoute {
    *
    * @return {string} The name of alias of the controller.
    */
-  getController() {
-    return this._controller;
+  async getController() {
+    return this._controller.constructor.name === 'AsyncFunction'
+      ? this._controller().then(module => module.default ?? module)
+      : this._controller;
   }
 
   /**
@@ -281,8 +283,10 @@ export default class AbstractRoute {
    *
    * @return {string} The name or alias of the view class.
    */
-  getView() {
-    return this._view;
+  async getView() {
+    return this._view.constructor.name === 'AsyncFunction'
+      ? this._view().then(module => module.default ?? module)
+      : this._view;
   }
 
   /**
