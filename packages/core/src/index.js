@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap from './Bootstrap';

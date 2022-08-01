@@ -1,41 +1,53 @@
 import { asUnit, Unit } from './utils';
 
-function maxWidthMedia(maxWidth: number): Unit {
-  return asUnit('', [maxWidth.toString()], '~"all and (max-width: ${parts})"');
+export type MediaType = 'all' | 'print' | 'screen' | 'speach';
+
+export function maxWidthMedia(maxWidth: number, type: MediaType = 'all'): Unit {
+  return asUnit(
+    '',
+    [maxWidth.toString()],
+    `~"${type}` + ' and (max-width: ${parts})"'
+  );
 }
 
-function minWidthMedia(minWidth: number): Unit {
-  return asUnit('', [minWidth.toString()], '~"all and (min-width: ${parts})"');
+export function minWidthMedia(minWidth: number, type: MediaType = 'all'): Unit {
+  return asUnit(
+    '',
+    [minWidth.toString()],
+    `~"${type}` + ' and (min-width: ${parts})"'
+  );
 }
 
-function minAndMaxWidthMedia(minWidth: number, maxWidth: number): Unit {
+export function minAndMaxWidthMedia(
+  minWidth: number,
+  maxWidth: number,
+  type: MediaType = 'all'
+): Unit {
   return asUnit(
     maxWidth.toString(),
     [minWidth.toString()],
-    '~"all and (min-width: ${parts}) and (max-width: ${unit})"'
+    `~"${type}` + ' and (min-width: ${parts}) and (max-width: ${unit})"'
   );
 }
 
-function maxHeightMedia(maxHeight: number): Unit {
+export function maxHeightMedia(
+  maxHeight: number,
+  type: MediaType = 'all'
+): Unit {
   return asUnit(
     '',
     [maxHeight.toString()],
-    '~"all and (max-height: ${parts})"'
+    `~"${type}` + ' and (max-height: ${parts})"'
   );
 }
 
-function minHeightMedia(minHeight: number): Unit {
+export function minHeightMedia(
+  minHeight: number,
+  type: MediaType = 'all'
+): Unit {
   return asUnit(
     '',
     [minHeight.toString()],
-    '~"all and (min-height: ${parts})"'
+    `~"${type}` + ' and (min-height: ${parts})"'
   );
 }
-
-export {
-  maxWidthMedia,
-  minWidthMedia,
-  minAndMaxWidthMedia,
-  maxHeightMedia,
-  minHeightMedia,
-};

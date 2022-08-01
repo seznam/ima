@@ -5,7 +5,7 @@ import Events from './Events';
 import GenericError from '../../error/GenericError';
 
 /**
- * Base class for implementations of the {@linkcode PageRenderer} interface.
+ * Base class for implementations of the {@link PageRenderer} interface.
  */
 export default class AbstractPageRenderer extends PageRenderer {
   /**

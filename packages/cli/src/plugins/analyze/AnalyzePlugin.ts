@@ -46,10 +46,6 @@ class AnalyzePlugin implements ImaCliPlugin {
         type: 'string',
         choices: ['server', 'client', 'client.es'],
       },
-      analyzeBaseline: {
-        desc: 'Generates baseline for webpack bundle stats comparison',
-        type: 'boolean',
-      },
     },
   };
 
@@ -154,6 +150,11 @@ class AnalyzePlugin implements ImaCliPlugin {
       this._logger.write(
         `${chalk.gray('└')} https://webpack.jakoblind.no/optimize/ ${chalk.gray(
           '- analyze and optimize bundle\n'
+        )}`
+      );
+      this._logger.write(
+        `${chalk.gray('└')} https://statoscope.tech/ ${chalk.gray(
+          '- detailed webpack stats analyzer\n'
         )}`
       );
     }

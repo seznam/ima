@@ -2,7 +2,7 @@ import HttpAgent from './HttpAgent';
 import GenericError from '../error/GenericError';
 
 /**
- * Implementation of the {@codelink HttpAgent} interface with internal caching
+ * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
 export default class HttpAgentImpl extends HttpAgent {
@@ -246,7 +246,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * and data is present in the internal cache and, if it is, the method
    * returns a promise that resolves to the response body parsed as JSON.
    *
-   * The method returns {@code null} if no such request is present in the
+   * The method returns `null` if no such request is present in the
    * cache.
    *
    * @param {string} method The HTTP method used by the request.
@@ -254,7 +254,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {Object<string, (boolean|number|string|Date)>} data The data sent
    *        to the server with the request.
    * @return {?Promise<HttpAgent~Response>} A promise that will resolve to the
-   *         server response with the body parsed as JSON, or {@code null} if
+   *         server response with the body parsed as JSON, or `null` if
    *         no such request is present in the cache.
    */
   _getCachedData(method, url, data) {
@@ -436,7 +436,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Sets all cookies from the {@code Set-Cookie} response header to the
+   * Sets all cookies from the `Set-Cookie` response header to the
    * cookie storage.
    *
    * @param {HttpAgent~Response} agentResponse The response of the server.

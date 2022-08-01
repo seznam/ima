@@ -170,15 +170,15 @@ export default class ClientPageManager extends AbstractPageManager {
 
   /**
    * Attempts to handle the currently processed event bus custom DOM event
-   * using the current controller. The method returns {@code true} if the
+   * using the current controller. The method returns `true` if the
    * event is handled by the controller.
    *
    * @param {string} method The name of the method the current controller
    *        should use to process the currently processed event bus custom
    *        DOM event.
    * @param {Object<string, *>} data The custom event's data.
-   * @return {boolean} {@code true} if the event has been handled by the
-   *         controller, {@code false} if the controller does not have a
+   * @return {boolean} `true` if the event has been handled by the
+   *         controller, `false` if the controller does not have a
    *         method for processing the event.
    */
   _handleEventWithController(method, data) {
@@ -196,14 +196,14 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * Attempts to handle the currently processed event bus custom DOM event
    * using the registered extensions of the current controller. The method
-   * returns {@code true} if the event is handled by the controller.
+   * returns `true` if the event is handled by the controller.
    *
    * @param {string} method The name of the method the current controller
    *        should use to process the currently processed event bus custom
    *        DOM event.
    * @param {Object<string, *>} data The custom event's data.
-   * @return {boolean} {@code true} if the event has been handled by one of
-   *         the controller's extensions, {@code false} if none of the
+   * @return {boolean} `true` if the event has been handled by one of
+   *         the controller's extensions, `false` if none of the
    *         controller's extensions has a method for processing the event.
    */
   _handleEventWithExtensions(method, data) {

@@ -8,7 +8,7 @@ import PageManager from '../page/manager/PageManager';
 // @server-side class ServerRouter extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerRouter;
 
 /**
- * The server-side implementation of the {@codelink Router} interface.
+ * The server-side implementation of the {@link Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
   //#if _SERVER

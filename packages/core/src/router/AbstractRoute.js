@@ -348,7 +348,7 @@ export default class AbstractRoute {
    *
    * @abstract
    * @param {string} path The URL path.
-   * @return {boolean} {@code true} if the provided path matches this route.
+   * @return {boolean} `true` if the provided path matches this route.
    */
   matches() {
     throw new GenericError(

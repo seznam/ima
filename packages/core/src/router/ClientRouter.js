@@ -34,7 +34,7 @@ const Events = Object.freeze({
 
 /**
  * The number used as the index of the mouse left button in DOM
- * {@code MouseEvent}s.
+ * `MouseEvent`s.
  *
  * @const
  * @type {number}
@@ -42,7 +42,7 @@ const Events = Object.freeze({
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink Router} interface.
+ * The client-side implementation of the {@link Router} interface.
  */
 export default class ClientRouter extends AbstractRouter {
   static get $dependencies() {
@@ -285,7 +285,7 @@ export default class ClientRouter extends AbstractRouter {
    * entry changes.
    *
    * The navigation will be handled by the router if the event state is defined
-   * and event is not {@code defaultPrevented}.
+   * and event is not `defaultPrevented`.
    *
    * @param {PopStateEvent} event The popstate event.
    */
@@ -385,7 +385,7 @@ export default class ClientRouter extends AbstractRouter {
    * hash fragment of the current URL.
    *
    * @param {string} targetUrl The target URL.
-   * @return {boolean} {@code true} if the navigation to target URL would
+   * @return {boolean} `true` if the navigation to target URL would
    *         result only in updating the hash fragment of the current URL.
    */
   _isHashLink(targetUrl) {
@@ -408,7 +408,7 @@ export default class ClientRouter extends AbstractRouter {
    * same as the current.
    *
    * @param {string=} [url=''] The URL.
-   * @return {boolean} {@code true} if the protocol and domain of the
+   * @return {boolean} `true` if the protocol and domain of the
    *         provided URL are the same as the current.
    */
   _isSameDomain(url = '') {

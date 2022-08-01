@@ -3,7 +3,7 @@
 import Window from './Window';
 
 /**
- * Client-side implementation of the {@code Window} utility API.
+ * Client-side implementation of the `Window` utility API.
  */
 export default class ClientWindow extends Window {
   static get $dependencies() {

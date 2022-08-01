@@ -1,4 +1,3 @@
-export { babelLoaderErrorParser } from './babelLoaderErrorParser';
 export { cssLoaderErrorParser } from './cssLoaderErrorParser';
 export { lessLoaderErrorParser } from './lessLoaderErrorParser';
 export { swcLoaderErrorParser } from './swcLoaderErrorParser';

@@ -51,7 +51,7 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
     const watcher = chokidar.watch(path.join(baseDir, paths), {
       persistent: true,
       cwd: baseDir,
-      ignored: [...IGNORED, '/**/*.d.ts'],
+      ignored: [...IGNORED],
     });
 
     const actionCreator = actionName => filePath => {

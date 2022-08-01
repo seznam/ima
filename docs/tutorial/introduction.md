@@ -1,6 +1,6 @@
 ---
-title: "Tutorial - 1. Introduction"
-layout: "tutorial"
+title: Introduction
+description: Tutorial > Introduction
 ---
 
 In this tutorial we will build our first IMA.js web application - a simple
@@ -35,8 +35,8 @@ First we need to bootstrap our new IMA.js application. Thanks to `create-ima-app
 npm package, available since IMA.js v17, this process is fairly simple.
 
 To initialize new project, run following command and choose the "Empty" (Hello World) template:
-```console
-$ npx create-ima-app imajs-tutorial
+```bash npm2yarn
+npx create-ima-app imajs-tutorial
 ```
 This will bootstrap the IMA.js directory structure and install all dependencies. To
 learn more information about `create-ima-app` package, take a look at its [github repository](https://github.com/seznam/ima/tree/master/packages/create-ima-app).
@@ -44,16 +44,14 @@ learn more information about `create-ima-app` package, take a look at its [githu
 To finish our setup, we will start a development server that will allow us to
 see our application in action. To do that, cd *into the imajs-tutorial directory* and run following command:
 
-```console
-$ npm run dev
+```bash npm2yarn
+npm run dev
 ```
 
 As you can already see from the command line, if everything went well, you can view the basic "hello world"
 application by opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/introduction-run-dev.jpg?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/img/tutorial/introduction-run-dev.jpg)
 
 ### Dev server
 By running `npm run dev` you start your application in development mode with a dev server.
@@ -98,10 +96,5 @@ server serving our application.
  - Finally, the `build` directory is used as an
 output directory for the built application and its resources.
 
-For more information see the [Application Structure](/docs/getting-started#application-structure)
+For more information see the [Application Structure](../introduction/getting-started.md#application-structure)
 section in the documentation.
-
-<hr class="bottom-doc-separator">
-
-So now that you know your way around the directory structure, let's do some
-coding in the [part 2 of this tutorial](/tutorial/static-view).

@@ -97,7 +97,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
   ): Promise<Record<string, UnitValue>> {
     const outputDir = path.join(
       args.rootDir,
-      './node_modules/.cache/ima-cli/less-constants-plugin'
+      './node_modules/.cache/less-constants-plugin'
     );
 
     // Compile entry point with webpack

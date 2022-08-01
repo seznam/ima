@@ -32,13 +32,17 @@
       source: JSON.parse('#{$Source}'),
       scripts: [],
       loadedScripts: [],
-      // es11 env test scripts
-      testScripts: [
-        'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
-        'return typeof Promise.allSettled === "function"',
-        'return typeof globalThis !== "undefined"',
-        'return typeof 9007199254740991n === "bigint"',
-      ],
+      testSource: {
+        scripts: [
+          // es2018 env test scripts
+          'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))() && !!Object.values',
+        ],
+        esScripts: [
+          // es2022 env test scripts
+          'return [1,1].findLast(e => e === 1)',
+          'return Object.hasOwn({a:1}, "a")',
+        ]
+      },
 
       /**
        * Handles creation of script elements and their injection to the DOM.
@@ -109,17 +113,25 @@
           scriptsRoot.appendChild(scriptEl);
         }
 
-        runner.isEsVersion = runner.testScripts.every(testScript);
-
         /**
          * Sets concrete scripts to the runner based on the currently
-         * supported ecma script version. Fallback to es5 scripts if
+         * supported ecma script version. Fallback to legacy scripts if
          * there are no sources for the newer versions.
          */
-        if (runner.isEsVersion && runner.source.esScripts) {
+        if (
+          runner.source.esScripts &&
+          runner.testSource.esScripts.every(testScript)
+        ) {
+          runner.isEsVersion = true;
           runner.scripts = runner.source.esScripts;
-        } else {
+        } else if (
+          runner.source.scripts &&
+          runner.testSource.scripts.every(testScript)
+        ) {
           runner.scripts = runner.source.scripts;
+        } else {
+          // Don't create scripts and execute runtime on unsupported environments.
+          return runner.onUnsupported();
         }
 
         // Create script tags
@@ -139,18 +151,14 @@
 
         try {
           /**
-           * Run es version of the runtime, in case there are any es scripts sources.
-           * Otherwise fallback to the es5 version of the runner.
+           * We need to wrap both runtime codes in a string and execute the function
+           * since the code can contain some legacy incompatible syntax, which would
+           * break the legacy (not supported) JS interpreters.
            */
-          if (runner.isEsVersion && runner.source.esScripts) {
-            /**
-             * We need to wrap esRuntime code in a string and execute the function
-             * since the code can contain some es5-incompatible syntax, which would
-             * break the legacy JS interpreters.
-             */
+          if (runner.isEsVersion) {
             new Function('<%- esRuntime %>')();
           } else {
-            <%- runtime %>
+            new Function('<%- runtime %>')();
           }
         } catch (error) {
           runner.onError(error);
@@ -185,6 +193,15 @@
         if (window.__IMA_HMR && window.$Debug) {
           window.__IMA_HMR.emit('error', { error: error });
         }
+      },
+
+      /**
+       * Optional onUnsupported handler. It is triggered in case tests
+       * for es and legacy version fails, which means that the APP runtime
+       * code is never executed.
+       */
+      onUnsupported: function() {
+        console.warn('Unsupported environment, the app runtime was not executed.');
       },
     },
     root.$IMA.Runner || {}

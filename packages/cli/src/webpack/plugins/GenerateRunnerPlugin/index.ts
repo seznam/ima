@@ -6,12 +6,13 @@ import { validate } from 'schema-utils';
 import { Schema } from 'schema-utils/declarations/validate';
 import { Compilation, Compiler, sources } from 'webpack';
 
-import { ImaConfigurationContext } from '../../../types';
+import { ImaConfig, ImaConfigurationContext } from '../../../types';
 
 import schema from './options.json';
 
 export interface GenerateRunnerPluginOptions {
   context: ImaConfigurationContext;
+  imaConfig: ImaConfig;
   runnerTemplate?: string;
 }
 
@@ -82,6 +83,7 @@ class GenerateRunnerPlugin {
       return;
     }
 
+    const { disableLegacyBuild } = this._options.imaConfig;
     const { legacy, command, name } = this._options.context;
 
     // Save runtime code into storage
@@ -95,13 +97,16 @@ class GenerateRunnerPlugin {
 
     // Emit the runner only when we have all available runtime codes
     if (
+      (disableLegacyBuild && esRuntimeCode) ||
       (command == 'build' && esRuntimeCode && runtimeCode) ||
       (command == 'dev' && legacy && esRuntimeCode && runtimeCode) ||
       (command == 'dev' && !legacy && esRuntimeCode)
     ) {
       const generatedRunner = this._runnerTemplate({
         esRuntime: this._addSlashes(esRuntimeCode),
-        runtime: runtimeCode ?? '// runtime not generated',
+        runtime: runtimeCode
+          ? this._addSlashes(runtimeCode)
+          : '// runtime not generated',
       });
 
       // Clean storage
