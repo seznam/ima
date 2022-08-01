@@ -533,7 +533,12 @@ export default class ObjectContainer {
   }
 
   /**
-   * //TODO docs
+   * Checks whether the name is marked as optional.
+   *
+   * @param {string} name Name of a constant or alias,
+   *        factory function, class or interface constructor, or a fully
+   *        qualified namespace path.
+   * @return {boolean}
    */
   _isOptional(name) {
     return (
@@ -543,7 +548,12 @@ export default class ObjectContainer {
   }
 
   /**
-   * //TODO docs
+   * Checks whether the name is marked as spread.
+   *
+   * @param {string} name Name of a constant or alias,
+   *        factory function, class or interface constructor, or a fully
+   *        qualified namespace path.
+   * @return {boolean}
    */
   _isSpread(name) {
     if (Array.isArray(name)) {
