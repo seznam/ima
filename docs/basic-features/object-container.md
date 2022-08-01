@@ -170,7 +170,6 @@ export let init = (ns, oc, config) => {
 }
 ```
 
-
 ## Obtaining dependencies
 
 In IMA.js application you can obtain dependencies using many different methods, where each one can be useful in different situation and environment.
@@ -214,7 +213,9 @@ Once you've defined the dependencies the constructor of the class will receive t
   }
 
   // ...
+
 ```
+
 #### Optional dependencies
 
 Dependencies can also be defined as optional.
@@ -302,8 +303,6 @@ static get $dependencies() {
 }
 // ...
 ```
-
-
 
 ### 2. `get()`
 
