@@ -41,6 +41,7 @@ const sidebars = {
         'basic-features/routing',
         'basic-features/extensions',
         'basic-features/object-container',
+        'basic-features/http-agent',
         'basic-features/rendering-process',
         'basic-features/handling-scripts-and-styles',
         'basic-features/page-manager',
