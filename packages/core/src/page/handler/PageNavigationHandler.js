@@ -46,7 +46,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
       options: { autoScroll },
     } = nextManagedPage;
 
-    // There was a condition checking for ERROR action type. I have removed it, because it was blocking redirects from plugin-redirect. More into in https://youtrack.seznam.net/issue/BLOGY-494
+    // There was a condition checking for ERROR action type. I have removed it, because it was blocking redirects from plugin-redirect. More info in https://youtrack.seznam.net/issue/BLOGY-494
     if (managedPage && action && action.type !== ActionTypes.POP_STATE) {
       const isRedirection = action.type === ActionTypes.REDIRECT;
 
