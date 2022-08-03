@@ -472,6 +472,7 @@ export default class HttpAgentImpl extends HttpAgent {
     // eslint-disable-next-line no-unused-vars
     const { signal, ...fetchOptions } =
       agentResponse.params.options.fetchOptions;
+
     // eslint-disable-next-line no-unused-vars
     let { abortController, ...options } = agentResponse.params.options;
     options.fetchOptions = fetchOptions;

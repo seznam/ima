@@ -1,52 +1,55 @@
 ---
-title: Http Agent
-description: Basic features > Http Agent
+title: Data fetching
+description: Basic features > Data fetching with HttpAgent
 ---
 
-TBD Http Agent description.
+`HttpAgent` allows you to isomorphically fetch data in IMA.js applications. It is a simple wrapper around native `fetch` with additional features like caching, proxy support and others.
 
 ## Cancellable requests
 
-Http Agent supports cancellable requests using [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+The HttpAgent has support for [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) to cancel requests in native way. There are **two ways** you can provide custom instance of AbortController to the HttpAgent, where each has it's own benefits:
 
-The whole AbortController can be provided in the request options. This is preferred way of usage as it allows to cancell the request outside the HttpAgent as well as inside of the HttpAgent when the request timeouts.
+
+### options.abortController
+
+Using this approach has the added benefit of `HttpAgent` being able to additionally **reuse** this controller **for cancelation of timeout requests**.
 
 ```javascript
-// Using HttpAgent with AbortController
-//
-
 const controller = new AbortController();
 
-const options = {
+httpAgent.get('<uri>', '<data>', {
   abortController: controller,
-};
+});
 
-httpAgent.get('<uri>', '<data>', options);
-
-controller.abort(); //Cancelling request outside of HttpAgent.
-//controller.abort('Reason X'); //Request can also be cancelled with reason.
-
-// ...
+// Cancel the request
+controller.abort();
 ```
 
-If only `AbortSignal` is provided in `options.fetchOptions.signal`, request can be cancelled outside of Http Agent, but it won't be cancelled on timeout.
+:::info
+
+If you don't provie custom instance of `AbortController` the agent uses it's own instance internally to cancel running timeout requests.
+
+:::
+
+### options.fetchOptions.signal
+
+This approach is more similar to native fetch definition. However since currently you can only provide one `signal` to fetch request and we don't have access to the `controller` instance (from within the HttpAgent), we are unable to abort time out requests in this case.
 
 ```javascript
-// Using HttpAgent with AbortSignal in options.fetchOptions
-//
-
 const controller = new AbortController();
 
-const options = {
+httpAgent.get('<uri>', '<data>', {
   fetchOptions: {
     signal: controller.signal,
   }
-};
+});
 
-httpAgent.get('<uri>', '<data>', options);
-
-controller.abort('Reason X'); //Request can be cancelled with or without reason.
-// ...
+// Cancel the request
+controller.abort();
 ```
 
-If external cancelling is not required, AbortController or Signal don't have to be included in the options. In this case HttpAgent creates it's own AbortController to be used on request timeout.
+:::note
+
+The time out requests still throw the same timeout error, however they are not canceled (aborted). This is the only difference between the two forementioned methods.
+
+:::
