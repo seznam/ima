@@ -2,6 +2,8 @@ import ns from './namespace';
 
 ns.namespace('ima.core');
 
+const SPREAD_RE = /^\.../;
+const OPTIONAL_RE = /^\?/;
 /**
  * The Object Container is an enhanced dependency injector with support for
  * aliases and constants, and allowing to reference classes in the application
@@ -365,6 +367,7 @@ export default class ObjectContainer {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
+    //Optional entries can be null if they are not found in the OC
     return entry?.sharedInstance;
   }
 
@@ -484,25 +487,19 @@ export default class ObjectContainer {
    *         implementation is known to this object container.
    */
   _getEntry(name) {
-    let nameToGet = name;
+    let entryName = Array.isArray(name) ? name[0] : name;
 
-    if (Array.isArray(name)) {
-      nameToGet = name?.[0];
-    }
-
-    if (this._isSpread(name)) {
-      nameToGet = nameToGet.replace('...', '');
-    }
-
-    if (this._isOptional(nameToGet)) {
-      nameToGet = nameToGet.replace('?', '');
+    // Remove all meta symbols from the start of the alias
+    if (typeof entryName === 'string') {
+      entryName = entryName.replace(SPREAD_RE, '');
+      entryName = entryName.replace(OPTIONAL_RE, '');
     }
 
     let entry =
-      this._entries.get(nameToGet) ||
-      this._getEntryFromConstant(nameToGet) ||
-      this._getEntryFromNamespace(nameToGet) ||
-      this._getEntryFromClassConstructor(nameToGet);
+      this._entries.get(entryName) ||
+      this._getEntryFromConstant(entryName) ||
+      this._getEntryFromNamespace(entryName) ||
+      this._getEntryFromClassConstructor(entryName);
 
     if ($Debug) {
       if (!entry && !this._isOptional(name)) {
@@ -542,8 +539,7 @@ export default class ObjectContainer {
    */
   _isOptional(name) {
     return (
-      (Array.isArray(name) && name?.[1]?.optional) ||
-      (typeof name === 'string' && name.includes('?'))
+      name?.[1]?.optional || (typeof name === 'string' && name.includes('?'))
     );
   }
 
@@ -556,10 +552,11 @@ export default class ObjectContainer {
    * @return {boolean}
    */
   _isSpread(name) {
-    if (Array.isArray(name)) {
-      name = name?.[0];
-    }
-    return typeof name === 'string' && name.startsWith('...');
+    const normalizedName = Array.isArray(name) ? name[0] : name;
+
+    return (
+      typeof normalizedName === 'string' && normalizedName.startsWith('...')
+    );
   }
 
   /**

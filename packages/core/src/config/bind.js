@@ -68,7 +68,6 @@ export default (ns, oc, config) => {
   oc.constant('$Env', config.$Env);
   oc.constant('$Protocol', config.$Protocol);
   oc.constant('$Secure', config.$Protocol === 'https:');
-
   //*************END CONSTANTS*****************
 
   //*************START IMA**************
