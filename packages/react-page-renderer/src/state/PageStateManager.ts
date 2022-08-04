@@ -15,10 +15,10 @@ export default class PageStateManager implements PageStateManagerInterface {
   private _cursor: number = -1;
   private _dispatcher: Dispatcher;
   private _ongoingTransaction: boolean = false;
-  private _statePatchQueue: object[] = [];
-  private _states: object[] = [];
+  private _statePatchQueue: { [key: string]: any }[] = [];
+  private _states: { [key: string]: any }[] = [];
 
-  onChange?: Function;
+  onChange?: (newState: { [key: string]: any }) => any;
 
   /**
    * Initializes the page state manager.
@@ -40,7 +40,7 @@ export default class PageStateManager implements PageStateManagerInterface {
   /**
    * @inheritdoc
    */
-  setState(patchState: object) {
+  setState(patchState: { [key: string]: any }) {
     if (this._ongoingTransaction) {
       return this._statePatchQueue.push(patchState);
     }
@@ -89,8 +89,8 @@ export default class PageStateManager implements PageStateManagerInterface {
     if ($Debug && this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.beginTransaction():' +
-          'Another state transaction is already in progress. Check you workflow.' +
-          'These uncommited state changes will be lost:',
+        'Another state transaction is already in progress. Check you workflow.' +
+        'These uncommited state changes will be lost:',
         this._statePatchQueue
       );
     }
@@ -106,7 +106,7 @@ export default class PageStateManager implements PageStateManagerInterface {
     if ($Debug && !this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.commitTransaction():' +
-          'No transaction is in progress. Check you workflow.'
+        'No transaction is in progress. Check you workflow.'
       );
     }
 
@@ -136,7 +136,7 @@ export default class PageStateManager implements PageStateManagerInterface {
    * Erase the oldest state from storage only if it exceed max
    * defined size of history.
    */
-  _eraseExcessHistory() {
+  private _eraseExcessHistory() {
     if (this._states.length > MAX_HISTORY_LIMIT) {
       this._states.shift();
       this._cursor -= 1;
@@ -148,7 +148,7 @@ export default class PageStateManager implements PageStateManagerInterface {
    *
    * @param newState
    */
-  _pushToHistory(newState: object) {
+  private _pushToHistory(newState: { [key: string]: any }) {
     this._states.push(newState);
     this._cursor += 1;
   }
@@ -158,7 +158,7 @@ export default class PageStateManager implements PageStateManagerInterface {
    *
    * @param newState
    */
-  _callOnChangeCallback(newState: object) {
+  private _callOnChangeCallback(newState: { [key: string]: any }) {
     if (this.onChange && typeof this.onChange === 'function') {
       this.onChange(newState);
     }

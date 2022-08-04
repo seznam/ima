@@ -42,7 +42,7 @@ export function getUtils(props: any, context: ContextType<typeof PageContext>): 
  *        placeholders in the localization phrase.
  * @return Localized phrase.
  */
-export function localize(component: AbstractComponent | AbstractPureComponent, key: string, params: object): string {
+export function localize(component: AbstractComponent | AbstractPureComponent, key: string, params: { [key: string]: string | number }): string {
   return component.utils!.$Dictionary.get(key, params);
 }
 
@@ -59,7 +59,7 @@ export function localize(component: AbstractComponent | AbstractPureComponent, k
  *        extraneous parameters to add to the URL as a query string.
  * @return The generated URL.
  */
-export function link(component: AbstractComponent | AbstractPureComponent, name: string, params: object): string {
+export function link(component: AbstractComponent | AbstractPureComponent, name: string, params: { [key: string]: string | number }): string {
   return component.utils!.$Router.link(name, params);
 }
 
@@ -150,7 +150,7 @@ export function fire(component: AbstractComponent | AbstractPureComponent, event
  * @param eventName The name of the event for which to listen.
  * @param listener The listener for event to register.
  */
-export function listen(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: Function) {
+export function listen(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
   return component.utils!.$EventBus.listen(eventTarget, eventName, listener);
 }
 
@@ -165,6 +165,6 @@ export function listen(component: AbstractComponent | AbstractPureComponent, eve
  * @param eventName The name of the event for which to listen.
  * @param listener The listener for event to register.
  */
-export function unlisten(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: Function) {
+export function unlisten(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
   return component.utils!.$EventBus.unlisten(eventTarget, eventName, listener);
 }

@@ -37,7 +37,7 @@ export default abstract class AbstractComponent extends Component<any> {
    *        the placeholders in the localization phrase.
    * @return Localized phrase.
    */
-  localize(key: string, params: object = {}) {
+  localize(key: string, params: { [key: string]: string | number } = {}) {
     return helpers.localize(this, key, params);
   }
 
@@ -52,7 +52,7 @@ export default abstract class AbstractComponent extends Component<any> {
    *        extraneous parameters to add to the URL as a query string.
    * @return The generated URL.
    */
-  link(name: string, params: object = {}) {
+  link(name: string, params: { [key: string]: string | number } = {}) {
     return helpers.link(this, name, params);
   }
 
@@ -76,7 +76,7 @@ export default abstract class AbstractComponent extends Component<any> {
    * @return String of CSS classes that had their property resolved
    *         to {@code true}.
    */
-  cssClasses(classRules: string | object, includeComponentClassName: boolean = false) {
+  cssClasses(classRules: string | { [key: string]: boolean }, includeComponentClassName: boolean = false) {
     return helpers.cssClasses(this, classRules, includeComponentClassName);
   }
 
@@ -100,7 +100,7 @@ export default abstract class AbstractComponent extends Component<any> {
    * @param eventName The name of the event for which to listen.
    * @param listener The listener for event to register.
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: Function) {
+  listen(eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
     helpers.listen(this, eventTarget, eventName, listener);
   }
 
@@ -113,7 +113,7 @@ export default abstract class AbstractComponent extends Component<any> {
    * @param eventName The name of the event for which to listen.
    * @param listener The listener for event to register.
    */
-  unlisten(eventTarget: EventTarget, eventName: string, listener: Function) {
+  unlisten(eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }

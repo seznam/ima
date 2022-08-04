@@ -13,14 +13,14 @@ export default interface PageStateManagerInterface {
    *
    * @param statePatch The patch of the current state.
    */
-  setState(patchState: object): void
+  setState(patchState: { [key: string]: any }): void
 
   /**
    * Returns the current page state.
    *
    * @return The current page state.
    */
-  getState(): object
+  getState(): { [key: string]: any }
 
   /**
    * Returns the recorded history of page states. The states will be
@@ -31,14 +31,14 @@ export default interface PageStateManagerInterface {
    *
    * @return The recorded history of page states.
    */
-  getAllStates(): object[]
+  getAllStates(): { [key: string]: any }[]
 
   /**
    * Returns queueing state patches off the main state from the begin of transaction.
    *
    * @return State patches from the begin of transaction.
    */
-  getTransactionStatePatches(): object[]
+  getTransactionStatePatches(): { [key: string]: any }[]
 
   /**
    * Starts queueing state patches off the main state. While the transaction

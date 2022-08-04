@@ -39,7 +39,7 @@ export default class PageStateManagerDecorator implements PageStateManagerInterf
   /**
    * @inheritdoc
    */
-  setState(statePatch: object) {
+  setState(statePatch: { [key: string]: any }) {
     if ($Debug) {
       let patchKeys = Object.keys(statePatch);
       let deniedKeys = patchKeys.filter(patchKey => {
