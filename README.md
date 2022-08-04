@@ -59,7 +59,7 @@ yarn dev
   
 Contribute to this project via [Pull-Requests](https://github.com/seznam/ima/pulls).
 
-We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
+We are using [changesets](https://github.com/changesets/changesets/blob/main/docs/common-questions.md) for version management. To simplify the changeset creation process, you can use `npm run changeset` command. It opens an interactive interface, which should help you with changeset file composition.
 
 
 ### Set up the dev environment

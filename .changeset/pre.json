@@ -1,0 +1,18 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@ima/cli": "18.0.0-rc.3",
+    "@ima/core": "18.0.0-rc.3",
+    "create-ima-app": "18.0.0-rc.3",
+    "@ima/dev-utils": "18.0.0-rc.3",
+    "@ima/devtools": "0.3.2",
+    "@ima/devtools-scripts": "18.0.0-rc.1",
+    "@ima/error-overlay": "18.0.0-rc.3",
+    "@ima/helpers": "18.0.0-rc.1",
+    "@ima/hmr-client": "18.0.0-rc.3",
+    "@ima/server": "18.0.0-rc.3",
+    "@ima/docs": "0.0.0"
+  },
+  "changesets": []
+}
