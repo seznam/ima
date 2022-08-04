@@ -4,9 +4,9 @@ import Storage from './Storage';
 import CacheEntry from '../cache/CacheEntry';
 
 /**
- * The {@codelink SessionMap} storage is an implementation of the
- * {@codelink Storage} interface acting as a synchronization proxy between
- * the underlying map storage and the {@code sessionStorage} DOM storage.
+ * The `link SessionMap` storage is an implementation of the
+ * `link Storage` interface acting as a synchronization proxy between
+ * the underlying map storage and the `sessionStorage` DOM storage.
  */
 export default class SessionMapStorage extends Storage {
   static get $dependencies() {

@@ -3,7 +3,7 @@ import Window from './Window';
 // @server-side class ServerWindow extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerWindow;
 
 /**
- * Server-side implementation of the {@code Window} utility API.
+ * Server-side implementation of the `Window` utility API.
  */
 export default class ServerWindow extends Window {
   //#if _SERVER

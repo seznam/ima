@@ -1,7 +1,6 @@
 node_modules/
 dist/
 out/
-lerna-debug.log
 .DS_Store
 .idea
 .history
@@ -9,3 +8,4 @@ lerna-debug.log
 jsconfig.json
 ima-app
 storage
+docs/api

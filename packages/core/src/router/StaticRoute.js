@@ -104,7 +104,7 @@ const PARAMS_REGEXP_OPT =
 /**
  * Utility for representing and manipulating a single static route in the
  * router's configuration using string representation of the path expression
- * with special param fields identified by {@code :paramName} prefix.
+ * with special param fields identified by `:paramName` prefix.
  *
  * @extends AbstractRoute
  */
@@ -114,7 +114,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} pathExpression A path expression specifying the URL path
    *        part matching this route (must not contain a query string),
    *        optionally containing named parameter placeholders specified as
-   *        {@code :parameterName}.
+   *        `:parameterName`.
    */
   constructor(name, pathExpression, controller, view, options) {
     super(name, pathExpression, controller, view, options);
@@ -134,7 +134,7 @@ export default class StaticRoute extends AbstractRoute {
     this._parameterNames = this._getParameterNames(pathExpression);
 
     /**
-     * Set to {@code true} if this route contains parameters in its path.
+     * Set to `true` if this route contains parameters in its path.
      *
      * @type {boolean}
      */

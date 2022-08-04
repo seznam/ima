@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import jsdom from 'jsdom';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
@@ -97,8 +96,6 @@ describe('revive client application', () => {
     //mock
     global.window.scrollTo = () => {};
 
-    jest.spyOn(ReactDOM, 'render');
-
     done();
   });
 
@@ -140,7 +137,6 @@ describe('revive client application', () => {
         expect(response.status).toBe(200);
         expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         expect(response.content).toBeNull();
-        expect(ReactDOM.render).toHaveBeenCalled();
         done();
       })
       .catch(error => {

@@ -19,7 +19,7 @@ export default class HomeController extends AbstractPageController {
 
   /**
    * Callback the controller uses to request the resources it needs to render
-   * its view. This method is invoked after the {@codelink init()} method.
+   * its view. This method is invoked after the {@link init()} method.
    *
    * The controller should request all resources it needs in this method, and
    * represent each resource request as a promise that will resolve once the
@@ -73,9 +73,9 @@ export default class HomeController extends AbstractPageController {
    *
    * @override
    * @param {Object<string, *>} _loadedResources Map of resource names to
-   *        resources loaded by the {@codelink load} method. This is the same
-   *        object as the one passed to the {@codelink setState} method when
-   *        the Promises returned by the {@codelink load} method were resolved.
+   *        resources loaded by the {@link load} method. This is the same
+   *        object as the one passed to the {@link setState} method when
+   *        the Promises returned by the {@link load} method were resolved.
    * @param {MetaManager} metaManager Meta attributes manager to configure.
    * @param {Router} router The current application router.
    * @param {Dictionary} dictionary The current localization dictionary.

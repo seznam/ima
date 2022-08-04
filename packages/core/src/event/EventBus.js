@@ -23,9 +23,9 @@ export default class EventBus {
    * is unspecified and should not be relied upon.
    *
    * Note that the default options are
-   * {@code { bubbles: true, cancelable: true }}, which is different from the
+   * `{ bubbles: true, cancelable: true }`, which is different from the
    * default values used in the native custom events
-   * ({@code { bubbles: false, cancelable: false }}).
+   * (`{ bubbles: false, cancelable: false }`).
    *
    * @param {EventTarget} eventTarget The event target at which the event
    *        will be  dispatched (e.g. element/document/window).
@@ -35,7 +35,7 @@ export default class EventBus {
    *        override of the default options passed to the constructor of the
    *        custom event fired by this event bus.
    *        The default options passed to the custom event constructor are
-   *        {@code { bubbles: true, cancelable: true }}.
+   *        `{ bubbles: true, cancelable: true }`.
    * @return {EventBus} This custom event bus.
    * @throws {Error} Thrown if the provided event target cannot be used to
    *         fire the event.

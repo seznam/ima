@@ -5,7 +5,7 @@ import Card from 'app/component/card/Card';
 import './homeView.less';
 
 /**
- * The {@code load} method in HomeController.js passes entries
+ * The `load` method in HomeController.js passes entries
  * in the returned object as props to this component view. The
  * data are passed all at once, as soon as all promises resolve
  * (in case of SSR) or one by one as the promises are being resolved.

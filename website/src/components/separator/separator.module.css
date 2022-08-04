@@ -1,0 +1,52 @@
+.title {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.icon {
+  width: 2.5rem;
+  height: 2.5rem;
+
+  stroke: white;
+  stroke-width: 1.5px;
+}
+
+.iconContainer {
+  display: flex;
+
+  z-index: 1;
+
+  border-radius: 100%;
+  width: 4.5rem;
+  height: 4.5rem;
+
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--ifm-color-primary);
+}
+
+.separator {
+  display: flex;
+
+  position: relative;
+
+  margin: 3rem 0 2rem;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.separator::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+
+  width: 100%;
+  height: 1px;
+
+  content: "";
+
+  background-color: var(--ifm-hr-background-color);
+}

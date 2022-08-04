@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { Component, PureComponent } from 'react';
+import { findDOMNode } from 'react-dom';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -60,7 +60,7 @@ export function link(component, name, params) {
 
 /**
  * Generate a string of CSS classes from the properties of the passed-in
- * object that resolve to {@code true}.
+ * object that resolve to `true`.
  *
  * @example
  *        this.cssClasses('my-class my-class-modificator', true);
@@ -74,10 +74,10 @@ export function link(component, name, params) {
  * @param {(string|Object<string, boolean>)} classRules CSS classes in a
  *        string separated by whitespace, or a map of CSS class names to
  *        boolean values. The CSS class name will be included in the result
- *        only if the value is {@code true}.
+ *        only if the value is `true`.
  * @param {boolean} includeComponentClassName
  * @return {string} String of CSS classes that had their property resolved
- *         to {@code true}.
+ *         to `true`.
  */
 export function cssClasses(component, classRules, includeComponentClassName) {
   return component.utils.$CssClasses(
@@ -88,25 +88,24 @@ export function cssClasses(component, classRules, includeComponentClassName) {
 
 /**
  * Generate a string of CSS classes from the properties of the passed-in
- * object that resolve to {@code true}.
+ * object that resolve to `true`.
  *
  * @param {(string|Object<string, boolean>)} classRules CSS classes in a
  *        string separated by whitespace, or a map of CSS class names to
  *        boolean values. The CSS class name will be included in the result
- *        only if the value is {@code true}.
+ *        only if the value is `true`.
  * @param {?(AbstractComponent|AbstractPureComponent|string)} component The component
  *        requiring the composition of the CSS class names, if it has the
- *        {@code className} property set and requires its inclusion this time.
+ *        `className` property set and requires its inclusion this time.
  * @return {string} String of CSS classes that had their property resolved
- *         to {@code true}.
+ *         to `true`.
  */
 export function defaultCssClasses(classRules, component) {
   let extraClasses = typeof component === 'string' ? component : null;
 
   if (
     !extraClasses &&
-    (component instanceof React.Component ||
-      component instanceof React.PureComponent)
+    (component instanceof Component || component instanceof PureComponent)
   ) {
     extraClasses = component.props.className;
   }
@@ -124,7 +123,8 @@ export function defaultCssClasses(classRules, component) {
  */
 export function fire(component, eventName, data = null) {
   return component.utils.$EventBus.fire(
-    ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
+    // eslint-disable-next-line react/no-find-dom-node
+    findDOMNode(component),
     eventName,
     data
   );
