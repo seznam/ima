@@ -10,6 +10,7 @@
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
+    "./website",
     "./packages/cli",
     "./packages/core",
     "./packages/create-ima-app",
@@ -76,6 +77,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.0",
     "fs-extra": "^10.0.1",
+    "globby": "^13.1.2",
     "husky": "^7.0.4",
     "jest": "^26.6.3",
     "jsdom": "^19.0.0",
