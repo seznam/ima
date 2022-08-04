@@ -34,8 +34,8 @@
     "express": "^4.17.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.0",
-    "@ima/helpers": "^18.0.0-rc.0"
+    "@ima/dev-utils": "*",
+    "@ima/helpers": "*"
   },
   "publishConfig": {
     "access": "public",
