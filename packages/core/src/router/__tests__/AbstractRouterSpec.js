@@ -37,6 +37,10 @@ describe('ima.core.router.AbstractRouter', () => {
     type: ActionTypes.ERROR,
     url: 'http://www.domain.com/root/currentRoutePath',
   };
+  let redirectAction = {
+    type: ActionTypes.ERROR,
+    url: 'http://www.domain.com/root/user/2345',
+  };
   let currentRoutePath = '/currentRoutePath';
   let Controller = function Controller() {};
   let View = function View() {};
@@ -422,7 +426,7 @@ describe('ima.core.router.AbstractRouter', () => {
               userId: '2345',
             }),
             options,
-            errorAction
+            redirectAction
           );
           expect(response.error instanceof GenericError).toBeTruthy();
           expect(router._runMiddlewares).toHaveBeenCalledWith(
@@ -434,7 +438,7 @@ describe('ima.core.router.AbstractRouter', () => {
               ...params,
               userId: '2345',
             }),
-            { route, action: errorAction }
+            { route, action: redirectAction }
           );
           done();
         })
