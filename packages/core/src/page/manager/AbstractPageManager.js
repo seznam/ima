@@ -129,12 +129,7 @@ export default class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(route, options, params = {}, action = {}) {
-    const [controller, view] = await Promise.all([
-      route.getController(),
-      route.getView(),
-    ]);
-
+  async manage({ route, controller, view, options, params = {}, action = {} }) {
     this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {

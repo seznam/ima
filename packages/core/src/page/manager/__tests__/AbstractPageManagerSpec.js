@@ -125,7 +125,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       );
 
       pageManager
-        .manage(route, options, params)
+        .manage({ route, options, params, controller: Controller, view: View })
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._managedPage.params).toStrictEqual(params);
@@ -157,7 +157,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       spyOn(pageManager, '_loadPageSource').and.returnValue(Promise.resolve());
 
       pageManager
-        .manage(route, options, params)
+        .manage({ route, options, params, controller: Controller, view: View })
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._deactivatePageSource).toHaveBeenCalled();

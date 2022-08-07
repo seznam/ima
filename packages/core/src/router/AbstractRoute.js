@@ -264,29 +264,35 @@ export default class AbstractRoute {
   }
 
   /**
-   * Returns the full name of the controller to use when this route is
-   * matched by the current URL, or an Object Container-registered alias of
-   * the controller.
+   * Returns Controller class/alias/constant associated with this route.
+   * Internally caches async calls for dynamically imported controllers,
+   * meaning that once they're loaded, you get the same promise for
+   * subsequent calls.
    *
-   * @return {string} The name of alias of the controller.
+   * @return {object|string|function} The Controller class/alias/constant.
    */
   async getController() {
-    return this._controller.constructor.name === 'AsyncFunction'
-      ? this._controller().then(module => module.default ?? module)
-      : this._controller;
+    if (!this._cachedController) {
+      this._cachedController = this._getAsyncModule(this._controller);
+    }
+
+    return this._cachedController;
   }
 
   /**
-   * Returns the full name of the view class or an Object
-   * Container-registered alias for the view class, representing the view to
-   * use when this route is matched by the current URL.
+   * Returns View class/alias/constant associated with this route.
+   * Internally caches async calls for dynamically imported views,
+   * meaning that once they're loaded, you get the same promise for
+   * subsequent calls.
    *
-   * @return {string} The name or alias of the view class.
+   * @return {object|string|function} The View class/alias/constant.
    */
   async getView() {
-    return this._view.constructor.name === 'AsyncFunction'
-      ? this._view().then(module => module.default ?? module)
-      : this._view;
+    if (!this._cachedView) {
+      this._cachedView = this._getAsyncModule(this._view);
+    }
+
+    return this._cachedView;
   }
 
   /**
@@ -323,6 +329,15 @@ export default class AbstractRoute {
    */
   getPathExpression() {
     return this._pathExpression;
+  }
+
+  /**
+   * Preloads dynamically imported view and controller.
+   *
+   * @return {Promise} Promise.All resolving to [view, controller] tuple.
+   */
+  async preload() {
+    return Promise.all([this.getView(), this.getController()]);
   }
 
   /**
@@ -379,5 +394,19 @@ export default class AbstractRoute {
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
         'and must be overridden'
     );
+  }
+
+  /**
+   * Helper method to pre-process view and controller which can be
+   * async functions in order to support dynamic async routing.
+   *
+   * @param {object|string|function} module The module class/alias/constant.
+   * @return {Promise} Promise resolving to the actual view or controller
+   *  constructor function/class.
+   */
+  async _getAsyncModule(module) {
+    return module.constructor.name === 'AsyncFunction'
+      ? module().then(module => module.default ?? module)
+      : module;
   }
 }
