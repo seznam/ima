@@ -43,35 +43,14 @@ import AbstractPageManager from './page/manager/AbstractPageManager';
 import ClientPageManager from './page/manager/ClientPageManager';
 import PageManager from './page/manager/PageManager';
 import ServerPageManager from './page/manager/ServerPageManager';
-import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
-import BlankManagedRootView from './page/renderer/BlankManagedRootView';
-import ErrorBoundary from './page/renderer/ErrorBoundary';
-import ClientPageRenderer from './page/renderer/ClientPageRenderer';
 import ComponentUtils from './page/renderer/ComponentUtils';
 import RendererEvents from './page/renderer/Events';
 import PageRenderer from './page/renderer/PageRenderer';
-import PageRendererFactory from './page/renderer/PageRendererFactory';
-import ServerPageRenderer from './page/renderer/ServerPageRenderer';
 import RendererTypes from './page/renderer/Types';
-import ViewAdapter from './page/renderer/ViewAdapter';
 import StateEvents from './page/state/Events';
 import PageStateManager from './page/state/PageStateManager';
 import PageStateManagerDecorator from './page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from './page/state/PageStateManagerImpl';
-import AbstractComponent from './page/AbstractComponent';
-import AbstractDocumentView from './page/AbstractDocumentView';
-import AbstractPureComponent from './page/AbstractPureComponent';
-import {
-  getUtils,
-  localize,
-  link,
-  cssClasses,
-  defaultCssClasses,
-  fire,
-  listen,
-  unlisten,
-} from './page/componentHelpers';
-import PageContext from './page/Context';
 import PageFactory from './page/PageFactory';
 import AbstractRouter from './router/AbstractRouter';
 import ActionTypes from './router/ActionTypes';
@@ -294,25 +273,14 @@ export {
   ClientPageManager,
   PageManager,
   ServerPageManager,
-  AbstractPageRenderer,
-  BlankManagedRootView,
-  ErrorBoundary,
-  ClientPageRenderer,
   ComponentUtils,
   RendererEvents,
   RendererTypes,
   PageRenderer,
-  PageRendererFactory,
-  ServerPageRenderer,
-  ViewAdapter,
   RouterEvents,
   PageStateManager,
   PageStateManagerDecorator,
   PageStateManagerImpl,
-  AbstractComponent,
-  AbstractDocumentView,
-  AbstractPureComponent,
-  PageContext,
   PageFactory,
   AbstractRouter,
   AbstractRoute,
@@ -339,13 +307,5 @@ export {
   ClientWindow,
   ns,
   pluginLoader,
-  getUtils,
-  localize,
-  link,
-  cssClasses,
-  defaultCssClasses,
-  fire,
-  listen,
-  unlisten,
   version,
 };

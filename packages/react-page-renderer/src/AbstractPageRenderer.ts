@@ -1,21 +1,19 @@
 import { ComponentType, Component } from 'react';
-import { Controller, Dispatcher, GenericError } from '@ima/core';
+import { Controller, Dispatcher, GenericError, PageRenderer, RendererEvents } from '@ima/core';
 
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import PageRendererInterface from './PageRendererInterface';
-import RendererEvents from '../renderer/RendererEvents';
-import RouteOptions from '../manager/RouteOptions';
+import { RouteOptions } from './types';
 import ViewAdapter from './ViewAdapter';
 
-// TODO import * as $Helper from '@ima/helpers'; (not a type)
 // TODO 
 
 /**
- * Base class for implementations of the {@linkcode PageRendererInterface} interface.
+ * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
-export default abstract class AbstractPageRenderer implements PageRendererInterface {
+export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _factory: PageRendererFactory;
+  // TODO import * as $Helper from '@ima/helpers'; (not a type)
   protected _helpers: { [key: string]: Function };
   protected _dispatcher: Dispatcher;
   protected _settings: { [key: string]: any };
@@ -33,6 +31,8 @@ export default abstract class AbstractPageRenderer implements PageRendererInterf
    *        application environment.
    */
   constructor(factory: PageRendererFactory, helpers: { [key: string]: Function }, dispatcher: Dispatcher, settings: { [key: string]: any }) {
+    super();
+
     /**
      * Factory for receive $Utils to view.
      */
@@ -103,7 +103,7 @@ export default abstract class AbstractPageRenderer implements PageRendererInterf
    * @param state
    */
   protected _generateViewProps(view: ComponentType, state: { [key: string]: any } = {}): { [key: string]: any } {
-    let props = {
+    const props = {
       view,
       state,
       $Utils: this._factory.getUtils(),
@@ -118,12 +118,12 @@ export default abstract class AbstractPageRenderer implements PageRendererInterf
    * @param routeOptions The current route options.
    */
   protected _getWrappedPageView(controller: Controller, view: ComponentType, routeOptions: RouteOptions) {
-    let managedRootView = this._factory.getManagedRootView(
+    const managedRootView = this._factory.getManagedRootView(
       routeOptions.managedRootView ||
       this._settings.$Page.$Render.managedRootView ||
       BlankManagedRootView
     );
-    let props = this._generateViewProps(
+    const props = this._generateViewProps(
       managedRootView,
       Object.assign({}, controller.getState(), { $pageView: view })
     );

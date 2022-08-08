@@ -1,13 +1,11 @@
 // @client-side
 import { Component, ComponentType, } from 'react';
-import { Controller, ControllerDecorator, Dispatcher, MetaManager, Window } from '@ima/core';
+import { Controller, ControllerDecorator, Dispatcher, MetaManager, RendererEvents, RendererTypes, Window } from '@ima/core';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import RendererEvents from '../renderer/RendererEvents';
-import RendererTypes from './RendererTypes';
-import RouteOptions from '../manager/RouteOptions';
+import { RouteOptions } from './types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -230,9 +228,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       routeOptions
     );
 
-    const documentView = this._getDocumentView(routeOptions);
-    // TODO masterElementId should be in settings now
-    const masterElementId = documentView.masterElementId;
+    const masterElementId = this._settings.$Page.$Render.masterElementId;
     this._viewContainer = this._window.getElementById(masterElementId);
 
     if (!this._viewContainer) {

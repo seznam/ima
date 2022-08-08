@@ -1,6 +1,6 @@
 import { Component, ComponentType, createElement, PureComponent } from 'react';
 
-import ComponentUtils from './ComponentUtils';
+import { ComponentUtils } from '@ima/core';
 
 /**
  * Factory for page render.
@@ -96,7 +96,7 @@ export default class PageRendererFactory {
    *         properties.
    */
   // TODO props any?
-  wrapView(view: ComponentType | string, props: any) {
+  wrapView(view: ComponentType | string, props: { [key: string]: any }) {
     return createElement(
       this._resolveClassConstructor(view),
       props

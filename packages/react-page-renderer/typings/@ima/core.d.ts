@@ -1,20 +1,12 @@
 import PageStateManagerInterface from "../../src/state/PageStateManagerInterface";
 
 declare module '@ima/core' {
-  export class AbstractRoute {
-    getController(): Controller;
-    getView(): string;
-  };
-
-  export enum ActionTypes {
-    CLICK = 'click',
-    ERROR = 'error',
-    POP_STATE = 'popstate',
-    REDIRECT = 'redirect'
-  };
-
   export class Cache {
     serialize(): void;
+  };
+
+  export class ComponentUtils {
+    getUtils(): { [key: string]: any };
   };
 
   export class Controller {
@@ -46,15 +38,6 @@ declare module '@ima/core' {
     unlisten(eventTarget: EventTarget, eventName: string, listener: (event: Event) => any): EventBus;
   };
 
-  export class Execution {
-    execute(...args: any): Promise;
-  };
-
-  export class Extension {
-    getAllowedStateKeys(): string[];
-    setPageStateManager(pageStateManager: PageStateManagerInterface): void;
-  };
-
   export class GenericError extends Error {
     constructor(message: string, params: { [key: string]: any } = {}, dropInternalStackFrames: boolean = true);
     getHttpStatus(): number;
@@ -71,11 +54,24 @@ declare module '@ima/core' {
     getTitle(): string;
   };
 
-  export class ObjectContainer {
-    create(name: string | Object, dependencies: any[]): Object;
-    get(name: string | Function): Object;
-    getConstructorOf(name: string | Object): Function;
-    has(name: string | Function): boolean;
+  export class PageRenderer {
+    mount(controller: Controller, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions): Promise<{ content?: string; pageState: { [key: string]: any }; status: number; }>;
+    update(controller: Controller, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions): Promise<{ content?: string; pageState: { [key: string]: any }; status: number; }>;
+    unmount(): void;
+    setState(state: { [key: string]: any }): void;
+  }
+
+  export enum RendererEvents {
+    MOUNTED = '$IMA.$PageRenderer.mounted',
+    UPDATED = '$IMA.$PageRenderer.updated',
+    UNMOUNTED = '$IMA.$PageRenderer.unmounted',
+    ERROR = '$IMA.$PageRenderer.error'
+  }
+
+  export enum RendererTypes {
+    RENDER = '$IMA.$PageRenderer.type.render',
+    HYDRATE = '$IMA.$PageRenderer.type.hydrate',
+    UNMOUNT = '$IMA.$PageRenderer.type.unmount'
   };
 
   export class Response {
@@ -90,8 +86,6 @@ declare module '@ima/core' {
     link(name: string, params: { [key: string]: string | number }): string;
   };
 
-  export class SerialBatch extends Execution { };
-
   export class Window {
     getElementById(id: string): Element;
     getHistoryState(): { [key: string]: any };
@@ -105,4 +99,53 @@ declare module '@ima/core' {
     scrollTo(x: number, y: number): void;
     setTitle(title: string): void;
   };
+
+
+
+  // export class AbstractRoute {
+  //   getController(): Controller;
+  //   getView(): string;
+  // };
+
+  // export enum ActionTypes {
+  //   CLICK = 'click',
+  //   ERROR = 'error',
+  //   POP_STATE = 'popstate',
+  //   REDIRECT = 'redirect'
+  // };
+
+
+
+
+
+
+  // export class Execution {
+  //   execute(...args: any): Promise;
+  // };
+
+  // export class Extension {
+  //   getAllowedStateKeys(): string[];
+  //   setPageStateManager(pageStateManager: PageStateManagerInterface): void;
+  // };
+
+
+
+
+
+  // export class ObjectContainer {
+  //   create(name: string | Object, dependencies: any[]): Object;
+  //   get(name: string | Function): Object;
+  //   getConstructorOf(name: string | Object): Function;
+  //   has(name: string | Function): boolean;
+  // };
+
+  
+
+  // export class Router {
+  //   link(name: string, params: { [key: string]: string | number }): string;
+  // };
+
+  // export class SerialBatch extends Execution { };
+
+
 }

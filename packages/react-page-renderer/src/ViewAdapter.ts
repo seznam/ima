@@ -1,13 +1,29 @@
-import { Component, createElement } from 'react';
+import { Component, ComponentType, createElement } from 'react';
 import memoizeOne from 'memoize-one';
-import Context from '../Context';
+
+import PageContext from './PageContext';
+
+interface Props {
+  state: State,
+  view: ComponentType
+}
+
+interface State {
+  [key: string]: any
+}
 
 /**
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
-export default class ViewAdapter extends Component {
-  static getDerivedStateFromProps(props, state) {
+export default class ViewAdapter extends Component<Props, State> {
+  private _getContextValue: Function;
+  private _view: ComponentType;
+
+  contextSelectors: Array<Function>;
+  createContext: Function;
+
+  static getDerivedStateFromProps(props: Props, state: State): State {
     //we want use props.state only when props changed
     //temp indicator notUsePropsState is set by AbstractPageRenderer
     if (state.notUsePropsState) {
@@ -23,33 +39,24 @@ export default class ViewAdapter extends Component {
   /**
    * Initializes the adapter component.
    *
-   * @param {{
-   *          state: Object<string, *>,
-   *          view: function(new:React.Component, Object<string, *>)
-   *        }} props Component properties, containing the actual page view
+   * @param props Component properties, containing the actual page view
    *        and the initial page state to pass to the view.
    */
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     /**
      * The current page state as provided by the controller.
-     *
-     * @type {Object<string, *>}
      */
     this.state = props.state;
 
     /**
      * The actual page view to render.
-     *
-     * @type {function(new:React.Component, Object<string, *>)}
      */
     this._view = props.view;
 
     /**
      * The memoized context value.
-     *
-     * @type {function}
      */
     this._getContextValue = memoizeOne((props, state) =>
       this.getContextValue(props, state)
@@ -57,22 +64,18 @@ export default class ViewAdapter extends Component {
 
     /**
      * The array of selectors for context values.
-     *
-     * @type {Array<function>}
      */
-    this.contextSelectors = [props => props.$Utils];
+    this.contextSelectors = [(props: any) => props.$Utils];
 
     /**
      * The function for creating context.
-     *
-     * @type {function}
      */
     this.createContext = memoizeOne($Utils => {
       return { $Utils };
     });
   }
 
-  getContextValue(props, state) {
+  getContextValue(props: Props, state: State) {
     const selectedValues = this.contextSelectors.map(selector =>
       selector(props, state)
     );
@@ -85,7 +88,7 @@ export default class ViewAdapter extends Component {
    */
   render() {
     return createElement(
-      Context.Provider,
+      PageContext.Provider,
       { value: this._getContextValue(this.props, this.state) },
       createElement(this._view, this.state)
     );

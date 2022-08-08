@@ -1,4 +1,6 @@
-import { EventBus, Dictionary, Router } from '@ima/core';
+import { ComponentType } from 'react';
+
+import { Controller, Dictionary, EventBus, Router } from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 import AbstractComponent from './AbstractComponent';
@@ -9,6 +11,15 @@ declare global {
   interface Window {
     __IMA_HMR: ErrorOverlayEmitter;
   }
+}
+
+export type RouteOptions = {
+  allowSPA: boolean;
+  autoScroll: boolean;
+  documentView?: ComponentType;
+  managedRootView?: ComponentType;
+  onlyUpdate?: (controller: Controller, view: ComponentType) => boolean;
+  viewAdapter?: ComponentType;
 }
 
 export type Utils = {

@@ -1,10 +1,11 @@
 import AbstractComponent from "./AbstractComponent";
 import AbstractPureComponent from "./AbstractPureComponent";
+import AbstractPageRenderer from "./AbstractPageRenderer";
+import ErrorBoundary from "./ErrorBoundary";
 import PageContext from "./PageContext";
-import PageStateEvents from "./state/PageStateEvents";
-import PageStateManager from "./state/PageStateManager";
-import PageStateManagerDecorator from "./state/PageStateManagerDecorator";
-import PageStateManagerInterface from "./state/PageStateManagerInterface";
+import PageRendererFactory from "./PageRendererFactory";
+import ViewAdapter from "./ViewAdapter";
+
 import {
     getUtils,
     localize,
@@ -19,11 +20,11 @@ import {
 export {
     AbstractComponent,
     AbstractPureComponent,
+    AbstractPageRenderer,
+    ErrorBoundary,
     PageContext,
-    PageStateEvents,
-    PageStateManager,
-    PageStateManagerDecorator,
-    PageStateManagerInterface,
+    PageRendererFactory,
+    ViewAdapter,
     getUtils,
     localize,
     link,

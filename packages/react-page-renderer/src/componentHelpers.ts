@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { Component, ContextType, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Utils } from '@/types';
+import { Utils } from './types';
 import AbstractComponent from './AbstractComponent';
 import AbstractPureComponent from './AbstractPureComponent';
 import PageContext from './PageContext';

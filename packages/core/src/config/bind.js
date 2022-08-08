@@ -20,18 +20,13 @@ import HttpStatusCode from '../http/StatusCode';
 import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
-import { defaultCssClasses as cssClassNameProcessor } from '../page/componentHelpers';
 import PageFactory from '../page/PageFactory';
 import PageHandlerRegistry from '../page/handler/PageHandlerRegistry';
 import PageNavigationHandler from '../page/handler/PageNavigationHandler';
 import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
 import ServerPageManager from '../page/manager/ServerPageManager';
-import ClientPageRenderer from '../page/renderer/ClientPageRenderer';
 import ComponentUtils from '../page/renderer/ComponentUtils';
-import PageRenderer from '../page/renderer/PageRenderer';
-import PageRendererFactory from '../page/renderer/PageRendererFactory';
-import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import PageStateManager from '../page/state/PageStateManager';
 import PageStateManagerDecorator from '../page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from '../page/state/PageStateManagerImpl';
@@ -143,11 +138,6 @@ export default (ns, oc, config) => {
   oc.bind('$ControllerDecorator', ControllerDecorator);
   oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
-  // UI components
-  oc.bind('$CssClasses', function () {
-    return cssClassNameProcessor;
-  });
-
   //Page
   oc.provide(PageStateManager, PageStateManagerImpl);
   oc.bind('$PageStateManager', PageStateManager);
@@ -159,7 +149,6 @@ export default (ns, oc, config) => {
   oc.bind('$ComponentUtils', ComponentUtils);
 
   oc.get(ComponentUtils).register({
-    $CssClasses: '$CssClasses',
     $Dictionary: Dictionary,
     $Dispatcher: Dispatcher,
     $EventBus: EventBus,
@@ -170,31 +159,6 @@ export default (ns, oc, config) => {
     $Settings: '$Settings',
     $Window: Window,
   });
-
-  oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
-  oc.bind('$PageRendererFactory', PageRendererFactory);
-
-  if (oc.get(Window).isClient()) {
-    oc.provide(PageRenderer, ClientPageRenderer, [
-      PageRendererFactory,
-      '$Helper',
-      '$ReactDOM',
-      '$Dispatcher',
-      '$Settings',
-      Window,
-    ]);
-  } else {
-    oc.provide(PageRenderer, ServerPageRenderer, [
-      PageRendererFactory,
-      '$Helper',
-      '$ReactDOMServer',
-      '$Dispatcher',
-      '$Settings',
-      Response,
-      Cache,
-    ]);
-  }
-  oc.bind('$PageRenderer', PageRenderer);
 
   if (oc.get(Window).isClient()) {
     oc.bind('$PageHandlerRegistry', PageHandlerRegistry, [

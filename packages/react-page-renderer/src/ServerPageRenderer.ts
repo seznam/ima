@@ -5,7 +5,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import RouteOptions from '../manager/RouteOptions';
+import { RouteOptions } from './types';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
