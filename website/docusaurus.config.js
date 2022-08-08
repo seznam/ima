@@ -51,61 +51,63 @@ const config = {
       }),
     ],
   ],
-  themeConfig:
-    /**
-     * @type {import('@docusaurus/preset-classic').ThemeConfig}
-     */
-    {
-      algolia: {
-        appId: 'YOUR_APP_ID',
-        apiKey: 'YOUR_SEARCH_API_KEY',
-        indexName: 'YOUR_INDEX_NAME',
-      },
-      navbar: {
-        title: 'IMA.js',
-        logo: {
-          alt: 'IMA.js, Isomorphic application in javascript',
-          src: 'img/logo.svg',
-        },
-        items: [
-          {
-            type: 'doc',
-            docId: 'introduction/getting-started',
-            position: 'right',
-            label: 'Docs',
-          },
-          {
-            type: 'doc',
-            docId: 'tutorial/introduction',
-            position: 'right',
-            label: 'Tutorial',
-          },
-          {
-            to: 'api/bootstrap',
-            position: 'right',
-            label: 'API',
-          },
-          {
-            type: 'search',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/seznam/ima',
-            className: 'header-github-link',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
-      },
-      footer: {
-        style: 'light',
-        copyright: `Copyright © 1996 - ${new Date().getFullYear()} Seznam.cz a. s.`,
-      },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
+  /**
+   * @type {import('@docusaurus/preset-classic').ThemeConfig}
+   */
+  themeConfig: {
+    algolia: {
+      appId: 'YOUR_APP_ID',
+      apiKey: 'YOUR_SEARCH_API_KEY',
+      indexName: 'YOUR_INDEX_NAME',
     },
+    navbar: {
+      title: 'IMA.js',
+      logo: {
+        alt: 'IMA.js, Isomorphic application in javascript',
+        src: 'img/logo.svg',
+      },
+      items: [
+        {
+          type: 'doc',
+          docId: 'introduction/getting-started',
+          position: 'right',
+          label: 'Docs',
+        },
+        {
+          type: 'doc',
+          docId: 'tutorial/introduction',
+          position: 'right',
+          label: 'Tutorial',
+        },
+        {
+          to: 'api/bootstrap',
+          position: 'right',
+          label: 'API',
+        },
+        {
+          type: 'search',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/seznam/ima',
+          className: 'header-github-link',
+          label: 'GitHub',
+          position: 'right',
+        },
+      ],
+    },
+    footer: {
+      style: 'light',
+      copyright: `Copyright © 1996 - ${new Date().getFullYear()} Seznam.cz a. s.`,
+    },
+    prism: {
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
+    },
+    tableOfContents: {
+      maxHeadingLevel: 4,
+    },
+  },
 };
 
 module.exports = config;

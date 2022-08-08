@@ -103,14 +103,6 @@ export default class Router {
   use() {}
 
   /**
-   * Returns specified route from registered route handlers.
-   *
-   * @param {string} name The route's unique name.
-   * @return {AbstractRoute|undefined} Route with given name or undefined.
-   */
-  get() {}
-
-  /**
    * Removes the specified route from the router's known routes.
    *
    * @param {string} name The route's unique name, identifying the route to
@@ -118,6 +110,14 @@ export default class Router {
    * @return {Router} This router.
    */
   remove() {}
+
+  /**
+   * Returns specified handler from registered route handlers.
+   *
+   * @param {string} name The route's unique name.
+   * @return {AbstractRoute|undefined} Route with given name or undefined.
+   */
+  getRouteHandler() {}
 
   /**
    * Returns the current path part of the current URL, including the query

@@ -160,17 +160,17 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  get(name) {
-    return this._routeHandlers.get(name);
+  remove(name) {
+    this._routeHandlers.delete(name);
+
+    return this;
   }
 
   /**
    * @inheritdoc
    */
-  remove(name) {
-    this._routeHandlers.delete(name);
-
-    return this;
+  getRouteHandler(name) {
+    return this._routeHandlers.getRouteHandler(name);
   }
 
   /**
