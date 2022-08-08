@@ -298,6 +298,22 @@ Here you can customize which compression algorithms to use in production build. 
 
 The `imageInlineSizeLimit` configuration option is already described in the [compiler features](./compiler-features#images) section. Essentially it's a image size threshold for it's automatic inlining as a base64 string.
 
+### disableLegacyBuild
+
+> `boolean`
+
+Set to true to disable building of the `client` bundle (older ECMAScript target).
+
+**Don't forget** to remove `script` sources from the `$Source` option in [app environment](https://github.com/seznam/ima/blob/next/packages/create-ima-app/template/server/config/environment.js#31) config
+
+:::caution
+
+The application will now only execute the modern version of the client bundle (`client.es`), meaning that the it will only work on the latest versions of modern browsers.
+
+This can be usefull if you're building an app, where you are able to set constrains for the supported browsers (e.g. internal admin page).
+
+:::
+
 ### watchOptions
 
 > `object`

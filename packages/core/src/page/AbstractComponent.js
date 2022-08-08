@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import * as helpers from './componentHelpers';
 import Context from './Context';
 
@@ -7,7 +7,7 @@ import Context from './Context';
  *
  * @abstract
  */
-export default class AbstractComponent extends React.Component {
+export default class AbstractComponent extends Component {
   static get contextType() {
     return Context;
   }

@@ -10,9 +10,9 @@ export interface MapUnit {
   toString: () => string;
 }
 
-function asUnit(
+export function asUnit(
   unit: string,
-  parts: string[] | number[],
+  parts: (string | number)[],
   template = '${parts}${unit}'
 ): Unit {
   return {
@@ -29,5 +29,3 @@ function asUnit(
     },
   };
 }
-
-export { asUnit };

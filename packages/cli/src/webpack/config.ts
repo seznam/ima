@@ -50,6 +50,7 @@ export default async (
   const appDir = path.join(rootDir, 'app');
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
+  const mode = isDevEnv ? 'development' : 'production';
 
   // Define browserslist targets for current context
   let targets: Record<string, string> | string[];
@@ -175,7 +176,7 @@ export default async (
       : isEsVersion
       ? ['web', 'es2022']
       : ['web', 'es2018'],
-    mode: isDevEnv ? 'development' : 'production',
+    mode,
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
       : devtool,
@@ -249,7 +250,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(ctx, imaConfig),
+      name: `${name}-${mode}-${createCacheKey(ctx, imaConfig)}`,
       store: 'pack',
       buildDependencies: {
         config: [__filename],
@@ -502,6 +503,7 @@ export default async (
             // This needs to run for both client bundles
             new GenerateRunnerPlugin({
               context: ctx,
+              imaConfig,
             }),
 
             processCss &&

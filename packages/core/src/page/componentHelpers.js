@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { Component, PureComponent } from 'react';
+import { findDOMNode } from 'react-dom';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -105,8 +105,7 @@ export function defaultCssClasses(classRules, component) {
 
   if (
     !extraClasses &&
-    (component instanceof React.Component ||
-      component instanceof React.PureComponent)
+    (component instanceof Component || component instanceof PureComponent)
   ) {
     extraClasses = component.props.className;
   }
@@ -124,7 +123,8 @@ export function defaultCssClasses(classRules, component) {
  */
 export function fire(component, eventName, data = null) {
   return component.utils.$EventBus.fire(
-    ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
+    // eslint-disable-next-line react/no-find-dom-node
+    findDOMNode(component),
     eventName,
     data
   );

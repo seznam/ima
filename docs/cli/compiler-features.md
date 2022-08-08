@@ -1,19 +1,34 @@
 ---
-title: 'Compiler Features'
-description: 'CLI > Compiler Features'
+title: 'Compiler features'
+description: 'CLI > Compiler features'
 ---
 
 The IMA.js CLI uses [webpack](https://webpack.js.org/) behind the scenes to **compile**, **minify** and **run** the application in **dev mode**. It comes pre-configured with some options, plugins and loaders, which are described in the following sections.
 
+
 ## Server and client bundles
 
-The CLI creates 3 separate bundles (*2 in dev mode for performance reasons*) with their own configurations. One `server` bundle (used in express for SSR) and two client bundles - `client` and `client.es`, where one targets the es9 and the other es13 version of the javascript.
+The CLI creates 3 separate bundles (*2 in dev mode for performance reasons*) with their own configurations. One `server` bundle (used in express for SSR) and two client bundles - `client` and `client.es`, where one targets the `es2018` and the other `es2022` version of the javascript.
+
+This can be further customized using the [**`disableLegacyBuilt` option in `ima.config.js`**](./ima.config.js.md#disablelegacybuild).
 
 :::tip
 
 To make the CLI build **both es versions** in dev mode, run it with `npx ima dev --legacy` option.
 
 Keep in mind that [hot module replacement (HMR)](https://webpack.js.org/concepts/hot-module-replacement/) is configured to work only with the latest es version (manual browser reload is required to see any changes on the legacy version).
+
+:::
+
+## Filesystem Cache
+
+The webpack [filesystem cache](https://webpack.js.org/configuration/cache/#cache) feature is enabled by default to improve consecutive build times in development and production mode.
+
+The CLI automatically generates cache key based on used set of CLI options, which somehow affect the produced output. Not all options affect cache key generation, however you may notice that sometimes the build speeds can behave as if there is no filesystem cache. To see which options affect the cache key generation, [take a look at the `createCacheKey()` function](https://github.com/seznam/ima/blob/next/packages/cli/src/webpack/utils.ts#L154).
+
+:::note
+
+Note that each command and bundle maintains it's own set of coexisting cache. To clear the cache, use `--clearCache` option in `build` or `dev` commands.
 
 :::
 
@@ -27,7 +42,7 @@ The swc compiler is configured to leverage the power of "env" functionality (pre
 
 This configuration can be easily customized using [swc option in ima.config.js](./ima.config.js#swc).
 
-:::tip
+:::note
 
 This means that you can write your code **using the latest and greatest from the ECMAscript language**, even proposals and the swc makes sure to compile these features down to the latest supported syntax or automatically inject core-js polyfills.
 

@@ -1,10 +1,10 @@
-import React from 'react';
+import { PureComponent } from 'react';
 
 /**
  * Error boundary wrapper which connects the IMA application to the
  * dev HMR api and handles error reporting.
  */
-export default class ErrorBoundary extends React.PureComponent {
+export default class ErrorBoundary extends PureComponent {
   constructor(props) {
     super(props);
 
