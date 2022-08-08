@@ -3,7 +3,7 @@ import ns from './namespace';
 ns.namespace('ima.core');
 
 const SPREAD_RE = /^\.../;
-const OPTIONAL_RE = /^\?/;
+const OPTIONAL_RE = /^(...)?\?/;
 /**
  * The Object Container is an enhanced dependency injector with support for
  * aliases and constants, and allowing to reference classes in the application
@@ -501,29 +501,37 @@ export default class ObjectContainer {
       this._getEntryFromNamespace(entryName) ||
       this._getEntryFromClassConstructor(entryName);
 
-    if ($Debug) {
-      if (!entry && !this._isOptional(name)) {
+    if ($Debug && !entry && !this._isOptional(name)) {
+      throw new Error(
+        `ima.core.ObjectContainer:_getEntry There is no constant, ` +
+          `alias, registered class, registered interface with ` +
+          `configured implementation or namespace entry ` +
+          `identified as: <strong>${
+            name?.toString().split('\n').slice(0, 5).join('\n') ?? name
+          }</strong> Check your bind.js file for ` +
+          `typos or register given entry with the object container.`
+      );
+    }
+
+    if (this._isSpread(name)) {
+      if (Array.isArray(entry?.sharedInstance)) {
+        let spreadEntry = Entry.from(entry);
+
+        spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
+          this.get(sharedInstance)
+        );
+
+        return spreadEntry;
+      }
+
+      if ($Debug) {
         throw new Error(
-          `ima.core.ObjectContainer:_getEntry There is no constant, ` +
-            `alias, registered class, registered interface with ` +
-            `configured implementation or namespace entry ` +
-            `identified as: <strong>${
-              name?.toString().split('\n').slice(0, 5).join('\n') ?? name
-            }</strong> Check your bind.js file for ` +
+          `ima.core.ObjectContainer:_getEntry Invalid use of spread entry identified as: <strong>${
+            name?.toString().split('\n').slice(0, 5).join('\n') ?? name
+          }</strong> Check your bind.js file for ` +
             `typos or register given entry with the object container.`
         );
       }
-    }
-
-    if (this._isSpread(name) && entry?.sharedInstance.length) {
-      let spreadEntry = Entry.createFromEntry(entry);
-
-      spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
-        this.get(sharedInstance)
-      );
-
-      this._entries.set(name, spreadEntry);
-      return spreadEntry;
     }
 
     return entry;
@@ -539,7 +547,8 @@ export default class ObjectContainer {
    */
   _isOptional(name) {
     return (
-      name?.[1]?.optional || (typeof name === 'string' && name.includes('?'))
+      name?.[1]?.optional ||
+      (typeof name === 'string' && OPTIONAL_RE.test(name))
     );
   }
 
@@ -554,9 +563,7 @@ export default class ObjectContainer {
   _isSpread(name) {
     const normalizedName = Array.isArray(name) ? name[0] : name;
 
-    return (
-      typeof normalizedName === 'string' && normalizedName.startsWith('...')
-    );
+    return typeof normalizedName === 'string' && SPREAD_RE.test(normalizedName);
   }
 
   /**
@@ -879,7 +886,7 @@ class Entry {
     return this._options.writeable;
   }
 
-  static createFromEntry(entry) {
+  static from(entry) {
     return new Entry(
       entry.classConstructor,
       entry.dependencies,
