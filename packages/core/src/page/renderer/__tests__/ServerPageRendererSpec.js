@@ -83,17 +83,17 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   });
 
   it('should be wrap each key to promise', () => {
-    spyOn(Promise, 'resolve').and.callThrough();
+    jest.spyOn(Promise, 'resolve');
 
     pageRenderer._wrapEachKeyToPromise(params);
 
     expect(Promise.resolve).toHaveBeenCalledWith(param1);
-    expect(Promise.resolve.calls.count()).toBe(1);
+    expect(Promise.resolve.mock.calls).toHaveLength(1);
   });
 
   describe('update method', () => {
     it('should reject promise with error', done => {
-      spyOn(pageRenderer, 'mount').and.stub();
+      jest.spyOn(pageRenderer, 'mount').mockImplementation();
 
       pageRenderer.update(controller, params).catch(error => {
         expect(error instanceof GenericError).toBeTruthy();
@@ -115,8 +115,8 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
         pageState: loadedPageState,
       };
 
-      spyOn(response, 'isResponseSent').and.returnValue(true);
-      spyOn(response, 'getResponseParams').and.returnValue(responseParams);
+      jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
+      jest.spyOn(response, 'getResponseParams').mockReturnValue(responseParams);
 
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
@@ -127,7 +127,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     });
 
     it('should call _renderPage method', done => {
-      spyOn(pageRenderer, '_renderPage').and.stub();
+      jest.spyOn(pageRenderer, '_renderPage').mockImplementation();
 
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
@@ -150,8 +150,8 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
         pageState: fetchedResource,
       };
 
-      spyOn(response, 'isResponseSent').and.returnValue(true);
-      spyOn(response, 'getResponseParams').and.returnValue(responseParams);
+      jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
+      jest.spyOn(response, 'getResponseParams').mockReturnValue(responseParams);
 
       expect(
         pageRenderer._renderPage(controller, view, fetchedResource)
@@ -163,14 +163,18 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       let pageRenderResponse = null;
 
       beforeEach(() => {
-        spyOn(controller, 'setState').and.stub();
-        spyOn(controller, 'setMetaParams').and.stub();
-        spyOn(controller, 'getHttpStatus').and.stub();
-        spyOn(pageRenderer, '_renderPageContentToString').and.stub();
-        spyOn(response, 'status').and.returnValue(response);
-        spyOn(response, 'setPageState').and.returnValue(response);
-        spyOn(response, 'send').and.returnValue(response);
-        spyOn(response, 'getResponseParams').and.returnValue(responseParams);
+        jest.spyOn(controller, 'setState').mockImplementation();
+        jest.spyOn(controller, 'setMetaParams').mockImplementation();
+        jest.spyOn(controller, 'getHttpStatus').mockImplementation();
+        jest
+          .spyOn(pageRenderer, '_renderPageContentToString')
+          .mockImplementation();
+        jest.spyOn(response, 'status').mockReturnValue(response);
+        jest.spyOn(response, 'setPageState').mockReturnValue(response);
+        jest.spyOn(response, 'send').mockReturnValue(response);
+        jest
+          .spyOn(response, 'getResponseParams')
+          .mockReturnValue(responseParams);
 
         pageRenderResponse = pageRenderer._renderPage(
           controller,
@@ -223,22 +227,24 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     let pageContent = null;
 
     beforeEach(() => {
-      spyOn(ReactDOMServer, 'renderToString').and.returnValue(pageMarkup);
-      spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
-        documentViewFactory
-      );
+      jest.spyOn(ReactDOMServer, 'renderToString').mockReturnValue(pageMarkup);
+      jest
+        .spyOn(rendererFactory, 'createReactElementFactory')
+        .mockReturnValue(documentViewFactory);
       jest
         .spyOn(ReactDOMServer, 'renderToStaticMarkup')
         .mockReturnValue(appMarkup);
-      spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
-        revivalSettings
-      );
-      spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
-        wrapedPageViewElement
-      );
-      spyOn(pageRenderer, '_getDocumentView').and.returnValue(documentView);
-      spyOn(controller, 'getMetaManager').and.returnValue(metaManager);
-      spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
+      jest
+        .spyOn(pageRenderer, '_getRevivalSettings')
+        .mockReturnValue(revivalSettings);
+      jest
+        .spyOn(pageRenderer, '_getWrappedPageView')
+        .mockReturnValue(wrapedPageViewElement);
+      jest
+        .spyOn(pageRenderer, '_getDocumentView')
+        .mockReturnValue(documentView);
+      jest.spyOn(controller, 'getMetaManager').mockReturnValue(metaManager);
+      jest.spyOn(rendererFactory, 'getUtils').mockReturnValue(utils);
 
       pageContent = pageRenderer._renderPageContentToString(
         controller,

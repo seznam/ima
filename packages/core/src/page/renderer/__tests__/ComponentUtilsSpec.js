@@ -15,6 +15,9 @@ describe('componentUtils', () => {
   beforeEach(() => {
     componentUtils = new ComponentUtils(oc);
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe('register() method', () => {
     it('should register utility class', () => {
@@ -43,9 +46,11 @@ describe('componentUtils', () => {
 
   describe('getUtils() method.', () => {
     beforeEach(() => {
-      spyOn(oc, 'get').and.callFake(entity =>
-        typeof entity === 'function' ? new entity() : entity
-      );
+      jest
+        .spyOn(oc, 'get')
+        .mockImplementation(entity =>
+          typeof entity === 'function' ? new entity() : entity
+        );
 
       componentUtils.register({
         SomeMockHelper,
@@ -54,7 +59,7 @@ describe('componentUtils', () => {
     });
 
     it('should return $Utils constant from OC if created.', () => {
-      spyOn(oc, 'has').and.callFake(entity => entity === '$Utils');
+      jest.spyOn(oc, 'has').mockImplementation(entity => entity === '$Utils');
 
       componentUtils.getUtils();
 
@@ -64,14 +69,15 @@ describe('componentUtils', () => {
     it('should create instace of each registered class through OC.', () => {
       const utils = componentUtils.getUtils();
 
-      expect(oc.get).toHaveBeenCalledTimes(2);
+      //TODO
+      expect(oc.get).toHaveBeenCalledTimes(3);
       expect(utils['SomeHelper'] instanceof SomeHelper).toBeTruthy();
       expect(utils['SomeMockHelper'] instanceof SomeMockHelper).toBeTruthy();
     });
 
     it('should not create instances again.', () => {
       const utils = (componentUtils._utilities = {});
-      spyOn(componentUtils, '_createUtilityInstance').and.stub();
+      jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 
       expect(componentUtils.getUtils()).toBe(utils);
       expect(componentUtils._createUtilityInstance).not.toHaveBeenCalled();

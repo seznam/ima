@@ -21,14 +21,14 @@ describe('ima.core.router.ClientRouter', () => {
     window = new Window();
     router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
 
-    spyOn(router, 'getPath').and.returnValue('/routePath');
+    jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
 
     router.init({ $Host: host, $Protocol: protocol });
   });
 
-  it('should be return actual path', () => {
-    router.getPath.and.callThrough();
-    spyOn(window, 'getPath').and.returnValue('');
+  it('should return actual path', () => {
+    jest.restoreAllMocks();
+    jest.spyOn(window, 'getPath').mockReturnValue('');
 
     router.getPath();
 
@@ -36,7 +36,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should be return actual url', () => {
-    spyOn(window, 'getUrl').and.stub();
+    jest.spyOn(window, 'getUrl').mockImplementation();
 
     router.getUrl();
 
@@ -44,19 +44,19 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should add listener to popState event, click event', () => {
-    spyOn(window, 'bindEventListener').and.stub();
+    jest.spyOn(window, 'bindEventListener').mockImplementation();
 
     router.listen();
 
-    expect(window.bindEventListener.calls.count()).toBe(2);
+    expect(window.bindEventListener).toHaveBeenCalledTimes(2);
   });
 
   it('should remove listener to popState event, click event', () => {
-    spyOn(window, 'unbindEventListener').and.stub();
+    jest.spyOn(window, 'unbindEventListener').mockImplementation();
 
     router.unlisten();
 
-    expect(window.unbindEventListener.calls.count()).toBe(2);
+    expect(window.unbindEventListener).toHaveBeenCalledTimes(2);
   });
 
   describe('redirect method', () => {
@@ -65,7 +65,7 @@ describe('ima.core.router.ClientRouter', () => {
       let url = protocol + '//' + host + path;
       let options = { httpStatus: 302 };
 
-      spyOn(router, 'route').and.stub();
+      jest.spyOn(router, 'route').mockImplementation();
 
       router.redirect(url, options);
 
@@ -84,7 +84,7 @@ describe('ima.core.router.ClientRouter', () => {
     it('return null for non exist route', () => {
       let url = 'http://example.com/somePath';
 
-      spyOn(window, 'redirect').and.stub();
+      jest.spyOn(window, 'redirect').mockImplementation();
 
       router.redirect(url);
 
@@ -94,7 +94,7 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('route method', () => {
     it('should call handleError for throwing error in super.router', done => {
-      spyOn(router, 'handleError').and.returnValue(Promise.resolve());
+      jest.spyOn(router, 'handleError').mockReturnValue(Promise.resolve());
 
       router.route('/something').then(() => {
         expect(router.handleError).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('handleNotFound method', () => {
     it('should be call router.handleError function for throwing error', done => {
-      spyOn(router, 'handleError').and.returnValue(Promise.resolve('ok'));
+      jest.spyOn(router, 'handleError').mockReturnValue(Promise.resolve('ok'));
 
       router.handleNotFound({ path: '/path' }).then(() => {
         expect(router.handleError).toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('ima.core.router.ClientRouter', () => {
             ' return ' +
             value.result,
           () => {
-            spyOn(window, 'getUrl').and.returnValue(value.baseUrl);
+            jest.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl);
 
             expect(router._isHashLink(value.targetUrl)).toStrictEqual(
               value.result

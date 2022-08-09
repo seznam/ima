@@ -55,34 +55,17 @@ describe('ima.core.http.HttpProxy', () => {
 
   ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
     describe(`method ${method}`, () => {
-      it('should return promise with response body', async done => {
+      it('should return promise with response body', async () => {
         try {
           await expect(
             proxy.request(method, API_URL, DATA, OPTIONS)
           ).resolves.toBeDefined();
-          done();
-        } catch (error) {
-          done.fail(error);
-        }
-      });
-
-      it('should return a "body" field in error object, when promise is rejected', async done => {
-        fetchResult = Promise.reject(
-          new GenericError('The HTTP request timed out', {
-            status: StatusCode.TIMEOUT,
-          })
-        );
-
-        try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
         } catch (error) {
           expect(error.getParams().body).toBeDefined();
-          done();
         }
       });
 
-      it('should reject promise for Timeout error', async done => {
+      it('should return a "body" field in error object, when promise is rejected', async () => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
             status: StatusCode.TIMEOUT,
@@ -91,10 +74,22 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+        } catch (error) {
+          expect(error.getParams().body).toBeDefined();
+        }
+      });
+
+      it('should reject promise for Timeout error', async () => {
+        fetchResult = Promise.reject(
+          new GenericError('The HTTP request timed out', {
+            status: StatusCode.TIMEOUT,
+          })
+        );
+
+        try {
+          await proxy.request(method, API_URL, DATA, OPTIONS);
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-          done();
         }
       });
 
@@ -116,7 +111,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for Forbidden', async done => {
+      it('should reject promise for Forbidden', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.FORBIDDEN,
@@ -124,14 +119,12 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.FORBIDDEN);
-          done();
         }
       });
 
-      it('should reject promise for Not found', async done => {
+      it('should reject promise for Not found', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.NOT_FOUND,
@@ -139,14 +132,12 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.NOT_FOUND);
-          done();
         }
       });
 
-      it('should reject promise for Internal Server Error', async done => {
+      it('should reject promise for Internal Server Error', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.SERVER_ERROR,
@@ -154,14 +145,12 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 
-      it('should reject promise for UNKNOWN', async done => {
+      it('should reject promise for UNKNOWN', async () => {
         Object.assign(response, {
           ok: false,
           status: null,
@@ -169,10 +158,8 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 
@@ -321,7 +308,7 @@ describe('ima.core.http.HttpProxy', () => {
     });
 
     it('should return null for requests with no body', () => {
-      spyOn(proxy, '_shouldRequestHaveBody').and.returnValue(false);
+      jest.spyOn(proxy, '_shouldRequestHaveBody').mockReturnValue(false);
 
       expect(proxy._getContentType('GET', null, { headers: {} })).toBeNull();
     });

@@ -41,10 +41,10 @@ describe('ima.storage.CookieStorage', () => {
     request.init({});
     response.init({}, transformFunction);
 
-    requestGetCookieHeaderSpy = spyOn(request, 'getCookieHeader');
-    requestGetCookieHeaderSpy.and.returnValue(cookieString);
+    requestGetCookieHeaderSpy = jest.spyOn(request, 'getCookieHeader');
+    requestGetCookieHeaderSpy.mockReturnValue(cookieString);
 
-    spyOn(response, 'setCookie').and.stub();
+    jest.spyOn(response, 'setCookie').mockImplementation();
 
     cookie.init({ secure: false }, transformFunction);
   });
@@ -89,17 +89,17 @@ describe('ima.storage.CookieStorage', () => {
   it('should be delete all cookies', () => {
     cookie.clear();
 
-    expect(response.setCookie.calls.count()).toBe(2);
+    expect(response.setCookie.mock.calls).toHaveLength(2);
     expect(cookie._storage.size).toBe(0);
   });
 
   it('should be get cookies string', () => {
-    spyOn(cookie._transformFunction, 'encode').and.callThrough();
+    jest.spyOn(cookie._transformFunction, 'encode');
 
     expect(cookie.getCookiesStringForCookieHeader()).toBe(
       cookiesStringForCookieHeader
     );
-    expect(cookie._transformFunction.encode.calls.count()).toBe(2);
+    expect(cookie._transformFunction.encode.mock.calls).toHaveLength(2);
   });
 
   describe('parse method', () => {
@@ -107,7 +107,7 @@ describe('ima.storage.CookieStorage', () => {
       let cookieStringWithDeletedCok1 =
         'cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
-      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithDeletedCok1);
+      requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithDeletedCok1);
 
       cookie._parse();
 
@@ -118,7 +118,7 @@ describe('ima.storage.CookieStorage', () => {
       let cookieStringWithNewValues =
         'cok1=hello3;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
-      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNewValues);
+      requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewValues);
 
       cookie._parse();
 
@@ -130,7 +130,7 @@ describe('ima.storage.CookieStorage', () => {
       let cookieStringWithNewOptions =
         'cok1=hello3;Path=/someDir;Domain=localhost:3001;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/differetDir;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
-      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNewOptions);
+      requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewOptions);
 
       cookie._parse();
 
@@ -142,7 +142,7 @@ describe('ima.storage.CookieStorage', () => {
     it('should not overwrite already set options, when none is parsed from document.cookie', () => {
       let cookieStringWithNoOptions = 'cok1=hello3; cok2=hello4;';
 
-      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNoOptions);
+      requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNoOptions);
 
       cookie._parse();
 
@@ -155,7 +155,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('set method', () => {
     it('should set cookie as expired for undefined value', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2');
 
@@ -163,7 +163,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should prefer maxAge before expires', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
 
@@ -171,7 +171,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should set session cookie', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', 'val2');
 
@@ -181,7 +181,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('parseFromSetCookieHeader method', () => {
     it('should parse cookie from Set-Cookie header string', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieString);
 
@@ -192,7 +192,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string for cookie name with first letter uppercase', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithFirstLetterUppercase);
 
@@ -203,7 +203,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with defined domain', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
 
@@ -215,7 +215,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with complex options', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
 
@@ -230,7 +230,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with Max-Age option', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithMaxAge);
 
