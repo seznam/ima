@@ -250,6 +250,27 @@ load() {
 }
 ```
 
+## Error and NotFound route names
+
+There are two special route names that `@ima/core` exports: `RouteNames.ERROR`, `RouteNames.NOT_FOUND`. You can use these constants to provide custom views and controllers for error handling pages.
+
+
+```javascript title=./app/config/routes.js
+import { RouteNames } from '@ima/core';
+
+import { ErrorController, ErrorView } from 'app/page/error';
+import { NotFoundController, NotFoundView } from 'app/page/not-found';
+
+export let init = (ns, oc, config) => {
+  const router = oc.get('$Router');
+
+  router
+    .add('home', '/', HomeController, HomeView)
+    .add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
+    .add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);
+}
+```
+
 ## Redirects
 
 In addition to the `link` method mentioned above (which handles URL generation for given routes), you can use `Router.redirect()` method to **redirect directly to the targetted URL**.
