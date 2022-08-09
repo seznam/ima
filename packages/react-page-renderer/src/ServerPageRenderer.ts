@@ -1,7 +1,9 @@
 import { Cache, ControllerDecorator, Dispatcher, GenericError, Response } from '@ima/core';
 import { Attributes, ComponentType, } from 'react';
+//#if _SERVER
 import { processContent } from '@ima/helpers';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+//#endif
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
@@ -224,4 +226,5 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     return '<!doctype html>\n' + appMarkup;
   }
   //#endif
+  ;
 }

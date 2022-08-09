@@ -18,10 +18,11 @@ function generateConfig(environment) {
       [`${environment}`]: './src/index.ts',
     },
     plugins: [
-      typescript(),
       jscc({
+        asloader: false,
         values: { _SERVER: environment === 'server' }
-      })
+      }),
+      typescript()
     ],
   }));
 }

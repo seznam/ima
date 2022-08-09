@@ -34,7 +34,7 @@
   "dependencies": {
     "@ima/core": "18.0.0-rc.5",
     "@ima/react-hooks": "^1.1.1",
-    "@ima/react-page-renderer": "18.0.0-rc.5",
+    "@ima/react-page-renderer": "18.0.0-rc.6",
     "@ima/server": "18.0.0-rc.3",
     "body-parser": "^1.19.2",
     "compression": "1.7.4",
