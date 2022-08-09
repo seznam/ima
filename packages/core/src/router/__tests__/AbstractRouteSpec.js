@@ -85,7 +85,7 @@ describe('ima.core.router.AbstractRoute', function () {
     jest.spyOn(route, 'getView');
     jest.spyOn(route, 'getController');
 
-    const [resultView, resultController] = await route.preload();
+    const [resultController, resultView] = await route.preload();
 
     expect(route.getView).toHaveBeenCalledTimes(1);
     expect(route.getController).toHaveBeenCalledTimes(1);

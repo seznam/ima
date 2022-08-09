@@ -337,7 +337,7 @@ export default class AbstractRoute {
    * @return {Promise} Promise.All resolving to [view, controller] tuple.
    */
   async preload() {
-    return Promise.all([this.getView(), this.getController()]);
+    return Promise.all([this.getController(), this.getView()]);
   }
 
   /**
