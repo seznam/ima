@@ -270,14 +270,18 @@ export default class DetailController extends AbstractController {
   }
 
   init() {
-    // highlight-next-line
-    this._router.redirect('order-detail', {
-    // highlight-next-line
-      userId: user.id,
-    // highlight-next-line
-      orderId: order.id
-    // highlight-next-line
-    });
+      // highlight-next-line
+    this._router.redirect(
+      // highlight-next-line
+      this._router.link('order-detail', {
+      // highlight-next-line
+        userId: user.id,
+      // highlight-next-line
+        orderId: order.id
+      // highlight-next-line
+      });
+      // highlight-next-line
+    );
   }
 }
 ```
