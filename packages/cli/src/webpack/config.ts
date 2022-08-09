@@ -288,7 +288,7 @@ export default async (
               test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
               name: 'vendors',
               enforce: true,
-              chunks: 'all',
+              chunks: 'initial',
             },
           },
         }),

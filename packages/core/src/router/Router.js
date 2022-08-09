@@ -112,6 +112,14 @@ export default class Router {
   remove() {}
 
   /**
+   * Returns specified handler from registered route handlers.
+   *
+   * @param {string} name The route's unique name.
+   * @return {AbstractRoute|undefined} Route with given name or undefined.
+   */
+  getRouteHandler() {}
+
+  /**
    * Returns the current path part of the current URL, including the query
    * string (if any).
    *
