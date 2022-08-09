@@ -209,15 +209,17 @@ export let init = (ns, oc, config) => {
     .use(async (params, locals) => {
       console.log('Matched current route object', locals.route);
       console.log('Global middleware', params, locals);
-    });
-    .add('home', '/', HomeController, HomeView, {}, [
-      async (params, locals) => {
-        locals.homeMiddleware = 0;
-      },
-      async (params, locals) => {
-        locals.homeMiddleware++;
-      }
-    ])
+    })
+    .add('home', '/', HomeController, HomeView, {
+      middlewares: [
+        async (params, locals) => {
+          locals.homeMiddleware = 0;
+        },
+        async (params, locals) => {
+          locals.homeMiddleware++;
+        }
+      ]
+    })
     .add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
     .add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);
 }

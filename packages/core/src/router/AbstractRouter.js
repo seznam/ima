@@ -374,7 +374,7 @@ export default class AbstractRouter extends Router {
     params = this._addParamsFromOriginalRoute(params);
 
     const action = {
-      url: this.getUrl(),
+      url: this.getBaseUrl() + this._getCurrentlyRoutedPath(),
       type: ActionTypes.ERROR,
     };
 
