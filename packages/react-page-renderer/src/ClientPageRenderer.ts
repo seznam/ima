@@ -1,5 +1,5 @@
 // @client-side
-import { Component, ComponentType, } from 'react';
+import { Component, ComponentType } from 'react';
 import { Controller, ControllerDecorator, Dispatcher, MetaManager, RendererEvents, RendererTypes, Window } from '@ima/core';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
@@ -249,7 +249,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         // TODO reactElementView - what??
-        this._reactiveView = hydrate(
+        const _hydrate: Function = hydrate;
+
+        this._reactiveView = _hydrate(
           reactElementView,
           this._viewContainer,
           () => {

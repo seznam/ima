@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "18.0.0-rc.0",
+  "version": "18.0.0-rc.1",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -16,7 +16,9 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "main": "./dist/index.cjs",
+  "main": "./dist/server.cjs",
+  "module": "./dist/server.mjs",
+  "browser": "./dist/client.js",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
