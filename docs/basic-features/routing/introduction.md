@@ -11,7 +11,9 @@ Routing is an essential part of every application that displays multiple pages. 
 
 All routes in IMA.js are registered inside the `init` function in `app/config/routes.js`. Same `init` function can be found in `app/config/bind.js`. See [Object Container](../object-container.md) documentation for more information about the `oc.get()` function.
 
-```javascript title=app/config/routes.js
+Usually you should be oke with simple string defined [StaticRoutes](../../api/router/StaticRoute.md) (the ones defined below), but the router also has support for more advanced and powerfull [DynamicRoutes](../../api/router/DynamicRoute.md). For more information about these see the [next section](./dynamic-routes.md).
+
+```javascript title=./app/config/routes.js
 import { RouteNames } from '@ima/core';
 
 import HomeController from 'app/page/home/HomeController';
