@@ -270,7 +270,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         () => {
           this._dispatcher.fire(RendererEvents.MOUNTED, { type: RendererTypes.RENDER }, true);
         }
-      ) as Component;
+      );
       return Promise.resolve();
     }
   }

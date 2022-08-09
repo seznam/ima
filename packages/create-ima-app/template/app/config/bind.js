@@ -1,4 +1,4 @@
-import { ComponentUtils, PageRenderer } from '@ima/core';
+import { Cache, ComponentUtils, PageRenderer, Response, Window } from '@ima/core';
 import {
   ClientPageRenderer,
   defaultCssClasses as cssClassNameProcessor,

@@ -94,6 +94,7 @@ module.exports = {
         'packages/hmr-client/**',
         'packages/error-overlay/**',
         'packages/dev-utils/**',
+        'packages/react-page-renderer/**',
       ],
       extends: ['plugin:import/recommended'],
       rules: {
