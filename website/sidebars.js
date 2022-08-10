@@ -38,7 +38,17 @@ const sidebars = {
         'basic-features/controller-lifecycle',
         'basic-features/views-and-components',
         'basic-features/fetching-data',
-        'basic-features/routing',
+        {
+          type: 'category',
+          label: 'Routing',
+          collapsed: true,
+          items: [
+            'basic-features/routing/introduction',
+            'basic-features/routing/dynamic-routes',
+            'basic-features/routing/middlewares',
+            'basic-features/routing/async-routing',
+          ],
+        },
         'basic-features/extensions',
         'basic-features/object-container',
         'basic-features/http-agent',

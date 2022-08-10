@@ -24,7 +24,7 @@
   --ifm-font-color-base: #343a40;
   --ifm-font-color-secondary: #495057;
   --ifm-menu-color: var(--ifm-font-color-secondary);
-  --docusaurus-highlighted-code-line-bg: var(--ifm-color-success-lightest);
+  --docusaurus-highlighted-code-line-bg: #e4fbe7;
   --ifm-font-size-base: 100%;
   --ifm-code-font-size: 90%;
   --ifm-code-border-radius: 3px;
@@ -142,6 +142,7 @@ code:not([class])::after {
 
 code {
   border: none;
+  border-radius: 0;
   padding: 0;
 
   font-weight: 600;
@@ -150,6 +151,10 @@ code {
   color: var(--ifm-color-primary-dark);
 
   background: none;
+}
+
+a code {
+  text-decoration: underline;
 }
 
 .theme-doc-sidebar-menu.menu__list {
