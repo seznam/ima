@@ -1,4 +1,4 @@
-const defaultResolver = require('jest-resolve/build/defaultResolver').default;
+const defaultResolver = require('jest-resolve').default;
 const packageConfig = require('./package.json');
 const path = require('path');
 
