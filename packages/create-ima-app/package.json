@@ -1,6 +1,6 @@
 {
   "name": "create-ima-app",
-  "version": "17.15.1",
+  "version": "17.15.2",
   "description": "Create a IMA.js App easily.",
   "bin": {
     "create-ima-app": "./bin/create-ima-app.js"
