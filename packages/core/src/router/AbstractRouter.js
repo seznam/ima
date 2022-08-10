@@ -169,6 +169,13 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
+  getRouteHandler(name) {
+    return this._routeHandlers.getRouteHandler(name);
+  }
+
+  /**
+   * @inheritdoc
+   */
   getPath() {
     throw new GenericError(
       'The getPath() method is abstract and must be overridden.'
@@ -457,7 +464,7 @@ export default class AbstractRouter extends Router {
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
-  _handle(route, params, options, action = {}) {
+  async _handle(route, params, options, action = {}) {
     options = Object.assign({}, route.getOptions(), options);
     const eventData = {
       route,
@@ -469,8 +476,14 @@ export default class AbstractRouter extends Router {
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
+    // Pre-fetch view and controller which can be async
+    const [controller, view] = await Promise.all([
+      route.getController(),
+      route.getView(),
+    ]);
+
     return this._pageManager
-      .manage(route, options, params, action)
+      .manage({ route, controller, view, options, params, action })
       .then(response => {
         response = response || {};
 

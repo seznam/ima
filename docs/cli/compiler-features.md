@@ -101,7 +101,7 @@ function Home() {
 
 The LESS pipeline uses additional custom loader `extend-less-loader` which ads support for two additional features.
 
-#### 1. Glob imports
+#### Glob imports
 These are resolved through `globby` npm package, so any syntax this package can parse is fully supported:
 
 ```less title=./app/less/app.less
@@ -113,7 +113,7 @@ These are resolved through `globby` npm package, so any syntax this package can 
 @import "@ima/**/organisms/**/*.less";
 ```
 
-#### 2. globals.less
+#### globals.less
 
 This file is located at `./app/less/globals.less` and it is automatically imported on top of every other processed LESS file.
 

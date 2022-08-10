@@ -536,12 +536,14 @@ describe('ima.core.router.AbstractRouter', () => {
       spyOn(dispatcher, 'fire').and.stub();
 
       router._handle(route, {}, {}, action).then(() => {
-        expect(pageManager.manage).toHaveBeenCalledWith(
+        expect(pageManager.manage).toHaveBeenCalledWith({
           route,
           options,
-          {},
-          action
-        );
+          params: {},
+          action,
+          controller: Controller,
+          view: View,
+        });
         done();
       });
     });
