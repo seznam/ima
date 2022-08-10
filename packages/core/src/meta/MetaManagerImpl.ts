@@ -57,8 +57,8 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaName(name: string, value: string, other_attrs: object) {
-    const meta = other_attrs ? { value, ...other_attrs } : value;
+  setMetaName(name: string, value: string, otherAttrs: object) {
+    const meta = otherAttrs ? { value, ...otherAttrs } : value;
     this._metaName.set(name, meta);
   }
 
@@ -79,8 +79,8 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaProperty(name: string, value: string, other_attrs: object) {
-    const meta = other_attrs ? { value, ...other_attrs } : value;
+  setMetaProperty(name: string, value: string, otherAttrs: object) {
+    const meta = otherAttrs ? { value, ...otherAttrs } : value;
     this._metaProperty.set(name, meta);
   }
 
@@ -101,8 +101,8 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setLink(relation: string, value: string, other_attrs: object) {
-    const meta = other_attrs ? { value, ...other_attrs } : value;
+  setLink(relation: string, value: string, otherAttrs: object) {
+    const meta = otherAttrs ? { value, ...otherAttrs } : value;
     this._link.set(relation, meta);
   }
 
