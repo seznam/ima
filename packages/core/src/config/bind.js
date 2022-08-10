@@ -1,7 +1,4 @@
 import * as $Helper from '@ima/helpers';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
@@ -51,10 +48,6 @@ export default (ns, oc, config) => {
   //**************START VENDORS**************
   oc.constant('$Helper', $Helper);
 
-  //React
-  oc.constant('$React', React);
-  oc.constant('$ReactDOM', ReactDOM);
-  oc.constant('$ReactDOMServer', ReactDOMServer);
   //*************END VENDORS*****************
 
   //*************START CONSTANTS*****************

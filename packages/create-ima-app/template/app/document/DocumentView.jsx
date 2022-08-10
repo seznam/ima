@@ -1,6 +1,6 @@
-import { AbstractComponent } from '@ima/react-page-renderer';
+import { AbstractPureComponent } from '@ima/react-page-renderer';
 
-export default class DocumentView extends AbstractComponent {
+export default class DocumentView extends AbstractPureComponent {
   render() {
     const { metaManager } = this.props;
 

@@ -44,9 +44,9 @@ export default class PageRendererFactory {
     if ($Debug) {
       let componentPrototype = documentViewComponent.prototype;
 
-      if (!(componentPrototype instanceof PureComponent)) {
+      if (!(componentPrototype instanceof PureComponent || this._isFunctionalComponent(documentViewComponent))) {
         throw new Error(
-          'The managed root view component must extend React.PureComponent'
+          'The document view component must extend React.PureComponent or be a functional component.'
         );
       }
     }
@@ -72,9 +72,9 @@ export default class PageRendererFactory {
     if ($Debug) {
       let componentPrototype = managedRootViewComponent.prototype;
 
-      if (!(componentPrototype instanceof Component)) {
+      if (!(componentPrototype instanceof Component || this._isFunctionalComponent(componentPrototype))) {
         throw new Error(
-          'The managed root view component must extend React.Component'
+          'The managed root view component must extend React.Component or be a functional component.'
         );
       }
     }
@@ -137,5 +137,9 @@ export default class PageRendererFactory {
     }
 
     return view as ComponentType;
+  }
+
+  private _isFunctionalComponent(component: Object) {
+    return typeof component === 'function' && !(component.prototype && component.prototype.isReactComponent);
   }
 }

@@ -26,7 +26,6 @@ export default (ns, oc, config) => {
     oc.provide(PageRenderer, ClientPageRenderer, [
       PageRendererFactory,
       '$Helper',
-      '$ReactDOM',
       '$Dispatcher',
       '$Settings',
       Window,
@@ -35,7 +34,6 @@ export default (ns, oc, config) => {
     oc.provide(PageRenderer, ServerPageRenderer, [
       PageRendererFactory,
       '$Helper',
-      '$ReactDOMServer',
       '$Dispatcher',
       '$Settings',
       Response,
