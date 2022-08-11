@@ -13,7 +13,12 @@ jobs:
   include:
     - name: "CI"
       script:
-      - npx turbo run build lint stylelint test
+      - npm run build
+      - npm run lint
+      - npm run stylelint
+      - npm run test
+      - npm run test:size
+      - npm run doc:build
       - npm run benchmark
     # - name: "Audit"
     #   script: npm audit || echo \"audit found some vulnerabilities.\"

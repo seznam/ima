@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.4",
+  "version": "18.0.0-rc.3",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -39,7 +39,7 @@
     "build": "rollup --config",
     "clean": "rm -rf dist",
     "dev": "rollup --config --watch",
-    "test": "size-limit #@TODO This script is not called anywhere in processes",
+    "test:size": "size-limit",
     "preversion": "npm test"
   },
   "dependencies": {

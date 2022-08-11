@@ -4,10 +4,11 @@ out/
 .DS_Store
 .idea
 .history
-.turbo
 jsconfig.json
 ima-app
 storage
 docs/api
 .eslintcache
 .stylelintcache
+.docusaurus
+build

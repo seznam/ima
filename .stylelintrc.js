@@ -5,7 +5,6 @@ module.exports = {
     '**/dist/**',
     '**/build/**',
     '**/docs/**',
-    '**/.turbo/**',
     '**/.docusaurus/**',
     '**/coverage/**', '**/*.js',
     '**/*.ts',
