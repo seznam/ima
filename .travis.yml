@@ -16,7 +16,7 @@ jobs:
       - npm run build
       - npm run lint
       - npm run stylelint
-      - npm run test
+      - npm run test:ci
       - npm run test:size
       - npm run doc:build
       - npm run benchmark
