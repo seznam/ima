@@ -34,8 +34,11 @@ function appFactory() {
     try {
       requireUncached('./build/server/vendors.js');
       return requireUncached('./build/server/app.server.js');
-    } catch (_) {
-      // fail silently for potential compile errors which are handled in error overlay
+    } catch (error) {
+      (logger ?? console).error('Application factory error', {
+        error,
+      });
+
       return null;
     }
   }

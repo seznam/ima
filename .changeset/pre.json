@@ -14,5 +14,7 @@
     "@ima/server": "18.0.0-rc.3",
     "@ima/docs": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "breezy-pens-smell"
+  ]
 }

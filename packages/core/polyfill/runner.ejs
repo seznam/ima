@@ -124,7 +124,10 @@
         ) {
           runner.isEsVersion = true;
           runner.scripts = runner.source.esScripts;
-        } else if (runner.testSource.scripts.every(testScript)) {
+        } else if (
+          runner.source.scripts &&
+          runner.testSource.scripts.every(testScript)
+        ) {
           runner.scripts = runner.source.scripts;
         } else {
           // Don't create scripts and execute runtime on unsupported environments.

@@ -361,13 +361,14 @@ async function createWebpackConfig(
       ...args,
     },
     // Process non-es version in build and legacy contexts
-    (args.command === 'build' || args.legacy) && {
-      name: 'client',
-      isServer: false,
-      isEsVersion: false,
-      processCss: false,
-      ...args,
-    },
+    (args.command === 'build' || args.legacy) &&
+      !imaConfig.disableLegacyBuild && {
+        name: 'client',
+        isServer: false,
+        isEsVersion: false,
+        processCss: false,
+        ...args,
+      },
     {
       name: 'client.es',
       isServer: false,
