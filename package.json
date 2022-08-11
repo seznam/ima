@@ -25,7 +25,7 @@
     "benchmark": "utils/benchmark/benchmark.sh",
     "dev": "node ./utils/scripts/dev.js",
     "build": "npm run build --workspaces --if-present",
-    "doc:build": "node ./website/scripts/jsdoc2md.mjs && docusaurus build ./website",
+    "doc": "node ./website/scripts/jsdoc2md.mjs && docusaurus build ./website",
     "doc:serve": "docusaurus serve ./website",
     "changeset": "changeset add",
     "postinstall": "npm run build",

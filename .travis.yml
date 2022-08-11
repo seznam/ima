@@ -4,24 +4,19 @@ language: node_js
 install:
   - npm ci
 
-cache:
-  directories:
-  - "$HOME/.npm"
-  - node_modules/.cache
-
 jobs:
   include:
     - name: "CI"
       script:
-      - npm run build
+      # We run build as part of postinstall script, so we can skip it, but if it ever changes, this has to be uncommented
+      # - npm run build
       - npm run lint
       - npm run stylelint
       - npm run test:ci
       - npm run test:size
-      - npm run doc:build
+      - npm run doc
       - npm run benchmark
-    # - name: "Audit"
-    #   script: npm audit || echo \"audit found some vulnerabilities.\"
+      # - npm audit || echo \"audit found some vulnerabilities.\"
     - if: branch =~ /^(master|next)$/
       stage: "deploy"
       script:
