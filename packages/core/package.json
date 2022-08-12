@@ -48,10 +48,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@size-limit/preset-big-lib": "^7.0.8",
-    "enzyme": "^3.11.0",
-    "jscodeshift": "^0.13.1",
-    "size-limit": "^7.0.8"
+    "jscodeshift": "^0.13.1"
   },
   "peerDependencies": {
     "react": ">=16.13",
