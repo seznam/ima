@@ -1,5 +1,6 @@
 import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { useContext, useEffect, useState } from 'react';
+import { StatsError } from 'webpack';
 
 import { OverlayContext } from '@/components';
 import { SourceStorage } from '@/entities';
@@ -7,6 +8,71 @@ import { ParsedError } from '@/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
 const COMPILE_ERROR_NEEDLES_RE = [/error:\s?module/i, /module\sbuild\sfailed/i];
+
+async function parseError(
+  error: Error | StatsError,
+  sourceStorage: SourceStorage
+): Promise<ParsedError | undefined> {
+  let parsedError: ParsedError | undefined;
+
+  // Try to defer the type from error contents
+  const type = COMPILE_ERROR_NEEDLES_RE.some(re =>
+    re.test(error?.message || error?.stack || '')
+  )
+    ? 'compile'
+    : 'runtime';
+
+  try {
+    // Parse compile error
+    if (type === 'compile') {
+      const compileError = await parseCompileError(error);
+
+      if (!compileError) {
+        return;
+      }
+
+      const { message, name } = compileError;
+      const frame = await mapCompileStackFrame(compileError, sourceStorage);
+
+      if (!frame) {
+        return;
+      }
+
+      // Cleanup sources to force latest on next load
+      sourceStorage.cleanup();
+
+      parsedError = {
+        name,
+        message,
+        type,
+        frames: [frame],
+      };
+    } else if (type === 'runtime') {
+      // Parse runtime error
+      const { name, message, stack } = error;
+      const frames = await mapStackFramesToOriginal(stack, sourceStorage);
+
+      if (!frames) {
+        return;
+      }
+
+      parsedError = {
+        name,
+        message,
+        type,
+        frames,
+      };
+    }
+  } catch (err) {
+    console.error('Unable to parse an error in ima-error-overlay.');
+    console.error(err);
+  }
+
+  // Cleanup sources to force latest on next load
+  sourceStorage.cleanup();
+
+  return parsedError;
+}
 
 /**
  * Connects error overlay to __IMA_HMR interface.
@@ -16,7 +82,6 @@ function useConnect(serverError: string | null) {
   const [error, setError] = useState<ParsedError | null>(null);
 
   // Tracks last reported error type for correct clearing
-  let lastErrorType: ParsedError['type'] | null = null;
   const sourceStorage = new SourceStorage(publicUrl);
 
   // Subscribe to HMR events
@@ -29,22 +94,16 @@ function useConnect(serverError: string | null) {
 
       try {
         // Parse runtime error
-        const { name, message, stack } = JSON.parse(
-          serverError
-        ) as unknown as Error;
+        const parsedError = await parseError(
+          JSON.parse(serverError) as unknown as Error,
+          sourceStorage
+        );
 
-        const frames = await mapStackFramesToOriginal(stack, sourceStorage);
-
-        if (!frames) {
+        if (!parsedError) {
           return;
         }
 
-        setError({
-          name,
-          message,
-          type: 'runtime',
-          frames,
-        });
+        setError(parsedError);
       } catch (err) {
         console.error('Unable to parse server error in ima-error-overlay.');
         console.error(err);
@@ -57,16 +116,8 @@ function useConnect(serverError: string | null) {
         setError(null);
       });
 
-      window.__IMA_HMR.on('clear', async data => {
-        if (
-          !data ||
-          !data?.type ||
-          (data?.type === 'compile' && lastErrorType === 'compile') ||
-          (data?.type === 'runtime' && lastErrorType === 'runtime')
-        ) {
-          setError(null);
-          lastErrorType = null;
-        }
+      window.__IMA_HMR.on('clear', async () => {
+        setError(null);
       });
 
       window.__IMA_HMR.on('error', async data => {
@@ -74,68 +125,13 @@ function useConnect(serverError: string | null) {
           return;
         }
 
-        lastErrorType = data.type;
+        const parsedError = await parseError(data?.error, sourceStorage);
 
-        /**
-         * The source doesn't know the type of an error.
-         * We nee to try to figure out which type it is before continuing.
-         */
-        if (!lastErrorType) {
-          lastErrorType = COMPILE_ERROR_NEEDLES_RE.some(re =>
-            re.test(data.error?.message || data.error?.stack || '')
-          )
-            ? 'compile'
-            : 'runtime';
+        if (!parsedError) {
+          return;
         }
 
-        try {
-          // Parse compile error
-          if (lastErrorType === 'compile') {
-            const parsedError = await parseCompileError(data.error);
-
-            if (!parsedError) {
-              return;
-            }
-
-            const { message, name } = parsedError;
-            const frame = await mapCompileStackFrame(
-              parsedError,
-              sourceStorage
-            );
-
-            if (!frame) {
-              return;
-            }
-
-            setError({
-              name,
-              message,
-              type: 'compile',
-              frames: [frame],
-            });
-          } else if (lastErrorType === 'runtime') {
-            // Parse runtime error
-            const { name, message, stack } = data.error;
-            const frames = await mapStackFramesToOriginal(stack, sourceStorage);
-
-            if (!frames) {
-              return;
-            }
-
-            setError({
-              name,
-              message,
-              type: 'runtime',
-              frames,
-            });
-          }
-
-          // Cleanup sources to force latest on next load
-          sourceStorage.cleanup();
-        } catch (err) {
-          console.error('Unable to parse an error in ima-error-overlay.');
-          console.error(err);
-        }
+        setError(parsedError);
       });
     }
   }, []);

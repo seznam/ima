@@ -3,7 +3,6 @@ import { StatsError } from 'webpack';
 export type EventName = 'error' | 'clear' | 'close';
 export type ListenerData = {
   error?: StatsError | Error;
-  type: 'compile' | 'runtime';
 };
 export type Listener = (data?: ListenerData) => Promise<void>;
 export type PendingEvents = Record<EventName, (ListenerData | undefined)[]>;
