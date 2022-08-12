@@ -1,15 +1,10 @@
 'use strict';
 
 const { URL } = require('url');
+const path = require('path');
 
-let path = require('path');
-
-module.exports = function urlParserMiddlewareFactory({
-  environment,
-  applicationFolder
-}) {
-  // TODO IMA@18 change build.js
-  const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
+module.exports = function urlParserMiddlewareFactory({ environment }) {
+  const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
   function _getHost(req) {
     let forwardedHost = req.get('X-Forwarded-Host');
@@ -37,9 +32,11 @@ module.exports = function urlParserMiddlewareFactory({
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let build = require(BUILD_JS_PATH);
+      let imaConfig = require(IMA_CONFIG_JS_PATH) || {
+        languages: { cs: [], en: [] }
+      };
 
-      const langCodes = Object.keys(build.languages);
+      const langCodes = Object.keys(imaConfig.languages);
       let languagesExpr = langCodes.join('|');
       rootReg += '(/(' + languagesExpr + '))?';
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 const serverAppFactory = require('../serverAppFactory.js');
-const { Emitter } = require('../../../emitter.js');
+const { Emitter } = require('../../emitter.js');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
 const {
@@ -44,6 +44,7 @@ describe('Server App Factory', () => {
   beforeEach(() => {
     logger = console;
     environment = {
+      $Debug: true,
       $Server: {
         badRequestConcurrency: 1,
         cache: {
@@ -130,7 +131,8 @@ describe('Server App Factory', () => {
     RES = {
       status: jest.fn(),
       send: jest.fn(),
-      locals: {}
+      locals: {},
+      headerSent: false
     };
 
     serverApp = serverAppFactory({
@@ -144,6 +146,8 @@ describe('Server App Factory', () => {
       instanceRecycler,
       serverGlobal
     });
+
+    serverApp.useIMADefaultHook();
   });
 
   afterEach(() => {
@@ -156,21 +160,19 @@ describe('Server App Factory', () => {
   it('should call appFactory for all request in dev mode', async () => {
     environment.$Env = 'dev';
 
-    await serverApp.requestHandler(REQ, RES);
-    await serverApp.requestHandler(REQ, RES);
+    await serverApp.requestHandlerMiddleware(REQ, RES);
+    await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(appFactory.mock.calls.length).toEqual(3);
-    expect(true).toBeTruthy();
   });
 
   it('should call appFactory only once for prod mode', async () => {
     environment.$Env = 'prod';
 
-    await serverApp.requestHandler(REQ, RES);
-    await serverApp.requestHandler(REQ, RES);
+    await serverApp.requestHandlerMiddleware(REQ, RES);
+    await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(appFactory.mock.calls.length).toEqual(1);
-    expect(true).toBeTruthy();
   });
 
   it('should render SPA page without cache', async () => {
@@ -178,30 +180,31 @@ describe('Server App Factory', () => {
       .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
       .mockReturnValue(true);
 
-    const page = await serverApp.requestHandler(REQ, RES);
+    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeTruthy();
     expect(page.status).toEqual(200);
     expect(page.cache).toBeFalsy();
   });
 
-  it('should render SPA page with cache', async () => {
-    jest
-      .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-      .mockReturnValue(true);
+  // TODO IMA@18 need performance test for usefulness
+  // it('should render SPA page with cache', async () => {
+  //   jest
+  //     .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+  //     .mockReturnValue(true);
 
-    await serverApp.requestHandler(REQ, RES);
-    const page = await serverApp.requestHandler(REQ, RES);
+  //   await serverApp.requestHandlerMiddleware(REQ, RES);
+  //   const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    expect(page.SPA).toBeTruthy();
-    expect(page.status).toEqual(200);
-    expect(page.cache).toBeTruthy();
-  });
+  //   expect(page.SPA).toBeTruthy();
+  //   expect(page.status).toEqual(200);
+  //   expect(page.cache).toBeTruthy();
+  // });
 
   it('should render overloaded message', async () => {
     environment.$Server.overloadConcurrency = 0;
 
-    const page = await serverApp.requestHandler(REQ, RES);
+    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
     expect(page.status).toEqual(503);
@@ -212,7 +215,7 @@ describe('Server App Factory', () => {
   it('should render 404 static page for exceed badRequestConcurrency', async () => {
     environment.$Server.badRequestConcurrency = 0;
 
-    const page = await serverApp.requestHandler(REQ, RES);
+    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
     expect(page.status).toEqual(404);
@@ -227,7 +230,7 @@ describe('Server App Factory', () => {
     });
     environment.$Server.badRequestConcurrency = 100;
 
-    const page = await serverApp.requestHandler(REQ, RES);
+    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
     expect(page.status).toEqual(404);
@@ -236,17 +239,12 @@ describe('Server App Factory', () => {
     expect(page.content).toEqual('404 page');
   });
 
-  describe('errorHandler method', () => {
+  describe('errorHandlerMiddleware method', () => {
     it('should render dev error page for $Debug mode', async () => {
       environment.$Debug = true;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandler({
-        error,
-        req: REQ,
-        res: RES,
-        environment
-      });
+      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
       expect(page.status).toEqual(500);
@@ -260,12 +258,7 @@ describe('Server App Factory', () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandler({
-        error,
-        req: REQ,
-        res: RES,
-        environment
-      });
+      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
       expect(page.status).toEqual(500);
@@ -279,12 +272,7 @@ describe('Server App Factory', () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandler({
-        error,
-        req: REQ,
-        res: RES,
-        environment
-      });
+      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
       expect(page.status).toEqual(500);
@@ -296,7 +284,7 @@ describe('Server App Factory', () => {
   });
 
   it('handle request', async () => {
-    await serverApp.requestHandler(REQ, RES);
+    await serverApp.requestHandlerMiddleware(REQ, RES);
 
     //console.log('PAGE', page);
 

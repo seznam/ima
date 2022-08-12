@@ -4,3 +4,4 @@ out/
 lerna-debug.log
 .DS_Store
 .idea
+.history

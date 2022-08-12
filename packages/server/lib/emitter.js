@@ -1,7 +1,10 @@
-const { Emitter, Event, createEvent, catchError } = require('./hooks');
+const { Emitter, Event, createEvent, catchError } = require('@esmj/emitter');
 
 const IMAEvent = {
   ...Event,
+
+  BeforeError: 'ima.server.beforeError',
+  AfterError: 'ima.server.afterError',
 
   BeforeRequest: 'ima.server.beforeRequest',
   Request: 'ima.server.request',
@@ -10,7 +13,6 @@ const IMAEvent = {
   BeforeResponse: 'ima.server.beforeResponse',
   Response: 'ima.server.response',
   AfterResponse: 'ima.server.afterResponse',
-  Error: 'ima.server.error',
 
   CreateBootConfig: 'ima.server.bootConfig',
   CreateImaApp: 'ima.server.createApp'
