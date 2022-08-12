@@ -2,7 +2,7 @@ import HttpAgent from './HttpAgent';
 import GenericError from '../error/GenericError';
 
 /**
- * Implementation of the {@codelink HttpAgent} interface with internal caching
+ * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
 export default class HttpAgentImpl extends HttpAgent {
@@ -14,6 +14,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {Cache} cache Cache to use for caching ongoing and completed
    *        requests.
    * @param {CookieStorage} cookie The cookie storage to use internally.
+   * @param {vendor.$Helper} Helper The IMA.js helper methods.
    * @param {Object<string, *>} config Configuration of the HTTP handler for
    *        the current application environment, specifying the various
    *        default request option values and cache option values.
@@ -39,7 +40,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *          .setDefaultHeader('Accept-Language', 'en')
    *          .clearDefaultHeaders();
    */
-  constructor(proxy, cache, cookie, config) {
+  constructor(proxy, cache, cookie, Helper, config) {
     super();
 
     /**
@@ -86,6 +87,13 @@ export default class HttpAgentImpl extends HttpAgent {
      *       }}
      */
     this._defaultRequestOptions = config.defaultRequestOptions;
+
+    /**
+     * Tha IMA.js helper methods.
+     *
+     * @type {vendor.$Helper}
+     */
+    this._Helper = Helper;
 
     /**
      * Internal request cache, used to cache ongoing requests.
@@ -189,6 +197,26 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
+   * Attempts to clone the provided value, if possible. Values that cannot be
+   * cloned (e.g. promises) will be simply returned.
+   *
+   * @param {*} value The value to clone.
+   * @return {*} The created clone, or the provided value if the value cannot be
+   *         cloned.
+   */
+  _clone(value) {
+    if (
+      value !== null &&
+      typeof value === 'object' &&
+      !(value instanceof Promise)
+    ) {
+      return this._Helper.clone(value);
+    }
+
+    return value;
+  }
+
+  /**
    * Check cache and if data isnt available then make real request.
    *
    * @param {string} method The HTTP method to use.
@@ -218,7 +246,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * and data is present in the internal cache and, if it is, the method
    * returns a promise that resolves to the response body parsed as JSON.
    *
-   * The method returns {@code null} if no such request is present in the
+   * The method returns `null` if no such request is present in the
    * cache.
    *
    * @param {string} method The HTTP method used by the request.
@@ -226,14 +254,16 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {Object<string, (boolean|number|string|Date)>} data The data sent
    *        to the server with the request.
    * @return {?Promise<HttpAgent~Response>} A promise that will resolve to the
-   *         server response with the body parsed as JSON, or {@code null} if
+   *         server response with the body parsed as JSON, or `null` if
    *         no such request is present in the cache.
    */
   _getCachedData(method, url, data) {
     let cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
-      return this._internalCacheOfPromises.get(cacheKey);
+      return this._internalCacheOfPromises
+        .get(cacheKey)
+        .then(data => this._clone(data));
     }
 
     if (this._cache.has(cacheKey)) {
@@ -288,7 +318,7 @@ export default class HttpAgentImpl extends HttpAgent {
       params: response.params,
       headers: response.headers,
       headersRaw: response.headersRaw,
-      cached: false
+      cached: false,
     };
     let cacheKey = this.getCacheKey(
       agentResponse.params.method,
@@ -406,19 +436,20 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Sets all cookies from the {@code Set-Cookie} response header to the
+   * Sets all cookies from the `Set-Cookie` response header to the
    * cookie storage.
    *
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _setCookiesFromResponse(agentResponse) {
     if (agentResponse.headersRaw) {
-      let receivedCookies = agentResponse.headersRaw.raw()['set-cookie'];
+      let receivedCookies = agentResponse.headersRaw.get('set-cookie');
 
       if (receivedCookies) {
         if (!Array.isArray(receivedCookies)) {
           receivedCookies = [receivedCookies];
         }
+
         receivedCookies.forEach(cookieHeader => {
           this._cookie.parseFromSetCookieHeader(cookieHeader);
         });

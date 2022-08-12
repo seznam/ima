@@ -1,4 +1,7 @@
-import vendorLinker from '../vendorLinker';
+import * as $Helper from '@ima/helpers';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
@@ -51,12 +54,12 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-  oc.constant('$Helper', vendorLinker.get('@ima/helpers', true));
+  oc.constant('$Helper', $Helper);
 
   //React
-  oc.constant('$React', vendorLinker.get('react', true));
-  oc.constant('$ReactDOM', vendorLinker.get('react-dom', true));
-  oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
+  oc.constant('$React', React);
+  oc.constant('$ReactDOM', ReactDOM);
+  oc.constant('$ReactDOMServer', ReactDOMServer);
   //*************END VENDORS*****************
 
   //*************START CONSTANTS*****************
@@ -91,7 +94,7 @@ export default (ns, oc, config) => {
   //Storage
   oc.constant('$CookieTransformFunction', {
     encode: s => s,
-    decode: s => s
+    decode: s => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {
@@ -105,8 +108,8 @@ export default (ns, oc, config) => {
       entryTtl: 30 * 60 * 1000,
       maxEntries: 1000,
       gcInterval: 60 * 1000,
-      gcEntryCountTreshold: 16
-    }
+      gcEntryCountTreshold: 16,
+    },
   ]);
   oc.bind('$WeakMapStorage', WeakMapStorage);
   oc.bind('$SessionMapStorage', SessionMapStorage);
@@ -130,7 +133,7 @@ export default (ns, oc, config) => {
     '$CacheStorage',
     CacheFactory,
     '$Helper',
-    config.$Cache
+    config.$Cache,
   ]);
   oc.bind('$Cache', Cache);
 
@@ -165,7 +168,7 @@ export default (ns, oc, config) => {
     $PageStateManager: PageStateManager,
     $Router: Router,
     $Settings: '$Settings',
-    $Window: Window
+    $Window: Window,
   });
 
   oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
@@ -178,7 +181,7 @@ export default (ns, oc, config) => {
       '$ReactDOM',
       '$Dispatcher',
       '$Settings',
-      Window
+      Window,
     ]);
   } else {
     oc.provide(PageRenderer, ServerPageRenderer, [
@@ -188,14 +191,14 @@ export default (ns, oc, config) => {
       '$Dispatcher',
       '$Settings',
       Response,
-      Cache
+      Cache,
     ]);
   }
   oc.bind('$PageRenderer', PageRenderer);
 
   if (oc.get(Window).isClient()) {
     oc.bind('$PageHandlerRegistry', PageHandlerRegistry, [
-      PageNavigationHandler
+      PageNavigationHandler,
     ]);
     oc.provide(PageManager, ClientPageManager);
   } else {
@@ -223,7 +226,8 @@ export default (ns, oc, config) => {
     '$HttpAgentProxy',
     '$Cache',
     CookieStorage,
-    config.$Http
+    '$Helper',
+    config.$Http,
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);

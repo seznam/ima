@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const confirmModalInitialState = {
+const confirmModalInitialState = {
   body: '',
   opened: false,
   accept: null,
-  cancel: null
+  cancel: null,
 };
 
 const confirmModal = createSlice({
@@ -19,10 +19,11 @@ const confirmModal = createSlice({
     },
     hideConfirmModal(state) {
       state.opened = false;
-    }
-  }
+    },
+  },
 });
 
-const { reducer, actions } = confirmModal;
+const { reducer: confirmModalReducer, actions: confirmModalActions } =
+  confirmModal;
 
-export { reducer, actions };
+export { confirmModalInitialState, confirmModalReducer, confirmModalActions };

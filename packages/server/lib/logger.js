@@ -1,7 +1,9 @@
-'use strict';
-
+const chalk = require('chalk');
 const { createLogger, format, transports } = require('winston');
 const { printf, combine } = format;
+
+const devLogger = require('./logger/devLogger');
+const { colorizeLevel } = require('./logger/loggerUtils');
 
 function formatMetaSimple(meta) {
   let keys = Object.keys(meta).filter(
@@ -77,14 +79,14 @@ function formatError(error) {
         function: parts[1],
         file: parts[2],
         row: parseInt(parts[3], 10) || parts[3],
-        column: parseInt(parts[4], 10) || parts[4]
+        column: parseInt(parts[4], 10) || parts[4],
       };
     });
 
   let description = {
     type: error.name,
     message: error.message,
-    stack
+    stack,
   };
 
   if (error._params) {
@@ -97,11 +99,15 @@ function formatError(error) {
 module.exports = environment => {
   let FORMATTING = environment.$Server.logger.formatting;
 
-  if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
+  if (['simple', 'JSON', 'dev'].indexOf(FORMATTING) === -1) {
     throw new Error(
       'Invalid logger configuration: the formatting has to be ' +
         `either "simple" or "JSON", ${FORMATTING} was provided`
     );
+  }
+
+  if (FORMATTING === 'dev') {
+    return devLogger;
   }
 
   let logger = createLogger({
@@ -133,17 +139,12 @@ module.exports = environment => {
         }
       })(),
       printf(info => {
-        return (
-          info.timestamp +
-          ' [' +
-          info.level.toUpperCase() +
-          '] ' +
-          (info.message || '') +
-          formatMeta(info)
-        );
+        return `${colorizeLevel(info.level)}${chalk.gray(
+          `[${info.timestamp}]`
+        )} ${info.message || ''} ${formatMeta(info)}`;
       })
     ),
-    transports: [new transports.Console()]
+    transports: [new transports.Console()],
   });
 
   function formatMeta(meta) {

@@ -1,17 +1,9 @@
-import $Helper from '@ima/helpers';
+import * as $Helper from '@ima/helpers';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
 
 ns.namespace('ima.core');
-
-/**
- * Environment name value in the production environment.
- *
- * @const
- * @type {string}
- */
-const PRODUCTION_ENVIRONMENT = 'prod';
 
 /**
  * Application bootstrap used to initialize the environment and the application
@@ -63,6 +55,19 @@ export default class Bootstrap {
   }
 
   /**
+   * Initializes dynamically loaded plugin. This is explicitly called from
+   * within the Plugin Loader instance.
+   *
+   * @param {string} name Plugin name.
+   * @param {module} module Plugin interface (object with init functions).
+   */
+  initPlugin(name, module) {
+    this._initPluginSettings(name, module);
+    this._bindPluginDependencies(name, module);
+    this._initPluginServices(module);
+  }
+
+  /**
    * Initializes the application settings. The method loads the settings for
    * all environments and then pics the settings for the current environment.
    *
@@ -71,27 +76,26 @@ export default class Bootstrap {
    */
   _initSettings() {
     let currentApplicationSettings = {};
-
     let plugins = this._config.plugins.concat([
-      { name: ObjectContainer.APP_BINDING_STATE, module: this._config }
+      { name: ObjectContainer.APP_BINDING_STATE, module: this._config },
     ]);
 
     plugins
-      .filter(plugin => typeof plugin.module.initSettings === 'function')
-      .forEach(plugin => {
-        let allPluginSettings = plugin.module.initSettings(
+      .filter(({ module }) => typeof module.initSettings === 'function')
+      .forEach(({ name, module }) => {
+        let allPluginSettings = module.initSettings(
           ns,
           this._oc,
-          this._config.settings
-        );
-        let environmentPluginSetting = $Helper.resolveEnvironmentSetting(
-          allPluginSettings,
-          this._config.settings.$Env
+          this._config.settings,
+          false // Indicating static bootstraping
         );
 
-        $Helper.assignRecursivelyWithTracking(plugin.name)(
+        $Helper.assignRecursivelyWithTracking(name)(
           currentApplicationSettings,
-          environmentPluginSetting
+          $Helper.resolveEnvironmentSetting(
+            allPluginSettings,
+            this._config.settings.$Env
+          )
         );
       });
 
@@ -103,22 +107,41 @@ export default class Bootstrap {
   }
 
   /**
-   * Returns setting for current environment where base values are from production
-   * environment and other environments override base values.
+   * Initializes dynamically loaded plugin settings (if the init
+   * function is provided). The settings are merged into the application
+   * the same way as with non-dynamic import, meaning the app setting overrides
+   * are prioritized over the default plugin settings.
    *
-   * @return {Object<string, *>}
+   * @param {string} name Plugin name.
+   * @param {module} module Plugin interface (object with init functions).
    */
-  _getEnvironmentSetting(allSettings) {
-    let environment = this._config.settings.$Env;
-    let environmentSetting = allSettings[environment] || {};
-
-    if (environment !== PRODUCTION_ENVIRONMENT) {
-      let productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-      $Helper.assignRecursively(productionSettings, environmentSetting);
-      environmentSetting = productionSettings;
+  _initPluginSettings(name, module) {
+    if (typeof module?.initSettings !== 'function') {
+      return;
     }
 
-    return environmentSetting;
+    let newApplicationSettings = {};
+    let allPluginSettings = module.initSettings(
+      ns,
+      this._oc,
+      this._config.settings,
+      true // Indicating static dynamic bootstraping
+    );
+
+    $Helper.assignRecursivelyWithTracking(name)(
+      newApplicationSettings,
+      $Helper.resolveEnvironmentSetting(
+        allPluginSettings,
+        this._config.settings.$Env
+      )
+    );
+
+    $Helper.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
+      newApplicationSettings,
+      this._config.bind
+    );
+
+    Object.assign(this._config.bind, newApplicationSettings);
   }
 
   /**
@@ -135,13 +158,10 @@ export default class Bootstrap {
     );
 
     this._config.plugins
-      .filter(plugin => typeof plugin.module.initBind === 'function')
-      .forEach(plugin => {
-        this._oc.setBindingState(
-          ObjectContainer.PLUGIN_BINDING_STATE,
-          plugin.name
-        );
-        plugin.module.initBind(ns, this._oc, this._config.bind, plugin.name);
+      .filter(({ module }) => typeof module.initBind === 'function')
+      .forEach(({ name, module }) => {
+        this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
+        module.initBind(ns, this._oc, this._config.bind, false);
       });
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
@@ -151,6 +171,25 @@ export default class Bootstrap {
       this._config.bind,
       ObjectContainer.APP_BINDING_STATE
     );
+  }
+
+  /**
+   * Binds the constants, service providers and class dependencies to the
+   * object container for dynamically imported plugins.
+   *
+   * @param {string} name Plugin name.
+   * @param {module} module Plugin interface (object with init functions).
+   */
+  _bindPluginDependencies(name, module) {
+    if (typeof module.initBind !== 'function') {
+      return;
+    }
+
+    this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
+
+    module.initBind(ns, this._oc, this._config.bind, name, true);
+
+    this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
   }
 
   /**
@@ -168,12 +207,26 @@ export default class Bootstrap {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
     this._config.plugins
-      .filter(plugin => typeof plugin.module.initServices === 'function')
-      .forEach(plugin => {
-        plugin.module.initServices(ns, this._oc, this._config.services);
+      .filter(({ module }) => typeof module.initServices === 'function')
+      .forEach(({ module }) => {
+        module.initServices(ns, this._oc, this._config.services, false);
       });
 
     this._config.initServicesApp(ns, this._oc, this._config.services);
+  }
+
+  /**
+   * Service initialization for the dynamically loaded plugins.
+   *
+   * @param {string} name Plugin name.
+   * @param {module} module Plugin interface (object with init functions).
+   */
+  _initPluginServices(module) {
+    if (typeof module.initServices !== 'function') {
+      return;
+    }
+
+    module.initServices(ns, this._oc, this._config.services, true);
   }
 }
 

@@ -1,4 +1,5 @@
 import toMock from 'to-mock';
+import * as Helper from '@ima/helpers';
 
 import Cache from 'src/cache/Cache';
 import GenericError from 'src/error/GenericError';
@@ -30,16 +31,16 @@ describe('ima.core.http.HttpAgentImpl', () => {
         ttl: 0,
         headers: {
           Accept: 'application/json',
-          'Accept-Language': 'en'
+          'Accept-Language': 'en',
         },
         cache: true,
-        postProcessor: agentResponse => agentResponse
+        postProcessor: agentResponse => agentResponse,
       },
       cacheOptions: {
-        prefix: 'http.'
-      }
+        prefix: 'http.',
+      },
     };
-    http = new HttpAgentImpl(proxy, cache, cookie, httpConfig);
+    http = new HttpAgentImpl(proxy, cache, cookie, Helper, httpConfig);
 
     options = {
       ttl: httpConfig.defaultRequestOptions.ttl,
@@ -49,7 +50,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       cache: true,
       withCredentials: true,
       postProcessor: httpConfig.defaultRequestOptions.postProcessor,
-      language: httpConfig.defaultRequestOptions.language
+      language: httpConfig.defaultRequestOptions.language,
     };
 
     data = {
@@ -58,17 +59,16 @@ describe('ima.core.http.HttpAgentImpl', () => {
       params: {
         url: 'url',
         data: {},
-        options: options
+        options: options,
       },
       headers: {
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
+        'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
       },
-      headersRaw: {
-        raw() {
-          return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
-        },
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
-      }
+      headersRaw: new Map(
+        Object.entries({
+          'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
+        })
+      ),
     };
   });
 
@@ -93,10 +93,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
               body: data.body,
               headers: data.headers,
               headersRaw: data.headersRaw,
-              cached: false
+              cached: false,
             };
 
-            expect(response).toEqual(agentResponse);
+            expect(response).toStrictEqual(agentResponse);
             done();
           })
           .catch(e => {
@@ -118,7 +118,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           () => {},
           error => {
             expect(error instanceof GenericError).toBe(true);
-            expect(proxy.request.calls.count()).toEqual(2);
+            expect(proxy.request.calls.count()).toBe(2);
             done();
           }
         );
@@ -136,7 +136,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
+          expect(cookie.parseFromSetCookieHeader.calls.count()).toBe(2);
           done();
         });
       });
@@ -169,6 +169,33 @@ describe('ima.core.http.HttpAgentImpl', () => {
           Object.assign({}, data.params.options, { withCredentials: false })
         ).then(() => {
           expect(cookie.getCookiesStringForCookieHeader).not.toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it('should clone result from _internalCacheOfPromises', done => {
+        spyOn(proxy, 'request').and.callFake(() => {
+          return Promise.resolve(data);
+        });
+
+        spyOn(Helper, 'clone').and.stub();
+
+        //the first call without a response in the _internalCacheOfPromises
+        http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then(() => {
+          expect(Helper.clone).not.toHaveBeenCalled();
+        });
+
+        //the second call from the _internalCacheOfPromises is cloned
+        http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then(() => {
+          expect(Helper.clone).toHaveBeenCalled();
           done();
         });
       });

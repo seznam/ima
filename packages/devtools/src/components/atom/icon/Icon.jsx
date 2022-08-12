@@ -1,19 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import Icons from './icons';
 
-export default class Icon extends React.PureComponent {
-  static get propTypes() {
-    return {
-      name: PropTypes.string.isRequired
-    };
-  }
+export default function Icon({ name }) {
+  const Component = Icons[name];
 
-  render() {
-    const { name } = this.props;
-    const Component = Icons[name];
-
-    return <Component />;
-  }
+  return <Component />;
 }
+
+Icon.propTypes = {
+  name: PropTypes.string.isRequired,
+};

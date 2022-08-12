@@ -14,8 +14,8 @@ import Window from '../window/Window';
 const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
 
 /**
- * Separator used to separate cookie declarations in the {@code Cookie} HTTP
- * header or the return value of the {@code document.cookie} property.
+ * Separator used to separate cookie declarations in the `Cookie` HTTP
+ * header or the return value of the `document.cookie` property.
  *
  * @const
  * @type {string}
@@ -24,7 +24,7 @@ const COOKIE_SEPARATOR = '; ';
 
 /**
  * Storage of cookies, mirroring the cookies to the current request / response
- * at the server side and the {@code document.cookie} property at the client
+ * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
 export default class CookieStorage extends MapStorage {
@@ -88,7 +88,7 @@ export default class CookieStorage extends MapStorage {
       secure: false,
       httpOnly: false,
       domain: '',
-      sameSite: 'Lax'
+      sameSite: 'Lax',
     };
 
     /**
@@ -101,7 +101,7 @@ export default class CookieStorage extends MapStorage {
      */
     this._transformFunction = {
       encode: value => value,
-      decode: value => value
+      decode: value => value,
     };
   }
 
@@ -135,6 +135,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   has(name) {
+    this._parse();
     return super.has(name);
   }
 
@@ -142,6 +143,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   get(name) {
+    this._parse();
     if (super.has(name)) {
       return super.get(name).value;
     } else {
@@ -160,12 +162,12 @@ export default class CookieStorage extends MapStorage {
    *          path: string=,
    *          httpOnly: boolean=,
    *          secure: boolean=
-   *        }=} options The cookie options. The {@code maxAge} is the maximum
+   *        }=} options The cookie options. The `maxAge` is the maximum
    *        age in seconds of the cookie before it will be deleted, the
-   *        {@code expires} is an alternative to that, specifying the moment
-   *        at which the cookie will be discarded. The {@code domain} and
-   *        {@code path} specify the cookie's domain and path. The
-   *        {@code httpOnly} and {@code secure} flags set the flags of the
+   *        `expires` is an alternative to that, specifying the moment
+   *        at which the cookie will be discarded. The `domain` and
+   *        `path` specify the cookie's domain and path. The
+   *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
   set(name, value, options = {}) {
@@ -200,14 +202,14 @@ export default class CookieStorage extends MapStorage {
    *          path: string=,
    *          httpOnly: boolean=,
    *          secure: boolean=
-   *        }=} options The cookie options. The {@code domain} and
-   *        {@code path} specify the cookie's domain and path. The
-   *        {@code httpOnly} and {@code secure} flags set the flags of the
+   *        }=} options The cookie options. The `domain` and
+   *        `path` specify the cookie's domain and path. The
+   *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    * @return {Storage} This storage.
    */
   delete(name, options = {}) {
-    if (this.has(name)) {
+    if (super.has(name)) {
       this.set(name, undefined, options);
       super.delete(name);
     }
@@ -230,6 +232,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   keys() {
+    this._parse();
     return super.keys();
   }
 
@@ -237,15 +240,16 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   size() {
+    this._parse();
     return super.size();
   }
 
   /**
    * Returns all cookies in this storage serialized to a string compatible
-   * with the {@code Cookie} HTTP header.
+   * with the `Cookie` HTTP header.
    *
    * @return {string} All cookies in this storage serialized to a string
-   *         compatible with the {@code Cookie} HTTP header.
+   *         compatible with the `Cookie` HTTP header.
    */
   getCookiesStringForCookieHeader() {
     let cookieStrings = [];
@@ -262,13 +266,13 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * Parses cookies from the provided {@code Set-Cookie} HTTP header value.
+   * Parses cookies from the provided `Set-Cookie` HTTP header value.
    *
    * The parsed cookies will be set to the internal storage, and the current
-   * HTTP response (via the {@code Set-Cookie} HTTP header) if at the server
-   * side, or the browser (via the {@code document.cookie} property).
+   * HTTP response (via the `Set-Cookie` HTTP header) if at the server
+   * side, or the browser (via the `document.cookie` property).
    *
-   * @param {string} setCookieHeader The value of the {@code Set-Cookie} HTTP
+   * @param {string} setCookieHeader The value of the `Set-Cookie` HTTP
    *        header.
    */
   parseFromSetCookieHeader(setCookieHeader) {
@@ -283,28 +287,53 @@ export default class CookieStorage extends MapStorage {
    * Parses cookies from a cookie string and sets the parsed cookies to the
    * internal storage.
    *
-   * The method obtains the cookie string from the request's {@code Cookie}
-   * HTTP header when used at the server side, and the {@code document.cookie}
+   * The method obtains the cookie string from the request's `Cookie`
+   * HTTP header when used at the server side, and the `document.cookie`
    * property at the client side.
    */
   _parse() {
     let cookiesString = this._window.isClient()
       ? document.cookie
       : this._request.getCookieHeader();
+
     let cookiesArray = cookiesString
       ? cookiesString.split(COOKIE_SEPARATOR)
       : [];
+
+    let cookiesNames = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
       let cookie = this._extractCookie(cookiesArray[i]);
 
       if (cookie.name !== null) {
-        cookie.options = Object.assign({}, this._options, cookie.options);
+        // if cookie already exists in storage get its old options
+        let oldCookieOptions = {};
+        if (super.has(cookie.name)) {
+          oldCookieOptions = super.get(cookie.name).options;
+        }
 
+        cookie.options = Object.assign(
+          {},
+          this._options, // default options
+          oldCookieOptions, // old cookie options (if any)
+          cookie.options // new cookie options (if any)
+        );
+
+        cookiesNames.push(cookie.name);
+
+        // add new cookie or update existing one
         super.set(cookie.name, {
           value: this._sanitizeCookieValue(cookie.value),
-          options: cookie.options
+          options: cookie.options,
         });
+      }
+    }
+
+    // remove cookies from storage, which were not parsed
+    for (let storageCookieName of super.keys()) {
+      const index = cookiesNames.indexOf(storageCookieName);
+      if (index === -1) {
+        super.delete(storageCookieName);
       }
     }
   }
@@ -324,10 +353,10 @@ export default class CookieStorage extends MapStorage {
 
   /**
    * Generates a string representing the specified cookied, usable either
-   * with the {@code document.cookie} property or the {@code Set-Cookie} HTTP
+   * with the `document.cookie` property or the `Set-Cookie` HTTP
    * header.
    *
-   * (Note that the {@code Cookie} HTTP header uses a slightly different
+   * (Note that the `Cookie` HTTP header uses a slightly different
    * syntax.)
    *
    * @param {string} name The cookie name.
@@ -346,7 +375,7 @@ export default class CookieStorage extends MapStorage {
    *        and full list of cookie attributes see
    *        http://tools.ietf.org/html/rfc2965#page-5
    * @return {string} A string representing the cookie. Setting this string
-   *         to the {@code document.cookie} property will set the cookie to
+   *         to the `document.cookie` property will set the cookie to
    *         the browser's cookie storage.
    */
   _generateCookieString(name, value, options) {
@@ -366,12 +395,12 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * Converts the provided cookie expiration to a {@code Date} instance.
+   * Converts the provided cookie expiration to a `Date` instance.
    *
    * @param {(number|string|Date)} expiration Cookie expiration in seconds
-   *        from now, or as a string compatible with the {@code Date}
+   *        from now, or as a string compatible with the `Date`
    *        constructor.
-   * @return {Date} Cookie expiration as a {@code Date} instance.
+   * @return {Date} Cookie expiration as a `Date` instance.
    */
   _getExpirationAsDate(expiration) {
     if (expiration instanceof Date) {
@@ -390,7 +419,7 @@ export default class CookieStorage extends MapStorage {
   /**
    * Extract cookie name, value and options from cookie string.
    *
-   * @param {string} cookieString The value of the {@code Set-Cookie} HTTP
+   * @param {string} cookieString The value of the `Set-Cookie` HTTP
    *        header.
    * @return {{
    *           name: ?string,
@@ -419,7 +448,7 @@ export default class CookieStorage extends MapStorage {
     return {
       name: cookieName,
       value: cookieValue,
-      options: cookieOptions
+      options: cookieOptions,
     };
   }
 

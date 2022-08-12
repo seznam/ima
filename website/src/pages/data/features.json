@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Fully Isomorphic",
+    "description": "Write and run the same code at both the server side and the client side! IMA.js provides abstraction for APIs that differ at the client side javascript and the server side javascript."
+  },
+  {
+    "title": "SEO",
+    "description": "Page metadata are centrally managed, allowing easier <a href=\"/basic-features/seo-and-meta-manager\">management</a> of all your keywords and og meta-tags."
+  },
+  {
+    "title": "Benchmarks and Tests",
+    "description": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of <a target=\"_blank\" href=\"https://github.com/seznam/ima\">unit tests</a> covering all of our code, you can rely on IMA.js to be a stable base of your application."
+  },
+  {
+    "title": "Production-ready Full Application Stack",
+    "description": "Use the familiar MVC pattern in combination with React for rendering your UI. See Hello example."
+  },
+  {
+    "title": "Routing",
+    "description": "IMA.js comes with a built-in <a href=\"/basic-features/routing\">router</a> for processing GET and POST HTTP requests."
+  },
+  {
+    "title": "Bleeding Edge Technologies",
+    "description": "ESNext, Webpack, SWC compiler, HMR and other technologies."
+  },
+  {
+    "title": "Full plugin support",
+    "description": "IMA.js comes with full support for plugins that can be created very easily through very simple interface."
+  },
+  {
+    "title": "Large collection of existing plugins",
+    "description": "We maintain a list of several plugins that are thoroughly tested and used every day on many of our websites here at Seznam.cz along with huge list of other plugins we use internally."
+  },
+  {
+    "title": "Multiple running modes",
+    "description": "Application can be switched between IMA, SPA and MPA modes or combination of all of them."
+  }
+]

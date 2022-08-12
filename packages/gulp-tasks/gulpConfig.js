@@ -10,7 +10,7 @@ function getModuleChildPath(parentModule, childModule) {
   const paths = [
     `./node_modules/@ima/gulp-tasks/${parentModule}/node_modules/${childModule}`,
     `./node_modules/${parentModule}/node_modules/${childModule}`,
-    `./node_modules/${childModule}`
+    `./node_modules/${childModule}`,
   ];
 
   for (let modulePath of paths) {
@@ -43,8 +43,8 @@ try {
 
   environment = {
     $Server: {
-      port: 3001
-    }
+      port: 3001,
+    },
   };
 }
 
@@ -64,13 +64,13 @@ try {
     vendors: {
       common: [],
       server: [],
-      client: []
+      client: [],
     },
     bundle: {
       js: [],
       es: [],
-      css: []
-    }
+      css: [],
+    },
   };
 }
 sharedTasksState.watchMode = process.argv.some(arg => /^dev$/.test(arg));
@@ -83,16 +83,16 @@ const vendorOptions = {
   basedir: '.',
   cache: {},
   packageCache: {},
-  noParse: ['clone']
+  noParse: ['clone'],
 };
 const esPlugins = [
   '@babel/plugin-transform-react-constant-elements',
-  '@babel/plugin-transform-react-inline-elements'
+  '@babel/plugin-transform-react-inline-elements',
 ];
 const baseBabelPlugins = [
   '@babel/plugin-external-helpers',
   ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }],
-  'babel-plugin-react-prop-types-remover'
+  'babel-plugin-react-prop-types-remover',
 ];
 
 let babelConfig = {
@@ -106,19 +106,19 @@ let babelConfig = {
           presets: ['@babel/preset-react'],
           plugins: isProduction
             ? [].concat(baseBabelPlugins, esPlugins)
-            : baseBabelPlugins
-        }
+            : baseBabelPlugins,
+        },
       ],
       [
         'loose-envify',
         {
-          NODE_ENV: process.env.NODE_ENV || 'development'
-        }
+          NODE_ENV: process.env.NODE_ENV || 'development',
+        },
       ],
-      ['ima-clientify']
+      ['ima-clientify'],
     ],
     plugin: sharedTasksState.watchMode ? [['watchify']] : [],
-    options: Object.assign({}, vendorOptions)
+    options: Object.assign({}, vendorOptions),
   },
   vendor: {
     transform: [
@@ -129,49 +129,49 @@ let babelConfig = {
           global: true,
           presets: [
             ['@babel/preset-env', { loose: true }],
-            '@babel/preset-react'
+            '@babel/preset-react',
           ],
-          plugins: baseBabelPlugins
-        }
+          plugins: baseBabelPlugins,
+        },
       ],
       [
         'loose-envify',
         {
-          NODE_ENV: process.env.NODE_ENV || 'development'
-        }
+          NODE_ENV: process.env.NODE_ENV || 'development',
+        },
       ],
-      ['ima-clientify']
+      ['ima-clientify'],
     ],
     plugin: sharedTasksState.watchMode ? [['watchify']] : [],
-    options: Object.assign({}, vendorOptions)
+    options: Object.assign({}, vendorOptions),
   },
   serverApp: {
     presets: ['@babel/preset-react'],
     plugins: ['@babel/plugin-transform-modules-systemjs'].concat(
       baseBabelPlugins
-    )
+    ),
   },
   esApp: {
     presets: [],
     plugins: [
       '@babel/plugin-external-helpers',
-      'babel-plugin-react-prop-types-remover'
-    ]
+      'babel-plugin-react-prop-types-remover',
+    ],
   },
   app: {
     presets: [['@babel/preset-env', { loose: true }]],
     plugins: [
       '@babel/plugin-external-helpers',
-      'babel-plugin-react-prop-types-remover'
-    ]
+      'babel-plugin-react-prop-types-remover',
+    ],
   },
   server: {
     presets: ['@babel/preset-react'],
     plugins: [
       '@babel/plugin-transform-modules-commonjs',
-      ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
-    ]
-  }
+      ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }],
+    ],
+  },
 };
 let $Debug = true;
 let legacyCompactMode = false;
@@ -196,14 +196,14 @@ exports.$Debug = $Debug;
 
 exports.uglifyCompression = {
   global_defs: {
-    $Debug: $Debug
+    $Debug: $Debug,
   },
   ecma: 7,
-  dead_code: true
+  dead_code: true,
 };
 
 exports.liveServer = {
-  port: undefined
+  port: undefined,
 };
 
 exports.vendorDependencies = {
@@ -216,45 +216,45 @@ exports.vendorDependencies = {
   client: coreDependencies.vendors.client.concat(
     appDependencies.vendors.client
   ),
-  test: coreDependencies.vendors.test.concat(appDependencies.vendors.test)
+  test: coreDependencies.vendors.test.concat(appDependencies.vendors.test),
 };
 
 exports.tasks = {
   dev: macroTasks.DEFAULT_DEV_SUBTASKS,
   build: macroTasks.DEFAULT_BUILD_SUBTASKS,
-  spa: macroTasks.DEFAULT_SPA_SUBTASKS
+  spa: macroTasks.DEFAULT_SPA_SUBTASKS,
 };
 
 exports.files = {
   vendor: {
     src: {
-      client: 'vendor.client.src.js'
+      client: 'vendor.client.src.js',
     },
     name: {
       server: 'vendor.server.js',
       esClient: 'vendor.client.es.js',
-      client: 'vendor.client.js'
+      client: 'vendor.client.js',
     },
     dest: {
       server: './build/ima/',
       client: './build/static/js/',
-      tmp: './build/ima/'
+      tmp: './build/ima/',
     },
-    watch: ['./app/build.js', './ima/build.js']
+    watch: ['./app/build.js', './ima/build.js'],
   },
   app: {
     name: {
       server: 'app.server.js',
       client: 'app.client.js',
-      esClient: 'app.client.es.js'
+      esClient: 'app.client.es.js',
     },
     clearServerSide: isProduction,
     src: [].concat(appDependencies.js, appDependencies.mainjs),
     dest: {
       server: './build/ima/',
-      client: './build/static/js/'
+      client: './build/static/js/',
     },
-    watch: ['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js']
+    watch: ['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js'],
   },
   server: {
     cwd: '/',
@@ -265,8 +265,8 @@ exports.files = {
       './server/*.js',
       './server/**/*.js',
       './app/*.js',
-      '!./server/ima/config/*.js'
-    ]
+      '!./server/ima/config/*.js',
+    ],
   },
   less: {
     cwd: '/',
@@ -275,92 +275,92 @@ exports.files = {
     src: appDependencies.less,
     dest: './build/static/css/',
     watch: ['./app/**/*.less', '!./app/assets/bower/'],
-    postCssPlugins: [autoprefixer()]
+    postCssPlugins: [autoprefixer()],
   },
   locale: {
     src: appDependencies.languages,
     dest: {
       server: './build/ima/locale/',
-      client: './build/static/js/locale/'
+      client: './build/static/js/locale/',
     },
-    watch: ['./app/**/*.json']
+    watch: ['./app/**/*.json'],
   },
   shim: {
     js: {
       name: 'shim.js',
       src: ['./node_modules/@ima/core/polyfill/collectionEnumeration.js'],
       dest: {
-        client: './build/static/js/'
-      }
+        client: './build/static/js/',
+      },
     },
     es: {
       name: 'shim.es.js',
       src: [],
       dest: {
         client: './build/static/js/',
-        server: './build/ima/'
-      }
-    }
+        server: './build/ima/',
+      },
+    },
   },
   polyfill: {
     js: {
       name: 'polyfill.js',
       src: [
         './node_modules/@babel/polyfill/dist/polyfill.min.js',
-        './node_modules/custom-event-polyfill/polyfill.js'
+        './node_modules/custom-event-polyfill/polyfill.js',
       ],
       dest: {
-        client: './build/static/js/'
-      }
+        client: './build/static/js/',
+      },
     },
     es: {
       name: 'polyfill.es.js',
       src: [],
       dest: {
-        client: './build/static/js/'
-      }
+        client: './build/static/js/',
+      },
     },
     fetch: {
       name: 'fetch-polyfill.js',
       src: [
         getModuleChildPath('@babel/polyfill', 'core-js') +
           '/client/shim.min.js',
-        './node_modules/whatwg-fetch/dist/fetch.umd.js'
+        './node_modules/whatwg-fetch/dist/fetch.umd.js',
       ],
       dest: {
-        client: './build/static/js/'
-      }
+        client: './build/static/js/',
+      },
     },
     ima: {
       name: 'ima-polyfill.js',
       src: [
         './node_modules/@ima/core/polyfill/imaLoader.js',
-        './node_modules/@ima/core/polyfill/imaRunner.js'
+        './node_modules/@ima/core/polyfill/imaRunner.js',
       ],
       dest: {
-        client: './build/static/js/'
-      }
-    }
+        client: './build/static/js/',
+      },
+    },
   },
   bundle: {
     js: {
       name: 'app.bundle.min.js',
       src: appDependencies.bundle.js,
-      dest: './build/static/js/'
+      dest: './build/static/js/',
     },
     es: {
       name: 'app.bundle.es.min.js',
       src: appDependencies.bundle.es,
-      dest: './build/static/js/'
+      dest: './build/static/js/',
     },
     css: {
       name: 'app.bundle.min.css',
       src: appDependencies.bundle.css,
-      dest: './build/static/css/'
+      dest: './build/static/css/',
     },
     postCssPlugins: [],
-    cssnanoSettings: {}
-  }
+    cssnanoSettings: {},
+  },
 };
 
 const defaultNotifyServer = {
@@ -370,27 +370,27 @@ const defaultNotifyServer = {
   port: 4445,
   messageJobs: {
     '(js|ejs|jsx)': ['vendor:build'],
-    '(css|sass|less)': ['less:build']
-  }
+    '(css|sass|less)': ['less:build'],
+  },
 };
 
 exports.webSocketServerConfig = {
-  port: 5888
+  port: 5888,
 };
 
 exports.hotReloadConfig = {
   watch: ['./build/static/css/*.css', './build/static/js/*.js'],
   options: {
-    persistent: true
+    persistent: true,
   },
-  socket: {}
+  socket: {},
 };
 
 exports.occupiedPorts = {
   server: environment.$Server.port,
   notifyServer: defaultNotifyServer.port,
   livereload: exports.liveServer.port || 35729,
-  webSocketServer: exports.webSocketServerConfig.port
+  webSocketServer: exports.webSocketServerConfig.port,
 };
 
 exports.notifyServer = defaultNotifyServer;

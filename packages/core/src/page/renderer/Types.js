@@ -24,7 +24,7 @@ const Types = Object.freeze({
    * @const
    * @type {string}
    */
-  UNMOUNT: '$IMA.$PageRenderer.type.unmount'
+  UNMOUNT: '$IMA.$PageRenderer.type.unmount',
 });
 
 export default Types;

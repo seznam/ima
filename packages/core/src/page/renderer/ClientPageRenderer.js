@@ -20,7 +20,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * @param {Object<string, *>} settings The application setting for the
    *        current application environment.
    * @param {Window} window Helper for manipulating the global object
-   *        ({@code window}) regardless of the client/server-side
+   *        (`window`) regardless of the client/server-side
    *        environment.
    */
   constructor(factory, Helper, ReactDOM, dispatcher, settings, window) {
@@ -34,7 +34,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     this._firstTime = true;
 
     /**
-     * Helper for manipulating the global object ({@code window})
+     * Helper for manipulating the global object (`window`)
      * regardless of the client/server-side environment.
      *
      * @type {Window}
@@ -81,7 +81,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState
+          pageState,
         };
       })
       .catch(error => this._handleError(error));
@@ -107,7 +107,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState: Object.assign({}, defaultPageState, fetchedResources)
+          pageState: Object.assign({}, defaultPageState, fetchedResources),
         };
       })
       .catch(error => this._handleError(error));
@@ -151,7 +151,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       patchedPromises[resourceName]
         .then(resource => {
           controller.setState({
-            [resourceName]: resource
+            [resourceName]: resource,
           });
         })
         .catch(error => this._handleError(error));
@@ -169,7 +169,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   _startBatchTransactions(controller, patchedPromises) {
     let hasResourcesLoaded = false;
     const options = {
-      timeout: 100
+      timeout: 100,
     };
     const requestIdleCallback = this._window.getWindow().requestIdleCallback
       ? this._window.getWindow().requestIdleCallback
@@ -308,6 +308,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
           this._dispatcher.fire(Events.MOUNTED, { type: Types.RENDER }, true);
         }
       );
+
       return Promise.resolve();
     }
   }

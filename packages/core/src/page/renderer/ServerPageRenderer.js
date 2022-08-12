@@ -1,21 +1,24 @@
+import { processContent } from '@ima/helpers';
+
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
-let imaLoader = '';
-let imaRunner = '';
+let runner = '';
 
 //#if _SERVER
 if (typeof window === 'undefined' || window === null) {
-  let nodeFs = 'fs';
-  let nodePath = 'path';
-  let fs = require(nodeFs);
-  let path = require(nodePath);
-  let folder = path.dirname(path.resolve('@ima/core'));
+  const fs = require('fs');
+  const path = require('path');
+  const runnerPath = path.resolve('./build/static/public/runner.js');
 
-  imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
-  imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
+  if (fs.existsSync(runnerPath)) {
+    runner = fs.readFileSync(
+      path.resolve('./build/static/public/runner.js'),
+      'utf8'
+    );
+  }
 }
 //#endif
 
@@ -116,15 +119,17 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * The javascript code will include a settings the "revival" data for the
    * application at the client-side.
    *
+   * @param {object} props Revival settings properties passed to $IMA
+   *         object on window.
    * @return {string} The javascript code to include into the
    *         rendered page.
    */
   _getRevivalSettings() {
     return `
 			(function(root) {
-				root.$Debug = ${this._settings.$Debug};
+				root.$Debug = ${$Debug};
 				root.$IMA = root.$IMA || {};
-				$IMA.Cache = ${this._cache.serialize()};
+				$IMA.Cache =${this._cache.serialize()};
 				$IMA.$Language = "${this._settings.$Language}";
 				$IMA.$Env = "${this._settings.$Env}";
 				$IMA.$Debug = ${this._settings.$Debug};
@@ -136,8 +141,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-			${imaRunner}
-			${imaLoader}
+      #{$Runner}
 			`;
   }
 
@@ -202,25 +206,35 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @return {string}
    */
   _renderPageContentToString(controller, view, routeOptions) {
-    let reactElementView = this._getWrappedPageView(
-      controller,
-      view,
-      routeOptions
+    // Render current page to string
+    const page = this._ReactDOM.renderToString(
+      this._getWrappedPageView(controller, view, routeOptions)
     );
-    let pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
-    let documentView = this._getDocumentView(routeOptions);
-    let documentViewFactory =
-      this._factory.createReactElementFactory(documentView);
+    // Get document view factory
+    const documentViewFactory = this._factory.createReactElementFactory(
+      this._getDocumentView(routeOptions)
+    );
+
+    // Render document view (base HTML) to string
     let appMarkup = this._ReactDOM.renderToStaticMarkup(
       documentViewFactory({
-        page: pageMarkup,
-        revivalSettings: this._getRevivalSettings(),
+        page,
+        $Utils: this._factory.getUtils(),
         metaManager: controller.getMetaManager(),
-        $Utils: this._factory.getUtils()
+        revivalSettings: this._getRevivalSettings(),
       })
     );
 
+    // TODO IMA@18 - should be handled in server
+    appMarkup = processContent({
+      content: appMarkup,
+      SPA: false,
+      settings: this._settings,
+      runner,
+    });
+
+    // Return HTML markup with injected styles
     return '<!doctype html>\n' + appMarkup;
   }
   //#endif

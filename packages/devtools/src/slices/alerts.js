@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import uid from 'easy-uid';
 
-export const alertsInitialState = {
-  alerts: {}
+const alertsInitialState = {
+  alerts: {},
 };
 
 const alerts = createSlice({
@@ -17,7 +17,7 @@ const alerts = createSlice({
         hidden: false,
         title,
         content,
-        type
+        type,
       };
     },
     removeAlert(state, { payload: id }) {
@@ -27,8 +27,8 @@ const alerts = createSlice({
       if (state.alerts[id]) {
         state.alerts[id].hidden = true;
       }
-    }
-  }
+    },
+  },
 });
 
 alerts.actions.showAlertWithTimeout = (alert, timeout) => async dispatch => {
@@ -52,7 +52,7 @@ alerts.actions.success = (text, timeout = 3000) => {
   return alerts.actions.showAlertWithTimeout(
     {
       content: text,
-      type: 'success'
+      type: 'success',
     },
     timeout
   );
@@ -62,7 +62,7 @@ alerts.actions.danger = (text, timeout = 3000) => {
   return alerts.actions.showAlertWithTimeout(
     {
       content: text,
-      type: 'danger'
+      type: 'danger',
     },
     timeout
   );
@@ -72,12 +72,12 @@ alerts.actions.default = (text, timeout = 3000) => {
   return alerts.actions.showAlertWithTimeout(
     {
       content: text,
-      type: 'default'
+      type: 'default',
     },
     timeout
   );
 };
 
-const { reducer, actions } = alerts;
+const { reducer: alertsReducer, actions: alertsActions } = alerts;
 
-export { reducer, actions };
+export { alertsInitialState, alertsReducer, alertsActions };

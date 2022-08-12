@@ -21,7 +21,7 @@ export default class UrlTransformer {
    * transformer.
    *
    * @param {string} pattern Regexp patter to look for (must be escaped as if
-   *        for use in the {@linkcode Regexp} constructor).
+   *        for use in the {@link Regexp} constructor).
    * @param {string} replacement The replacement of the matched patter in any
    *        matched URL.
    * @return {UrlTransformer} This transformer.

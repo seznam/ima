@@ -1,107 +1,55 @@
-'use strict';
-
+const path = require('path');
 const fs = require('fs');
-const stackTrace = require('stack-trace');
-const asyncEach = require('async-each');
-const hljs = require('highlight.js');
-const sep = require('path').sep;
-const errorView = require('./template/errorView.js');
+const ejs = require('ejs');
 const instanceRecycler = require('./instanceRecycler.js');
-const templateProcessor = require('./templateProcessor.js');
-const errorToJSON = require('error-to-json');
+const { processContent } = require('@ima/helpers');
+const errorToJSON = require('error-to-json').default;
 const Cache = require('./cache.js').Cache;
 
-hljs.configure({
-  tabReplace: '  ',
-  lineNodes: true
-});
-
 module.exports = (environment, logger, languageLoader, appFactory) => {
-  appFactory();
+  const app = appFactory();
+
+  const runner = fs.readFileSync('./build/static/public/runner.js', 'utf8');
+  const spaTemplate = ejs.compile(
+    fs.readFileSync('./build/static/public/spa.html', 'utf8'),
+    { cache: true, filename: 'spa.html' }
+  );
+
+  const errorTemplate = ejs.compile(
+    fs.readFileSync(path.resolve(__dirname, './error-view/index.ejs'), 'utf8'),
+    {
+      cache: true,
+      filename: 'error.html',
+    }
+  );
 
   const spaCache = new Cache(
     Object.assign({}, environment.$Server.cache, {
-      cacheKeyGenerator: null
+      cacheKeyGenerator: null,
     })
   );
 
-  function _displayDetails(err, req, res) {
-    let callstack = stackTrace.parse(err);
-    let fileIndex = 1;
+  async function _displayDetails(err, req, res) {
+    res.status(500);
 
-    logger.error('The application crashed due to an uncaught exception', {
-      error: errorToJSON(err)
-    });
+    if (!err || !err?.stack) {
+      logger.error('Failed to display error page', {
+        error: errorToJSON(err),
+      });
 
-    asyncEach(
-      callstack,
-      (stackFrame, cb) => {
-        // exclude core node modules and node modules
-        if (
-          !stackFrame.fileName ||
-          !stackFrame.fileName.includes(sep) ||
-          /node_modules/.test(stackFrame.fileName) ||
-          /internal/.test(stackFrame.fileName)
-        ) {
-          return cb();
-        }
-
-        fs.readFile(stackFrame.fileName, 'utf-8', (err, content) => {
-          if (err) {
-            return cb(err);
-          }
-
-          content = hljs.highlight('javascript', content);
-
-          // start a few lines before the error or at the beginning of
-          // the file
-          let start = Math.max(stackFrame.lineNumber - 11, 0);
-          let lines = content.value
-            .split('\n')
-            .map(line => `<span class="line">${line}</span>`);
-          // end a few lines after the error or the last line of the file
-          let end = Math.min(stackFrame.lineNumber + 10, lines.length);
-          let snippet = lines.slice(start, end);
-          // array starts at 0 but lines numbers begin with 1, so we have
-          // to subtract 1 to get the error line position in the array
-          let errLine = stackFrame.lineNumber - start - 1;
-
-          snippet[errLine] = snippet[errLine].replace(
-            '<span class="line">',
-            '<span class="line error-line">'
-          );
-
-          stackFrame.content = snippet.join('\n');
-          stackFrame.errLine = errLine;
-          stackFrame.startLine = start;
-          stackFrame.id = 'file-' + fileIndex;
-
-          fileIndex++;
-
-          cb(null, stackFrame);
-        });
-      },
-      (error, callstack) => {
-        if (!Array.isArray(callstack)) {
-          callstack = [];
-        }
-
-        callstack = callstack.filter(item => !!item);
-
-        res.status(500);
-
-        // if something bad happened while processing the stacktrace make
-        // sure to return something useful
-        if (error) {
-          logger.error('Failed to display error page', {
-            error: errorToJSON(error)
-          });
-          res.send(err.stack);
-        } else {
-          res.send(errorView(err, callstack));
-        }
-      }
-    );
+      res.send(err.stack);
+    } else {
+      res.send(
+        errorTemplate({
+          devServerPublic: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
+          serverError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack.toString(),
+          },
+        })
+      );
+    }
   }
 
   function _initApp(req, res, appMain) {
@@ -126,7 +74,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     );
 
     return new Promise((resolve, reject) => {
-      const filePath = './build/static/html/error.html';
+      const filePath = './build/static/public/error.html';
       fs.readFile(filePath, 'utf-8', (error, content) => {
         let status = 500;
         res.status(status);
@@ -157,33 +105,39 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         pageState: {},
         status,
         SPA: true,
-        error: null
+        error: null,
       });
     }
 
     return new Promise((resolve, reject) => {
-      const filePath = './build/static/html/spa.html';
-      fs.readFile(filePath, 'utf-8', (error, content) => {
-        if (error) {
-          return showStaticErrorPage(error, req, res).then(
-            response => {
-              resolve(response);
-            },
-            error => {
-              reject(error);
-            }
-          );
-        }
+      if (!spaTemplate) {
+        return showStaticErrorPage(
+          new Error('Unable to render SPA template'),
+          req,
+          res
+        ).then(
+          response => {
+            resolve(response);
+          },
+          error => {
+            reject(error);
+          }
+        );
+      }
 
-        content = templateProcessor(content, bootConfig.settings);
-
-        spaCache.set(req, content);
-
-        res.status(status);
-        res.send(content);
-
-        resolve({ content, status, SPA: true, error: null, pageState: {} });
+      let content = processContent({
+        content: spaTemplate(bootConfig.settings),
+        SPA: true,
+        settings: bootConfig.settings,
+        runner,
       });
+
+      spaCache.set(req, content);
+
+      res.status(status);
+      res.send(content);
+
+      resolve({ content, status, SPA: true, error: null, pageState: {} });
     });
   }
 
@@ -200,7 +154,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       error: new Error(
         `The server is overloaded with ${requests} concurrency requests.`
       ),
-      pageState: {}
+      pageState: {},
     });
   }
 
@@ -213,6 +167,11 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _hasToServeSPA(req, app) {
+    // Force SPA if enabled through cli option
+    if (environment.$Env === 'dev' && process.env.IMA_CLI_FORCE_SPA) {
+      return true;
+    }
+
     const userAgent = req.headers['user-agent'] || '';
     const spaConfig = environment.$Server.serveSPA;
     const isAllowedServeSPA = spaConfig.allow;
@@ -254,28 +213,29 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $IMA: {},
         dictionary: {
           $Language: language,
-          dictionary: dictionary
+          dictionary: dictionary,
         },
         router: {
           $Protocol: protocol,
           $Host: host,
           $Path: urlPath,
           $Root: root,
-          $LanguagePartPath: languagePartPath
-        }
+          $LanguagePartPath: languagePartPath,
+        },
       },
       settings: {
         $Debug: environment.$Debug,
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
+        $Source: environment.$Source,
         $Protocol: protocol,
         $Language: language,
         $Host: host,
         $Path: urlPath,
         $Root: root,
-        $LanguagePartPath: languagePartPath
-      }
+        $LanguagePartPath: languagePartPath,
+      },
     };
 
     return bootConfig;
@@ -333,15 +293,16 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let promise;
 
     try {
-      app.oc
-        .get('$Router')
-        .redirect(error.getParams().url, { httpStatus: error.getHttpStatus() });
+      app.oc.get('$Router').redirect(error.getParams().url, {
+        httpStatus: error.getHttpStatus(),
+        headers: error.getParams().headers,
+      });
       instanceRecycler.clearInstance(app);
       promise = Promise.resolve({
         content: null,
         pageState: {},
         status: error.getHttpStatus(),
-        error: error
+        error: error,
       });
     } catch (e) {
       promise = _applyError(e, req, res, app);
@@ -351,16 +312,27 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _importAppMain() {
-    return $IMA.Loader.import('app/main').then(appMain => {
-      if (!instanceRecycler.isInitialized()) {
-        instanceRecycler.init(
-          appMain.ima.createImaApp,
-          environment.$Server.concurrency
-        );
-      }
+    let mainJs = app;
 
-      return appMain;
-    });
+    if (environment.$Env === 'dev') {
+      let updatedMainJs = appFactory();
+
+      if (updatedMainJs) {
+        instanceRecycler.clear();
+        mainJs = updatedMainJs;
+      } else {
+        Promise.reject();
+      }
+    }
+
+    if (!instanceRecycler.isInitialized()) {
+      instanceRecycler.init(
+        mainJs.ima.createImaApp,
+        environment.$Server.concurrency
+      );
+    }
+
+    return Promise.resolve(mainJs);
   }
 
   function errorHandler(error, req, res, app) {
@@ -375,8 +347,9 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         content: null,
         pageState: {},
         status: 500,
-        error: error
+        error: error,
       });
+
       _displayDetails(error, req, res);
     } else {
       let appPromise = Promise.resolve(app);
@@ -420,7 +393,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       routeInfo = router.getCurrentRouteInfo();
     } catch (e) {
       logger.warn('Failed to retrieve current route info', {
-        error: errorToJSON(e)
+        error: errorToJSON(e),
       });
     }
 
@@ -463,36 +436,31 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   function requestHandler(req, res) {
     if (environment.$Env === 'dev') {
       instanceRecycler.clear();
-
-      Object.keys($IMA.Loader.modules).forEach(modulePath => {
-        let module = global.$IMA.Loader.modules[modulePath];
-
-        global.$IMA.Loader.modules[modulePath] = Object.assign({}, module, {
-          instance: null,
-          dependencyOf: [],
-          dependencies: module.dependencies.slice()
-        });
-      });
-
       appFactory();
     }
 
-    return _importAppMain().then(appMain => {
-      let app = _initApp(req, res, appMain);
-      _addImaToResponse(req, res, app);
+    return _importAppMain()
+      .then(appMain => {
+        let app = _initApp(req, res, appMain);
+        _addImaToResponse(req, res, app);
 
-      if (_hasToServeSPA(req, app)) {
-        instanceRecycler.clearInstance(app);
-        return showStaticSPAPage(req, res);
-      }
+        if (_hasToServeSPA(req, app)) {
+          instanceRecycler.clearInstance(app);
+          return showStaticSPAPage(req, res);
+        }
 
-      if (_isServerOverloaded()) {
-        instanceRecycler.clearInstance(app);
-        return _overloadHandler(req, res);
-      }
+        if (_isServerOverloaded()) {
+          instanceRecycler.clearInstance(app);
+          return _overloadHandler(req, res);
+        }
 
-      return _generateResponse(req, res, app);
-    });
+        return _generateResponse(req, res, app);
+      })
+      .catch(err => {
+        _displayDetails(err, req, res);
+
+        return err;
+      });
   }
 
   return {
@@ -500,6 +468,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     errorHandler,
     requestHandler,
     showStaticErrorPage,
-    showStaticSPAPage
+    showStaticSPAPage,
   };
 };

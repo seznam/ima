@@ -1,0 +1,15 @@
+{
+  "title": "ScrambleCssMinimizerOptions",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "hashTableFilename": {
+      "type": "string",
+      "description": "This option determines the location of generated hashTable.json file."
+    },
+    "mainAssetFilter": {
+      "instanceof": "Function",
+      "description": "Optional asset filter for files which are used for hashTable.json creation."
+    }
+  }
+}

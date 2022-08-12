@@ -3,12 +3,12 @@ import Dispatcher from '../DispatcherImpl';
 describe('ima.core.event.DispatcherImpl', () => {
   let handlers = {
     handler1: () => {},
-    handler2: () => {}
+    handler2: () => {},
   };
 
   let event = 'event';
   let data = {
-    data: 'data'
+    data: 'data',
   };
 
   let dispatcher = null;
@@ -20,25 +20,25 @@ describe('ima.core.event.DispatcherImpl', () => {
     it('should add handler for event', () => {
       dispatcher.listen(event, handlers.handler1);
       dispatcher.listen(event, handlers.handler2);
-      expect(dispatcher._eventListeners.get(event).size).toEqual(2);
+      expect(dispatcher._eventListeners.get(event).size).toBe(2);
       expect(
         dispatcher._eventListeners.get(event).get(handlers.handler1).size
-      ).toEqual(1);
+      ).toBe(1);
       expect(
         dispatcher._eventListeners.get(event).get(handlers.handler2).size
-      ).toEqual(1);
+      ).toBe(1);
     });
 
     it('should add handler with their scope for event', () => {
       dispatcher.listen(event, handlers.handler1, handlers);
       dispatcher.listen(event, handlers.handler2, handlers);
-      expect(dispatcher._eventListeners.get(event).size).toEqual(2);
+      expect(dispatcher._eventListeners.get(event).size).toBe(2);
       expect(
         dispatcher._eventListeners.get(event).get(handlers.handler1).size
-      ).toEqual(1);
+      ).toBe(1);
       expect(
         dispatcher._eventListeners.get(event).get(handlers.handler2).size
-      ).toEqual(1);
+      ).toBe(1);
     });
 
     it('should throw error if handler isnt function', () => {
@@ -65,7 +65,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.unlisten(event, handlers.handler1);
 
-      expect(dispatcher._eventListeners.get(event).size).toEqual(1);
+      expect(dispatcher._eventListeners.get(event).size).toBe(1);
     });
 
     it('should remove handler with their scope for event', () => {
@@ -74,7 +74,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.unlisten(event, handlers.handler1, handlers);
 
-      expect(dispatcher._eventListeners.get(event).size).toEqual(1);
+      expect(dispatcher._eventListeners.get(event).size).toBe(1);
     });
 
     it('should remove handler with their scope for event, if scope is not changing', () => {
@@ -150,7 +150,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.clear();
 
-      expect(dispatcher._eventListeners.size).toEqual(0);
+      expect(dispatcher._eventListeners.size).toBe(0);
     });
   });
 });

@@ -6,7 +6,7 @@ export default class DevManager {
       '$Window',
       '$Dispatcher',
       '$EventBus',
-      '$SessionMapStorage'
+      '$SessionMapStorage',
     ];
   }
 
@@ -34,19 +34,31 @@ export default class DevManager {
     this._window.bindEventListener(window, 'keydown', e => {
       // Alt + S
       if (e.altKey && e.keyCode === 83) {
-        console.log('%cApp state:', 'color: blue'); //eslint-disable-line no-console
+        // eslint-disable-next-line no-console
+        console.log(
+          '%cApp state:',
+          'background: #f03e3e; color: white; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 90%;'
+        );
         console.log(this._stateManager.getState()); //eslint-disable-line no-console
       }
 
       // Alt + C
       if (e.altKey && e.keyCode === 67) {
-        console.log('%cCache keys:', 'color:blue'); //eslint-disable-line no-console
+        // eslint-disable-next-line no-console
+        console.log(
+          '%cCache keys:',
+          'background: #f03e3e; color: white; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 90%;'
+        );
         console.log(this._sessionMapStorage.keys()); //eslint-disable-line no-console
       }
 
       // Alt + V
       if (e.altKey && e.keyCode === 86) {
-        console.log('%c$IMA.$Version:', 'color:blue'); //eslint-disable-line no-console
+        // eslint-disable-next-line no-console
+        console.log(
+          '%c$IMA.$Version:',
+          'background: #f03e3e; color: white; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 90%;'
+        );
         console.log($IMA.$Version); //eslint-disable-line no-console
       }
     });

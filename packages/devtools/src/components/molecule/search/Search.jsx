@@ -1,12 +1,13 @@
-import styles from './search.less';
-import React from 'react';
-import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
-import cn from 'clsx';
-import Tooltip from '@reach/tooltip';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import { Tooltip } from '@reach/tooltip';
+import cn from 'clsx';
+import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import Icon from 'components/atom/icon/Icon';
+import { Icon } from '@/components/atom';
+
+import styles from './search.module.less';
 
 /**
  * Wait time for debounce function for setting search query into global state.
@@ -28,7 +29,7 @@ export default class Search extends React.PureComponent {
       clearEntries: PropTypes.func,
       setSearchQuery: PropTypes.func,
       selectNext: PropTypes.func,
-      selectPrevious: PropTypes.func
+      selectPrevious: PropTypes.func,
     };
   }
 
@@ -48,7 +49,7 @@ export default class Search extends React.PureComponent {
 
     this.state = {
       query: props.searchQuery,
-      invalid: false
+      invalid: false,
     };
   }
 
@@ -77,17 +78,18 @@ export default class Search extends React.PureComponent {
             styles['icon'],
             styles['icon--large'],
             styles['icon--disabled']
-          )}>
-          <Icon name="search" />
+          )}
+        >
+          <Icon name='search' />
         </span>
         <input
-          type="text"
+          type='text'
           value={query}
           onChange={e => this.onChange(e)}
           className={cn(styles.searchInput, {
-            [styles['searchInput--invalid']]: invalid
+            [styles['searchInput--invalid']]: invalid,
           })}
-          placeholder="Search (text or /regex/)"
+          placeholder='Search (text or /regex/)'
         />
         <span className={styles.showing}>
           showing&nbsp;{showingLength}/{entriesLength}&nbsp;items
@@ -102,28 +104,31 @@ export default class Search extends React.PureComponent {
 
     return (
       <>
-        <Tooltip label="Select previous item">
+        <Tooltip label='Select previous item'>
           <button
             disabled={!hasPrevious}
             onClick={selectPrevious}
-            className={cn(styles.btn, styles.icon)}>
-            <Icon name="arrowUp" />
+            className={cn(styles.btn, styles.icon)}
+          >
+            <Icon name='arrowUp' />
           </button>
         </Tooltip>
-        <Tooltip label="Select next item">
+        <Tooltip label='Select next item'>
           <button
             disabled={!hasNext}
             onClick={selectNext}
-            className={cn(styles.btn, styles.icon)}>
-            <Icon name="arrowDown" />
+            className={cn(styles.btn, styles.icon)}
+          >
+            <Icon name='arrowDown' />
           </button>
         </Tooltip>
-        <Tooltip label="Clear search">
+        <Tooltip label='Clear search'>
           <button
             disabled={query.length <= 0}
             onClick={e => this.onClear(e)}
-            className={cn(styles.btn, styles.icon)}>
-            <Icon name="close" />
+            className={cn(styles.btn, styles.icon)}
+          >
+            <Icon name='close' />
           </button>
         </Tooltip>
       </>
@@ -134,9 +139,9 @@ export default class Search extends React.PureComponent {
     const { clearEntries } = this.props;
 
     return (
-      <Tooltip label="Clear entries">
+      <Tooltip label='Clear entries'>
         <button onClick={clearEntries} className={cn(styles.btn, styles.icon)}>
-          <Icon name="reset" />
+          <Icon name='reset' />
         </button>
       </Tooltip>
     );
@@ -145,15 +150,15 @@ export default class Search extends React.PureComponent {
   _renderMenu() {
     return (
       <Menu>
-        <Tooltip label="More options">
+        <Tooltip label='More options'>
           <MenuButton className={cn(styles.btn, styles.icon)}>
-            <Icon name="more" />
+            <Icon name='more' />
           </MenuButton>
         </Tooltip>
         <MenuList>
           <MenuItem onSelect={() => chrome.runtime.openOptionsPage()}>
-            <span className="menu-item__label">Settings</span>
-            <Icon name="cog" />
+            <span className='menu-item__label'>Settings</span>
+            <Icon name='cog' />
           </MenuItem>
         </MenuList>
       </Menu>
@@ -163,7 +168,7 @@ export default class Search extends React.PureComponent {
   onChange({ target: { value } }) {
     this.setState(
       {
-        query: value
+        query: value,
       },
       this._setQuery
     );
@@ -174,7 +179,7 @@ export default class Search extends React.PureComponent {
 
     this.props.setSearchQuery('');
     this.setState({
-      query: ''
+      query: '',
     });
   }
 
@@ -189,6 +194,7 @@ export default class Search extends React.PureComponent {
         }
 
         // Test if regexp is correct
+        // eslint-disable-next-line no-constant-condition
         if (new RegExp(query)) {
           return query;
         }

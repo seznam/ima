@@ -1,12 +1,10 @@
-import { confirmModalInitialState, reducer, actions } from '../confirmModal';
+import {
+  confirmModalInitialState,
+  confirmModalReducer,
+  confirmModalActions,
+} from '../confirmModal';
 
-describe('confirmModalInitialState', () => {
-  it('should match snapshot', () => {
-    expect(confirmModalInitialState).toMatchSnapshot();
-  });
-});
-
-describe('reducer', () => {
+describe('confirmModalReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -14,69 +12,72 @@ describe('reducer', () => {
       body: '',
       opened: false,
       accept: null,
-      cancel: null
+      cancel: null,
     };
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(confirmModalInitialState);
+    expect(confirmModalReducer(undefined, {})).toStrictEqual(
+      confirmModalInitialState
+    );
   });
 
   it('should set opened to false', () => {
     expect(
-      reducer(curState, { type: 'confirmModal/hideConfirmModal' })
-    ).toEqual({
+      confirmModalReducer(curState, { type: 'confirmModal/hideConfirmModal' })
+    ).toStrictEqual({
       ...curState,
-      opened: false
+      opened: false,
     });
   });
 
   it('should set opened to true and set data to state', () => {
     expect(
-      reducer(curState, {
+      confirmModalReducer(curState, {
         type: 'confirmModal/showConfirmModal',
         payload: {
           body: 'body',
           accept: 'accept',
-          cancel: 'cancel'
-        }
+          cancel: 'cancel',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       opened: true,
       body: 'body',
       accept: 'accept',
-      cancel: 'cancel'
+      cancel: 'cancel',
     });
   });
 
   it('should set opened to true and data to initial state if not provided', () => {
     expect(
-      reducer(curState, {
+      confirmModalReducer(curState, {
         type: 'confirmModal/showConfirmModal',
-        payload: {}
+        payload: {},
       })
-    ).toEqual({
+    ).toStrictEqual({
       opened: true,
       body: confirmModalInitialState.body,
       accept: confirmModalInitialState.accept,
-      cancel: confirmModalInitialState.cancel
+      cancel: confirmModalInitialState.cancel,
     });
   });
 });
 
-describe('actions', () => {
+describe('confirmModalActions', () => {
   it('should create action to hide confirm modal', () => {
-    expect(actions.hideConfirmModal()).toEqual({
-      type: 'confirmModal/hideConfirmModal'
+    expect(confirmModalActions.hideConfirmModal()).toStrictEqual({
+      type: 'confirmModal/hideConfirmModal',
+      payload: undefined,
     });
   });
 
   it('should create action to show confirm modal', () => {
     const data = {};
 
-    expect(actions.showConfirmModal(data)).toEqual({
+    expect(confirmModalActions.showConfirmModal(data)).toStrictEqual({
       type: 'confirmModal/showConfirmModal',
-      payload: {}
+      payload: {},
     });
   });
 });

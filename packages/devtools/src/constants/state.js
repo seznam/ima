@@ -2,7 +2,7 @@ const State = Object.freeze({
   ALIVE: 'alive',
   DEAD: 'dead',
   DETECTING: 'detecting',
-  RELOAD: 'reload'
+  RELOAD: 'reload',
 });
 
-export default State;
+export { State };

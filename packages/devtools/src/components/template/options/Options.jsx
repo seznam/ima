@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-no-target-blank */
-import styles from './options.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import uid from 'easy-uid';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { getSettings, setSettings } from 'services/settings';
-import HookEntry from 'components/molecule/hookEntry/HookEntryContainer';
-import Button from 'components/atom/button/Button';
-import PresetsModal from 'components/organism/presetsModal/PresetsModalContainer';
+import { Button } from '@/components/atom';
+import { HookEntryContainer } from '@/components/molecule';
+import { PresetsModalContainer } from '@/components/organism';
+import { getSettings, setSettings } from '@/utils';
+
+import styles from './options.module.less';
 
 export default class Options extends React.PureComponent {
   static propTypes() {
@@ -17,7 +18,7 @@ export default class Options extends React.PureComponent {
       presets: PropTypes.object,
       setPresets: PropTypes.func,
       addHook: PropTypes.func,
-      alertSuccess: PropTypes.func
+      alertSuccess: PropTypes.func,
     };
   }
 
@@ -25,7 +26,7 @@ export default class Options extends React.PureComponent {
     super(props);
 
     this.state = {
-      modalOpened: false
+      modalOpened: false,
     };
   }
 
@@ -45,7 +46,7 @@ export default class Options extends React.PureComponent {
 
     setPresets({
       presets,
-      selectedPresetId
+      selectedPresetId,
     });
   }
 
@@ -55,7 +56,7 @@ export default class Options extends React.PureComponent {
 
     return (
       <div className={styles.container}>
-        <PresetsModal
+        <PresetsModalContainer
           onClose={e => this.onModalClose(e)}
           opened={modalOpened}
         />
@@ -66,7 +67,11 @@ export default class Options extends React.PureComponent {
             {hookIds &&
               hookIds.map(id => {
                 return (
-                  <HookEntry editable={this.isEditable} id={id} key={id} />
+                  <HookEntryContainer
+                    editable={this.isEditable}
+                    id={id}
+                    key={id}
+                  />
                 );
               })}
           </div>
@@ -94,8 +99,9 @@ export default class Options extends React.PureComponent {
             you can customize, turn on/off or completely remove to suit your
             needs.{' '}
             <a
-              href="https://imajs.io/docs/devtools-introduction"
-              target="_blank">
+              href='https://imajs.io/docs/devtools-introduction'
+              target='_blank'
+            >
               For more information about devtools, visit imajs.io
             </a>
             .
@@ -104,7 +110,7 @@ export default class Options extends React.PureComponent {
 
         <div className={styles.actionsWrapper}>
           {this.isEditable && (
-            <Button onClick={e => this.onAdd(e)} color="primary">
+            <Button onClick={e => this.onAdd(e)} color='primary'>
               Add Hook
             </Button>
           )}
@@ -131,7 +137,7 @@ export default class Options extends React.PureComponent {
             &#x27;Load or Create Preset&#x27; button.
           </p>
         )}
-        <Button className={styles.saveBtn} color="success" type="submit">
+        <Button className={styles.saveBtn} color='success' type='submit'>
           Save Changes
         </Button>
       </div>
@@ -149,13 +155,13 @@ export default class Options extends React.PureComponent {
     e.preventDefault();
 
     this.setState({
-      modalOpened: true
+      modalOpened: true,
     });
   }
 
   onModalClose() {
     this.setState({
-      modalOpened: false
+      modalOpened: false,
     });
   }
 
@@ -184,7 +190,7 @@ export default class Options extends React.PureComponent {
       groupedData[id] = {
         ...hooks[id],
         ...groupedData[id],
-        opened: false
+        opened: false,
       };
     }
 
@@ -192,13 +198,13 @@ export default class Options extends React.PureComponent {
     const newPresets = { ...presets };
     newPresets[selectedPresetId] = {
       ...newPresets[selectedPresetId],
-      ...{ hooks: groupedData }
+      ...{ hooks: groupedData },
     };
 
     // Save settings to storage
     setSettings({
       presets: newPresets,
-      selectedPresetId
+      selectedPresetId,
     });
 
     alertSuccess('Changes were saved.');
@@ -214,7 +220,7 @@ export default class Options extends React.PureComponent {
       opened: false,
       name: `Hook - ${displayId}`,
       description: `Description for hook - ${displayId}`,
-      code: ''
+      code: '',
     };
   }
 }

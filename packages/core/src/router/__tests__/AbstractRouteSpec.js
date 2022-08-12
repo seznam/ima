@@ -13,7 +13,7 @@ describe('ima.core.router.AbstractRoute', function () {
     documentView: null,
     managedRootView: null,
     viewAdapter: null,
-    middlewares: []
+    middlewares: [],
   };
 
   beforeEach(function () {
@@ -21,33 +21,76 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should return route name', function () {
-    expect(route.getName()).toEqual(name);
+    expect(route.getName()).toBe(name);
   });
 
   it('should return route path', function () {
-    expect(route.getPathExpression()).toEqual(pathExpression);
+    expect(route.getPathExpression()).toBe(pathExpression);
   });
 
   it('should return route options', function () {
-    expect(route.getOptions()).toEqual(options);
+    expect(route.getOptions()).toStrictEqual(options);
   });
 
-  it('should return route controller', function () {
-    expect(route.getController()).toEqual(controller);
+  it('should return route controller', async () => {
+    const result = await route.getController();
+
+    expect(result).toStrictEqual(controller);
   });
 
-  it('should return route view', function () {
-    expect(route.getView()).toEqual(view);
+  it('should return route view', async () => {
+    const result = await route.getView();
+
+    expect(result).toStrictEqual(view);
+  });
+
+  it('should return and cache async route controller', async () => {
+    route._controller = async () => controller;
+    const result = await route.getController();
+
+    expect(result).toStrictEqual(controller);
+    await expect(route._cachedController).resolves.toStrictEqual(result);
+  });
+
+  it('should return and cache async route view', async () => {
+    route._view = async () => view;
+    const result = await route.getView();
+
+    expect(result).toStrictEqual(view);
+    await expect(route._cachedView).resolves.toStrictEqual(result);
   });
 
   it('should parse query', function () {
     expect(
-      route._decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
-    ).toEqual('á/b?č#d:ě%25');
+      AbstractRoute.decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
+    ).toBe('á/b?č#d:ě%25');
   });
 
   it('should return empty string for query that cant be parsed', function () {
-    expect(route._decodeURIParameter('p%F8%EDrodn%ED')).toEqual('');
+    expect(AbstractRoute.decodeURIParameter('p%F8%EDrodn%ED')).toBe('');
+  });
+
+  it('should preload async view and controller', async () => {
+    let asyncController = async () => Promise.resolve({ default: controller });
+    let asyncView = async () => Promise.resolve({ default: view });
+
+    route = new AbstractRoute(
+      name,
+      pathExpression,
+      asyncController,
+      asyncView,
+      options
+    );
+
+    jest.spyOn(route, 'getView');
+    jest.spyOn(route, 'getController');
+
+    const [resultController, resultView] = await route.preload();
+
+    expect(route.getView).toHaveBeenCalledTimes(1);
+    expect(route.getController).toHaveBeenCalledTimes(1);
+    expect(resultView).toStrictEqual(view);
+    expect(resultController).toStrictEqual(controller);
   });
 
   describe('pairsToQuery() static method', () => {
@@ -55,30 +98,30 @@ describe('ima.core.router.AbstractRoute', function () {
       [
         [
           [1, true],
-          ['hello', 'world']
+          ['hello', 'world'],
         ],
-        '?1=true&hello=world'
+        '?1=true&hello=world',
       ],
       [
         [
           [{}, []],
           ['test', () => {}],
           [null, 'world'],
-          ['str', 123]
+          ['str', 123],
         ],
-        '?str=123'
+        '?str=123',
       ],
       [
         [
           [2, undefined],
           ['p', null],
-          ['š+', -1]
+          ['š+', -1],
         ],
-        '?%C5%A1%2B=-1'
+        '?%C5%A1%2B=-1',
       ],
-      [[[]], '']
+      [[[]], ''],
     ])('should parse query pairs %j into "%s"', (pairs, result) => {
-      expect(AbstractRoute.pairsToQuery(pairs)).toEqual(result);
+      expect(AbstractRoute.pairsToQuery(pairs)).toBe(result);
     });
   });
 
@@ -87,29 +130,54 @@ describe('ima.core.router.AbstractRoute', function () {
       [
         {
           1: true,
-          hello: 'world'
+          hello: 'world',
         },
-        '?1=true&hello=world'
+        '?1=true&hello=world',
       ],
       [
         {
           test: () => {},
           key: null,
-          str: 123
+          str: 123,
         },
-        '?str=123'
+        '?str=123',
       ],
       [
         {
           2: undefined,
           p: null,
-          'š+': -1
+          'š+': -1,
         },
-        '?%C5%A1%2B=-1'
+        '?%C5%A1%2B=-1',
       ],
-      [[[]], '']
+      [[[]], ''],
     ])('should parse %j into "%s"', (pairs, result) => {
-      expect(AbstractRoute.paramsToQuery(pairs)).toEqual(result);
+      expect(AbstractRoute.paramsToQuery(pairs)).toBe(result);
+    });
+  });
+
+  describe('_getAsyncModule() method', () => {
+    it('should return promise resolving to default export for async import', async () => {
+      let asyncController = async () =>
+        Promise.resolve({ default: controller });
+
+      await expect(
+        route._getAsyncModule(asyncController)
+      ).resolves.toStrictEqual(controller);
+    });
+
+    it('should return promise resolving to async constructor', async () => {
+      let asyncController = async () => Promise.resolve(controller);
+
+      await expect(
+        route._getAsyncModule(asyncController)
+      ).resolves.toStrictEqual(controller);
+    });
+
+    it('should return promise resolving to constructor', async () => {
+      await expect(route._getAsyncModule(controller)).resolves.toStrictEqual(
+        controller
+      );
     });
   });
 });

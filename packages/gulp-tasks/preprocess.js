@@ -7,10 +7,10 @@ module.exports = {
         filename,
         presets: ['@babel/preset-react'],
         plugins: ['@babel/transform-modules-commonjs'],
-        retainLines: true
+        retainLines: true,
       }).code;
     }
 
     return src;
-  }
+  },
 };

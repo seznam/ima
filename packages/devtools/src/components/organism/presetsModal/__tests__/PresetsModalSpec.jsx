@@ -1,16 +1,19 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import * as settings from 'services/settings';
+
+jest.mock('@/utils');
+import * as settings from '@/utils';
+
 import PresetsModal from '../PresetsModal';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
 describe('PresetsModal organism', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn()
+    preventDefault: jest.fn(),
   };
 
   const props = {
@@ -19,15 +22,15 @@ describe('PresetsModal organism', () => {
         id: '0',
         name: 'name',
         editable: true,
-        selected: false
-      }
+        selected: false,
+      },
     },
     selectedPresetId: '0',
     addPreset: jest.fn(),
     selectPreset: jest.fn(),
     alertSuccess: jest.fn(),
     onClose: jest.fn(),
-    opened: true
+    opened: true,
   };
 
   beforeEach(() => {
@@ -36,37 +39,36 @@ describe('PresetsModal organism', () => {
     event.preventDefault.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   describe('onCreatePreset', () => {
     it('should call props.addPreset with blank preset', () => {
-      instance._createPreset = jest.fn().mockReturnValue('newPreset');
+      jest
+        .spyOn(instance, '_createPreset')
+        .mockImplementation()
+        .mockReturnValue('newPreset');
 
       instance.onCreatePreset(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.props.addPreset.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.props.addPreset.mock.calls).toHaveLength(1);
       expect(instance.props.addPreset.mock.calls[0][0]).toBe('newPreset');
-      expect(instance._createPreset.mock.calls.length).toBe(1);
+      expect(instance._createPreset.mock.calls).toHaveLength(1);
     });
   });
 
   describe('onSaveChanges', () => {
     it('should save changes to chrome.local.storage', () => {
-      settings.setSettings = jest.fn();
+      jest.spyOn(settings, 'setSettings').mockImplementation();
 
       instance.onSaveChanges(event);
 
-      expect(settings.setSettings.mock.calls.length).toBe(1);
-      expect(settings.setSettings.mock.calls[0][0]).toEqual({
+      expect(settings.setSettings.mock.calls).toHaveLength(1);
+      expect(settings.setSettings.mock.calls[0][0]).toStrictEqual({
         presets: props.presets,
-        selectedPresetId: props.selectedPresetId
+        selectedPresetId: props.selectedPresetId,
       });
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.props.alertSuccess.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.props.alertSuccess.mock.calls).toHaveLength(1);
       expect(instance.props.alertSuccess.mock.calls[0][0]).toBe(
         'Changes made to the presets were saved.'
       );
@@ -77,9 +79,9 @@ describe('PresetsModal organism', () => {
     it('should call props.selectPreset with preset id', () => {
       instance.onSelect('2fghzj');
 
-      expect(instance.props.selectPreset.mock.calls.length).toBe(1);
+      expect(instance.props.selectPreset.mock.calls).toHaveLength(1);
       expect(instance.props.selectPreset.mock.calls[0][0]).toBe('2fghzj');
-      expect(instance.props.onClose.mock.calls.length).toBe(1);
+      expect(instance.props.onClose.mock.calls).toHaveLength(1);
     });
   });
 
@@ -87,12 +89,12 @@ describe('PresetsModal organism', () => {
     it('should create blank preset object with generated ID', () => {
       uid.mockReturnValue('2fghzj-123456');
 
-      expect(instance._createPreset()).toEqual({
+      expect(instance._createPreset()).toStrictEqual({
         id: '2fghzj-123456',
         name: 'Preset - 2fghzj',
         editable: true,
         selected: false,
-        hooks: {}
+        hooks: {},
       });
     });
   });

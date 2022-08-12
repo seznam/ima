@@ -1,33 +1,53 @@
-'use strict';
-
 let path = require('path');
 let applicationFolder = path.resolve('.');
 
 let environmentConfig = require(path.resolve(
   applicationFolder,
-  './build/ima/config/environment.js'
+  './server/config/environment.js'
 ));
 let environment = require('./lib/environment.js')(environmentConfig);
 
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
 
-require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
-require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
+const modulePathCache = new Map();
+
+function requireUncached(module) {
+  if (!modulePathCache.has(module)) {
+    modulePathCache.set(module, path.resolve(module));
+  }
+
+  if (environment.$Env === 'dev') {
+    delete require.cache[require.resolve(modulePathCache.get(module))];
+  }
+
+  return require(modulePathCache.get(module));
+}
+
+if (environment.$Env === 'dev') {
+  requireUncached('./build/server/vendors.js');
+}
 
 function appFactory() {
-  delete require.cache[
-    path.resolve(applicationFolder, './build/ima/app.server.js')
-  ];
+  // Require new server-side bundle on dev reload
+  if (environment.$Env === 'dev') {
+    try {
+      requireUncached('./build/server/vendors.js');
+      return requireUncached('./build/server/app.server.js');
+    } catch (error) {
+      (logger ?? console).error('Application factory error', {
+        error,
+      });
 
-  require(path.resolve(applicationFolder, './build/ima/app.server.js'))();
+      return null;
+    }
+  }
+
+  return requireUncached('./build/server/app.server.js');
 }
 
 function languageLoader(language) {
-  return require(path.resolve(
-    applicationFolder,
-    `./build/ima/locale/${language}.js`
-  ));
+  return requireUncached(`./build/static/locale/${language}.js`);
 }
 
 let logger = require('./lib/logger.js')(environment);
@@ -45,5 +65,5 @@ module.exports = {
   clientApp,
   urlParser,
   logger,
-  cache
+  cache,
 };

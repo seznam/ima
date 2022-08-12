@@ -32,7 +32,7 @@
  */
 
 /**
- * The {@codelink HttpAgent} defines unifying API for sending HTTP requests at
+ * The {@link HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  *
  * @interface

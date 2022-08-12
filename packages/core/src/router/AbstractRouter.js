@@ -1,3 +1,4 @@
+import AbstractRoute from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
@@ -6,7 +7,7 @@ import GenericError from '../error/GenericError';
 import RouterMiddleware from './RouterMiddleware';
 
 /**
- * The basic implementation of the {@codelink Router} interface, providing the
+ * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
  *
  * @abstract
@@ -66,7 +67,7 @@ export default class AbstractRouter extends Router {
 
     /**
      * The current protocol used to access the application, terminated by a
-     * colon (for example {@code https:}).
+     * colon (for example `https:`).
      *
      * @type {string}
      */
@@ -87,7 +88,7 @@ export default class AbstractRouter extends Router {
     this._root = '';
 
     /**
-     * The URL path fragment used as a suffix to the {@code _root} field
+     * The URL path fragment used as a suffix to the `_root` field
      * that specifies the current language.
      *
      * @type {string}
@@ -163,6 +164,13 @@ export default class AbstractRouter extends Router {
     this._routeHandlers.delete(name);
 
     return this;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getRouteHandler(name) {
+    return this._routeHandlers.getRouteHandler(name);
   }
 
   /**
@@ -310,9 +318,9 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleError(params, options = {}, locals = {}) {
-    let routeError = this._routeHandlers.get(RouteNames.ERROR);
+    let errorRoute = this._routeHandlers.get(RouteNames.ERROR);
 
-    if (!routeError) {
+    if (!errorRoute) {
       let error = new GenericError(
         `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
@@ -323,33 +331,35 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    params = this._addParamsFromOriginalRoute(params);
+
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
-    locals.route = routeError;
+    locals.route = errorRoute;
 
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
-        ...routeError.getOptions().middlewares
+        ...errorRoute.getOptions().middlewares,
       ],
       params,
       locals
     );
 
-    return this._handle(routeError, params, options, action);
+    return this._handle(errorRoute, params, options, action);
   }
 
   /**
    * @inheritdoc
    */
   async handleNotFound(params, options = {}, locals = {}) {
-    let routeNotFound = this._routeHandlers.get(RouteNames.NOT_FOUND);
+    let notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
-    if (!routeNotFound) {
+    if (!notFoundRoute) {
       let error = new GenericError(
         `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
@@ -361,24 +371,26 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    params = this._addParamsFromOriginalRoute(params);
+
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
-    locals.route = routeNotFound;
+    locals.route = notFoundRoute;
 
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
-        ...routeNotFound.getOptions().middlewares
+        ...notFoundRoute.getOptions().middlewares,
       ],
       params,
       locals
     );
 
-    return this._handle(routeNotFound, params, options, action);
+    return this._handle(notFoundRoute, params, options, action);
   }
 
   /**
@@ -445,27 +457,33 @@ export default class AbstractRouter extends Router {
    *          viewAdapter: ?function(new: React.Component)=,
    *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The options overrides route options defined in the
-   *        {@code routes.js} configuration file.
+   *        `routes.js` configuration file.
    * @param {{ type: string, event: Event, url: string }} [action] An action
    *        object describing what triggered this routing.
    * @return {Promise<Object<string, *>>} A promise that resolves when the
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
-  _handle(route, params, options, action = {}) {
+  async _handle(route, params, options, action = {}) {
     options = Object.assign({}, route.getOptions(), options);
     const eventData = {
       route,
       params,
       path: this._getCurrentlyRoutedPath(),
       options,
-      action
+      action,
     };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
+    // Pre-fetch view and controller which can be async
+    const [controller, view] = await Promise.all([
+      route.getController(),
+      route.getView(),
+    ]);
+
     return this._pageManager
-      .manage(route, options, params, action)
+      .manage({ route, controller, view, options, params, action })
       .then(response => {
         response = response || {};
 
@@ -487,7 +505,7 @@ export default class AbstractRouter extends Router {
    *
    * @param {string} path The URL path.
    * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>}} The route
-   *         matching the path and middlewares preceding it or {@code {}}
+   *         matching the path and middlewares preceding it or `{}`
    *         (empty object) if no such route exists.
    */
   _getRouteHandlersByPath(path) {
@@ -503,7 +521,7 @@ export default class AbstractRouter extends Router {
       if (routeHandler.matches(path)) {
         return {
           route: routeHandler,
-          middlewares
+          middlewares,
         };
       }
     }
@@ -536,7 +554,7 @@ export default class AbstractRouter extends Router {
   }
 
   /**
-   * Returns path that is stored in private property when a {@code route}
+   * Returns path that is stored in private property when a `route`
    * method is called.
    *
    * @returns {string}
@@ -562,5 +580,30 @@ export default class AbstractRouter extends Router {
     for (const middleware of middlewares) {
       await middleware.run(params, locals);
     }
+  }
+
+  /**
+   * Obtains original route that was handled before not-found / error route
+   * and assigns its params to current params
+   *
+   * @param {Object<string, string>} params Route params for not-found or
+   *        error page
+   * @returns {Object<string, string>} Provided params merged with params
+   *        from original route
+   */
+  _addParamsFromOriginalRoute(params) {
+    const originalPath = this._getCurrentlyRoutedPath();
+    const { route } = this._getRouteHandlersByPath(originalPath);
+
+    if (!route) {
+      // try to at least extract query string params from path
+      const queryParams = AbstractRoute.getQuery(
+        AbstractRoute.getTrimmedPath(originalPath)
+      );
+
+      return Object.assign({}, queryParams, params);
+    }
+
+    return Object.assign({}, route.extractParameters(originalPath), params);
   }
 }

@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import Cache from 'src/cache/Cache';
 import Controller from 'src/controller/Controller';
 import GenericError from 'src/error/GenericError';
@@ -10,9 +10,10 @@ import {
   toMockedInstance,
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } from 'to-mock';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {
@@ -34,7 +35,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let param2 = 'param2';
   let params = {
     param1: param1,
-    param2: Promise.resolve(param2)
+    param2: Promise.resolve(param2),
   };
 
   let controller = new Controller();
@@ -48,21 +49,21 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let dispatcher = null;
   let ReactDOMServer = {
     renderToString: () => {},
-    renderToStaticMarkup: () => {}
+    renderToStaticMarkup: () => {},
   };
   let settings = {
+    $Source: jest.fn().mockReturnValue({}),
     $Page: {
       $Render: {
-        scripts: [],
-        documentView: 'app.component.document.DocumentView'
-      }
-    }
+        documentView: 'app.component.document.DocumentView',
+      },
+    },
   };
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
     allowSPA: false,
-    documentView: null
+    documentView: null,
   };
 
   beforeEach(() => {
@@ -87,7 +88,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     pageRenderer._wrapEachKeyToPromise(params);
 
     expect(Promise.resolve).toHaveBeenCalledWith(param1);
-    expect(Promise.resolve.calls.count()).toEqual(1);
+    expect(Promise.resolve.calls.count()).toBe(1);
   });
 
   describe('update method', () => {
@@ -95,7 +96,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       spyOn(pageRenderer, 'mount').and.stub();
 
       pageRenderer.update(controller, params).catch(error => {
-        expect(error instanceof GenericError).toEqual(true);
+        expect(error instanceof GenericError).toBeTruthy();
         done();
       });
     });
@@ -104,14 +105,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('mount method', () => {
     let loadedPageState = {
       param1: 'param1',
-      param2: Promise.resolve('param2')
+      param2: Promise.resolve('param2'),
     };
 
     it('should return already sent data to the client', done => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: loadedPageState
+        pageState: loadedPageState,
       };
 
       spyOn(response, 'isResponseSent').and.returnValue(true);
@@ -120,7 +121,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
         .then(page => {
-          expect(page).toEqual(responseParams);
+          expect(page).toStrictEqual(responseParams);
           done();
         });
     });
@@ -139,14 +140,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
   describe('_renderPage method', () => {
     let fetchedResource = {
-      resource: 'json'
+      resource: 'json',
     };
 
     it('should return already sent data to client', () => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: fetchedResource
+        pageState: fetchedResource,
       };
 
       spyOn(response, 'isResponseSent').and.returnValue(true);
@@ -154,7 +155,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
       expect(
         pageRenderer._renderPage(controller, view, fetchedResource)
-      ).toEqual(responseParams);
+      ).toStrictEqual(responseParams);
     });
 
     describe('render new page', () => {
@@ -200,7 +201,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       });
 
       it('should return response params', () => {
-        expect(pageRenderResponse).toEqual(responseParams);
+        expect(pageRenderResponse).toStrictEqual(responseParams);
       });
     });
   });
@@ -208,7 +209,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('_renderPageContentToString method', () => {
     let utils = { $Utils: 'utils' };
     let wrapedPageViewElement = {
-      wrapElementView: 'wrapedPageViewElement'
+      wrapElementView: 'wrapedPageViewElement',
     };
     let pageMarkup = '<body></body>';
     let documentView = () => {};
@@ -226,7 +227,9 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
         documentViewFactory
       );
-      spyOn(ReactDOMServer, 'renderToStaticMarkup').and.returnValue(appMarkup);
+      jest
+        .spyOn(ReactDOMServer, 'renderToStaticMarkup')
+        .mockReturnValue(appMarkup);
       spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
         revivalSettings
       );
@@ -274,7 +277,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     });
 
     it('should return page content', () => {
-      expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
+      expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
     });
   });
 });

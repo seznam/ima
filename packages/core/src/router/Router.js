@@ -14,17 +14,17 @@ export default class Router {
    *          $LanguagePartPath: string,
    *          $Host: string
    *        }} config Router configuration.
-   *        The {@code $Protocol} field must be the current protocol used to
+   *        The `$Protocol` field must be the current protocol used to
    *        access the application, terminated by a colon (for example
-   *        {@code https:}).
-   *        The {@code $Root} field must specify the URL path pointing to the
+   *        `https:`).
+   *        The `$Root` field must specify the URL path pointing to the
    *        application's root.
-   *        The {@code $LanguagePartPath} field must be the URL path fragment
-   *        used as a suffix to the {@code $Root} field that specifies the
+   *        The `$LanguagePartPath` field must be the URL path fragment
+   *        used as a suffix to the `$Root` field that specifies the
    *        current language.
-   *        The {@code $Host} field must be the application's domain (and the
+   *        The `$Host` field must be the application's domain (and the
    *        port number if other than the default is used) in the following
-   *        form: {@code `${protocol}//${host}`}.
+   *        form: ``${protocol}//${host}``.
    */
   init() {}
 
@@ -36,11 +36,11 @@ export default class Router {
    * @param {string} pathExpression A path expression specifying the URL path
    *        part matching this route (must not contain a query string),
    *        optionally containing named parameter placeholders specified as
-   *        {@code :parameterName}. The name of the parameter is terminated
-   *        by a forward slash ({@code /}) or the end of the path expression
+   *        `:parameterName`. The name of the parameter is terminated
+   *        by a forward slash (`/`) or the end of the path expression
    *        string.
    *        The path expression may also contain optional parameters, which
-   *        are specified as {@code :?parameterName}. It is recommended to
+   *        are specified as `:?parameterName`. It is recommended to
    *        specify the optional parameters at the end of the path
    *        expression.
    * @param {string} controller The full name of Object Container alias
@@ -68,22 +68,22 @@ export default class Router {
    *        }=} options
    *        Additional route options, specified how the navigation to the
    *        route will be handled.
-   *        The {@code onlyUpdate} can be either a flag signalling whether
+   *        The `onlyUpdate` can be either a flag signalling whether
    *        the current controller and view instances should be kept if they
    *        match the ones used by the previous route; or a callback function
    *        that will receive the previous controller and view identifiers
    *        used in the previously matching route, and returns a
-   *        {@code boolean} representing the value of the flag. This flag is
+   *        `boolean` representing the value of the flag. This flag is
    *        disabled by default.
-   *        The {@code autoScroll} flag signals whether the page should be
+   *        The `autoScroll` flag signals whether the page should be
    *        scrolled to the top when the navigation takes place. This flag is
    *        enabled by default.
-   *        The {@code allowSPA} flag can be used to make the route
+   *        The `allowSPA` flag can be used to make the route
    *        always served from the server and never using the SPA page even
    *        if the server is overloaded. This is useful for routes that use
-   *        different document views (specified by the {@code documentView}
+   *        different document views (specified by the `documentView`
    *        option), for example for rendering the content of iframes.
-   *        The route specific {@code middlewares} which are run after
+   *        The route specific `middlewares` which are run after
    *        extracting parameters before route handling.
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
@@ -95,7 +95,7 @@ export default class Router {
    *
    * @param {function(Object<string, string>, function)} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
-   *        and {@code locals} object as second argument. This can be used to pass data
+   *        and `locals` object as second argument. This can be used to pass data
    *        between middlewares.
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a middleware with the same name already exists.
@@ -110,6 +110,14 @@ export default class Router {
    * @return {Router} This router.
    */
   remove() {}
+
+  /**
+   * Returns specified handler from registered route handlers.
+   *
+   * @param {string} name The route's unique name.
+   * @return {AbstractRoute|undefined} Route with given name or undefined.
+   */
+  getRouteHandler() {}
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -136,7 +144,7 @@ export default class Router {
 
   /**
    * Returns the application's domain in the following form
-   * {@code `${protocol}//${host}`}.
+   * ``${protocol}//${host}``.
    *
    * @return {string} The current application's domain.
    */
@@ -151,7 +159,7 @@ export default class Router {
 
   /**
    * Returns the current protocol used to access the application, terminated
-   * by a colon (for example {@code https:}).
+   * by a colon (for example `https:`).
    *
    * @return {string} The current application protocol used to access the
    *         application.
@@ -182,7 +190,7 @@ export default class Router {
    * Note that the router will not prevent forms from being submitted to the
    * server.
    *
-   * The effects of this method can be reverted with {@code unlisten}. This
+   * The effects of this method can be reverted with `unlisten`. This
    * method has no effect at the server side.
    *
    * @return {Router} This router.
@@ -201,7 +209,7 @@ export default class Router {
    * Note that the router will not prevent forms from being submitted to the
    * server.
    *
-   * The effects of this method can be reverted with {@code unlisten}. This method has no effect
+   * The effects of this method can be reverted with `unlisten`. This method has no effect
    * at the server side.
    *
    * @return {Router} This router.
@@ -212,7 +220,7 @@ export default class Router {
    * Redirects the client to the specified location.
    *
    * At the server side the method results in responding to the client with a
-   * redirect HTTP status code and the {@code Location} header.
+   * redirect HTTP status code and the `Location` header.
    *
    * At the client side the method updates the current URL by manipulating
    * the browser history (if the target URL is at the same domain and
@@ -241,9 +249,10 @@ export default class Router {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          headers: Object<string, *>
    *        }} [options={}] The options overrides route options defined in
-   *        the {@code routes.js} configuration file.
+   *        the `routes.js` configuration file.
    * @param {{ type: string, payload: Object|Event }} [action] An action object
    *        describing what triggered this routing.
    * @param {object} [locals={}] The locals param is used to pass local data
@@ -289,7 +298,7 @@ export default class Router {
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
-   *        the {@code routes.js} configuration file.
+   *        the `routes.js` configuration file.
    * @param {{ type: string, event: Event|null, url: string|null }} [action]
    *        An action object describing what triggered this routing.
    * @param {object} [locals={}] The locals param is used to pass local data
@@ -324,7 +333,7 @@ export default class Router {
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
-   *        the {@code routes.js} configuration file.
+   *        the `routes.js` configuration file.
    * @param {object} [locals={}] The locals param is used to pass local data
    *        between middlewares.
    * @return {Promise<Object<string, *>>} A promise resolved when the error
@@ -357,7 +366,7 @@ export default class Router {
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)
    *        }} [options={}] The options overrides route options defined in
-   *        the {@code routes.js} configuration file.
+   *        the `routes.js` configuration file.
    * @param {object} [locals={}] The locals param is used to pass local data
    *        between middlewares.
    * @return {Promise<Object<string, *>>} A promise resolved
@@ -372,7 +381,7 @@ export default class Router {
    * failure at the server side.
    *
    * @param {(ImaError|Error)} reason The encountered error.
-   * @return {boolean} {@code true} if the error was caused the action of the
+   * @return {boolean} `true` if the error was caused the action of the
    *         client.
    */
   isClientError() {}
@@ -381,7 +390,7 @@ export default class Router {
    * Tests, if possible, whether the specified error lead to redirection.
    *
    * @param {(ImaError|Error)} reason The encountered error.
-   * @return {boolean} {@code true} if the error was caused the action of the
+   * @return {boolean} `true` if the error was caused the action of the
    *         redirection.
    */
   isRedirection() {}

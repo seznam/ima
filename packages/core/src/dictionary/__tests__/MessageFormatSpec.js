@@ -7,9 +7,9 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
     dictionary: {
       home: {
         title: () => 'title',
-        message: () => 'message'
-      }
-    }
+        message: () => 'message',
+      },
+    },
   };
   beforeEach(() => {
     dictionary = new MessageFormatDictionary();
@@ -18,20 +18,18 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
   });
 
   it('should be initialization', () => {
-    expect(dictionary.language).not.toBe(null);
-    expect(dictionary.dictionary).not.toBe(null);
+    expect(dictionary.language).not.toBeNull();
+    expect(dictionary.dictionary).not.toBeNull();
   });
 
   it('should be return current language', () => {
-    expect(dictionary.getLanguage()).toEqual(config.$Language);
+    expect(dictionary.getLanguage()).toBe(config.$Language);
   });
 
   describe('get method', () => {
     it('should be return translated text', () => {
-      expect(dictionary.get('home.title')).toEqual(
-        config.dictionary.home.title()
-      );
-      expect(dictionary.get('home.message')).toEqual(
+      expect(dictionary.get('home.title')).toBe(config.dictionary.home.title());
+      expect(dictionary.get('home.message')).toBe(
         config.dictionary.home.message()
       );
     });

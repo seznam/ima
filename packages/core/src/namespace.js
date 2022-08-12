@@ -1,18 +1,14 @@
-//let namespaceWarningEmitted = false;
-
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
  * interfaces, classes and constants of the application to provide access to
  * each other more easily than by using the ES6 import/export mechanism.
- *
- * @deprecated
  */
 export class Namespace {
   /**
    * Initializes the namespace provider.
    *
-   * This is a private constructor, you should use the exported {@code ns}
+   * This is a private constructor, you should use the exported `ns`
    * instance to create and use namespaces (see the examples).
    *
    * @private
@@ -38,22 +34,6 @@ export class Namespace {
    * @return {*} The value at the specified path in the namespace.
    */
   namespace(path) {
-    /*if (
-			(typeof $Debug !== 'undefined') &&
-			$Debug &&
-			/^app./i.test(path) &&
-			!namespaceWarningEmitted
-		) {
-			console.warn(
-				'DEPRECATION WARNING: Your application seems to be using ' +
-				`namespaces (attempted to create the ${path} namespace), ` +
-				'but namespaces were deprecated since IMA 0.12.0. Please ' +
-				'switch to ES6 imports as the support for namespaces will ' +
-				'be removed in an upcoming version of IMA.js.'
-			);
-			namespaceWarningEmitted = true;
-		}*/
-
     const levels = this._resolvePathLevels(path);
     let self = this;
 
@@ -73,7 +53,7 @@ export class Namespace {
    * namespace or terminal value.
    *
    * @param {string} path The namespace path to test.
-   * @return {boolean} {@code true} if the namespace or terminal value exists
+   * @return {boolean} `true` if the namespace or terminal value exists
    *         at the specified path.
    */
   has(path) {

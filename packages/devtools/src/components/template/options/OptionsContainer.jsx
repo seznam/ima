@@ -1,16 +1,17 @@
-import { actions as alertsActions } from 'slices/alerts';
-import { actions as presetsActions, selectors } from 'slices/presets';
 import { connect } from 'react-redux';
+
+import { alertsActions, presetsActions, presetsSelectors } from '@/slices';
+
 import Options from './Options';
 
 const mapStateToProps = state => ({
-  hookIds: selectors.getHookIds(state),
+  hookIds: presetsSelectors.getHookIds(state),
   selectedPresetId: state.presets.selectedPresetId,
-  presets: state.presets.presets
+  presets: state.presets.presets,
 });
 
 export default connect(mapStateToProps, {
   setPresets: presetsActions.setPresets,
   addHook: presetsActions.addHook,
-  alertSuccess: alertsActions.success
+  alertSuccess: alertsActions.success,
 })(Options);

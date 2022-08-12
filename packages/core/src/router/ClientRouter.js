@@ -29,12 +29,12 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  POP_STATE: 'popstate'
+  POP_STATE: 'popstate',
 });
 
 /**
  * The number used as the index of the mouse left button in DOM
- * {@code MouseEvent}s.
+ * `MouseEvent`s.
  *
  * @const
  * @type {number}
@@ -42,7 +42,7 @@ const Events = Object.freeze({
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink Router} interface.
+ * The client-side implementation of the {@link Router} interface.
  */
 export default class ClientRouter extends AbstractRouter {
   static get $dependencies() {
@@ -180,13 +180,19 @@ export default class ClientRouter extends AbstractRouter {
     const action = {
       event,
       type,
-      url: url || this.getBaseUrl() + path
+      url: url || this.getBaseUrl() + path,
     };
 
     return super
       .route(path, options, action, locals)
-      .catch(error => {
-        return this.handleError({ error }, {}, locals);
+      .catch(error => this.handleError({ error }, {}, locals))
+      .then(params => {
+        // Hide error overlay
+        if (!params?.error && $Debug && window.__IMA_HMR) {
+          window.__IMA_HMR.emit('clear', { type: 'runtime' });
+        }
+
+        return params;
       })
       .catch(error => {
         this._handleFatalError(error);
@@ -199,6 +205,20 @@ export default class ClientRouter extends AbstractRouter {
   handleError(params, options = {}, locals = {}) {
     if ($Debug) {
       console.error(params.error);
+
+      // Show error overlay
+      if (window.__IMA_HMR) {
+        window.__IMA_HMR.emit('error', {
+          error: params.error,
+          type: 'runtime',
+        });
+
+        return Promise.reject({
+          content: null,
+          status: options.httpStatus || 500,
+          error: params.error,
+        });
+      }
     }
 
     if (this.isClientError(params.error)) {
@@ -211,7 +231,7 @@ export default class ClientRouter extends AbstractRouter {
       let action = {
         event: null,
         type: ActionTypes.REDIRECT,
-        url: errorParams.url
+        url: errorParams.url,
       };
 
       this.redirect(
@@ -220,10 +240,11 @@ export default class ClientRouter extends AbstractRouter {
         Object.assign(action, errorParams.action),
         locals
       );
+
       return Promise.resolve({
         content: null,
         status: options.httpStatus,
-        error: params.error
+        error: params.error,
       });
     }
 
@@ -264,7 +285,7 @@ export default class ClientRouter extends AbstractRouter {
    * entry changes.
    *
    * The navigation will be handled by the router if the event state is defined
-   * and event is not {@code defaultPrevented}.
+   * and event is not `defaultPrevented`.
    *
    * @param {PopStateEvent} event The popstate event.
    */
@@ -276,7 +297,7 @@ export default class ClientRouter extends AbstractRouter {
         {
           type: ActionTypes.POP_STATE,
           event,
-          url: this.getUrl()
+          url: this.getUrl(),
         }
       );
     }
@@ -364,7 +385,7 @@ export default class ClientRouter extends AbstractRouter {
    * hash fragment of the current URL.
    *
    * @param {string} targetUrl The target URL.
-   * @return {boolean} {@code true} if the navigation to target URL would
+   * @return {boolean} `true` if the navigation to target URL would
    *         result only in updating the hash fragment of the current URL.
    */
   _isHashLink(targetUrl) {
@@ -387,7 +408,7 @@ export default class ClientRouter extends AbstractRouter {
    * same as the current.
    *
    * @param {string=} [url=''] The URL.
-   * @return {boolean} {@code true} if the protocol and domain of the
+   * @return {boolean} `true` if the protocol and domain of the
    *         provided URL are the same as the current.
    */
   _isSameDomain(url = '') {

@@ -73,6 +73,6 @@ exports.default = gulpConfig => {
     'server:websocket': webSocketTask,
     'server:restart': serverRestart,
     'server:reload': serverReload,
-    'server:hotreload': serverHotreload
+    'server:hotreload': serverHotreload,
   };
 };
