@@ -96,15 +96,6 @@ describe('revive client application', () => {
     //mock
     global.window.scrollTo = () => {};
 
-<<<<<<< HEAD
-    vendorLinker.set('react', React);
-    vendorLinker.set('react-dom', ReactDOM);
-    vendorLinker.set('@ima/helpers', $Helper);
-
-    jest.spyOn(ReactDOM, 'render');
-
-=======
->>>>>>> next
     done();
   });
 
