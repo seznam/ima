@@ -5,11 +5,11 @@ module.exports = function IMAInternalFactory({
   instanceRecycler,
   serverGlobal,
   appFactory,
-  languageLoader
+  languageLoader,
 }) {
   const GLOBAL = {
     APP_MAIN: 'appMain',
-    DUMMY_APP: 'dummyApp'
+    DUMMY_APP: 'dummyApp',
   };
 
   function _createDummyApp({ environment }) {
@@ -22,7 +22,7 @@ module.exports = function IMAInternalFactory({
         app: {},
         headersSent: false,
         locals: {
-          language: 'en'
+          language: 'en',
         },
         append() {},
         attachment() {},
@@ -43,7 +43,7 @@ module.exports = function IMAInternalFactory({
         setHeader() {},
         type() {},
         get() {},
-        getHeader() {}
+        getHeader() {},
       },
       req: {
         app: {},
@@ -73,8 +73,8 @@ module.exports = function IMAInternalFactory({
         acceptsLanguages() {},
         get() {},
         is() {},
-        range() {}
-      }
+        range() {},
+      },
     });
 
     const bootConfig = createBootConfig(event);
@@ -107,7 +107,7 @@ module.exports = function IMAInternalFactory({
       host,
       path: urlPath,
       root,
-      languagePartPath
+      languagePartPath,
     } = res.locals;
 
     dummyApp.oc.get('$Request').init(req);
@@ -117,14 +117,14 @@ module.exports = function IMAInternalFactory({
       $Host: host,
       $Path: urlPath,
       $Root: root,
-      $LanguagePartPath: languagePartPath
+      $LanguagePartPath: languagePartPath,
     });
 
     try {
       routeInfo = dummyApp.oc.get('$Router').getCurrentRouteInfo();
     } catch (e) {
       console.warn('Failed to retrieve current route info', {
-        error: e
+        error: e,
       });
     }
 
@@ -186,15 +186,15 @@ module.exports = function IMAInternalFactory({
         $IMA: {},
         dictionary: {
           $Language: language,
-          dictionary: dictionary
+          dictionary: dictionary,
         },
         router: {
           $Protocol: protocol,
           $Host: host,
           $Path: urlPath,
           $Root: root,
-          $LanguagePartPath: languagePartPath
-        }
+          $LanguagePartPath: languagePartPath,
+        },
       },
       settings: {
         $Debug: environment.$Debug,
@@ -207,8 +207,8 @@ module.exports = function IMAInternalFactory({
         $Host: host,
         $Path: urlPath,
         $Root: root,
-        $LanguagePartPath: languagePartPath
-      }
+        $LanguagePartPath: languagePartPath,
+      },
     };
 
     event = emitter.emit(Event.CreateBootConfig, event);
@@ -253,6 +253,6 @@ module.exports = function IMAInternalFactory({
     _createDummyApp,
     _getRouteInfo,
     _addImaToResponse,
-    _generateAppResponse
+    _generateAppResponse,
   };
 };

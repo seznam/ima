@@ -1,0 +1,410 @@
+I"~?<h2 id="httpagent">HttpAgent <a name="HttpAgent" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface</p>
+
+<ul>
+  <li><a href="#HttpAgent">HttpAgent</a>
+    <ul>
+      <li><em>instance</em>
+        <ul>
+          <li><a href="#HttpAgent+get">.get(url, data, [options])</a> ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a></li>
+          <li><a href="#HttpAgent+post">.post(url, data, [options])</a> ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a></li>
+          <li><a href="#HttpAgent+put">.put(url, data, [options])</a> ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a></li>
+          <li><a href="#HttpAgent+patch">.patch(url, data, [options])</a> ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a></li>
+          <li><a href="#HttpAgent+delete">.delete(url, data, [options])</a> ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a></li>
+          <li><a href="#HttpAgent+getCacheKey">.getCacheKey(method, url, data)</a> ⇒ <code>string</code></li>
+          <li><a href="#HttpAgent+setDefaultHeader">.setDefaultHeader(header, value)</a> ⇒ <a href="#HttpAgent"><code>HttpAgent</code></a></li>
+          <li><a href="#HttpAgent+clearDefaultHeaders">.clearDefaultHeaders()</a> ⇒ <a href="#HttpAgent"><code>HttpAgent</code></a></li>
+        </ul>
+      </li>
+      <li><em>inner</em>
+        <ul>
+          <li><a href="#HttpAgent..RequestOptions">~RequestOptions</a> : <code>Object</code></li>
+          <li><a href="#HttpAgent..Response">~Response</a> : <code>Object</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="httpagentgeturl-data-options--promiseltresponsegt">httpAgent.get(url, data, [options]) ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> <a name="HttpAgent+get" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sends an HTTP GET request to the specified URL, sending the provided
+data as query parameters.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> - A promise that resolves to the
+        response.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request should be made.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>Object.&lt;string, (boolean\|number\|string)&gt;</code></td>
+      <td>The data to send        to the server as query parameters.</td>
+    </tr>
+    <tr>
+      <td>[options]</td>
+      <td><a href="#HttpAgent..RequestOptions"><code>RequestOptions</code></a></td>
+      <td>Optional request options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentposturl-data-options--promiseltresponsegt">httpAgent.post(url, data, [options]) ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> <a name="HttpAgent+post" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sends an HTTP POST request to the specified URL, sending the provided
+data as the request body. If an object is provided as the request data,
+the data will be JSON-encoded. Sending other primitive non-string values
+as the request body is not supported.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> - A promise that resolves to the
+        response.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request should be made.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>string</code> | <code>Object.&lt;string, \*&gt;</code></td>
+      <td>The data to send to the server        as the request body.</td>
+    </tr>
+    <tr>
+      <td>[options]</td>
+      <td><a href="#HttpAgent..RequestOptions"><code>RequestOptions</code></a></td>
+      <td>Optional request options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentputurl-data-options--promiseltresponsegt">httpAgent.put(url, data, [options]) ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> <a name="HttpAgent+put" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sends an HTTP PUT request to the specified URL, sending the provided
+data as the request body. If an object is provided as the request data,
+the data will be JSON-encoded. Sending other primitive non-string values
+as the request body is not supported.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> - A promise that resolves to the
+        response.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request should be made.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>string</code> | <code>Object.&lt;string, \*&gt;</code></td>
+      <td>The data to send to the server        as the request body.</td>
+    </tr>
+    <tr>
+      <td>[options]</td>
+      <td><a href="#HttpAgent..RequestOptions"><code>RequestOptions</code></a></td>
+      <td>Optional request options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentpatchurl-data-options--promiseltresponsegt">httpAgent.patch(url, data, [options]) ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> <a name="HttpAgent+patch" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sends an HTTP PATCH request to the specified URL, sending the provided
+data as the request body. If an object is provided as the request data,
+the data will be JSON-encoded. Sending other primitive non-string values
+as the request body is not supported.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> - A promise that resolves to the
+        response.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request should be made.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>string</code> | <code>Object.&lt;string, \*&gt;</code></td>
+      <td>The data to send to the server        as the request body.</td>
+    </tr>
+    <tr>
+      <td>[options]</td>
+      <td><a href="#HttpAgent..RequestOptions"><code>RequestOptions</code></a></td>
+      <td>Optional request options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentdeleteurl-data-options--promiseltresponsegt">httpAgent.delete(url, data, [options]) ⇒ <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> <a name="HttpAgent+delete" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sends an HTTP DELETE request to the specified URL, sending the provided
+data as the request body. If an object is provided as the request data,
+the data will be JSON-encoded. Sending other primitive non-string values
+as the request body is not supported.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent..Response"><code>Promise.&lt;Response&gt;</code></a> - A promise that resolves to the
+        response.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request should be made.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>string</code> | <code>Object.&lt;string, \*&gt;</code></td>
+      <td>The data to send to the server        as the request body.</td>
+    </tr>
+    <tr>
+      <td>[options]</td>
+      <td><a href="#HttpAgent..RequestOptions"><code>RequestOptions</code></a></td>
+      <td>Optional request options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentgetcachekeymethod-url-data--string">httpAgent.getCacheKey(method, url, data) ⇒ <code>string</code> <a name="HttpAgent+getCacheKey" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Generates a cache key to use for identifying a request to the specified
+URL using the specified HTTP method, submitting the provided data.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The key to use for identifying such a request in the
+        cache.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method</td>
+      <td><code>string</code></td>
+      <td>The HTTP method used by the request.</td>
+    </tr>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL to which the request is sent.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>Object.&lt;string, string&gt;</code></td>
+      <td>The data associated with the        request. These can be either the query parameters or request body        data.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentsetdefaultheaderheader-value--httpagent">httpAgent.setDefaultHeader(header, value) ⇒ <a href="#HttpAgent"><code>HttpAgent</code></a> <a name="HttpAgent+setDefaultHeader" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L138" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the specified header to be sent with every subsequent HTTP request,
+unless explicitly overridden by request options.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent"><code>HttpAgent</code></a> - This HTTP agent.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>header</td>
+      <td><code>string</code></td>
+      <td>The name of the header.</td>
+    </tr>
+    <tr>
+      <td>value</td>
+      <td><code>string</code></td>
+      <td>The header value. To provide multiple values,        separate them with commas        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentcleardefaultheaders--httpagent">httpAgent.clearDefaultHeaders() ⇒ <a href="#HttpAgent"><code>HttpAgent</code></a> <a name="HttpAgent+clearDefaultHeaders" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Clears all configured default headers.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Returns</strong>: <a href="#HttpAgent"><code>HttpAgent</code></a> - This HTTP agent.</p>
+
+<hr />
+
+<h3 id="httpagentrequestoptions--object">HttpAgent~RequestOptions : <code>Object</code> <a name="HttpAgent..RequestOptions" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L1" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Options for a request sent using the HTTP agent.</p>
+
+<p><strong>Kind</strong>: inner typedef of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Properties</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[timeout]</td>
+      <td><code>number</code></td>
+      <td>Specifies the request timeout in milliseconds.</td>
+    </tr>
+    <tr>
+      <td>[ttl]</td>
+      <td><code>number</code></td>
+      <td>Specified how long the request may be cached in           milliseconds.</td>
+    </tr>
+    <tr>
+      <td>[repeatRequest]</td>
+      <td><code>number</code></td>
+      <td>Specifies the maximum number of tries to           repeat the request if the request fails.</td>
+    </tr>
+    <tr>
+      <td>[headers]</td>
+      <td><code>Object.&lt;string, string&gt;</code></td>
+      <td>Sets the additional request           headers (the keys are case-insensitive header names, the values           are header values).</td>
+    </tr>
+    <tr>
+      <td>[fetchOptions]</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>Sets the fetch request options.</td>
+    </tr>
+    <tr>
+      <td>[cache]</td>
+      <td><code>boolean</code></td>
+      <td>Flag that enables caching the HTTP request           (enabled by default, also applies to requests in progress).</td>
+    </tr>
+    <tr>
+      <td>[withCredentials]</td>
+      <td><code>boolean</code></td>
+      <td>Flag that indicates whether the           request should be made using credentials such as cookies or           authorization headers.</td>
+    </tr>
+    <tr>
+      <td>[listeners]</td>
+      <td><code>Object</code></td>
+      <td>Listeners for request events.</td>
+    </tr>
+    <tr>
+      <td>[postProcessor]</td>
+      <td><code>function</code></td>
+      <td>Response           post-processor applied just before the response is stored in the           cache and returned.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="httpagentresponse--object">HttpAgent~Response : <code>Object</code> <a name="HttpAgent..Response" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/http/HttpAgent.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>A response from the server.</p>
+
+<p><strong>Kind</strong>: inner typedef of <a href="#HttpAgent"><code>HttpAgent</code></a><br />
+<strong>Properties</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>status</td>
+      <td><code>number</code></td>
+      <td>The HTTP response status code.</td>
+    </tr>
+    <tr>
+      <td>body</td>
+      <td><code>\*</code></td>
+      <td>The parsed response body, parsed as JSON.</td>
+    </tr>
+    <tr>
+      <td>params</td>
+      <td><code>HttpProxy~RequestParams</code></td>
+      <td>The original request params.</td>
+    </tr>
+    <tr>
+      <td>headers</td>
+      <td><code>Object.&lt;string, string&gt;</code></td>
+      <td>The response HTTP headers.</td>
+    </tr>
+    <tr>
+      <td>cached</td>
+      <td><code>boolean</code></td>
+      <td>Whether or not the response has been cached.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

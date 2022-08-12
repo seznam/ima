@@ -15,7 +15,7 @@ export default class ServerPageManager extends AbstractPageManager {
       PageFactory,
       PageRenderer,
       PageStateManager,
-      '$PageHandlerRegistry'
+      '$PageHandlerRegistry',
     ];
   }
   //#endif

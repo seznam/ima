@@ -14,7 +14,7 @@ module.exports = function serverAppFactory({
   appFactory,
   emitter,
   instanceRecycler,
-  serverGlobal
+  serverGlobal,
 }) {
   const {
     _initApp,
@@ -22,23 +22,23 @@ module.exports = function serverAppFactory({
     _importAppMainSync,
     _addImaToResponse,
     _getRouteInfo,
-    _generateAppResponse
+    _generateAppResponse,
   } = IMAInternalFactory({
     languageLoader,
     appFactory,
     emitter,
     instanceRecycler,
-    serverGlobal
+    serverGlobal,
   });
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
     renderStaticErrorPage,
-    renderStaticBadRequestPage
+    renderStaticBadRequestPage,
   } = staticPageFactory({
     applicationFolder,
     instanceRecycler,
-    createBootConfig
+    createBootConfig,
   });
 
   const {
@@ -48,7 +48,7 @@ module.exports = function serverAppFactory({
     useResponseHook,
     useIMAHandleRequestHook,
     useIMAInitializationRequestHook,
-    userPerformanceOptimizationRequestHook
+    userPerformanceOptimizationRequestHook,
   } = hooksFactory({
     renderOverloadedPage,
     renderStaticSPAPage,
@@ -62,7 +62,7 @@ module.exports = function serverAppFactory({
     emitter,
     instanceRecycler,
     devErrorPage,
-    environment
+    environment,
   });
 
   const defaultResponse = {
@@ -71,7 +71,7 @@ module.exports = function serverAppFactory({
     status: 204,
     content: null,
     pageState: {},
-    cache: false
+    cache: false,
   };
 
   // TODO IMA@18 need performance test for usefulness
@@ -96,7 +96,7 @@ module.exports = function serverAppFactory({
       event = await emitter.emit(Event.BeforeRequest, {
         req,
         res,
-        environment
+        environment,
       });
 
       event = await emitter.emit(Event.Request, event);
@@ -104,7 +104,7 @@ module.exports = function serverAppFactory({
 
       event.context.response = {
         ...defaultResponse,
-        ...event.context.response
+        ...event.context.response,
       };
 
       event = await responseHandler(event);
@@ -133,7 +133,7 @@ module.exports = function serverAppFactory({
 
       event.context.response = {
         ...defaultResponse,
-        ...event.context.response
+        ...event.context.response,
       };
 
       event = await emitter.emit(Event.AfterError, event);
@@ -145,7 +145,7 @@ module.exports = function serverAppFactory({
       return renderStaticErrorPage({
         ...event,
         error: error,
-        cause: event.error
+        cause: event.error,
       });
     }
   }
@@ -165,7 +165,7 @@ module.exports = function serverAppFactory({
         error,
         req,
         res,
-        environment
+        environment,
       };
 
       return errorHandler(error, event);
@@ -177,6 +177,6 @@ module.exports = function serverAppFactory({
     renderStaticSPAPage,
     requestHandler,
     responseHandler,
-    errorHandler
+    errorHandler,
   };
 };

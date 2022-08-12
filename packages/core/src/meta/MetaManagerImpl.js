@@ -1,7 +1,7 @@
 import MetaManager from './MetaManager';
 
 /**
- * Default implementation of the {@codelink MetaManager} interface.
+ * Default implementation of the {@link MetaManager} interface.
  */
 export default class MetaManagerImpl extends MetaManager {
   static get $dependencies() {

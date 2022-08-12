@@ -1,30 +1,31 @@
 {
   "name": "@ima/gulp-task-loader",
-  "version": "17.8.0",
+  "version": "18.0.0-rc.0",
   "description": "Automatic gulp task loader for IMA.js applications.",
-  "main": "taskLoader.js",
-  "scripts": {
-    "preversion": "npm test",
-    "test": "echo \"Error: no test specified\" && exit 0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/ima.git"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
   "keywords": [
     "gulp",
     "ima.js",
     "IMA",
     "taskloader"
   ],
-  "author": "Seznam.cz, a.s.",
-  "license": "MIT",
+  "homepage": "https://github.com/seznam/ima",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
-  "homepage": "https://github.com/seznam/ima"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "license": "MIT",
+  "author": "Seznam.cz, a.s.",
+  "main": "taskLoader.js",
+  "scripts": {
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "preversion": "npm test"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

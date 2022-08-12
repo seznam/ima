@@ -13,7 +13,7 @@ module.exports = function hooksFactory({
   emitter,
   instanceRecycler,
   devErrorPage,
-  environment
+  environment,
 }) {
   function _isServerOverloaded({ environment }) {
     return (
@@ -93,7 +93,7 @@ module.exports = function hooksFactory({
         status: error.getHttpStatus(),
         error,
         isRedirection: true,
-        url: error.getParams().url
+        url: error.getParams().url,
       };
     } catch (e) {
       return _applyError({ ...event, error: e });
@@ -208,6 +208,6 @@ module.exports = function hooksFactory({
     useResponseHook,
     useIMAHandleRequestHook,
     useIMAInitializationRequestHook,
-    userPerformanceOptimizationRequestHook
+    userPerformanceOptimizationRequestHook,
   };
 };

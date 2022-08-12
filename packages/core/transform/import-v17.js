@@ -36,7 +36,7 @@ module.exports = function (fileInfo, api, options) {
             }
             spec.type = 'ImportSpecifier';
             spec.imported = Object.assign({}, spec.local, {
-              name: MAP.defaultKey
+              name: MAP.defaultKey,
             });
             break;
           case 'ImportSpecifier':

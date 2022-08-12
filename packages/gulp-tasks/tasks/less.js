@@ -37,7 +37,7 @@ exports.default = gulpConfig => {
         concat({
           path: files.less.name,
           base: files.less.base,
-          cwd: files.less.cwd
+          cwd: files.less.cwd,
         })
       )
       .pipe(gulpLess({ paths: [path.join(__dirname)] }))
@@ -48,6 +48,6 @@ exports.default = gulpConfig => {
   }
 
   return {
-    less
+    less,
   };
 };

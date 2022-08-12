@@ -10,7 +10,7 @@ function loadTemplateFile(path) {
 module.exports = function staticTemplateFactory({
   applicationFolder,
   instanceRecycler,
-  createBootConfig
+  createBootConfig,
 }) {
   // TODO IMA@18 doc, example
   const templateSPA = ejs.compile(
@@ -34,7 +34,7 @@ module.exports = function staticTemplateFactory({
         SPA: false,
         static: true,
         pageState: {},
-        cache: false
+        cache: false,
       };
     } catch (e) {
       return {
@@ -44,7 +44,7 @@ module.exports = function staticTemplateFactory({
         SPA: false,
         static: true,
         pageState: {},
-        cache: false
+        cache: false,
       };
     }
   }
@@ -58,7 +58,7 @@ module.exports = function staticTemplateFactory({
       status,
       error: event.error,
       SPA: false,
-      static: true
+      static: true,
     };
   }
 
@@ -73,7 +73,7 @@ module.exports = function staticTemplateFactory({
       content,
       status,
       SPA: true,
-      static: true
+      static: true,
     };
   }
 
@@ -93,6 +93,6 @@ module.exports = function staticTemplateFactory({
     renderOverloadedPage,
     renderStaticSPAPage,
     renderStaticErrorPage,
-    renderStaticBadRequestPage
+    renderStaticBadRequestPage,
   };
 };

@@ -1,0 +1,41 @@
+I"�<h2 id="constants">Constants</h2>
+
+<dl>
+<dt><a href="#BEFORE_CHANGE_STATE">BEFORE_CHANGE_STATE</a> : <code>string</code></dt>
+<dd><p>PateStateManager fire event <code>$IMA.$PageStateManager.beforeChangeState</code> before
+state is patched. Event&#39;s data contain
+<code>{ oldState: Object&lt;string, *&gt;, newState: Object&lt;string, *&gt;,
+pathState:  Object&lt;string, *&gt; </code>}.</p>
+</dd>
+<dt><a href="#AFTER_CHANGE_STATE">AFTER_CHANGE_STATE</a> : <code>string</code></dt>
+<dd><p>PateStateManager fire event <code>$IMA.$PageStateManager.afterChangeState</code> after state
+is patched. Event&#39;s data contain <code>{newState: Object&lt;string, *&gt;</code>}.</p>
+</dd>
+</dl>
+
+<h2 id="events--enum">Events : <code>enum</code> <a name="Events" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/Events.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Events constants, which is firing to app.</p>
+
+<p><strong>Kind</strong>: global enum</p>
+
+<hr />
+
+<h2 id="before_change_state--string">BEFORE_CHANGE_STATE : <code>string</code> <a name="BEFORE_CHANGE_STATE" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/Events.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>PateStateManager fire event <code>$IMA.$PageStateManager.beforeChangeState</code> before
+state is patched. Event’s data contain
+<code>{ oldState: Object&lt;string, *&gt;, newState: Object&lt;string, *&gt;,
+pathState:  Object&lt;string, *&gt; </code>}.</p>
+
+<p><strong>Kind</strong>: global constant</p>
+
+<hr />
+
+<h2 id="after_change_state--string">AFTER_CHANGE_STATE : <code>string</code> <a name="AFTER_CHANGE_STATE" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/Events.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>PateStateManager fire event <code>$IMA.$PageStateManager.afterChangeState</code> after state
+is patched. Event’s data contain <code>{newState: Object&lt;string, *&gt;</code>}.</p>
+
+<p><strong>Kind</strong>: global constant</p>
+
+<hr />
+
+:ET

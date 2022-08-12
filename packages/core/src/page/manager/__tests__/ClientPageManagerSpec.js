@@ -14,7 +14,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     createController: Controller => new Controller(),
     decorateController: controller => controller,
     decoratePageStateManager: pageStateManger => pageStateManger,
-    createView: view => view
+    createView: view => view,
   };
   let pageRenderer = null;
   let pageStateManager = null;
@@ -33,20 +33,21 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    documentView: null
+    allowSPA: true,
+    documentView: null,
   };
   let params = {
     param1: 'param1',
-    param2: 2
+    param2: 2,
   };
   let data = {
-    content: ''
+    content: '',
   };
   let event = {
     detail: {
       eventName: 'method',
-      data: data
-    }
+      data: data,
+    },
   };
 
   beforeEach(() => {
@@ -78,9 +79,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       viewInstance
     );
 
-    jest
-      .spyOn(controllerInstance, 'getExtensions')
-      .mockReturnValue([extensionInstance]);
+    spyOn(controllerInstance, 'getExtensions').and.returnValue([
+      extensionInstance,
+    ]);
   });
 
   it('should be listening for all custom events', () => {
@@ -98,10 +99,10 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   it('should return parsed custom event', () => {
-    expect(pageManager._parseCustomEvent(event)).toEqual({
+    expect(pageManager._parseCustomEvent(event)).toStrictEqual({
       method: 'onMethod',
       eventName: 'method',
-      data: data
+      data: data,
     });
   });
 
@@ -119,11 +120,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     );
   });
 
-  describe('_onCustomEventHanler method', () => {
+  describe('_onCustomEventHandler method', () => {
     let parsedCustomEvent = {
       method: 'onMethod',
       data: {},
-      eventName: 'method'
+      eventName: 'method',
     };
 
     beforeEach(() => {
@@ -195,14 +196,6 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
       expect(console.warn).toHaveBeenCalled();
     });
-
-    it('should do nothing if active controller is null', () => {
-      pageManager._managedPage.controllerInstance = null;
-
-      pageManager._onCustomEventHandler(event);
-
-      expect(console.warn).not.toHaveBeenCalled();
-    });
   });
 
   describe('manage method', () => {
@@ -227,23 +220,23 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('_handleEventWithController method', () => {
     it('should return false for undefined method on controller', () => {
-      expect(pageManager._handleEventWithController('onMethod', {})).toEqual(
-        false
-      );
+      expect(
+        pageManager._handleEventWithController('onMethod', {})
+      ).toBeFalsy();
     });
 
     it('should call method on controller and return true', () => {
       pageManager._managedPage.controllerInstance = {
-        onMethod: () => {}
+        onMethod: () => {},
       };
 
       jest
         .spyOn(pageManager._managedPage.controllerInstance, 'onMethod')
         .mockImplementation();
 
-      expect(pageManager._handleEventWithController('onMethod', data)).toEqual(
-        true
-      );
+      expect(
+        pageManager._handleEventWithController('onMethod', data)
+      ).toBeTruthy();
       expect(
         pageManager._managedPage.controllerInstance.onMethod
       ).toHaveBeenCalledWith(data);
@@ -252,26 +245,26 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('_handleEventWithExtensions method', () => {
     it('should return false for undefined method on extensions', () => {
-      expect(pageManager._handleEventWithExtensions('onMethod', {})).toEqual(
-        false
-      );
+      expect(
+        pageManager._handleEventWithExtensions('onMethod', {})
+      ).toBeFalsy();
     });
 
     it('should call method on someone extension and return true', () => {
       let dumpExtensionInstance = {
-        onMethod: () => {}
+        onMethod: () => {},
       };
       pageManager._managedPage.controllerInstance = {
         getExtensions: () => {
           return [dumpExtensionInstance];
-        }
+        },
       };
 
       jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
 
-      expect(pageManager._handleEventWithExtensions('onMethod', data)).toEqual(
-        true
-      );
+      expect(
+        pageManager._handleEventWithExtensions('onMethod', data)
+      ).toBeTruthy();
       expect(dumpExtensionInstance.onMethod).toHaveBeenCalledWith(data);
     });
   });

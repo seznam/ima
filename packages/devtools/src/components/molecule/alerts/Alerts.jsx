@@ -1,16 +1,17 @@
-import styles from './alerts.less';
-import ReactDOM from 'react-dom';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Alert from 'components/atom/alert/Alert';
+import { Alert } from '@/components/atom';
+
+import styles from './alerts.module.less';
 
 export default class Alerts extends React.PureComponent {
   static get propTypes() {
     return {
       alerts: PropTypes.object,
-      removeAlert: PropTypes.func
+      removeAlert: PropTypes.func,
     };
   }
 
@@ -43,10 +44,11 @@ export default class Alerts extends React.PureComponent {
               <Alert
                 onClick={() => removeAlert(id)}
                 className={cn(styles.alert, {
-                  [styles['alert--hidden']]: hidden
+                  [styles['alert--hidden']]: hidden,
                 })}
                 key={id}
-                {...rest}>
+                {...rest}
+              >
                 {content}
               </Alert>
             );

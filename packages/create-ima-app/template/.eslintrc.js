@@ -1,51 +1,58 @@
 module.exports = {
-  root: true,
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
-  parser: 'babel-eslint',
+  ignorePatterns: ['node_modules', 'build'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:prettier/recommended',
+  ],
   rules: {
+    'no-console': [
+      'error',
+      {
+        allow: ['warn', 'error'],
+      },
+    ],
+
+    // Prettier
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
         semi: true,
-        jsxBracketSameLine: true
-      }
+        trailingComma: 'es5',
+        jsxSingleQuote: true,
+        bracketSameLine: false,
+        arrowParens: 'avoid',
+      },
     ],
 
-    'no-console': [
-      'error',
-      {
-        allow: ['warn', 'error']
-      }
-    ],
-
-    'react/prop-types': 0,
-    'react/wrap-multilines': 0
+    // React plugin overrides
+    'react/prop-types': 'off',
   },
-  plugins: ['prettier', 'jest', 'react', 'jasmine'],
   settings: {
-    ecmascript: 2015,
-    jsx: true,
     react: {
-      version: '16'
-    }
+      version: '16',
+    },
   },
+  parser: '@babel/eslint-parser',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 6,
-    ecmaFeatures: {
-      jsx: true
-    }
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react'],
+    },
   },
   env: {
     browser: true,
     node: true,
-    es6: true,
-    jasmine: true,
-    'jest/globals': true
+    es2022: true,
   },
   globals: {
     $Debug: true,
-    $IMA: true
-  }
+    $IMA: true,
+    using: true,
+    extend: true,
+    spyOn: true,
+  },
 };

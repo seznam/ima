@@ -19,11 +19,11 @@ describe('ima.core.cache.CacheEntry', () => {
   });
 
   it('should return value', () => {
-    expect(cacheEntry.getValue()).toEqual(123);
+    expect(cacheEntry.getValue()).toBe(123);
   });
 
   it('should be return object for serialization', () => {
-    expect(cacheEntry.serialize().value).toEqual(123);
-    expect(cacheEntry.serialize().ttl).toEqual(1000);
+    expect(cacheEntry.serialize().value).toBe(123);
+    expect(cacheEntry.serialize().ttl).toBe(1000);
   });
 });

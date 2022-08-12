@@ -1,0 +1,375 @@
+I"?<h2 id="clientpagerenderer">ClientPageRenderer <a name="ClientPageRenderer" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Client-side page renderer. The renderer attempts to reuse the markup sent by
+server if possible.</p>
+
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#ClientPageRenderer">ClientPageRenderer</a>
+    <ul>
+      <li><a href="#new_ClientPageRenderer_new">new ClientPageRenderer(factory, Helper, ReactDOM, dispatcher, settings, window)</a></li>
+      <li><a href="#ClientPageRenderer+_firstTime">._firstTime</a> : <code>boolean</code></li>
+      <li><a href="#ClientPageRenderer+_window">._window</a> : <code>Window</code></li>
+      <li><a href="#ClientPageRenderer+_viewContainer">._viewContainer</a> : <code>HTMLElement</code></li>
+      <li><a href="#ClientPageRenderer+mount">.mount()</a></li>
+      <li><a href="#ClientPageRenderer+update">.update()</a></li>
+      <li><a href="#ClientPageRenderer+unmount">.unmount()</a></li>
+      <li><a href="#ClientPageRenderer+_handleError">._handleError(error)</a></li>
+      <li><a href="#ClientPageRenderer+_patchPromisesToState">._patchPromisesToState(controller, patchedPromises)</a></li>
+      <li><a href="#ClientPageRenderer+_setStateWithoutRendering">._setStateWithoutRendering(controller, defaultPageState)</a></li>
+      <li><a href="#ClientPageRenderer+_patchStateToClearPreviousState">._patchStateToClearPreviousState(state)</a> ⇒ <code>Object.&lt;string, \*&gt;</code></li>
+      <li><a href="#ClientPageRenderer+_renderToDOM">._renderToDOM(controller, view, routeOptions)</a> ⇒ <code>Promise.&lt;undefined&gt;</code></li>
+      <li><a href="#ClientPageRenderer+_separatePromisesAndValues">._separatePromisesAndValues(dataMap)</a> ⇒ <code>Object</code></li>
+      <li><a href="#ClientPageRenderer+_updateMetaAttributes">._updateMetaAttributes(metaManager)</a></li>
+      <li><a href="#ClientPageRenderer+_updateMetaNameAttributes">._updateMetaNameAttributes(metaManager)</a></li>
+      <li><a href="#ClientPageRenderer+_updateMetaPropertyAttributes">._updateMetaPropertyAttributes(metaManager)</a></li>
+      <li><a href="#ClientPageRenderer+_updateMetaLinkAttributes">._updateMetaLinkAttributes(metaManager)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-clientpagerendererfactory-helper-reactdom-dispatcher-settings-window">new ClientPageRenderer(factory, Helper, ReactDOM, dispatcher, settings, window) <a name="new_ClientPageRenderer_new"></a></h3>
+<p>Initializes the client-side page renderer.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>factory</td>
+      <td><code>PageRendererFactory</code></td>
+      <td>Factory for receive $Utils to view.</td>
+    </tr>
+    <tr>
+      <td>Helper</td>
+      <td><code>vendor.$Helper</code></td>
+      <td>The IMA.js helper methods.</td>
+    </tr>
+    <tr>
+      <td>ReactDOM</td>
+      <td><code>vendor.ReactDOM</code></td>
+      <td>React framework instance to use to        render the page on the client side.</td>
+    </tr>
+    <tr>
+      <td>dispatcher</td>
+      <td><code>Dispatcher</code></td>
+      <td>Dispatcher fires events to app.</td>
+    </tr>
+    <tr>
+      <td>settings</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The application setting for the        current application environment.</td>
+    </tr>
+    <tr>
+      <td>window</td>
+      <td><code>Window</code></td>
+      <td>Helper for manipulating the global object        (<code>window</code>) regardless of the client/server-side        environment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_firsttime--boolean">clientPageRenderer._firstTime : <code>boolean</code> <a name="ClientPageRenderer+_firstTime" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Flag signalling that the page is being rendered for the first time.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerenderer_window--window">clientPageRenderer._window : <code>Window</code> <a name="ClientPageRenderer+_window" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Helper for manipulating the global object (<code>window</code>)
+regardless of the client/server-side environment.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerenderer_viewcontainer--htmlelement">clientPageRenderer._viewContainer : <code>HTMLElement</code> <a name="ClientPageRenderer+_viewContainer" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The HTML element containing the current application view for the
+current route.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerenderermount">clientPageRenderer.mount() <a name="ClientPageRenderer+mount" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerendererupdate">clientPageRenderer.update() <a name="ClientPageRenderer+update" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L93" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerendererunmount">clientPageRenderer.unmount() <a name="ClientPageRenderer+unmount" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="clientpagerenderer_handleerrorerror">clientPageRenderer._handleError(error) <a name="ClientPageRenderer+_handleError" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L135" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Show error to console in $Debug mode and re-throw that error
+for other error handler.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a><br />
+<strong>Throws</strong>:</p>
+
+<ul>
+  <li><code>Error</code> Re-throws the handled error.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>error</td>
+      <td><code>Error</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_patchpromisestostatecontroller-patchedpromises">clientPageRenderer._patchPromisesToState(controller, patchedPromises) <a name="ClientPageRenderer+_patchPromisesToState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L149" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Patch promise values to controller state.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>controller</td>
+      <td><code>ControllerDecorator</code></td>
+    </tr>
+    <tr>
+      <td>patchedPromises</td>
+      <td><code>Object.&lt;string, Promise.&lt;\*&gt;&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_setstatewithoutrenderingcontroller-defaultpagestate">clientPageRenderer._setStateWithoutRendering(controller, defaultPageState) <a name="ClientPageRenderer+_setStateWithoutRendering" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The method is hacky for IMA@17 and we must rewrite logic for IMA@18.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>controller</td>
+      <td><code>Controller</code></td>
+    </tr>
+    <tr>
+      <td>defaultPageState</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_patchstatetoclearpreviousstatestate--objectltstring-gt">clientPageRenderer._patchStateToClearPreviousState(state) ⇒ <code>Object.&lt;string, \*&gt;</code> <a name="ClientPageRenderer+_patchStateToClearPreviousState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>state</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_rendertodomcontroller-view-routeoptions--promiseltundefinedgt">clientPageRenderer._renderToDOM(controller, view, routeOptions) ⇒ <code>Promise.&lt;undefined&gt;</code> <a name="ClientPageRenderer+_renderToDOM" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Renders the current route to DOM.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>controller</td>
+      <td><code>ControllerDecorator</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>view</td>
+      <td><code>function</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>routeOptions</td>
+      <td><code>Object</code></td>
+      <td>The current route options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_separatepromisesandvaluesdatamap--object">clientPageRenderer._separatePromisesAndValues(dataMap) ⇒ <code>Object</code> <a name="ClientPageRenderer+_separatePromisesAndValues" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L288" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Separate promises and values from provided data map. Values will be use
+for default page state. Promises will be patched to state after their
+resolve.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a><br />
+<strong>Returns</strong>: <code>Object</code> - Return separated promises and other values.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dataMap</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>A map of data.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_updatemetaattributesmetamanager">clientPageRenderer._updateMetaAttributes(metaManager) <a name="ClientPageRenderer+_updateMetaAttributes" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L311" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Updates the title and the contents of the meta elements used for SEO.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>metaManager</td>
+      <td><code>MetaManager</code></td>
+      <td>meta attributes storage providing the        new values for page meta elements and title.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_updatemetanameattributesmetamanager">clientPageRenderer._updateMetaNameAttributes(metaManager) <a name="ClientPageRenderer+_updateMetaNameAttributes" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L325" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Updates the contents of the generic meta elements used for SEO.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>metaManager</td>
+      <td><code>MetaManager</code></td>
+      <td>meta attributes storage providing the        new values for page meta elements and title.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_updatemetapropertyattributesmetamanager">clientPageRenderer._updateMetaPropertyAttributes(metaManager) <a name="ClientPageRenderer+_updateMetaPropertyAttributes" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L344" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Updates the contents of the specialized meta elements used for SEO.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>metaManager</td>
+      <td><code>MetaManager</code></td>
+      <td>meta attributes storage providing the        new values for page meta elements and title.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagerenderer_updatemetalinkattributesmetamanager">clientPageRenderer._updateMetaLinkAttributes(metaManager) <a name="ClientPageRenderer+_updateMetaLinkAttributes" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/ClientPageRenderer.js#L363" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Updates the href of the specialized link elements used for SEO.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageRenderer"><code>ClientPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>metaManager</td>
+      <td><code>MetaManager</code></td>
+      <td>meta attributes storage providing the        new values for page meta elements and title.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

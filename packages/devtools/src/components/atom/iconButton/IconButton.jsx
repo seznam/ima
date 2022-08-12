@@ -1,38 +1,27 @@
-import styles from './iconButton.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
 
-import Icon from 'components/atom/icon/Icon';
+import { Icon } from '@/components/atom';
 
-export default class IconButton extends React.PureComponent {
-  static get propTypes() {
-    return {
-      color: PropTypes.oneOf(['danger', 'success']),
-      name: PropTypes.string.isRequired,
-      className: PropTypes.string
-    };
-  }
+import styles from './iconButton.module.less';
 
-  static get defaultProps() {
-    return {
-      className: ''
-    };
-  }
-
-  render() {
-    const { color, className, name, ...rest } = this.props;
-
-    return (
-      <button
-        className={`${cn(
-          styles.iconBtn,
-          { [styles[`iconBtn--${color}`]]: color },
-          className
-        )}`}
-        {...rest}>
-        <Icon name={name} />
-      </button>
-    );
-  }
+export default function IconButton({ color, className, name, ...restProps }) {
+  return (
+    <button
+      className={`${cn(
+        styles.iconBtn,
+        { [styles[`iconBtn--${color}`]]: color },
+        className
+      )}`}
+      {...restProps}
+    >
+      <Icon name={name} />
+    </button>
+  );
 }
+
+IconButton.propTypes = {
+  color: PropTypes.oneOf(['danger', 'success']),
+  name: PropTypes.string.isRequired,
+  className: PropTypes.string,
+};

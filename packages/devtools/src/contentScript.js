@@ -1,16 +1,17 @@
-import { getSettings } from 'services/settings';
+// Injection scripts
+
+import imaDevtoolsCode from '@ima/devtools-scripts/dist/index.string.js';
+
+import { Actions } from '@/constants';
+import { detectImaAppCode, runImaAppCode } from '@/inject';
 import {
+  InjectType,
+  injectCode,
+  getSettings,
   createEntry,
   SENTINEL_TO_EXTENSION,
-  SENTINEL_TO_WEB
-} from 'services/stream';
-import { InjectType, injectCode } from 'services/inject';
-import Actions from 'constants/actions';
-
-// Injection scripts
-import imaDevtoolsCode from '@ima/devtools-scripts';
-import detectImaAppCode from 'inject/detectImaAppCode';
-import runImaAppCode from 'inject/runImaAppCode';
+  SENTINEL_TO_WEB,
+} from '@/utils';
 
 let port = null;
 
@@ -87,7 +88,7 @@ function onMessageListener(data) {
    * between panel and content script after both are initialized
    */
   port = chrome.runtime.connect({
-    name: 'contentScript'
+    name: 'contentScript',
   });
 
   // Define listener on window and port, so scripts can communicate with extension and web page

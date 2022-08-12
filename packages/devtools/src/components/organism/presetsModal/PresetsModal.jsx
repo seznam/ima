@@ -1,13 +1,12 @@
-import styles from './presetsModal.less';
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import { setSettings } from 'services/settings';
-import Modal from 'components/atom/modal/Modal';
-import ModalFooter from 'components/atom/modal/ModalFooter';
-import Button from 'components/atom/button/Button';
-import PresetEntry from 'components/molecule/presetEntry/PresetEntryContainer';
 import uid from 'easy-uid';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+import { Button, Modal, ModalFooter } from '@/components/atom';
+import { PresetEntryContainer } from '@/components/molecule';
+import { setSettings } from '@/utils';
+
+import styles from './presetsModal.module.less';
 
 export default class PresetsModal extends React.PureComponent {
   static get propTypes() {
@@ -18,7 +17,7 @@ export default class PresetsModal extends React.PureComponent {
       addPreset: PropTypes.func,
       selectPreset: PropTypes.func,
       alertSuccess: PropTypes.func,
-      onClose: PropTypes.func.isRequired
+      onClose: PropTypes.func.isRequired,
     };
   }
 
@@ -30,7 +29,8 @@ export default class PresetsModal extends React.PureComponent {
         onClose={onClose}
         title={'Presets'}
         className={styles.modal}
-        opened={opened}>
+        opened={opened}
+      >
         {this._renderModalBody()}
         {this._renderModalFooter()}
       </Modal>
@@ -44,7 +44,11 @@ export default class PresetsModal extends React.PureComponent {
       <div className={styles.body}>
         {Object.keys(presets).map(id => {
           return (
-            <PresetEntry onClick={() => this.onSelect(id)} key={id} id={id} />
+            <PresetEntryContainer
+              onClick={() => this.onSelect(id)}
+              key={id}
+              id={id}
+            />
           );
         })}
       </div>
@@ -56,11 +60,11 @@ export default class PresetsModal extends React.PureComponent {
 
     return (
       <ModalFooter className={styles.footer}>
-        <Button onClick={e => this.onSaveChanges(e)} color="success">
+        <Button onClick={e => this.onSaveChanges(e)} color='success'>
           Save Preset Changes
         </Button>
         <div>
-          <Button onClick={e => this.onCreatePreset(e)} color="primary">
+          <Button onClick={e => this.onCreatePreset(e)} color='primary'>
             Create Preset
           </Button>
           <Button onClick={onClose}>Close</Button>
@@ -82,7 +86,7 @@ export default class PresetsModal extends React.PureComponent {
 
     setSettings({
       presets,
-      selectedPresetId
+      selectedPresetId,
     });
 
     alertSuccess('Changes made to the presets were saved.');
@@ -103,7 +107,7 @@ export default class PresetsModal extends React.PureComponent {
       name: `Preset - ${id.substring(0, 6)}`,
       editable: true,
       selected: false,
-      hooks: {}
+      hooks: {},
     };
   }
 }

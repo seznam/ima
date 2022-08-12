@@ -7,7 +7,7 @@ const { Emitter, Event } = require('./lib/emitter.js');
 module.exports = function createIMAServer({
   environment,
   logger,
-  emitter
+  emitter,
 } = {}) {
   environment =
     environment ||
@@ -77,11 +77,11 @@ module.exports = function createIMAServer({
   const serverGlobal = require('./lib/serverGlobal.js');
   logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
   const devErrorPage = require('./lib/factory/devErrorPageFactory.js')({
-    logger
+    logger,
   });
   const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
     environment,
-    applicationFolder
+    applicationFolder,
   });
   const serverApp = require('./lib/factory/serverAppFactory.js')({
     environment,
@@ -92,7 +92,7 @@ module.exports = function createIMAServer({
     appFactory,
     emitter,
     instanceRecycler,
-    serverGlobal
+    serverGlobal,
   });
 
   const cache = require('./lib/cache.js')({ environment });
@@ -115,6 +115,6 @@ module.exports = function createIMAServer({
     cache,
     instanceRecycler,
     emitter,
-    Event
+    Event,
   };
 };

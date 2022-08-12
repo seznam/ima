@@ -1,0 +1,54 @@
+I"J
+<h2 id="abstractexecution--execution"><em>AbstractExecution ⇐ <code>Execution</code></em> <a name="AbstractExecution" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/AbstractExecution.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Basic implementation of the <a href="Execution">Execution</a> interface. Provides the basic
+functionality for appending and validating jobs.</p>
+
+<p><strong>Kind</strong>: global abstract class<br />
+<strong>Extends</strong>: <code>Execution</code></p>
+
+<ul>
+  <li><em><a href="#AbstractExecution">AbstractExecution</a> ⇐ <code>Execution</code></em>
+    <ul>
+      <li><em><a href="#AbstractExecution+append">.append()</a></em></li>
+      <li><em><a href="#AbstractExecution+execute">.execute()</a></em></li>
+      <li><em><a href="#AbstractExecution+_validateJob">._validateJob(job)</a> ⇒ <code>boolean</code></em></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="abstractexecutionappend"><em>abstractExecution.append()</em> <a name="AbstractExecution+append" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/AbstractExecution.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExecution"><code>AbstractExecution</code></a></p>
+
+<hr />
+
+<h3 id="abstractexecutionexecute"><em>abstractExecution.execute()</em> <a name="AbstractExecution+execute" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/AbstractExecution.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExecution"><code>AbstractExecution</code></a></p>
+
+<hr />
+
+<h3 id="abstractexecution_validatejobjob--boolean"><em>abstractExecution._validateJob(job) ⇒ <code>boolean</code></em> <a name="AbstractExecution+_validateJob" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/AbstractExecution.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Return <code>true</code> if the given job can be executed</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExecution"><code>AbstractExecution</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>job</td>
+      <td><code>function</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

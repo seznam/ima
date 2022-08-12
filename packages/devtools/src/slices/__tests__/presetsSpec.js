@@ -1,15 +1,15 @@
-import { presetsInitialState, actions, reducer, selectors } from '../presets';
+import {
+  presetsInitialState,
+  presetsActions,
+  presetsReducer,
+  presetsSelectors,
+} from '../presets';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
-describe('presetsInitialState', () => {
-  it('should match snapshot', () => {
-    expect(presetsInitialState).toMatchSnapshot();
-  });
-});
-
-describe('reducer', () => {
+describe('presetsReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -20,19 +20,19 @@ describe('reducer', () => {
           id: '0',
           name: 'name',
           hooks: {},
-          selected: true
-        }
-      }
+          selected: true,
+        },
+      },
     };
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(presetsInitialState);
+    expect(presetsReducer(undefined, {})).toStrictEqual(presetsInitialState);
   });
 
   it('should set presets to state', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/setPresets',
         payload: {
           presets: {
@@ -40,63 +40,63 @@ describe('reducer', () => {
               id: '1',
               name: 'name',
               hooks: {},
-              selected: true
-            }
+              selected: true,
+            },
           },
-          selectedPresetId: '1'
-        }
+          selectedPresetId: '1',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       presets: {
         1: {
           id: '1',
           name: 'name',
           hooks: {},
-          selected: true
-        }
+          selected: true,
+        },
       },
-      selectedPresetId: '1'
+      selectedPresetId: '1',
     });
   });
 
   it('should add preset to state', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/addPreset',
         payload: {
           id: '1',
-          name: 'name'
-        }
+          name: 'name',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
         1: {
           id: '1',
-          name: 'name'
-        }
-      }
+          name: 'name',
+        },
+      },
     });
   });
 
   it('should rename existing preset', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/renamePreset',
         payload: {
           id: '0',
-          name: 'newName'
-        }
+          name: 'newName',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         0: {
           ...curState.presets['0'],
-          name: 'newName'
-        }
-      }
+          name: 'newName',
+        },
+      },
     });
   });
 
@@ -104,36 +104,36 @@ describe('reducer', () => {
     curState.selectedPresetId = null;
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deletePreset',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
-      presets: {}
+      presets: {},
     });
   });
 
   it('should remove preset from state and reset selected ID', () => {
     curState.presets['1'] = {
       id: '1',
-      name: 'Name#1'
+      name: 'Name#1',
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deletePreset',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       selectedPresetId: '1',
       presets: {
         1: {
           id: '1',
           name: 'Name#1',
-          selected: true
-        }
-      }
+          selected: true,
+        },
+      },
     });
   });
 
@@ -141,11 +141,11 @@ describe('reducer', () => {
     uid.mockReturnValue('1');
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/copyPreset',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -154,28 +154,28 @@ describe('reducer', () => {
           name: 'Copy of name - 1',
           selected: false,
           editable: true,
-          hooks: {}
-        }
-      }
+          hooks: {},
+        },
+      },
     });
   });
 
   it('should set preset with given id as selected', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/selectPreset',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
         0: {
           ...curState.presets['0'],
-          selected: true
-        }
+          selected: true,
+        },
       },
-      selectedPresetId: '0'
+      selectedPresetId: '0',
     });
   });
 
@@ -184,42 +184,42 @@ describe('reducer', () => {
     curState.presets['1'] = {
       id: '1',
       name: 'Name#1',
-      selected: true
+      selected: true,
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/selectPreset',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
         0: {
           ...curState.presets['0'],
-          selected: true
+          selected: true,
         },
         1: {
           id: '1',
           name: 'Name#1',
-          selected: false
-        }
+          selected: false,
+        },
       },
-      selectedPresetId: '0'
+      selectedPresetId: '0',
     });
   });
 
   it('should add hook to currently selected preset', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/addHook',
         payload: {
           id: '0',
-          name: 'hookName'
-        }
+          name: 'hookName',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -228,27 +228,27 @@ describe('reducer', () => {
           hooks: {
             0: {
               id: '0',
-              name: 'hookName'
-            }
-          }
-        }
-      }
+              name: 'hookName',
+            },
+          },
+        },
+      },
     });
   });
 
   it('should toggle hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
       0: {
-        enabled: false
-      }
+        enabled: false,
+      },
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/toggleHook',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -256,51 +256,51 @@ describe('reducer', () => {
           ...curState.presets['0'],
           hooks: {
             0: {
-              enabled: true
-            }
-          }
-        }
-      }
+              enabled: true,
+            },
+          },
+        },
+      },
     });
   });
 
   it('should delete hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
       0: {
-        enabled: false
-      }
+        enabled: false,
+      },
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deleteHook',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
         0: {
           ...curState.presets['0'],
-          hooks: {}
-        }
-      }
+          hooks: {},
+        },
+      },
     });
   });
 
   it('should open hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
       0: {
-        opened: false
-      }
+        opened: false,
+      },
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/openHook',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -308,30 +308,30 @@ describe('reducer', () => {
           ...curState.presets['0'],
           hooks: {
             0: {
-              opened: true
-            }
-          }
-        }
-      }
+              opened: true,
+            },
+          },
+        },
+      },
     });
   });
 
   it('should open hook in currently selected preset and close others', () => {
     curState.presets['0'].hooks = {
       0: {
-        opened: false
+        opened: false,
       },
       1: {
-        opened: true
-      }
+        opened: true,
+      },
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/openHook',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -339,169 +339,165 @@ describe('reducer', () => {
           ...curState.presets['0'],
           hooks: {
             0: {
-              opened: true
+              opened: true,
             },
             1: {
-              opened: false
-            }
-          }
-        }
-      }
+              opened: false,
+            },
+          },
+        },
+      },
     });
   });
 });
 
-describe('actions', () => {
+describe('presetsActions', () => {
   it('should create action to set presets', () => {
     expect(
-      actions.setPresets({
+      presetsActions.setPresets({
         presets: 'myPresets',
-        selectedPresetId: '0'
+        selectedPresetId: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/setPresets',
       payload: {
         presets: 'myPresets',
-        selectedPresetId: '0'
-      }
+        selectedPresetId: '0',
+      },
     });
   });
 
   it('should create action to add preset', () => {
     expect(
-      actions.addPreset({
+      presetsActions.addPreset({
         id: '0',
-        name: 'preset'
+        name: 'preset',
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/addPreset',
       payload: {
         id: '0',
-        name: 'preset'
-      }
+        name: 'preset',
+      },
     });
   });
 
   it('should create action to rename preset', () => {
     expect(
-      actions.renamePreset({
+      presetsActions.renamePreset({
         id: '0',
-        name: 'newPresetName'
+        name: 'newPresetName',
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/renamePreset',
       payload: {
         id: '0',
-        name: 'newPresetName'
-      }
+        name: 'newPresetName',
+      },
     });
   });
 
   it('should create action to delete preset', () => {
-    expect(actions.deletePreset('0')).toEqual({
+    expect(presetsActions.deletePreset('0')).toStrictEqual({
       type: 'presets/deletePreset',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to copy preset', () => {
-    expect(actions.copyPreset('0')).toEqual({
+    expect(presetsActions.copyPreset('0')).toStrictEqual({
       type: 'presets/copyPreset',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to select preset', () => {
-    expect(actions.selectPreset('0')).toEqual({
+    expect(presetsActions.selectPreset('0')).toStrictEqual({
       type: 'presets/selectPreset',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to add hook', () => {
     expect(
-      actions.addHook({
+      presetsActions.addHook({
         id: '0',
-        name: 'hookName'
+        name: 'hookName',
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/addHook',
       payload: {
         id: '0',
-        name: 'hookName'
-      }
+        name: 'hookName',
+      },
     });
   });
 
   it('should create action to toggle hook', () => {
-    expect(actions.toggleHook('0')).toEqual({
+    expect(presetsActions.toggleHook('0')).toStrictEqual({
       type: 'presets/toggleHook',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to delete hook', () => {
-    expect(actions.deleteHook('0')).toEqual({
+    expect(presetsActions.deleteHook('0')).toStrictEqual({
       type: 'presets/deleteHook',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to open hook', () => {
-    expect(actions.openHook('0')).toEqual({
+    expect(presetsActions.openHook('0')).toStrictEqual({
       type: 'presets/openHook',
-      payload: '0'
+      payload: '0',
     });
   });
 });
 
-describe('selectors', () => {
-  it('should match snapshot', () => {
-    expect(selectors).toMatchSnapshot();
-  });
-
+describe('presetsSelectors', () => {
   describe('getHookIds selector', () => {
     it('should return hook keys from currently selected preset', () => {
-      const result = selectors.getHookIds.resultFunc('0', {
+      const result = presetsSelectors.getHookIds.resultFunc('0', {
         0: {
           hooks: {
             0: {},
-            1: {}
-          }
-        }
+            1: {},
+          },
+        },
       });
 
-      expect(result).toEqual(['0', '1']);
+      expect(result).toStrictEqual(['0', '1']);
     });
 
     it('should return null for empty state', () => {
-      const result = selectors.getHookIds.resultFunc(null, {});
+      const result = presetsSelectors.getHookIds.resultFunc(null, {});
 
-      expect(result).toBe(null);
+      expect(result).toBeNull();
     });
   });
 
   describe('getActiveHooks selector', () => {
     it('should return hooks from currently selected preset', () => {
-      const result = selectors.getActiveHooks.resultFunc('0', {
+      const result = presetsSelectors.getActiveHooks.resultFunc('0', {
         0: {
           hooks: {
             0: {},
-            1: {}
-          }
-        }
+            1: {},
+          },
+        },
       });
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         0: {},
-        1: {}
+        1: {},
       });
     });
 
     it('should return null for empty state', () => {
-      const result = selectors.getActiveHooks.resultFunc(null, {});
+      const result = presetsSelectors.getActiveHooks.resultFunc(null, {});
 
-      expect(result).toBe(null);
+      expect(result).toBeNull();
     });
   });
 });

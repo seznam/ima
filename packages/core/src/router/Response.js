@@ -16,7 +16,7 @@ export default class Response {
    */
   constructor() {
     /**
-     * The ExpressJS response object, or {@code null} if running at the
+     * The ExpressJS response object, or `null` if running at the
      * client side.
      *
      * @type {?Express.Response}
@@ -68,7 +68,7 @@ export default class Response {
      */
     this._cookieTransformFunction = {
       encode: value => value,
-      decode: value => value
+      decode: value => value,
     };
   }
 
@@ -77,7 +77,7 @@ export default class Response {
    * object.
    *
    * @param {?Express.Response} response The ExpressJS response, or
-   *        {@code null} if the code is running at the client side.
+   *        `null` if the code is running at the client side.
    * @param {{
    *          encode: function(string): string=,
    *          decode: function(string): string
@@ -111,9 +111,11 @@ export default class Response {
    * @param {string} url The URL to which the client should be redirected.
    * @param {number=} [status=302] The HTTP status code to send to the
    *        client.
+   * @param {Object.<string, string>} [headers={}] Custom headers to be used on the response.
    * @return {Response} This response.
    */
-  redirect(url, status = 302) {
+  redirect(url, status = 302, headers = {}) {
+    // TODO IMA@18 refactor to use an `options` object for `status` and `headers`, same as $Router
     if ($Debug) {
       if (this._isSent === true) {
         let params = this.getResponseParams();
@@ -130,6 +132,7 @@ export default class Response {
     this._isSent = true;
     this._status = status;
     this._setCookieHeaders();
+    this._response.set(headers);
     this._response.redirect(status, url);
 
     return this;
@@ -258,7 +261,7 @@ export default class Response {
 
     this._internalCookieStorage.set(name, {
       value,
-      options: advancedOptions
+      options: advancedOptions,
     });
 
     return this;
@@ -274,7 +277,7 @@ export default class Response {
     return {
       status: this._status,
       content: this._content,
-      pageState: this._pageState
+      pageState: this._pageState,
     };
   }
 

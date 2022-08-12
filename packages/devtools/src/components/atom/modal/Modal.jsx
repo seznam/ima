@@ -1,10 +1,11 @@
-import styles from './modal.less';
-import ReactDOM from 'react-dom';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Icon from 'components/atom/icon/Icon';
+import { Icon } from '@/components/atom';
+
+import styles from './modal.module.less';
 
 export const HIDE_ANIMATION_DURATION = 200;
 export const BODY_STYLES =
@@ -17,13 +18,13 @@ export default class Modal extends React.PureComponent {
       opened: PropTypes.bool.isRequired,
       title: PropTypes.string,
       onClose: PropTypes.func,
-      className: PropTypes.string
+      className: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      className: ''
+      className: '',
     };
   }
 
@@ -38,7 +39,7 @@ export default class Modal extends React.PureComponent {
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.state = {
-      closing: false
+      closing: false,
     };
   }
 
@@ -52,12 +53,12 @@ export default class Modal extends React.PureComponent {
 
         // Initiate closing animation
         this.setState({
-          closing: true
+          closing: true,
         });
 
         setTimeout(() => {
           this.setState({
-            closing: false
+            closing: false,
           });
         }, HIDE_ANIMATION_DURATION);
       }
@@ -90,18 +91,19 @@ export default class Modal extends React.PureComponent {
         <div
           onClick={onClose}
           className={cn(styles.overlay, {
-            [styles['overlay--closing']]: closing
+            [styles['overlay--closing']]: closing,
           })}
         />
         <div
           className={cn(
             styles.modal,
             {
-              [styles['modal--closing']]: closing
+              [styles['modal--closing']]: closing,
             },
             className
           )}
-          {...rest}>
+          {...rest}
+        >
           {this._renderModalHeader()}
           {children}
         </div>
@@ -116,7 +118,7 @@ export default class Modal extends React.PureComponent {
       <div className={styles.header}>
         <h4>{title}</h4>
         <button onClick={onClose} className={styles.closeIcon}>
-          <Icon name="close" />
+          <Icon name='close' />
         </button>
       </div>
     );

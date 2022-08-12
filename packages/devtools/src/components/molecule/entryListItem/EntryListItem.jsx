@@ -1,17 +1,18 @@
-import styles from './entryListItem.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import entryType from 'types/entryType';
+import { EntryType } from '@/utils';
+
+import styles from './entryListItem.module.less';
 
 export default class EntryListItem extends React.PureComponent {
   static get propTypes() {
     return {
-      entry: entryType.isRequired,
+      entry: EntryType.isRequired,
       zeroId: PropTypes.string.isRequired,
       zeroTime: PropTypes.number.isRequired,
-      setSelected: PropTypes.func.isRequired
+      setSelected: PropTypes.func.isRequired,
     };
   }
 
@@ -32,8 +33,9 @@ export default class EntryListItem extends React.PureComponent {
       <tr
         onClick={this.onSelect}
         className={cn(styles.wrapper, styles[`wrapper--${color}`], {
-          [styles['wrapper--selected']]: selected
-        })}>
+          [styles['wrapper--selected']]: selected,
+        })}
+      >
         <td className={styles.label}>
           {shortLabel}
           {event && <span className={styles.event}> [{event}]</span>}
@@ -44,8 +46,9 @@ export default class EntryListItem extends React.PureComponent {
             <span className={styles.tagWrapper}>
               <span
                 className={cn(styles.promiseStatus, {
-                  [styles['promiseStatus--pending']]: promises === 'pending'
-                })}>
+                  [styles['promiseStatus--pending']]: promises === 'pending',
+                })}
+              >
                 {promises}
                 {this._getPromiseTimeDiff()}
               </span>
@@ -127,7 +130,7 @@ export default class EntryListItem extends React.PureComponent {
 
     return {
       shortLabel: parts[0].split('/').pop(),
-      event: parts[2] || ''
+      event: parts[2] || '',
     };
   }
 }

@@ -5,7 +5,7 @@ import Events from './Events';
 import GenericError from '../../error/GenericError';
 
 /**
- * Base class for implementations of the {@linkcode PageRenderer} interface.
+ * Base class for implementations of the {@link PageRenderer} interface.
  */
 export default class AbstractPageRenderer extends PageRenderer {
   /**
@@ -103,7 +103,7 @@ export default class AbstractPageRenderer extends PageRenderer {
     if (this._reactiveView) {
       // add temp indicator (in viewAdapter method getDerivedStateFromProps is unset) for indicate whether not to use state in props
       const stateWithIndicator = Object.assign({}, state, {
-        notUsePropsState: true
+        notUsePropsState: true,
       });
       this._reactiveView.setState(stateWithIndicator, () => {
         this._dispatcher.fire(Events.UPDATED, { state }, true);
@@ -124,7 +124,7 @@ export default class AbstractPageRenderer extends PageRenderer {
     let props = {
       view,
       state,
-      $Utils: this._factory.getUtils()
+      $Utils: this._factory.getUtils(),
     };
 
     return props;

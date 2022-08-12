@@ -6,7 +6,7 @@ describe('Cache', () => {
   describe('set method', () => {
     let cache = null;
     let page = {
-      content: 'some html'
+      content: 'some html',
     };
 
     beforeEach(() => {
@@ -18,26 +18,26 @@ describe('Cache', () => {
               cacheKeyGenerator: null,
               entryTtl: 60 * 60 * 1000, // milliseconds
               unusedEntryTtl: 15 * 60 * 1000,
-              maxEntries: 1 // milliseconds
-            }
-          }
-        }
+              maxEntries: 1, // milliseconds
+            },
+          },
+        },
       });
 
       jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
     it('should be set page to cache', () => {
-      expect(cache.set({}, page)).toEqual(true);
+      expect(cache.set({}, page)).toBe(true);
     });
 
     it('should be not set page to cache for exceed maximum entries limit', () => {
-      expect(cache.set({}, page)).toEqual(true);
-      expect(cache.set({}, page)).toEqual(false);
+      expect(cache.set({}, page)).toBe(true);
+      expect(cache.set({}, page)).toBe(false);
     });
 
     it('should get page from cache', () => {
-      expect(cache.set({}, page)).toEqual(true);
+      expect(cache.set({}, page)).toBe(true);
 
       expect(cache.get({})).toEqual(page);
     });

@@ -6,7 +6,7 @@ const Actions = Object.freeze({
   RELOADING: 'ima:devtool:reloading',
   DETECTING: 'ima:devtool:detecting',
   UNSUPPORTED: 'ima:devtool:unsupported',
-  MESSAGE: 'ima:devtool:message'
+  MESSAGE: 'ima:devtool:message',
 });
 
-export default Actions;
+export { Actions };

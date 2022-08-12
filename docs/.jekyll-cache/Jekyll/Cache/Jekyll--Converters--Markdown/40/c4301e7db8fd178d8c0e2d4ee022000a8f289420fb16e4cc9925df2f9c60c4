@@ -1,0 +1,102 @@
+I"1<h2 id="pagehandler">PageHandler <a name="PageHandler" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageHandler.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#PageHandler">PageHandler</a>
+    <ul>
+      <li><a href="#PageHandler+init">.init()</a></li>
+      <li><a href="#PageHandler+handlePreManagedState">.handlePreManagedState(managedPage, nextManagedPage, [action])</a></li>
+      <li><a href="#PageHandler+handlePostManagedState">.handlePostManagedState(managedPage, previousManagedPage, [action])</a></li>
+      <li><a href="#PageHandler+destroy">.destroy()</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="pagehandlerinit">pageHandler.init() <a name="PageHandler+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageHandler.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Initializes the page handler.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageHandler"><code>PageHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagehandlerhandlepremanagedstatemanagedpage-nextmanagedpage-action">pageHandler.handlePreManagedState(managedPage, nextManagedPage, [action]) <a name="PageHandler+handlePreManagedState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageHandler.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Called before a PageManager starts to transition from previous page to
+a new one.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageHandler"><code>PageHandler</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>managedPage</td>
+      <td><code>ManagedPage</code></td>
+      <td>The currently managed page - soon-to-be        previously managed page.</td>
+    </tr>
+    <tr>
+      <td>nextManagedPage</td>
+      <td><code>ManagedPage</code></td>
+      <td>The data of the page that’s about to        be managed.</td>
+    </tr>
+    <tr>
+      <td>[action]</td>
+      <td><code>Object</code></td>
+      <td>An action object describing what triggered the routing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="pagehandlerhandlepostmanagedstatemanagedpage-previousmanagedpage-action">pageHandler.handlePostManagedState(managedPage, previousManagedPage, [action]) <a name="PageHandler+handlePostManagedState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageHandler.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Called after a PageManager finishes transition from previous page to
+a new one.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageHandler"><code>PageHandler</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>managedPage</td>
+      <td><code>ManagedPage</code></td>
+      <td>The currently managed page.</td>
+    </tr>
+    <tr>
+      <td>previousManagedPage</td>
+      <td><code>ManagedPage</code></td>
+      <td>The data of the page that was        previously managed.</td>
+    </tr>
+    <tr>
+      <td>[action]</td>
+      <td><code>Object</code></td>
+      <td>An action object describing what triggered the routing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="pagehandlerdestroy">pageHandler.destroy() <a name="PageHandler+destroy" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageHandler.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Finalization callback, called when the page manager is being discarded.
+This usually happens when the page is hot-reloaded at the client side.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageHandler"><code>PageHandler</code></a></p>
+
+<hr />
+
+:ET

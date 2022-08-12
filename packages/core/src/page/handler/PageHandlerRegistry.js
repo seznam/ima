@@ -3,7 +3,7 @@ import SerialBatch from '../../execution/SerialBatch';
 
 export default class PageHandlerRegistry extends PageHandler {
   /**
-   * Creates an instance of HandlerRegistry and creates {@code SerialBatch}
+   * Creates an instance of HandlerRegistry and creates `SerialBatch`
    * instance for pre-handlers and post-handlers.
    *
    * @param {...PageHandler} pageHandlers
@@ -48,7 +48,7 @@ export default class PageHandlerRegistry extends PageHandler {
       [
         this._pageHandlers.map(handler =>
           handler.handlePreManagedState.bind(handler)
-        )
+        ),
       ]
     );
 
@@ -57,7 +57,7 @@ export default class PageHandlerRegistry extends PageHandler {
       [
         this._pageHandlers.map(handler =>
           handler.handlePostManagedState.bind(handler)
-        )
+        ),
       ]
     );
   }

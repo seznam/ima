@@ -1,0 +1,235 @@
+I"�/<h2 id="abstractpagerenderer">AbstractPageRenderer <a name="AbstractPageRenderer" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Base class for implementations of the {@linkcode PageRenderer} interface.</p>
+
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#AbstractPageRenderer">AbstractPageRenderer</a>
+    <ul>
+      <li><a href="#new_AbstractPageRenderer_new">new AbstractPageRenderer(factory, Helper, ReactDOM, dispatcher, settings)</a></li>
+      <li><a href="#AbstractPageRenderer+_factory">._factory</a> : <code>PageRendererFactory</code></li>
+      <li><a href="#AbstractPageRenderer+_Helper">._Helper</a> : <code>Vendor.$Helper</code></li>
+      <li><a href="#AbstractPageRenderer+_ReactDOM">._ReactDOM</a> : <code>Vendor.ReactDOM</code></li>
+      <li><a href="#AbstractPageRenderer+_dispatcher">._dispatcher</a> : <code>Dispatcher</code></li>
+      <li><a href="#AbstractPageRenderer+_settings">._settings</a> : <code>Object.&lt;string, \*&gt;</code></li>
+      <li><a href="#AbstractPageRenderer+_reactiveView">._reactiveView</a> : <code>React.Component</code></li>
+      <li><em><a href="#AbstractPageRenderer+mount">.mount()</a></em></li>
+      <li><a href="#AbstractPageRenderer+update">.update()</a></li>
+      <li><a href="#AbstractPageRenderer+unmount">.unmount()</a></li>
+      <li><a href="#AbstractPageRenderer+clearState">.clearState()</a></li>
+      <li><a href="#AbstractPageRenderer+setState">.setState()</a></li>
+      <li><a href="#AbstractPageRenderer+_generateViewProps">._generateViewProps(view, [state])</a> ⇒ <code>Object.&lt;string, \*&gt;</code></li>
+      <li><a href="#AbstractPageRenderer+_getWrappedPageView">._getWrappedPageView(controller, view, routeOptions)</a></li>
+      <li><a href="#AbstractPageRenderer+_getDocumentView">._getDocumentView(documentView)</a> ⇒ <code>function</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-abstractpagerendererfactory-helper-reactdom-dispatcher-settings">new AbstractPageRenderer(factory, Helper, ReactDOM, dispatcher, settings) <a name="new_AbstractPageRenderer_new"></a></h3>
+<p>Initializes the abstract page renderer.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>factory</td>
+      <td><code>PageRendererFactory</code></td>
+      <td>Factory for receive $Utils to view.</td>
+    </tr>
+    <tr>
+      <td>Helper</td>
+      <td><code>vendor.$Helper</code></td>
+      <td>The IMA.js helper methods.</td>
+    </tr>
+    <tr>
+      <td>ReactDOM</td>
+      <td><code>vendor.ReactDOM</code></td>
+      <td>React framework instance, will be used        to render the page.</td>
+    </tr>
+    <tr>
+      <td>dispatcher</td>
+      <td><code>Dispatcher</code></td>
+      <td>Dispatcher fires events to app.</td>
+    </tr>
+    <tr>
+      <td>settings</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>Application settings for the current        application environment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractpagerenderer_factory--pagerendererfactory">abstractPageRenderer._factory : <code>PageRendererFactory</code> <a name="AbstractPageRenderer+_factory" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Factory for receive $Utils to view.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_helper--vendorhelper">abstractPageRenderer._Helper : <code>Vendor.$Helper</code> <a name="AbstractPageRenderer+_Helper" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The IMA.js helper methods.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_reactdom--vendorreactdom">abstractPageRenderer._ReactDOM : <code>Vendor.ReactDOM</code> <a name="AbstractPageRenderer+_ReactDOM" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Rect framework instance, used to render the page.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_dispatcher--dispatcher">abstractPageRenderer._dispatcher : <code>Dispatcher</code> <a name="AbstractPageRenderer+_dispatcher" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L55" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Dispatcher fires events to app.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_settings--objectltstring-gt">abstractPageRenderer._settings : <code>Object.&lt;string, \*&gt;</code> <a name="AbstractPageRenderer+_settings" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Application setting for the current application environment.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_reactiveview--reactcomponent">abstractPageRenderer._reactiveView : <code>React.Component</code> <a name="AbstractPageRenderer+_reactiveView" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L69" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance property of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractpagerenderermount"><em>abstractPageRenderer.mount()</em> <a name="AbstractPageRenderer+mount" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance abstract method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerendererupdate">abstractPageRenderer.update() <a name="AbstractPageRenderer+update" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L85" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerendererunmount">abstractPageRenderer.unmount() <a name="AbstractPageRenderer+unmount" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L94" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerendererclearstate">abstractPageRenderer.clearState() <a name="AbstractPageRenderer+clearState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L103" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerenderersetstate">abstractPageRenderer.setState() <a name="AbstractPageRenderer+setState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L127" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<hr />
+
+<h3 id="abstractpagerenderer_generateviewpropsview-state--objectltstring-gt">abstractPageRenderer._generateViewProps(view, [state]) ⇒ <code>Object.&lt;string, \*&gt;</code> <a name="AbstractPageRenderer+_generateViewProps" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Generate properties for view from state.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>view</td>
+      <td><code>function</code></td>
+      <td> </td>
+      <td>The page        view React component to wrap.</td>
+    </tr>
+    <tr>
+      <td>[state]</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td><code>{}</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractpagerenderer_getwrappedpageviewcontroller-view-routeoptions">abstractPageRenderer._getWrappedPageView(controller, view, routeOptions) <a name="AbstractPageRenderer+_getWrappedPageView" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L185" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns wrapped page view component with managed root view and view adapter.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>controller</td>
+      <td><code>ControllerDecorator</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>view</td>
+      <td><code>function</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>routeOptions</td>
+      <td><code>Object</code></td>
+      <td>The current route options.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractpagerenderer_getdocumentviewdocumentview--function">abstractPageRenderer._getDocumentView(documentView) ⇒ <code>function</code> <a name="AbstractPageRenderer+_getDocumentView" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/AbstractPageRenderer.js#L213" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the class constructor of the specified document view component.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractPageRenderer"><code>AbstractPageRenderer</code></a><br />
+<strong>Returns</strong>: <code>function</code> - The constructor of the document
+        view component.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>documentView</td>
+      <td><code>function</code> | <code>string</code></td>
+      <td>The        namespace path pointing to the document view component, or the        constructor of the document view component.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

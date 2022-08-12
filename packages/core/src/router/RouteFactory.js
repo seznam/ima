@@ -17,7 +17,7 @@ export default class RouteFactory {
    * @param {string|Route~PathExpression} pathExpression A path expression
    *        specifying either the URL path part matching this route (must not\
    *        contain a query string) with optionally containing named parameter
-   *        placeholders specified as {@code :parameterName}. Or object defining
+   *        placeholders specified as `:parameterName`. Or object defining
    *        matcher in form of regular expression and toPath and extractParameters
    *        function overrides.
    * @param {string} controller The full name of Object Container alias

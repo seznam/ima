@@ -1,22 +1,23 @@
-import styles from './dataView.less';
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
-import JsonView from 'components/atom/jsonView/JsonView';
-import entryType from 'types/entryType';
+import { JsonView } from '@/components/atom';
+import { EntryType } from '@/utils';
+
+import styles from './dataView.module.less';
 
 export const TAB_SIZE = 3;
 
 export default class DataView extends React.PureComponent {
   static get propTypes() {
     return {
-      entry: entryType
+      entry: EntryType,
     };
   }
 
   static get defaultProps() {
     return {
-      entry: null
+      entry: null,
     };
   }
 
@@ -32,7 +33,7 @@ export default class DataView extends React.PureComponent {
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.state = {
-      tabIndex: 0
+      tabIndex: 0,
     };
   }
 
@@ -53,7 +54,8 @@ export default class DataView extends React.PureComponent {
     return (
       <Tabs
         selectedIndex={tabIndex}
-        onSelect={tabIndex => this.setState({ tabIndex })}>
+        onSelect={tabIndex => this.setState({ tabIndex })}
+      >
         <TabList>
           <Tab>Args</Tab>
           <Tab>Payload</Tab>
@@ -90,12 +92,12 @@ export default class DataView extends React.PureComponent {
     if (keyCode === 37 && tabIndex > 0) {
       // Arrow left
       this.setState({
-        tabIndex: tabIndex - 1
+        tabIndex: tabIndex - 1,
       });
     } else if (keyCode === 39 && tabIndex + 1 < TAB_SIZE) {
       // Arrow right
       this.setState({
-        tabIndex: tabIndex + 1
+        tabIndex: tabIndex + 1,
       });
     }
   }

@@ -1,0 +1,44 @@
+{
+  "name": "@ima/error-overlay",
+  "version": "18.0.0-rc.4",
+  "description": "IMA.js error-overlay used in development mode for error reporting.",
+  "keywords": [
+    "IMA.js",
+    "hot-module-replacement",
+    "error-overlay",
+    "stack-trace"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/error-overlay"
+  },
+  "license": "MIT",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "main": "./dist/js/overlay.js",
+  "scripts": {
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack --watch",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "stylelint": "stylelint './**/*.less'"
+  },
+  "devDependencies": {
+    "@ima/dev-utils": "^18.0.0-rc.4",
+    "@types/prismjs": "^1.26.0",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.5",
+    "clsx": "^1.1.1",
+    "compression-webpack-plugin": "^10.0.0",
+    "prismjs": "^1.28.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "stacktrace-parser": "^0.1.10"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

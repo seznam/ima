@@ -1,8 +1,8 @@
 import MapStorage from './MapStorage';
 
 /**
- * A specialization of the {@codelink MapStorage} storage mimicking the native
- * {@code WeakMap} using its internal garbage collector used once the size of
+ * A specialization of the `link MapStorage` storage mimicking the native
+ * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
 export default class WeakMapStorage extends MapStorage {
@@ -126,7 +126,7 @@ class WeakRef {
     }
 
     /**
-     * The actual target reference, or {@code null} if the reference has
+     * The actual target reference, or `null` if the reference has
      * been already discarded.
      *
      * @type {?Object}
@@ -144,9 +144,9 @@ class WeakRef {
 
   /**
    * Returns the target reference, provided that the target reference is
-   * still alive. Returns {@code null} if the reference has been discarded.
+   * still alive. Returns `null` if the reference has been discarded.
    *
-   * @return {?Object} The target reference, or {@code null} if the reference
+   * @return {?Object} The target reference, or `null` if the reference
    *         has been discarded by the garbage collector.
    */
   get target() {

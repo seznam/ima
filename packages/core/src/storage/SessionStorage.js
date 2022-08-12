@@ -3,8 +3,8 @@ import Storage from './Storage';
 import Window from '../window/Window';
 
 /**
- * Implementation of the {@codelink Storage} interface that relies on the
- * native {@code sessionStorage} DOM storage for storing its entries.
+ * Implementation of the `link Storage` interface that relies on the
+ * native `sessionStorage` DOM storage for storing its entries.
  */
 export default class SessionStorage extends Storage {
   static get $dependencies() {
@@ -64,7 +64,7 @@ export default class SessionStorage extends Storage {
         key,
         JSON.stringify({
           created: Date.now(),
-          value
+          value,
         })
       );
     } catch (error) {
@@ -120,7 +120,7 @@ export default class SessionStorage extends Storage {
   _deleteOldestEntry() {
     let oldestEntry = {
       key: null,
-      created: Date.now() + 1
+      created: Date.now() + 1,
     };
 
     for (let key of this.keys()) {
@@ -128,7 +128,7 @@ export default class SessionStorage extends Storage {
       if (value.created < oldestEntry.created) {
         oldestEntry = {
           key,
-          created: value.created
+          created: value.created,
         };
       }
     }
@@ -179,7 +179,7 @@ class StorageIterator {
     if (this._currentKeyIndex >= this._storage.length) {
       return {
         done: true,
-        value: undefined
+        value: undefined,
       };
     }
 
@@ -188,14 +188,14 @@ class StorageIterator {
 
     return {
       done: false,
-      value: key
+      value: key,
     };
   }
 
   /**
    * Returns the iterator for this object (this iterator). This method
    * implements the iterable protocol and provides compatibility with the
-   * {@code for..of} loops.
+   * `for..of` loops.
    *
    * @return {StorageIterator} This iterator.
    */

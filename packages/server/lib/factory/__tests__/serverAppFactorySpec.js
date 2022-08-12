@@ -1,5 +1,3 @@
-'use strict';
-
 const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter } = require('../../emitter.js');
 const instanceRecycler = require('../../instanceRecycler.js');
@@ -7,7 +5,7 @@ const serverGlobal = require('../../serverGlobal.js');
 const {
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } = require('to-mock');
 
 setGlobalMockMethod(jest.fn);
@@ -21,8 +19,8 @@ jest.mock('fs', () => {
     ...toMockedInstance(originalModule, {
       readFileSync() {
         return 'read file content';
-      }
-    })
+      },
+    }),
   };
 });
 
@@ -48,12 +46,12 @@ describe('Server App Factory', () => {
       $Server: {
         badRequestConcurrency: 1,
         cache: {
-          enabled: true
+          enabled: true,
         },
         serveSPA: {
-          allow: true
-        }
-      }
+          allow: true,
+        },
+      },
     };
     devErrorPage = jest.fn(({ error }) => ({
       SPA: false,
@@ -62,7 +60,7 @@ describe('Server App Factory', () => {
       cache: false,
       error,
       content: 'dev error page',
-      status: 500
+      status: 500,
     }));
     languageLoader = jest.fn();
     applicationFolder = '';
@@ -76,10 +74,10 @@ describe('Server App Factory', () => {
           route: {
             getName() {
               return 'notfound';
-            }
-          }
+            },
+          },
         };
-      })
+      }),
     };
 
     appFactory = jest.fn(() => {
@@ -89,7 +87,7 @@ describe('Server App Factory', () => {
           createImaApp: jest.fn(() => {
             return {
               bootstrap: {
-                run: jest.fn()
+                run: jest.fn(),
               },
               oc: {
                 // TODO IMA@18+ change for imports from @ima/core
@@ -100,23 +98,23 @@ describe('Server App Factory', () => {
 
                   if (name === '$Request') {
                     return {
-                      init: jest.fn()
+                      init: jest.fn(),
                     };
                   }
 
                   if (name === '$Response') {
                     return {
-                      init: jest.fn()
+                      init: jest.fn(),
                     };
                   }
                 },
-                clear() {}
-              }
+                clear() {},
+              },
             };
           }),
           getInitialPluginConfig: jest.fn(),
-          getInitialImaConfigFunctions: jest.fn()
-        }
+          getInitialImaConfigFunctions: jest.fn(),
+        },
       };
     });
 
@@ -126,13 +124,13 @@ describe('Server App Factory', () => {
       },
       get() {
         return '';
-      }
+      },
     };
     RES = {
       status: jest.fn(),
       send: jest.fn(),
       locals: {},
-      headerSent: false
+      headerSent: false,
     };
 
     serverApp = serverAppFactory({
@@ -144,7 +142,7 @@ describe('Server App Factory', () => {
       appFactory,
       emitter,
       instanceRecycler,
-      serverGlobal
+      serverGlobal,
     });
 
     serverApp.useIMADefaultHook();
@@ -163,7 +161,7 @@ describe('Server App Factory', () => {
     await serverApp.requestHandlerMiddleware(REQ, RES);
     await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    expect(appFactory.mock.calls.length).toEqual(3);
+    expect(appFactory.mock.calls).toHaveLength(3);
   });
 
   it('should call appFactory only once for prod mode', async () => {
@@ -172,7 +170,7 @@ describe('Server App Factory', () => {
     await serverApp.requestHandlerMiddleware(REQ, RES);
     await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    expect(appFactory.mock.calls.length).toEqual(1);
+    expect(appFactory.mock.calls).toHaveLength(1);
   });
 
   it('should render SPA page without cache', async () => {
@@ -183,7 +181,7 @@ describe('Server App Factory', () => {
     const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeTruthy();
-    expect(page.status).toEqual(200);
+    expect(page.status).toBe(200);
     expect(page.cache).toBeFalsy();
   });
 
@@ -207,7 +205,7 @@ describe('Server App Factory', () => {
     const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
-    expect(page.status).toEqual(503);
+    expect(page.status).toBe(503);
     expect(page.status).toBeTruthy();
     expect(page.cache).toBeFalsy();
   });
@@ -218,7 +216,7 @@ describe('Server App Factory', () => {
     const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
-    expect(page.status).toEqual(404);
+    expect(page.status).toBe(404);
     expect(page.cache).toBeFalsy();
     expect(page.static).toBeTruthy();
   });
@@ -226,17 +224,17 @@ describe('Server App Factory', () => {
   it('should render 404 app page for not exceed badRequestConcurrency', async () => {
     jest.spyOn(router, 'route').mockReturnValue({
       status: 404,
-      content: '404 page'
+      content: '404 page',
     });
     environment.$Server.badRequestConcurrency = 100;
 
     const page = await serverApp.requestHandlerMiddleware(REQ, RES);
 
     expect(page.SPA).toBeFalsy();
-    expect(page.status).toEqual(404);
+    expect(page.status).toBe(404);
     expect(page.cache).toBeFalsy();
     expect(page.static).toBeFalsy();
-    expect(page.content).toEqual('404 page');
+    expect(page.content).toBe('404 page');
   });
 
   describe('errorHandlerMiddleware method', () => {
@@ -247,10 +245,10 @@ describe('Server App Factory', () => {
       const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
-      expect(page.status).toEqual(500);
+      expect(page.status).toBe(500);
       expect(page.cache).toBeFalsy();
       expect(page.static).toBeFalsy();
-      expect(page.content).toEqual('dev error page');
+      expect(page.content).toBe('dev error page');
       expect(page.error).toEqual(error);
     });
 
@@ -261,10 +259,10 @@ describe('Server App Factory', () => {
       const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
-      expect(page.status).toEqual(500);
+      expect(page.status).toBe(500);
       expect(page.cache).toBeFalsy();
       expect(page.static).toBeTruthy();
-      expect(page.content).toEqual('read file content');
+      expect(page.content).toBe('read file content');
       expect(page.error).toEqual(error);
     });
 
@@ -275,10 +273,10 @@ describe('Server App Factory', () => {
       const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
       expect(page.SPA).toBeFalsy();
-      expect(page.status).toEqual(500);
+      expect(page.status).toBe(500);
       expect(page.cache).toBeFalsy();
       expect(page.static).toBeTruthy();
-      expect(page.content).toEqual('read file content');
+      expect(page.content).toBe('read file content');
       expect(page.error).toEqual(error);
     });
   });

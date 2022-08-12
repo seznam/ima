@@ -5,7 +5,7 @@ const {
   setGlobalMockMethod,
   setGlobalKeepUnmock,
   objectKeepUnmock,
-  toMock
+  toMock,
 } = require('to-mock');
 
 setGlobalMockMethod(jest.fn);
@@ -19,15 +19,15 @@ jest.mock('fs', () => {
     ...toMockedInstance(originalModule, {
       readFileSync() {
         return 'read file content';
-      }
-    })
+      },
+    }),
   };
 });
 
 describe('devErrorPageFactory', () => {
   const logger = toMock(console);
   const devErrorPage = devErrorPageFactory({
-    logger
+    logger,
   });
 
   const REQ = Object.freeze({});
@@ -35,7 +35,7 @@ describe('devErrorPageFactory', () => {
   const RES = Object.freeze({
     status: jest.fn(),
     send: jest.fn(),
-    locals: {}
+    locals: {},
   });
 
   const ERROR = new Error('My own Error');
@@ -49,7 +49,7 @@ describe('devErrorPageFactory', () => {
       const response = await devErrorPage({ error: ERROR, req: REQ, res: RES });
 
       expect(logger.error).toHaveBeenCalled();
-      expect(response.status).toEqual(500);
+      expect(response.status).toBe(500);
       expect(response.content.includes('read file content')).toBeTruthy();
     });
   });

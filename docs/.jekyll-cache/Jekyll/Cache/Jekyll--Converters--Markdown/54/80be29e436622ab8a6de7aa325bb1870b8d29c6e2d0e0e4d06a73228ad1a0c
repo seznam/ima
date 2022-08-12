@@ -1,0 +1,109 @@
+I"<h2 id="pagestatemanager">PageStateManager <a name="PageStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Manager of the current page state and state history.</p>
+
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#PageStateManager">PageStateManager</a>
+    <ul>
+      <li><a href="#PageStateManager+clear">.clear()</a></li>
+      <li><a href="#PageStateManager+setState">.setState(statePatch)</a></li>
+      <li><a href="#PageStateManager+getState">.getState()</a> ⇒ <code>Object.&lt;string, \*&gt;</code></li>
+      <li><a href="#PageStateManager+getAllStates">.getAllStates()</a> ⇒ <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code></li>
+      <li><a href="#PageStateManager+getTransactionStatePatches">.getTransactionStatePatches()</a> ⇒ <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code></li>
+      <li><a href="#PageStateManager+beginTransaction">.beginTransaction()</a></li>
+      <li><a href="#PageStateManager+commitTransaction">.commitTransaction()</a></li>
+      <li><a href="#PageStateManager+cancelTransaction">.cancelTransaction()</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="pagestatemanagerclear">pageStateManager.clear() <a name="PageStateManager+clear" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Clears the state history.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a></p>
+
+<hr />
+
+<h3 id="pagestatemanagersetstatestatepatch">pageStateManager.setState(statePatch) <a name="PageStateManager+setState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets a new page state by applying the provided patch to the current
+state.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>statePatch</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The patch of the current state.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="pagestatemanagergetstate--objectltstring-gt">pageStateManager.getState() ⇒ <code>Object.&lt;string, \*&gt;</code> <a name="PageStateManager+getState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the current page state.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a><br />
+<strong>Returns</strong>: <code>Object.&lt;string, \*&gt;</code> - The current page state.</p>
+
+<hr />
+
+<h3 id="pagestatemanagergetallstates--arrayltobjectltstring-gtgt">pageStateManager.getAllStates() ⇒ <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code> <a name="PageStateManager+getAllStates" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the recorded history of page states. The states will be
+chronologically sorted from the oldest to the newest.</p>
+
+<p>Note that the implementation may limit the size of the recorded history,
+therefore the complete history may not be available.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a><br />
+<strong>Returns</strong>: <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code> - The recorded history of page states.</p>
+
+<hr />
+
+<h3 id="pagestatemanagergettransactionstatepatches--arrayltobjectltstring-gtgt">pageStateManager.getTransactionStatePatches() ⇒ <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code> <a name="PageStateManager+getTransactionStatePatches" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns queueing state patches off the main state from the begin of transaction.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a><br />
+<strong>Returns</strong>: <code>Array.&lt;Object.&lt;string, \*&gt;&gt;</code> - State patches from the begin of transaction.</p>
+
+<hr />
+
+<h3 id="pagestatemanagerbegintransaction">pageStateManager.beginTransaction() <a name="PageStateManager+beginTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Starts queueing state patches off the main state. While the transaction
+is active every {@method setState} call has no effect on the current state.</p>
+
+<p>Note that call to {@method getState} after the transaction has begun will
+return state as it was before the transaction.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a></p>
+
+<hr />
+
+<h3 id="pagestatemanagercommittransaction">pageStateManager.commitTransaction() <a name="PageStateManager+commitTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Applies queued state patches to the main state. All patches are squashed
+and applied with one {@method setState} call.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a></p>
+
+<hr />
+
+<h3 id="pagestatemanagercanceltransaction">pageStateManager.cancelTransaction() <a name="PageStateManager+cancelTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/state/PageStateManager.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Cancels ongoing transaction. Uncommited state changes are lost.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageStateManager"><code>PageStateManager</code></a></p>
+
+<hr />
+
+:ET

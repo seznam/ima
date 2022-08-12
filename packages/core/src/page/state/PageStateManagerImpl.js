@@ -5,7 +5,7 @@ import Dispatcher from '../../event/Dispatcher';
 const MAX_HISTORY_LIMIT = 10;
 
 /**
- * The implementation of the {@linkcode PageStateManager} interface.
+ * The implementation of the {@link PageStateManager} interface.
  */
 export default class PageStateManagerImpl extends PageStateManager {
   static get $dependencies() {
@@ -21,12 +21,12 @@ export default class PageStateManagerImpl extends PageStateManager {
     super();
 
     /**
-     * @type {Object<string, *>[]}
+     * @type {Array<Object<string, *>>}
      */
     this._states = [];
 
     /**
-     * @type {Object<string, *>[]}
+     * @type {Array<Object<string, *>>}
      */
     this._statePatchQueue = [];
 
@@ -176,7 +176,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * Call registered callback function on (@codelink onChange) with newState.
+   * Call registered callback function on (@link onChange) with newState.
    *
    * @param {Object<string, *>} newState
    */

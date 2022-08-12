@@ -1,9 +1,9 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import uid from 'easy-uid';
 
-export const presetsInitialState = {
+const presetsInitialState = {
   selectedPresetId: null,
-  presets: {}
+  presets: {},
 };
 
 const getCurrentPreset = state => {
@@ -91,11 +91,11 @@ const presets = createSlice({
 
         hooks[id].opened = true;
       }
-    }
-  }
+    },
+  },
 });
 
-const selectors = {
+const presetsSelectors = {
   getHookIds: createSelector(
     state => state.presets.selectedPresetId,
     state => state.presets.presets,
@@ -109,9 +109,14 @@ const selectors = {
     (selectedPresetId, presets) => {
       return selectedPresetId && presets[selectedPresetId].hooks;
     }
-  )
+  ),
 };
 
-const { reducer, actions } = presets;
+const { reducer: presetsReducer, actions: presetsActions } = presets;
 
-export { reducer, actions, selectors };
+export {
+  presetsInitialState,
+  presetsReducer,
+  presetsActions,
+  presetsSelectors,
+};

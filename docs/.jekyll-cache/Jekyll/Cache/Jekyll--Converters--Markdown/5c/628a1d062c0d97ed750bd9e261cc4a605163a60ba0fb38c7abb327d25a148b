@@ -1,0 +1,243 @@
+I"I-<h2 id="clientpagemanager">ClientPageManager <a name="ClientPageManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Page manager for controller on the client side.</p>
+
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#ClientPageManager">ClientPageManager</a>
+    <ul>
+      <li><a href="#new_ClientPageManager_new">new ClientPageManager(pageFactory, pageRenderer, stateManager, handlerRegistry, window, eventBus)</a></li>
+      <li><a href="#ClientPageManager+_window">._window</a> : <code>ima.core.window.Window</code></li>
+      <li><a href="#ClientPageManager+_eventBus">._eventBus</a> : <code>ima.core.event.EventBus</code></li>
+      <li><a href="#ClientPageManager+_boundOnCustomEventHandler">._boundOnCustomEventHandler()</a> : <code>function</code></li>
+      <li><a href="#ClientPageManager+init">.init()</a></li>
+      <li><a href="#ClientPageManager+manage">.manage()</a></li>
+      <li><a href="#ClientPageManager+destroy">.destroy()</a></li>
+      <li><a href="#ClientPageManager+_onCustomEventHandler">._onCustomEventHandler(event)</a></li>
+      <li><a href="#ClientPageManager+_parseCustomEvent">._parseCustomEvent(event)</a> ⇒ <code>Object</code></li>
+      <li><a href="#ClientPageManager+_handleEventWithController">._handleEventWithController(method, data)</a> ⇒ <code>boolean</code></li>
+      <li><a href="#ClientPageManager+_handleEventWithExtensions">._handleEventWithExtensions(method, data)</a> ⇒ <code>boolean</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-clientpagemanagerpagefactory-pagerenderer-statemanager-handlerregistry-window-eventbus">new ClientPageManager(pageFactory, pageRenderer, stateManager, handlerRegistry, window, eventBus) <a name="new_ClientPageManager_new"></a></h3>
+<p>Initializes the client-side page manager.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pageFactory</td>
+      <td><code>PageFactory</code></td>
+      <td>Factory used by the page manager to        create instances of the controller for the current route, and        decorate the controllers and page state managers.</td>
+    </tr>
+    <tr>
+      <td>pageRenderer</td>
+      <td><code>PageRenderer</code></td>
+      <td>The current renderer of the page.</td>
+    </tr>
+    <tr>
+      <td>stateManager</td>
+      <td><code>PageStateManager</code></td>
+      <td>The current page state manager.</td>
+    </tr>
+    <tr>
+      <td>handlerRegistry</td>
+      <td><code>HandlerRegistry</code></td>
+      <td>Instance of HandlerRegistry that        holds a list of pre-manage and post-manage handlers.</td>
+    </tr>
+    <tr>
+      <td>window</td>
+      <td><code>Window</code></td>
+      <td>The utility for manipulating the global context        and global client-side-specific APIs.</td>
+    </tr>
+    <tr>
+      <td>eventBus</td>
+      <td><code>EventBus</code></td>
+      <td>The event bus for dispatching and listening        for custom IMA events propagated through the DOM.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagemanager_window--imacorewindowwindow">clientPageManager._window : <code>ima.core.window.Window</code> <a name="ClientPageManager+_window" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The utility for manipulating the global context and global
+client-side-specific APIs.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanager_eventbus--imacoreeventeventbus">clientPageManager._eventBus : <code>ima.core.event.EventBus</code> <a name="ClientPageManager+_eventBus" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The event bus for dispatching and listening for custom IMA events
+propagated through the DOM.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanager_boundoncustomeventhandler--function">clientPageManager._boundOnCustomEventHandler() : <code>function</code> <a name="ClientPageManager+_boundOnCustomEventHandler" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Event listener for the custom DOM events used by the event bus,
+bound to this instance.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanagerinit">clientPageManager.init() <a name="ClientPageManager+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanagermanage">clientPageManager.manage() <a name="ClientPageManager+manage" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L91" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanagerdestroy">clientPageManager.destroy() <a name="ClientPageManager+destroy" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L101" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<hr />
+
+<h3 id="clientpagemanager_oncustomeventhandlerevent">clientPageManager._onCustomEventHandler(event) <a name="ClientPageManager+_onCustomEventHandler" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Custom DOM event handler.</p>
+
+<p>The handler invokes the event listener in the active controller, if such
+listener is present. The name of the controller’s listener method is
+created by turning the first symbol of the event’s name to upper case,
+and then prefixing the result with the ‘on’ prefix.</p>
+
+<p>For example: for an event named ‘toggle’ the controller’s listener
+would be named ‘onToggle’.</p>
+
+<p>The controller’s listener will be invoked with the event’s data as an
+argument.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>event</td>
+      <td><code>CustomEvent</code></td>
+      <td>The encountered event bus DOM event.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagemanager_parsecustomeventevent--object">clientPageManager._parseCustomEvent(event) ⇒ <code>Object</code> <a name="ClientPageManager+_parseCustomEvent" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Extracts the details of the provided event bus custom DOM event, along
+with the expected name of the current controller’s method for
+intercepting the event.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a><br />
+<strong>Returns</strong>: <code>Object</code> - The event’s
+        details.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>event</td>
+      <td><code>CustomEvent</code></td>
+      <td>The encountered event bus custom DOM event.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagemanager_handleeventwithcontrollermethod-data--boolean">clientPageManager._handleEventWithController(method, data) ⇒ <code>boolean</code> <a name="ClientPageManager+_handleEventWithController" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Attempts to handle the currently processed event bus custom DOM event
+using the current controller. The method returns <code>true</code> if the
+event is handled by the controller.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a><br />
+<strong>Returns</strong>: <code>boolean</code> - <code>true</code> if the event has been handled by the
+        controller, <code>false</code> if the controller does not have a
+        method for processing the event.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method</td>
+      <td><code>string</code></td>
+      <td>The name of the method the current controller        should use to process the currently processed event bus custom        DOM event.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The custom event’s data.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="clientpagemanager_handleeventwithextensionsmethod-data--boolean">clientPageManager._handleEventWithExtensions(method, data) ⇒ <code>boolean</code> <a name="ClientPageManager+_handleEventWithExtensions" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/manager/ClientPageManager.js#L209" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Attempts to handle the currently processed event bus custom DOM event
+using the registered extensions of the current controller. The method
+returns <code>true</code> if the event is handled by the controller.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#ClientPageManager"><code>ClientPageManager</code></a><br />
+<strong>Returns</strong>: <code>boolean</code> - <code>true</code> if the event has been handled by one of
+        the controller’s extensions, <code>false</code> if none of the
+        controller’s extensions has a method for processing the event.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method</td>
+      <td><code>string</code></td>
+      <td>The name of the method the current controller        should use to process the currently processed event bus custom        DOM event.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The custom event’s data.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

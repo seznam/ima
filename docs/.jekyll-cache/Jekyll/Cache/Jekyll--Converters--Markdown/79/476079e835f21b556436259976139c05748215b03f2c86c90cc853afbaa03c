@@ -1,0 +1,103 @@
+I"�<h2 id="extensibleerror--error"><em>ExtensibleError ⇐ <code>Error</code></em> <a name="ExtensibleError" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global abstract class<br />
+<strong>Extends</strong>: <code>Error</code></p>
+
+<ul>
+  <li><em><a href="#ExtensibleError">ExtensibleError</a> ⇐ <code>Error</code></em>
+    <ul>
+      <li><em><a href="#new_ExtensibleError_new">new ExtensibleError(message, [dropInternalStackFrames])</a></em></li>
+      <li><em><a href="#ExtensibleError+name">.name</a> : <code>string</code></em></li>
+      <li><em><a href="#ExtensibleError+message">.message</a> : <code>string</code></em></li>
+      <li><em><a href="#ExtensibleError+_nativeError">._nativeError</a> : <code>Error</code></em></li>
+      <li><em><a href="#ExtensibleError+_stack">._stack</a> : <code>string</code></em></li>
+      <li><em><a href="#ExtensibleError+_dropInternalStackFrames">._dropInternalStackFrames</a> : <code>boolean</code></em></li>
+      <li><em><a href="#ExtensibleError+stack">.stack</a> : <code>string</code></em></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-extensibleerrormessage-dropinternalstackframes"><em>new ExtensibleError(message, [dropInternalStackFrames])</em> <a name="new_ExtensibleError_new"></a></h3>
+<p>Base class of custom error classes, extending the native <code class="highlighter-rouge">Error</code> class.</p>
+
+<p>This class has been introduced to fix the Babel-related issues with
+extending the native JavaScript (Error) classes.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>message</td>
+      <td><code>string</code></td>
+      <td> </td>
+      <td>The message describing the cause of the error.</td>
+    </tr>
+    <tr>
+      <td>[dropInternalStackFrames]</td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether or not the call stack        frames referring to the constructors of the custom errors should be        excluded from the stack of this error (just like the native platform        call stack frames are dropped by the JS engine).        This flag is enabled by default.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="extensibleerrorname--string"><em>extensibleError.name : <code>string</code></em> <a name="ExtensibleError+name" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The name of this error, used in the generated stack trace.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+<h3 id="extensibleerrormessage--string"><em>extensibleError.message : <code>string</code></em> <a name="ExtensibleError+message" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The message describing the cause of the error.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+<h3 id="extensibleerror_nativeerror--error"><em>extensibleError._nativeError : <code>Error</code></em> <a name="ExtensibleError+_nativeError" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Native error instance we use to generate the call stack. For some reason
+some browsers do not generate call stacks for instances of classes
+extending the native <code class="highlighter-rouge">Error</code> class, so we bypass this shortcoming this way.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+<h3 id="extensibleerror_stack--string"><em>extensibleError._stack : <code>string</code></em> <a name="ExtensibleError+_stack" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The internal cache of the generated stack. The cache is filled upon first
+access to the <a href="#ExtensibleError+stack">stack</a> property.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+<h3 id="extensibleerror_dropinternalstackframes--boolean"><em>extensibleError._dropInternalStackFrames : <code>boolean</code></em> <a name="ExtensibleError+_dropInternalStackFrames" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Whether or not the call stack frames referring to the constructors of
+the custom errors should be excluded from the stack of this error (just
+like the native platform call stack frames are dropped by the JS
+engine).</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+<h3 id="extensibleerrorstack--string"><em>extensibleError.stack : <code>string</code></em> <a name="ExtensibleError+stack" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/ExtensibleError.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The call stack captured at the moment of creation of this error. The
+formatting of the stack is browser-dependant.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#ExtensibleError"><code>ExtensibleError</code></a></p>
+
+<hr />
+
+:ET

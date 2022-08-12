@@ -1,15 +1,15 @@
 import ArrowDownIcon from './ArrowDownIcon';
 import ArrowUpIcon from './ArrowUpIcon';
-import SearchIcon from './SearchIcon';
-import ResetIcon from './ResetIcon';
-import CloseIcon from './CloseIcon';
-import MoreIcon from './MoreIcon';
-import CogIcon from './CogIcon';
-import EnableIcon from './EnableIcon';
-import TrashIcon from './TrashIcon';
-import EditIcon from './EditIcon';
 import CheckIcon from './CheckIcon';
+import CloseIcon from './CloseIcon';
+import CogIcon from './CogIcon';
 import CopyIcon from './CopyIcon';
+import EditIcon from './EditIcon';
+import EnableIcon from './EnableIcon';
+import MoreIcon from './MoreIcon';
+import ResetIcon from './ResetIcon';
+import SearchIcon from './SearchIcon';
+import TrashIcon from './TrashIcon';
 
 export default Object.freeze({
   cog: CogIcon,
@@ -23,5 +23,5 @@ export default Object.freeze({
   trash: TrashIcon,
   edit: EditIcon,
   check: CheckIcon,
-  copy: CopyIcon
+  copy: CopyIcon,
 });

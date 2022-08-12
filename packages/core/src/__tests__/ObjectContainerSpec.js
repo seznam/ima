@@ -5,7 +5,7 @@ describe('ima.core.ObjectContainer', () => {
   let oc = null;
 
   function classConstructorWithDependencies(dependency) {
-    this.dependecy = dependency;
+    this.dependency = dependency;
   }
   classConstructorWithDependencies.$dependencies = [];
 
@@ -27,7 +27,7 @@ describe('ima.core.ObjectContainer', () => {
   let constantCompositionName = 'constantObject.path.to.property';
   let constantObjectProperty = 'property';
   let constantObjectValue = {
-    path: { to: { property: constantObjectProperty } }
+    path: { to: { property: constantObjectProperty } },
   };
 
   let namespacePathUnit = 'test.unit';
@@ -39,7 +39,7 @@ describe('ima.core.ObjectContainer', () => {
   });
 
   it('should be empty object container', () => {
-    expect(oc._entries.size).toEqual(0);
+    expect(oc._entries.size).toBe(0);
   });
 
   it('should be clear entries', () => {
@@ -84,9 +84,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.constant(constantName, constantValue);
 
       expect(oc._createEntry).toHaveBeenCalled();
-      expect(oc._entries.get(constantName).sharedInstance).toEqual(
-        constantValue
-      );
+      expect(oc._entries.get(constantName).sharedInstance).toBe(constantValue);
     });
   });
 
@@ -115,17 +113,17 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.inject(classConstructor, dependencies);
 
-      expect(oc._entries.get(classConstructor).classConstructor).toEqual(
+      expect(oc._entries.get(classConstructor).classConstructor).toStrictEqual(
         classConstructor
       );
-      expect(oc._entries.get(classConstructor).dependencies).toEqual(
+      expect(oc._entries.get(classConstructor).dependencies).toStrictEqual(
         dependencies
       );
       expect(oc._createEntry).toHaveBeenCalledWith(
         classConstructor,
         dependencies
       );
-      expect(oc._entries.size).toEqual(1);
+      expect(oc._entries.size).toBe(1);
     });
 
     it('should set instance of entry from aliases to the entries', () => {
@@ -134,15 +132,17 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classConstructor, dependencies);
       oc.inject(classConstructor, dependencies);
 
-      expect(oc._entries.get(classConstructor).classConstructor).toEqual(
+      expect(oc._entries.get(classConstructor).classConstructor).toStrictEqual(
         classConstructor
       );
-      expect(oc._entries.get(classConstructor).dependencies).toEqual(
+      expect(oc._entries.get(classConstructor).dependencies).toStrictEqual(
         dependencies
       );
-      expect(oc._entries.size).toEqual(2);
-      expect(oc._createEntry.mock.calls.length).toEqual(1);
-      expect(oc._entries.get(classConstructor)).toEqual(oc._entries.get(alias));
+      expect(oc._entries.size).toBe(2);
+      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._entries.get(classConstructor)).toStrictEqual(
+        oc._entries.get(alias)
+      );
     });
 
     it('should be throw error, if yow call inject more then 2 times for same classConstructor', () => {
@@ -192,8 +192,10 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias, classConstructor);
 
-      expect(oc._createEntry.mock.calls.length).toEqual(0);
-      expect(oc._entries.get(alias)).toEqual(oc._entries.get(classConstructor));
+      expect(oc._createEntry.calls.count()).toBe(0);
+      expect(oc._entries.get(alias)).toStrictEqual(
+        oc._entries.get(classConstructor)
+      );
     });
 
     it('should be use entry from entries which was defined by provide method', () => {
@@ -203,8 +205,10 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias, classParent);
 
-      expect(oc._createEntry.mock.calls.length).toEqual(0);
-      expect(oc._entries.get(alias)).toEqual(oc._entries.get(classParent));
+      expect(oc._createEntry.calls.count()).toBe(0);
+      expect(oc._entries.get(alias)).toStrictEqual(
+        oc._entries.get(classParent)
+      );
     });
 
     it('should use entry from entries which was provided and binded', () => {
@@ -225,10 +229,10 @@ describe('ima.core.ObjectContainer', () => {
         classConstructorWithDependencies,
         classConstructorWithDependencies.$dependencies
       );
-      expect(aliasEntry.classConstructor).toEqual(
+      expect(aliasEntry.classConstructor).toStrictEqual(
         classConstructorWithDependencies
       );
-      expect(aliasEntry.dependencies).toEqual(
+      expect(aliasEntry.dependencies).toStrictEqual(
         classConstructorWithDependencies.$dependencies
       );
     });
@@ -241,11 +245,11 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias2, classConstructor, []);
 
-      expect(oc._createEntry.mock.calls.length).toEqual(1);
-      expect(oc._entries.get(alias2)).not.toEqual(
+      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._entries.get(alias2)).not.toStrictEqual(
         oc._entries.get(classConstructor)
       );
-      expect(oc._entries.get(alias2).dependencies).toEqual([]);
+      expect(oc._entries.get(alias2).dependencies).toStrictEqual([]);
     });
   });
 
@@ -274,8 +278,8 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.provide(classParent, classConstructor, dependencies);
 
-      expect(oc._createEntry.mock.calls.length).toEqual(1);
-      expect(oc._entries.size).toEqual(2);
+      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._entries.size).toBe(2);
     });
   });
 
@@ -287,17 +291,25 @@ describe('ima.core.ObjectContainer', () => {
     it('should return true if name is exist in object container', () => {
       oc.inject(classConstructor, dependencies);
 
-      expect(oc.has(classConstructor)).toEqual(true);
-      expect(oc.has(namespacePathUnit)).toEqual(true);
+      expect(oc.has(classConstructor)).toBeTruthy();
+      expect(oc.has(namespacePathUnit)).toBeTruthy();
     });
 
     it('should return true if classConstructor has defined $dependencies property', () => {
-      expect(oc.has(classConstructorWithDependencies)).toEqual(true);
+      expect(oc.has(classConstructorWithDependencies)).toBeTruthy();
     });
 
     it('should return false if name is not exist in object container', () => {
-      expect(oc.has(classConstructor)).toEqual(false);
-      expect(oc.has(namespacePathOC)).toEqual(false);
+      global.$Debug = false;
+      expect(oc.has(namespacePathOC)).toBeFalsy();
+      expect(oc.has(classConstructor)).toBeFalsy();
+      global.$Debug = true;
+    });
+
+    it('should throw if class is not in object container', () => {
+      expect(() => {
+        oc.has(classConstructor);
+      }).toThrow();
     });
   });
 
@@ -308,7 +320,7 @@ describe('ima.core.ObjectContainer', () => {
       entry = {
         sharedInstance: null,
         classConstructor: classConstructor,
-        dependencies: dependencies
+        dependencies: dependencies,
       };
     });
 
@@ -318,8 +330,8 @@ describe('ima.core.ObjectContainer', () => {
       jest.spyOn(oc, '_getEntry').mockReturnValue(entry);
       jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
 
-      expect(oc.get('entry')).toEqual(entry.sharedInstance);
-      expect(oc._createInstanceFromEntry.mock.calls.length).toEqual(0);
+      expect(oc.get('entry')).toStrictEqual(entry.sharedInstance);
+      expect(oc._createInstanceFromEntry.calls.count()).toBe(0);
     });
 
     it('should create new instance', () => {
@@ -350,7 +362,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be return entry from constants', () => {
       oc.constant(constantName, constantValue);
 
-      expect(oc._getEntry(constantName).sharedInstance).toEqual(constantValue);
+      expect(oc._getEntry(constantName).sharedInstance).toBe(constantValue);
     });
 
     it('should be return entry from aliases', () => {
@@ -358,8 +370,8 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntry(alias);
 
-      expect(entry.classConstructor).toEqual(classConstructor);
-      expect(entry.dependencies).toEqual(dependencies);
+      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be return value from registry', () => {
@@ -367,8 +379,8 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntry(classConstructor);
 
-      expect(entry.classConstructor).toEqual(classConstructor);
-      expect(entry.dependencies).toEqual(dependencies);
+      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be return value from namespace', () => {
@@ -378,14 +390,16 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntry(namespacePathOC);
 
-      expect(entry.sharedInstance).toEqual(value);
+      expect(entry.sharedInstance).toStrictEqual(value);
     });
 
     it('should be return value from registry for class constructor with $dependencies', () => {
       let entry = oc._getEntry(classConstructorWithDependencies);
 
-      expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
-      expect(entry.dependencies).toEqual(
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructorWithDependencies
+      );
+      expect(entry.dependencies).toStrictEqual(
         classConstructorWithDependencies.$dependencies
       );
     });
@@ -401,7 +415,7 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromConstant(constantObjectName);
 
-      expect(entry.sharedInstance).toEqual(constantObjectValue);
+      expect(entry.sharedInstance).toStrictEqual(constantObjectValue);
     });
 
     it('should return entry by composition name to property from stored constants', () => {
@@ -409,7 +423,7 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromConstant(constantCompositionName);
 
-      expect(entry.sharedInstance).toEqual(constantObjectProperty);
+      expect(entry.sharedInstance).toStrictEqual(constantObjectProperty);
     });
 
     it('should return null for bad type of composition name', () => {
@@ -417,7 +431,7 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromConstant(() => {});
 
-      expect(entry).toEqual(null);
+      expect(entry).toBeNull();
     });
   });
 
@@ -435,8 +449,8 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromNamespace(namespacePathOC);
 
-      expect(entry.classConstructor).toEqual(classConstructor);
-      expect(entry.dependencies).toEqual(dependencies);
+      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
@@ -446,8 +460,8 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromNamespace(namespacePathOC);
 
-      expect(entry.classConstructor).toEqual(classDependency);
-      expect(entry.dependencies).toEqual([]);
+      expect(entry.classConstructor).toStrictEqual(classDependency);
+      expect(entry.dependencies).toStrictEqual([]);
     });
 
     it('should be create entry with constant value if namespace return another type than function', () => {
@@ -458,7 +472,7 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromNamespace(namespacePathOC);
 
-      expect(entry.sharedInstance).toEqual(constant);
+      expect(entry.sharedInstance).toStrictEqual(constant);
     });
   });
 
@@ -468,11 +482,19 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return null if classConstructor is not a function', () => {
-      expect(oc._getEntryFromClassConstructor()).toEqual(null);
+      expect(oc._getEntryFromClassConstructor()).toBeNull();
     });
 
     it('should return null for not defined $dependencies property', () => {
-      expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(null);
+      global.$Debug = false;
+      expect(oc._getEntryFromClassConstructor(classConstructor)).toBeNull();
+      global.$Debug = true;
+    });
+
+    it('should throw for not defined $dependencies property in $Debug', () => {
+      expect(() => {
+        oc._getEntryFromClassConstructor(classConstructor);
+      }).toThrow();
     });
 
     it('should set class to entries if class has defined $dependencies', () => {
@@ -484,7 +506,7 @@ describe('ima.core.ObjectContainer', () => {
         classConstructorWithDependencies,
         classConstructorWithDependencies.$dependencies
       );
-      expect(oc._entries.size).toEqual(1);
+      expect(oc._entries.size).toBe(1);
     });
 
     it('should return entry if class has defined $dependencies', () => {
@@ -492,8 +514,10 @@ describe('ima.core.ObjectContainer', () => {
         classConstructorWithDependencies
       );
 
-      expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
-      expect(entry.dependencies).toEqual(
+      expect(entry.classConstructor).toStrictEqual(
+        classConstructorWithDependencies
+      );
+      expect(entry.dependencies).toStrictEqual(
         classConstructorWithDependencies.$dependencies
       );
     });

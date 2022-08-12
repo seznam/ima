@@ -1,0 +1,16 @@
+I"�<h2 id="blankmanagedrootview">BlankManagedRootView <a name="BlankManagedRootView" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/BlankManagedRootView.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Blank managed root view does not nothing except for rendering the current
+page view.</p>
+
+<p>This is the default managed root view.</p>
+
+<p><strong>Kind</strong>: global class</p>
+
+<hr />
+
+<h3 id="blankmanagedrootviewrender">blankManagedRootView.render() <a name="BlankManagedRootView+render" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/renderer/BlankManagedRootView.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#BlankManagedRootView"><code>BlankManagedRootView</code></a></p>
+
+<hr />
+
+:ET

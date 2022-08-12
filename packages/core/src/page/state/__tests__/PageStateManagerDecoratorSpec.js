@@ -7,7 +7,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   let decoratedPageStateManager = null;
   let state = {
     allow: 1,
-    deny: 0
+    deny: 0,
   };
 
   beforeEach(() => {
@@ -31,13 +31,13 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     decoratedPageStateManager.getState();
 
-    expect(decoratedPageStateManager.getState()).toEqual(state);
+    expect(decoratedPageStateManager.getState()).toStrictEqual(state);
   });
 
   it('should return all history of states', () => {
     jest.spyOn(pageStateManager, 'getAllStates').mockReturnValue([state]);
 
-    expect(decoratedPageStateManager.getAllStates()).toEqual([state]);
+    expect(decoratedPageStateManager.getAllStates()).toStrictEqual([state]);
   });
 
   describe('setState method', () => {
@@ -59,7 +59,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     it('should setState for all allowed keys', () => {
       let patchState = {
-        allow: 0
+        allow: 0,
       };
 
       jest.spyOn(pageStateManager, 'setState').mockImplementation();
@@ -71,14 +71,14 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     it('should commit transaction for all allowed keys', () => {
       let patchState = {
-        allow: 0
+        allow: 0,
       };
 
       decoratedPageStateManager.beginTransaction();
       decoratedPageStateManager.setState(patchState);
       decoratedPageStateManager.commitTransaction();
 
-      expect(pageStateManager.getState()).toEqual(patchState);
+      expect(pageStateManager.getState()).toStrictEqual(patchState);
     });
   });
 });

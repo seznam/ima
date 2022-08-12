@@ -19,13 +19,13 @@ describe('ima.core.execution.AbstractExecution', () => {
     it('should append a job to the list of jobs', () => {
       execution.append([asyncFunction, syncFunction]);
 
-      expect(execution._jobs.length).toBe(2);
+      expect(execution._jobs).toHaveLength(2);
     });
 
     it("should not append a job if it's invalid", () => {
       execution.append({});
 
-      expect(execution._jobs.length).toBe(0);
+      expect(execution._jobs).toHaveLength(0);
     });
   });
 

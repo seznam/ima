@@ -1,0 +1,216 @@
+I"�-<h2 id="cacheimpl--cache">CacheImpl ⇐ <code>Cache</code> <a name="CacheImpl" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Configurable generic implementation of the <a href="Cache">Cache</a> interface.</p>
+
+<p><strong>Kind</strong>: global class<br />
+<strong>Extends</strong>: <code>Cache</code></p>
+
+<ul>
+  <li><a href="#CacheImpl">CacheImpl</a> ⇐ <code>Cache</code>
+    <ul>
+      <li><a href="#new_CacheImpl_new">new CacheImpl(cacheStorage, factory, Helper, [config])</a></li>
+      <li><a href="#CacheImpl+_cache">._cache</a> : <code>Storage</code></li>
+      <li><a href="#CacheImpl+_factory">._factory</a> : <code>CacheFactory</code></li>
+      <li><a href="#CacheImpl+_Helper">._Helper</a> : <code>vendor.$Helper</code></li>
+      <li><a href="#CacheImpl+_ttl">._ttl</a> : <code>number</code></li>
+      <li><a href="#CacheImpl+_enabled">._enabled</a> : <code>boolean</code></li>
+      <li><a href="#CacheImpl+clear">.clear()</a></li>
+      <li><a href="#CacheImpl+has">.has()</a></li>
+      <li><a href="#CacheImpl+get">.get()</a></li>
+      <li><a href="#CacheImpl+set">.set()</a></li>
+      <li><a href="#CacheImpl+delete">.delete()</a></li>
+      <li><a href="#CacheImpl+disable">.disable()</a></li>
+      <li><a href="#CacheImpl+enable">.enable()</a></li>
+      <li><a href="#CacheImpl+serialize">.serialize()</a></li>
+      <li><a href="#CacheImpl+deserialize">.deserialize()</a></li>
+      <li><a href="#CacheImpl+_canSerializeValue">._canSerializeValue(value)</a> ⇒ <code>boolean</code></li>
+      <li><a href="#CacheImpl+_clone">._clone(value)</a> ⇒ <code>\*</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-cacheimplcachestorage-factory-helper-config">new CacheImpl(cacheStorage, factory, Helper, [config]) <a name="new_CacheImpl_new"></a></h3>
+<p>Initializes the cache.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>cacheStorage</td>
+      <td><code>Storage</code></td>
+      <td> </td>
+      <td>The cache entry storage to use.</td>
+    </tr>
+    <tr>
+      <td>factory</td>
+      <td><code>CacheFactory</code></td>
+      <td> </td>
+      <td>Which create new instance of cache entry.</td>
+    </tr>
+    <tr>
+      <td>Helper</td>
+      <td><code>vendor.$Helper</code></td>
+      <td> </td>
+      <td>The IMA.js helper methods.</td>
+    </tr>
+    <tr>
+      <td>[config]</td>
+      <td><code>Object</code></td>
+      <td><code>{ttl: 30000, enabled: false}</code></td>
+      <td>The cache configuration.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Example</strong></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="dl">'</span><span class="s1">model.articles</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">cache</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">model.articles</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">articles</span> <span class="o">=</span> <span class="nx">getArticlesFromStorage</span><span class="p">();</span>
+  <span class="c1">// cache for an hour</span>
+  <span class="nx">cache</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">model.articles</span><span class="dl">'</span><span class="p">,</span> <span class="nx">articles</span><span class="p">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="cacheimpl_cache--storage">cacheImpl._cache : <code>Storage</code> <a name="CacheImpl+_cache" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Cache entry storage.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpl_factory--cachefactory">cacheImpl._factory : <code>CacheFactory</code> <a name="CacheImpl+_factory" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance property of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpl_helper--vendorhelper">cacheImpl._Helper : <code>vendor.$Helper</code> <a name="CacheImpl+_Helper" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Tha IMA.js helper methods.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpl_ttl--number">cacheImpl._ttl : <code>number</code> <a name="CacheImpl+_ttl" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Default cache entry time to live in milliseconds.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpl_enabled--boolean">cacheImpl._enabled : <code>boolean</code> <a name="CacheImpl+_enabled" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Flag signalling whether the cache is currently enabled.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplclear">cacheImpl.clear() <a name="CacheImpl+clear" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplhas">cacheImpl.has() <a name="CacheImpl+has" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplget">cacheImpl.get() <a name="CacheImpl+get" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplset">cacheImpl.set() <a name="CacheImpl+set" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L110" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpldelete">cacheImpl.delete() <a name="CacheImpl+delete" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpldisable">cacheImpl.disable() <a name="CacheImpl+disable" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplenable">cacheImpl.enable() <a name="CacheImpl+enable" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L141" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimplserialize">cacheImpl.serialize() <a name="CacheImpl+serialize" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpldeserialize">cacheImpl.deserialize() <a name="CacheImpl+deserialize" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L185" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a></p>
+
+<hr />
+
+<h3 id="cacheimpl_canserializevaluevalue--boolean">cacheImpl._canSerializeValue(value) ⇒ <code>boolean</code> <a name="CacheImpl+_canSerializeValue" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L204" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Tests whether the provided value can be serialized into JSON.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a><br />
+<strong>Returns</strong>: <code>boolean</code> - <code class="highlighter-rouge">true</code> if the provided value can be serialized into JSON,
+        <code class="highlighter-rouge">false</code> otherwise.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>value</td>
+      <td><code>\*</code></td>
+      <td>The value to test whether or not it can be serialized.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="cacheimpl_clonevalue--">cacheImpl._clone(value) ⇒ <code>\*</code> <a name="CacheImpl+_clone" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/CacheImpl.js#L256" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Attempts to clone the provided value, if possible. Values that cannot be
+cloned (e.g. promises) will be simply returned.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#CacheImpl"><code>CacheImpl</code></a><br />
+<strong>Returns</strong>: <code>\*</code> - The created clone, or the provided value if the value cannot be
+        cloned.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>value</td>
+      <td><code>\*</code></td>
+      <td>The value to clone.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

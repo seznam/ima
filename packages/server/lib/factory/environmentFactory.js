@@ -1,5 +1,3 @@
-'use strict';
-
 const helpers = require('@ima/helpers');
 const path = require('path');
 

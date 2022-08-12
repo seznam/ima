@@ -1,67 +1,44 @@
 {
   "name": "@ima/server",
-  "version": "17.11.0",
+  "version": "18.0.0-rc.4",
   "description": "Default dev server for IMA.js applications.",
-  "main": "index.js",
-  "scripts": {
-    "preversion": "npm test",
-    "test": "../../node_modules/.bin/jest -c jest.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/ima.git"
-  },
   "keywords": [
-    "gulp",
     "IMA.js",
+    "server",
+    "ssr",
     "ima"
   ],
-  "author": "Seznam.cz, a.s.",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/server"
   },
-  "homepage": "https://github.com/seznam/ima",
-  "devDependencies": {
-    "@ima/helpers": "^17.9.0",
-    "express": "^4.17.1"
+  "license": "MIT",
+  "author": "Seznam.cz, a.s.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js",
+    "preversion": "npm test"
   },
   "dependencies": {
-    "@esmj/emitter": "^0.0.3",
+    "@esmj/emitter": "^0.0.4",
     "ejs": "^3.1.6",
     "winston": "3.2.1"
   },
+  "devDependencies": {
+    "@ima/dev-utils": "^18.0.0-rc.4",
+    "express": "^4.17.3"
+  },
   "peerDependencies": {
-    "@ima/helpers": "17.x"
+    "@ima/dev-utils": "18.0.0-rc.4",
+    "@ima/helpers": "18.0.0-rc.2"
   },
-  "engines": {
-    "node": ">=6",
-    "npm": ">=4 <7"
-  },
-  "jest": {
-    "bail": false,
-    "verbose": true,
-    "testEnvironment": "node",
-    "setupFiles": [],
-    "resolver": "<rootDir>/resolver.js",
-    "modulePaths": [
-      "<rootDir>/"
-    ],
-    "testMatch": [
-      "**/__tests__/*.js"
-    ]
-  },
-  "jestConfig": {
-    "mockRules": {
-      "lib": [
-        {
-          "../app/build.js": "./__mocks__/build.js"
-        }
-      ]
-    }
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

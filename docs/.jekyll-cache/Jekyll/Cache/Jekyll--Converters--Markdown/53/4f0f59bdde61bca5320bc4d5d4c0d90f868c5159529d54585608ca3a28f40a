@@ -1,0 +1,209 @@
+I"� <h2 id="cache">Cache <a name="Cache" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface</p>
+
+<ul>
+  <li><a href="#Cache">Cache</a>
+    <ul>
+      <li><a href="#Cache+clear">.clear()</a></li>
+      <li><a href="#Cache+has">.has(key)</a> ⇒ <code>boolean</code></li>
+      <li><a href="#Cache+get">.get(key)</a> ⇒ <code>\*</code></li>
+      <li><a href="#Cache+set">.set(key, value, [ttl])</a></li>
+      <li><a href="#Cache+delete">.delete(key)</a></li>
+      <li><a href="#Cache+disable">.disable()</a></li>
+      <li><a href="#Cache+enable">.enable()</a></li>
+      <li><a href="#Cache+serialize">.serialize()</a> ⇒ <code>string</code></li>
+      <li><a href="#Cache+deserialize">.deserialize(serializedData)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="cacheclear">cache.clear() <a name="Cache+clear" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Clears the cache by deleting all entries.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<hr />
+
+<h3 id="cachehaskey--boolean">cache.has(key) ⇒ <code>boolean</code> <a name="Cache+has" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Tests whether the cache contains a fresh entry for the specified key. A
+cache entry is fresh if the has not expired its TTL (time to live).</p>
+
+<p>The method always returns <code class="highlighter-rouge">false</code> if the cache is currently disabled.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a><br />
+<strong>Returns</strong>: <code>boolean</code> - <code class="highlighter-rouge">true</code> if the cache is enabled, the entry exists and has
+        not expired yet.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The identifier of the cache entry.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="cachegetkey--">cache.get(key) ⇒ <code>\*</code> <a name="Cache+get" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the value of the entry identified by the specified key.</p>
+
+<p>The method returns <code class="highlighter-rouge">null</code> if the specified entry does not exist, has
+already expired, or the cache is currently disabled.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a><br />
+<strong>Returns</strong>: <code>\*</code> - The value of the specified cache entry, or <code class="highlighter-rouge">null</code> if the entry
+        is not available.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The identifier of the cache entry.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="cachesetkey-value-ttl">cache.set(key, value, [ttl]) <a name="Cache+set" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the cache entry identified by the specified key to the provided
+value. The entry is created if it does not exist yet.</p>
+
+<p>The method has no effect if the cache is currently disabled.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The identifier of the cache entry.</td>
+    </tr>
+    <tr>
+      <td>value</td>
+      <td><code>\*</code></td>
+      <td>The cache entry value.</td>
+    </tr>
+    <tr>
+      <td>[ttl]</td>
+      <td><code>number</code></td>
+      <td>Cache entry time to live in milliseconds. The        entry will expire after the specified amount of milliseconds. Use        <code class="highlighter-rouge">null</code> or omit the parameter to use the default TTL of this cache.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="cachedeletekey">cache.delete(key) <a name="Cache+delete" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Deletes the specified cache entry. The method has no effect if the entry
+does not exist.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The identifier of the cache entry.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="cachedisable">cache.disable() <a name="Cache+disable" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Disables the cache, preventing the retrieval of any cached entries and
+reporting all cache entries as non-existing. Disabling the cache does
+not however prevent modifying the existing or creating new cache
+entries.</p>
+
+<p>Disabling the cache also clears all of its current entries.</p>
+
+<p>The method has no effect if the cache is already disabled.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<hr />
+
+<h3 id="cacheenable">cache.enable() <a name="Cache+enable" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L78" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Enables the cache, allowing the retrieval of cache entries.</p>
+
+<p>The method has no effect if the cache is already enabled.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<hr />
+
+<h3 id="cacheserialize--string">cache.serialize() ⇒ <code>string</code> <a name="Cache+serialize" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Exports the state of this cache to an HTML-safe JSON string. The data
+obtained by parsing the result of this method are compatible with the
+<a href="#Cache+deserialize">deserialize</a> method.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a><br />
+<strong>Returns</strong>: <code>string</code> - A JSON string containing an object representing of the
+        current state of this cache.</p>
+
+<hr />
+
+<h3 id="cachedeserializeserializeddata">cache.deserialize(serializedData) <a name="Cache+deserialize" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/cache/Cache.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Loads the provided serialized cache data into this cache. Entries
+present in this cache but not specified in the provided data will remain
+in this cache intact.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Cache"><code>Cache</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>serializedData</td>
+      <td><code>Object.&lt;string, {value: \*, ttl: number}&gt;</code></td>
+      <td>An        object representing the state of the cache to load, obtained by        parsing the JSON string returned by the <a href="#Cache+serialize">serialize</a>        method.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

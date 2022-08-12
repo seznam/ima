@@ -1,11 +1,66 @@
-'use strict';
-
-const TransportStream = require('winston-transport');
-const { formatError } = require('@ima/dev-utils/dist/cliUtils');
-const { createLogger, format, transports, config } = require('winston');
 const chalk = require('chalk');
+const { createLogger, format, transports, config } = require('winston');
+const { printf, combine, json } = format;
+const { formatError: devFormatError } = require('@ima/dev-utils/dist/cliUtils');
 
-const { printf, combine } = format;
+function colorizeLevel(level) {
+  switch (level) {
+    case 'error':
+      return chalk.bold.red(`${level}: `);
+    case 'warn':
+      return chalk.bold.yellow(`${level}: `);
+    case 'info':
+      return chalk.bold.cyan(`${level}: `);
+    case 'http':
+      return chalk.bold.magenta(`${level}: `);
+    case 'verbose':
+      return chalk.bold.underline.white(`${level}: `);
+    case 'debug':
+      return chalk.bold.green(`${level}: `);
+    case 'silly':
+    default:
+      return chalk.bold.gray(`${level}: `);
+  }
+}
+class ConsoleAsync extends transports.Stream {
+  constructor(options = {}) {
+    super(options);
+
+    this.name = options.name || 'console-async';
+    this.rootDir = options.rootDir;
+  }
+
+  log(info, callback) {
+    this._log(info, callback);
+  }
+
+  async _log(meta, callback) {
+    const message = meta.error
+      ? `${meta.message}\n\n${await devFormatError(
+        meta.error,
+        'runtime',
+        this.rootDir
+      )}`
+      : meta.message;
+
+    // eslint-disable-next-line no-console
+    (console[meta.level] ?? console.log)(
+      `${colorizeLevel(meta.level)}${message}`
+    );
+
+    callback();
+  }
+}
+
+const devLogger = createLogger({
+  format: json(),
+  levels: config.npm.levels,
+  transports: [
+    new ConsoleAsync({
+      rootDir: process.cwd(),
+    }),
+  ],
+});
 
 function formatMetaSimple(meta) {
   let keys = Object.keys(meta).filter(
@@ -65,50 +120,37 @@ function formatMetaJSON(meta) {
   return JSON.stringify(clone, null, '\t');
 }
 
-class ConsoleAsync extends TransportStream {
-  constructor(options = {}) {
-    super(options);
+function formatError(error) {
+  let matcher = /^\s+at\s+([^(]+?)\s+[(](.+):(\d+):(\d+)[)]/;
 
-    this.name = options.name || 'console-async';
-    this.rootDir = options.rootDir;
+  let stack = error.stack
+    .split('\n')
+    .slice(1)
+    .map(line => {
+      let parts = line.match(matcher);
+      if (!parts) {
+        return line;
+      }
+
+      return {
+        function: parts[1],
+        file: parts[2],
+        row: parseInt(parts[3], 10) || parts[3],
+        column: parseInt(parts[4], 10) || parts[4],
+      };
+    });
+
+  let description = {
+    type: error.name,
+    message: error.message,
+    stack,
+  };
+
+  if (error._params) {
+    description.params = error._params;
   }
 
-  log(info, callback) {
-    this._log(info, callback);
-  }
-
-  async _log(meta, callback) {
-    // eslint-disable-next-line no-console
-    (console[meta.level] ?? console.log)(
-      `${colorizeLevel(meta.level)}${
-        meta.error
-          ? await formatError(meta.error, 'runtime', this.rootDir)
-          : meta.message
-      }`
-    );
-
-    callback();
-  }
-}
-
-function colorizeLevel(level) {
-  switch (level) {
-    case 'error':
-      return chalk.bold.red(`${level}: `);
-    case 'warn':
-      return chalk.bold.yellow(`${level}: `);
-    case 'info':
-      return chalk.bold.cyan(`${level}: `);
-    case 'http':
-      return chalk.bold.magenta(`${level}: `);
-    case 'verbose':
-      return chalk.bold.underline.white(`${level}: `);
-    case 'debug':
-      return chalk.bold.green(`${level}: `);
-    case 'silly':
-    default:
-      return chalk.bold.gray(`${level}: `);
-  }
+  return description;
 }
 
 module.exports = function loggerFactory({ environment }) {
@@ -117,20 +159,12 @@ module.exports = function loggerFactory({ environment }) {
   if (['simple', 'JSON', 'dev'].indexOf(FORMATTING) === -1) {
     throw new Error(
       'Invalid logger configuration: the formatting has to be ' +
-        `either "simple" or "JSON", ${FORMATTING} was provided`
+      `either "simple" or "JSON", ${FORMATTING} was provided`
     );
   }
 
   if (FORMATTING === 'dev') {
-    return createLogger({
-      format: format.json(),
-      levels: config.npm.levels,
-      transports: [
-        new ConsoleAsync({
-          rootDir: process.cwd()
-        })
-      ]
-    });
+    return devLogger;
   }
 
   let logger = createLogger({
@@ -162,17 +196,12 @@ module.exports = function loggerFactory({ environment }) {
         }
       })(),
       printf(info => {
-        return (
-          info.timestamp +
-          ' [' +
-          info.level.toUpperCase() +
-          '] ' +
-          (info.message || '') +
-          formatMeta(info)
-        );
+        return `${colorizeLevel(info.level)}${chalk.gray(
+          `[${info.timestamp}]`
+        )} ${info.message || ''} ${formatMeta(info)}`;
       })
     ),
-    transports: [new transports.Console()]
+    transports: [new transports.Console()],
   });
 
   function formatMeta(meta) {

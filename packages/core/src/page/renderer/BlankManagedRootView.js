@@ -1,4 +1,5 @@
-import React from 'react';
+import { Component, createElement } from 'react';
+import ErrorBoundary from './ErrorBoundary';
 
 /**
  * Blank managed root view does not nothing except for rendering the current
@@ -6,10 +7,10 @@ import React from 'react';
  *
  * This is the default managed root view.
  */
-export default class BlankManagedRootView extends React.Component {
+export default class BlankManagedRootView extends Component {
   static get defaultProps() {
     return {
-      $pageView: null
+      $pageView: null,
     };
   }
 
@@ -26,6 +27,9 @@ export default class BlankManagedRootView extends React.Component {
     const restProps = Object.assign({}, this.props);
     delete restProps.$pageView;
 
-    return React.createElement($pageView, restProps);
+    // Wrap view with ErrorBoundary in $Debug env
+    return $Debug
+      ? createElement(ErrorBoundary, [], createElement($pageView, restProps))
+      : createElement($pageView, restProps);
   }
 }

@@ -1,15 +1,13 @@
-import styles from './hookEntry.less';
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Tooltip } from '@reach/tooltip';
+import Editor from '@uiw/react-textarea-code-editor';
 import cn from 'clsx';
-import Tooltip from '@reach/tooltip';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import HookType from 'types/hookType';
-import IconButton from 'components/atom/iconButton/IconButton';
+import { IconButton } from '@/components/atom';
+import { HookType } from '@/utils';
+
+import styles from './hookEntry.module.less';
 
 export default class HookEntry extends React.PureComponent {
   static get propTypes() {
@@ -21,13 +19,13 @@ export default class HookEntry extends React.PureComponent {
       alertSuccess: PropTypes.func,
       openHook: PropTypes.func,
       showConfirmModal: PropTypes.func,
-      editable: PropTypes.bool
+      editable: PropTypes.bool,
     };
   }
 
   static defaultProps() {
     return {
-      editable: false
+      editable: false,
     };
   }
 
@@ -37,7 +35,7 @@ export default class HookEntry extends React.PureComponent {
     this.state = {
       name: props.hook.name,
       description: props.hook.description,
-      code: props.hook.code
+      code: props.hook.code,
     };
   }
 
@@ -47,8 +45,9 @@ export default class HookEntry extends React.PureComponent {
     return (
       <div
         className={cn(styles.container, {
-          [styles['container--opened']]: opened
-        })}>
+          [styles['container--opened']]: opened,
+        })}
+      >
         {this._renderEntry()}
         {this._renderForm()}
       </div>
@@ -72,15 +71,15 @@ export default class HookEntry extends React.PureComponent {
               <Tooltip label={enabled ? 'Disable hook' : 'Enable hook'}>
                 <span>
                   <IconButton
-                    name="enable"
+                    name='enable'
                     color={enabled ? 'success' : 'danger'}
                     onClick={e => this.onEnable(e)}
                   />
                 </span>
               </Tooltip>
-              <Tooltip label="Delete hook">
+              <Tooltip label='Delete hook'>
                 <span>
-                  <IconButton name="trash" onClick={e => this.onDelete(e)} />
+                  <IconButton name='trash' onClick={e => this.onDelete(e)} />
                 </span>
               </Tooltip>
             </>
@@ -98,16 +97,17 @@ export default class HookEntry extends React.PureComponent {
     return (
       <div
         className={cn(styles.formWrapper, {
-          [styles['formWrapper--opened']]: opened
-        })}>
+          [styles['formWrapper--opened']]: opened,
+        })}
+      >
         <input
           onChange={e => this.onChange(e)}
           disabled={!editable}
           name={`name__${id}`}
           value={name}
           className={styles.input}
-          type="text"
-          placeholder="Name"
+          type='text'
+          placeholder='Name'
         />
         <input
           onChange={e => this.onChange(e)}
@@ -115,20 +115,20 @@ export default class HookEntry extends React.PureComponent {
           name={`description__${id}`}
           value={description}
           className={styles.input}
-          type="text"
-          placeholder="Description"
+          type='text'
+          placeholder='Description'
         />
         <Editor
           name={`code__${id}`}
           disabled={!editable}
+          language='js'
           className={cn(styles.input, styles.codeInput)}
-          placeholder="// code"
+          placeholder='// code'
           value={code}
-          onValueChange={code => this.setState({ code })}
-          highlight={code => highlight(code, languages.js)}
+          onChange={event => this.setState({ code: event.target.value })}
           padding={10}
           style={{
-            overflow: 'auto'
+            overflow: 'auto',
           }}
         />
       </div>
@@ -137,7 +137,7 @@ export default class HookEntry extends React.PureComponent {
 
   onChange({ target: { value, name } }) {
     this.setState({
-      [name.split('__')[0]]: value
+      [name.split('__')[0]]: value,
     });
   }
 
@@ -157,7 +157,7 @@ export default class HookEntry extends React.PureComponent {
       accept: () => {
         deleteHook(hook.id);
         alertSuccess(`'${hook.name}' hook was deleted.`);
-      }
+      },
     });
   }
 

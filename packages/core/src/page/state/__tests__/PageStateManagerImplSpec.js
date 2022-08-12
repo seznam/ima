@@ -20,19 +20,19 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   it('should clear history', () => {
     stateManager.clear();
 
-    expect(stateManager._states.length).toEqual(0);
-    expect(stateManager._cursor).toEqual(-1);
+    expect(stateManager._states).toHaveLength(0);
+    expect(stateManager._cursor).toBe(-1);
   });
 
   describe('getState method', () => {
     it('should returns default state', () => {
-      expect(stateManager.getState()).toEqual(defaultState);
+      expect(stateManager.getState()).toStrictEqual(defaultState);
     });
 
     it('should returns empty object for empty history', () => {
       stateManager.clear();
 
-      expect(stateManager.getState()).toEqual({});
+      expect(stateManager.getState()).toStrictEqual({});
     });
   });
 
@@ -82,7 +82,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   });
 
   it('should return history of states', () => {
-    expect(stateManager.getAllStates()).toEqual([defaultState]);
+    expect(stateManager.getAllStates()).toStrictEqual([defaultState]);
   });
 
   describe('beginTransaction method', () => {
@@ -129,7 +129,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       stateManager.commitTransaction();
 
       expect(stateManager.setState).toHaveBeenCalledWith(finalState);
-      expect(stateManager.getState().lazy).toEqual('overriden');
+      expect(stateManager.getState().lazy).toBe('overriden');
     });
   });
 
@@ -151,9 +151,9 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       stateManager.setState(queuedPatchState1);
       stateManager.setState(queuedPatchState2);
 
-      expect(stateManager.getTransactionStatePatches()).toEqual([
+      expect(stateManager.getTransactionStatePatches()).toStrictEqual([
         queuedPatchState1,
-        queuedPatchState2
+        queuedPatchState2,
       ]);
     });
   });

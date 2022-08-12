@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import Cache from 'src/cache/Cache';
 import Controller from 'src/controller/Controller';
 import GenericError from 'src/error/GenericError';
@@ -10,9 +10,10 @@ import {
   toMockedInstance,
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } from 'to-mock';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {
@@ -34,7 +35,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let param2 = 'param2';
   let params = {
     param1: param1,
-    param2: Promise.resolve(param2)
+    param2: Promise.resolve(param2),
   };
 
   let controller = new Controller();
@@ -48,20 +49,21 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let dispatcher = null;
   let ReactDOMServer = {
     renderToString: () => {},
-    renderToStaticMarkup: () => {}
+    renderToStaticMarkup: () => {},
   };
   let settings = {
+    $Source: jest.fn().mockReturnValue({}),
     $Page: {
       $Render: {
-        scripts: [],
-        documentView: 'app.component.document.DocumentView'
-      }
-    }
+        documentView: 'app.component.document.DocumentView',
+      },
+    },
   };
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
-    documentView: null
+    allowSPA: false,
+    documentView: null,
   };
 
   beforeEach(() => {
@@ -86,7 +88,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     pageRenderer._wrapEachKeyToPromise(params);
 
     expect(Promise.resolve).toHaveBeenCalledWith(param1);
-    expect(Promise.resolve.mock.calls.length).toEqual(1);
+    expect(Promise.resolve.calls.count()).toBe(1);
   });
 
   describe('update method', () => {
@@ -94,7 +96,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       jest.spyOn(pageRenderer, 'mount').mockImplementation();
 
       pageRenderer.update(controller, params).catch(error => {
-        expect(error instanceof GenericError).toEqual(true);
+        expect(error instanceof GenericError).toBeTruthy();
         done();
       });
     });
@@ -103,14 +105,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('mount method', () => {
     let loadedPageState = {
       param1: 'param1',
-      param2: Promise.resolve('param2')
+      param2: Promise.resolve('param2'),
     };
 
     it('should return already sent data to the client', done => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: loadedPageState
+        pageState: loadedPageState,
       };
 
       jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
@@ -119,7 +121,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
         .then(page => {
-          expect(page).toEqual(responseParams);
+          expect(page).toStrictEqual(responseParams);
           done();
         });
     });
@@ -138,14 +140,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
   describe('_renderPage method', () => {
     let fetchedResource = {
-      resource: 'json'
+      resource: 'json',
     };
 
     it('should return already sent data to client', () => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: fetchedResource
+        pageState: fetchedResource,
       };
 
       jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
@@ -153,7 +155,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
       expect(
         pageRenderer._renderPage(controller, view, fetchedResource)
-      ).toEqual(responseParams);
+      ).toStrictEqual(responseParams);
     });
 
     describe('render new page', () => {
@@ -203,7 +205,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       });
 
       it('should return response params', () => {
-        expect(pageRenderResponse).toEqual(responseParams);
+        expect(pageRenderResponse).toStrictEqual(responseParams);
       });
     });
   });
@@ -211,7 +213,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('_renderPageContentToString method', () => {
     let utils = { $Utils: 'utils' };
     let wrapedPageViewElement = {
-      wrapElementView: 'wrapedPageViewElement'
+      wrapElementView: 'wrapedPageViewElement',
     };
     let pageMarkup = '<body></body>';
     let documentView = () => {};
@@ -225,24 +227,22 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     let pageContent = null;
 
     beforeEach(() => {
-      jest.spyOn(ReactDOMServer, 'renderToString').mockReturnValue(pageMarkup);
-      jest
-        .spyOn(rendererFactory, 'createReactElementFactory')
-        .mockReturnValue(documentViewFactory);
+      spyOn(ReactDOMServer, 'renderToString').and.returnValue(pageMarkup);
+      spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
+        documentViewFactory
+      );
       jest
         .spyOn(ReactDOMServer, 'renderToStaticMarkup')
         .mockReturnValue(appMarkup);
-      jest
-        .spyOn(pageRenderer, '_getRevivalSettings')
-        .mockReturnValue(revivalSettings);
-      jest
-        .spyOn(pageRenderer, '_getWrappedPageView')
-        .mockReturnValue(wrapedPageViewElement);
-      jest
-        .spyOn(pageRenderer, '_getDocumentView')
-        .mockReturnValue(documentView);
-      jest.spyOn(controller, 'getMetaManager').mockReturnValue(metaManager);
-      jest.spyOn(rendererFactory, 'getUtils').mockReturnValue(utils);
+      spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
+        revivalSettings
+      );
+      spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
+        wrapedPageViewElement
+      );
+      spyOn(pageRenderer, '_getDocumentView').and.returnValue(documentView);
+      spyOn(controller, 'getMetaManager').and.returnValue(metaManager);
+      spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
 
       pageContent = pageRenderer._renderPageContentToString(
         controller,
@@ -281,7 +281,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     });
 
     it('should return page content', () => {
-      expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
+      expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
     });
   });
 });

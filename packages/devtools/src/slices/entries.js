@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-export const entriesInitialState = {
+const entriesInitialState = {
   entryIdsByQuery: [],
   entries: {},
   searchQuery: '',
@@ -11,7 +11,7 @@ export const entriesInitialState = {
   zeroTime: null,
   zeroId: null,
   selectedId: null,
-  isLoading: true
+  isLoading: true,
 };
 
 const updateHasPreviousNext = state => {
@@ -112,7 +112,7 @@ const entries = createSlice({
           state.entries[id] = {
             id: id,
             selected: isFirst,
-            messages: [msg]
+            messages: [msg],
           };
         }
 
@@ -171,17 +171,22 @@ const entries = createSlice({
         updateSelected(state, state.entryIdsByQuery[selectedIdIndex - 1]);
         updateHasPreviousNext(state);
       }
-    }
-  }
+    },
+  },
 });
 
-const selectors = {
+const entriesSelectors = {
   getEntriesLength: createSelector(
     state => state.entries.entries,
     entries => entries && Object.keys(entries).length
-  )
+  ),
 };
 
-const { reducer, actions } = entries;
+const { reducer: entriesReducer, actions: entriesActions } = entries;
 
-export { reducer, actions, selectors };
+export {
+  entriesInitialState,
+  entriesReducer,
+  entriesActions,
+  entriesSelectors,
+};

@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import Controller from 'src/controller/Controller';
 import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';
@@ -9,7 +9,7 @@ import {
   toMockedInstance,
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } from 'to-mock';
 
 setGlobalMockMethod(jest.fn);
@@ -20,11 +20,11 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   let param2 = 'param2';
   let params = {
     param1: param1,
-    param2: Promise.resolve(param2)
+    param2: Promise.resolve(param2),
   };
   let pageState = {
     param1: param1,
-    param2: param2
+    param2: param2,
   };
 
   let view = function () {};
@@ -36,35 +36,35 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   let pageRenderer = null;
   let ReactDOM = {
     unmountComponentAtNode: function () {},
-    render: function () {}
+    render: function () {},
   };
   let settings = {
     $Page: {
       $Render: {
-        scripts: [],
-        documentView: 'app.component.document.DocumentView'
-      }
-    }
+        documentView: 'app.component.document.DocumentView',
+      },
+    },
   };
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
-    documentView: null
+    allowSPA: false,
+    documentView: null,
   };
 
   beforeEach(function () {
     controller = toMockedInstance(Controller, {
       getMetaManager() {
-        return toMockedInstance(MetaManager);
-      }
+        return () => {};
+      },
     });
     rendererFactory = toMockedInstance(RendererFactory);
     win = toMockedInstance(Window, {
       getWindow() {
         return {
-          requestIdleCallback: callback => setTimeout(callback, 0)
+          requestIdleCallback: callback => setTimeout(callback, 0),
         };
-      }
+      },
     });
     dispatcher = toMockedInstance(Dispatcher);
 
@@ -82,7 +82,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     beforeEach(function () {
       jest.spyOn(pageRenderer, '_separatePromisesAndValues').mockReturnValue({
         values: { param1: params.param1 },
-        promises: { param2: params.param2 }
+        promises: { param2: params.param2 },
       });
 
       jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
@@ -114,7 +114,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
             controller,
             {
-              param2: params.param2
+              param2: params.param2,
             }
           );
           done();
@@ -134,10 +134,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         .then(function () {
           jest.runAllTimers();
 
-          expect(controller.beginStateTransaction.mock.calls.length).toEqual(1);
-          expect(controller.commitStateTransaction.mock.calls.length).toEqual(
-            1
-          );
+          expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
+          expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
             Array [
               Array [
@@ -167,7 +165,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
 
       pageRenderer._firstTime = false;
       pageRenderer._reactiveView = {
-        state: { prevParam1: 'param1', param1: '1param' }
+        state: { prevParam1: 'param1', param1: '1param' },
       };
 
       pageRenderer
@@ -178,7 +176,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           ).toHaveBeenCalled();
           expect(controller.setState).toHaveBeenCalledWith({
             param1: 'param1',
-            prevParam1: undefined
+            prevParam1: undefined,
           });
           done();
         })
@@ -223,10 +221,10 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       pageRenderer
         .mount(controller, view, params, routeOptions)
         .then(function (response) {
-          expect(response).toEqual({
+          expect(response).toStrictEqual({
             status: 200,
             content: null,
-            pageState: pageState
+            pageState: pageState,
           });
           done();
         })
@@ -241,7 +239,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     beforeEach(function () {
       jest.spyOn(pageRenderer, '_separatePromisesAndValues').mockReturnValue({
         values: { param1: params.param1 },
-        promises: { param2: params.param2 }
+        promises: { param2: params.param2 },
       });
 
       jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
@@ -254,7 +252,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         .update(controller, params)
         .then(function () {
           expect(controller.setState).toHaveBeenCalledWith({
-            param1: params.param1
+            param1: params.param1,
           });
           done();
         })
@@ -273,10 +271,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         .then(function () {
           jest.runAllTimers();
 
-          expect(controller.beginStateTransaction.mock.calls.length).toEqual(1);
-          expect(controller.commitStateTransaction.mock.calls.length).toEqual(
-            1
-          );
+          expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
+          expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
             Array [
               Array [
@@ -308,7 +304,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
             controller,
             {
-              param2: params.param2
+              param2: params.param2,
             }
           );
           done();
@@ -354,10 +350,10 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       pageRenderer
         .update(controller, params)
         .then(function (response) {
-          expect(response).toEqual({
+          expect(response).toStrictEqual({
             status: 200,
             content: null,
-            pageState: pageState
+            pageState: pageState,
           });
           done();
         })
@@ -370,16 +366,16 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
 
   describe('_renderToDOM method', function () {
     let wrapedPageViewElement = {
-      wrapElementView: 'wrapedPageViewElement'
+      wrapElementView: 'wrapedPageViewElement',
     };
     let documentView = {
-      masterElementId: 'id'
+      masterElementId: 'id',
     };
     let htmlNode = {
       type: 'div',
       children: {
-        length: 0
-      }
+        length: 0,
+      },
     };
 
     beforeEach(function () {
@@ -415,7 +411,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   describe('_patchStateToClearPreviousState() method', () => {
     beforeEach(() => {
       pageRenderer._reactiveView = {
-        state: { prevParam1: 'param1', param1: '1param' }
+        state: { prevParam1: 'param1', param1: '1param' },
       };
     });
 
@@ -423,9 +419,9 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       const patchedState =
         pageRenderer._patchStateToClearPreviousState(pageState);
 
-      expect(patchedState).toEqual({
+      expect(patchedState).toStrictEqual({
         ...pageState,
-        prevParam1: undefined
+        prevParam1: undefined,
       });
     });
   });

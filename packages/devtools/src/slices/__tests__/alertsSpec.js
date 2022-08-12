@@ -1,12 +1,6 @@
-import { alertsInitialState, reducer, actions } from '../alerts';
+import { alertsInitialState, alertsReducer, alertsActions } from '../alerts';
 
-describe('alertsInitialState', () => {
-  it('should match snapshot', () => {
-    expect(alertsInitialState).toMatchSnapshot();
-  });
-});
-
-describe('reducer', () => {
+describe('alertsReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -17,28 +11,28 @@ describe('reducer', () => {
           hidden: false,
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
-      }
+          type: 'type',
+        },
+      },
     };
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(alertsInitialState);
+    expect(alertsReducer(undefined, {})).toStrictEqual(alertsInitialState);
   });
 
   it('should add alert to state', () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/showAlert',
         payload: {
           id: '1',
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
+          type: 'type',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         ...curState.alerts,
@@ -47,73 +41,73 @@ describe('reducer', () => {
           hidden: false,
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
-      }
+          type: 'type',
+        },
+      },
     });
   });
 
   it('should remove alert from state', () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/removeAlert',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
-      alerts: {}
+      alerts: {},
     });
   });
 
   it("should set alert's hidden property to true", () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/hideAlert',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         0: {
           ...curState.alerts['0'],
-          hidden: true
-        }
-      }
+          hidden: true,
+        },
+      },
     });
   });
 });
 
-describe('actions', () => {
+describe('alertsActions', () => {
   it('should create action to show alert', () => {
     const data = {
       id: '0',
       title: 'title',
       content: 'content',
-      type: 'type'
+      type: 'type',
     };
 
-    expect(actions.showAlert(data)).toEqual({
+    expect(alertsActions.showAlert(data)).toStrictEqual({
       type: 'alerts/showAlert',
       payload: {
         id: '0',
         title: 'title',
         content: 'content',
-        type: 'type'
-      }
+        type: 'type',
+      },
     });
   });
 
   it('should create action to remove alert', () => {
-    expect(actions.removeAlert('0')).toEqual({
+    expect(alertsActions.removeAlert('0')).toStrictEqual({
       type: 'alerts/removeAlert',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to hide alert', () => {
-    expect(actions.hideAlert('0')).toEqual({
+    expect(alertsActions.hideAlert('0')).toStrictEqual({
       type: 'alerts/hideAlert',
-      payload: '0'
+      payload: '0',
     });
   });
 });

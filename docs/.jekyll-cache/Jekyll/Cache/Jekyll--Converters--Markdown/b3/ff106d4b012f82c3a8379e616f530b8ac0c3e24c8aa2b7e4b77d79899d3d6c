@@ -1,0 +1,122 @@
+I"<h2 id="dictionary">Dictionary <a name="Dictionary" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/dictionary/Dictionary.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface</p>
+
+<ul>
+  <li><a href="#Dictionary">Dictionary</a>
+    <ul>
+      <li><a href="#Dictionary+init">.init(config)</a></li>
+      <li><a href="#Dictionary+getLanguage">.getLanguage()</a> ⇒ <code>string</code></li>
+      <li><a href="#Dictionary+get">.get(key, [parameters])</a> ⇒ <code>string</code></li>
+      <li><a href="#Dictionary+has">.has(key)</a> ⇒ <code>boolean</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="dictionaryinitconfig">dictionary.init(config) <a name="Dictionary+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/dictionary/Dictionary.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Initializes this dictionary with the provided language and localization
+phrases.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Dictionary"><code>Dictionary</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>config</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The dictionary configuration.</td>
+    </tr>
+    <tr>
+      <td>config.$Language</td>
+      <td><code>string</code></td>
+      <td>The language property is an ISO 639-1        language code specifying the language of the provided phrases.</td>
+    </tr>
+    <tr>
+      <td>config.dictionary</td>
+      <td><code>\*</code></td>
+      <td>The dictionary property contains the        localization phrases organized in an implementation-specific way.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="dictionarygetlanguage--string">dictionary.getLanguage() ⇒ <code>string</code> <a name="Dictionary+getLanguage" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/dictionary/Dictionary.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the ISO 639-1 language code of the language this dictionary was
+initialized with.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Dictionary"><code>Dictionary</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The language code representing the language of the
+        localization phrases in this dictionary.</p>
+
+<hr />
+
+<h3 id="dictionarygetkey-parameters--string">dictionary.get(key, [parameters]) ⇒ <code>string</code> <a name="Dictionary+get" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/dictionary/Dictionary.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Retrieves the localization phrase identified by the specified key,
+evaluates the phrase’s placeholder expressions using the provided
+parameters and returns the result.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Dictionary"><code>Dictionary</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The specified localization phrase with its placeholders
+        evaluated using the provided parameters.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The key identifying the localization phrase.</td>
+    </tr>
+    <tr>
+      <td>[parameters]</td>
+      <td><code>Object.&lt;string, (boolean\|number\|string\|Date)&gt;</code></td>
+      <td>The        map of parameter names to the parameter values to use.        Defaults to an empty plain object.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="dictionaryhaskey--boolean">dictionary.has(key) ⇒ <code>boolean</code> <a name="Dictionary+has" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/dictionary/Dictionary.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Tests whether the specified localization phrase exists in the
+dictionary.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Dictionary"><code>Dictionary</code></a><br />
+<strong>Returns</strong>: <code>boolean</code> - <code class="highlighter-rouge">true</code> if the key exists and denotes a single
+                  localization phrase, otherwise <code class="highlighter-rouge">false</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>The key identifying the localization phrase.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

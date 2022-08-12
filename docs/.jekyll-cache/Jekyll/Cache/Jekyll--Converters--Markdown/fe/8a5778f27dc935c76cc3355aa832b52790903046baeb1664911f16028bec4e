@@ -1,0 +1,139 @@
+I"�<h2 id="pagenavigationhandler">PageNavigationHandler <a name="PageNavigationHandler" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global class</p>
+
+<ul>
+  <li><a href="#PageNavigationHandler">PageNavigationHandler</a>
+    <ul>
+      <li><a href="#new_PageNavigationHandler_new">new PageNavigationHandler(window)</a></li>
+      <li><a href="#PageNavigationHandler+_window">._window</a> : <code>ima.core.window.Window</code></li>
+      <li><a href="#PageNavigationHandler+init">.init()</a></li>
+      <li><a href="#PageNavigationHandler+handlePreManagedState">.handlePreManagedState()</a></li>
+      <li><a href="#PageNavigationHandler+handlePostManagedState">.handlePostManagedState()</a></li>
+      <li><a href="#PageNavigationHandler+_saveScrollHistory">._saveScrollHistory()</a></li>
+      <li><a href="#PageNavigationHandler+_scrollTo">._scrollTo(scroll)</a></li>
+      <li><a href="#PageNavigationHandler+_setAddressBar">._setAddressBar(url, isRedirection)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-pagenavigationhandlerwindow">new PageNavigationHandler(window) <a name="new_PageNavigationHandler_new"></a></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>window</td>
+      <td><code>Window</code></td>
+      <td>The utility for manipulating the global context        and global client-side-specific APIs.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="pagenavigationhandler_window--imacorewindowwindow">pageNavigationHandler._window : <code>ima.core.window.Window</code> <a name="PageNavigationHandler+_window" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The utility for manipulating the global context and global
+client-side-specific APIs.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagenavigationhandlerinit">pageNavigationHandler.init() <a name="PageNavigationHandler+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagenavigationhandlerhandlepremanagedstate">pageNavigationHandler.handlePreManagedState() <a name="PageNavigationHandler+handlePreManagedState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagenavigationhandlerhandlepostmanagedstate">pageNavigationHandler.handlePostManagedState() <a name="PageNavigationHandler+handlePostManagedState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagenavigationhandler_savescrollhistory">pageNavigationHandler._saveScrollHistory() <a name="PageNavigationHandler+_saveScrollHistory" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Save user’s scroll state to history.</p>
+
+<p>Replace scroll values in current state for actual scroll values in
+document.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<hr />
+
+<h3 id="pagenavigationhandler_scrolltoscroll">pageNavigationHandler._scrollTo(scroll) <a name="PageNavigationHandler+_scrollTo" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Scrolls to give coordinates on a page.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>scroll</td>
+      <td><code>Object</code></td>
+    </tr>
+    <tr>
+      <td>[scroll.x]</td>
+      <td><code>number</code></td>
+    </tr>
+    <tr>
+      <td>[scroll.y]</td>
+      <td><code>number</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="pagenavigationhandler_setaddressbarurl-isredirection">pageNavigationHandler._setAddressBar(url, isRedirection) <a name="PageNavigationHandler+_setAddressBar" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/handler/PageNavigationHandler.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the provided URL to the browser’s address bar by pushing or replacing a new
+state to the history.</p>
+
+<p>The state object pushed to or replaced in the history will be an object with the
+following structure: <code>{url: string</code>}. The <code>url</code> field will
+be set to the provided URL.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#PageNavigationHandler"><code>PageNavigationHandler</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>url</td>
+      <td><code>string</code></td>
+      <td>The URL.</td>
+    </tr>
+    <tr>
+      <td>isRedirection</td>
+      <td><code>boolean</code></td>
+      <td>If replaceState should be used instead of pushState.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

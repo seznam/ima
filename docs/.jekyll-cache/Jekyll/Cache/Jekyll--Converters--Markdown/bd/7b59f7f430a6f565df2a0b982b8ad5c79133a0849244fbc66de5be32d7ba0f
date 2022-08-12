@@ -1,0 +1,179 @@
+I"�9<h2 id="abstractextension--extension"><em>AbstractExtension ⇐ <code>Extension</code></em> <a name="AbstractExtension" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>Abstract extension</p>
+
+<p><strong>Kind</strong>: global abstract class<br />
+<strong>Extends</strong>: <code>Extension</code></p>
+
+<ul>
+  <li><em><a href="#AbstractExtension">AbstractExtension</a> ⇐ <code>Extension</code></em>
+    <ul>
+      <li><em><a href="#AbstractExtension+_pageStateManager">._pageStateManager</a> : <code>PageStateManager</code></em></li>
+      <li><em><a href="#AbstractExtension+_usingStateManager">._usingStateManager</a> : <code>boolean</code></em></li>
+      <li><em><a href="#AbstractExtension+status">.status</a> : <code>number</code></em></li>
+      <li><em><a href="#AbstractExtension+params">.params</a> : <code>Object.&lt;string, string&gt;</code></em></li>
+      <li><em><a href="#AbstractExtension+init">.init()</a></em></li>
+      <li><em><a href="#AbstractExtension+destroy">.destroy()</a></em></li>
+      <li><em><a href="#AbstractExtension+activate">.activate()</a></em></li>
+      <li><em><a href="#AbstractExtension+deactivate">.deactivate()</a></em></li>
+      <li><strong><a href="#AbstractExtension+load">.load()</a></strong></li>
+      <li><em><a href="#AbstractExtension+update">.update()</a></em></li>
+      <li><em><a href="#AbstractExtension+setState">.setState()</a></em></li>
+      <li><em><a href="#AbstractExtension+getState">.getState()</a></em></li>
+      <li><em><a href="#AbstractExtension+beginStateTransaction">.beginStateTransaction()</a></em></li>
+      <li><em><a href="#AbstractExtension+commitStateTransaction">.commitStateTransaction()</a></em></li>
+      <li><em><a href="#AbstractExtension+cancelStateTransaction">.cancelStateTransaction()</a></em></li>
+      <li><em><a href="#AbstractExtension+setPartialState">.setPartialState()</a></em></li>
+      <li><em><a href="#AbstractExtension+getPartialState">.getPartialState()</a></em></li>
+      <li><em><a href="#AbstractExtension+clearPartialState">.clearPartialState()</a></em></li>
+      <li><em><a href="#AbstractExtension+setRouteParams">.setRouteParams()</a></em></li>
+      <li><em><a href="#AbstractExtension+getRouteParams">.getRouteParams()</a></em></li>
+      <li><em><a href="#AbstractExtension+setPageStateManager">.setPageStateManager()</a></em></li>
+      <li><em><a href="#AbstractExtension+switchToStateManager">.switchToStateManager()</a></em></li>
+      <li><em><a href="#AbstractExtension+switchToPartialState">.switchToPartialState()</a></em></li>
+      <li><em><a href="#AbstractExtension+getHttpStatus">.getHttpStatus()</a></em></li>
+      <li><em><a href="#AbstractExtension+getAllowedStateKeys">.getAllowedStateKeys()</a></em></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="abstractextension_pagestatemanager--pagestatemanager"><em>abstractExtension._pageStateManager : <code>PageStateManager</code></em> <a name="AbstractExtension+_pageStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>State manager.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractExtension"><code>AbstractExtension</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractextension_usingstatemanager--boolean"><em>abstractExtension._usingStateManager : <code>boolean</code></em> <a name="AbstractExtension+_usingStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Flag indicating whether the PageStateManager should be used instead
+of partial state.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractExtension"><code>AbstractExtension</code></a><br />
+<strong>Access</strong>: protected</p>
+
+<hr />
+
+<h3 id="abstractextensionstatus--number"><em>abstractExtension.status : <code>number</code></em> <a name="AbstractExtension+status" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L36" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The HTTP response code to send to the client.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionparams--objectltstring-stringgt"><em>abstractExtension.params : <code>Object.&lt;string, string&gt;</code></em> <a name="AbstractExtension+params" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The route parameters extracted from the current route.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensioninit"><em>abstractExtension.init()</em> <a name="AbstractExtension+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiondestroy"><em>abstractExtension.destroy()</em> <a name="AbstractExtension+destroy" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionactivate"><em>abstractExtension.activate()</em> <a name="AbstractExtension+activate" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiondeactivate"><em>abstractExtension.deactivate()</em> <a name="AbstractExtension+deactivate" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionload"><strong>abstractExtension.load()</strong> <a name="AbstractExtension+load" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance abstract method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionupdate"><em>abstractExtension.update()</em> <a name="AbstractExtension+update" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionsetstate"><em>abstractExtension.setState()</em> <a name="AbstractExtension+setState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiongetstate"><em>abstractExtension.getState()</em> <a name="AbstractExtension+getState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L98" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionbeginstatetransaction"><em>abstractExtension.beginStateTransaction()</em> <a name="AbstractExtension+beginStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensioncommitstatetransaction"><em>abstractExtension.commitStateTransaction()</em> <a name="AbstractExtension+commitStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensioncancelstatetransaction"><em>abstractExtension.cancelStateTransaction()</em> <a name="AbstractExtension+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L127" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionsetpartialstate"><em>abstractExtension.setPartialState()</em> <a name="AbstractExtension+setPartialState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L136" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiongetpartialstate"><em>abstractExtension.getPartialState()</em> <a name="AbstractExtension+getPartialState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionclearpartialstate"><em>abstractExtension.clearPartialState()</em> <a name="AbstractExtension+clearPartialState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L155" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionsetrouteparams"><em>abstractExtension.setRouteParams()</em> <a name="AbstractExtension+setRouteParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L162" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiongetrouteparams"><em>abstractExtension.getRouteParams()</em> <a name="AbstractExtension+getRouteParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L169" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionsetpagestatemanager"><em>abstractExtension.setPageStateManager()</em> <a name="AbstractExtension+setPageStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L176" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionswitchtostatemanager"><em>abstractExtension.switchToStateManager()</em> <a name="AbstractExtension+switchToStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L183" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensionswitchtopartialstate"><em>abstractExtension.switchToPartialState()</em> <a name="AbstractExtension+switchToPartialState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L190" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiongethttpstatus"><em>abstractExtension.getHttpStatus()</em> <a name="AbstractExtension+getHttpStatus" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L197" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+<h3 id="abstractextensiongetallowedstatekeys"><em>abstractExtension.getAllowedStateKeys()</em> <a name="AbstractExtension+getAllowedStateKeys" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/extension/AbstractExtension.js#L206" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns array of allowed state keys for extension.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractExtension"><code>AbstractExtension</code></a></p>
+
+<hr />
+
+:ET

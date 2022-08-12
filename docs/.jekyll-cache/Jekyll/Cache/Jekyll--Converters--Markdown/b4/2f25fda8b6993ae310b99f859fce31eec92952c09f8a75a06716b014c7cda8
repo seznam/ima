@@ -1,0 +1,260 @@
+I"�)<h2 id="metamanager">MetaManager <a name="MetaManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface</p>
+
+<ul>
+  <li><a href="#MetaManager">MetaManager</a>
+    <ul>
+      <li><a href="#MetaManager+setTitle">.setTitle(title)</a></li>
+      <li><a href="#MetaManager+getTitle">.getTitle()</a> ⇒ <code>string</code></li>
+      <li><a href="#MetaManager+setMetaName">.setMetaName(name, value)</a></li>
+      <li><a href="#MetaManager+getMetaName">.getMetaName(name)</a> ⇒ <code>string</code></li>
+      <li><a href="#MetaManager+getMetaNames">.getMetaNames()</a> ⇒ <code>Array.&lt;string&gt;</code></li>
+      <li><a href="#MetaManager+setMetaProperty">.setMetaProperty(name, value)</a></li>
+      <li><a href="#MetaManager+getMetaProperty">.getMetaProperty(name)</a> ⇒ <code>string</code></li>
+      <li><a href="#MetaManager+getMetaProperties">.getMetaProperties()</a> ⇒ <code>Array.&lt;string&gt;</code></li>
+      <li><a href="#MetaManager+setLink">.setLink(relation, reference)</a></li>
+      <li><a href="#MetaManager+getLink">.getLink(relation)</a> ⇒ <code>string</code></li>
+      <li><a href="#MetaManager+getLinks">.getLinks()</a> ⇒ <code>Array.&lt;string&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="metamanagersettitletitle">metaManager.setTitle(title) <a name="MetaManager+setTitle" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the page title.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>title</td>
+      <td><code>string</code></td>
+      <td>The new page title.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergettitle--string">metaManager.getTitle() ⇒ <code>string</code> <a name="MetaManager+getTitle" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the page title. The method returns an empty string if no page
+title has been set yet.</p>
+
+<p>Note that the page title is cached internally by the meta manager and
+may therefore differ from the current document title if it has been
+modified by a 3rd party code.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The current page title.</p>
+
+<hr />
+
+<h3 id="metamanagersetmetanamename-value">metaManager.setMetaName(name, value) <a name="MetaManager+setMetaName" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L46" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Set the specified named meta information property.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><code>string</code></td>
+      <td>Meta information property name, for example        <code>keywords</code>.</td>
+    </tr>
+    <tr>
+      <td>value</td>
+      <td><code>string</code></td>
+      <td>The meta information value.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetmetanamename--string">metaManager.getMetaName(name) ⇒ <code>string</code> <a name="MetaManager+getMetaName" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the value of the specified named meta information property. The
+method returns an empty string for missing meta information (to make the
+returned value React-friendly).</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The value of the generic meta information, or an empty
+        string.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><code>string</code></td>
+      <td>The name of the named meta information property.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetmetanames--arrayltstringgt">metaManager.getMetaNames() ⇒ <code>Array.&lt;string&gt;</code> <a name="MetaManager+getMetaNames" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the names of the currently specified named meta information
+properties.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>Array.&lt;string&gt;</code> - The names of the currently specified named meta
+        information properties.</p>
+
+<hr />
+
+<h3 id="metamanagersetmetapropertyname-value">metaManager.setMetaProperty(name, value) <a name="MetaManager+setMetaProperty" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L74" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the specified specialized meta information property.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><code>string</code></td>
+      <td>Name of the specialized meta information property.</td>
+    </tr>
+    <tr>
+      <td>value</td>
+      <td><code>string</code></td>
+      <td>The value of the meta information property.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetmetapropertyname--string">metaManager.getMetaProperty(name) ⇒ <code>string</code> <a name="MetaManager+getMetaProperty" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the value of the specified specialized meta information
+property. The method returns an empty string for missing meta
+information (to make the returned value React-friendly).</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The value of the specified meta information, or an
+        empty string.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><code>string</code></td>
+      <td>The name of the specialized meta information        property.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetmetaproperties--arrayltstringgt">metaManager.getMetaProperties() ⇒ <code>Array.&lt;string&gt;</code> <a name="MetaManager+getMetaProperties" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the names of the currently specified specialized meta
+information properties.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>Array.&lt;string&gt;</code> - The names of the currently specified specialized meta
+        information properties.</p>
+
+<hr />
+
+<h3 id="metamanagersetlinkrelation-reference">metaManager.setLink(relation, reference) <a name="MetaManager+setLink" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the specified specialized link information.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>relation</td>
+      <td><code>string</code></td>
+      <td>The relation of the link target to the current        page.</td>
+    </tr>
+    <tr>
+      <td>reference</td>
+      <td><code>string</code></td>
+      <td>The reference to the location of the related        document, e.g. a URL.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetlinkrelation--string">metaManager.getLink(relation) ⇒ <code>string</code> <a name="MetaManager+getLink" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L117" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Return the reference to the specified related linked document. The
+method returns an empty string for missing meta information (to make the
+returned value React-friendly).</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The reference to the location of the related document,
+        e.g. a URL.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>relation</td>
+      <td><code>string</code></td>
+      <td>The relation of the link target to the current        page.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="metamanagergetlinks--arrayltstringgt">metaManager.getLinks() ⇒ <code>Array.&lt;string&gt;</code> <a name="MetaManager+getLinks" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/meta/MetaManager.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the relations of the currently set related documents linked to
+the current page.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#MetaManager"><code>MetaManager</code></a></p>
+
+<hr />
+
+:ET

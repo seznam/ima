@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "DOM",
+      "ES2022"
+    ],
+    "outDir": "./dist",
+    "baseUrl": "."
+  },
+  "include": [
+    "./typings/**/*",
+    "./src/**/*",
+    "./index.ts"
+  ]
+}

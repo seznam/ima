@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Seznamzpravy.cz",
+    "href": "https://seznamzpravy.cz",
+    "img": "/img/references/seznamzpravy.jpg",
+    "description": "Seznam Zprávy is one of the top Czech news platforms, which delivers compelling, diverse and visually engaging stories in the form of a text and a video."
+  },
+  {
+    "title": "Novinky.cz",
+    "href": "https://novinky.cz",
+    "img": "/img/references/novinky.jpg",
+    "description": "One of the biggest and most visited news website in the Czech Republic. It offers coverage of the latest news from home and around the world in one place."
+  },
+  {
+    "title": "Prozeny.cz",
+    "href": "https://prozeny.cz",
+    "img": "/img/references/prozeny.jpg",
+    "description": "The biggest online lifestyle magazine for women in the Czech Republic. Current articles about fashion, health and lifestyle, living, family, and a great section of recipes."
+  },
+  {
+    "title": "Garaz.cz",
+    "href": "https://garaz.cz",
+    "img": "/img/references/garaz.jpg",
+    "description": "The biggest online magazine about cars and motorcycles in the Czech Republic where you can found current articles about news from the car industry, service tips, reports from car events and wonderful video section."
+  },
+  {
+    "title": "Počasí.cz",
+    "href": "https://počasí.cz",
+    "img": "/img/references/pocasi.jpg",
+    "description": "The most visited weather forecast website in the Czech republic. Offers weather forecast up to 6 days ahead for every place on Earth and interactive map with meteoradar."
+  },
+  {
+    "title": "tv.seznam.cz",
+    "href": "https://tv.seznam.cz",
+    "img": "/img/references/tv_seznam.jpg",
+    "description": "TV broadcast schedule for at least 14 days ahead, available for more than 100 most watched TV stations. Horizontal and vertical layout, notifications and social sharing is available."
+  },
+  {
+    "title": "SBazar.cz",
+    "href": "https://sbazar.cz",
+    "img": "/img/references/sbazar.jpg",
+    "description": "Sbazar.cz is one of the largest online peer to peer marketers in the Czech Republic. People can choose between 1,800,000 current offers. Advertising is clearly arranged into individual categories with the possibility of searching in a specific place in the Czechia."
+  },
+  {
+    "title": "SAuto.cz",
+    "href": "https://sauto.cz",
+    "img": "/img/references/sauto.jpg",
+    "description": "Sauto is the biggest marketplace of used and new cars in the Czech Republic. People can choose from up to 90,000 current sellers’ ads from across the country. Advanced filtering makes finding a car easier."
+  },
+  {
+    "title": "Hry.cz",
+    "href": "https://hry.cz",
+    "img": "/img/references/hry.jpg",
+    "description": "The Czech video game portal where you find your next video game to play. There are plenty of video games for different devices, including on-line browser games."
+  },
+  {
+    "title": "Seznam.cz/vychytavky",
+    "href": "https://seznam.cz/vychytavky",
+    "img": "/img/references/seznam_vychytavky.jpg",
+    "description": "The news feed of the Seznam.cz company where you can see the new features of all Seznam.cz services."
+  }
+]

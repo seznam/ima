@@ -13,7 +13,7 @@ module.exports = function devErrorPageFactory({ logger }) {
 
   function devErrorPage({ error, req, res }) {
     logger.error('The application crashed due to an uncaught exception', {
-      error
+      error,
     });
 
     return {
@@ -23,13 +23,13 @@ module.exports = function devErrorPageFactory({ logger }) {
         serverError: {
           name: error.name,
           message: error.message,
-          stack: error.stack.toString()
+          stack: error.stack.toString(),
         },
         req,
-        res
+        res,
       }),
       static: true,
-      status: 500
+      status: 500,
     };
   }
 

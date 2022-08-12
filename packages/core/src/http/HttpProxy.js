@@ -100,13 +100,12 @@ export default class HttpProxy {
         requestTimeoutId = setTimeout(() => {
           reject(
             new GenericError('The HTTP request timed out', {
-              status: HttpStatusCode.TIMEOUT
+              status: HttpStatusCode.TIMEOUT,
             })
           );
         }, options.timeout);
       }
 
-      const fetch = this._getFetchApi();
       fetch(
         this._composeRequestUrl(
           url,
@@ -251,12 +250,12 @@ export default class HttpProxy {
         params: requestParams,
         headers: this._headersToPlainObject(response.headers),
         headersRaw: response.headers,
-        cached: false
+        cached: false,
       };
     } else {
       throw new GenericError('The request failed', {
         status: response.status,
-        body: responseBody
+        body: responseBody,
       });
     }
   }
@@ -270,44 +269,8 @@ export default class HttpProxy {
   _headersToPlainObject(headers) {
     let plainHeaders = {};
 
-    if (headers.entries) {
-      for (let [key, value] of headers.entries()) {
-        plainHeaders[key] = value;
-      }
-    } else if (headers.forEach) {
-      /**
-       * Check for forEach() has to be here because in old Firefoxes (versions lower than 44) there is not
-       * possibility to iterate through all the headers - according to docs
-       * (https://developer.mozilla.org/en-US/docs/Web/API/Headers) where is "entries(), keys(), values(), and support
-       * of for...of" is supported from Firefox version 44
-       */
-      if (headers.getAll) {
-        /**
-         * @todo This branch should be removed with node-fetch release
-         *       2.0.0.
-         */
-        headers.forEach((_, headerName) => {
-          plainHeaders[headerName] = headers.getAll(headerName).join(', ');
-        });
-      } else if (headers.get) {
-        /**
-         * In case that Headers.getAll() from previous branch doesn't exist because it is obsolete and deprecated - in
-         * newer versions of the Fetch spec, Headers.getAll() has been deleted, and Headers.get() has been updated to
-         * fetch all header values instead of only the first one - according to docs
-         * (https://developer.mozilla.org/en-US/docs/Web/API/Headers/getAll)
-         */
-        headers.forEach((_, headerName) => {
-          plainHeaders[headerName] = headers.get(headerName);
-        });
-      } else {
-        /**
-         * @todo If Microsoft Edge supported headers.entries(), we'd remove
-         *       this branch.
-         */
-        headers.forEach((headerValue, headerName) => {
-          plainHeaders[headerName] = headerValue;
-        });
-      }
+    for (let [key, value] of headers.entries()) {
+      plainHeaders[key] = value;
     }
 
     return plainHeaders;
@@ -361,22 +324,6 @@ export default class HttpProxy {
   }
 
   /**
-   * Returns {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch window.fetch}
-   * compatible API to use, depending on the method being used at the server
-   * (polyfill) or client (native/polyfill) side.
-   *
-   * @return {function((string|Request), RequestInit=): Promise.<Response>} An
-   *         implementation of the Fetch API to use.
-   */
-  _getFetchApi() {
-    const fetch = 'node-fetch';
-
-    return this._window.isClient()
-      ? this._window.getWindow().fetch
-      : require(fetch);
-  }
-
-  /**
    * Composes an object representing the HTTP request parameters from the
    * provided arguments.
    *
@@ -395,7 +342,7 @@ export default class HttpProxy {
       url,
       transformedUrl: this._transformer.transform(url),
       data,
-      options
+      options,
     };
   }
 
@@ -411,11 +358,11 @@ export default class HttpProxy {
    * @return {RequestInit} A `RequestInit` object of the Fetch API.
    */
   _composeRequestInit(method, data, options) {
-    options.headers['Content-Type'] = this._getContentType(
-      method,
-      data,
-      options
-    );
+    const contentType = this._getContentType(method, data, options);
+
+    if (contentType) {
+      options.headers['Content-Type'] = contentType;
+    }
 
     for (let [headerName, headerValue] of this._defaultHeaders) {
       options.headers[headerName] = headerValue;
@@ -425,7 +372,7 @@ export default class HttpProxy {
       method: method.toUpperCase(),
       headers: options.headers,
       credentials: options.withCredentials ? 'include' : 'same-origin',
-      redirect: 'follow'
+      redirect: 'follow',
     };
 
     if (this._shouldRequestHaveBody(method, data)) {
@@ -445,10 +392,14 @@ export default class HttpProxy {
    *        be send with a request.
    * @param {HttpAgent~RequestOptions} options Options provided by the HTTP
    *        agent.
-   * @return {string} A `Content-Type` header value.
+   * @return {string|null} A `Content-Type` header value, null for requests
+   *        with no body.
    */
   _getContentType(method, data, options) {
-    if (options.headers['Content-Type']) {
+    if (
+      options.headers['Content-Type'] &&
+      typeof options.headers['Content-Type'] === 'string'
+    ) {
       return options.headers['Content-Type'];
     }
 
@@ -456,7 +407,7 @@ export default class HttpProxy {
       return 'application/json';
     }
 
-    return '';
+    return null;
   }
 
   /**
@@ -472,13 +423,13 @@ export default class HttpProxy {
   _composeRequestUrl(url, data) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
-    const delimeter = queryString
+    const delimiter = queryString
       ? transformedUrl.includes('?')
         ? '&'
         : '?'
       : '';
 
-    return `${transformedUrl}${delimeter}${queryString}`;
+    return `${transformedUrl}${delimiter}${queryString}`;
   }
 
   /**
@@ -491,7 +442,11 @@ export default class HttpProxy {
    * @return {boolean} `true` if a request has a body, otherwise `false`.
    */
   _shouldRequestHaveBody(method, data) {
-    return ['get', 'head'].indexOf(method.toLowerCase()) === -1 && data;
+    return !!(
+      method &&
+      data &&
+      !['get', 'head'].includes(method.toLowerCase())
+    );
   }
 
   /**

@@ -1,8 +1,6 @@
-import './assets/less/popup.less';
-import { getSettings, setSettings } from 'services/settings';
-import { getCurrentTab, toggleClass } from 'services/utils';
-import Actions from 'constants/actions';
-import State from 'constants/state';
+import './assets/less/popup.module.less';
+import { Actions, State } from '@/constants';
+import { getSettings, setSettings, getCurrentTab, toggleClass } from '@/utils';
 
 /**
  * Shows alert message based on passed state attribute and hides the others.
@@ -53,8 +51,8 @@ function sendEnabled(port, enabled) {
   port.postMessage({
     action: Actions.SETTINGS,
     payload: {
-      enabled: enabled
-    }
+      enabled: enabled,
+    },
   });
 }
 
@@ -70,7 +68,7 @@ function sendEnabled(port, enabled) {
   // Initialize connection with background script
   const curTab = await getCurrentTab();
   const port = chrome.runtime.connect({
-    name: `popup:${curTab.id}`
+    name: `popup:${curTab.id}`,
   });
 
   // Handle popup state changes
@@ -89,12 +87,8 @@ function sendEnabled(port, enabled) {
   // Init default state
   getSettings('enabled').then(enabled => {
     enableSwitch.checked = enabled;
-    sendEnabled(port, enabled);
 
-    // Timeout to prevent transition on initial opening of the popup
-    setTimeout(() => {
-      toggleClass(popupBody, enabled);
-      enableSwitch.disabled = false;
-    }, 50);
+    sendEnabled(port, enabled);
+    toggleClass(popupBody, enabled);
   });
 })();

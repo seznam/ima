@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charSet="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    #{$Styles}
+
+    <title></title>
+</head>
+<body>
+    <div id="page"></div>
+    <div id="revivalSettings">
+        <script>
+            window.$Debug = <%= $Debug %>;
+            window.$IMA = window.$IMA || {};
+            window.$IMA.Cache = {};
+            window.$IMA.$App = <%- JSON.stringify($App) %>;
+            window.$IMA.$Language = "<%= $Language %>";
+            window.$IMA.$Version =  "<%= $Version %>";
+            window.$IMA.$Env = "<%= $Env %>";
+            window.$IMA.$Debug = <%= $Debug %>;
+            window.$IMA.$Protocol = location.protocol;
+            window.$IMA.$Host = location.host;
+            window.$IMA.$Path = location.pathname;
+            window.$IMA.$Root = "";
+            window.$IMA.$LanguagePartPath = "";
+            #{$Runner}
+        </script>
+    </div>
+</body>
+</html>

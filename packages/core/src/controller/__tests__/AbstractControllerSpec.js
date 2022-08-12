@@ -42,7 +42,7 @@ describe('ima.core.controller.AbstractController', () => {
     it('should be return {} for undefined stateManager', () => {
       controller.setPageStateManager(null);
 
-      expect(controller.getState()).toEqual({});
+      expect(controller.getState()).toStrictEqual({});
     });
   });
 });

@@ -1,11 +1,10 @@
 import React from 'react';
 import jsdom from 'jsdom';
-import $Helper from '@ima/helpers';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
-import * as ima from '../main';
-import vendorLinker from '../vendorLinker';
+import * as ima from '../index';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {
@@ -21,26 +20,14 @@ jest.mock('path', () => {
 
 const MASTER_ELEMENT_ID = 'some-id';
 
-describe('Revive client application', () => {
+describe('revive client application', () => {
   let router = null;
-  let ReactDOM = {
-    render() {
-      return {
-        setState: () => {}
-      };
-    },
-    hydrate() {
-      return {
-        setState: () => {}
-      };
-    }
-  };
 
   let routerConfig = {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
 
   function View() {
@@ -70,7 +57,8 @@ describe('Revive client application', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    documentView: DocumentView
+    allowSPA: true,
+    documentView: DocumentView,
   };
 
   function propagateToGlobal(win) {
@@ -87,14 +75,14 @@ describe('Revive client application', () => {
 
   beforeAll(done => {
     let doc = Reflect.construct(jsdom.JSDOM, [
-      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`
+      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`,
     ]);
 
     propagateToGlobal(doc.window);
 
     global.$IMA = Object.assign({}, global.$IMA || {}, routerConfig, {
       $Env: 'prod',
-      $Version: 1
+      $Version: 1,
     });
 
     global.document = doc.window.document;
@@ -102,18 +90,21 @@ describe('Revive client application', () => {
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
     doc.reconfigure({
-      url: `${routerConfig.$Protocol}//${routerConfig.$Host}`
+      url: `${routerConfig.$Protocol}//${routerConfig.$Host}`,
     });
 
     //mock
     global.window.scrollTo = () => {};
 
+<<<<<<< HEAD
     vendorLinker.set('react', React);
     vendorLinker.set('react-dom', ReactDOM);
     vendorLinker.set('@ima/helpers', $Helper);
 
     jest.spyOn(ReactDOM, 'render');
 
+=======
+>>>>>>> next
     done();
   });
 
@@ -128,11 +119,11 @@ describe('Revive client application', () => {
             prod: {
               $Http: {},
               $Page: {
-                $Render: {}
-              }
-            }
+                $Render: {},
+              },
+            },
           };
-        }
+        },
       },
       {
         initBindApp: (ns, oc) => {
@@ -145,17 +136,16 @@ describe('Revive client application', () => {
           if (!oc.has('$Utils')) {
             oc.constant('$Utils', {});
           }
-        }
+        },
       }
     );
 
     ima
       .reviveClientApp(bootConfig)
       .then(response => {
-        expect(response.status).toEqual(200);
-        expect(response.pageState).toEqual({ hello: 'Hello' });
-        expect(response.content).toEqual(null);
-        expect(ReactDOM.render).toHaveBeenCalled();
+        expect(response.status).toBe(200);
+        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
+        expect(response.content).toBeNull();
         done();
       })
       .catch(error => {

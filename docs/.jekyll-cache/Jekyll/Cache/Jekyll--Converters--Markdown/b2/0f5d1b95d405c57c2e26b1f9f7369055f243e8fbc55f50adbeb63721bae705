@@ -1,0 +1,390 @@
+I"tR<h2 id="controller">Controller <a name="Controller" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface</p>
+
+<ul>
+  <li><a href="#Controller">Controller</a>
+    <ul>
+      <li><a href="#Controller+init">.init()</a> ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code></li>
+      <li><a href="#Controller+destroy">.destroy()</a> ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code></li>
+      <li><a href="#Controller+activate">.activate()</a> ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code></li>
+      <li><a href="#Controller+deactivate">.deactivate()</a> ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code></li>
+      <li><a href="#Controller+load">.load()</a> ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code></li>
+      <li><a href="#Controller+update">.update([prevParams])</a> ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code></li>
+      <li><a href="#Controller+setState">.setState(statePatch)</a></li>
+      <li><a href="#Controller+getState">.getState()</a> ⇒ <code>Object.&lt;string, \*&gt;</code></li>
+      <li><a href="#Controller+beginStateTransaction">.beginStateTransaction()</a></li>
+      <li><a href="#Controller+commitStateTransaction">.commitStateTransaction()</a></li>
+      <li><a href="#Controller+cancelStateTransaction">.cancelStateTransaction()</a></li>
+      <li><a href="#Controller+addExtension">.addExtension(extension)</a> ⇒ <a href="#Controller"><code>Controller</code></a></li>
+      <li><a href="#Controller+getExtensions">.getExtensions()</a> ⇒ <code>Array.&lt;Extension&gt;</code></li>
+      <li><a href="#Controller+setMetaParams">.setMetaParams(loadedResources, metaManager, router, dictionary, settings)</a></li>
+      <li><a href="#Controller+setRouteParams">.setRouteParams([params])</a></li>
+      <li><a href="#Controller+getRouteParams">.getRouteParams()</a> ⇒ <code>Object.&lt;string, string&gt;</code></li>
+      <li><a href="#Controller+setPageStateManager">.setPageStateManager(pageStateManager)</a></li>
+      <li><a href="#Controller+getHttpStatus">.getHttpStatus()</a> ⇒ <code>number</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="controllerinit--promiseltundefinedgt--undefined">controller.init() ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code> <a name="Controller+init" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback for initializing the controller after the route parameters have
+been set on this controller.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controllerdestroy--promiseltundefinedgt--undefined">controller.destroy() ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code> <a name="Controller+destroy" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Finalization callback, called when the controller is being discarded by
+the application. This usually happens when the user navigates to a
+different URL.</p>
+
+<p>This method is the lifecycle counterpart of the <a href="#Controller+init">init</a>
+method.</p>
+
+<p>The controller should release all resources obtained in the
+<a href="#Controller+init">init</a> method. The controller must release any resources
+that might not be released automatically when the controller’s instance
+is destroyed by the garbage collector.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controlleractivate--promiseltundefinedgt--undefined">controller.activate() ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code> <a name="Controller+activate" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback for activating the controller in the UI. This is the last
+method invoked during controller initialization, called after all the
+promises returned from the <a href="#Controller+load">load</a> method have been
+resolved and the controller has configured the meta manager.</p>
+
+<p>The controller may register any React and DOM event listeners in this
+method. The controller may start receiving event bus event after this
+method completes.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controllerdeactivate--promiseltundefinedgt--undefined">controller.deactivate() ⇒ <code>Promise.&lt;undefined&gt;</code> | <code>undefined</code> <a name="Controller+deactivate" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L62" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback for deactivating the controller in the UI. This is the first
+method invoked during controller deinitialization. This usually happens
+when the user navigates to a different URL.</p>
+
+<p>This method is the lifecycle counterpart of the
+<a href="#Controller+activate">activate</a> method.</p>
+
+<p>The controller should deregister listeners registered and release all
+resources obtained in the <a href="#Controller+activate">activate</a> method.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controllerload--promiseltobjectltstring-promisegtgt--objectltstring-promisegt">controller.load() ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code> <a name="Controller+load" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback the controller uses to request the resources it needs to render
+its view. This method is invoked after the <a href="#Controller+init">init</a>
+method.</p>
+
+<p>The controller should request all resources it needs in this method, and
+represent each resource request as a promise that will resolve once the
+resource is ready for use (these can be data fetched over HTTP(S),
+database connections, etc).</p>
+
+<p>The method must return a plain flat object. The field names of the
+object identify the resources being fetched and prepared, each value
+must be either the resource (e.g. view configuration or a value
+retrieved synchronously) or a Promise that will resolve to the resource.</p>
+
+<p>The IMA will use the object to set the state of the controller.</p>
+
+<p>If at the server side, the IMA will wait for all the promises to
+resolve, replaces the promises with the resolved values and sets the
+resulting object as the controller’s state.</p>
+
+<p>If at the client side, the IMA will first set the controller’s state to
+an object containing only the fields of the returned object that were
+not promises. IMA will then update the controller’s state every time a
+promise of the returned object resolves. IMA will update the state by
+adding the resolved resource to the controller’s state.</p>
+
+<p>Any returned promise that gets rejected will redirect the application to
+the error page. The error page that will be used depends on the status
+code of the error.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code> - A map object of promises resolved when all resources the controller
+        requires are ready. The resolved values will be pushed to the
+        controller’s state.</p>
+
+<hr />
+
+<h3 id="controllerupdateprevparams--promiseltobjectltstring-promisegtgt--objectltstring-promisegt">controller.update([prevParams]) ⇒ <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code> <a name="Controller+update" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback for updating the controller after a route update. This method
+is invoked if the current route has the <code class="highlighter-rouge">onlyUpdate</code> flag set to <code class="highlighter-rouge">true</code> and
+the current controller and view match those used by the previously active
+route, or, the <code class="highlighter-rouge">onlyUpdate</code> option of the current route is a callback and
+returned <code class="highlighter-rouge">true</code>.</p>
+
+<p>The method must return an object with the same semantics as the result
+of the <a href="#Controller+load">load</a> method. The controller’s state will only
+be patched by the returned object instead of replacing it completely.</p>
+
+<p>The other controller lifecycle callbacks (<a href="#Controller+init">init</a>,
+<a href="#Controller+load">load</a>, <a href="#Controller+activate">activate</a>,
+<a href="#Controller+deactivate">deactivate</a>, <a href="Controller#deinit">Controller#deinit</a>) are not call
+in case this method is used.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>Promise.&lt;Object.&lt;string, (Promise\|\*)&gt;&gt;</code> | <code>Object.&lt;string, (Promise\|\*)&gt;</code> - A map object of promises resolved when all resources the controller
+        requires are ready. The resolved values will be pushed to the
+        controller’s state.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[prevParams]</td>
+      <td><code>Object.&lt;string, string&gt;</code></td>
+      <td><code>{}</code></td>
+      <td>Previous route         parameters.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllersetstatestatepatch">controller.setState(statePatch) <a name="Controller+setState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L147" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Patches the state of this controller using the provided object by
+copying the provided patch object fields to the controller’s state
+object.</p>
+
+<p>You can use this method to modify the state partially or add new fields
+to the state object.</p>
+
+<p>Note that the state is not patched recursively but by replacing the
+values of the top-level fields of the state object.</p>
+
+<p>Once the promises returned by the <a href="#Controller+load">load</a> method are
+resolved, this method is called with the an object containing the
+resolved values. The field names of the passed object will match the
+field names in the object returned from the <a href="#Controller+load">load</a>
+method.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>statePatch</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>Patch of the controller’s state to        apply.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllergetstate--objectltstring-gt">controller.getState() ⇒ <code>Object.&lt;string, \*&gt;</code> <a name="Controller+getState" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L154" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the controller’s current state.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>Object.&lt;string, \*&gt;</code> - The current state of this controller.</p>
+
+<hr />
+
+<h3 id="controllerbeginstatetransaction">controller.beginStateTransaction() <a name="Controller+beginStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Starts queueing state patches off the controller state. While the transaction
+is active every {@method setState} call has no effect on the current state.</p>
+
+<p>Note that call to {@method getState} after the transaction has begun will
+return state as it was before the transaction.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controllercommitstatetransaction">controller.commitStateTransaction() <a name="Controller+commitStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L169" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Applies queued state patches to the controller state. All patches are squashed
+and applied with one {@method setState} call.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controllercancelstatetransaction">controller.cancelStateTransaction() <a name="Controller+cancelStateTransaction" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L174" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Cancels ongoing state transaction. Uncommited state changes are lost.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<hr />
+
+<h3 id="controlleraddextensionextension--controller">controller.addExtension(extension) ⇒ <a href="#Controller"><code>Controller</code></a> <a name="Controller+addExtension" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Adds the provided extension to this controller. All extensions should be
+added to the controller before the <a href="#Controller+init">init</a> method is
+invoked.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <a href="#Controller"><code>Controller</code></a> - This controller.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>extension</td>
+      <td><code>Extension</code></td>
+      <td>The extension to add to this controller.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllergetextensions--arrayltextensiongt">controller.getExtensions() ⇒ <code>Array.&lt;Extension&gt;</code> <a name="Controller+getExtensions" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the controller’s extensions.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>Array.&lt;Extension&gt;</code> - The extensions added to this controller.</p>
+
+<hr />
+
+<h3 id="controllersetmetaparamsloadedresources-metamanager-router-dictionary-settings">controller.setMetaParams(loadedResources, metaManager, router, dictionary, settings) <a name="Controller+setMetaParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L208" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Callback used to configure the meta attribute manager. The method is
+called after the the controller’s state has been patched with the all
+loaded resources and the view has been rendered.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>loadedResources</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>A plain object representing a        map of resource names to resources loaded by the        <a href="#Controller+load">load</a> method. This is the same object as the one        passed to the <a href="#Controller+setState">setState</a> method.</td>
+    </tr>
+    <tr>
+      <td>metaManager</td>
+      <td><code>MetaManager</code></td>
+      <td>Meta attributes manager to configure.</td>
+    </tr>
+    <tr>
+      <td>router</td>
+      <td><code>Router</code></td>
+      <td>The current application router.</td>
+    </tr>
+    <tr>
+      <td>dictionary</td>
+      <td><code>Dictionary</code></td>
+      <td>The current localization dictionary.</td>
+    </tr>
+    <tr>
+      <td>settings</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The application settings for the        current application environment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllersetrouteparamsparams">controller.setRouteParams([params]) <a name="Controller+setRouteParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L216" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the current route parameters. This method is invoked before the
+<a href="#Controller+init">init</a> method.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[params]</td>
+      <td><code>Object.&lt;string, string&gt;</code></td>
+      <td><code>{}</code></td>
+      <td>The current route parameters.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllergetrouteparams--objectltstring-stringgt">controller.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code> <a name="Controller+getRouteParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the current route parameters.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>Object.&lt;string, string&gt;</code> - The current route parameters.</p>
+
+<hr />
+
+<h3 id="controllersetpagestatemanagerpagestatemanager">controller.setPageStateManager(pageStateManager) <a name="Controller+setPageStateManager" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L235" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Sets the page state manager. The page state manager manages the
+controller’s state. The state manager can be set to <code class="highlighter-rouge">null</code> if this
+controller loses the right to modify the state of the current page (e.g.
+the user has navigated to a different route using a different
+controller).</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pageStateManager</td>
+      <td><code>PageStateManager</code></td>
+      <td>The current state manager to        use.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="controllergethttpstatus--number">controller.getHttpStatus() ⇒ <code>number</code> <a name="Controller+getHttpStatus" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/controller/Controller.js#L243" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the HTTP status code to send to the client, should the
+controller be used at the server-side.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Controller"><code>Controller</code></a><br />
+<strong>Returns</strong>: <code>number</code> - The HTTP status code to send to the client.</p>
+
+<hr />
+
+:ET

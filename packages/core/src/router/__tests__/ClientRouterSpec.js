@@ -48,7 +48,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.listen();
 
-    expect(window.bindEventListener.mock.calls.length).toEqual(2);
+    expect(window.bindEventListener.calls.count()).toBe(2);
   });
 
   it('should remove listener to popState event, click event', () => {
@@ -56,7 +56,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.unlisten();
 
-    expect(window.unbindEventListener.mock.calls.length).toEqual(2);
+    expect(window.unbindEventListener.calls.count()).toBe(2);
   });
 
   describe('redirect method', () => {
@@ -75,7 +75,7 @@ describe('ima.core.router.ClientRouter', () => {
         {
           type: ActionTypes.REDIRECT,
           event: undefined,
-          url: 'http://locahlost:3002/somePath'
+          url: 'http://locahlost:3002/somePath',
         },
         {}
       );
@@ -119,7 +119,7 @@ describe('ima.core.router.ClientRouter', () => {
       let path = '/somePath';
       let url = protocol + '//' + host + path;
 
-      expect(router._isSameDomain(url)).toEqual(true);
+      expect(router._isSameDomain(url)).toBeTruthy();
     });
 
     it('should be retrun false for strange domain with query for same domain', () => {
@@ -135,14 +135,14 @@ describe('ima.core.router.ClientRouter', () => {
         host +
         path;
 
-      expect(router._isSameDomain(url)).toEqual(false);
+      expect(router._isSameDomain(url)).toBeFalsy();
     });
 
     it('should be retrun false for strange domain', () => {
       let path = '/somePath';
       let url = protocol + '//' + 'www.strangeDomain.com' + path;
 
-      expect(router._isSameDomain(url)).toEqual(false);
+      expect(router._isSameDomain(url)).toBeFalsy();
     });
   });
 
@@ -152,18 +152,18 @@ describe('ima.core.router.ClientRouter', () => {
         {
           targetUrl: 'http://localhost/aaa#hash',
           baseUrl: 'http://localhost/aaa',
-          result: true
+          result: true,
         },
         {
           targetUrl: 'http://localhost/bbb#hash',
           baseUrl: 'http://localhost/aaa',
-          result: false
+          result: false,
         },
         {
           targetUrl: 'http://localhost/aaa',
           baseUrl: 'http://localhost/aaa',
-          result: false
-        }
+          result: false,
+        },
       ],
       value => {
         it(
@@ -176,7 +176,9 @@ describe('ima.core.router.ClientRouter', () => {
           () => {
             jest.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl);
 
-            expect(router._isHashLink(value.targetUrl)).toEqual(value.result);
+            expect(router._isHashLink(value.targetUrl)).toStrictEqual(
+              value.result
+            );
           }
         );
       }

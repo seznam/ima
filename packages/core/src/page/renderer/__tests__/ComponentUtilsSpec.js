@@ -7,7 +7,7 @@ class SomeMockHelper {}
 
 class SomeHelper {}
 
-describe('ComponentUtils', () => {
+describe('componentUtils', () => {
   let componentUtils = null;
 
   const oc = toMockedInstance(ObjectContainer);
@@ -20,8 +20,8 @@ describe('ComponentUtils', () => {
     it('should register utility class', () => {
       componentUtils.register('SomeHelper', SomeMockHelper);
 
-      expect(componentUtils._utilityClasses['SomeHelper']).not.toBeUndefined();
-      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(
+      expect(componentUtils._utilityClasses['SomeHelper']).toBeDefined();
+      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
         SomeMockHelper
       );
     });
@@ -29,13 +29,15 @@ describe('ComponentUtils', () => {
     it('should register multiple classes given in form of an Object.', () => {
       componentUtils.register({
         MockHelper: SomeMockHelper,
-        SomeHelper
+        SomeHelper,
       });
 
-      expect(componentUtils._utilityClasses['MockHelper']).toEqual(
+      expect(componentUtils._utilityClasses['MockHelper']).toStrictEqual(
         SomeMockHelper
       );
-      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(SomeHelper);
+      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
+        SomeHelper
+      );
     });
   });
 
@@ -49,7 +51,7 @@ describe('ComponentUtils', () => {
 
       componentUtils.register({
         SomeMockHelper,
-        SomeHelper
+        SomeHelper,
       });
     });
 

@@ -1,0 +1,278 @@
+I"/<h2 id="abstractcomponent"><em>AbstractComponent</em> <a name="AbstractComponent" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p>The base class for all view components.</p>
+
+<p><strong>Kind</strong>: global abstract class</p>
+
+<ul>
+  <li><em><a href="#AbstractComponent">AbstractComponent</a></em>
+    <ul>
+      <li><em><a href="#new_AbstractComponent_new">new AbstractComponent(props, context)</a></em></li>
+      <li><em><a href="#AbstractComponent+_utils">._utils</a> : <code>Object.&lt;string, \*&gt;</code></em></li>
+      <li><em><a href="#AbstractComponent+utils">.utils</a> ⇒ <code>Object.&lt;string, \*&gt;</code></em></li>
+      <li><em><a href="#AbstractComponent+localize">.localize(key, [params])</a> ⇒ <code>string</code></em></li>
+      <li><em><a href="#AbstractComponent+link">.link(name, [params])</a> ⇒ <code>string</code></em></li>
+      <li><em><a href="#AbstractComponent+cssClasses">.cssClasses(classRules, includeComponentClassName)</a> ⇒ <code>string</code></em></li>
+      <li><em><a href="#AbstractComponent+fire">.fire(eventName, [data])</a></em></li>
+      <li><em><a href="#AbstractComponent+listen">.listen(eventTarget, eventName, listener)</a></em></li>
+      <li><em><a href="#AbstractComponent+unlisten">.unlisten(eventTarget, eventName, listener)</a></em></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="new-abstractcomponentprops-context"><em>new AbstractComponent(props, context)</em> <a name="new_AbstractComponent_new"></a></h3>
+<p>Initializes the component.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>props</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The component properties.</td>
+    </tr>
+    <tr>
+      <td>context</td>
+      <td><code>Object.&lt;string, \*&gt;</code></td>
+      <td>The component context.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractcomponent_utils--objectltstring-gt"><em>abstractComponent._utils : <code>Object.&lt;string, \*&gt;</code></em> <a name="AbstractComponent+_utils" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>The view utilities, initialized lazily upon first use from either
+the context, or the component’s props.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractComponent"><code>AbstractComponent</code></a></p>
+
+<hr />
+
+<h3 id="abstractcomponentutils--objectltstring-gt"><em>abstractComponent.utils ⇒ <code>Object.&lt;string, \*&gt;</code></em> <a name="AbstractComponent+utils" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the utilities for the view components. The returned value is the
+value bound to the <code>$Utils</code> object container constant.</p>
+
+<p><strong>Kind</strong>: instance property of <a href="#AbstractComponent"><code>AbstractComponent</code></a><br />
+<strong>Returns</strong>: <code>Object.&lt;string, \*&gt;</code> - The utilities for the view components.</p>
+
+<hr />
+
+<h3 id="abstractcomponentlocalizekey-params--string"><em>abstractComponent.localize(key, [params]) ⇒ <code>string</code></em> <a name="AbstractComponent+localize" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the localized phrase identified by the specified key. The
+placeholders in the localization phrase will be replaced by the provided
+values.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a><br />
+<strong>Returns</strong>: <code>string</code> - Localized phrase.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td><code>string</code></td>
+      <td>Localization key.</td>
+    </tr>
+    <tr>
+      <td>[params]</td>
+      <td><code>Object.&lt;string, (number\|string)&gt;</code></td>
+      <td>Values for replacing        the placeholders in the localization phrase.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractcomponentlinkname-params--string"><em>abstractComponent.link(name, [params]) ⇒ <code>string</code></em> <a name="AbstractComponent+link" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Generates an absolute URL using the provided route name (see the
+<code>app/config/routes.js</code> file). The provided parameters will
+replace the placeholders in the route pattern, while the extraneous
+parameters will be appended to the generated URL’s query string.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a><br />
+<strong>Returns</strong>: <code>string</code> - The generated URL.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td><code>string</code></td>
+      <td>The route name.</td>
+    </tr>
+    <tr>
+      <td>[params]</td>
+      <td><code>Object.&lt;string, (number\|string)&gt;</code></td>
+      <td>Router parameters and        extraneous parameters to add to the URL as a query string.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractcomponentcssclassesclassrules-includecomponentclassname--string"><em>abstractComponent.cssClasses(classRules, includeComponentClassName) ⇒ <code>string</code></em> <a name="AbstractComponent+cssClasses" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Generate a string of CSS classes from the properties of the passed-in
+object that resolve to true.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a><br />
+<strong>Returns</strong>: <code>string</code> - String of CSS classes that had their property resolved
+        to <code>true</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>classRules</td>
+      <td><code>string</code> | <code>Object.&lt;string, boolean&gt;</code></td>
+      <td> </td>
+      <td>CSS classes in a        string separated by whitespace, or a map of CSS class names to        boolean values. The CSS class name will be included in the result        only if the value is <code>true</code>.</td>
+    </tr>
+    <tr>
+      <td>includeComponentClassName</td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Example</strong></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nx">cssClasses</span><span class="p">(</span><span class="dl">'</span><span class="s1">my-class my-class-modificator</span><span class="dl">'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+<p><strong>Example</strong></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nx">cssClasses</span><span class="p">({</span>
+           <span class="dl">'</span><span class="s1">my-class</span><span class="dl">'</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+           <span class="dl">'</span><span class="s1">my-class-modificator</span><span class="dl">'</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">modificator</span>
+       <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="abstractcomponentfireeventname-data"><em>abstractComponent.fire(eventName, [data])</em> <a name="AbstractComponent+fire" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Creates and sends a new IMA.js DOM custom event from this component.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>eventName</td>
+      <td><code>string</code></td>
+      <td>The name of the event.</td>
+    </tr>
+    <tr>
+      <td>[data]</td>
+      <td><code>\*</code></td>
+      <td>Data to send within the event.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractcomponentlisteneventtarget-eventname-listener"><em>abstractComponent.listen(eventTarget, eventName, listener)</em> <a name="AbstractComponent+listen" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Registers the provided event listener for execution whenever an IMA.js
+DOM custom event of the specified name occurs at the specified event
+target.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>eventTarget</td>
+      <td><code>React.Element</code> | <code>EventTarget</code></td>
+      <td>The react component or        event target at which the listener should listen for the event.</td>
+    </tr>
+    <tr>
+      <td>eventName</td>
+      <td><code>string</code></td>
+      <td>The name of the event for which to listen.</td>
+    </tr>
+    <tr>
+      <td>listener</td>
+      <td><code>function</code></td>
+      <td>The listener for event to register.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="abstractcomponentunlisteneventtarget-eventname-listener"><em>abstractComponent.unlisten(eventTarget, eventName, listener)</em> <a name="AbstractComponent+unlisten" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/page/AbstractComponent.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Deregisters the provided event listener for an IMA.js DOM custom event
+of the specified name at the specified event target.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#AbstractComponent"><code>AbstractComponent</code></a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>eventTarget</td>
+      <td><code>React.Element</code> | <code>EventTarget</code></td>
+      <td>The react component or        event target at which the listener should listen for the event.</td>
+    </tr>
+    <tr>
+      <td>eventName</td>
+      <td><code>string</code></td>
+      <td>The name of the event for which to listen.</td>
+    </tr>
+    <tr>
+      <td>listener</td>
+      <td><code>function</code></td>
+      <td>The listener for event to register.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+:ET

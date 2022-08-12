@@ -15,12 +15,12 @@ const IMAEvent = {
   AfterResponse: 'ima.server.afterResponse',
 
   CreateBootConfig: 'ima.server.bootConfig',
-  CreateImaApp: 'ima.server.createApp'
+  CreateImaApp: 'ima.server.createApp',
 };
 
 module.exports = {
   Emitter,
   createEvent,
   catchError,
-  Event: IMAEvent
+  Event: IMAEvent,
 };

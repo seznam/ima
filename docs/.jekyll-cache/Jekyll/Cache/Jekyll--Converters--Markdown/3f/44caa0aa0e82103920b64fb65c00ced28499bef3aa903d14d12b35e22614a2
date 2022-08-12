@@ -1,0 +1,12 @@
+I"'<h2 id="serialbatch--abstractexecution">SerialBatch ⇐ <code>AbstractExecution</code> <a name="SerialBatch" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/SerialBatch.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global class<br />
+<strong>Extends</strong>: <code>AbstractExecution</code></p>
+
+<hr />
+
+<h3 id="serialbatchexecute">serialBatch.execute() <a name="SerialBatch+execute" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/execution/SerialBatch.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p><strong>Kind</strong>: instance method of <a href="#SerialBatch"><code>SerialBatch</code></a></p>
+
+<hr />
+
+:ET

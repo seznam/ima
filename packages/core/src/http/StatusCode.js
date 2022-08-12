@@ -61,7 +61,7 @@ const StatusCode = Object.freeze({
    *
    * @type {number}
    */
-  SERVER_ERROR: 500
+  SERVER_ERROR: 500,
 });
 
 export default StatusCode;

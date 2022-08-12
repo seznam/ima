@@ -1,0 +1,45 @@
+I"�	<h2 id="error--extensibleerror">Error ⇐ <code>ExtensibleError</code> <a name="Error" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/Error.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h2>
+<p><strong>Kind</strong>: global interface<br />
+<strong>Extends</strong>: <code>ExtensibleError</code></p>
+
+<ul>
+  <li><a href="#Error">Error</a> ⇐ <code>ExtensibleError</code>
+    <ul>
+      <li><a href="#Error+getHttpStatus">.getHttpStatus()</a> ⇒ <code>number</code></li>
+      <li><a href="#Error+getParams">.getParams()</a> ⇒ <code>Object.&lt;string, \*&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="errorgethttpstatus--number">error.getHttpStatus() ⇒ <code>number</code> <a name="Error+getHttpStatus" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/Error.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the HTTP status to send to the client.</p>
+
+<p>If the error has occurred at the client-side, the status code is used to
+determine the error page to show to the user.</p>
+
+<p>This method is a shorthand for the following code snippet:
+<code class="highlighter-rouge">this.getParams().status || 500</code>.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Error"><code>Error</code></a><br />
+<strong>Returns</strong>: <code>number</code> - The HTTP status to send to the client.<br />
+<strong>See</strong>: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</p>
+
+<hr />
+
+<h3 id="errorgetparams--objectltstring-gt">error.getParams() ⇒ <code>Object.&lt;string, \*&gt;</code> <a name="Error+getParams" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/error/Error.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a></h3>
+<p>Returns the error parameters providing additional details about the
+error. The structure of the returned object is always
+situation-dependent, but the returned object usually contains the
+<code class="highlighter-rouge">status: number</code> field which represents the HTTP status to send to
+the client.</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Error"><code>Error</code></a><br />
+<strong>Returns</strong>: <code>Object.&lt;string, \*&gt;</code> - The route parameters of the route at which
+        the error has occurred.<br />
+<strong>See</strong>: Error#getHttpStatus</p>
+
+<hr />
+
+:ET
