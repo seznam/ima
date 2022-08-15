@@ -57,7 +57,7 @@ describe('ima.core.http.HttpProxy', () => {
     });
   });
 
-  ['get' /*,  'head', 'post', 'put', 'delete', 'patch' */].forEach(method => {
+  ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
     describe(`method ${method}`, () => {
       it('should return promise with response body', async () => {
         try {
