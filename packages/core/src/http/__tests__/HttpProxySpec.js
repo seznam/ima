@@ -24,6 +24,10 @@ describe('ima.core.http.HttpProxy', () => {
   });
   const mockedWindowHelper = toMockedInstance(Window);
 
+  const TIMEOUT_ERROR = new GenericError('The HTTP request timed out', {
+    status: StatusCode.TIMEOUT,
+  });
+
   let proxy;
   let response;
   let fetchResult;
@@ -230,24 +234,23 @@ describe('ima.core.http.HttpProxy', () => {
       it('should call provided abortController.abort on timeout', async () => {
         //TODO
         jest.useRealTimers();
+
         let abortController = new AbortController();
         const abortControllerSpy = jest.spyOn(abortController, 'abort');
 
         let options = { ...OPTIONS, timeout: 1, abortController };
 
-        fetchResult = new Promise(res => setTimeout(() => res(response), 2000));
+        fetchResult = new Promise(res => setTimeout(() => res(response), 20));
 
-        try {
+        await expect(async () => {
           await proxy.request(method, API_URL, DATA, options);
-        } catch (error) {
-          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-          expect(abortControllerSpy).toHaveBeenCalled();
-        }
+        }).rejects.toThrow(TIMEOUT_ERROR);
+
+        expect(abortControllerSpy).toHaveBeenCalled();
       });
 
       it('should create AbortController when not provided and abort it on timeout', async () => {
         //TODO how to check if httpproxy created and aborted its abortcontroller?
-        //TODO test will pass even if error is not thrown
 
         //TODO
         jest.useRealTimers();
@@ -255,11 +258,9 @@ describe('ima.core.http.HttpProxy', () => {
         let options = { ...OPTIONS, timeout: 1 };
         fetchResult = new Promise(res => setTimeout(() => res(response), 10));
 
-        try {
+        await expect(async () => {
           await proxy.request(method, API_URL, DATA, options);
-        } catch (error) {
-          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-        }
+        }).rejects.toThrow(TIMEOUT_ERROR);
       });
 
       it('should throw generic Timed Out error when aborted externally with timeout reason', async () => {
@@ -277,18 +278,12 @@ describe('ima.core.http.HttpProxy', () => {
         );
 
         setTimeout(() => {
-          abortController.abort(
-            new GenericError('The HTTP request timed out', {
-              status: StatusCode.TIMEOUT,
-            })
-          );
+          abortController.abort(TIMEOUT_ERROR);
         }, 10);
 
-        try {
+        await expect(async () => {
           await proxy.request(method, API_URL, DATA, options);
-        } catch (error) {
-          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-        }
+        }).rejects.toThrow(TIMEOUT_ERROR);
       });
 
       it('should throw Abort error when aborted externally; with other reason', async () => {
@@ -309,12 +304,10 @@ describe('ima.core.http.HttpProxy', () => {
           abortController.abort('Aborted');
         }, 10);
 
-        try {
+        await expect(async () => {
           await proxy.request(method, API_URL, DATA, options);
-        } catch (error) {
-          expect(abortController.signal.reason).toBe('Aborted');
-          expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
-        }
+        }).rejects.toThrow();
+        expect(abortController.signal.reason).toBe('Aborted');
       });
     });
   });
