@@ -1,7 +1,8 @@
-import path from 'path';
-import chalk from 'chalk';
 import fs from 'fs';
+import path from 'path';
 import { fileURLToPath } from 'url';
+
+import chalk from 'chalk';
 import { globby } from 'globby';
 import jsdoc2md from 'jsdoc-to-markdown';
 
