@@ -12,7 +12,10 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
   },
   "include": [
     "./typings/**/*",

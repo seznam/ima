@@ -6,7 +6,10 @@
       "ES2022"
     ],
     "outDir": "./dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
   },
   "include": [
     "./typings/**/*",
