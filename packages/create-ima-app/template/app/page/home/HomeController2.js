@@ -1,5 +1,4 @@
 import { HttpAgent } from '@ima/core';
-import TestExtension from './TestExtension';
 
 import AbstractPageController from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
@@ -7,10 +6,6 @@ import IMAjsShareImg from 'app/public/imajs-share.png';
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {
     return [HttpAgent];
-  }
-
-  static get $extensions() {
-    return [TestExtension];
   }
 
   /**
