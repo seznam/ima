@@ -5,7 +5,7 @@ describe('ima.core.ObjectContainer', () => {
   let oc = null;
 
   function classConstructorWithDependencies(dependency) {
-    this.dependecy = dependency;
+    this.dependency = dependency;
   }
   classConstructorWithDependencies.$dependencies = [];
 
@@ -304,8 +304,16 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return false if name is not exist in object container', () => {
-      expect(oc.has(classConstructor)).toBeFalsy();
+      global.$Debug = false;
       expect(oc.has(namespacePathOC)).toBeFalsy();
+      expect(oc.has(classConstructor)).toBeFalsy();
+      global.$Debug = true;
+    });
+
+    it('should throw if class is not in object container', () => {
+      expect(() => {
+        oc.has(classConstructor);
+      }).toThrow();
     });
   });
 
@@ -614,7 +622,15 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return null for not defined $dependencies property', () => {
+      global.$Debug = false;
       expect(oc._getEntryFromClassConstructor(classConstructor)).toBeNull();
+      global.$Debug = true;
+    });
+
+    it('should throw for not defined $dependencies property in $Debug', () => {
+      expect(() => {
+        oc._getEntryFromClassConstructor(classConstructor);
+      }).toThrow();
     });
 
     it('should set class to entries if class has defined $dependencies', () => {

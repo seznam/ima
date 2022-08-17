@@ -88,8 +88,8 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  async manage(route, options, params = {}, action) {
-    const response = await super.manage(route, options, params, action);
+  async manage(...args) {
+    const response = await super.manage(...args);
     await this._activatePageSource();
 
     return response;
