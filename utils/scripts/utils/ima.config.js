@@ -10,7 +10,7 @@ const path = require('path');
  */
 module.exports = {
   watchOptions: {
-    ignored: /(node_modules|build|.git)\/(?!@ima).*/,
+    ignored: /(node_modules|build|.husky|_templates|.git)\/(?!@ima).*/,
   },
   webpack: async (config, ctx) => {
     if (ctx.command === 'dev') {
