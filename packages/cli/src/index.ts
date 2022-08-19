@@ -5,10 +5,6 @@ export {
   ScrambleCssPlugin,
 } from './plugins/scramble-css/ScrambleCssPlugin';
 
-export { AnalyzePlugin } from './plugins/analyze/AnalyzePlugin';
-
-export { LessConstantsPlugin } from './plugins/less-constants/LessConstantsPlugin';
-
 export { ScrambleCssMinimizer } from './plugins/scramble-css/plugin/ScrambleCssMinimizer';
 
 export { PostCssPlugin } from './webpack/plugins/PostCssPlugin';

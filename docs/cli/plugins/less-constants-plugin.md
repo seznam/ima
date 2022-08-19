@@ -37,13 +37,13 @@ module.exports = {
 Then export your LESS JS constants from the provided entry file, using the available [`units` helper functions](./less-constants-plugin.md#units), imported from the CLI plugin:
 
 ```js title=./app/config/theme.js
-import * as units from '@ima/cli-plugin-less-constants/units';
+import { units, media } from '@ima/cli-plugin-less-constants';
 
 export default {
   bodyfontSize: units.rem(1),
   headerHeight: units.px(120),
   bodyWidth: units.vw(100),
-  greaterThanMobile: units.maxWidthMedia(360, 'screen'),
+  greaterThanMobile: media.maxWidthMedia(360, 'screen'),
   zIndexes: units.lessMap({
     header: 100,
     footer: 200,
@@ -139,6 +139,8 @@ export interface Unit {
 If you're missing any additional helpers, you can always define your own, either custom ones (as long as they adhere to the `Unit` interface) or you can use the following helper:
 
 ```typescript
+import { asUnit } from '@ima/cli-plugin-less-constants';
+
 function asUnit(
   unit: string,
   parts: (string | number)[],
