@@ -37,7 +37,7 @@ module.exports = {
 Then export your LESS JS constants from the provided entry file, using the available [`units` helper functions](./less-constants-plugin.md#units), imported from the CLI plugin:
 
 ```js title=./app/config/theme.js
-import { units, media } from '@ima/cli-plugin-less-constants';
+import { units, media } from '@ima/cli-plugin-less-constants/units';
 
 export default {
   bodyfontSize: units.rem(1),
@@ -139,7 +139,7 @@ export interface Unit {
 If you're missing any additional helpers, you can always define your own, either custom ones (as long as they adhere to the `Unit` interface) or you can use the following helper:
 
 ```typescript
-import { asUnit } from '@ima/cli-plugin-less-constants';
+import { asUnit } from '@ima/cli-plugin-less-constants/units';
 
 function asUnit(
   unit: string,
