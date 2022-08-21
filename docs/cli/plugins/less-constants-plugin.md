@@ -54,7 +54,7 @@ export default {
 
 This produces the following output:
 
-```less title=../../build/less-constants/constants.less
+```less title=./build/less-constants/constants.less
 @bodyfont-size: 1rem;
 @header-height: 120px;
 @body-width: 100vw;
@@ -78,7 +78,7 @@ Finally don't forget to import the generated `./build/less-constants/constants.l
 
 Since every unit returns [`Unit`](./less-constants-plugin.md#units) object, you can always access it's value through the `.valueOf()` method or use the CSS interpreted value by calling `.toString()`.
 
-```js
+```jsx
 import { headerHeight } from 'app/config/theme.js';
 
 export default function ThemeComponent({ children, title, href }) {
@@ -100,7 +100,7 @@ The constants are generated only in the [`preProcess`](../plugins-api.md#plugins
 ## Options
 
 ```ts
-new AnalyzePlugin(options: {
+new LessConstantsPlugin(options: {
   entry: string;
   output?: string;
 });
