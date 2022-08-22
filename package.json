@@ -39,7 +39,7 @@
     "release:next:init": "changeset pre enter rc",
     "release:publish": "changeset publish --no-git-tag",
     "stylelint": "stylelint --cache './**/*.{css,less}'",
-    "test": "jest --onlyChanged",
+    "test": "jest --changedSince `test -f '.changeset/pre.json' && echo 'next' || echo 'master'`",
     "test:ci": "jest --colors",
     "test:size": "npm run test:size --workspaces --if-present",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"

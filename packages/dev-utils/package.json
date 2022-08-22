@@ -18,7 +18,8 @@
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
     "build": "tsc -b",
-    "dev": "tsc -w --preserveWatchOutput"
+    "dev": "tsc -w --preserveWatchOutput",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "chalk": "^4.1.2",

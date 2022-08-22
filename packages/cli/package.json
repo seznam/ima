@@ -25,7 +25,8 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "dev": "tsc -w --preserveWatchOutput"
+    "dev": "tsc -w --preserveWatchOutput",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@gatsbyjs/webpack-hot-middleware": "2.25.2",

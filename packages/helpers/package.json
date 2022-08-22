@@ -21,7 +21,9 @@
   "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup --config",
-    "dev": "rollup --config --watch"
+    "dev": "rollup --config --watch",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest"
   },
   "dependencies": {
     "clone": "^2.1.2"
