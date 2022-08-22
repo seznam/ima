@@ -12,7 +12,7 @@ jobs:
       # - npm run build
       - npm run lint
       - npm run stylelint
-      - npm run test:ci
+      - npm run test:all
       - npm run test:size
       - npm run doc
       - npm run benchmark
