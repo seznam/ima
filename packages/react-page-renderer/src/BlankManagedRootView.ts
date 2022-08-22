@@ -1,8 +1,18 @@
-import { Component, ComponentType, createElement } from 'react';
-import ErrorBoundary from './ErrorBoundary';
+import {
+  ClassAttributes,
+  Component,
+  ComponentType,
+  createElement,
+} from 'react';
 
-interface Props {
-  $pageView: ComponentType;
+import ErrorBoundary from './ErrorBoundary';
+import { AnyState, Utils } from './types';
+
+export interface BlankManagedRootViewProps {
+  $pageView?: ComponentType;
+  $Utils: Utils;
+  state: AnyState;
+  view: ComponentType;
 }
 
 /**
@@ -11,7 +21,7 @@ interface Props {
  *
  * This is the default managed root view.
  */
-export default class BlankManagedRootView extends Component<Props> {
+export default class BlankManagedRootView extends Component<BlankManagedRootViewProps> {
   static get defaultProps() {
     return {
       $pageView: null,
@@ -28,13 +38,14 @@ export default class BlankManagedRootView extends Component<Props> {
       return null;
     }
 
+    const pageViewElement = createElement(
+      $pageView,
+      restProps as ClassAttributes<BlankManagedRootViewProps>
+    );
+
     // Wrap view with ErrorBoundary in $Debug env
     return $Debug
-      ? createElement(
-          ErrorBoundary,
-          null,
-          createElement($pageView, restProps as any)
-        )
-      : createElement($pageView, restProps as any);
+      ? createElement(ErrorBoundary, null, pageViewElement)
+      : pageViewElement;
   }
 }

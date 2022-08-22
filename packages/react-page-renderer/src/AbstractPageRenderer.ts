@@ -1,12 +1,21 @@
+import {
+  Controller,
+  Dispatcher,
+  PageRenderer,
+  RendererEvents,
+} from '@ima/core';
 import { ComponentType, Component } from 'react';
-import { Controller, Dispatcher, GenericError, PageRenderer, RendererEvents } from '@ima/core';
 
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import { RouteOptions } from './types';
+import {
+  AnyResource,
+  AnyState,
+  Helpers,
+  RouteOptions,
+  Settings,
+} from './types';
 import ViewAdapter from './ViewAdapter';
-
-// TODO 
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
@@ -14,11 +23,10 @@ import ViewAdapter from './ViewAdapter';
 export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _factory: PageRendererFactory;
   // TODO import * as $Helper from '@ima/helpers'; (not a type)
-  protected _helpers: { [key: string]: Function };
+  protected _helpers: Helpers;
   protected _dispatcher: Dispatcher;
-  protected _settings: { [key: string]: any };
+  protected _settings: Settings;
   protected _reactiveView?: Component | Element | void;
-
 
   /**
    * Initializes the abstract page renderer.
@@ -30,7 +38,12 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    * @param settings Application settings for the current
    *        application environment.
    */
-  constructor(factory: PageRendererFactory, helpers: { [key: string]: Function }, dispatcher: Dispatcher, settings: { [key: string]: any }) {
+  constructor(
+    factory: PageRendererFactory,
+    helpers: Helpers,
+    dispatcher: Dispatcher,
+    settings: Settings
+  ) {
     super();
 
     /**
@@ -57,29 +70,35 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   /**
    * @inheritdoc
    */
-  mount(controller: Controller, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions): Promise<{ content?: string; pageState: { [key: string]: any }; status: number; }> {
-    throw new GenericError(
-      'The mount() method is abstract and must be overridden.'
-    );
-  }
+  abstract mount(
+    controller: Controller,
+    view: ComponentType,
+    pageResources: AnyResource,
+    routeOptions: RouteOptions
+  ): Promise<{
+    content?: string;
+    pageState: AnyState;
+    status: number;
+  }>;
 
   /**
    * @inheritdoc
    */
-  update(controller: Controller, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions): Promise<{ content?: string; pageState: { [key: string]: any }; status: number; }> {
-    throw new GenericError(
-      'The update() method is abstract and must be overridden.'
-    );
-  }
+  abstract update(
+    controller: Controller,
+    view: ComponentType,
+    pageResources: AnyResource,
+    routeOptions: RouteOptions
+  ): Promise<{
+    content?: string;
+    pageState: AnyState;
+    status: number;
+  }>;
 
   /**
    * @inheritdoc
    */
-  unmount() {
-    throw new GenericError(
-      'The unmount() method is abstract and must be overridden.'
-    );
-  }
+  abstract unmount(): void;
 
   /**
    * @inheritdoc
@@ -102,7 +121,10 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    * @param view The page view React component to wrap.
    * @param state
    */
-  protected _generateViewProps(view: ComponentType, state: { [key: string]: any } = {}): { [key: string]: any } {
+  protected _generateViewProps(
+    view: ComponentType,
+    state: AnyState = {}
+  ): AnyState {
     const props = {
       view,
       state,
@@ -117,11 +139,15 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    *
    * @param routeOptions The current route options.
    */
-  protected _getWrappedPageView(controller: Controller, view: ComponentType, routeOptions: RouteOptions) {
+  protected _getWrappedPageView(
+    controller: Controller,
+    view: ComponentType,
+    routeOptions: RouteOptions
+  ) {
     const managedRootView = this._factory.getManagedRootView(
       routeOptions.managedRootView ||
-      this._settings.$Page.$Render.managedRootView ||
-      BlankManagedRootView
+        this._settings.$Page.$Render.managedRootView ||
+        BlankManagedRootView
     );
     const props = this._generateViewProps(
       managedRootView,
@@ -130,8 +156,8 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
 
     return this._factory.wrapView(
       routeOptions.viewAdapter ||
-      this._settings.$Page.$Render.viewAdapter ||
-      ViewAdapter,
+        this._settings.$Page.$Render.viewAdapter ||
+        ViewAdapter,
       props
     );
   }

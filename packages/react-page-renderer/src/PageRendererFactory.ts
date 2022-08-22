@@ -1,6 +1,7 @@
+import { ComponentUtils } from '@ima/core';
 import { Component, ComponentType, createElement, PureComponent } from 'react';
 
-import { ComponentUtils } from '@ima/core';
+import { BlankManagedRootViewProps } from './BlankManagedRootView';
 
 /**
  * Factory for page render.
@@ -39,12 +40,17 @@ export default class PageRendererFactory {
    *         view component.
    */
   getDocumentView(documentView: ComponentType | string) {
-    let documentViewComponent = this._resolveClassConstructor(documentView);
+    const documentViewComponent = this._resolveClassConstructor(documentView);
 
     if ($Debug) {
-      let componentPrototype = documentViewComponent.prototype;
+      const componentPrototype = documentViewComponent.prototype;
 
-      if (!(componentPrototype instanceof PureComponent || this._isFunctionalComponent(documentViewComponent))) {
+      if (
+        !(
+          componentPrototype instanceof PureComponent ||
+          this._isFunctionalComponent(documentViewComponent)
+        )
+      ) {
         throw new Error(
           'The document view component must extend React.PureComponent or be a functional component.'
         );
@@ -65,14 +71,21 @@ export default class PageRendererFactory {
    * @return The constructor of the managed
    *         root view component.
    */
-  getManagedRootView(managedRootView: ComponentType | string) {
-    let managedRootViewComponent =
+  getManagedRootView(
+    managedRootView: ComponentType<BlankManagedRootViewProps> | string
+  ) {
+    const managedRootViewComponent =
       this._resolveClassConstructor(managedRootView);
 
     if ($Debug) {
-      let componentPrototype = managedRootViewComponent.prototype;
+      const componentPrototype = managedRootViewComponent.prototype;
 
-      if (!(componentPrototype instanceof Component || this._isFunctionalComponent(componentPrototype))) {
+      if (
+        !(
+          componentPrototype instanceof Component ||
+          this._isFunctionalComponent(componentPrototype)
+        )
+      ) {
         throw new Error(
           'The managed root view component must extend React.Component or be a functional component.'
         );
@@ -97,10 +110,7 @@ export default class PageRendererFactory {
    */
   // TODO props any?
   wrapView(view: ComponentType | string, props: { [key: string]: any }) {
-    return createElement(
-      this._resolveClassConstructor(view),
-      props
-    );
+    return createElement(this._resolveClassConstructor(view), props);
   }
 
   /**
@@ -129,7 +139,9 @@ export default class PageRendererFactory {
    * @return The constructor of the view
    *         component.
    */
-  private _resolveClassConstructor(view: ComponentType | string): ComponentType {
+  private _resolveClassConstructor(
+    view: ComponentType<any> | string
+  ): ComponentType {
     if ($Debug && typeof view === 'string') {
       throw new Error(
         `The namespace was removed. You must pass react component instead of namespace ${view}.`
@@ -140,6 +152,9 @@ export default class PageRendererFactory {
   }
 
   private _isFunctionalComponent(component: Object) {
-    return typeof component === 'function' && !(component.prototype && component.prototype.isReactComponent);
+    return (
+      typeof component === 'function' &&
+      !(component.prototype && component.prototype.isReactComponent)
+    );
   }
 }

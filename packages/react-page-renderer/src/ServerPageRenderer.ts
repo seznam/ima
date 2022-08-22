@@ -1,7 +1,13 @@
-import { Cache, ControllerDecorator, Dispatcher, GenericError, Response } from '@ima/core';
-import { Attributes, ComponentType, } from 'react';
-//#if _SERVER
+import {
+  Cache,
+  ControllerDecorator,
+  Dispatcher,
+  GenericError,
+  Response,
+} from '@ima/core';
 import { processContent } from '@ima/helpers';
+import { Attributes, ComponentType } from 'react';
+//#if _SERVER
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 //#endif
 
@@ -43,7 +49,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   //#if _SERVER
   private _response: Response;
   private _cache: Cache;
-
 
   /**
    * Initializes the server-side page renderer.
@@ -87,7 +92,12 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @inheritdoc
    * @method mount
    */
-  mount(controller: ControllerDecorator, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions) {
+  mount(
+    controller: ControllerDecorator,
+    view: ComponentType,
+    pageResources: { [key: string]: any | Promise<any> },
+    routeOptions: RouteOptions
+  ) {
     if (this._response.isResponseSent()) {
       return Promise.resolve(this._response.getResponseParams());
     }
@@ -157,7 +167,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @return A copy of the provided data map that
    *         has all its values wrapped into promises.
    */
-  _wrapEachKeyToPromise(dataMap: { [key: string]: any } = {}): { [key: string]: Promise<any> } {
+  _wrapEachKeyToPromise(dataMap: { [key: string]: any } = {}): {
+    [key: string]: Promise<any>;
+  } {
     const copy: { [key: string]: Promise<any> } = {};
 
     for (const field of Object.keys(dataMap)) {
@@ -176,7 +188,12 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   /**
    * Render page after all promises from loaded resources is resolved.
    */
-  _renderPage(controller: ControllerDecorator, view: ComponentType, pageState: { [key: string]: any }, routeOptions: RouteOptions) {
+  _renderPage(
+    controller: ControllerDecorator,
+    view: ComponentType,
+    pageState: { [key: string]: any },
+    routeOptions: RouteOptions
+  ) {
     if (!this._response.isResponseSent()) {
       controller.setState(pageState);
       controller.setMetaParams(pageState);
@@ -193,7 +210,11 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   /**
    * Render page content to a string containing HTML markup.
    */
-  _renderPageContentToString(controller: ControllerDecorator, view: ComponentType, routeOptions: RouteOptions) {
+  _renderPageContentToString(
+    controller: ControllerDecorator,
+    view: ComponentType,
+    routeOptions: RouteOptions
+  ) {
     // Render current page to string
     const page = renderToString(
       this._getWrappedPageView(controller, view, routeOptions)
@@ -226,5 +247,4 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     return '<!doctype html>\n' + appMarkup;
   }
   //#endif
-  ;
 }

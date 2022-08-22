@@ -1,15 +1,15 @@
 import { PureComponent, ContextType } from 'react';
 
-import { Utils } from '@/types';
 import * as helpers from './componentHelpers';
 import PageContext from './PageContext';
+import { Utils } from './types';
 
 /**
  * The base class for all view components.
  */
-export default abstract class AbstractPureComponent extends PureComponent<any> {
+export default abstract class AbstractPureComponent extends PureComponent {
   static contextType = PageContext;
-  declare context: ContextType<typeof PageContext>
+  declare context: ContextType<typeof PageContext>;
 
   private _utils?: Utils;
 
@@ -76,7 +76,10 @@ export default abstract class AbstractPureComponent extends PureComponent<any> {
    * @return String of CSS classes that had their property resolved
    *         to {@code true}.
    */
-  cssClasses(classRules: string | { [key: string]: boolean }, includeComponentClassName: boolean = false) {
+  cssClasses(
+    classRules: string | { [key: string]: boolean },
+    includeComponentClassName = false
+  ) {
     return helpers.cssClasses(this, classRules, includeComponentClassName);
   }
 
@@ -100,7 +103,11 @@ export default abstract class AbstractPureComponent extends PureComponent<any> {
    * @param eventName The name of the event for which to listen.
    * @param listener The listener for event to register.
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
+  listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: (event: Event) => void
+  ) {
     helpers.listen(this, eventTarget, eventName, listener);
   }
 
@@ -113,7 +120,11 @@ export default abstract class AbstractPureComponent extends PureComponent<any> {
    * @param eventName The name of the event for which to listen.
    * @param listener The listener for event to register.
    */
-  unlisten(eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
+  unlisten(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: (event: Event) => void
+  ) {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }

@@ -1,11 +1,19 @@
 // @client-side
+import {
+  Controller,
+  ControllerDecorator,
+  Dispatcher,
+  MetaManager,
+  RendererEvents,
+  RendererTypes,
+  Window,
+} from '@ima/core';
 import { Component, ComponentType } from 'react';
-import { Controller, ControllerDecorator, Dispatcher, MetaManager, RendererEvents, RendererTypes, Window } from '@ima/core';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { RouteOptions } from './types';
+import { Helpers, RouteOptions } from './types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -15,14 +23,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * Flag signalling that the page is being rendered for the first time.
    */
-  private _firstTime: boolean = true;
+  private _firstTime = true;
   private _window: Window;
   /**
    * The HTML element containing the current application view for the
    * current route.
    */
   private _viewContainer?: Element;
-
 
   /**
    * Initializes the client-side page renderer.
@@ -36,7 +43,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *        ({@code window}) regardless of the client/server-side
    *        environment.
    */
-  constructor(factory: PageRendererFactory, helpers: { [key: string]: Function }, dispatcher: Dispatcher, settings: { [key: string]: any }, window: Window) {
+  constructor(
+    factory: PageRendererFactory,
+    helpers: { [key: string]: Function },
+    dispatcher: Dispatcher,
+    settings: { [key: string]: any },
+    window: Window
+  ) {
     super(factory, helpers, dispatcher, settings);
 
     /**
@@ -49,7 +62,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritdoc
    */
-  async mount(controller: ControllerDecorator, view: ComponentType, pageResources: { [key: string]: any | Promise<any> }, routeOptions: RouteOptions) {
+  async mount(
+    controller: ControllerDecorator,
+    view: ComponentType,
+    pageResources: { [key: string]: any | Promise<any> },
+    routeOptions: RouteOptions
+  ) {
     const separatedData = this._separatePromisesAndValues(pageResources);
     const defaultPageState = separatedData.values;
     const loadedPromises = separatedData.promises;
@@ -86,7 +104,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritdoc
    */
-  update(controller: ControllerDecorator, view: ComponentType, resourcesUpdate: { [key: string]: any | Promise<any> }) {
+  update(
+    controller: ControllerDecorator,
+    view: ComponentType,
+    resourcesUpdate: { [key: string]: any | Promise<any> }
+  ) {
     const separatedData = this._separatePromisesAndValues(resourcesUpdate);
     const defaultPageState = separatedData.values;
     const updatedPromises = separatedData.promises;
@@ -116,7 +138,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (this._reactiveView && this._viewContainer) {
       if (unmountComponentAtNode(this._viewContainer)) {
         this._reactiveView = undefined;
-        this._dispatcher.fire(RendererEvents.UNMOUNTED, { type: RendererTypes.UNMOUNT }, true);
+        this._dispatcher.fire(
+          RendererEvents.UNMOUNTED,
+          { type: RendererTypes.UNMOUNT },
+          true
+        );
       }
     }
   }
@@ -138,7 +164,10 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * Patch promise values to controller state.
    */
-  private _patchPromisesToState(controller: ControllerDecorator, patchedPromises: { [key: string]: Promise<any> }) {
+  private _patchPromisesToState(
+    controller: ControllerDecorator,
+    patchedPromises: { [key: string]: Promise<any> }
+  ) {
     for (const resourceName of Object.keys(patchedPromises)) {
       patchedPromises[resourceName]
         .then(resource => {
@@ -155,13 +184,16 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * Batch patch promise values to controller state.
    */
-  private _startBatchTransactions(controller: ControllerDecorator, patchedPromises: { [key: string]: Promise<any> }) {
+  private _startBatchTransactions(
+    controller: ControllerDecorator,
+    patchedPromises: { [key: string]: Promise<any> }
+  ) {
     let hasResourcesLoaded = false;
     const options = {
       timeout: 100,
     };
     const requestIdleCallback = this._window.getWindow()?.requestIdleCallback
-      ? this._window.getWindow()?.requestIdleCallback as Function
+      ? (this._window.getWindow()?.requestIdleCallback as Function)
       : (callback: Function) => setTimeout(callback, 0);
     const handler = () => {
       controller.commitStateTransaction();
@@ -191,7 +223,10 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
    */
-  private _setStateWithoutRendering(controller: Controller, defaultPageState: { [key: string]: any }) {
+  private _setStateWithoutRendering(
+    controller: Controller,
+    defaultPageState: { [key: string]: any }
+  ) {
     const patchState = this._patchStateToClearPreviousState(defaultPageState);
 
     const reactiveView = this._reactiveView;
@@ -203,7 +238,10 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
   private _patchStateToClearPreviousState(state: { [key: string]: any }) {
     // TODO check if this condition is ok - state is empty or reactiveView does not have state at all?
-    if (!this._reactiveView || (this._reactiveView instanceof Component && !this._reactiveView.state)) {
+    if (
+      !this._reactiveView ||
+      (this._reactiveView instanceof Component && !this._reactiveView.state)
+    ) {
       return state;
     }
 
@@ -221,7 +259,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *
    * @param routeOptions The current route options.
    */
-  private _renderToDOM(controller: Controller, view: ComponentType, routeOptions: RouteOptions) {
+  private _renderToDOM(
+    controller: Controller,
+    view: ComponentType,
+    routeOptions: RouteOptions
+  ) {
     const reactElementView = this._getWrappedPageView(
       controller,
       view,
@@ -241,7 +283,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         console.warn(errorMessage);
       }
 
-      this._dispatcher.fire(RendererEvents.ERROR, { message: errorMessage }, true);
+      this._dispatcher.fire(
+        RendererEvents.ERROR,
+        { message: errorMessage },
+        true
+      );
 
       return Promise.resolve();
     }
@@ -264,13 +310,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         );
       });
     } else {
-      this._reactiveView = render(
-        reactElementView,
-        this._viewContainer,
-        () => {
-          this._dispatcher.fire(RendererEvents.MOUNTED, { type: RendererTypes.RENDER }, true);
-        }
-      );
+      this._reactiveView = render(reactElementView, this._viewContainer, () => {
+        this._dispatcher.fire(
+          RendererEvents.MOUNTED,
+          { type: RendererTypes.RENDER },
+          true
+        );
+      });
       return Promise.resolve();
     }
   }
@@ -322,7 +368,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _updateMetaNameAttributes(metaManager: MetaManager) {
     for (const metaTagKey of metaManager.getMetaNames()) {
-      const metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`) as HTMLMetaElement;
+      const metaTag = this._window.querySelector(
+        `meta[name="${metaTagKey}"]`
+      ) as HTMLMetaElement;
 
       if (metaTag) {
         metaTag.content = metaManager.getMetaName(metaTagKey);
@@ -338,7 +386,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _updateMetaPropertyAttributes(metaManager: MetaManager) {
     for (const metaTagKey of metaManager.getMetaProperties()) {
-      const metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`) as HTMLMetaElement;
+      const metaTag = this._window.querySelector(
+        `meta[property="${metaTagKey}"]`
+      ) as HTMLMetaElement;
 
       if (metaTag) {
         metaTag.content = metaManager.getMetaProperty(metaTagKey);
@@ -354,7 +404,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _updateMetaLinkAttributes(metaManager: MetaManager) {
     for (const linkTagKey of metaManager.getLinks()) {
-      const linkTag = this._window.querySelector(`link[rel="${linkTagKey}"]`) as HTMLLinkElement;
+      const linkTag = this._window.querySelector(
+        `link[rel="${linkTagKey}"]`
+      ) as HTMLLinkElement;
 
       if (linkTag && linkTag.href) {
         linkTag.href = metaManager.getLink(linkTagKey);

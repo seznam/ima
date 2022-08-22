@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import { Component, ContextType, PureComponent } from 'react';
+import { Component, ComponentType, ContextType, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Utils } from './types';
 import AbstractComponent from './AbstractComponent';
 import AbstractPureComponent from './AbstractPureComponent';
 import PageContext from './PageContext';
+import { Utils } from './types';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -17,13 +17,16 @@ import PageContext from './PageContext';
  * @throws Error Throw if the view utils cannot be located in the provided
  *         properties nor context.
  */
-export function getUtils(props: any, context: ContextType<typeof PageContext>): Utils {
+export function getUtils(
+  props: { $Utils?: Utils },
+  context: ContextType<typeof PageContext>
+): Utils | undefined {
   const utils = context ? context.$Utils || props.$Utils : props.$Utils;
 
   if ($Debug && !utils) {
     throw new Error(
       'The component cannot access the view utils because they were ' +
-      'not passed in the initial props or context as $Utils.'
+        'not passed in the initial props or context as $Utils.'
     );
   }
 
@@ -42,7 +45,12 @@ export function getUtils(props: any, context: ContextType<typeof PageContext>): 
  *        placeholders in the localization phrase.
  * @return Localized phrase.
  */
-export function localize(component: AbstractComponent | AbstractPureComponent, key: string, params: { [key: string]: string | number }): string {
+export function localize(
+  component: AbstractComponent | AbstractPureComponent,
+  key: string,
+  params: { [key: string]: string | number }
+): string {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$Dictionary.get(key, params);
 }
 
@@ -59,7 +67,12 @@ export function localize(component: AbstractComponent | AbstractPureComponent, k
  *        extraneous parameters to add to the URL as a query string.
  * @return The generated URL.
  */
-export function link(component: AbstractComponent | AbstractPureComponent, name: string, params: { [key: string]: string | number }): string {
+export function link(
+  component: AbstractComponent | AbstractPureComponent,
+  name: string,
+  params: { [key: string]: string | number }
+): string {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$Router.link(name, params);
 }
 
@@ -84,7 +97,12 @@ export function link(component: AbstractComponent | AbstractPureComponent, name:
  * @return String of CSS classes that had their property resolved
  *         to {@code true}.
  */
-export function cssClasses(component: AbstractComponent | AbstractPureComponent, classRules: string | object, includeComponentClassName: boolean): string {
+export function cssClasses(
+  component: AbstractComponent | AbstractPureComponent,
+  classRules: string | object,
+  includeComponentClassName: boolean
+): string {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$CssClasses(
     classRules,
     includeComponentClassName ? component : ''
@@ -105,17 +123,17 @@ export function cssClasses(component: AbstractComponent | AbstractPureComponent,
  * @return String of CSS classes that had their property resolved
  *         to {@code true}.
  */
-export function defaultCssClasses(classRules: string | object, component: string | AbstractComponent | AbstractPureComponent): string {
+export function defaultCssClasses(
+  classRules: string | object,
+  component: string | ComponentType
+): string {
   let extraClasses = typeof component === 'string' ? component : null;
 
   // TODO find out why is ts complaining..
   const isComponent = component instanceof Component;
   const isPureComponent = component instanceof PureComponent;
 
-  if (
-    !extraClasses &&
-    (isComponent || isPureComponent)
-  ) {
+  if (!extraClasses && (isComponent || isPureComponent)) {
     extraClasses = component.props.className;
   }
 
@@ -130,8 +148,14 @@ export function defaultCssClasses(classRules: string | object, component: string
  * @param eventName The name of the event.
  * @param data Data to send within the event.
  */
-export function fire(component: AbstractComponent | AbstractPureComponent, eventName: string, data: any = null) {
-  return component.utils!.$EventBus.fire(// TODO findDOMNode remove
+export function fire(
+  component: AbstractComponent | AbstractPureComponent,
+  eventName: string,
+  data: unknown = null
+) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return component.utils!.$EventBus.fire(
+    // TODO findDOMNode remove
     ReactDOM.findDOMNode(component) as EventTarget, //eslint-disable-line react/no-find-dom-node
     eventName,
     data
@@ -150,7 +174,13 @@ export function fire(component: AbstractComponent | AbstractPureComponent, event
  * @param eventName The name of the event for which to listen.
  * @param listener The listener for event to register.
  */
-export function listen(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
+export function listen(
+  component: AbstractComponent | AbstractPureComponent,
+  eventTarget: EventTarget,
+  eventName: string,
+  listener: (event: Event) => void
+) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$EventBus.listen(eventTarget, eventName, listener);
 }
 
@@ -165,6 +195,12 @@ export function listen(component: AbstractComponent | AbstractPureComponent, eve
  * @param eventName The name of the event for which to listen.
  * @param listener The listener for event to register.
  */
-export function unlisten(component: AbstractComponent | AbstractPureComponent, eventTarget: EventTarget, eventName: string, listener: (event: Event) => any) {
+export function unlisten(
+  component: AbstractComponent | AbstractPureComponent,
+  eventTarget: EventTarget,
+  eventName: string,
+  listener: (event: Event) => void
+) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$EventBus.unlisten(eventTarget, eventName, listener);
 }

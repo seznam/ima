@@ -1,7 +1,7 @@
 import { PureComponent, ReactElement } from 'react';
 
 interface Props {
-  children?: ReactElement
+  children?: ReactElement;
 }
 
 interface State {
