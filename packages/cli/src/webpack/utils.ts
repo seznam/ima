@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 
 import envResolver from '@ima/server/lib/environment.js';
+import MessageFormat from '@messageformat/core';
 import chalk from 'chalk';
 import { ObjectPattern } from 'copy-webpack-plugin';
-import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
 import { logger } from '../lib/logger';
@@ -132,10 +132,12 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             });
           }, tempLocales[locale]);
 
+          console.log(tempLocales[locale]);
+
+          console.log(mf.compile(tempLocales[locale]));
+
           return `(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
-                                        ${mf
-                                          .compile(tempLocales[locale])
-                                          .toString('$IMA.i18n')}
+                                        ${mf.compile(tempLocales[locale])}
                                           ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
         },
       })
