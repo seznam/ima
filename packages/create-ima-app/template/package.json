@@ -41,6 +41,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
     "express-http-proxy": "^1.6.3",
+    "express-static-gzip": "^2.1.7",
     "helmet": "^3.23.3",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
