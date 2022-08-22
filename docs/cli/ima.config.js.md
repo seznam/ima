@@ -286,11 +286,11 @@ module.exports = {
 
 :::
 
-### compression
+### compress
 
-> `string[] = ['brotliCompress', 'gzip']`
+> `boolean = true`
 
-Here you can customize which compression algorithms to use in production build. To disable asset compression entirely, use an empty array `[]`.
+Enables brotli and gzip compression for production assets (in build command). Set to false to disable this feature.
 
 ### imageInlineSizeLimit
 

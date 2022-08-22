@@ -65,12 +65,13 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
  * @param {ImaCliCommand} command Current CLI command identifier.
  * @returns {CommandBuilder} Object with shared args.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
   return {
     clean: {
       desc: 'Clean build folder before building the application',
       type: 'boolean',
-      default: command === 'build',
+      default: true,
     },
     clearCache: {
       desc: 'Deletes node_modules/.cache directory to invalidate loaders cache',

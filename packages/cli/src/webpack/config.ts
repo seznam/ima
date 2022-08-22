@@ -280,18 +280,20 @@ export default async (
       chunkIds: 'named',
       ...(!isServer && { runtimeChunk: 'single' }),
       splitChunks: {
-        ...(isDevEnv && {
-          cacheGroups: {
-            // Split vendor chunk in dev for better watch caching
-            vendor: {
-              // Split only JS files
-              test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
-              name: 'vendors',
-              enforce: true,
-              chunks: 'initial',
-            },
+        cacheGroups: {
+          vendors: {
+            test: /node_modules/,
+            name: 'vendors',
+            enforce: isDevEnv,
+            chunks: isDevEnv ? 'initial' : 'async',
+            reuseExistingChunk: true,
           },
-        }),
+          default: {
+            chunks: 'async',
+            minChunks: 2,
+            reuseExistingChunk: true,
+          },
+        },
       },
     },
     resolve: {
@@ -524,8 +526,8 @@ export default async (
               }),
 
             // Enables compression for assets in production build
-            ...(ctx.command === 'build'
-              ? imaConfig.compression.map(
+            ...(ctx.command === 'build' && imaConfig.compress
+              ? ['brotliCompress', 'gzip'].map(
                   algorithm =>
                     new CompressionPlugin({
                       algorithm,
@@ -533,10 +535,6 @@ export default async (
                         algorithm === 'brotliCompress' ? 'br' : 'gz'
                       }`,
                       test: /\.(js|css|svg)$/,
-                      compressionOptions: {
-                        level: 9,
-                      },
-                      threshold: 0,
                       minRatio: 0.95,
                     })
                 )
