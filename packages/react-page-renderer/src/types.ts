@@ -1,6 +1,6 @@
 import { Controller, Dictionary, EventBus, Router } from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
-import { processContent } from '@ima/helpers';
+import { allPromiseHash, processContent } from '@ima/helpers';
 import { ComponentType } from 'react';
 
 import AbstractComponent from './AbstractComponent';
@@ -14,6 +14,7 @@ declare global {
 }
 
 export type Helpers = {
+  allPromiseHash: typeof allPromiseHash;
   processContent: typeof processContent;
 };
 
@@ -27,13 +28,24 @@ export type RouteOptions = {
 };
 
 export type Settings = {
+  $App: unknown;
+  $Debug: unknown;
+  $Env: unknown;
+  $Host: unknown;
+  $Language: unknown;
+  $LanguagePartPath: unknown;
+  $Path: unknown;
   $Page: {
     $Render: {
       documentView?: ComponentType;
       managedRootView?: ComponentType;
+      masterElementId?: string;
       viewAdapter?: ComponentType;
     };
   };
+  $Protocol: unknown;
+  $Root: unknown;
+  $Version: unknown;
 };
 
 export type Utils = {

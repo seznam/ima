@@ -92,21 +92,27 @@ declare module '@ima/core' {
       view: ComponentType,
       pageResources: { [key: string]: unknown | Promise<unknown> },
       routeOptions: RouteOptions
-    ): Promise<{
-      content?: string;
-      pageState: { [key: string]: unknown };
-      status: number;
-    }>;
+    ): Promise<
+      | unknown
+      | {
+          content?: string;
+          pageState: { [key: string]: unknown };
+          status: number;
+        }
+    >;
     update(
       controller: Controller,
       view: ComponentType,
       pageResources: { [key: string]: unknown | Promise<unknown> },
       routeOptions: RouteOptions
-    ): Promise<{
-      content?: string;
-      pageState: { [key: string]: unknown };
-      status: number;
-    }>;
+    ): Promise<
+      | unknown
+      | {
+          content?: string;
+          pageState: { [key: string]: unknown };
+          status: number;
+        }
+    >;
     unmount(): void;
     setState(state: { [key: string]: unknown }): void;
   }

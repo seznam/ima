@@ -13,7 +13,7 @@ import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, RouteOptions } from './types';
+import { Helpers, RouteOptions, Settings } from './types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -45,9 +45,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   constructor(
     factory: PageRendererFactory,
-    helpers: { [key: string]: Function },
+    helpers: Helpers,
     dispatcher: Dispatcher,
-    settings: { [key: string]: any },
+    settings: Settings,
     window: Window
   ) {
     super(factory, helpers, dispatcher, settings);
@@ -65,7 +65,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   async mount(
     controller: ControllerDecorator,
     view: ComponentType,
-    pageResources: { [key: string]: any | Promise<any> },
+    pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
     const separatedData = this._separatePromisesAndValues(pageResources);
@@ -80,7 +80,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     return this._helpers
       .allPromiseHash(loadedPromises)
-      .then(async (fetchedResources: any) => {
+      .then(async (fetchedResources: unknown) => {
         const pageState = Object.assign({}, defaultPageState, fetchedResources);
 
         if (this._firstTime) {
@@ -107,7 +107,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   update(
     controller: ControllerDecorator,
     view: ComponentType,
-    resourcesUpdate: { [key: string]: any | Promise<any> }
+    resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
   ) {
     const separatedData = this._separatePromisesAndValues(resourcesUpdate);
     const defaultPageState = separatedData.values;
@@ -118,7 +118,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     return this._helpers
       .allPromiseHash(updatedPromises)
-      .then((fetchedResources: any) => {
+      .then((fetchedResources: unknown) => {
         controller.setMetaParams(controller.getState());
         this._updateMetaAttributes(controller.getMetaManager());
 
@@ -166,7 +166,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _patchPromisesToState(
     controller: ControllerDecorator,
-    patchedPromises: { [key: string]: Promise<any> }
+    patchedPromises: { [key: string]: Promise<unknown> }
   ) {
     for (const resourceName of Object.keys(patchedPromises)) {
       patchedPromises[resourceName]
@@ -186,15 +186,21 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _startBatchTransactions(
     controller: ControllerDecorator,
-    patchedPromises: { [key: string]: Promise<any> }
+    patchedPromises: { [key: string]: Promise<unknown> }
   ) {
     let hasResourcesLoaded = false;
     const options = {
       timeout: 100,
     };
-    const requestIdleCallback = this._window.getWindow()?.requestIdleCallback
-      ? (this._window.getWindow()?.requestIdleCallback as Function)
-      : (callback: Function) => setTimeout(callback, 0);
+
+    const Window = this._window.getWindow();
+    let requestIdleCallback: (
+      callback: IdleRequestCallback,
+      options?: IdleRequestOptions | undefined
+    ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
+    if (Window && Window['requestIdleCallback']) {
+      requestIdleCallback = Window.requestIdleCallback;
+    }
     const handler = () => {
       controller.commitStateTransaction();
 
@@ -225,7 +231,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _setStateWithoutRendering(
     controller: Controller,
-    defaultPageState: { [key: string]: any }
+    defaultPageState: { [key: string]: unknown }
   ) {
     const patchState = this._patchStateToClearPreviousState(defaultPageState);
 
@@ -236,7 +242,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     this._reactiveView = reactiveView;
   }
 
-  private _patchStateToClearPreviousState(state: { [key: string]: any }) {
+  private _patchStateToClearPreviousState(state: { [key: string]: unknown }) {
     // TODO check if this condition is ok - state is empty or reactiveView does not have state at all?
     if (
       !this._reactiveView ||
@@ -271,7 +277,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     );
 
     const masterElementId = this._settings.$Page.$Render.masterElementId;
-    this._viewContainer = this._window.getElementById(masterElementId);
+    this._viewContainer = this._window.getElementById(
+      masterElementId as string
+    );
 
     if (!this._viewContainer) {
       const errorMessage =
@@ -294,12 +302,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
-        // TODO reactElementView - what??
-        const _hydrate: Function = hydrate;
-
-        this._reactiveView = _hydrate(
+        this._reactiveView = hydrate(
           reactElementView,
-          this._viewContainer,
+          this._viewContainer as Element,
           () => {
             this._dispatcher.fire(
               RendererEvents.MOUNTED,
@@ -329,9 +334,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * @param dataMap A map of data.
    * @return Return separated promises and other values.
    */
-  private _separatePromisesAndValues(dataMap: { [key: string]: any }) {
-    const promises: { [key: string]: Promise<any> } = {};
-    const values: { [key: string]: any } = {};
+  private _separatePromisesAndValues(dataMap: { [key: string]: unknown }) {
+    const promises: { [key: string]: Promise<unknown> } = {};
+    const values: { [key: string]: unknown } = {};
 
     for (const field of Object.keys(dataMap)) {
       const value = dataMap[field];

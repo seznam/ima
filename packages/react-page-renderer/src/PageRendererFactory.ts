@@ -1,8 +1,6 @@
 import { ComponentUtils } from '@ima/core';
 import { Component, ComponentType, createElement, PureComponent } from 'react';
 
-import { BlankManagedRootViewProps } from './BlankManagedRootView';
-
 /**
  * Factory for page render.
  */
@@ -71,11 +69,10 @@ export default class PageRendererFactory {
    * @return The constructor of the managed
    *         root view component.
    */
-  getManagedRootView(
-    managedRootView: ComponentType<BlankManagedRootViewProps> | string
-  ) {
-    const managedRootViewComponent =
-      this._resolveClassConstructor(managedRootView);
+  getManagedRootView(managedRootView: ComponentType | string) {
+    const managedRootViewComponent = this._resolveClassConstructor(
+      managedRootView as ComponentType
+    );
 
     if ($Debug) {
       const componentPrototype = managedRootViewComponent.prototype;
@@ -108,9 +105,11 @@ export default class PageRendererFactory {
    *         state to an instance of the specified page view through
    *         properties.
    */
-  // TODO props any?
-  wrapView(view: ComponentType | string, props: { [key: string]: any }) {
-    return createElement(this._resolveClassConstructor(view), props);
+  wrapView(view: ComponentType | string, props: { [key: string]: unknown }) {
+    return createElement(
+      this._resolveClassConstructor(view as ComponentType),
+      props
+    );
   }
 
   /**
@@ -124,7 +123,7 @@ export default class PageRendererFactory {
    *         component's properties as the argument and returns a rendered
    *         component.
    */
-  createReactElementFactory(view: ComponentType<any> | string) {
+  createReactElementFactory(view: ComponentType | string) {
     return createElement.bind(null, view);
   }
 
@@ -140,7 +139,7 @@ export default class PageRendererFactory {
    *         component.
    */
   private _resolveClassConstructor(
-    view: ComponentType<any> | string
+    view: ComponentType | string
   ): ComponentType {
     if ($Debug && typeof view === 'string') {
       throw new Error(
@@ -151,7 +150,7 @@ export default class PageRendererFactory {
     return view as ComponentType;
   }
 
-  private _isFunctionalComponent(component: Object) {
+  private _isFunctionalComponent(component: unknown) {
     return (
       typeof component === 'function' &&
       !(component.prototype && component.prototype.isReactComponent)

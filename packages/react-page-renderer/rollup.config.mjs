@@ -23,7 +23,7 @@ function generateConfig(environment) {
         values: { _SERVER: environment === 'server' }
       }),
       typescript()
-    ],
+    ]
   }));
 }
 

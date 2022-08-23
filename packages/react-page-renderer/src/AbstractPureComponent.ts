@@ -24,7 +24,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
       this._utils = helpers.getUtils(this.props, this.context);
     }
 
-    return this._utils;
+    return this._utils as Utils;
   }
 
   /**

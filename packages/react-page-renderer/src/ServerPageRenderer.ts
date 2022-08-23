@@ -5,7 +5,6 @@ import {
   GenericError,
   Response,
 } from '@ima/core';
-import { processContent } from '@ima/helpers';
 import { Attributes, ComponentType } from 'react';
 //#if _SERVER
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
@@ -13,13 +12,14 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { RouteOptions } from './types';
+import { Helpers, RouteOptions, Settings } from './types';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
 let runner = '';
 
 //#if _SERVER
+/* eslint-disable @typescript-eslint/no-var-requires */
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
@@ -32,6 +32,7 @@ if (typeof window === 'undefined' || window === null) {
     );
   }
 }
+/* eslint-enable */
 //#endif
 
 /**
@@ -65,9 +66,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    */
   constructor(
     factory: PageRendererFactory,
-    helpers: { [key: string]: Function },
+    helpers: Helpers,
     dispatcher: Dispatcher,
-    settings: { [key: string]: any },
+    settings: Settings,
     response: Response,
     cache: Cache
   ) {
@@ -95,7 +96,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   mount(
     controller: ControllerDecorator,
     view: ComponentType,
-    pageResources: { [key: string]: any | Promise<any> },
+    pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
     if (this._response.isResponseSent()) {
@@ -104,8 +105,13 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
     return this._helpers
       .allPromiseHash(pageResources)
-      .then((pageState: any) =>
-        this._renderPage(controller, view, pageState, routeOptions)
+      .then(pageState =>
+        this._renderPage(
+          controller,
+          view,
+          pageState as { [key: string]: unknown },
+          routeOptions
+        )
       );
   }
 
@@ -167,10 +173,10 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @return A copy of the provided data map that
    *         has all its values wrapped into promises.
    */
-  _wrapEachKeyToPromise(dataMap: { [key: string]: any } = {}): {
-    [key: string]: Promise<any>;
+  _wrapEachKeyToPromise(dataMap: { [key: string]: unknown } = {}): {
+    [key: string]: Promise<unknown>;
   } {
-    const copy: { [key: string]: Promise<any> } = {};
+    const copy: { [key: string]: Promise<unknown> } = {};
 
     for (const field of Object.keys(dataMap)) {
       const value = dataMap[field];
@@ -191,7 +197,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   _renderPage(
     controller: ControllerDecorator,
     view: ComponentType,
-    pageState: { [key: string]: any },
+    pageState: { [key: string]: unknown },
     routeOptions: RouteOptions
   ) {
     if (!this._response.isResponseSent()) {
@@ -236,7 +242,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     );
 
     // TODO IMA@18 - should be handled in server
-    appMarkup = processContent({
+    appMarkup = this._helpers.processContent({
       content: appMarkup,
       SPA: false,
       settings: this._settings,
@@ -247,4 +253,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     return '<!doctype html>\n' + appMarkup;
   }
   //#endif
+  /* eslint-disable */
+  ; // TODO Remove when jscc is not longer used.
+  /* eslint-enable */
 }

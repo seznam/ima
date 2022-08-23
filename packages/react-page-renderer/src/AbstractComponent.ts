@@ -19,12 +19,12 @@ export default abstract class AbstractComponent extends Component {
    *
    * @return The utilities for the view components.
    */
-  get utils(): Utils | undefined {
+  get utils(): Utils {
     if (!this._utils) {
       this._utils = helpers.getUtils(this.props, this.context);
     }
 
-    return this._utils;
+    return this._utils as Utils;
   }
 
   /**

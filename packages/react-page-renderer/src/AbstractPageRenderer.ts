@@ -8,13 +8,7 @@ import { ComponentType, Component } from 'react';
 
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import {
-  AnyResource,
-  AnyState,
-  Helpers,
-  RouteOptions,
-  Settings,
-} from './types';
+import { Helpers, RouteOptions, Settings } from './types';
 import ViewAdapter from './ViewAdapter';
 
 /**
@@ -73,13 +67,16 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   abstract mount(
     controller: Controller,
     view: ComponentType,
-    pageResources: AnyResource,
+    pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
-  ): Promise<{
-    content?: string;
-    pageState: AnyState;
-    status: number;
-  }>;
+  ): Promise<
+    | unknown
+    | {
+        content?: string;
+        pageState: { [key: string]: unknown };
+        status: number;
+      }
+  >;
 
   /**
    * @inheritdoc
@@ -87,13 +84,16 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   abstract update(
     controller: Controller,
     view: ComponentType,
-    pageResources: AnyResource,
+    pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
-  ): Promise<{
-    content?: string;
-    pageState: AnyState;
-    status: number;
-  }>;
+  ): Promise<
+    | unknown
+    | {
+        content?: string;
+        pageState: { [key: string]: unknown };
+        status: number;
+      }
+  >;
 
   /**
    * @inheritdoc
@@ -123,8 +123,8 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   protected _generateViewProps(
     view: ComponentType,
-    state: AnyState = {}
-  ): AnyState {
+    state: { [key: string]: unknown } = {}
+  ): { [key: string]: unknown } {
     const props = {
       view,
       state,
@@ -145,9 +145,9 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     routeOptions: RouteOptions
   ) {
     const managedRootView = this._factory.getManagedRootView(
-      routeOptions.managedRootView ||
+      (routeOptions.managedRootView ||
         this._settings.$Page.$Render.managedRootView ||
-        BlankManagedRootView
+        BlankManagedRootView) as ComponentType
     );
     const props = this._generateViewProps(
       managedRootView,
@@ -155,9 +155,9 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     );
 
     return this._factory.wrapView(
-      routeOptions.viewAdapter ||
+      (routeOptions.viewAdapter ||
         this._settings.$Page.$Render.viewAdapter ||
-        ViewAdapter,
+        ViewAdapter) as ComponentType,
       props
     );
   }
@@ -170,7 +170,8 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   protected _getDocumentView(routeOptions: RouteOptions) {
     return this._factory.getDocumentView(
-      routeOptions.documentView || this._settings.$Page.$Render.documentView
+      (routeOptions.documentView ||
+        this._settings.$Page.$Render.documentView) as ComponentType
     );
   }
 }

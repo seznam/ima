@@ -6,12 +6,12 @@ import {
 } from 'react';
 
 import ErrorBoundary from './ErrorBoundary';
-import { AnyState, Utils } from './types';
+import { Utils } from './types';
 
 export interface BlankManagedRootViewProps {
   $pageView?: ComponentType;
   $Utils: Utils;
-  state: AnyState;
+  state: { [key: string]: unknown };
   view: ComponentType;
 }
 

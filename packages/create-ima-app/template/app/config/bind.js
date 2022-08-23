@@ -19,7 +19,7 @@ export default (ns, oc, config) => {
     $CssClasses: '$CssClasses'
   });
 
-  oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
+  oc.inject(PageRendererFactory, [ComponentUtils]);
   oc.bind('$PageRendererFactory', PageRendererFactory);
 
   if (oc.get(Window).isClient()) {
