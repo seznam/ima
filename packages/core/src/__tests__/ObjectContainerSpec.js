@@ -405,18 +405,6 @@ describe('ima.core.ObjectContainer', () => {
       expect(entry).toBeInstanceOf(classParent);
     });
 
-    it('should not find optional class entity', () => {
-      let entry = oc.get([classParent, { optional: true }]);
-
-      expect(entry).toBeUndefined();
-    });
-
-    it('should not find non optional class entity and throw', () => {
-      expect(() => {
-        oc.get([classParent, { optional: false }]);
-      }).toThrow();
-    });
-
     it('should spread dependencies', () => {
       oc.bind(alias, classParent);
       oc.constant(spreadConstantName, spreadConstantValue);
@@ -446,15 +434,6 @@ describe('ima.core.ObjectContainer', () => {
       expect(() => {
         oc.get('...' + spreadConstantName);
       }).toThrow();
-    });
-
-    it('should not find undefined spread dependencies', () => {
-      oc.constant(spreadConstantName, [[classParent, { optional: true }]]);
-
-      let entry = oc.get('...' + spreadConstantName);
-
-      expect(entry).toHaveLength(1);
-      expect(entry[0]).toBeUndefined();
     });
 
     it('should create new entry when spread', () => {
