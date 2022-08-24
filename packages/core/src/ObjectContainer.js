@@ -427,9 +427,9 @@ export default class ObjectContainer {
    *        constructor or factory function.
    * @return {T} Created instance or generated value.
    */
-  create(name, dependencies, extensions) {
+  create(name, dependencies) {
     let entry = this._getEntry(name);
-    return this._createInstanceFromEntry(entry, dependencies, extensions);
+    return this._createInstanceFromEntry(entry, dependencies);
   }
 
   /**
@@ -547,19 +547,12 @@ export default class ObjectContainer {
    * @param {{ writeable: boolean }} options
    * @return {T} Created instance or generated value.
    */
-  _createEntry(classConstructor, dependencies, extensions, options) {
+  _createEntry(classConstructor, dependencies, options) {
     if (
       (!dependencies || dependencies.length === 0) &&
       Array.isArray(classConstructor.$dependencies)
     ) {
       dependencies = classConstructor.$dependencies;
-    }
-
-    if (
-      (!extensions || extensions.length === 0) &&
-      Array.isArray(classConstructor.$extensions)
-    ) {
-      extensions = classConstructor.$extensions;
     }
 
     let referrer = this._bindingState;
@@ -568,13 +561,7 @@ export default class ObjectContainer {
       referrer = this._bindingPlugin;
     }
 
-    return new Entry(
-      classConstructor,
-      dependencies,
-      extensions,
-      referrer,
-      options
-    );
+    return new Entry(classConstructor, dependencies, referrer, options);
   }
 
   /**
@@ -593,7 +580,7 @@ export default class ObjectContainer {
    *        constructor or factory function.
    * @return {T} Created instance or generated value.
    */
-  _createInstanceFromEntry(entry, dependencies = [], extensions = []) {
+  _createInstanceFromEntry(entry, dependencies = []) {
     if (dependencies.length === 0) {
       dependencies = [];
 
@@ -606,24 +593,8 @@ export default class ObjectContainer {
       }
     }
 
-    extensions = extensions.concat(entry.extensions);
-    let initializedExtensions = [];
-    for (let extension of extensions) {
-      if (['function', 'string'].indexOf(typeof extension) > -1) {
-        initializedExtensions.push(this.get(extension));
-      } else {
-        initializedExtensions.push(extension);
-      }
-    }
-
     let constructor = entry.classConstructor;
-
-    let instance = new constructor(...dependencies, ...initializedExtensions); //TODO passovat extensions do constructoru?
-    if (initializedExtensions.length) {
-      for (let extension of initializedExtensions)
-        instance.addExtension(extension);
-    }
-    return instance;
+    return new constructor(...dependencies);
   }
 
   /**
@@ -752,23 +723,9 @@ export default class ObjectContainer {
       return null;
     }
 
-    /* if (!Array.isArray(classConstructor.$extensions)) {
-      //TODO extensions are optional
-      if ($Debug) {
-        throw new Error(
-          `The class constructor identified as: ${this._getDebugName(
-            classConstructor
-          )} is missing <b>static get $extensions() {}</b> definition.`
-        );
-      }
-
-      return null;
-    } */
-
     let entry = this._createEntry(
       classConstructor,
-      classConstructor.$dependencies,
-      classConstructor.$extensions
+      classConstructor.$dependencies
     );
 
     this._entries.set(classConstructor, entry);
@@ -810,7 +767,7 @@ class Entry {
    *        this entry.
    * @param {?{ writeable: boolean }} [options] The Entry options.
    */
-  constructor(classConstructor, dependencies, extensions, referrer, options) {
+  constructor(classConstructor, dependencies, referrer, options) {
     /**
      * The constructor of the class represented by this entry, or the
      * getter of the value of the constant represented by this entry.
@@ -852,14 +809,6 @@ class Entry {
     this._dependencies = dependencies || [];
 
     /**
-     * Extensions of the class constructor of the class represented by
-     * this entry.
-     *
-     * @type Array<string|object|function>
-     */
-    this._extensions = extensions || [];
-
-    /**
      * The override counter
      *
      * @type {number}
@@ -888,33 +837,8 @@ class Entry {
     this._overrideCounter++;
   }
 
-  set extensions(extensions) {
-    if ($Debug) {
-      if (!this.writeable) {
-        throw new Error(
-          `The entry is constant and you ` +
-            `can't redefined their extensions ${extensions}.`
-        );
-      }
-
-      if (this._overrideCounter >= 1) {
-        throw new Error(
-          `The extensions entry can't be overrided more than once.` +
-            `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
-        );
-      }
-    }
-
-    this._extensions = extensions;
-    this._overrideCounter++;
-  }
-
   get dependencies() {
     return this._dependencies;
-  }
-
-  get extensions() {
-    return this._extensions;
   }
 
   get referrer() {

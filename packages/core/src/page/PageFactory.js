@@ -24,8 +24,14 @@ export default class PageFactory {
    * @param {(string|function(new:Controller))} controller
    * @return {Controller}
    */
-  createController(controller, extensions) {
-    let controllerInstance = this._oc.create(controller, undefined, extensions);
+  createController(controller, extensions = []) {
+    if (Array.isArray(controller.$extensions) && controller.$extensions.length)
+      extensions = extensions.concat(controller?.$extensions);
+
+    let controllerInstance = this._oc.create(controller);
+    for (let extension of extensions) {
+      controllerInstance.addExtension(this._oc.get(extension));
+    }
 
     return controllerInstance;
   }
