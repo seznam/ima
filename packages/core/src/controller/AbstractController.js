@@ -137,7 +137,6 @@ export default class AbstractController extends Controller {
    */
   addExtension(extension) {
     this._extensions.set(extension, extension);
-    //TODO ked pridam takto extension tak bude ulozena pod klucom instancie a nebudem ju potom schopny ziskat cez getExtension
   }
 
   /**
