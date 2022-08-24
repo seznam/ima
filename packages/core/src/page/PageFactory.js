@@ -30,7 +30,10 @@ export default class PageFactory {
 
     let controllerInstance = this._oc.create(controller);
     for (let extension of extensions) {
-      controllerInstance.addExtension(this._oc.get(extension));
+      controllerInstance.addExtensionWithKey(
+        extension,
+        this._oc.get(extension)
+      );
     }
 
     return controllerInstance;

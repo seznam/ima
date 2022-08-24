@@ -28,7 +28,7 @@ export default class AbstractController extends Controller {
      *
      * @type {Extension[]}
      */
-    this._extensions = [];
+    this._extensions = new Map();
 
     /**
      * The HTTP response code to send to the client.
@@ -136,14 +136,29 @@ export default class AbstractController extends Controller {
    * @inheritdoc
    */
   addExtension(extension) {
-    this._extensions.push(extension);
+    this._extensions.set(extension, extension);
+    //TODO ked pridam takto extension tak bude ulozena pod klucom instancie a nebudem ju potom schopny ziskat cez getExtension
+  }
+
+  /**
+   * @inheritdoc
+   */
+  addExtensionWithKey(extension, extensionInstance) {
+    this._extensions.set(extension, extensionInstance);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getExtension(extension) {
+    return this._extensions.get(extension);
   }
 
   /**
    * @inheritdoc
    */
   getExtensions() {
-    return this._extensions;
+    return Array.from(this._extensions.values());
   }
 
   /**
