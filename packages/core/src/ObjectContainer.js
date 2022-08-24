@@ -211,7 +211,7 @@ export default class ObjectContainer {
       }
     }
 
-    let constantEntry = this._createEntry(() => value, [], [], {
+    let constantEntry = this._createEntry(() => value, [], {
       writeable: false,
     });
     constantEntry.sharedInstance = value;
@@ -429,6 +429,7 @@ export default class ObjectContainer {
    */
   create(name, dependencies) {
     let entry = this._getEntry(name);
+
     return this._createInstanceFromEntry(entry, dependencies);
   }
 
@@ -629,7 +630,7 @@ export default class ObjectContainer {
     }
 
     if (constantValue !== undefined && constantValue !== null) {
-      let entry = this._createEntry(() => constantValue, [], [], {
+      let entry = this._createEntry(() => constantValue, [], {
         writeable: false,
       });
       entry.sharedInstance = constantValue;
