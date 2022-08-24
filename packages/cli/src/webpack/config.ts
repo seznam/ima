@@ -526,8 +526,8 @@ export default async (
               }),
 
             // Enables compression for assets in production build
-            ...(ctx.command === 'build'
-              ? imaConfig.compression.map(
+            ...(ctx.command === 'build' && imaConfig.compress
+              ? ['brotliCompress', 'gzip'].map(
                   algorithm =>
                     new CompressionPlugin({
                       algorithm,
@@ -535,10 +535,6 @@ export default async (
                         algorithm === 'brotliCompress' ? 'br' : 'gz'
                       }`,
                       test: /\.(js|css|svg)$/,
-                      compressionOptions: {
-                        level: 9,
-                      },
-                      threshold: 0,
                       minRatio: 0.95,
                     })
                 )

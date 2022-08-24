@@ -11,10 +11,6 @@ module.exports = createWebpackConfig(baseConfig => {
         algorithm: 'brotliCompress',
         filename: `[path][base].br`,
         test: /\.(js|css|html|svg)$/,
-        compressionOptions: {
-          level: 9,
-        },
-        threshold: 0,
         minRatio: 0.95,
       }),
     ].filter(Boolean),
