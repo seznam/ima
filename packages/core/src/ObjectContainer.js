@@ -509,7 +509,7 @@ export default class ObjectContainer {
       this._entries.get(entryName) ||
       this._getEntryFromConstant(entryName) ||
       this._getEntryFromNamespace(entryName) ||
-      this._getEntryFromClassConstructor(entryName);
+      this._getEntryFromClassConstructor(entryName, this._isOptional(name));
 
     if ($Debug && !entry && !this._isOptional(name)) {
       throw new Error(
@@ -776,13 +776,13 @@ export default class ObjectContainer {
    *         if the specified classConstructor does not have defined
    *         `$dependencies`.
    */
-  _getEntryFromClassConstructor(classConstructor) {
+  _getEntryFromClassConstructor(classConstructor, optional = false) {
     if (typeof classConstructor !== 'function') {
       return null;
     }
 
     if (!Array.isArray(classConstructor.$dependencies)) {
-      if ($Debug) {
+      if ($Debug && !optional) {
         throw new Error(
           `The class constructor identified as: ${this._getDebugName(
             classConstructor
