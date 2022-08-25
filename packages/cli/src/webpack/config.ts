@@ -18,13 +18,13 @@ import webpack, {
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
+// import { LocalePlugin } from './plugins/LocalePlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
   resolveEnvironment,
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
-  extractLanguages,
   createDevServerConfig,
   getCurrentCoreJsVersion,
 } from './utils';
@@ -209,6 +209,8 @@ export default async (
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
+            cs: 'app/locale/cs.js',
+            en: 'app/locale/en.js',
           }),
     },
     output: {
@@ -508,6 +510,7 @@ export default async (
               imaConfig,
             }),
 
+            // Extract CSS imports to one css file
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
@@ -516,13 +519,17 @@ export default async (
                 chunkFilename: `static/css/[id].css`,
               }),
 
+            // Process locale files
+            // isEsVersion &&
+            //   new LocalePlugin({
+            //     context: ctx,
+            //     imaConfig,
+            //   }),
+
             // Copies essential assets to static directory
             isEsVersion &&
               new CopyPlugin({
-                patterns: [
-                  { from: 'app/public', to: 'static/public' },
-                  ...extractLanguages(imaConfig),
-                ],
+                patterns: [{ from: 'app/public', to: 'static/public' }],
               }),
 
             // Enables compression for assets in production build

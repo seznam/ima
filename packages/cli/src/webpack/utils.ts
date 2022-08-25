@@ -4,6 +4,7 @@ import path from 'path';
 
 import envResolver from '@ima/server/lib/environment.js';
 import MessageFormat from '@messageformat/core';
+import compileModule from '@messageformat/core/lib/compile-module';
 import chalk from 'chalk';
 import { ObjectPattern } from 'copy-webpack-plugin';
 import { Configuration } from 'webpack';
@@ -132,12 +133,24 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             });
           }, tempLocales[locale]);
 
-          console.log(tempLocales[locale]);
+          // console.log(tempLocales[locale]);
+          // console.log(mf.compile('A {TYPE} example.').toString());
+          // console.log();
+          // console.log();
+          // console.log();
 
-          console.log(mf.compile(tempLocales[locale]));
+          // console.log(compileModule(mf, tempLocales[locale]));
+
+          // console.log();
+          // console.log();
+          // console.log();
+          // console.log();
 
           return `(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
-                                        ${mf.compile(tempLocales[locale])}
+                                        ${compileModule(
+                                          mf,
+                                          tempLocales[locale]
+                                        )}
                                           ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
         },
       })

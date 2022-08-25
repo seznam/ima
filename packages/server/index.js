@@ -47,7 +47,7 @@ function appFactory() {
 }
 
 function languageLoader(language) {
-  return requireUncached(`./build/static/locale/${language}.js`);
+  return requireUncached(`./build/static/js.es/${language}.js`);
 }
 
 let logger = require('./lib/logger.js')(environment);

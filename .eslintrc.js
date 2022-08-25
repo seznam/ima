@@ -157,7 +157,14 @@ module.exports = {
           'error',
           { 'ts-expect-error': 'allow-with-description' },
         ],
-        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+          },
+        ],
         '@typescript-eslint/no-namespace': [
           'error',
           { allowDeclarations: true },
@@ -187,7 +194,14 @@ module.exports = {
     {
       files: ['packages/devtools/**', 'packages/create-ima-app/**'],
       rules: {
-        'no-unused-vars': 'warn',
+        'no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+          },
+        ],
       },
       globals: {
         chrome: true,
