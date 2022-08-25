@@ -170,7 +170,6 @@ export let init = (ns, oc, config) => {
 }
 ```
 
-
 ## Obtaining dependencies
 
 In IMA.js application you can obtain dependencies using many different methods, where each one can be useful in different situation and environment.
@@ -202,7 +201,7 @@ export default class OrderController extends AbstractController {
   // ...
 ```
 
-Once you've defined the dependencies the constructor of the class will receiver their instances.
+Once you've defined the dependencies the constructor of the class will receive their instances.
 
 ```javascript
   constructor(orderService, userService, $router) {
@@ -214,6 +213,95 @@ Once you've defined the dependencies the constructor of the class will receiver 
   }
 
   // ...
+
+```
+
+#### Optional dependencies
+
+Dependencies can also be defined as optional.
+If those dependencies are present in the OC, the constructor of the class will receive their instances.
+Otherwise it will receive `undefined`.
+
+To use optional dependency, prefix `?` is added before the string alias or the dependency is wrapped in array, with option specifying if it's optional or not.
+
+```javascript
+// app/page/order/OrderController.js
+//
+// OrderController using optional dependencies
+
+import { AbstractController } from '@ima/core';
+import OrderService from 'app/model/order/OrderService.js';
+import UserService from 'app/model/user/UserService.js';
+
+export default class OrderController extends AbstractController {
+
+  static get $dependencies() {
+    return [
+      [OrderService, { optional: true }]
+      [UserService, { optional: false }]
+      '?$Router' //If $Router is registered in the OC, the constructor will receive router instance. Otherwise it will receive undefined.
+    ];
+  }
+
+  // ...
+```
+
+#### Spread dependencies
+
+Dependencies can be added to array registered in the OC. These dependencies can be then spread to the class constructor using spread operator `...`.
+
+```javascript
+// app/config/bind.js
+//
+// Creating array of dependencies
+
+import OrderService from 'app/model/order/OrderService.js';
+import UserService from 'app/model/user/UserService.js';
+
+export let init = (ns, oc, config) => {
+  oc.constant('$spreadDependencies', [OrderService, UserService]);
+}
+```
+
+```javascript
+// app/page/order/OrderController.js
+//
+// OrderController using spread dependencies
+
+import { AbstractController } from '@ima/core';
+
+export default class OrderController extends AbstractController {
+
+  static get $dependencies() {
+    return ['...$spreadDependencies'];
+  }
+
+  constructor(orderService, userService) {
+    super();
+
+    this._orderService = orderService;
+    this._userService = userService;
+  }
+
+  // ...
+```
+
+Spread and optional dependencies can be combined.
+
+```javascript
+// ...
+static get $dependencies() {
+  return ['...?$spreadDependencies'];
+}
+// ...
+```
+
+```javascript
+// ...
+static get $dependencies() {
+  return [['...$spreadDependencies', { optional: true }]];
+}
+// ...
 ```
 
 ### 2. `get()`
