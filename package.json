@@ -11,6 +11,7 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
     "./website",
+    "./packages/plugin-cli",
     "./packages/cli",
     "./packages/core",
     "./packages/create-ima-app",

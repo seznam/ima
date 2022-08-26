@@ -95,6 +95,17 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
               fs.chmodSync(path.join(destFolder, '../../.bin/ima'), '755');
             }
 
+            // Fix ima binary not being executable
+            if (
+              name === 'plugin-cli' &&
+              filePath.includes('bin/ima-plugin.js')
+            ) {
+              fs.chmodSync(
+                path.join(destFolder, '../../.bin/ima-plugin'),
+                '755'
+              );
+            }
+
             callback(err);
           });
 

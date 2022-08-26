@@ -3,23 +3,17 @@
   "compilerOptions": {
     "lib": [
       "DOM",
-      "ES2022"
     ],
-    "outDir": "./dist",
+    "outDir": "dist",
     "baseUrl": ".",
     "declaration": false,
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "../../node_modules/@types",
-    ],
+    }
   },
   "include": [
-    "./typings/**/*",
-    "./src/**/*"
+    "src"
   ]
 }
