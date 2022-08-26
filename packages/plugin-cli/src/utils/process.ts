@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
+import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 
 import { BuildConfig, PipeContext, Context, Source } from '../types';
-import { error } from './utils';
 
 const CONFIG_FILENAME = 'ima-plugin.config.js';
 
@@ -101,7 +101,7 @@ export async function processTransformers(
 
       source = await transform({ source, context });
     } catch (err) {
-      error(`at ${chalk.magenta(context.filePath)}`);
+      logger.error(`at ${chalk.magenta(context.filePath)}`);
       console.error(err);
 
       // Don't continue in build command

@@ -11,11 +11,11 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
     "./website",
+    "./packages/dev-utils",
     "./packages/plugin-cli",
     "./packages/cli",
     "./packages/core",
     "./packages/create-ima-app",
-    "./packages/dev-utils",
     "./packages/devtools",
     "./packages/devtools-scripts",
     "./packages/error-overlay",

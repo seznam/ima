@@ -2,10 +2,9 @@ import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-import chalk from 'chalk';
+import { logger } from '@ima/dev-utils/dist/logger';
 
 import { Plugin } from '../types';
-import { info, error, trackTime } from '../utils/utils';
 
 export interface TypescriptDeclarationsPluginOptions {
   additionalArgs?: string[];
@@ -26,8 +25,11 @@ export function typescriptDeclarationsPlugin(
       return;
     }
 
-    const time = trackTime();
-    info('Generating typescript declaration files...');
+    if (context.command === 'build') {
+      logger.info('Generating typescript declaration files...', {
+        trackTime: true,
+      });
+    }
 
     await new Promise<void>((resolve, reject) => {
       spawn(
@@ -48,13 +50,10 @@ export function typescriptDeclarationsPlugin(
         }
       )
         .on('close', () => {
-          info(
-            `Typescript declaration generated in ${chalk.gray(`${time()}`)}`
-          );
           resolve();
         })
         .on('error', err => {
-          error('Error generating declaration files.');
+          logger.error('Error generating declaration files.');
           reject(err);
         });
     });

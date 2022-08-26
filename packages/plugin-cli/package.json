@@ -31,18 +31,25 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
+    "@ima/dev-utils": "^18.0.0-rc.4",
     "@swc/core": "^1.2.244",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.3",
     "globby": "^11.1.0",
     "preprocess": "^3.2.0",
-    "pretty-bytes": "^5.6.0",
-    "pretty-ms": "^7.0.1",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@types/node": "^18.7.6",
     "@types/yargs": "^17.0.10"
+  },
+  "peerDependencies": {
+    "typescript": "*"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

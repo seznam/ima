@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { logger, time } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
 import globby from 'globby';
@@ -12,20 +13,54 @@ import {
   parseConfigFile,
   runPlugins,
 } from './process';
-import { info, parsePkgJSON, success, trackTime } from './utils';
+
+/**
+ * Loads and parses package.json at given working directory.
+ */
+export async function parsePkgJSON(basePath: string): Promise<{
+  name: string;
+}> {
+  return JSON.parse(
+    await (
+      await fs.promises.readFile(path.join(basePath, 'package.json'))
+    ).toString()
+  );
+}
+
+/**
+ * Return colored status icon based on provided chokidar event.
+ */
+export function getStatusIcon(
+  eventName: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'
+): string {
+  switch (eventName) {
+    case 'add':
+    case 'change':
+      return chalk.green('✓');
+      break;
+
+    case 'unlink':
+    case 'unlinkDir':
+      return chalk.red('×');
+
+    case 'addDir':
+      return chalk.blue('+');
+      break;
+  }
+}
 
 /**
  * Build command function handler.
  */
 export async function build() {
-  const time = trackTime();
+  const elapsed = time();
   const cwd = process.cwd();
   const [pkgJson, configurations] = await Promise.all([
     parsePkgJSON(cwd),
     parseConfigFile(cwd),
   ]);
 
-  info(`Building ${chalk.bold.magenta(pkgJson.name)}`);
+  logger.info(`Building ${chalk.bold.magenta(pkgJson.name)}`);
 
   // Spawn compilation for each config
   await Promise.all(
@@ -63,7 +98,7 @@ export async function build() {
     })
   );
 
-  success(`Finished in ${chalk.bold.gray(time())}`);
+  logger.success('Finished', { elapsed });
 }
 
 /**
@@ -79,7 +114,7 @@ export async function watch(args: Arguments) {
     parseConfigFile(cwd),
   ]);
 
-  info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
+  logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
 
   // Spawn watch for each config
   configurations.forEach(async config => {
@@ -124,40 +159,44 @@ export async function watch(args: Arguments) {
           const contextPath = path.relative(outputDir, filePath);
           const linkedOutputPath = path.join(linkedBasePath, contextPath);
           const linkedOutputDir = path.dirname(linkedOutputPath);
+          const outputContextPath = `./${path.join(
+            config.output,
+            contextPath
+          )}`;
 
-          if (['add', 'change'].includes(eventName)) {
-            info(
-              `Copied ${chalk.gray(pkgJson.name + ':')}${chalk.magenta(
-                contextPath
-              )} ${chalk.green('→')} ${chalk.gray(
-                linkedPkgJson.name
-              )}:${chalk.magenta(path.join('./', config.output, contextPath))}`
-            );
+          const elapsed = time();
 
-            if (!fs.existsSync(linkedOutputDir)) {
-              await fs.promises.mkdir(linkedOutputDir, { recursive: true });
+          switch (eventName) {
+            case 'add':
+            case 'change':
+              if (!fs.existsSync(linkedOutputDir)) {
+                await fs.promises.mkdir(linkedOutputDir, { recursive: true });
+              }
+
+              await fs.promises.copyFile(filePath, linkedOutputPath);
+              break;
+
+            case 'unlink':
+            case 'unlinkDir':
+              await fs.promises.rm(linkedOutputPath, { recursive: true });
+              break;
+
+            case 'addDir':
+              await fs.promises.mkdir(linkedOutputPath, { recursive: true });
+              break;
+          }
+
+          // Print info to output
+          logger.info(
+            `${getStatusIcon(eventName)} ${chalk.gray(
+              pkgJson.name + ':'
+            )}${chalk.magenta(outputContextPath)} ${chalk.green(
+              '→'
+            )} ${chalk.blue(linkedPkgJson.name)}`,
+            {
+              elapsed,
             }
-
-            await fs.promises.copyFile(filePath, linkedOutputPath);
-          }
-
-          if (['unlink', 'unlinkDir'].includes(eventName)) {
-            info(
-              `Removing linked ${chalk.gray(
-                linkedPkgJson.name + ':'
-              )}${chalk.magenta(contextPath)}`
-            );
-            await fs.promises.rm(linkedOutputPath, { recursive: true });
-          }
-
-          if (eventName === 'addDir') {
-            info(
-              `Creating ${chalk.gray(linkedPkgJson.name + ':')}${chalk.magenta(
-                contextPath
-              )}`
-            );
-            await fs.promises.mkdir(linkedOutputPath, { recursive: true });
-          }
+          );
         });
     }
 
@@ -171,33 +210,38 @@ export async function watch(args: Arguments) {
         ignored: config.exclude,
       })
       .on('all', async (eventName, filePath) => {
-        const relativePath = path.relative(inputDir, filePath);
+        const contextPath = path.relative(inputDir, filePath);
+        const outputContextPath = `./${path.join(config.output, contextPath)}`;
 
-        // Process new and changed files with pipeline
-        if (['add', 'change'].includes(eventName)) {
-          const time = trackTime();
-          await process(filePath);
-          info(
-            `Processed ${chalk.magenta(relativePath)} in ${chalk.gray(
-              time()
-            )} ${chalk.green('✓')}`
+        const elapsed = time();
+
+        switch (eventName) {
+          case 'add':
+          case 'change':
+            await process(filePath);
+            break;
+
+          case 'unlink':
+          case 'unlinkDir':
+            await fs.promises.rm(filePath, { recursive: true });
+            break;
+
+          case 'addDir':
+            await fs.promises.mkdir(filePath, { recursive: true });
+            break;
+        }
+
+        // Prevents duplicate logging in `link` mode
+        if (command !== 'link') {
+          logger.info(
+            `${getStatusIcon(eventName)} ${chalk.magenta(outputContextPath)}`,
+            {
+              elapsed,
+            }
           );
-        }
-
-        // Sync deleted dirs and files
-        if (['unlink', 'unlinkDir'].includes(eventName)) {
-          info(`Removing ${relativePath}`);
-          await fs.promises.rm(filePath, { recursive: true });
-        }
-
-        // Sync newly added directories
-        if (eventName === 'addDir') {
-          info(`Creating ${relativePath}`);
-          await fs.promises.mkdir(filePath, { recursive: true });
         }
       })
       .on('ready', async () => {
-        // Run plugins
         await runPlugins(context);
       });
   });

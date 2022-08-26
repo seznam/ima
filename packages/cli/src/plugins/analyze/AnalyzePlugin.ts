@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { createLogger } from '@ima/dev-utils/dist/logger';
 import open from 'better-opn';
 import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
 import chalk from 'chalk';
@@ -10,7 +11,6 @@ import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
-import { createLogger } from '../../lib/logger';
 import {
   ImaConfigurationContext,
   ImaCliCommand,
@@ -51,7 +51,7 @@ class AnalyzePlugin implements ImaCliPlugin {
 
   constructor(options: AnalyzePluginOptions) {
     this._options = options;
-    this._logger = createLogger(this);
+    this._logger = createLogger(this.name);
   }
 
   async webpack(

@@ -72,6 +72,16 @@ export function createClientServerConfig(
     {
       input: './src',
       output: './dist/server',
+      exclude: [
+        '**/*.less/**',
+        '**/*.css/**',
+        '**/*.json/**',
+        '**/__tests__/**',
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/typings/**',
+        'tsconfig.tsbuildinfo',
+      ],
       transforms: [
         preprocessTransformer({
           context: {

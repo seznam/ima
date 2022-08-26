@@ -2,11 +2,11 @@
 
 import path from 'path';
 
+import { createLogger } from '@ima/dev-utils/dist/logger';
 import globby from 'globby';
 import { Configuration, EntryObject } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { createLogger } from '../../lib/logger';
 import {
   ImaConfigurationContext,
   ImaCliCommand,
@@ -55,7 +55,7 @@ class AmpPlugin implements ImaCliPlugin {
   };
 
   constructor(options: AmpPluginOptions) {
-    this._logger = createLogger(this);
+    this._logger = createLogger(this.name);
 
     // Init options with defaults
     this._options = {

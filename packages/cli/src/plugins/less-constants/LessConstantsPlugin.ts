@@ -3,10 +3,10 @@
 import fs from 'fs';
 import path from 'path';
 
+import { createLogger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import webpack from 'webpack';
 
-import { createLogger } from '../../lib/logger';
 import { ImaCliPlugin, ImaCliArgs, ImaConfig } from '../../types';
 import { generateLessVariables, UnitValue } from './generator';
 
@@ -28,7 +28,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
 
   constructor(options: LessConstantsPluginOptions) {
     this._options = options || {};
-    this._logger = createLogger(this);
+    this._logger = createLogger(this.name);
   }
 
   /**

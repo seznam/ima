@@ -13,8 +13,6 @@ export { ScrambleCssMinimizer } from './plugins/scramble-css/plugin/ScrambleCssM
 
 export { PostCssPlugin } from './webpack/plugins/PostCssPlugin';
 
-export { createLogger } from './lib/logger';
-
 export {
   ImaCliPlugin,
   ImaConfig,

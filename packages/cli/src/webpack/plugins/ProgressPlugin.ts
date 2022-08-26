@@ -1,8 +1,8 @@
+import { time } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import cliProgress from 'cli-progress';
 import webpack from 'webpack';
 
-import { time } from '../../lib/time';
 import { ImaConfigurationContext } from '../../types';
 
 /**

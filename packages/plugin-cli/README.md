@@ -26,6 +26,7 @@ npx ima-plugin link [target-project]
 npx ima-plugin --help
 ```
 
+### Create `ima-plugin.config.js`
 Create `ima-plugin.config.js` file in the root of your plugin directory and export some configuration:
 
 ```js
@@ -37,27 +38,27 @@ module.exports = {
   input: './src',
   output: './dist',
   transforms: [
-    [swcTransformer({
-      module: {
-        type: 'es6',
-      },
-      jsc: {
-        target: 'es2022',
-        parser: {
-          syntax: 'ecmascript',
-          jsx: true
+    [
+      swcTransformer({
+        module: {
+          type: 'es6',
         },
-      },
-    }),
-    {
-      test: /\.(js|jsx)$/
-    }
+        jsc: {
+          target: 'es2022',
+          parser: {
+            syntax: 'ecmascript',
+            jsx: true
+          },
+        },
+      }),
+      {
+        test: /\.(js|jsx)$/
+      }
     ]
   ],
   plugins: [
     typescriptDeclarationsPlugin({
-      additionalArgs: ['--skipLibCheck'
-      ],
+      additionalArgs: ['--skipLibCheck'],
     }),
   ],
 };
