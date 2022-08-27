@@ -58,7 +58,7 @@ function timeNow() {
     m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
     s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
 
-  return '[' + chalk.gray(`${h}:${m}:${s}`) + ']';
+  return chalk.gray(`[${h}:${m}:${s}]`);
 }
 
 /**

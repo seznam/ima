@@ -43,7 +43,7 @@ function timeNow() {
     m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
     s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
 
-  return `${h}:${m}:${s}`;
+  return chalk.gray(`[${h}:${m}:${s}]`);
 }
 
 function createWatcher(name, baseDir, paths, destFolder, options = {}) {
@@ -66,13 +66,12 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
           );
         } else {
           console.log(
-            `${chalk.gray(timeNow())} ${chalk[
-              actionName === 'copy' ? 'green' : 'yellow'
-            ](actionName === 'copy' ? '✓' : '𐄂')} ${chalk.cyan(
-              `${name}`
-            )} ./${path.relative(path.join(destFolder), dest)} ${chalk.gray(
-              `[${Date.now() - startTime}ms]`
-            )}`
+            `${timeNow()} ${chalk[actionName === 'copy' ? 'green' : 'yellow'](
+              actionName === 'copy' ? '✓' : '𐄂'
+            )} ${chalk.cyan(`@ima/${name}`)} ./${path.relative(
+              path.join(destFolder),
+              dest
+            )} ${chalk.gray(`[${Date.now() - startTime}ms]`)}`
           );
         }
       };
@@ -152,10 +151,21 @@ function watchChanges(destFolder, pkgDirs) {
     if (pkgJson.scripts.dev) {
       const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
       runningProcesses.push(
-        child.spawn(npm, ['run', 'dev'], {
-          stdio: 'inherit',
-          cwd: pkgDir,
-        })
+        child.spawn(
+          npm,
+          [
+            'run',
+            'dev',
+            // Silent output since we provide our own
+            ...(pkgJson.scripts.dev.includes('ima-plugin')
+              ? ['--', '--silent']
+              : []),
+          ],
+          {
+            stdio: 'inherit',
+            cwd: pkgDir,
+          }
+        )
       );
     }
 
@@ -182,7 +192,7 @@ function copyChanges(destDir, pkgDirs) {
       .filter(dir => !IGNORED.includes(dir))
       .forEach(file => {
         console.log(
-          `${chalk.gray(timeNow())} ${chalk.green('✓')} ${chalk.cyan(
+          `${timeNow()} ${chalk.green('✓')} ${chalk.cyan(
             `${pkgJson.name}`
           )} ./${file}`
         );
