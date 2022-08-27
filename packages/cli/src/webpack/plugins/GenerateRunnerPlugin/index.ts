@@ -48,7 +48,7 @@ class GenerateRunnerPlugin {
         fs.readFileSync(
           path.resolve(
             path.dirname(require.resolve('@ima/core')),
-            '../polyfill/runner.ejs'
+            '../../polyfill/runner.ejs'
           ),
           'utf8'
         )

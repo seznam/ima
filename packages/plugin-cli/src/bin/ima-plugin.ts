@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import chalk from 'chalk';
 import yargs from 'yargs';
 
@@ -28,11 +27,30 @@ yargs
     required: chalk.yellow('required'),
   })
   .command('build', 'Build ima plugin at current directory', {}, build)
-  .command('dev', 'Watch ima plugin at current directory', {}, watch)
+  .command(
+    'dev',
+    'Watch ima plugin at current directory',
+    args => {
+      args.option('silent', {
+        alias: 's',
+        desc: 'Disable logging status messages',
+        type: 'boolean',
+        default: false,
+      });
+    },
+    watch
+  )
   .command(
     'link <path>',
     'Link ima plugin at current directory to ima application at given path',
-    {},
+    args => {
+      args.option('silent', {
+        alias: 's',
+        desc: 'Disable logging status messages',
+        type: 'boolean',
+        default: false,
+      });
+    },
     watch
   )
   .wrap(null).argv;

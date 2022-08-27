@@ -32,13 +32,12 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/server.cjs",
-  "module": "./dist/server.mjs",
-  "browser": "./dist/client.js",
+  "main": "./dist/server/index.js",
+  "browser": "./dist/client/index.js",
   "scripts": {
-    "build": "rollup --config",
-    "clean": "rm -rf dist",
-    "dev": "rollup --config --watch",
+    "dev": "ima-plugin dev",
+    "build": "ima-plugin build",
+    "link": "ima-plugin link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest --no-watchman -c jest.config.js",
@@ -51,6 +50,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
+    "@ima/plugin-cli": "*",
     "@size-limit/preset-big-lib": "^7.0.8",
     "enzyme": "^3.11.0",
     "jscodeshift": "^0.13.1",

@@ -4,6 +4,6 @@
     "outDir": "dist",
   },
   "include": [
-    "src", "../dev-utils/src/time.ts", "../dev-utils/src/logger.ts",
+    "src"
   ]
 }

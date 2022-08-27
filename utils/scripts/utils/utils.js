@@ -68,8 +68,8 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
           console.log(
             `${chalk.gray(timeNow())} ${chalk[
               actionName === 'copy' ? 'green' : 'yellow'
-            ](actionName === 'copy' ? '✓' : '𐄂')} ${chalk.magenta(
-              `[${name}]`
+            ](actionName === 'copy' ? '✓' : '𐄂')} ${chalk.cyan(
+              `${name}`
             )} ./${path.relative(path.join(destFolder), dest)} ${chalk.gray(
               `[${Date.now() - startTime}ms]`
             )}`
@@ -173,7 +173,6 @@ function copyChanges(destDir, pkgDirs) {
   pkgDirs.forEach(async pkgDir => {
     const pkgJson = require(path.join(pkgDir, 'package.json'));
     const destPkgDir = path.join(destNodeModules, pkgJson.name);
-    const name = pkgJson.name.split('/').pop();
 
     // Build package
     pkgJson.scripts.build && shell('npm run build', pkgDir);
@@ -183,8 +182,8 @@ function copyChanges(destDir, pkgDirs) {
       .filter(dir => !IGNORED.includes(dir))
       .forEach(file => {
         console.log(
-          `${chalk.gray(timeNow())} ${chalk.green('✓')} ${chalk.magenta(
-            `[${name}]`
+          `${chalk.gray(timeNow())} ${chalk.green('✓')} ${chalk.cyan(
+            `${pkgJson.name}`
           )} ./${file}`
         );
 

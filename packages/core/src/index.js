@@ -7,7 +7,6 @@ import pluginLoader from './pluginLoader';
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
 
-/* eslint-disable no-unused-vars */
 import Cache from './cache/Cache';
 import CacheEntry from './cache/CacheEntry';
 import CacheFactory from './cache/CacheFactory';
@@ -95,7 +94,7 @@ import WeakMapStorage from './storage/WeakMapStorage';
 import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
-import { version } from '../package.json';
+import { version } from '../../package.json';
 /* eslint-enable no-unused-vars */
 
 function getInitialImaConfigFunctions() {

@@ -50,6 +50,18 @@ export function getStatusIcon(
 }
 
 /**
+ * Prints current time in HH:MM:SS format.
+ */
+function timeNow() {
+  const d = new Date(),
+    h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+    m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
+    s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+
+  return '[' + chalk.gray(`${h}:${m}:${s}`) + ']';
+}
+
+/**
  * Build command function handler.
  */
 export async function build() {
@@ -106,7 +118,10 @@ export async function build() {
  */
 export async function watch(args: Arguments) {
   const [command] = args._ as ['link' | 'dev'];
-  const { path: linkPath } = args as unknown as { path: string };
+  const { path: linkPath, silent } = args as unknown as {
+    path: string;
+    silent: boolean;
+  };
 
   const cwd = process.cwd();
   const [pkgJson, configurations] = await Promise.all([
@@ -114,7 +129,9 @@ export async function watch(args: Arguments) {
     parseConfigFile(cwd),
   ]);
 
-  logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
+  if (!silent) {
+    logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
+  }
 
   // Spawn watch for each config
   configurations.forEach(async config => {
@@ -186,17 +203,19 @@ export async function watch(args: Arguments) {
               break;
           }
 
-          // Print info to output
-          logger.info(
-            `${getStatusIcon(eventName)} ${chalk.gray(
-              pkgJson.name + ':'
-            )}${chalk.magenta(outputContextPath)} ${chalk.green(
-              '→'
-            )} ${chalk.blue(linkedPkgJson.name)}`,
-            {
-              elapsed,
-            }
-          );
+          if (!silent) {
+            // Print info to output
+            logger.write(
+              `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
+                pkgJson.name
+              )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
+                linkedPkgJson.name
+              )}`,
+              {
+                elapsed,
+              }
+            );
+          }
         });
     }
 
@@ -232,9 +251,9 @@ export async function watch(args: Arguments) {
         }
 
         // Prevents duplicate logging in `link` mode
-        if (command !== 'link') {
-          logger.info(
-            `${getStatusIcon(eventName)} ${chalk.magenta(outputContextPath)}`,
+        if (command !== 'link' && !silent) {
+          logger.write(
+            `${timeNow()} ${getStatusIcon(eventName)} ${outputContextPath}`,
             {
               elapsed,
             }
