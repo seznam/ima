@@ -50,7 +50,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^18.0.0-rc.4",
+    "@ima/plugin-cli": "^18.0.0-rc.1",
     "@size-limit/preset-big-lib": "^7.0.8",
     "enzyme": "^3.11.0",
     "jscodeshift": "^0.13.1",

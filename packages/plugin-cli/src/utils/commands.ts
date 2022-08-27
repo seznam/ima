@@ -183,6 +183,8 @@ export async function watch(args: Arguments) {
 
           const elapsed = time();
 
+          console.log('EVEnt', eventName, filePath);
+
           switch (eventName) {
             case 'add':
             case 'change':
@@ -231,8 +233,10 @@ export async function watch(args: Arguments) {
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
         const outputContextPath = `./${path.join(config.output, contextPath)}`;
+        const outputPath = path.join(outputDir, contextPath);
 
         const elapsed = time();
+        console.log('EVEnt dev', eventName, filePath);
 
         switch (eventName) {
           case 'add':
@@ -242,11 +246,11 @@ export async function watch(args: Arguments) {
 
           case 'unlink':
           case 'unlinkDir':
-            await fs.promises.rm(filePath, { recursive: true });
+            await fs.promises.rm(outputPath, { recursive: true });
             break;
 
           case 'addDir':
-            await fs.promises.mkdir(filePath, { recursive: true });
+            await fs.promises.mkdir(outputPath, { recursive: true });
             break;
         }
 
