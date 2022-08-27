@@ -7,7 +7,7 @@ description: Basic features > Data fetching with HttpAgent
 
 ## Cancellable requests
 
-The HttpAgent has support for [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) to cancel requests in native way. There are **two ways** you can provide custom instance of AbortController to the HttpAgent, where each has it's own benefits:
+The HttpAgent has support for [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) to cancel requests in native way. There are **two ways** you can provide custom instance of AbortController to the HttpAgent, where each has it's own benefits.
 
 
 ### options.abortController
