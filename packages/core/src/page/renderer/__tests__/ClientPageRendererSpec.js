@@ -140,14 +140,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-            Array [
-              Array [
-                Object {
+            [
+              [
+                {
                   "param1": "param1",
                 },
               ],
-              Array [
-                Object {
+              [
+                {
                   "param2": "param2",
                 },
               ],
@@ -279,14 +279,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-            Array [
-              Array [
-                Object {
+            [
+              [
+                {
                   "param1": "param1",
                 },
               ],
-              Array [
-                Object {
+              [
+                {
                   "param2": "param2",
                 },
               ],
