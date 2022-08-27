@@ -32,9 +32,7 @@
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "preversion": "npm test"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "to-aop": "^0.5.4"

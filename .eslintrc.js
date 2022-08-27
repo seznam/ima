@@ -5,7 +5,6 @@ module.exports = {
     '**/dist/**',
     '**/build/**',
     '**/docs/**',
-    '**/.turbo/**',
     '**/.docusaurus/**',
     '**/coverage/**',
     'packages/create-ima-app/examples/todos/assets/**',
