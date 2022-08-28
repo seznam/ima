@@ -183,8 +183,6 @@ export async function watch(args: Arguments) {
 
           const elapsed = time();
 
-          console.log('EVEnt', eventName, filePath);
-
           switch (eventName) {
             case 'add':
             case 'change':
@@ -236,7 +234,6 @@ export async function watch(args: Arguments) {
         const outputPath = path.join(outputDir, contextPath);
 
         const elapsed = time();
-        console.log('EVEnt dev', eventName, filePath);
 
         switch (eventName) {
           case 'add':
