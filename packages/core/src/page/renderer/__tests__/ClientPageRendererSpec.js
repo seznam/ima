@@ -4,7 +4,6 @@ import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';
 import Window from 'src/window/Window';
 import Dispatcher from 'src/event/Dispatcher';
-import MetaManager from 'src/meta/MetaManager';
 import {
   toMockedInstance,
   setGlobalMockMethod,

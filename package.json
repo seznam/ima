@@ -29,7 +29,7 @@
     "doc": "npm run build:doc --workspace website",
     "changeset": "changeset add",
     "postinstall": "npm run build",
-    "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
+    "lint": "eslint --fix --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky install",
     "release": "npm run release:prepare && npm run release:push",
     "release:prepare": "changeset version",

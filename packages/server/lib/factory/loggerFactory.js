@@ -37,10 +37,10 @@ class ConsoleAsync extends transports.Stream {
   async _log(meta, callback) {
     const message = meta.error
       ? `${meta.message}\n\n${await devFormatError(
-        meta.error,
-        'runtime',
-        this.rootDir
-      )}`
+          meta.error,
+          'runtime',
+          this.rootDir
+        )}`
       : meta.message;
 
     // eslint-disable-next-line no-console
@@ -159,7 +159,7 @@ module.exports = function loggerFactory({ environment }) {
   if (['simple', 'JSON', 'dev'].indexOf(FORMATTING) === -1) {
     throw new Error(
       'Invalid logger configuration: the formatting has to be ' +
-      `either "simple" or "JSON", ${FORMATTING} was provided`
+        `either "simple" or "JSON", ${FORMATTING} was provided`
     );
   }
 
