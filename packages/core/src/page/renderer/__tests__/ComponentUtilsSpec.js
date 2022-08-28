@@ -73,7 +73,7 @@ describe('componentUtils', () => {
     it('should create instace of each registered class through OC.', () => {
       const utils = componentUtils.getUtils();
 
-      expect(oc.get).toHaveBeenCalledTimes(3);
+      expect(oc.get).toHaveBeenCalledTimes(2);
       expect(utils['SomeHelper'] instanceof SomeHelper).toBeTruthy();
       expect(utils['SomeMockHelper'] instanceof SomeMockHelper).toBeTruthy();
     });

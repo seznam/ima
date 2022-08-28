@@ -132,7 +132,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         .spyOn(pageManager, '_parseCustomEvent')
         .mockReturnValue(parsedCustomEvent);
 
-      expect(console.warn).not.toHaveBeenCalled();
+      jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
 
     it('should handle event only with controller', () => {
       jest
