@@ -32,7 +32,7 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/server.cjs",
+  "main": "./dist/server.js",
   "module": "./dist/server.mjs",
   "browser": "./dist/client.js",
   "scripts": {
