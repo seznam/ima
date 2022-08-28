@@ -5,7 +5,6 @@
       "DOM",
     ],
     "outDir": "dist",
-    "baseUrl": ".",
     "declaration": false,
     "baseUrl": ".",
     "paths": {
