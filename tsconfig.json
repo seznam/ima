@@ -5,7 +5,7 @@
       "ES2022"
     ],
     "module": "commonjs",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "declaration": true,
     "allowJs": true,
     "esModuleInterop": true,
