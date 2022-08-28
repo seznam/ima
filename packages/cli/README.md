@@ -24,9 +24,9 @@ npm install @ima/cli --save-dev
 ## Usage
 
 ```
-npx @ima/cli dev
-npx @ima/cli build
-npx @ima/cli --help
+npx ima dev
+npx ima build
+npx ima --help
 ```
 
 ---
