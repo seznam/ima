@@ -93,13 +93,6 @@ export default class HttpProxy {
       options
     );
 
-    const REQUEST_TIMEOUT_ERROR = new GenericError(
-      'The HTTP request timed out',
-      {
-        status: HttpStatusCode.TIMEOUT,
-      }
-    );
-
     if (
       options.timeout &&
       !options.abortController &&
@@ -108,14 +101,15 @@ export default class HttpProxy {
       options.abortController = new AbortController();
     }
 
-    return new Promise((resolve, reject) => {
-      let requestTimeoutId;
+    // Track request timeout status
+    let requestTimeoutId = null;
 
+    return new Promise((resolve, reject) => {
       if (options.timeout) {
         requestTimeoutId = setTimeout(() => {
-          options.abortController?.abort(REQUEST_TIMEOUT_ERROR);
+          options.abortController?.abort();
 
-          reject(REQUEST_TIMEOUT_ERROR);
+          return reject();
         }, options.timeout);
       }
 
@@ -129,6 +123,7 @@ export default class HttpProxy {
         .then(response => {
           if (requestTimeoutId) {
             clearTimeout(requestTimeoutId);
+            requestTimeoutId = null;
           }
 
           const contentType = response.headers.get('content-type');
@@ -146,12 +141,17 @@ export default class HttpProxy {
         )
         .then(resolve, reject);
     }).catch(fetchError => {
-      if (
-        fetchError.name === 'AbortError' &&
-        options.fetchOptions?.signal?.reason?.message ===
-          REQUEST_TIMEOUT_ERROR.message
-      ) {
-        throw this._processError(REQUEST_TIMEOUT_ERROR, requestParams);
+      /**
+       * If requestTimeoutId is truthy, that means that the there's a time out,
+       * since the request handler didn't managed to reset timeout callback on time.
+       */
+      if (requestTimeoutId) {
+        throw this._processError(
+          new GenericError('The HTTP request timed out', {
+            status: HttpStatusCode.TIMEOUT,
+          }),
+          requestParams
+        );
       }
 
       throw this._processError(fetchError, requestParams);

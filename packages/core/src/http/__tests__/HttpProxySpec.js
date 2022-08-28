@@ -232,82 +232,68 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should call provided abortController.abort on timeout', async () => {
-        //TODO
-        jest.useRealTimers();
+        jest.useFakeTimers();
 
         let abortController = new AbortController();
         const abortControllerSpy = jest.spyOn(abortController, 'abort');
-
         let options = { ...OPTIONS, timeout: 1, abortController };
 
-        fetchResult = new Promise(res => setTimeout(() => res(response), 20));
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve(response), 100000)
+        );
 
         await expect(async () => {
-          await proxy.request(method, API_URL, DATA, options);
+          let result = proxy.request(method, API_URL, DATA, options);
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
 
         expect(abortControllerSpy).toHaveBeenCalled();
+        expect(abortController.signal.aborted).toBeTruthy();
       });
 
       it('should create AbortController when not provided and abort it on timeout', async () => {
-        //TODO how to check if httpproxy created and aborted its abortcontroller?
-
-        //TODO
-        jest.useRealTimers();
-
+        jest.useFakeTimers();
         let options = { ...OPTIONS, timeout: 1 };
-        fetchResult = new Promise(res => setTimeout(() => res(response), 10));
 
-        await expect(async () => {
-          await proxy.request(method, API_URL, DATA, options);
-        }).rejects.toThrow(TIMEOUT_ERROR);
-      });
-
-      it('should throw generic Timed Out error when aborted externally with timeout reason', async () => {
-        let abortController = new AbortController();
-        let options = {
-          ...OPTIONS,
-          fetchOptions: { signal: abortController.signal },
-        };
-
-        const mockAbortError = new Error('Aborted');
-        mockAbortError.name = 'AbortError';
-
-        fetchResult = new Promise((_r, reject) =>
-          setTimeout(() => reject(mockAbortError), 15)
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve(response), 100000)
         );
 
-        setTimeout(() => {
-          abortController.abort(TIMEOUT_ERROR);
-        }, 10);
-
         await expect(async () => {
-          await proxy.request(method, API_URL, DATA, options);
+          let result = proxy.request(method, API_URL, DATA, options);
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
+
+        // Check for presence of auto-created AbortController
+        expect(options.abortController).toBeInstanceOf(AbortController);
+        expect(options.abortController.signal.aborted).toBeTruthy();
       });
 
       it('should throw Abort error when aborted externally; with other reason', async () => {
+        jest.useFakeTimers();
         let abortController = new AbortController();
         let options = {
           ...OPTIONS,
           fetchOptions: { signal: abortController.signal },
         };
 
-        const mockAbortError = new Error('Aborted');
-        mockAbortError.name = 'AbortError';
-
-        fetchResult = new Promise((_r, reject) =>
-          setTimeout(() => reject(mockAbortError), 15)
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve({}), 100000)
         );
 
-        setTimeout(() => {
-          abortController.abort('Aborted');
-        }, 10);
-
         await expect(async () => {
-          await proxy.request(method, API_URL, DATA, options);
+          let result = proxy.request(method, API_URL, DATA, options);
+          abortController.abort('Aborted');
+          jest.runAllTimers();
+          await result;
         }).rejects.toThrow();
+
         expect(abortController.signal.reason).toBe('Aborted');
+        expect(abortController.signal.aborted).toBeTruthy();
       });
     });
   });
