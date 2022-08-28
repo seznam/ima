@@ -3,8 +3,8 @@ const { Event } = require('../emitter.js');
 module.exports = function hooksFactory({
   renderOverloadedPage,
   renderStaticSPAPage,
-  renderStaticErrorPage,
-  renderStaticBadRequestPage,
+  renderStaticServerErrorPage,
+  renderStaticClientErrorPage,
   _initApp,
   _importAppMainSync,
   _addImaToResponse,
@@ -64,10 +64,10 @@ module.exports = function hooksFactory({
         .get('$Router')
         .handleError({ error })
         .catch(e => {
-          return renderStaticErrorPage({ ...event, error: e });
+          return renderStaticServerErrorPage({ ...event, error: e });
         });
     } catch (e) {
-      return renderStaticErrorPage({ ...event, error: e });
+      return renderStaticServerErrorPage({ ...event, error: e });
     }
   }
 
@@ -108,7 +108,7 @@ module.exports = function hooksFactory({
         const { context } = event;
         //TODO IMA@18 update for better performance check
         if (!context?.app || _isServerOverloaded(event)) {
-          return renderStaticErrorPage(event);
+          return renderStaticServerErrorPage(event);
         }
 
         let router = context.app.oc.get('$Router');
@@ -122,7 +122,7 @@ module.exports = function hooksFactory({
           return _applyError(event);
         }
       } catch (e) {
-        return renderStaticErrorPage({ ...event, error: e });
+        return renderStaticServerErrorPage({ ...event, error: e });
       }
     }
   }
@@ -154,7 +154,7 @@ module.exports = function hooksFactory({
 
       if (_hasToServeStaticBadRequest(event)) {
         event.stopPropagation();
-        return renderStaticBadRequestPage(event);
+        return renderStaticClientErrorPage(event);
       }
     });
   }

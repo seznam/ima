@@ -24,6 +24,20 @@ jest.mock('fs', () => {
   };
 });
 
+jest.mock('../devErrorPageFactory.js', () => {
+  return () => {
+    return jest.fn(({ error }) => ({
+      SPA: false,
+      static: false,
+      pageState: {},
+      cache: false,
+      error,
+      content: 'dev error page',
+      status: 500,
+    }));
+  };
+});
+
 describe('Server App Factory', () => {
   let logger = null;
   let devErrorPage = null;
@@ -161,7 +175,7 @@ describe('Server App Factory', () => {
     await serverApp.requestHandlerMiddleware(REQ, RES);
     await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    expect(appFactory.mock.calls).toHaveLength(3);
+    expect(appFactory.mock.calls).toHaveLength(2);
   });
 
   it('should call appFactory only once for prod mode', async () => {

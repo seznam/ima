@@ -23,7 +23,7 @@ class ServerGlobal {
   get(name) {
     if (!this.has(name)) {
       throw new Error(
-        `Server global hasn't key with '${name}'. Check your workflow.`
+        `Server global doesn't have key named '${name}'. Check your workflow.`
       );
     }
 

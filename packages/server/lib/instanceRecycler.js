@@ -1,5 +1,4 @@
-// TODO IMA@18 remove and use Observer on 'request' and 'response' hook
-
+// IMA@18 keep only for backwards compatibility. IMA@19 will be removed.
 /**
  * Instance Recycler.
  *

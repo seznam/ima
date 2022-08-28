@@ -5,10 +5,11 @@ const { Event } = require('../emitter.js');
 const staticPageFactory = require('./staticPageFactory.js');
 const IMAInternalFactory = require('./IMAInternalFactory.js');
 const hooksFactory = require('./hooksFactory.js');
+const devErrorPageFactory = require('./devErrorPageFactory.js');
 
 module.exports = function serverAppFactory({
   environment,
-  devErrorPage,
+  logger,
   languageLoader,
   applicationFolder,
   appFactory,
@@ -16,6 +17,7 @@ module.exports = function serverAppFactory({
   instanceRecycler,
   serverGlobal,
 }) {
+  const devErrorPage = devErrorPageFactory({ logger });
   const {
     _initApp,
     createBootConfig,
@@ -33,8 +35,8 @@ module.exports = function serverAppFactory({
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
-    renderStaticErrorPage,
-    renderStaticBadRequestPage,
+    renderStaticServerErrorPage,
+    renderStaticClientErrorPage,
   } = staticPageFactory({
     applicationFolder,
     instanceRecycler,
@@ -52,8 +54,8 @@ module.exports = function serverAppFactory({
   } = hooksFactory({
     renderOverloadedPage,
     renderStaticSPAPage,
-    renderStaticErrorPage,
-    renderStaticBadRequestPage,
+    renderStaticServerErrorPage,
+    renderStaticClientErrorPage,
     _initApp,
     _importAppMainSync,
     _addImaToResponse,
@@ -77,7 +79,7 @@ module.exports = function serverAppFactory({
   // TODO IMA@18 need performance test for usefulness
   // TODO IMA@18@performance refactor
   // TODO IMA@18@performance documentation environment.$Server.serveSPA.cache
-  // TODO IMA@18performance test rendering SPA fro random url
+  // TODO IMA@18performance test rendering SPA for random url
   // const spaCache = new Cache(
   //   Object.assign(
   //     {},
@@ -142,12 +144,28 @@ module.exports = function serverAppFactory({
 
       return event.context.response;
     } catch (error) {
-      return renderStaticErrorPage({
+      return renderStaticServerErrorPage({
         ...event,
         error: error,
         cause: event.error,
       });
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  async function errorHandlerMiddleware(error, req, res, next) {
+    let event = {
+      error,
+      req,
+      res,
+      environment,
+    };
+
+    return errorHandler(error, event);
+  }
+
+  async function requestHandlerMiddleware(req, res) {
+    return requestHandler(req, res);
   }
 
   return {
@@ -159,21 +177,9 @@ module.exports = function serverAppFactory({
     useIMAHandleRequestHook,
     useIMAInitializationRequestHook,
     userPerformanceOptimizationRequestHook,
-    // eslint-disable-next-line no-unused-vars
-    errorHandlerMiddleware: async (error, req, res, next) => {
-      let event = {
-        error,
-        req,
-        res,
-        environment,
-      };
-
-      return errorHandler(error, event);
-    },
-    requestHandlerMiddleware: async (req, res) => {
-      return requestHandler(req, res);
-    },
-    renderStaticErrorPage,
+    errorHandlerMiddleware,
+    requestHandlerMiddleware,
+    renderStaticServerErrorPage,
     renderStaticSPAPage,
     requestHandler,
     responseHandler,

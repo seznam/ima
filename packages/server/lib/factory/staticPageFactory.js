@@ -19,39 +19,39 @@ module.exports = function staticTemplateFactory({
   const template500 = ejs.compile(
     loadTemplateFile(path.join(applicationFolder, './server/template/500.ejs'))
   );
-  const template404 = ejs.compile(
+  const template400 = ejs.compile(
     loadTemplateFile(path.join(applicationFolder, './server/template/400.ejs'))
   );
 
-  function renderStaticErrorPage(event) {
+  function renderStaticServerErrorPage(event) {
+    const error500 = {
+      status: 500,
+      SPA: false,
+      static: true,
+      pageState: {},
+      cache: false,
+    };
+
     try {
       const content = template500(event);
 
       return {
+        ...error500,
         content,
-        status: 500,
         error: event.error,
-        SPA: false,
-        static: true,
-        pageState: {},
-        cache: false,
       };
-    } catch (e) {
+    } catch (error) {
       return {
+        ...error500,
         content: 'Internal Server Error',
-        status: 500,
-        error: e,
-        SPA: false,
-        static: true,
-        pageState: {},
-        cache: false,
+        error,
       };
     }
   }
 
-  function renderStaticBadRequestPage(event) {
+  function renderStaticClientErrorPage(event) {
     const status = 404;
-    const content = template404(event);
+    const content = template400(event);
 
     return {
       content,
@@ -83,7 +83,7 @@ module.exports = function staticTemplateFactory({
       `The server is overloaded with ${requests} concurrency requests.`
     );
 
-    let page = renderStaticErrorPage({ ...event, error });
+    let page = renderStaticServerErrorPage({ ...event, error });
     page.status = 503;
 
     return page;
@@ -92,7 +92,7 @@ module.exports = function staticTemplateFactory({
   return {
     renderOverloadedPage,
     renderStaticSPAPage,
-    renderStaticErrorPage,
-    renderStaticBadRequestPage,
+    renderStaticServerErrorPage,
+    renderStaticClientErrorPage,
   };
 };

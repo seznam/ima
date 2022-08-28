@@ -27,11 +27,11 @@ describe('Cache', () => {
       jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
-    it('should be set page to cache', () => {
+    it('should set page to cache', () => {
       expect(cache.set({}, page)).toBe(true);
     });
 
-    it('should be not set page to cache for exceed maximum entries limit', () => {
+    it('should not set page to cache for exceed maximum entries limit', () => {
       expect(cache.set({}, page)).toBe(true);
       expect(cache.set({}, page)).toBe(false);
     });
