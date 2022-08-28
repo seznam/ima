@@ -5,7 +5,7 @@ import { preprocessTransformer } from './transformers/preprocessTransformer';
 import { swcTransformer } from './transformers/swcTransformer';
 import { BuildConfig } from './types';
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isBuild = process.argv.includes('build');
 const jsxRe = /\.(js|jsx)$/;
 const tsxRE = /\.(ts|tsx)$/;
 
@@ -32,7 +32,7 @@ function createSwcTransformer({
       transform: {
         react: {
           useBuiltins: true,
-          development: !isProduction,
+          development: !isBuild,
         },
       },
     },
