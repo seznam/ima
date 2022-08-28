@@ -38,9 +38,7 @@
   },
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "stylelint": "stylelint './**/*.less'",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "preversion": "npm test"
+    "stylelint": "stylelint './**/*.less'"
   },
   "dependencies": {
     "chalk": "^5.0.1",

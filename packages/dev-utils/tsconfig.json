@@ -3,14 +3,10 @@
   "compilerOptions": {
     "lib": [
       "DOM",
-      "ES2022"
     ],
-    "outDir": "./dist",
-    "baseUrl": "."
+    "outDir": "dist",
   },
   "include": [
-    "./typings/**/*",
-    "./src/**/*",
-    "./index.ts"
+    "src",
   ]
 }

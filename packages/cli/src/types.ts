@@ -1,4 +1,3 @@
-import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
 import { Configuration, ResolveOptions, Watching } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -183,9 +182,9 @@ export type ImaConfig = {
   jsxRuntime?: 'classic' | 'automatic';
 
   /**
-   * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]
+   * Enable brotli and gzip compression for production assets [default=true].
    */
-  compression: (AlgorithmFunction<ZlibOptions> | 'gzip' | 'brotliCompress')[];
+  compress: boolean;
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]

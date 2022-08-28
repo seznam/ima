@@ -15,13 +15,13 @@ describe('Modal atom', () => {
     instance = wrapper.instance();
     instance.props.onClose.mockClear();
 
-    global.document = {
+    Object.defineProperty(global, document, {
       body: {
         style: {
           cssText: null,
         },
       },
-    };
+    });
 
     jest
       .spyOn(global, 'setTimeout')

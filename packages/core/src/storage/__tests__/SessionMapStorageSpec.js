@@ -39,7 +39,7 @@ describe('ima.storage.SessionMapStorage', () => {
   });
 
   it('should set promise value only to map storage', () => {
-    spyOn(sessionStorage, 'set').and.stub();
+    jest.spyOn(sessionStorage, 'set').mockImplementation();
 
     sessionMap.set('promise', Promise.resolve(1));
 
