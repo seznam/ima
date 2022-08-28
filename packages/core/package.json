@@ -40,7 +40,7 @@
     "link": "ima-plugin link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
-    "test:jest": "jest --no-watchman -c jest.config.js",
+    "test:jest": "jest -c jest.config.js",
     "test:size": "size-limit",
     "preversion": "npm test"
   },
@@ -51,10 +51,7 @@
   },
   "devDependencies": {
     "@ima/plugin-cli": "^18.0.0-rc.1",
-    "@size-limit/preset-big-lib": "^7.0.8",
-    "enzyme": "^3.11.0",
-    "jscodeshift": "^0.13.1",
-    "size-limit": "^7.0.8"
+    "jscodeshift": "^0.13.1"
   },
   "peerDependencies": {
     "react": ">=16.13",

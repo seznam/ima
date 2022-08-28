@@ -17,6 +17,10 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
     stateManager._pushToHistory(defaultState);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should clear history', () => {
     stateManager.clear();
 
@@ -38,10 +42,10 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
   describe('setState method', () => {
     beforeEach(() => {
-      spyOn(stateManager, '_eraseExcessHistory').and.stub();
-      spyOn(stateManager, '_pushToHistory').and.stub();
-      spyOn(stateManager, '_callOnChangeCallback').and.callThrough();
-      spyOn(dispatcher, 'fire');
+      jest.spyOn(stateManager, '_eraseExcessHistory').mockImplementation();
+      jest.spyOn(stateManager, '_pushToHistory').mockImplementation();
+      jest.spyOn(stateManager, '_callOnChangeCallback');
+      jest.spyOn(dispatcher, 'fire').mockImplementation(() => {});
     });
 
     it('should set smooth copy last state and state patch', () => {
@@ -84,7 +88,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   describe('beginTransaction method', () => {
     it('should show warning for another ongoing transaction', () => {
       stateManager._ongoingTransaction = true;
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       stateManager.beginTransaction();
 
@@ -102,7 +106,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   describe('commitTransaction method', () => {
     it('should show warning for no active transaction', () => {
       stateManager._ongoingTransaction = false;
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       stateManager.commitTransaction();
 
@@ -120,7 +124,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       stateManager.setState(queuedPatchState1);
       stateManager.setState(queuedPatchState2);
 
-      spyOn(stateManager, 'setState').and.callThrough();
+      jest.spyOn(stateManager, 'setState');
 
       stateManager.commitTransaction();
 

@@ -84,7 +84,7 @@ describe('ima.core.cache.CacheImpl', () => {
 
     it('should return same value for instance of Promise', () => {
       let promise = Promise.resolve('promise');
-      spyOn(Helper, 'clone').and.stub();
+      jest.spyOn(Helper, 'clone').mockImplementation();
 
       cache.set('promise', promise);
 
@@ -94,7 +94,7 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should return false for undefined cacheEntry', () => {
-    spyOn(cacheStorage, 'has').and.returnValue(true);
+    jest.spyOn(cacheStorage, 'has').mockReturnValue(true);
 
     expect(cache.has('bbb')).toBe(false);
   });
@@ -128,7 +128,9 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should serialize only instances of the CacheEntry', () => {
-    spyOn(cacheFactory, 'createCacheEntry').and.returnValue({ foo: 'bar' });
+    jest
+      .spyOn(cacheFactory, 'createCacheEntry')
+      .mockReturnValue({ foo: 'bar' });
 
     cache.set('myKey', {
       foo: 'bar',
@@ -189,7 +191,7 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should throw error for serialize if value is instance of Promise', () => {
-    spyOn(console, 'warn');
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     cache.set('promise', Promise.resolve('promise'));
 
@@ -201,7 +203,7 @@ describe('ima.core.cache.CacheImpl', () => {
 
   describe('_canSerializeValue method', () => {
     beforeEach(() => {
-      spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     it('should return false for Date', () => {
