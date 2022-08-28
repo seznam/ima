@@ -10,7 +10,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
   beforeEach(() => {
     window = new Window();
-    spyOn(window, 'getWindow').and.returnValue({
+    jest.spyOn(window, 'getWindow').mockReturnValue({
       history: { scrollRestoration: 'auto' },
     });
 
@@ -31,8 +31,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
   describe('handlePreManagedState() method', () => {
     it('should call window.replaceState and then window.pushState method', () => {
-      const replaceStateMock = spyOn(window, 'replaceState');
-      const pushStateMock = spyOn(window, 'pushState').and.stub();
+      const replaceStateMock = jest.spyOn(window, 'replaceState');
+      const pushStateMock = jest
+        .spyOn(window, 'pushState')
+        .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState({}, nextManagedPage, {
@@ -44,8 +46,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('should call just window.replaceState method for redirect action type', () => {
-      const replaceStateMock = spyOn(window, 'replaceState');
-      const pushStateMock = spyOn(window, 'pushState').and.stub();
+      const replaceStateMock = jest.spyOn(window, 'replaceState');
+      const pushStateMock = jest
+        .spyOn(window, 'pushState')
+        .mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
       handler.handlePreManagedState({}, nextManagedPage, {
@@ -58,8 +62,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('should not call window.pushState after loading page because url is set alright from browser', () => {
-      const replaceStateMock = spyOn(window, 'replaceState');
-      const pushStateMock = spyOn(window, 'pushState').and.stub();
+      const replaceStateMock = jest.spyOn(window, 'replaceState');
+      const pushStateMock = jest
+        .spyOn(window, 'pushState')
+        .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState(null, nextManagedPage, {
@@ -71,8 +77,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('should not call window.pushState after POP_STATE action because url is set alright from browser', () => {
-      const replaceStateMock = spyOn(window, 'replaceState');
-      const pushStateMock = spyOn(window, 'pushState').and.stub();
+      const replaceStateMock = jest.spyOn(window, 'replaceState');
+      const pushStateMock = jest
+        .spyOn(window, 'pushState')
+        .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState(null, nextManagedPage, {
@@ -85,7 +93,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
       handler.handlePreManagedState(null, nextManagedPage, {});
@@ -95,7 +103,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('window should be scrolled to the top if routers autoScroll option was set to true.', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState(null, nextManagedPage, {});
@@ -107,7 +115,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
   describe('handlePostManagedState() method', () => {
     it('should call window.scrollTo method', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
 
       const managedPage = { options: { autoScroll: true } };
       const scroll = { x: 0, y: 340 };
@@ -121,7 +129,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('should not call window.scrollTo for undefined scroll position', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
 
       const managedPage = { options: { autoScroll: true } };
 
@@ -132,7 +140,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('should not call window.scrollTo if current route has autoScroll set to false', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
 
       const managedPage = { options: { autoScroll: false } };
       const scroll = { x: 0, y: 340 };

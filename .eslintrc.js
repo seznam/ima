@@ -24,6 +24,15 @@ module.exports = {
         allow: ['warn', 'error'],
       },
     ],
+    'no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
 
     // Prettier
     'prettier/prettier': [
@@ -156,7 +165,15 @@ module.exports = {
           'error',
           { 'ts-expect-error': 'allow-with-description' },
         ],
-        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            destructuredArrayIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+          },
+        ],
         '@typescript-eslint/no-namespace': [
           'error',
           { allowDeclarations: true },
@@ -185,9 +202,6 @@ module.exports = {
     },
     {
       files: ['packages/devtools/**', 'packages/create-ima-app/**'],
-      rules: {
-        'no-unused-vars': 'warn',
-      },
       globals: {
         chrome: true,
         FB: true,
