@@ -26,8 +26,8 @@ describe('ima.core.router.ClientRouter', () => {
     router.init({ $Host: host, $Protocol: protocol });
   });
 
-  it('should be return actual path', () => {
-    router.getPath.mockRestore();
+  it('should return actual path', () => {
+    jest.restoreAllMocks();
     jest.spyOn(window, 'getPath').mockReturnValue('');
 
     router.getPath();
@@ -48,7 +48,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.listen();
 
-    expect(window.bindEventListener.calls.count()).toBe(2);
+    expect(window.bindEventListener).toHaveBeenCalledTimes(2);
   });
 
   it('should remove listener to popState event, click event', () => {
@@ -56,7 +56,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.unlisten();
 
-    expect(window.unbindEventListener.calls.count()).toBe(2);
+    expect(window.unbindEventListener).toHaveBeenCalledTimes(2);
   });
 
   describe('redirect method', () => {

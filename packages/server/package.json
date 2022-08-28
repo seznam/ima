@@ -21,8 +21,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js",
-    "preversion": "npm test"
+    "test": "jest"
   },
   "dependencies": {
     "@esmj/emitter": "^0.0.4",

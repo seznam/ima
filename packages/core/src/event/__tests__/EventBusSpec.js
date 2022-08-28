@@ -30,22 +30,24 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('listen method', () => {
     it('should bind listener for specific event', () => {
-      jest.spyOn(windowInterface, 'bindEventListener').mockImplementation();
+      jest
+        .spyOn(windowInterface, 'bindEventListener')
+        .mockImplementation(() => {});
 
       eventBus.listen(eventTarget, event, listeners.listener1);
       eventBus.listen(eventTarget, event, listeners.listener2);
 
-      expect(windowInterface.bindEventListener.calls.count()).toBe(2);
-      expect(
-        windowInterface.bindEventListener.calls.argsFor(0)[0]
-      ).toStrictEqual(eventTarget);
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toBe(
+      expect(windowInterface.bindEventListener.mock.calls).toHaveLength(2);
+      expect(windowInterface.bindEventListener.mock.calls[0][0]).toStrictEqual(
+        eventTarget
+      );
+      expect(windowInterface.bindEventListener.mock.calls[0][1]).toBe(
         IMA_EVENT
       );
-      expect(
-        windowInterface.bindEventListener.calls.argsFor(1)[0]
-      ).toStrictEqual(eventTarget);
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toBe(
+      expect(windowInterface.bindEventListener.mock.calls[1][0]).toStrictEqual(
+        eventTarget
+      );
+      expect(windowInterface.bindEventListener.mock.calls[1][1]).toBe(
         IMA_EVENT
       );
     });
@@ -53,22 +55,24 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('listenAll method', () => {
     it('should bind listener for any event', () => {
-      jest.spyOn(windowInterface, 'bindEventListener');
+      jest
+        .spyOn(windowInterface, 'bindEventListener')
+        .mockImplementation(() => {});
 
       eventBus.listenAll(eventTarget, listeners.listener1);
       eventBus.listenAll(eventTarget, listeners.listener2);
 
-      expect(windowInterface.bindEventListener.calls.count()).toBe(2);
-      expect(
-        windowInterface.bindEventListener.calls.argsFor(0)[0]
-      ).toStrictEqual(eventTarget);
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toBe(
+      expect(windowInterface.bindEventListener.mock.calls).toHaveLength(2);
+      expect(windowInterface.bindEventListener.mock.calls[0][0]).toStrictEqual(
+        eventTarget
+      );
+      expect(windowInterface.bindEventListener.mock.calls[0][1]).toBe(
         IMA_EVENT
       );
-      expect(
-        windowInterface.bindEventListener.calls.argsFor(1)[0]
-      ).toStrictEqual(eventTarget);
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toBe(
+      expect(windowInterface.bindEventListener.mock.calls[1][0]).toStrictEqual(
+        eventTarget
+      );
+      expect(windowInterface.bindEventListener.mock.calls[1][1]).toBe(
         IMA_EVENT
       );
     });
@@ -76,7 +80,7 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for listeners', () => {
-      jest.spyOn(eventSource, 'dispatchEvent').mockImplementation();
+      jest.spyOn(eventSource, 'dispatchEvent').mockImplementation(() => {});
       jest
         .spyOn(windowInterface, 'createCustomEvent')
         .mockImplementation((IMA_EVENT, options) => {
@@ -88,19 +92,17 @@ describe('ima.core.event.EventBusImpl', () => {
 
       eventBus.fire(eventSource, event, data);
 
-      expect(eventSource.dispatchEvent.calls.count()).toBe(1);
+      expect(eventSource.dispatchEvent.mock.calls).toHaveLength(1);
 
+      expect(eventSource.dispatchEvent.mock.calls[0][0].detail.eventName).toBe(
+        event
+      );
       expect(
-        eventSource.dispatchEvent.calls.argsFor(0)[0].detail.eventName
-      ).toBe(event);
-      expect(
-        eventSource.dispatchEvent.calls.argsFor(0)[0].detail.data
+        eventSource.dispatchEvent.mock.calls[0][0].detail.data
       ).toStrictEqual(data);
+      expect(eventSource.dispatchEvent.mock.calls[0][0].bubbles).toBeTruthy();
       expect(
-        eventSource.dispatchEvent.calls.argsFor(0)[0].bubbles
-      ).toBeTruthy();
-      expect(
-        eventSource.dispatchEvent.calls.argsFor(0)[0].cancelable
+        eventSource.dispatchEvent.mock.calls[0][0].cancelable
       ).toBeTruthy();
     });
 
@@ -113,16 +115,18 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('unlisten method', () => {
     it('should unbind bound listeners', () => {
-      jest.spyOn(windowInterface, 'unbindEventListener').mockImplementation();
+      jest
+        .spyOn(windowInterface, 'unbindEventListener')
+        .mockImplementation(() => {});
 
       eventBus.listen(eventTarget, event, listeners.listener1);
       eventBus.unlisten(eventTarget, event, listeners.listener1);
 
-      expect(windowInterface.unbindEventListener.calls.count()).toBe(1);
+      expect(windowInterface.unbindEventListener.mock.calls).toHaveLength(1);
       expect(
-        windowInterface.unbindEventListener.calls.argsFor(0)[0]
+        windowInterface.unbindEventListener.mock.calls[0][0]
       ).toStrictEqual(eventTarget);
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toBe(
+      expect(windowInterface.unbindEventListener.mock.calls[0][1]).toBe(
         IMA_EVENT
       );
     });
@@ -130,16 +134,18 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('unlistenAll method', () => {
     it('should unbind bound listeners', () => {
-      jest.spyOn(windowInterface, 'unbindEventListener').mockImplementation();
+      jest
+        .spyOn(windowInterface, 'unbindEventListener')
+        .mockImplementation(() => {});
 
       eventBus.listenAll(eventTarget, listeners.listener1);
       eventBus.unlistenAll(eventTarget, listeners.listener1);
 
-      expect(windowInterface.unbindEventListener.calls.count()).toBe(1);
+      expect(windowInterface.unbindEventListener.mock.calls).toHaveLength(1);
       expect(
-        windowInterface.unbindEventListener.calls.argsFor(0)[0]
+        windowInterface.unbindEventListener.mock.calls[0][0]
       ).toStrictEqual(eventTarget);
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toBe(
+      expect(windowInterface.unbindEventListener.mock.calls[0][1]).toBe(
         IMA_EVENT
       );
     });

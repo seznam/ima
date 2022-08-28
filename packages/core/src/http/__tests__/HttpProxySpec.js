@@ -26,6 +26,10 @@ describe('ima.core.http.HttpProxy', () => {
   });
   const mockedWindowHelper = toMockedInstance(Window);
 
+  const TIMEOUT_ERROR = new GenericError('The HTTP request timed out', {
+    status: StatusCode.TIMEOUT,
+  });
+
   let proxy;
   let response;
   let fetchResult;
@@ -57,14 +61,13 @@ describe('ima.core.http.HttpProxy', () => {
 
   ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
     describe(`method ${method}`, () => {
-      it('should return promise with response body', async done => {
+      it('should return promise with response body', async () => {
         try {
           await expect(
             proxy.request(method, API_URL, DATA, OPTIONS)
           ).resolves.toBeDefined();
-          done();
         } catch (error) {
-          done.fail(error);
+          expect(error.getParams().body).toBeDefined();
         }
       });
 
@@ -95,7 +98,6 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-          done();
         }
       });
 
@@ -128,7 +130,6 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.FORBIDDEN);
-          done();
         }
       });
 
@@ -143,7 +144,6 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.NOT_FOUND);
-          done();
         }
       });
 
@@ -158,7 +158,6 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 
@@ -173,7 +172,6 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 
@@ -240,6 +238,71 @@ describe('ima.core.http.HttpProxy', () => {
         const result = await proxy.request(method, API_URL, DATA, OPTIONS);
         expect(result.body).toBeNull();
       });
+
+      it('should call provided abortController.abort on timeout', async () => {
+        jest.useFakeTimers();
+
+        let abortController = new AbortController();
+        const abortControllerSpy = jest.spyOn(abortController, 'abort');
+        let options = { ...OPTIONS, timeout: 1, abortController };
+
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve(response), 100000)
+        );
+
+        await expect(async () => {
+          let result = proxy.request(method, API_URL, DATA, options);
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
+        }).rejects.toThrow(TIMEOUT_ERROR);
+
+        expect(abortControllerSpy).toHaveBeenCalled();
+        expect(abortController.signal.aborted).toBeTruthy();
+      });
+
+      it('should create AbortController when not provided and abort it on timeout', async () => {
+        jest.useFakeTimers();
+        let options = { ...OPTIONS, timeout: 1 };
+
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve(response), 100000)
+        );
+
+        await expect(async () => {
+          let result = proxy.request(method, API_URL, DATA, options);
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
+        }).rejects.toThrow(TIMEOUT_ERROR);
+
+        // Check for presence of auto-created AbortController
+        expect(options.abortController).toBeInstanceOf(AbortController);
+        expect(options.abortController.signal.aborted).toBeTruthy();
+      });
+
+      it('should throw Abort error when aborted externally; with other reason', async () => {
+        jest.useFakeTimers();
+        let abortController = new AbortController();
+        let options = {
+          ...OPTIONS,
+          fetchOptions: { signal: abortController.signal },
+        };
+
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve({}), 100000)
+        );
+
+        await expect(async () => {
+          let result = proxy.request(method, API_URL, DATA, options);
+          abortController.abort('Aborted');
+          jest.runAllTimers();
+          await result;
+        }).rejects.toThrow();
+
+        expect(abortController.signal.reason).toBe('Aborted');
+        expect(abortController.signal.aborted).toBeTruthy();
+      });
     });
   });
 
@@ -304,7 +367,7 @@ describe('ima.core.http.HttpProxy', () => {
     });
 
     it('should return null for requests with no body', () => {
-      spyOn(proxy, '_shouldRequestHaveBody').and.returnValue(false);
+      jest.spyOn(proxy, '_shouldRequestHaveBody').mockReturnValue(false);
 
       expect(proxy._getContentType('GET', null, { headers: {} })).toBeNull();
     });

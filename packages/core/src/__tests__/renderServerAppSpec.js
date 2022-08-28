@@ -98,7 +98,7 @@ describe('render server application', () => {
     );
     ima.bootClientApp(app, bootConfig);
 
-    jest.spyOn(ReactDOM, 'render');
+    jest.spyOn(ReactDOM, 'render').mockImplementation(() => {});
 
     done();
   });

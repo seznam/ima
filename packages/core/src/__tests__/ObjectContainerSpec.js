@@ -30,6 +30,9 @@ describe('ima.core.ObjectContainer', () => {
     path: { to: { property: constantObjectProperty } },
   };
 
+  let spreadConstantName = 'spreadConstant';
+  let spreadConstantValue = [classParent, classParent];
+
   let namespacePathUnit = 'test.unit';
   let namespacePathOC = 'test.unit.ObjectContainer';
   ns.namespace(namespacePathUnit);
@@ -43,7 +46,8 @@ describe('ima.core.ObjectContainer', () => {
   });
 
   it('should be clear entries', () => {
-    jest.spyOn(oc._entries, 'clear');
+    jest.spyOn(oc._entries, 'clear').mockImplementation();
+
     oc.clear();
 
     expect(oc._entries.clear).toHaveBeenCalled();
@@ -139,7 +143,7 @@ describe('ima.core.ObjectContainer', () => {
         dependencies
       );
       expect(oc._entries.size).toBe(2);
-      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._createEntry.mock.calls).toHaveLength(1);
       expect(oc._entries.get(classConstructor)).toStrictEqual(
         oc._entries.get(alias)
       );
@@ -192,7 +196,7 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias, classConstructor);
 
-      expect(oc._createEntry.calls.count()).toBe(0);
+      expect(oc._createEntry.mock.calls).toHaveLength(0);
       expect(oc._entries.get(alias)).toStrictEqual(
         oc._entries.get(classConstructor)
       );
@@ -205,7 +209,7 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias, classParent);
 
-      expect(oc._createEntry.calls.count()).toBe(0);
+      expect(oc._createEntry.mock.calls).toHaveLength(0);
       expect(oc._entries.get(alias)).toStrictEqual(
         oc._entries.get(classParent)
       );
@@ -245,7 +249,7 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.bind(alias2, classConstructor, []);
 
-      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._createEntry.mock.calls).toHaveLength(1);
       expect(oc._entries.get(alias2)).not.toStrictEqual(
         oc._entries.get(classConstructor)
       );
@@ -278,7 +282,7 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.provide(classParent, classConstructor, dependencies);
 
-      expect(oc._createEntry.calls.count()).toBe(1);
+      expect(oc._createEntry.mock.calls).toHaveLength(1);
       expect(oc._entries.size).toBe(2);
     });
   });
@@ -331,7 +335,7 @@ describe('ima.core.ObjectContainer', () => {
       jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
 
       expect(oc.get('entry')).toStrictEqual(entry.sharedInstance);
-      expect(oc._createInstanceFromEntry.calls.count()).toBe(0);
+      expect(oc._createInstanceFromEntry.mock.calls).toHaveLength(0);
     });
 
     it('should create new instance', () => {
@@ -341,6 +345,117 @@ describe('ima.core.ObjectContainer', () => {
       oc.get('entry');
 
       expect(oc._createInstanceFromEntry).toHaveBeenCalledWith(entry);
+    });
+
+    it('should find optional aliased entity', () => {
+      oc.bind(alias, classParent);
+      let entry = oc.get('?' + alias);
+
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
+    });
+
+    it('should not find optional aliased entity', () => {
+      let entry = oc.get('?undefined');
+
+      expect(entry).toBeUndefined();
+    });
+
+    it('should not find aliased entity and throw', () => {
+      expect(() => {
+        oc.get('undefined');
+      }).toThrow();
+    });
+
+    it('should find optional entity', () => {
+      oc.bind(alias, classParent);
+      let entry = oc.get([alias, { optional: true }]);
+
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
+    });
+
+    it('should not find optional entity', () => {
+      let entry = oc.get(['undefined', { optional: true }]);
+
+      expect(entry).toBeUndefined();
+    });
+
+    it('should find non optional entity', () => {
+      oc.bind(alias, classParent);
+      let entry = oc.get([alias, { optional: false }]);
+
+      expect(entry).not.toStrictEqual(classParent);
+    });
+
+    it('should not find non optional entity and throw', () => {
+      expect(() => {
+        oc.get(['undefined', { optional: false }]);
+      }).toThrow();
+    });
+
+    it('should find optional class entity', () => {
+      oc.bind(alias, classParent);
+      let entry = oc.get([classParent, { optional: true }]);
+
+      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).toBeDefined();
+      expect(entry).toBeInstanceOf(classParent);
+    });
+
+    it('should spread dependencies', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      let entry = oc.get('...' + spreadConstantName);
+
+      expect(entry).toHaveLength(2);
+      expect(entry[0]).not.toStrictEqual(classParent);
+    });
+
+    it('should spread dependencies with optional parameter', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, [
+        ...spreadConstantValue,
+        ['undefined', { optional: true }],
+      ]);
+
+      let entry = oc.get('...' + spreadConstantName);
+
+      expect(entry).toHaveLength(3);
+      expect(entry[2]).toBeUndefined();
+    });
+
+    it('should throw with undefined spread dependencies', () => {
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      expect(() => {
+        oc.get('...' + spreadConstantName);
+      }).toThrow();
+    });
+
+    it('should create new entry when spread', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      let entry1 = oc.get('...' + spreadConstantName);
+      let entry2 = oc.get(spreadConstantName);
+      let entry3 = oc.get('...?' + spreadConstantName);
+
+      expect(entry1[0]).toStrictEqual(entry3[0]);
+      expect(entry1[0]).not.toStrictEqual(entry2[0]);
+    });
+
+    it('should not spread dependencies', () => {
+      oc.bind(alias, classParent);
+      oc.constant(spreadConstantName, spreadConstantValue);
+
+      let entry = oc.get(spreadConstantName);
+
+      expect(entry).toHaveLength(2);
+      expect(entry[0]).toStrictEqual(classParent);
     });
   });
 

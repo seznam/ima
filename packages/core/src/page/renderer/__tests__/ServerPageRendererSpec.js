@@ -88,7 +88,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     pageRenderer._wrapEachKeyToPromise(params);
 
     expect(Promise.resolve).toHaveBeenCalledWith(param1);
-    expect(Promise.resolve.calls.count()).toBe(1);
+    expect(Promise.resolve.mock.calls).toHaveLength(1);
   });
 
   describe('update method', () => {
@@ -227,22 +227,24 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     let pageContent = null;
 
     beforeEach(() => {
-      spyOn(ReactDOMServer, 'renderToString').and.returnValue(pageMarkup);
-      spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
-        documentViewFactory
-      );
+      jest.spyOn(ReactDOMServer, 'renderToString').mockReturnValue(pageMarkup);
+      jest
+        .spyOn(rendererFactory, 'createReactElementFactory')
+        .mockReturnValue(documentViewFactory);
       jest
         .spyOn(ReactDOMServer, 'renderToStaticMarkup')
         .mockReturnValue(appMarkup);
-      spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
-        revivalSettings
-      );
-      spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
-        wrapedPageViewElement
-      );
-      spyOn(pageRenderer, '_getDocumentView').and.returnValue(documentView);
-      spyOn(controller, 'getMetaManager').and.returnValue(metaManager);
-      spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
+      jest
+        .spyOn(pageRenderer, '_getRevivalSettings')
+        .mockReturnValue(revivalSettings);
+      jest
+        .spyOn(pageRenderer, '_getWrappedPageView')
+        .mockReturnValue(wrapedPageViewElement);
+      jest
+        .spyOn(pageRenderer, '_getDocumentView')
+        .mockReturnValue(documentView);
+      jest.spyOn(controller, 'getMetaManager').mockReturnValue(metaManager);
+      jest.spyOn(rendererFactory, 'getUtils').mockReturnValue(utils);
 
       pageContent = pageRenderer._renderPageContentToString(
         controller,

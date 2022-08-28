@@ -75,9 +75,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       handlerRegistry
     );
 
-    spyOn(controllerInstance, 'getExtensions').and.returnValue([
-      extensionInstance,
-    ]);
+    jest
+      .spyOn(controllerInstance, 'getExtensions')
+      .mockReturnValue([extensionInstance]);
 
     route = routeFactory.createRoute(
       routeName,
@@ -403,7 +403,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should return extensions state together with active controller state', async () => {
-      spyOn(extensionInstance, 'load').and.returnValue({
+      jest.spyOn(extensionInstance, 'load').mockReturnValue({
         extension: 'extension',
       });
       jest
@@ -443,10 +443,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
-      spyOn(extensionInstance, 'switchToStateManager').and.stub();
-      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
-        resolver();
-      });
+      jest
+        .spyOn(extensionInstance, 'switchToStateManager')
+        .mockImplementation();
+      jest
+        .spyOn(extensionInstance, 'clearPartialState')
+        .mockImplementation(() => {
+          resolver();
+        });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
         extension: Promise.resolve(),
@@ -458,9 +462,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should clear partial state if resource is not loaded successfully', async () => {
-      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
-        resolver();
-      });
+      jest
+        .spyOn(extensionInstance, 'clearPartialState')
+        .mockImplementation(() => {
+          resolver();
+        });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
         extension: Promise.reject(),
@@ -605,7 +611,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should return extensions state together with active controller state', async () => {
-      spyOn(extensionInstance, 'update').and.returnValue({
+      jest.spyOn(extensionInstance, 'update').mockReturnValue({
         extension: 'extension',
       });
       jest
@@ -738,12 +744,17 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         onlyUpdate: () => true,
       });
 
-      jest.spyOn(newOptions, 'onlyUpdate');
+      //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
+      const spy = jest.spyOn(newOptions, 'onlyUpdate');
+      const mockSpyWrapper = (...args) => {
+        return spy(...args);
+      };
+      newOptions.onlyUpdate = mockSpyWrapper;
 
       expect(
         pageManager._hasOnlyUpdate(Controller, View, newOptions)
       ).toBeTruthy();
-      expect(newOptions.onlyUpdate).toHaveBeenCalledWith(Controller, View);
+      expect(spy).toHaveBeenCalledWith(Controller, View);
     });
 
     it('should return true for option onlyUpdate set to true and for same controller and view', () => {
@@ -766,7 +777,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_clearComponentState method', () => {
     it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
-      spyOn(pageRenderer, 'unmount').and.stub();
+      jest.spyOn(pageRenderer, 'unmount').mockImplementation();
 
       pageManager._clearComponentState({});
 

@@ -16,6 +16,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
+const expressStaticGzip = require('express-static-gzip');
 
 process.on('uncaughtException', error => {
   logger.error('Uncaught Exception', {
@@ -85,6 +86,7 @@ function staticErrorPage(err, req, res) {
 }
 
 const app = express();
+const staticDir = path.resolve(path.join(__dirname, '../build/static'));
 
 app
   .set('trust proxy', true)
@@ -97,8 +99,14 @@ app
   )
   .use(
     environment.$Server.staticFolder,
-    express.static(path.resolve(path.join(__dirname, '../build/static')))
+    expressStaticGzip(staticDir, {
+      enableBrotli: true,
+      index: false,
+      orderPreference: ['br'],
+      maxAge: '14d',
+    })
   )
+  .use(environment.$Server.staticFolder, express.static(staticDir))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(cookieParser())

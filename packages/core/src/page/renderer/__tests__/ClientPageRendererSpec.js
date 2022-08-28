@@ -85,12 +85,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         promises: { param2: params.param2 },
       });
 
-      jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
-      jest.spyOn(pageRenderer, '_renderToDOM').mockImplementation();
+      jest
+        .spyOn(pageRenderer, '_updateMetaAttributes')
+        .mockImplementation(() => {});
+      jest.spyOn(pageRenderer, '_renderToDOM').mockImplementation(() => {});
     });
 
     it('should set default page state values', function (done) {
-      jest.spyOn(controller, 'setState').mockImplementation();
+      jest.spyOn(controller, 'setState').mockImplementation(() => {});
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
@@ -105,7 +107,9 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should patch promises to state', function (done) {
-      jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
+      jest
+        .spyOn(pageRenderer, '_patchPromisesToState')
+        .mockImplementation(() => {});
       pageRenderer._firstTime = false;
 
       pageRenderer
@@ -137,14 +141,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-            Array [
-              Array [
-                Object {
+            [
+              [
+                {
                   "param1": "param1",
                 },
               ],
-              Array [
-                Object {
+              [
+                {
                   "param2": "param2",
                 },
               ],
@@ -159,7 +163,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should overwrite previous state values with undefined', done => {
-      jest.spyOn(controller, 'setState').mockImplementation();
+      jest.spyOn(controller, 'setState').mockImplementation(() => {});
       jest.spyOn(pageRenderer, '_patchStateToClearPreviousState');
       jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
 
@@ -187,7 +191,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should set page meta params', function (done) {
-      jest.spyOn(controller, 'setMetaParams').mockImplementation();
+      jest.spyOn(controller, 'setMetaParams').mockImplementation(() => {});
       jest.spyOn(controller, 'getState').mockReturnValue(pageState);
 
       pageRenderer
@@ -242,11 +246,13 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         promises: { param2: params.param2 },
       });
 
-      jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
+      jest
+        .spyOn(pageRenderer, '_updateMetaAttributes')
+        .mockImplementation(() => {});
     });
 
     it('should set default page state values', function (done) {
-      jest.spyOn(controller, 'setState').mockImplementation();
+      jest.spyOn(controller, 'setState').mockImplementation(() => {});
 
       pageRenderer
         .update(controller, params)
@@ -274,14 +280,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
           expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-            Array [
-              Array [
-                Object {
+            [
+              [
+                {
                   "param1": "param1",
                 },
               ],
-              Array [
-                Object {
+              [
+                {
                   "param2": "param2",
                 },
               ],
@@ -296,7 +302,9 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should patch promises to state', function (done) {
-      jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
+      jest
+        .spyOn(pageRenderer, '_patchPromisesToState')
+        .mockImplementation(() => {});
 
       pageRenderer
         .update(controller, params)
@@ -316,7 +324,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should set page meta params', function (done) {
-      jest.spyOn(controller, 'setMetaParams').mockImplementation();
+      jest.spyOn(controller, 'setMetaParams').mockImplementation(() => {});
       jest.spyOn(controller, 'getState').mockReturnValue(params);
 
       pageRenderer

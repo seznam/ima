@@ -15,6 +15,9 @@ describe('ima.core.event.DispatcherImpl', () => {
   beforeEach(() => {
     dispatcher = new Dispatcher();
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -118,16 +121,24 @@ describe('ima.core.event.DispatcherImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for handlers', () => {
-      jest.spyOn(handlers, 'handler1');
-      jest.spyOn(handlers, 'handler2');
+      const handler1Spy = jest.spyOn(handlers, 'handler1');
+      const handler2Spy = jest.spyOn(handlers, 'handler2');
 
-      dispatcher.listen(event, handlers.handler1);
-      dispatcher.listen(event, handlers.handler2);
+      //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
+      const handler1SpyWrapper = (...args) => {
+        return handler1Spy(...args);
+      };
+      const handler2SpyWrapper = (...args) => {
+        return handler2Spy(...args);
+      };
+
+      dispatcher.listen(event, handler1SpyWrapper);
+      dispatcher.listen(event, handler2SpyWrapper);
 
       dispatcher.fire(event, data);
 
-      expect(handlers.handler1).toHaveBeenCalledWith(data);
-      expect(handlers.handler2).toHaveBeenCalledWith(data);
+      expect(handler1Spy).toHaveBeenCalledWith(data);
+      expect(handler2Spy).toHaveBeenCalledWith(data);
     });
 
     it('should show warning for none listeners', () => {
@@ -148,7 +159,8 @@ describe('ima.core.event.DispatcherImpl', () => {
   });
 
   describe('clear method', () => {
-    it('should cleared dispatcher', () => {
+    it('should clear dispatcher', () => {
+      jest.restoreAllMocks();
       dispatcher.listen(event, handlers.handler1, handlers);
       dispatcher.listen(event, handlers.handler2, handlers);
 

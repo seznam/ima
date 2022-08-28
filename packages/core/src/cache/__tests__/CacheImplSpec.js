@@ -191,7 +191,7 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should throw error for serialize if value is instance of Promise', () => {
-    jest.spyOn(console, 'warn');
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     cache.set('promise', Promise.resolve('promise'));
 
@@ -203,7 +203,7 @@ describe('ima.core.cache.CacheImpl', () => {
 
   describe('_canSerializeValue method', () => {
     beforeEach(() => {
-      jest.spyOn(console, 'warn');
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     it('should return false for Date', () => {

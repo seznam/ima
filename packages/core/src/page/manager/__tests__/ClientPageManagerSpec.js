@@ -79,9 +79,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       viewInstance
     );
 
-    spyOn(controllerInstance, 'getExtensions').and.returnValue([
-      extensionInstance,
-    ]);
+    jest
+      .spyOn(controllerInstance, 'getExtensions')
+      .mockReturnValue([extensionInstance]);
   });
 
   it('should be listening for all custom events', () => {
@@ -132,20 +132,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         .spyOn(pageManager, '_parseCustomEvent')
         .mockReturnValue(parsedCustomEvent);
 
-      jest.spyOn(console, 'warn').mockImplementation();
-    });
-
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('should do nothing if active controller is null', () => {
-      pageManager._managedPage.controllerInstance = null;
-
-      pageManager._onCustomEventHandler(event);
-
       expect(console.warn).not.toHaveBeenCalled();
-    });
 
     it('should handle event only with controller', () => {
       jest

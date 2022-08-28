@@ -304,11 +304,11 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "error" route', done => {
       let params = { error: new Error('test') };
 
-      spyOn(router._routeHandlers, 'get').and.returnValue(route);
-      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+      jest.spyOn(router._routeHandlers, 'get').mockReturnValue(route);
+      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
       });
-      spyOn(router, '_runMiddlewares').and.callThrough();
+      jest.spyOn(router, '_runMiddlewares');
 
       jest.spyOn(router, '_handle').mockReturnValue(
         Promise.resolve({
@@ -397,11 +397,11 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "notFound" route', done => {
       let params = { error: new GenericError() };
 
-      spyOn(router._routeHandlers, 'get').and.returnValue(route);
-      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+      jest.spyOn(router._routeHandlers, 'get').mockReturnValue(route);
+      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
       });
-      spyOn(router, '_runMiddlewares').and.callThrough();
+      jest.spyOn(router, '_runMiddlewares');
 
       jest.spyOn(router, '_handle').mockReturnValue(
         Promise.resolve({

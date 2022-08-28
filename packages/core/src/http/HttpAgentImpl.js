@@ -231,7 +231,7 @@ export default class HttpAgentImpl extends HttpAgent {
     options = this._prepareOptions(options);
 
     if (options.cache) {
-      let cachedData = this._getCachedData(method, url, data);
+      const cachedData = this._getCachedData(method, url, data);
 
       if (cachedData) {
         return cachedData;
@@ -258,7 +258,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *         no such request is present in the cache.
    */
   _getCachedData(method, url, data) {
-    let cacheKey = this.getCacheKey(method, url, data);
+    const cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
       return this._internalCacheOfPromises
@@ -267,7 +267,7 @@ export default class HttpAgentImpl extends HttpAgent {
     }
 
     if (this._cache.has(cacheKey)) {
-      let cacheData = this._cache.get(cacheKey);
+      const cacheData = this._cache.get(cacheKey);
 
       return Promise.resolve(cacheData);
     }
@@ -290,9 +290,9 @@ export default class HttpAgentImpl extends HttpAgent {
    *         with the body parsed as JSON.
    */
   _request(method, url, data, options) {
-    let cacheKey = this.getCacheKey(method, url, data);
+    const cacheKey = this.getCacheKey(method, url, data);
 
-    let cachePromise = this._proxy.request(method, url, data, options).then(
+    const cachePromise = this._proxy.request(method, url, data, options).then(
       response => this._proxyResolved(response),
       error => this._proxyRejected(error)
     );
@@ -320,7 +320,7 @@ export default class HttpAgentImpl extends HttpAgent {
       headersRaw: response.headersRaw,
       cached: false,
     };
-    let cacheKey = this.getCacheKey(
+    const cacheKey = this.getCacheKey(
       agentResponse.params.method,
       agentResponse.params.url,
       agentResponse.params.data
@@ -332,7 +332,7 @@ export default class HttpAgentImpl extends HttpAgent {
       this._setCookiesFromResponse(agentResponse);
     }
 
-    let { postProcessor, cache } = agentResponse.params.options;
+    const { postProcessor, cache } = agentResponse.params.options;
     if (typeof postProcessor === 'function') {
       agentResponse = postProcessor(agentResponse);
     }
@@ -362,22 +362,22 @@ export default class HttpAgentImpl extends HttpAgent {
    *         failure.
    */
   _proxyRejected(error) {
-    let errorParams = error.getParams();
-    let method = errorParams.method;
-    let url = errorParams.url;
-    let data = errorParams.data;
+    const errorParams = error.getParams();
+    const method = errorParams.method;
+    const url = errorParams.url;
+    const data = errorParams.data;
 
     if (errorParams.options.repeatRequest > 0) {
       errorParams.options.repeatRequest--;
 
       return this._request(method, url, data, errorParams.options);
     } else {
-      let cacheKey = this.getCacheKey(method, url, data);
+      const cacheKey = this.getCacheKey(method, url, data);
       this._internalCacheOfPromises.delete(cacheKey);
 
-      let errorName = errorParams.errorName;
-      let errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
-      let agentError = new GenericError(errorMessage, errorParams);
+      const errorName = errorParams.errorName;
+      const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
+      const agentError = new GenericError(errorMessage, errorParams);
       return Promise.reject(agentError);
     }
   }
@@ -392,7 +392,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(options) {
-    let composedOptions = Object.assign(
+    const composedOptions = Object.assign(
       {},
       this._defaultRequestOptions,
       options
@@ -464,15 +464,33 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _saveAgentResponseToCache(agentResponse) {
-    let cacheKey = this.getCacheKey(
+    /**
+     * Create copy of agentResponse without AbortController and AbortController signal.
+     * Setting agentResponse with AbortController or signal into cache would result in crash.
+     */
+    const { signal, ...fetchOptions } =
+      agentResponse.params.options.fetchOptions || {};
+    const { abortController, ...options } = agentResponse.params.options || {};
+
+    options.fetchOptions = fetchOptions;
+
+    const cacheKey = this.getCacheKey(
       agentResponse.params.method,
       agentResponse.params.url,
       agentResponse.params.data
     );
 
     agentResponse.cached = true;
-    let ttl = agentResponse.params.options.ttl;
-    this._cache.set(cacheKey, agentResponse, ttl);
+
+    this._cache.set(
+      cacheKey,
+      {
+        ...agentResponse,
+        params: { ...agentResponse.params, options },
+      },
+      agentResponse.params.options.ttl
+    );
+
     agentResponse.cached = false;
   }
 }

@@ -10,7 +10,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
   beforeEach(() => {
     window = new Window();
-    spyOn(window, 'getWindow').and.returnValue({
+    jest.spyOn(window, 'getWindow').mockReturnValue({
       history: { scrollRestoration: 'auto' },
     });
 
@@ -93,7 +93,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
       handler.handlePreManagedState(null, nextManagedPage, {});
@@ -103,7 +103,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('window should be scrolled to the top if routers autoScroll option was set to true.', () => {
-      spyOn(window, 'scrollTo').and.stub();
+      jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState(null, nextManagedPage, {});

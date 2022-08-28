@@ -72,6 +72,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
     };
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   using(['get', 'post', 'put', 'patch', 'delete'], method => {
     describe(method + ' method', () => {
       beforeEach(() => {
@@ -118,7 +122,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           () => {},
           error => {
             expect(error instanceof GenericError).toBe(true);
-            expect(proxy.request.calls.count()).toBe(2);
+            expect(proxy.request.mock.calls).toHaveLength(2);
             done();
           }
         );
@@ -129,14 +133,16 @@ describe('ima.core.http.HttpAgentImpl', () => {
           return Promise.resolve(data);
         });
         jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
-        jest.spyOn(cookie, 'parseFromSetCookieHeader');
+        jest
+          .spyOn(cookie, 'parseFromSetCookieHeader')
+          .mockImplementation(() => {});
 
         http[method](
           data.params.url,
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(cookie.parseFromSetCookieHeader.calls.count()).toBe(2);
+          expect(cookie.parseFromSetCookieHeader.mock.calls).toHaveLength(2);
           done();
         });
       });
@@ -174,11 +180,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should clone result from _internalCacheOfPromises', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        spyOn(Helper, 'clone').and.stub();
+        jest.spyOn(Helper, 'clone').mockImplementation();
 
         //the first call without a response in the _internalCacheOfPromises
         http[method](
