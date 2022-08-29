@@ -135,15 +135,17 @@ export default class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension) {
-    this._extensions.set(extension, extension);
-  }
+  addExtension(extension, extensionInstance) {
+    if (!extensionInstance && typeof extension !== 'object') {
+      throw new Error(
+        `ima.core.AbstractController:addExtension Extension instance expected.`
+      );
+    }
 
-  /**
-   * @inheritdoc
-   */
-  addExtensionWithKey(extension, extensionInstance) {
-    this._extensions.set(extension, extensionInstance);
+    this._extensions.set(
+      extension,
+      extensionInstance ? extensionInstance : extension
+    );
   }
 
   /**

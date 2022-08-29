@@ -25,15 +25,30 @@ export default class PageFactory {
    * @return {Controller}
    */
   createController(controller, extensions = []) {
-    if (Array.isArray(controller.$extensions) && controller.$extensions.length)
-      extensions = extensions.concat(controller?.$extensions);
+    let mergedExtensions = [...extensions];
+    if (
+      Array.isArray(controller.$extensions) &&
+      controller.$extensions.length
+    ) {
+      mergedExtensions = mergedExtensions.concat(controller.$extensions);
+    }
 
     let controllerInstance = this._oc.create(controller);
-    for (let extension of extensions) {
-      controllerInstance.addExtensionWithKey(
-        extension,
-        this._oc.get(extension)
-      );
+
+    for (let extension of mergedExtensions) {
+      let loadedExtension = this._oc.get(extension);
+      if (!loadedExtension) {
+        //Optional extension handling
+        continue;
+      }
+      if (Array.isArray(loadedExtension)) {
+        //Spread support handling
+        for (let extensionInstance of loadedExtension) {
+          controllerInstance.addExtension(extensionInstance);
+        }
+      } else {
+        controllerInstance.addExtension(extension, loadedExtension);
+      }
     }
 
     return controllerInstance;
