@@ -12,15 +12,8 @@ function createRollupConfig(callback) {
     output: [
       {
         dir: './dist',
-        entryFileNames: '[name].cjs',
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true,
-      },
-      {
-        dir: './dist',
         entryFileNames: '[name].js',
-        format: 'esm',
+        format: 'cjs',
         exports: 'named',
         sourcemap: true,
       },

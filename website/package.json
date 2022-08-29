@@ -7,7 +7,7 @@
     "start": "docusaurus start",
     "dev": "docusaurus start",
     "build:api": "node ./scripts/jsdoc2md.mjs",
-    "build": "npm run build:api; docusaurus build",
+    "build:doc": "npm run build:api; docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

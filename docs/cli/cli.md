@@ -47,7 +47,7 @@ Run application in development watch mode
 Options:
   --version         Show version number  [boolean]
   --help            Show help  [boolean]
-  --clean           Clean build folder before building the application  [boolean] [default: false]
+  --clean           Clean build folder before building the application  [boolean] [default: true]
   --clearCache      Deletes node_modules/.cache directory to invalidate loaders cache  [boolean]
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
   --publicPath      Webpack public path to specify base for all assets in the app  [string]
@@ -86,20 +86,13 @@ Options:
   --profile         Turn on profiling support in production  [boolean] [default: false]
 ```
 
-:::note
-
-Additionally in comparison with dev command, the build has `clean` option enabled by default.
-
-:::
-
-
 ## CLI options
 
 Most of the following options are available for both `dev` and `build` commands, however some may be exclusive to only one of them. You can always use the `--help` argument to show all available options for each command.
 
 :::tip
 
-When you run into any issues with the application build, you can always run the app with `npx ima dev --clean --clearCache` to make sure that all cache and tmp files are deleted before next build and see if this resolves your issues.
+When you run into any issues with the application build, you can always run the app with `npx ima dev --clearCache` to make sure that all cache and tmp files are deleted before next build and see if this resolves your issues.
 
 Similarly you can use the `--verbose` option to show more information during build that can aid you in **debugging process** in case anything happens.
 
@@ -115,15 +108,9 @@ Prints help dialog.
 
 ### --clean
 
-> `boolean = false`
+> `boolean = true`
 
 Deletes `./build` folder before running the application.
-
-:::note
-
-This defaults to `true` for `build` command.
-
-:::
 
 ### --clearCache
 
@@ -180,7 +167,7 @@ Following options are used to customize the companion dev server location (only 
 
 :::tip
 
-If you provide `port` and `hostname`, you don't need to define the `publicUrl`. The CLI will create it automatically. Unless the publicUrl is completely different than the hostname and port provided.
+If you provide `port` and `hostname`, you don't need to define the `publicUrl`, the CLI will create it automatically, unless the `publicUrl` is completely different than the `hostname` and `port` provided.
 
 :::
 

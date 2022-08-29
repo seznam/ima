@@ -182,7 +182,7 @@ Everything in this folder is copied to the `./build/static/public` and available
 
 ## Compression
 
-When you built the application bundle, all static assets are additionally compressed using `brotli` and `gzip` compression (with `.br` and `.gz` extensions respectively). To customize the selection of compression algorithms, take a look at [ima.config.js](./ima.config.js.md#compression) configuration section.
+When you built the application bundle, all static assets are additionally compressed using `brotli` and `gzip` compression (with `.br` and `.gz` extensions respectively). To customize this behavior, take a look at [ima.config.js](./ima.config.js.md#compress) configuration section.
 
 
 ## Languages

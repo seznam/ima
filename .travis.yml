@@ -1,24 +1,22 @@
+dist: focal
 language: node_js
 
 install:
   - npm ci
 
-dist: focal
-
 jobs:
   include:
-    - name: "Unit Tests"
-      script: npm test
-    - name: "Lint"
-      script: npm run lint
-    - name: "Stylelint"
-      script: npm run stylelint
-    - name: "Docs"
-      script: npm run doc
-    - name: "Benchmark Test"
-      script: npm run benchmark
-    # - name: "Audit"
-    #   script: npm audit || echo \"audit found some vulnerabilities.\"
+    - name: "CI"
+      script:
+      # We run build as part of postinstall script, so we can skip it, but if it ever changes, this has to be uncommented
+      # - npm run build
+      - npm run lint
+      - npm run stylelint
+      - npm run test:all
+      - npm run test:size
+      - npm run doc
+      - npm run benchmark
+      # - npm audit || echo \"audit found some vulnerabilities.\"
     - if: branch =~ /^(master|next)$/
       stage: "deploy"
       script:

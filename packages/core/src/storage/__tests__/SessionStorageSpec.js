@@ -15,7 +15,7 @@ describe('ima.storage.SessionStorage', () => {
   beforeEach(() => {
     window = new Window();
 
-    spyOn(window, 'getWindow').and.returnValue({ sessionStorage });
+    jest.spyOn(window, 'getWindow').mockReturnValue({ sessionStorage });
 
     session = new SessionStorage(window);
 
