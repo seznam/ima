@@ -24,7 +24,8 @@ export default class PageFactory {
    * @param {(string|function(new:Controller))} controller
    * @return {Controller}
    */
-  createController(controller, extensions = []) {
+  createController(controller, options) {
+    let { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (
       Array.isArray(controller.$extensions) &&
@@ -38,11 +39,11 @@ export default class PageFactory {
     for (let extension of mergedExtensions) {
       let loadedExtension = this._oc.get(extension);
       if (!loadedExtension) {
-        //Optional extension handling
+        // Optional extension handling
         continue;
       }
       if (Array.isArray(loadedExtension)) {
-        //Spread support handling
+        // Spread support handling
         for (let extensionInstance of loadedExtension) {
           controllerInstance.addExtension(extensionInstance);
         }

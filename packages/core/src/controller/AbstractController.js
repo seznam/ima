@@ -138,7 +138,7 @@ export default class AbstractController extends Controller {
   addExtension(extension, extensionInstance) {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
-        `ima.core.AbstractController:addExtension Extension instance expected.`
+        `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
       );
     }
 
