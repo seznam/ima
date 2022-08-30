@@ -11,16 +11,16 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
     "./website",
+    "./packages/helpers",
     "./packages/dev-utils",
+    "./packages/core",
+    "./packages/server",
     "./packages/devtools-scripts",
     "./packages/cli",
-    "./packages/core",
     "./packages/create-ima-app",
     "./packages/devtools",
     "./packages/error-overlay",
-    "./packages/helpers",
-    "./packages/hmr-client",
-    "./packages/server"
+    "./packages/hmr-client"
   ],
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
