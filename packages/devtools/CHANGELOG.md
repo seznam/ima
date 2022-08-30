@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.4.0-rc.1
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+
 ## 0.4.0-rc.0
 
 ### Minor Changes

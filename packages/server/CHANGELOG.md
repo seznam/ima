@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+- Updated dependencies [a2709cb0]
+- Updated dependencies [486e2cde]
+  - @ima/dev-utils@18.0.0-rc.5
+  - @ima/helpers@18.0.0-rc.3
+
 ## 18.0.0-rc.4
 
 ### Major Changes
