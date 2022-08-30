@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 const { createLogger, format, transports, config } = require('winston');
+const TransportStream = require('winston-transport');
 const { printf, combine, json } = format;
 const { formatError: devFormatError } = require('@ima/dev-utils/dist/cliUtils');
 
@@ -22,7 +23,7 @@ function colorizeLevel(level) {
       return chalk.bold.gray(`${level}: `);
   }
 }
-class ConsoleAsync extends transports.Stream {
+class ConsoleAsync extends TransportStream {
   constructor(options = {}) {
     super(options);
 
