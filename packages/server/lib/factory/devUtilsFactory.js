@@ -3,16 +3,15 @@ const path = require('path');
 module.exports = function devUtilsFactory({ environment }) {
   const modulePathCache = new Map();
 
-  function requireUncached(module) {
+  function requireUncached(module, options = {}) {
     if (!modulePathCache.has(module)) {
       modulePathCache.set(module, path.resolve(module));
     }
 
     const modulePath = modulePathCache.get(module);
 
+    const moduleName = require.resolve(modulePath);
     if (environment.$Env === 'dev') {
-      const moduleName = require.resolve(modulePath);
-
       if (!moduleName) {
         return;
       }
@@ -20,6 +19,10 @@ module.exports = function devUtilsFactory({ environment }) {
       searchCache(moduleName, function (mod) {
         delete require.cache[mod.id];
       });
+    }
+
+    if (!moduleName && options.optional) {
+      return;
     }
 
     return require(modulePath);
