@@ -24,11 +24,11 @@ export default class PageFactory {
    * @param {(string|function(new:Controller))} controller
    * @return {Controller}
    */
-  createController(controller, options) {
+  createController(controller, options = {}) {
     let { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (
-      Array.isArray(controller.$extensions) &&
+      Array.isArray(controller?.$extensions) &&
       controller.$extensions.length
     ) {
       mergedExtensions = mergedExtensions.concat(controller.$extensions);
