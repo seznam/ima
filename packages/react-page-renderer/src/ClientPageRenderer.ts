@@ -8,8 +8,9 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
-import { Component, ComponentType } from 'react';
+import { ComponentType, ReactElement } from 'react';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
+import { Root } from 'react-dom/client';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
@@ -25,6 +26,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   private _firstTime = true;
   private _window: Window;
+  private _reactRoot?: Root;
   /**
    * The HTML element containing the current application view for the
    * current route.
@@ -73,7 +75,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     const loadedPromises = separatedData.promises;
 
     if (!this._firstTime) {
-      this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
@@ -99,6 +100,29 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         };
       })
       .catch((error: Error) => this._handleError(error));
+  }
+
+  render(props = {}) {
+    if (this._viewAdapter) {
+      const renderCallback = () =>
+        this._dispatcher.fire(RendererEvents.UPDATED, { props }, true);
+
+      if (this._reactRoot) {
+        const viewAdapterElement = this._getViewAdapterElement(
+          Object.assign(props, {
+            renderCallback,
+          })
+        );
+
+        this._reactRoot.render(viewAdapterElement);
+      } else if (this._viewContainer) {
+        render(
+          this._getViewAdapterElement(props) as ReactElement,
+          this._viewContainer,
+          renderCallback
+        );
+      }
+    }
   }
 
   /**
@@ -135,9 +159,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * @inheritdoc
    */
   unmount() {
-    if (this._reactiveView && this._viewContainer) {
+    if (this._viewContainer) {
       if (unmountComponentAtNode(this._viewContainer)) {
-        this._reactiveView = undefined;
         this._dispatcher.fire(
           RendererEvents.UNMOUNTED,
           { type: RendererTypes.UNMOUNT },
@@ -225,41 +248,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       });
   }
 
-  // TODO IMA@18
-  /**
-   * The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
-   */
-  private _setStateWithoutRendering(
-    controller: Controller,
-    defaultPageState: { [key: string]: unknown }
-  ) {
-    const patchState = this._patchStateToClearPreviousState(defaultPageState);
-
-    const reactiveView = this._reactiveView;
-    this._reactiveView = undefined;
-
-    controller.setState(patchState);
-    this._reactiveView = reactiveView;
-  }
-
-  private _patchStateToClearPreviousState(state: { [key: string]: unknown }) {
-    // TODO check if this condition is ok - state is empty or reactiveView does not have state at all?
-    if (
-      !this._reactiveView ||
-      (this._reactiveView instanceof Component && !this._reactiveView.state)
-    ) {
-      return state;
-    }
-
-    if (this._reactiveView instanceof Component) {
-      Object.keys(this._reactiveView.state).forEach(key => {
-        state[key] = state[key] !== undefined ? state[key] : undefined;
-      });
-    }
-
-    return state;
-  }
-
   /**
    * Renders the current route to DOM.
    *
@@ -270,12 +258,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     view: ComponentType,
     routeOptions: RouteOptions
   ) {
-    const reactElementView = this._getWrappedPageView(
-      controller,
-      view,
-      routeOptions
-    );
+    this._prepareViewAdapter(controller, view, routeOptions);
 
+    const reactElementView = this._getViewAdapterElement() as ReactElement;
     const masterElementId = this._settings.$Page.$Render.masterElementId;
     this._viewContainer = this._window.getElementById(
       masterElementId as string
@@ -302,20 +287,16 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
-        this._reactiveView = hydrate(
-          reactElementView,
-          this._viewContainer as Element,
-          () => {
-            this._dispatcher.fire(
-              RendererEvents.MOUNTED,
-              { type: RendererTypes.HYDRATE },
-              true
-            );
-          }
-        );
+        hydrate(reactElementView, this._viewContainer as Element, () => {
+          this._dispatcher.fire(
+            RendererEvents.MOUNTED,
+            { type: RendererTypes.HYDRATE },
+            true
+          );
+        });
       });
     } else {
-      this._reactiveView = render(reactElementView, this._viewContainer, () => {
+      render(reactElementView, this._viewContainer, () => {
         this._dispatcher.fire(
           RendererEvents.MOUNTED,
           { type: RendererTypes.RENDER },

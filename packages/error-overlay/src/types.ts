@@ -2,6 +2,10 @@ import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitte
 
 import { StackFrame } from '@/entities';
 
+declare module '*.less' {
+  export const use: (args?: Record<string, unknown>) => void;
+}
+
 declare global {
   interface Window {
     __IMA_HMR: ErrorOverlayEmitter;

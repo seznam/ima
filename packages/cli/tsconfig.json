@@ -1,19 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": [
-      "ES2022"
-    ],
-    "resolveJsonModule": true,
-    "outDir": "./dist",
-    "baseUrl": ".",
-    "typeRoots": [
-      "./node_modules/@types",
-      "../../node_modules/@types",
-    ],
+    "outDir": "dist",
   },
   "include": [
-    "./typings/**/*",
-    "./src/**/*"
+    "src"
   ]
 }

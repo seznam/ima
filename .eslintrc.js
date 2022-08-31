@@ -5,7 +5,6 @@ module.exports = {
     '**/dist/**',
     '**/build/**',
     '**/docs/**',
-    '**/.turbo/**',
     '**/.docusaurus/**',
     '**/coverage/**',
     'packages/create-ima-app/examples/todos/assets/**',
@@ -23,6 +22,15 @@ module.exports = {
       'error',
       {
         allow: ['warn', 'error'],
+      },
+    ],
+    'no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        ignoreRestSiblings: true,
       },
     ],
 
@@ -158,7 +166,15 @@ module.exports = {
           'error',
           { 'ts-expect-error': 'allow-with-description' },
         ],
-        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            destructuredArrayIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+          },
+        ],
         '@typescript-eslint/no-namespace': [
           'error',
           { allowDeclarations: true },
@@ -187,9 +203,6 @@ module.exports = {
     },
     {
       files: ['packages/devtools/**', 'packages/create-ima-app/**'],
-      rules: {
-        'no-unused-vars': 'warn',
-      },
       globals: {
         chrome: true,
         FB: true,

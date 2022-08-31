@@ -1,5 +1,23 @@
 # Change Log
 
+## 18.0.0-rc.5
+
+### Major Changes
+
+- 5ef9bbfa: Added optional and spread dependencies in ObjectContainer
+
+### Minor Changes
+
+- f90bb056: Added support for AbortController
+- 3e8d1eeb: Added support for async controller and view imports in routing
+  Added `get` public method to `Router` for getting route handlers
+  Added `preload` public method to `Route` class, for async view and controllers preloading. Can be used in conjunction with the new `get` method for getting specific route handlers (routes) from `Router`.
+  Updated Router documentation
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+
 ## 18.0.0-rc.4
 
 ### Major Changes

@@ -1,11 +1,12 @@
 import memoizeOne from 'memoize-one';
-import { Component, ComponentType, createElement } from 'react';
+import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
 import PageContext from './PageContext';
 import { Utils } from './types';
 
-interface Props {
+export interface ViewAdapterProps {
   $Utils: Utils;
+  renderCallback?: () => void;
   state: State;
   view: ComponentType;
 }
@@ -18,30 +19,20 @@ interface State {
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
-export default class ViewAdapter extends Component<Props, State> {
-  private _getContextValue: (props: Props, state: State) => { $Utils: Utils };
+export default class ViewAdapter extends Component<ViewAdapterProps, State> {
+  private _getContextValue: (
+    props: ViewAdapterProps,
+    state: State
+  ) => { $Utils: Utils };
   private _view: ComponentType;
 
   contextSelectors: Array<
-    (props: Props, state: State) => { [key: string]: unknown }
+    (props: ViewAdapterProps, state: State) => { [key: string]: unknown }
   > = [];
   createContext: (
     $Utils: Utils,
     values: { [key: string]: unknown }
   ) => { $Utils: Utils };
-
-  static getDerivedStateFromProps(props: Props, state: State): State {
-    //we want use props.state only when props changed
-    //temp indicator notUsePropsState is set by AbstractPageRenderer
-    if (state.notUsePropsState) {
-      return Object.assign({}, state, {
-        $pageView: props.state.$pageView,
-        notUsePropsState: undefined,
-      });
-    }
-
-    return props.state;
-  }
 
   /**
    * Initializes the adapter component.
@@ -49,7 +40,7 @@ export default class ViewAdapter extends Component<Props, State> {
    * @param props Component properties, containing the actual page view
    *        and the initial page state to pass to the view.
    */
-  constructor(props: Props) {
+  constructor(props: ViewAdapterProps) {
     super(props);
 
     /**
@@ -82,7 +73,7 @@ export default class ViewAdapter extends Component<Props, State> {
     );
   }
 
-  getContextValue(props: Props, state: State) {
+  getContextValue(props: ViewAdapterProps, state: State) {
     const selectedValues = this.contextSelectors.map(selector =>
       selector(props, state)
     );
@@ -100,7 +91,16 @@ export default class ViewAdapter extends Component<Props, State> {
     return createElement(
       PageContext.Provider,
       { value: this._getContextValue(this.props, this.state) },
-      createElement(this._view, this.state)
+      createElement(
+        this._view as ComponentClass,
+        Object.assign(this.state, {
+          ref: () => {
+            if (this.props.renderCallback) {
+              this.props.renderCallback();
+            }
+          },
+        })
+      )
     );
   }
 }

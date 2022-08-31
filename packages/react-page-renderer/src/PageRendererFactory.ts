@@ -1,5 +1,5 @@
 import { ComponentUtils } from '@ima/core';
-import { Component, ComponentType, createElement, PureComponent } from 'react';
+import { Component, ComponentType, PureComponent } from 'react';
 
 /**
  * Factory for page render.
@@ -37,16 +37,14 @@ export default class PageRendererFactory {
    * @return The constructor of the document
    *         view component.
    */
-  getDocumentView(documentView: ComponentType | string) {
-    const documentViewComponent = this._resolveClassConstructor(documentView);
-
+  getDocumentView(documentView: ComponentType) {
     if ($Debug) {
-      const componentPrototype = documentViewComponent.prototype;
+      const componentPrototype = documentView.prototype;
 
       if (
         !(
           componentPrototype instanceof PureComponent ||
-          this._isFunctionalComponent(documentViewComponent)
+          this._isFunctionalComponent(documentView)
         )
       ) {
         throw new Error(
@@ -55,7 +53,7 @@ export default class PageRendererFactory {
       }
     }
 
-    return documentViewComponent;
+    return documentView;
   }
 
   /**
@@ -69,13 +67,9 @@ export default class PageRendererFactory {
    * @return The constructor of the managed
    *         root view component.
    */
-  getManagedRootView(managedRootView: ComponentType | string) {
-    const managedRootViewComponent = this._resolveClassConstructor(
-      managedRootView as ComponentType
-    );
-
+  getManagedRootView(managedRootView: ComponentType) {
     if ($Debug) {
-      const componentPrototype = managedRootViewComponent.prototype;
+      const componentPrototype = managedRootView.prototype;
 
       if (
         !(
@@ -89,65 +83,7 @@ export default class PageRendererFactory {
       }
     }
 
-    return managedRootViewComponent;
-  }
-
-  /**
-   * Wraps the provided view into the view adapter so it can access the state
-   * passed from controller through the {@code props} property instead of the
-   * {@code state} property.
-   *
-   * @param view The namespace path
-   *        pointing to the view component, or the constructor
-   *        of the {@code React.Component}.
-   * @param props The initial props to pass to the view.
-   * @return View adapter handling passing the controller's
-   *         state to an instance of the specified page view through
-   *         properties.
-   */
-  wrapView(view: ComponentType | string, props: { [key: string]: unknown }) {
-    return createElement(
-      this._resolveClassConstructor(view as ComponentType),
-      props
-    );
-  }
-
-  /**
-   * Return a function that produces ReactElements of a given type.
-   * Like React.createElement.
-   *
-   * @param view The react
-   *        component for which a factory function should be created.
-   * @return The created factory
-   *         function. The factory accepts an object containing the
-   *         component's properties as the argument and returns a rendered
-   *         component.
-   */
-  createReactElementFactory(view: ComponentType | string) {
-    return createElement.bind(null, view);
-  }
-
-  /**
-   * Returns the class constructor of the specified view component.
-   * View may be specified as a namespace path or as a class
-   * constructor.
-   *
-   * @param view The namespace path
-   *        pointing to the view component, or the constructor
-   *        of the {@code React.Component}.
-   * @return The constructor of the view
-   *         component.
-   */
-  private _resolveClassConstructor(
-    view: ComponentType | string
-  ): ComponentType {
-    if ($Debug && typeof view === 'string') {
-      throw new Error(
-        `The namespace was removed. You must pass react component instead of namespace ${view}.`
-      );
-    }
-
-    return view as ComponentType;
+    return managedRootView;
   }
 
   private _isFunctionalComponent(component: unknown) {

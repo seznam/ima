@@ -1,6 +1,6 @@
 {
   "name": "@ima/helpers",
-  "version": "18.0.0-rc.2",
+  "version": "18.0.0-rc.3",
   "description": "Various helpers for the IMA.js framework.",
   "keywords": [
     "ima",
@@ -16,15 +16,13 @@
   },
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js",
-    "preversion": "npm test"
+    "test": "jest"
   },
   "dependencies": {
     "clone": "^2.1.2"

@@ -1,12 +1,9 @@
-import {
-  Controller,
-  Dispatcher,
-  PageRenderer,
-  RendererEvents,
-} from '@ima/core';
-import { ComponentType, Component } from 'react';
+import { Controller, Dispatcher, PageRenderer } from '@ima/core';
+import { ComponentType, createElement } from 'react';
 
-import BlankManagedRootView from './BlankManagedRootView';
+import BlankManagedRootView, {
+  ManagedRootViewProps,
+} from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
 import { Helpers, RouteOptions, Settings } from './types';
 import ViewAdapter from './ViewAdapter';
@@ -15,12 +12,12 @@ import ViewAdapter from './ViewAdapter';
  * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
 export default abstract class AbstractPageRenderer extends PageRenderer {
-  protected _factory: PageRendererFactory;
-  // TODO import * as $Helper from '@ima/helpers'; (not a type)
-  protected _helpers: Helpers;
   protected _dispatcher: Dispatcher;
+  protected _factory: PageRendererFactory;
+  protected _helpers: Helpers;
   protected _settings: Settings;
-  protected _reactiveView?: Component | Element | void;
+  protected _viewAdapter?: ComponentType;
+  protected _viewAdapterProps = {};
 
   /**
    * Initializes the abstract page renderer.
@@ -103,15 +100,16 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   /**
    * @inheritdoc
    */
-  setState(state = {}) {
-    if (this._reactiveView instanceof Component) {
-      // add temp indicator (in viewAdapter method getDerivedStateFromProps is unset) for indicate whether not to use state in props
-      const stateWithIndicator = Object.assign({}, state, {
-        notUsePropsState: true,
-      });
-      this._reactiveView.setState(stateWithIndicator, () => {
-        this._dispatcher.fire(RendererEvents.UPDATED, { state }, true);
-      });
+  abstract render(props: unknown): void;
+
+  /**
+   * @inheritdoc
+   */
+  _getViewAdapterElement(props = {}) {
+    if (this._viewAdapter) {
+      this._viewAdapterProps = Object.assign(this._viewAdapterProps, props);
+
+      return createElement(this._viewAdapter, this._viewAdapterProps);
     }
   }
 
@@ -121,14 +119,16 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    * @param view The page view React component to wrap.
    * @param state
    */
-  protected _generateViewProps(
+  protected _generateViewAdapterProps(
     view: ComponentType,
+    pageView: ComponentType,
     state: { [key: string]: unknown } = {}
-  ): { [key: string]: unknown } {
+  ): ManagedRootViewProps {
     const props = {
-      view,
-      state,
       $Utils: this._factory.getUtils(),
+      pageView,
+      state,
+      view,
     };
 
     return props;
@@ -139,7 +139,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    *
    * @param routeOptions The current route options.
    */
-  protected _getWrappedPageView(
+  protected _prepareViewAdapter(
     controller: Controller,
     view: ComponentType,
     routeOptions: RouteOptions
@@ -149,17 +149,16 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
         this._settings.$Page.$Render.managedRootView ||
         BlankManagedRootView) as ComponentType
     );
-    const props = this._generateViewProps(
+    const props = this._generateViewAdapterProps(
       managedRootView,
-      Object.assign({}, controller.getState(), { $pageView: view })
+      view,
+      Object.assign({}, controller.getState())
     );
 
-    return this._factory.wrapView(
-      (routeOptions.viewAdapter ||
-        this._settings.$Page.$Render.viewAdapter ||
-        ViewAdapter) as ComponentType,
-      props
-    );
+    this._viewAdapter = (routeOptions.viewAdapter ||
+      this._settings.$Page.$Render.viewAdapter ||
+      ViewAdapter) as ComponentType;
+    this._viewAdapterProps = Object.assign(this._viewAdapterProps, props);
   }
 
   /**

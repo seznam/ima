@@ -37,7 +37,7 @@ const sidebars = {
       items: [
         'basic-features/controller-lifecycle',
         'basic-features/views-and-components',
-        'basic-features/fetching-data',
+        'basic-features/data-fetching',
         {
           type: 'category',
           label: 'Routing',

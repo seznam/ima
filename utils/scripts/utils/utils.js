@@ -8,7 +8,6 @@ const chokidar = require('chokidar');
 const IGNORED = [
   '.DS_Store',
   '.npmignore',
-  '.turbo',
   'LICENSE',
   'README.md',
   'CHANGELOG.md',

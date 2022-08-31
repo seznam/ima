@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "18.0.0-rc.4",
+  "version": "18.0.0-rc.5",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -21,8 +21,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js",
-    "preversion": "npm test"
+    "test": "jest"
   },
   "dependencies": {
     "ejs": "^3.1.6",
@@ -34,8 +33,8 @@
     "express": "^4.17.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "18.0.0-rc.4",
-    "@ima/helpers": "18.0.0-rc.2"
+    "@ima/dev-utils": "18.0.0-rc.5",
+    "@ima/helpers": "18.0.0-rc.3"
   },
   "publishConfig": {
     "access": "public",

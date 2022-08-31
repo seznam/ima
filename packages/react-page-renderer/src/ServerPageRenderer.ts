@@ -5,7 +5,7 @@ import {
   GenericError,
   Response,
 } from '@ima/core';
-import { Attributes, ComponentType } from 'react';
+import { Attributes, ComponentType, createElement, ReactElement } from 'react';
 //#if _SERVER
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 //#endif
@@ -91,7 +91,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
   /**
    * @inheritdoc
-   * @method mount
    */
   mount(
     controller: ControllerDecorator,
@@ -115,9 +114,12 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       );
   }
 
+  render() {
+    throw new GenericError('The render() is denied on server side.');
+  }
+
   /**
    * @inheritdoc
-   * @method update
    */
   update() {
     return Promise.reject(
@@ -127,7 +129,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
   /**
    * @inheritdoc
-   * @method unmount
    */
   unmount() {
     // nothing to do
@@ -221,19 +222,14 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     view: ComponentType,
     routeOptions: RouteOptions
   ) {
-    // Render current page to string
-    const page = renderToString(
-      this._getWrappedPageView(controller, view, routeOptions)
-    );
+    this._prepareViewAdapter(controller, view, routeOptions);
 
-    // Get document view factory
-    const documentViewFactory = this._factory.createReactElementFactory(
-      this._getDocumentView(routeOptions)
-    );
+    // Render current page to string
+    const page = renderToString(this._getViewAdapterElement() as ReactElement);
 
     // Render document view (base HTML) to string
     let appMarkup = renderToStaticMarkup(
-      documentViewFactory({
+      createElement(this._getDocumentView(routeOptions), {
         page,
         $Utils: this._factory.getUtils(),
         metaManager: controller.getMetaManager(),

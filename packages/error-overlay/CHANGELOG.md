@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+- db0bd1fe: Changed compression option to compress in ima.config.js, it is now boolean to disable/enable compression for production assets
+  Added `express-static-gzip` middleware to create-ima-app template, to support serving compressed assets
+  Fixed @swc/core to v1.2.230, since later versions contain error with preset env
+- 486e2cde: Updated tsconfig with correct typeRoots paths
+
 ## 18.0.0-rc.4
 
 ### Major Changes
