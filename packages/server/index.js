@@ -21,7 +21,7 @@ module.exports = function createIMAServer({
   });
 
   function appFactory() {
-    requireUncached('./build/server/vendors.js');
+    requireUncached('./build/server/vendors.js', { optional: true });
     return requireUncached('./build/server/app.server.js');
   }
 
