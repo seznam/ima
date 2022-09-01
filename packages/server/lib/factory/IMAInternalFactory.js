@@ -148,7 +148,7 @@ module.exports = function IMAInternalFactory({
       : appFactory();
 
     if (environment.$Env === 'dev') {
-      appMain = serverGlobal.has(GLOBAL.APP_MAIN) && appFactory();
+      appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? appFactory() : appMain;
 
       instanceRecycler.clear();
     }

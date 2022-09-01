@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 module.exports = function devUtilsFactory({ environment }) {
   const modulePathCache = new Map();
@@ -10,7 +11,7 @@ module.exports = function devUtilsFactory({ environment }) {
 
     const modulePath = modulePathCache.get(module);
 
-    const moduleName = require.resolve(modulePath);
+    const moduleName = path.resolve(modulePath);
     if (environment.$Env === 'dev') {
       if (!moduleName) {
         return;
@@ -21,7 +22,11 @@ module.exports = function devUtilsFactory({ environment }) {
       });
     }
 
-    if (!moduleName && options.optional) {
+    if (
+      options.optional &&
+      moduleName &&
+      !fs.statSync(moduleName, { throwIfNoEntry: false })
+    ) {
       return;
     }
 

@@ -21,7 +21,7 @@ module.exports = function createIMAServer({
   });
 
   function appFactory() {
-    requireUncached('./build/server/vendors.js', { optional: true });
+    requireUncached('./build/server/vendors.js');
     return requireUncached('./build/server/app.server.js');
   }
 
@@ -59,6 +59,7 @@ module.exports = function createIMAServer({
 
   serverApp.useIMADefaultHook();
 
+  // TODO IMA@18 prepare settings for lazy start
   !environment.$Debug && appFactory();
 
   return {
