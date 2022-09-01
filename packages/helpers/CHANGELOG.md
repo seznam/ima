@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.4
+
+### Patch Changes
+
+- ce988367: fix build
+
 ## 18.0.0-rc.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.4.0-rc.2
+
+### Patch Changes
+
+- ce988367: fix build
+
 ## 0.4.0-rc.1
 
 ### Patch Changes

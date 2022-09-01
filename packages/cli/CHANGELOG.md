@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- ce988367: fix build
+- Updated dependencies [ce988367]
+  - @ima/server@18.0.0-rc.6
+
 ## 18.0.0-rc.5
 
 ### Major Changes
