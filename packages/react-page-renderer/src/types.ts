@@ -40,6 +40,7 @@ export type Settings = {
       documentView?: ComponentType;
       managedRootView?: ComponentType;
       masterElementId?: string;
+      useLegacyReact: boolean;
       viewAdapter?: ComponentType;
     };
   };

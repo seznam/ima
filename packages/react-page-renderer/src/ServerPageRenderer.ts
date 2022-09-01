@@ -94,7 +94,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    */
   mount(
     controller: ControllerDecorator,
-    view: ComponentType,
+    pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
@@ -102,20 +102,25 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       return Promise.resolve(this._response.getResponseParams());
     }
 
-    return this._helpers
-      .allPromiseHash(pageResources)
-      .then(pageState =>
-        this._renderPage(
-          controller,
-          view,
-          pageState as { [key: string]: unknown },
-          routeOptions
-        )
-      );
+    return this._helpers.allPromiseHash(pageResources).then(pageState => {
+      if (!this._response.isResponseSent()) {
+        controller.setState(pageState as { [key: string]: unknown });
+        controller.setMetaParams(pageState as { [key: string]: unknown });
+
+        this._response
+          .status(controller.getHttpStatus())
+          .setPageState(pageState as { [key: string]: unknown })
+          .send(
+            this._renderPageViewToString(controller, pageView, routeOptions)
+          );
+      }
+
+      return this._response.getResponseParams();
+    });
   }
 
-  render() {
-    throw new GenericError('The render() is denied on server side.');
+  setState() {
+    throw new GenericError('The setState() is denied on server side.');
   }
 
   /**
@@ -163,66 +168,14 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-   * Creates a copy of the provided data map object that has the values of
-   * its fields wrapped into Promises.
-   *
-   * The the values that are already Promises will referenced directly
-   * without wrapping then into another Promise.
-   *
-   * @param dataMap A map of data that should have
-   *        its values wrapped into Promises.
-   * @return A copy of the provided data map that
-   *         has all its values wrapped into promises.
-   */
-  _wrapEachKeyToPromise(dataMap: { [key: string]: unknown } = {}): {
-    [key: string]: Promise<unknown>;
-  } {
-    const copy: { [key: string]: Promise<unknown> } = {};
-
-    for (const field of Object.keys(dataMap)) {
-      const value = dataMap[field];
-
-      if (value instanceof Promise) {
-        copy[field] = value;
-      } else {
-        copy[field] = Promise.resolve(value);
-      }
-    }
-
-    return copy;
-  }
-
-  /**
-   * Render page after all promises from loaded resources is resolved.
-   */
-  _renderPage(
-    controller: ControllerDecorator,
-    view: ComponentType,
-    pageState: { [key: string]: unknown },
-    routeOptions: RouteOptions
-  ) {
-    if (!this._response.isResponseSent()) {
-      controller.setState(pageState);
-      controller.setMetaParams(pageState);
-
-      this._response
-        .status(controller.getHttpStatus())
-        .setPageState(pageState)
-        .send(this._renderPageContentToString(controller, view, routeOptions));
-    }
-
-    return this._response.getResponseParams();
-  }
-
-  /**
    * Render page content to a string containing HTML markup.
    */
-  _renderPageContentToString(
+  _renderPageViewToString(
     controller: ControllerDecorator,
-    view: ComponentType,
+    pageView: ComponentType,
     routeOptions: RouteOptions
   ) {
-    this._prepareViewAdapter(controller, view, routeOptions);
+    this._prepareViewAdapter(controller, pageView, routeOptions);
 
     // Render current page to string
     const page = renderToString(this._getViewAdapterElement() as ReactElement);

@@ -1,5 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import jscc from 'rollup-plugin-jscc';
+
 import { createRollupConfig } from '../../createRollupConfig.mjs';
 
 function generateConfig(environment) {
@@ -20,10 +21,10 @@ function generateConfig(environment) {
     plugins: [
       jscc({
         asloader: false,
-        values: { _SERVER: environment === 'server' }
+        values: { _SERVER: environment === 'server' },
       }),
-      typescript()
-    ]
+      typescript(),
+    ],
   }));
 }
 

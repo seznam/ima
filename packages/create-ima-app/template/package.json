@@ -44,8 +44,8 @@
     "express-static-gzip": "^2.1.7",
     "helmet": "^3.23.3",
     "prop-types": "^15.8.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18",
+    "react-dom": "^18",
     "serve-favicon": "^2.5.0"
   }
 }

@@ -79,6 +79,9 @@ export default class ClientPageManager extends AbstractPageManager {
    */
   init() {
     super.init();
+    this._pageStateManager.onChange = newState => {
+      this._onChangeStateHandler(newState);
+    };
     this._eventBus.listenAll(
       this._window.getWindow(),
       this._boundOnCustomEventHandler
@@ -138,13 +141,13 @@ export default class ClientPageManager extends AbstractPageManager {
         if (!handled) {
           console.warn(
             `The active controller has no listener for ` +
-              `the encountered event '${eventName}'. Check ` +
-              `your event name for typos, or create an ` +
-              `'${method}' event listener method on the ` +
-              `active controller or add an event listener ` +
-              `that stops the propagation of this event to ` +
-              `an ancestor component of the component that ` +
-              `fired this event.`
+            `the encountered event '${eventName}'. Check ` +
+            `your event name for typos, or create an ` +
+            `'${method}' event listener method on the ` +
+            `active controller or add an event listener ` +
+            `that stops the propagation of this event to ` +
+            `an ancestor component of the component that ` +
+            `fired this event.`
           );
         }
       }
@@ -219,5 +222,18 @@ export default class ClientPageManager extends AbstractPageManager {
     }
 
     return false;
+  }
+
+  /**
+ * On change event handler set state to view.
+ *
+ * @param {Object<string, *>} state
+ */
+  _onChangeStateHandler(state) {
+    let controller = this._managedPage.controllerInstance;
+
+    if (controller) {
+      this._pageRenderer.setState(state);
+    }
   }
 }

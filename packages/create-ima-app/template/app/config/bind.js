@@ -1,9 +1,15 @@
-import { Cache, ComponentUtils, PageRenderer, Response, Window } from '@ima/core';
+import {
+  Cache,
+  ComponentUtils,
+  PageRenderer,
+  Response,
+  Window,
+} from '@ima/core';
 import {
   ClientPageRenderer,
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
-  ServerPageRenderer
+  ServerPageRenderer,
 } from '@ima/react-page-renderer';
 
 //eslint-disable-next-line no-unused-vars
@@ -16,7 +22,7 @@ export default (ns, oc, config) => {
   });
 
   oc.get(ComponentUtils).register({
-    $CssClasses: '$CssClasses'
+    $CssClasses: '$CssClasses',
   });
 
   oc.inject(PageRendererFactory, [ComponentUtils]);

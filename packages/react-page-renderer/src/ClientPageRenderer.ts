@@ -10,7 +10,7 @@ import {
 } from '@ima/core';
 import { ComponentType, ReactElement } from 'react';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
-import { Root } from 'react-dom/client';
+import { createRoot, hydrateRoot, Root } from 'react-dom/client';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
@@ -66,16 +66,15 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   async mount(
     controller: ControllerDecorator,
-    view: ComponentType,
+    pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
-    const separatedData = this._separatePromisesAndValues(pageResources);
-    const defaultPageState = separatedData.values;
-    const loadedPromises = separatedData.promises;
+    const { values: defaultPageState, promises: loadedPromises } =
+      this._separatePromisesAndValues(pageResources);
 
     if (!this._firstTime) {
-      await this._renderToDOM(controller, view, routeOptions);
+      await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
 
@@ -86,7 +85,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
         if (this._firstTime) {
           controller.setState(pageState);
-          await this._renderToDOM(controller, view, routeOptions);
+          await this._renderPageViewToDOM(controller, pageView, routeOptions);
           this._firstTime = false;
         }
 
@@ -102,24 +101,27 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       .catch((error: Error) => this._handleError(error));
   }
 
-  render(props = {}) {
+  setState(pageState = {}) {
     if (this._viewAdapter) {
       const renderCallback = () =>
-        this._dispatcher.fire(RendererEvents.UPDATED, { props }, true);
+        this._dispatcher.fire(RendererEvents.UPDATED, { pageState }, true);
 
-      if (this._reactRoot) {
-        const viewAdapterElement = this._getViewAdapterElement(
-          Object.assign(props, {
-            renderCallback,
-          })
-        );
-
-        this._reactRoot.render(viewAdapterElement);
-      } else if (this._viewContainer) {
+      if (this._settings.$Page.$Render.useLegacyReact) {
         render(
-          this._getViewAdapterElement(props) as ReactElement,
-          this._viewContainer,
+          this._getViewAdapterElement({ state: pageState }) as ReactElement,
+          this._viewContainer as Element,
           renderCallback
+        );
+      } else if (this._reactRoot) {
+        this._reactRoot.render(
+          this._getViewAdapterElement(
+            Object.assign(
+              { state: pageState },
+              {
+                renderCallback,
+              }
+            )
+          )
         );
       }
     }
@@ -130,12 +132,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   update(
     controller: ControllerDecorator,
-    view: ComponentType,
+    pageView: ComponentType,
     resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
   ) {
-    const separatedData = this._separatePromisesAndValues(resourcesUpdate);
-    const defaultPageState = separatedData.values;
-    const updatedPromises = separatedData.promises;
+    const { values: defaultPageState, promises: updatedPromises } =
+      this._separatePromisesAndValues(resourcesUpdate);
 
     controller.setState(defaultPageState);
     this._patchPromisesToState(controller, updatedPromises);
@@ -253,14 +254,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *
    * @param routeOptions The current route options.
    */
-  private _renderToDOM(
+  private _renderPageViewToDOM(
     controller: Controller,
-    view: ComponentType,
+    pageView: ComponentType,
     routeOptions: RouteOptions
   ) {
-    this._prepareViewAdapter(controller, view, routeOptions);
+    this._prepareViewAdapter(controller, pageView, routeOptions);
 
-    const reactElementView = this._getViewAdapterElement() as ReactElement;
     const masterElementId = this._settings.$Page.$Render.masterElementId;
     this._viewContainer = this._window.getElementById(
       masterElementId as string
@@ -268,7 +268,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (!this._viewContainer) {
       const errorMessage =
-        `ima.core.page.renderer.ClientPageRenderer:_renderToDOM: ` +
+        `ima.core.page.renderer.ClientPageRenderer:_renderPageViewToDOM: ` +
         `Element with ID "${masterElementId}" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 
@@ -287,22 +287,52 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
-        hydrate(reactElementView, this._viewContainer as Element, () => {
+        const renderCallback = () =>
           this._dispatcher.fire(
             RendererEvents.MOUNTED,
             { type: RendererTypes.HYDRATE },
             true
           );
-        });
+
+        if (this._settings.$Page.$Render.useLegacyReact) {
+          hydrate(
+            this._getViewAdapterElement() as ReactElement,
+            this._viewContainer as Element,
+            renderCallback
+          );
+        } else {
+          this._reactRoot = hydrateRoot(
+            this._viewContainer as Element,
+            this._getViewAdapterElement({
+              renderCallback,
+            }) as ReactElement
+          );
+        }
       });
     } else {
-      render(reactElementView, this._viewContainer, () => {
+      const renderCallback = () =>
         this._dispatcher.fire(
           RendererEvents.MOUNTED,
           { type: RendererTypes.RENDER },
           true
         );
-      });
+
+      if (this._settings.$Page.$Render.useLegacyReact) {
+        render(
+          this._getViewAdapterElement() as ReactElement,
+          this._viewContainer,
+          renderCallback
+        );
+      } else {
+        this._reactRoot = createRoot(this._viewContainer as Element);
+
+        this._reactRoot.render(
+          this._getViewAdapterElement({
+            renderCallback,
+          }) as ReactElement
+        );
+      }
+
       return Promise.resolve();
     }
   }

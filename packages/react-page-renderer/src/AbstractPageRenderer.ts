@@ -1,12 +1,10 @@
 import { Controller, Dispatcher, PageRenderer } from '@ima/core';
 import { ComponentType, createElement } from 'react';
 
-import BlankManagedRootView, {
-  ManagedRootViewProps,
-} from './BlankManagedRootView';
+import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
 import { Helpers, RouteOptions, Settings } from './types';
-import ViewAdapter from './ViewAdapter';
+import ViewAdapter, { ViewAdapterProps } from './ViewAdapter';
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
@@ -63,7 +61,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   abstract mount(
     controller: Controller,
-    view: ComponentType,
+    pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ): Promise<
@@ -80,7 +78,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   abstract update(
     controller: Controller,
-    view: ComponentType,
+    pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ): Promise<
@@ -100,7 +98,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   /**
    * @inheritdoc
    */
-  abstract render(props: unknown): void;
+  abstract setState(pageState: unknown): void;
 
   /**
    * @inheritdoc
@@ -117,18 +115,17 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    * Generate properties for view from state.
    *
    * @param view The page view React component to wrap.
-   * @param state
    */
   protected _generateViewAdapterProps(
-    view: ComponentType,
+    managedRootView: ComponentType,
     pageView: ComponentType,
     state: { [key: string]: unknown } = {}
-  ): ManagedRootViewProps {
+  ): ViewAdapterProps {
     const props = {
       $Utils: this._factory.getUtils(),
+      managedRootView,
       pageView,
       state,
-      view,
     };
 
     return props;
@@ -141,7 +138,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   protected _prepareViewAdapter(
     controller: Controller,
-    view: ComponentType,
+    pageView: ComponentType,
     routeOptions: RouteOptions
   ) {
     const managedRootView = this._factory.getManagedRootView(
@@ -151,7 +148,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     );
     const props = this._generateViewAdapterProps(
       managedRootView,
-      view,
+      pageView,
       Object.assign({}, controller.getState())
     );
 

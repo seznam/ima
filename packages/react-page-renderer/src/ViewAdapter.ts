@@ -6,9 +6,10 @@ import { Utils } from './types';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
+  managedRootView: ComponentType;
+  pageView?: ComponentType;
   renderCallback?: () => void;
   state: State;
-  view: ComponentType;
 }
 
 interface State {
@@ -24,7 +25,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
     props: ViewAdapterProps,
     state: State
   ) => { $Utils: Utils };
-  private _view: ComponentType;
+  private _managedRootView: ComponentType;
 
   contextSelectors: Array<
     (props: ViewAdapterProps, state: State) => { [key: string]: unknown }
@@ -51,7 +52,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
     /**
      * The actual page view to render.
      */
-    this._view = props.view;
+    this._managedRootView = props.managedRootView;
 
     /**
      * The memoized context value.
@@ -92,8 +93,9 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
       PageContext.Provider,
       { value: this._getContextValue(this.props, this.state) },
       createElement(
-        this._view as ComponentClass,
+        this._managedRootView as ComponentClass,
         Object.assign(this.state, {
+          pageView: this.props.pageView,
           ref: () => {
             if (this.props.renderCallback) {
               this.props.renderCallback();

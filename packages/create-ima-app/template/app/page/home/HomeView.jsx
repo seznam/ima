@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSettings, useLocalize } from '@ima/react-hooks';
+// import { useSettings, useLocalize } from '@ima/react-hooks';
 
 import Card from 'app/component/card/Card';
 import './homeView.less';
@@ -11,8 +11,8 @@ import './homeView.less';
  * (in case of SSR) or one by one as the promises are being resolved.
  */
 export default function HomeView({ message, name, cards }) {
-  const links = useSettings('links');
-  const localize = useLocalize();
+  // const links = useSettings('links');
+  // const localize = useLocalize();
   const [mounted, setMounted] = useState(false);
 
   // This executes only on client side
@@ -37,12 +37,12 @@ export default function HomeView({ message, name, cards }) {
 
         <p
           className='hero'
-          dangerouslySetInnerHTML={{ __html: localize('home.intro') }}
+          dangerouslySetInnerHTML={{ __html: 'Test Page Renderer' }}
         ></p>
 
         <div className='cards'>
           {cards?.map(card => (
-            <Card key={card.id} title={card.title} href={links[card.id]}>
+            <Card key={card.id} title={card.title} href="#">
               {card.content}
             </Card>
           )) ?? null}

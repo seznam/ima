@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "main": "./dist/server.cjs",
+  "main": "./dist/server.js",
   "module": "./dist/server.mjs",
   "browser": "./dist/client.js",
   "scripts": {
@@ -42,8 +42,8 @@
   "peerDependencies": {
     "@ima/core": "^18.0.0-rc.0",
     "@ima/dev-utils": "^18.0.0-rc.0",
-    "react": ">=16.13",
-    "react-dom": ">=16.13",
+    "react": ">=18",
+    "react-dom": ">=18",
     "webpack": "^5.70.0"
   }
 }
