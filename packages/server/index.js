@@ -29,7 +29,7 @@ module.exports = function createIMAServer({
     return requireUncached(`./build/static/locale/${language}.js`);
   }
 
-  emitter = emitter || new Emitter({ logger });
+  emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
   logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
