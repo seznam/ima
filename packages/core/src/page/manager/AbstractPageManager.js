@@ -141,7 +141,10 @@ export default class AbstractPageManager extends PageManager {
 
     // Construct new managedPage value
     const pageFactory = this._pageFactory;
-    const controllerInstance = pageFactory.createController(controller);
+    const controllerInstance = pageFactory.createController(
+      controller,
+      options
+    );
     const decoratedController =
       pageFactory.decorateController(controllerInstance);
     const viewInstance = pageFactory.createView(view);
@@ -360,7 +363,6 @@ export default class AbstractPageManager extends PageManager {
    */
   async _initExtensions() {
     let controller = this._managedPage.controllerInstance;
-
     for (let extension of controller.getExtensions()) {
       extension.setRouteParams(this._managedPage.params);
       await extension.init();

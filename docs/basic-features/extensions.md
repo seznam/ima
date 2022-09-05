@@ -72,8 +72,7 @@ export default class GalleryExtension extends AbstractExtension {
 ```
 
 All extensions to be used on a page must be added to the current controller
-via `addExtension()` method before the controller is initialized (Good
-place for that is the [`init()`](./controller-lifecycle#init-serverclient) method). After that, the extensions will go
+via `$extensions` getter. After that, the extensions will go
 through the same lifecycle as the controller.
 
 ```javascript
@@ -82,18 +81,101 @@ import GalleryExtension from 'app/component/gallery/GalleryExtension';
 
 export default class PostController extends AbstractController {
   static get $dependencies() {
+    return [];
+  }
+
+  static get $extensions() {
     return [GalleryExtension];
   }
 
-  constructor(galleryExtension) {
-    this._galleryExtension = galleryExtension;
+  constructor() {
+    //If needed, extension instance can be retrieved using getExtension();
+    this._galleryExtension = this.getExtension(GalleryExtension);
   }
 
-  init() {
-    this.addExtension(this._galleryExtension);
-  }
+  ...
+}
+```
+
+Extensions can be also defined within routes.
+
+```javascript
+//routes.js
+
+import PostController from 'app/page/post/PostController';
+import PostView from 'app/page/post/PostView';
+import GalleryExtension from 'app/component/gallery/GalleryExtension';
+
+export default (ns, oc, routesConfig, router) =>
+  router
+    .add('home', '/', PostController, PostView, {
+      extensions: [GalleryExtension],
+    });
+
+```
+
+Extensions can be defined in global array of extensions.
+This array can be registered in the OC as constant:
+
+```javascript
+
+//bind.js
+import Extension1 from 'app/component/gallery/GalleryExtension';
+import Extension2 from 'app/component/gallery/GalleryExtension2';
+...
+export default (ns, oc, config) => {
+  oc.constant('$galleryExtensions', [Extension, Extension2]);
 }
 
+//PostController.js
+import { AbstractController } from '@ima/core';
+import GalleryExtension from 'app/component/gallery/GalleryExtension';
+
+export default class PostController extends AbstractController {
+
+  ...
+
+  static get $extensions() {
+    return ['...$galleryExtensions'];
+  }
+
+  ...
+}
+
+//Or in routes.js
+...
+router
+    .add('home', '/', PostController, PostView, {
+      extensions: ['...$galleryExtensions'],
+    });
+...
+```
+
+Or just exported array:
+
+```javascript
+
+//GalleryExtensions.js
+import Extension1 from 'app/component/gallery/GalleryExtension';
+import Extension2 from 'app/component/gallery/GalleryExtension2';
+
+export const GalleryExtensions = [Extension, Extension2];
+
+
+//PostController.js
+import { AbstractController } from '@ima/core';
+import { GalleryExtensions } from 'app/component/gallery/GalleryExtensions';
+
+export default class PostController extends AbstractController {
+
+  ...
+
+  static get $extensions() {
+    return [...GalleryExtensions];
+  }
+
+  ...
+}
 ```
 
 ## Passing partial state from controllers
