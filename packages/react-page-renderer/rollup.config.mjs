@@ -10,10 +10,11 @@ function generateConfig(environment) {
       '@ima/core',
       '@ima/helpers',
       'classnames',
-      'react',
-      'react-dom',
       'memoize-one',
+      'react-dom',
+      'react-dom/client',
       'react-dom/server',
+      'react',
     ],
     input: {
       [`${environment}`]: './src/index.ts',

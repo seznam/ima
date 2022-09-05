@@ -8,7 +8,7 @@ export interface ViewAdapterProps {
   $Utils: Utils;
   managedRootView: ComponentType;
   pageView?: ComponentType;
-  renderCallback?: () => void;
+  refCallback?: () => void;
   state: State;
 }
 
@@ -97,8 +97,8 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
         Object.assign(this.state, {
           pageView: this.props.pageView,
           ref: () => {
-            if (this.props.renderCallback) {
-              this.props.renderCallback();
+            if (this.props.refCallback) {
+              this.props.refCallback();
             }
           },
         })

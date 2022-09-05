@@ -1,12 +1,9 @@
-import {
-  Cache,
-  ControllerDecorator,
-  Dispatcher,
-  GenericError,
-  Response,
-} from '@ima/core';
+import { Cache, ControllerDecorator, Dispatcher, Response } from '@ima/core';
 import { Attributes, ComponentType, createElement, ReactElement } from 'react';
 //#if _SERVER
+/* eslint-disable import/no-duplicates,import/order */
+import { GenericError } from '@ima/core';
+/* eslint-enable */
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 //#endif
 

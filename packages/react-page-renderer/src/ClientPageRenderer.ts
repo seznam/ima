@@ -9,7 +9,7 @@ import {
   Window,
 } from '@ima/core';
 import { ComponentType, ReactElement } from 'react';
-import { hydrate, render, unmountComponentAtNode } from 'react-dom';
+import { unmountComponentAtNode } from 'react-dom';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
@@ -31,7 +31,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * The HTML element containing the current application view for the
    * current route.
    */
-  private _viewContainer?: Element;
+  protected _viewContainer?: Element;
 
   /**
    * Initializes the client-side page renderer.
@@ -102,28 +102,17 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   setState(pageState = {}) {
-    if (this._viewAdapter) {
-      const renderCallback = () =>
-        this._dispatcher.fire(RendererEvents.UPDATED, { pageState }, true);
-
-      if (this._settings.$Page.$Render.useLegacyReact) {
-        render(
-          this._getViewAdapterElement({ state: pageState }) as ReactElement,
-          this._viewContainer as Element,
-          renderCallback
-        );
-      } else if (this._reactRoot) {
-        this._reactRoot.render(
-          this._getViewAdapterElement(
-            Object.assign(
-              { state: pageState },
-              {
-                renderCallback,
-              }
-            )
+    if (this._viewAdapter && this._reactRoot) {
+      this._reactRoot.render(
+        this._getViewAdapterElement(
+          Object.assign(
+            { state: pageState },
+            {
+              refCallback: this._getUpdateCallback(pageState),
+            }
           )
-        );
-      }
+        )
+      );
     }
   }
 
@@ -171,6 +160,29 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 
+  protected _getHydrateCallback() {
+    return () =>
+      this._dispatcher.fire(
+        RendererEvents.MOUNTED,
+        { type: RendererTypes.HYDRATE },
+        true
+      );
+  }
+
+  protected _getRenderCallback() {
+    return () =>
+      this._dispatcher.fire(
+        RendererEvents.MOUNTED,
+        { type: RendererTypes.RENDER },
+        true
+      );
+  }
+
+  protected _getUpdateCallback(pageState: unknown) {
+    return () =>
+      this._dispatcher.fire(RendererEvents.UPDATED, { pageState }, true);
+  }
+
   /**
    * Show error to console in $Debug mode and re-throw that error
    * for other error handler.
@@ -183,6 +195,15 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
 
     throw error;
+  }
+
+  protected _hydrate() {
+    this._reactRoot = hydrateRoot(
+      this._viewContainer as Element,
+      this._getViewAdapterElement({
+        refCallback: this._getHydrateCallback(),
+      }) as ReactElement
+    );
   }
 
   /**
@@ -249,6 +270,16 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       });
   }
 
+  protected _render() {
+    this._reactRoot = createRoot(this._viewContainer as Element);
+
+    this._reactRoot.render(
+      this._getViewAdapterElement({
+        refCallback: this._getRenderCallback(),
+      }) as ReactElement
+    );
+  }
+
   /**
    * Renders the current route to DOM.
    *
@@ -287,51 +318,10 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
-        const renderCallback = () =>
-          this._dispatcher.fire(
-            RendererEvents.MOUNTED,
-            { type: RendererTypes.HYDRATE },
-            true
-          );
-
-        if (this._settings.$Page.$Render.useLegacyReact) {
-          hydrate(
-            this._getViewAdapterElement() as ReactElement,
-            this._viewContainer as Element,
-            renderCallback
-          );
-        } else {
-          this._reactRoot = hydrateRoot(
-            this._viewContainer as Element,
-            this._getViewAdapterElement({
-              renderCallback,
-            }) as ReactElement
-          );
-        }
+        this._hydrate();
       });
     } else {
-      const renderCallback = () =>
-        this._dispatcher.fire(
-          RendererEvents.MOUNTED,
-          { type: RendererTypes.RENDER },
-          true
-        );
-
-      if (this._settings.$Page.$Render.useLegacyReact) {
-        render(
-          this._getViewAdapterElement() as ReactElement,
-          this._viewContainer,
-          renderCallback
-        );
-      } else {
-        this._reactRoot = createRoot(this._viewContainer as Element);
-
-        this._reactRoot.render(
-          this._getViewAdapterElement({
-            renderCallback,
-          }) as ReactElement
-        );
-      }
+      this._render();
 
       return Promise.resolve();
     }

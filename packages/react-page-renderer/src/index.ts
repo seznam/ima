@@ -14,6 +14,7 @@ import {
   unlisten,
 } from './componentHelpers';
 import ErrorBoundary from './ErrorBoundary';
+import LegacyClientPageRenderer from './LegacyClientPageRenderer';
 import PageContext from './PageContext';
 import PageRendererFactory from './PageRendererFactory';
 import ServerPageRenderer from './ServerPageRenderer';
@@ -26,6 +27,7 @@ export {
   BlankManagedRootView,
   ClientPageRenderer,
   ErrorBoundary,
+  LegacyClientPageRenderer,
   PageContext,
   PageRendererFactory,
   ServerPageRenderer,

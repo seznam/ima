@@ -30,8 +30,7 @@ export default (ns, oc, config) => {
       $Page: {
         $Render: {
           documentView: DocumentView,
-          masterElementId: 'page',
-          useLegacyReact: false,
+          masterElementId: 'page'
         },
       },
       links: {

@@ -215,6 +215,10 @@
         "keys": [],
         "defaultKey": "AbstractComponent"
     },
+    "ima/page/AbstractDocumentView": {
+        "keys": [],
+        "defaultKey": "AbstractDocumentView"
+    },
     "ima/page/AbstractPureComponent": {
         "keys": [],
         "defaultKey": "AbstractPureComponent"
