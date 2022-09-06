@@ -1,6 +1,6 @@
 // @client-side
 import { ReactElement } from 'react';
-import { hydrate, render } from 'react-dom';
+import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
 import ClientPageRenderer from './ClientPageRenderer';
 
@@ -16,6 +16,12 @@ export default class LegacyClientPageRenderer extends ClientPageRenderer {
         this._viewContainer as Element,
         this._getUpdateCallback(pageState)
       );
+    }
+  }
+
+  unmount() {
+    if (this._viewContainer && unmountComponentAtNode(this._viewContainer)) {
+      this._runUnmountCallback();
     }
   }
 

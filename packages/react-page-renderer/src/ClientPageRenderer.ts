@@ -9,7 +9,6 @@ import {
   Window,
 } from '@ima/core';
 import { ComponentType, ReactElement } from 'react';
-import { unmountComponentAtNode } from 'react-dom';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
@@ -149,14 +148,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * @inheritdoc
    */
   unmount() {
-    if (this._viewContainer) {
-      if (unmountComponentAtNode(this._viewContainer)) {
-        this._dispatcher.fire(
-          RendererEvents.UNMOUNTED,
-          { type: RendererTypes.UNMOUNT },
-          true
-        );
-      }
+    if (this._reactRoot) {
+      this._reactRoot.unmount();
+      this._runUnmountCallback();
     }
   }
 
@@ -224,6 +218,14 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
 
     this._startBatchTransactions(controller, patchedPromises);
+  }
+
+  protected _runUnmountCallback() {
+    this._dispatcher.fire(
+      RendererEvents.UNMOUNTED,
+      { type: RendererTypes.UNMOUNT },
+      true
+    );
   }
 
   /**

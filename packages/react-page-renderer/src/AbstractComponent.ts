@@ -1,4 +1,4 @@
-import { Component, ContextType } from 'react';
+import { Component, ContextType, createRef } from 'react';
 
 import * as helpers from './componentHelpers';
 import PageContext from './PageContext';
@@ -10,6 +10,8 @@ import { Utils } from './types';
 export default abstract class AbstractComponent extends Component {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;
+
+  eventBusRef = createRef();
 
   private _utils?: Utils;
 

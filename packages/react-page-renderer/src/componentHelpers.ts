@@ -1,6 +1,5 @@
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
-import ReactDOM from 'react-dom';
 
 import AbstractComponent from './AbstractComponent';
 import AbstractPureComponent from './AbstractPureComponent';
@@ -153,10 +152,17 @@ export function fire(
   eventName: string,
   data: unknown = null
 ) {
+  const { current: eventTarget } = component.eventBusRef;
+
+  if (eventTarget !instanceof EventTarget) {
+    throw new Error(
+      'The components `eventBusRef` must be set to a valid EventTarget element.'
+    );
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils!.$EventBus.fire(
-    // TODO findDOMNode remove
-    ReactDOM.findDOMNode(component) as EventTarget, //eslint-disable-line react/no-find-dom-node
+    eventTarget as EventTarget,
     eventName,
     data
   );
