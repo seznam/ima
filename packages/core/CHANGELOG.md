@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.0.0-rc.7
+
+### Major Changes
+
+- 1c5f5fd8: Adds the possibility to use \$extensions getter in the Controllers to register extensions.
+
+### Patch Changes
+
+- 4a88eba1: New build using @ima/plugin-cli
+
 ## 18.0.0-rc.6
 
 ### Patch Changes
