@@ -1,3 +1,4 @@
+// @if server
 import AbstractRouter from './AbstractRouter';
 import Request from './Request';
 import Response from './Response';
@@ -5,13 +6,10 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 
-// @server-side class ServerRouter extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerRouter;
-
 /**
  * The server-side implementation of the {@link Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
-  //#if _SERVER
   static get $dependencies() {
     return [PageManager, RouteFactory, Dispatcher, Request, Response];
   }
@@ -27,7 +25,6 @@ export default class ServerRouter extends AbstractRouter {
    */
   constructor(pageManager, factory, dispatcher, request, response) {
     super(pageManager, factory, dispatcher);
-
     /**
      * The current HTTP request.
      *
@@ -70,5 +67,5 @@ export default class ServerRouter extends AbstractRouter {
   redirect(url = '/', options = {}) {
     this._response.redirect(url, options.httpStatus || 302, options.headers);
   }
-  //#endif
 }
+// @endif

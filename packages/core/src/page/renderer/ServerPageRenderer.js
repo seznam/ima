@@ -1,13 +1,11 @@
+// @if server
 import { processContent } from '@ima/helpers';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
 
-// @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
-
 let runner = '';
 
-//#if _SERVER
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
@@ -20,7 +18,6 @@ if (typeof window === 'undefined' || window === null) {
     );
   }
 }
-//#endif
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -34,7 +31,6 @@ if (typeof window === 'undefined' || window === null) {
  * @submodule ima.core.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
-  //#if _SERVER
   /**
    * Initializes the server-side page renderer.
    *
@@ -237,5 +233,5 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     // Return HTML markup with injected styles
     return '<!doctype html>\n' + appMarkup;
   }
-  //#endif
 }
+// @endif

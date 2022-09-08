@@ -378,14 +378,7 @@ export default async (
              */
             {
               test: /\.(js|mjs|cjs)$/,
-              exclude: [
-                /\bcore-js\b/,
-                /\bwebpack\/buildin\b/,
-                /\bcss-loader\b/,
-                /\bmini-css-extract-plugin\b/,
-                /\breact-dom-server\b/,
-                appDir,
-              ],
+              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
               use: [
                 !isServer && {
                   loader: require.resolve('swc-loader'),
@@ -395,6 +388,7 @@ export default async (
                       mode: 'usage',
                       coreJs: coreJsVersion,
                       bugfixes: true,
+                      dynamicImport: true,
                     },
                     module: {
                       type: 'commonjs',
@@ -427,6 +421,7 @@ export default async (
                     coreJs: coreJsVersion,
                     shippedProposals: true,
                     bugfixes: true,
+                    dynamicImport: true,
                   },
                   module: {
                     type: 'es6',
@@ -475,6 +470,23 @@ export default async (
               type: 'asset/resource',
             },
           ],
+        },
+        {
+          /**
+           * Allows the use of // @if | @else | @elseif | @endif directives
+           * on client server, ctx === 'client'|'client.es'|'server' variables
+           * to conditionally exclude parts of the source code for concrete bundles.
+           */
+          test: /\.(js|mjs|jsx|cjs|ts|tsx)$/,
+          loader: 'preprocess-loader',
+          include: appDir,
+          options: {
+            context: {
+              server: isServer,
+              client: !isServer,
+              ctx: ctx.name,
+            },
+          },
         },
         {
           /**

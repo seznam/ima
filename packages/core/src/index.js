@@ -7,7 +7,6 @@ import pluginLoader from './pluginLoader';
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
 
-/* eslint-disable no-unused-vars */
 import Cache from './cache/Cache';
 import CacheEntry from './cache/CacheEntry';
 import CacheFactory from './cache/CacheFactory';

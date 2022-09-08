@@ -1,7 +1,5 @@
 import chalk from 'chalk';
-
-import { ImaCliPlugin } from '../types';
-import { time } from './time';
+import prettyMs from 'pretty-ms';
 
 export interface LoggerOptions {
   trackTime?: boolean;
@@ -9,7 +7,20 @@ export interface LoggerOptions {
   elapsed?: ReturnType<typeof time>;
 }
 
-class Logger {
+/**
+ * Returns time utility function, which when called returns
+ * formatted elapsed time from it's creation.
+ *
+ * @returns {() => string} Callback to return formatted elapsed time.
+ */
+export function time(): () => string {
+  const start = process.hrtime.bigint();
+
+  return () =>
+    prettyMs(Number((process.hrtime.bigint() - start) / BigInt(1e6)));
+}
+
+export class Logger {
   private _identifier?: string;
   private _globalLogger?: Logger;
 
@@ -133,9 +144,8 @@ class Logger {
  * Create global logger instance
  */
 const globalLogger = new Logger();
+export { globalLogger as logger };
 
-function createLogger(imaPlugin: ImaCliPlugin): Logger {
-  return new Logger(imaPlugin.name, globalLogger);
+export function createLogger(name: string): Logger {
+  return new Logger(name, globalLogger);
 }
-
-export { createLogger, globalLogger as logger };
