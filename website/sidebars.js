@@ -58,7 +58,7 @@ const sidebars = {
         'basic-features/page-state',
         'basic-features/seo-and-meta-manager',
         'basic-features/dictionary',
-        'basic-features/errors',
+        'basic-features/error-handling',
       ],
     },
     {
