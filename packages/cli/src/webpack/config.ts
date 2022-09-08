@@ -506,7 +506,7 @@ export default async (
        * progress across all configuration contexts. For verbose mode, we are using
        * the default implementation.
        */
-      ctx.verbose ? new webpack.ProgressPlugin() : createProgress(name),
+      !ctx.verbose && createProgress(name),
 
       // Server/client specific plugins are defined below
       ...(isServer
@@ -574,7 +574,9 @@ export default async (
 
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
-      level: ctx.verbose ? 'info' : 'none',
+      colors: true,
+      appendOnly: true,
+      level: ctx.verbose ? 'log' : 'none',
     },
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)

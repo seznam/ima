@@ -1,5 +1,23 @@
 # Change Log
 
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- ce988367: fix build
+- Updated dependencies [ce988367]
+  - @ima/dev-utils@18.0.0-rc.6
+
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+- 486e2cde: Updated tsconfig with correct typeRoots paths
+- Updated dependencies [a2709cb0]
+- Updated dependencies [486e2cde]
+  - @ima/dev-utils@18.0.0-rc.5
+
 ## 18.0.0-rc.4
 
 ### Major Changes

@@ -662,8 +662,8 @@ export default class ObjectContainer {
         }
       }
     }
-    let constructor = entry.classConstructor;
 
+    let constructor = entry.classConstructor;
     return new constructor(...dependencies);
   }
 
