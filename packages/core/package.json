@@ -16,6 +16,7 @@
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/core"
   },
+  "type": "module",
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
