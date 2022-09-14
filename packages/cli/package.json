@@ -34,7 +34,7 @@
     "@ima/error-overlay": "^18.0.0-rc.4",
     "@ima/hmr-client": "^18.0.0-rc.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
-    "@swc/core": "^1.2.244",
+    "@swc/core": "^1.3.0",
     "ajv": "8.11.0",
     "better-opn": "3.0.2",
     "chalk": "4.1.2",
