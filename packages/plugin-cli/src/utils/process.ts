@@ -6,19 +6,26 @@ import chalk from 'chalk';
 
 import { BuildConfig, PipeContext, Context, Source } from '../types';
 
-const CONFIG_FILENAME = 'ima-plugin.config.js';
+const CONFIG_BASENAME = 'ima-plugin.config';
 
 /**
  * Parses ima.build.js file, initializing the build pipeline.
  */
 export async function parseConfigFile(cwd: string): Promise<BuildConfig[]> {
-  const configPath = path.resolve(cwd, CONFIG_FILENAME);
+  const configDir = path.resolve(cwd);
+  const configFile = await fs.promises
+    .readdir(configDir)
+    .then(files =>
+      files.find(fileName => fileName.startsWith('ima-plugin.config'))
+    );
 
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`Unable to load the ${configPath} config file.`);
+  if (!configFile || !fs.existsSync(configFile)) {
+    throw new Error(
+      `Unable to locate ${CONFIG_BASENAME} configuration file in the ${configDir} directory.`
+    );
   }
 
-  let loadedConfig = (await import(configPath)).default;
+  let loadedConfig = (await import(path.join(configDir, configFile))).default;
   loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
 
   return loadedConfig.map((config: BuildConfig) => ({

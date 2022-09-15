@@ -1,4 +1,6 @@
-// @if server
+/* @if client **
+export default undefined;
+/* @else */
 import AbstractRouter from './AbstractRouter';
 import Request from './Request';
 import Response from './Response';
