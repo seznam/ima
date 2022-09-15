@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- 01aeb426: Changed core type to module
+- 3104f5d2: Added custom size-limit config
+  Added new tree-shaking specific size-limit test
+
 ## 18.0.0-rc.7
 
 ### Major Changes
