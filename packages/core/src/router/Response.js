@@ -1,10 +1,12 @@
+/* @if client **
+export default class Response {};
+/* @else */
 import GenericError from '../error/GenericError';
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
 export default class Response {
-  // @if server
   static get $dependencies() {
     return [];
   }
@@ -319,5 +321,5 @@ export default class Response {
 
     return expressOptions;
   }
-  // @endif
 }
+// @endif

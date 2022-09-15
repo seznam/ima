@@ -1,5 +1,5 @@
 /* @if server **
-export default undefined;
+export default class ClientPageManager {};
 /* @else */
 import AbstractPageManager from './AbstractPageManager';
 import PageFactory from '../PageFactory';

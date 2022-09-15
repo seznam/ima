@@ -1,5 +1,5 @@
 /* @if client **
-export default undefined;
+export default class ServerPageRenderer {};
 /* @else */
 import { processContent } from '@ima/helpers';
 

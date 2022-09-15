@@ -1,5 +1,5 @@
 /* @if server **
-export default undefined;
+export default class ClientPageRenderer {};
 /* @else */
 import AbstractPageRenderer from './AbstractPageRenderer';
 import Events from './Events';
