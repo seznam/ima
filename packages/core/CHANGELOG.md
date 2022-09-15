@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- ec52f6ab: Fixed preprocessor exports for client/server bundles (now exports empty class instead of undefined)
+
 ## 18.0.0-rc.8
 
 ### Patch Changes
