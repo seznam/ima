@@ -78,6 +78,9 @@ export default class ClientPageManager extends AbstractPageManager {
    */
   init() {
     super.init();
+    this._pageStateManager.onChange = newState => {
+      this._onChangeStateHandler(newState);
+    };
     this._eventBus.listenAll(
       this._window.getWindow(),
       this._boundOnCustomEventHandler
@@ -218,6 +221,19 @@ export default class ClientPageManager extends AbstractPageManager {
     }
 
     return false;
+  }
+
+  /**
+   * On change event handler set state to view.
+   *
+   * @param {Object<string, *>} state
+   */
+  _onChangeStateHandler(state) {
+    let controller = this._managedPage.controllerInstance;
+
+    if (controller) {
+      this._pageRenderer.setState(state);
+    }
   }
 }
 // @endif

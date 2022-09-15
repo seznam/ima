@@ -1,46 +1,32 @@
-import { Component } from 'react';
+import { Component, ContextType, createRef } from 'react';
+
 import * as helpers from './componentHelpers';
-import Context from './Context';
+import PageContext from './PageContext';
+import { Utils } from './types';
 
 /**
  * The base class for all view components.
- *
- * @abstract
  */
-export default class AbstractComponent extends Component {
-  static get contextType() {
-    return Context;
-  }
-  /**
-   * Initializes the component.
-   *
-   * @param {Object<string, *>} props The component properties.
-   * @param {Object<string, *>} context The component context.
-   */
-  constructor(props, context) {
-    super(props, context);
+export default abstract class AbstractComponent extends Component {
+  static contextType = PageContext;
+  declare context: ContextType<typeof PageContext>;
 
-    /**
-     * The view utilities, initialized lazily upon first use from either
-     * the context, or the component's props.
-     *
-     * @type {?Object<string, *>}
-     */
-    this._utils = null;
-  }
+  eventBusRef = createRef();
+
+  private _utils?: Utils;
 
   /**
    * Returns the utilities for the view components. The returned value is the
-   * value bound to the `$Utils` object container constant.
+   * value bound to the {@code $Utils} object container constant.
    *
-   * @return {Object<string, *>} The utilities for the view components.
+   * @return The utilities for the view components.
    */
-  get utils() {
+  get utils(): Utils {
     if (!this._utils) {
       this._utils = helpers.getUtils(this.props, this.context);
     }
 
-    return this._utils;
+    return this._utils as Utils;
   }
 
   /**
@@ -48,12 +34,12 @@ export default class AbstractComponent extends Component {
    * placeholders in the localization phrase will be replaced by the provided
    * values.
    *
-   * @param {string} key Localization key.
-   * @param {Object<string, (number|string)>=} params Values for replacing
+   * @param key Localization key.
+   * @param params Values for replacing
    *        the placeholders in the localization phrase.
-   * @return {string} Localized phrase.
+   * @return Localized phrase.
    */
-  localize(key, params = {}) {
+  localize(key: string, params: { [key: string]: string | number } = {}) {
     return helpers.localize(this, key, params);
   }
 
@@ -63,12 +49,12 @@ export default class AbstractComponent extends Component {
    * replace the placeholders in the route pattern, while the extraneous
    * parameters will be appended to the generated URL's query string.
    *
-   * @param {string} name The route name.
-   * @param {Object<string, (number|string)>=} params Router parameters and
+   * @param name The route name.
+   * @param params Router parameters and
    *        extraneous parameters to add to the URL as a query string.
-   * @return {string} The generated URL.
+   * @return The generated URL.
    */
-  link(name, params = {}) {
+  link(name: string, params: { [key: string]: string | number } = {}) {
     return helpers.link(this, name, params);
   }
 
@@ -84,25 +70,28 @@ export default class AbstractComponent extends Component {
    *            'my-class-modificator': this.props.modificator
    *        }, true);
    *
-   * @param {(string|Object<string, boolean>)} classRules CSS classes in a
+   * @param classRules CSS classes in a
    *        string separated by whitespace, or a map of CSS class names to
    *        boolean values. The CSS class name will be included in the result
-   *        only if the value is `true`.
-   * @param {boolean} includeComponentClassName
-   * @return {string} String of CSS classes that had their property resolved
-   *         to `true`.
+   *        only if the value is {@code true}.
+   * @param includeComponentClassName
+   * @return String of CSS classes that had their property resolved
+   *         to {@code true}.
    */
-  cssClasses(classRules, includeComponentClassName = false) {
+  cssClasses(
+    classRules: string | { [key: string]: boolean },
+    includeComponentClassName = false
+  ) {
     return helpers.cssClasses(this, classRules, includeComponentClassName);
   }
 
   /**
    * Creates and sends a new IMA.js DOM custom event from this component.
    *
-   * @param {string} eventName The name of the event.
-   * @param {*=} data Data to send within the event.
+   * @param eventName The name of the event.
+   * @param data Data to send within the event.
    */
-  fire(eventName, data = undefined) {
+  fire(eventName: string, data = undefined) {
     helpers.fire(this, eventName, data);
   }
 
@@ -111,12 +100,16 @@ export default class AbstractComponent extends Component {
    * DOM custom event of the specified name occurs at the specified event
    * target.
    *
-   * @param {(React.Element|EventTarget)} eventTarget The react component or
+   * @param eventTarget The react component or
    *        event target at which the listener should listen for the event.
-   * @param {string} eventName The name of the event for which to listen.
-   * @param {function(Event)} listener The listener for event to register.
+   * @param eventName The name of the event for which to listen.
+   * @param listener The listener for event to register.
    */
-  listen(eventTarget, eventName, listener) {
+  listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: (event: Event) => void
+  ) {
     helpers.listen(this, eventTarget, eventName, listener);
   }
 
@@ -124,12 +117,16 @@ export default class AbstractComponent extends Component {
    * Deregisters the provided event listener for an IMA.js DOM custom event
    * of the specified name at the specified event target.
    *
-   * @param {(React.Element|EventTarget)} eventTarget The react component or
+   * @param eventTarget The react component or
    *        event target at which the listener should listen for the event.
-   * @param {string} eventName The name of the event for which to listen.
-   * @param {function(Event)} listener The listener for event to register.
+   * @param eventName The name of the event for which to listen.
+   * @param listener The listener for event to register.
    */
-  unlisten(eventTarget, eventName, listener) {
+  unlisten(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: (event: Event) => void
+  ) {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }

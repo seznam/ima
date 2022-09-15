@@ -452,7 +452,7 @@ export default class AbstractRouter extends Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=,
+   *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
    *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=

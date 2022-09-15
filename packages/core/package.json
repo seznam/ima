@@ -52,10 +52,6 @@
     "@ima/plugin-cli": "^18.0.0-rc.1",
     "jscodeshift": "^0.13.1"
   },
-  "peerDependencies": {
-    "react": ">=16.13",
-    "react-dom": ">=16.13"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

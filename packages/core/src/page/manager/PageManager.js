@@ -32,7 +32,7 @@ export default class PageManager {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?function(new: AbstractDocumentView),
+   *          documentView: ?function(new: React.Component),
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)
    *        }} options The current route options.

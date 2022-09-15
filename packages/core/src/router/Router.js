@@ -61,7 +61,7 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?function(new: AbstractDocumentView)=,
+   *          documentView: ?function(new: React.Component)=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
    *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
@@ -247,7 +247,7 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=,
+   *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
    *          headers: Object<string, *>
@@ -294,7 +294,7 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=,
+   *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
@@ -329,7 +329,7 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          serverSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=,
+   *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
@@ -362,7 +362,7 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=,
+   *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)
    *        }} [options={}] The options overrides route options defined in

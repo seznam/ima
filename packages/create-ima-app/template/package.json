@@ -32,8 +32,9 @@
     "prettier": "^2.6.0"
   },
   "dependencies": {
-    "@ima/core": "18.0.0-rc.3",
+    "@ima/core": "18.0.0-rc.5",
     "@ima/react-hooks": "^1.1.1",
+    "@ima/react-page-renderer": "18.0.0-rc.8",
     "@ima/server": "18.0.0-rc.3",
     "body-parser": "^1.19.2",
     "compression": "1.7.4",
@@ -43,8 +44,8 @@
     "express-static-gzip": "^2.1.7",
     "helmet": "^3.23.3",
     "prop-types": "^15.8.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "serve-favicon": "^2.5.0"
   }
 }
