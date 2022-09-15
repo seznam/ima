@@ -36,7 +36,7 @@ module.exports = [
   },
   // Test tree-shaking
   {
-    limit: '70 B',
+    limit: '6 KB',
     path: './dist/client/index.js',
     import: '{ Cache }',
     running: false,
