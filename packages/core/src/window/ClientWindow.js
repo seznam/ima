@@ -1,4 +1,6 @@
-// @if client
+/* @if server **
+export default undefined;
+/* @else */
 import Window from './Window';
 
 /**

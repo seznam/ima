@@ -1,4 +1,6 @@
-// @if client
+/* @if server **
+export default undefined;
+/* @else */
 import AbstractRouter from './AbstractRouter';
 import ActionTypes from './ActionTypes';
 import RouteFactory from './RouteFactory';
