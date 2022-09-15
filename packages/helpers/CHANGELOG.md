@@ -1,5 +1,17 @@
 # Change Log
 
+## 18.0.0-rc.4
+
+### Patch Changes
+
+- ce988367: fix build
+
+## 18.0.0-rc.3
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+
 ## 18.0.0-rc.2
 
 ### Major Changes

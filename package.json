@@ -13,6 +13,7 @@
     "./website",
     "./packages/dev-utils",
     "./packages/devtools-scripts",
+    "./packages/plugin-cli",
     "./packages/cli",
     "./packages/core",
     "./packages/create-ima-app",

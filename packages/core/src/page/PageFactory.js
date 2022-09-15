@@ -24,8 +24,33 @@ export default class PageFactory {
    * @param {(string|function(new:Controller))} controller
    * @return {Controller}
    */
-  createController(controller) {
+  createController(controller, options = {}) {
+    let { extensions = [] } = options;
+    let mergedExtensions = [...extensions];
+    if (
+      Array.isArray(controller?.$extensions) &&
+      controller.$extensions.length
+    ) {
+      mergedExtensions = mergedExtensions.concat(controller.$extensions);
+    }
+
     let controllerInstance = this._oc.create(controller);
+
+    for (let extension of mergedExtensions) {
+      let loadedExtension = this._oc.get(extension);
+      if (!loadedExtension) {
+        // Optional extension handling
+        continue;
+      }
+      if (Array.isArray(loadedExtension)) {
+        // Spread support handling
+        for (let extensionInstance of loadedExtension) {
+          controllerInstance.addExtension(extensionInstance);
+        }
+      } else {
+        controllerInstance.addExtension(extension, loadedExtension);
+      }
+    }
 
     return controllerInstance;
   }

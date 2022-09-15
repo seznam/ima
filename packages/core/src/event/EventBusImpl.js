@@ -1,5 +1,3 @@
-// @client-side
-
 import EventBus from './EventBus';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';

@@ -1,5 +1,3 @@
-export { createLogger } from './lib/logger';
-
 export {
   ImaCliPlugin,
   ImaConfig,

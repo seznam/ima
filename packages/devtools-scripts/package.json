@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools-scripts",
-  "version": "18.0.0-rc.2",
+  "version": "18.0.0-rc.4",
   "description": "IMA.js devtool script used in the @ima/devtools.",
   "private": true,
   "keywords": [
@@ -26,9 +26,8 @@
       "email": "jan.simecek@firma.seznam.cz"
     }
   ],
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",

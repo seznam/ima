@@ -28,7 +28,7 @@ export default class AbstractController extends Controller {
      *
      * @type {Extension[]}
      */
-    this._extensions = [];
+    this._extensions = new Map();
 
     /**
      * The HTTP response code to send to the client.
@@ -135,15 +135,31 @@ export default class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension) {
-    this._extensions.push(extension);
+  addExtension(extension, extensionInstance) {
+    if (!extensionInstance && typeof extension !== 'object') {
+      throw new Error(
+        `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
+      );
+    }
+
+    this._extensions.set(
+      extension,
+      extensionInstance ? extensionInstance : extension
+    );
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getExtension(extension) {
+    return this._extensions.get(extension);
   }
 
   /**
    * @inheritdoc
    */
   getExtensions() {
-    return this._extensions;
+    return Array.from(this._extensions.values());
   }
 
   /**
