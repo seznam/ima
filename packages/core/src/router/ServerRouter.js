@@ -1,5 +1,5 @@
 /* @if client **
-export default undefined;
+export default class ServerRouter {};
 /* @else */
 import AbstractRouter from './AbstractRouter';
 import Request from './Request';

@@ -1,5 +1,5 @@
 /* @if server **
-export default undefined;
+export default class ClientWindow {};
 /* @else */
 import Window from './Window';
 
