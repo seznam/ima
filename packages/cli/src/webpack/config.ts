@@ -492,7 +492,7 @@ export default async (
           /**
            * Allow interop import of .mjs modules.
            */
-          test: /\.(js|mjs)$/,
+          test: /\.(js|mjs|jsx|cjs|ts|tsx)$/,
           type: 'javascript/auto',
           resolve: {
             fullySpecified: false,
