@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.4",
+  "version": "18.0.0-rc.8",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -16,6 +16,8 @@
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/core"
   },
+  "type": "module",
+  "sideEffects": false,
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
@@ -32,13 +34,11 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/server.cjs",
-  "module": "./dist/server.mjs",
-  "browser": "./dist/client.js",
+  "main": "./dist/server/index.js",
+  "browser": "./dist/client/index.js",
   "scripts": {
-    "build": "rollup --config",
-    "clean": "rm -rf dist",
-    "dev": "rollup --config --watch",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",
@@ -51,6 +51,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
+    "@ima/plugin-cli": "^18.0.0-rc.1",
     "jscodeshift": "^0.13.1"
   },
   "peerDependencies": {
@@ -60,17 +61,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "size-limit": [
-    {
-      "limit": "31 KB",
-      "path": "./dist/client.mjs",
-      "running": false
-    },
-    {
-      "limit": "31 KB",
-      "path": "./dist/server.mjs",
-      "running": false
-    }
-  ]
+  }
 }

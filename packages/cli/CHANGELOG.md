@@ -1,5 +1,50 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- d6a4045f: Added support for pure esm modules
+
+## 18.0.0-rc.7
+
+### Minor Changes
+
+- c2ee312b: Added preprocess-loader
+
+### Patch Changes
+
+- 49445893: Moved logger and time utility functions to @ima/dev-utils pkg
+  - @ima/server@18.0.0-rc.7
+
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- ce988367: fix build
+- Updated dependencies [ce988367]
+  - @ima/server@18.0.0-rc.6
+
+## 18.0.0-rc.5
+
+### Major Changes
+
+- 10c189dc: Moved cli-plugin-analyze to separate plugin repository
+  Removed cli-plugin-less-constants
+
+### Patch Changes
+
+- b78e1a27: Fixed an issue with webpack, generating multiple CSS chunks instead of only one
+- 14326c17: Enabled `clean` CLI arg by default for all commands
+- a2709cb0: Updated jest to v29
+- db0bd1fe: Changed compression option to compress in ima.config.js, it is now boolean to disable/enable compression for production assets
+  Added `express-static-gzip` middleware to create-ima-app template, to support serving compressed assets
+  Fixed @swc/core to v1.2.230, since later versions contain error with preset env
+- 486e2cde: Updated tsconfig with correct typeRoots paths
+- 627c6d40: Migrated @ima/cli-plugin-scramble-css to IMA.js plugins repository
+- Updated dependencies [a2709cb0]
+  - @ima/server@18.0.0-rc.5
+
 ## 18.0.0-rc.4
 
 ### Major Changes

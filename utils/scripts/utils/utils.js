@@ -42,7 +42,7 @@ function timeNow() {
     m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
     s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
 
-  return `${h}:${m}:${s}`;
+  return chalk.gray(`[${h}:${m}:${s}]`);
 }
 
 function createWatcher(name, baseDir, paths, destFolder, options = {}) {
@@ -65,13 +65,12 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
           );
         } else {
           console.log(
-            `${chalk.gray(timeNow())} ${chalk[
-              actionName === 'copy' ? 'green' : 'yellow'
-            ](actionName === 'copy' ? '✓' : '𐄂')} ${chalk.magenta(
-              `[${name}]`
-            )} ./${path.relative(path.join(destFolder), dest)} ${chalk.gray(
-              `[${Date.now() - startTime}ms]`
-            )}`
+            `${timeNow()} ${chalk[actionName === 'copy' ? 'green' : 'yellow'](
+              actionName === 'copy' ? '✓' : '𐄂'
+            )} ${chalk.cyan(`@ima/${name}`)} ./${path.relative(
+              path.join(destFolder),
+              dest
+            )} ${chalk.gray(`[${Date.now() - startTime}ms]`)}`
           );
         }
       };
@@ -92,6 +91,17 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
             // Fix ima binary not being executable
             if (name === 'cli' && filePath.includes('bin/ima.js')) {
               fs.chmodSync(path.join(destFolder, '../../.bin/ima'), '755');
+            }
+
+            // Fix ima binary not being executable
+            if (
+              name === 'plugin-cli' &&
+              filePath.includes('bin/ima-plugin.js')
+            ) {
+              fs.chmodSync(
+                path.join(destFolder, '../../.bin/ima-plugin'),
+                '755'
+              );
             }
 
             callback(err);
@@ -140,10 +150,21 @@ function watchChanges(destFolder, pkgDirs) {
     if (pkgJson.scripts.dev) {
       const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
       runningProcesses.push(
-        child.spawn(npm, ['run', 'dev'], {
-          stdio: 'inherit',
-          cwd: pkgDir,
-        })
+        child.spawn(
+          npm,
+          [
+            'run',
+            'dev',
+            // Silent output since we provide our own
+            ...(pkgJson.scripts.dev.includes('ima-plugin')
+              ? ['--', '--silent']
+              : []),
+          ],
+          {
+            stdio: 'inherit',
+            cwd: pkgDir,
+          }
+        )
       );
     }
 
@@ -161,7 +182,6 @@ function copyChanges(destDir, pkgDirs) {
   pkgDirs.forEach(async pkgDir => {
     const pkgJson = require(path.join(pkgDir, 'package.json'));
     const destPkgDir = path.join(destNodeModules, pkgJson.name);
-    const name = pkgJson.name.split('/').pop();
 
     // Build package
     pkgJson.scripts.build && shell('npm run build', pkgDir);
@@ -171,8 +191,8 @@ function copyChanges(destDir, pkgDirs) {
       .filter(dir => !IGNORED.includes(dir))
       .forEach(file => {
         console.log(
-          `${chalk.gray(timeNow())} ${chalk.green('✓')} ${chalk.magenta(
-            `[${name}]`
+          `${timeNow()} ${chalk.green('✓')} ${chalk.cyan(
+            `${pkgJson.name}`
           )} ./${file}`
         );
 

@@ -1,5 +1,6 @@
-// @client-side
-
+/* @if server **
+export default undefined;
+/* @else */
 import AbstractRouter from './AbstractRouter';
 import ActionTypes from './ActionTypes';
 import RouteFactory from './RouteFactory';
@@ -414,3 +415,4 @@ export default class ClientRouter extends AbstractRouter {
     return new RegExp('^' + this.getBaseUrl()).test(url);
   }
 }
+// @endif

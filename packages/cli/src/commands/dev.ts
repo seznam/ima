@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { logger } from '@ima/dev-utils/dist/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
@@ -14,7 +15,6 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
-import { logger } from '../lib/logger';
 import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
 import {
   cleanup,

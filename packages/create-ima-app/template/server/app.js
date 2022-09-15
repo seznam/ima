@@ -94,12 +94,15 @@ function staticErrorPage(error, req, res) {
 }
 
 const app = express();
-const staticDir = path.resolve(path.join(__dirname, '../build/static'));
 
 app
   .set('trust proxy', true)
   .use(helmet())
-  .use(compression())
+  .use(
+    compression({
+      filter: req => req.baseUrl !== environment.$Server.staticFolder,
+    })
+  )
   .use(
     favicon(
       path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
@@ -107,14 +110,20 @@ app
   )
   .use(
     environment.$Server.staticFolder,
-    expressStaticGzip(staticDir, {
+    expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
       enableBrotli: true,
       index: false,
       orderPreference: ['br'],
-      maxAge: '14d',
+      serveStatic: {
+        maxAge: '14d',
+        ...(environment.$Env !== 'prod' && {
+          setHeaders: res => {
+            res.setHeader('Cache-Control', 'no-store');
+          },
+        }),
+      },
     })
   )
-  .use(environment.$Server.staticFolder, express.static(staticDir))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(cookieParser())

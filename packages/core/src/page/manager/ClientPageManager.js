@@ -1,5 +1,6 @@
-// @client-side
-
+/* @if server **
+export default undefined;
+/* @else */
 import AbstractPageManager from './AbstractPageManager';
 import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';
@@ -221,3 +222,4 @@ export default class ClientPageManager extends AbstractPageManager {
     return false;
   }
 }
+// @endif

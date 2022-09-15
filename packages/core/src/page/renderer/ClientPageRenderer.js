@@ -1,5 +1,6 @@
-// @client-side
-
+/* @if server **
+export default undefined;
+/* @else */
 import AbstractPageRenderer from './AbstractPageRenderer';
 import Events from './Events';
 import Types from './Types';
@@ -411,3 +412,4 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 }
+// @endif

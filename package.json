@@ -11,8 +11,9 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
     "./website",
-    "./packages/helpers",
     "./packages/dev-utils",
+    "./packages/plugin-cli",
+    "./packages/helpers",
     "./packages/core",
     "./packages/server",
     "./packages/devtools-scripts",

@@ -1,3 +1,4 @@
+import { logger } from '@ima/dev-utils/dist/logger';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -7,7 +8,6 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
-import { logger } from '../lib/logger';
 import { HandlerFn } from '../types';
 import {
   cleanup,

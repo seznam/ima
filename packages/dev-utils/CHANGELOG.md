@@ -1,5 +1,24 @@
 # Change Log
 
+## 18.0.0-rc.7
+
+### Patch Changes
+
+- 49445893: Moved logger and time utility functions to @ima/dev-utils pkg
+
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- ce988367: fix build
+
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+- 486e2cde: Updated tsconfig with correct typeRoots paths
+
 ## 18.0.0-rc.4
 
 ### Major Changes

@@ -1,3 +1,4 @@
+import { logger } from '@ima/dev-utils/dist/logger';
 import { MultiCompiler } from 'webpack';
 
 import { ImaCliArgs, ImaConfig } from '../types';
@@ -8,7 +9,6 @@ import {
   formatWebpackErrors,
   formatWebpackWarnings,
 } from './formatStats';
-import { logger } from './logger';
 
 /**
  * Cli Error handler.

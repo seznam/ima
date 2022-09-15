@@ -1,5 +1,31 @@
 # Change Log
 
+## 18.0.0-rc.7
+
+### Patch Changes
+
+- Updated dependencies [49445893]
+  - @ima/dev-utils@18.0.0-rc.7
+
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- ce988367: fix build
+- Updated dependencies [ce988367]
+  - @ima/dev-utils@18.0.0-rc.6
+  - @ima/helpers@18.0.0-rc.4
+
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- a2709cb0: Updated jest to v29
+- Updated dependencies [a2709cb0]
+- Updated dependencies [486e2cde]
+  - @ima/dev-utils@18.0.0-rc.5
+  - @ima/helpers@18.0.0-rc.3
+
 ## 18.0.0-rc.4
 
 ### Major Changes
