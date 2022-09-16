@@ -1,0 +1,5 @@
+[32m@ima/core:test[0m: cache hit, replaying output [2maef466b1e6ae7441[0m
+[32m@ima/core:test: [0m
+[32m@ima/core:test: [0m> @ima/core@18.0.0-rc.4 test
+[32m@ima/core:test: [0m> npm run test:jest && npm run test:size
+[32m@ima/core:test: [0m
