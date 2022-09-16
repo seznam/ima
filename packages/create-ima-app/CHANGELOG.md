@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.7
+
+### Major Changes
+
+- update versions
+
 ## 18.0.0-rc.6
 
 ### Patch Changes
