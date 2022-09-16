@@ -60,7 +60,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?function(new: AbstractDocumentView)=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
@@ -246,7 +245,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
@@ -293,7 +291,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
@@ -361,7 +358,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)

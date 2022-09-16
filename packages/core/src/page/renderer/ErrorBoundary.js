@@ -23,7 +23,7 @@ export default class ErrorBoundary extends PureComponent {
   componentDidCatch(error) {
     // Report errors to overlay
     if (typeof window !== 'undefined' && window?.__IMA_HMR?.emit) {
-      window.__IMA_HMR.emit('error', { error, type: 'runtime' });
+      window.__IMA_HMR.emit('error', { error });
       this.setState({ hasError: true });
     }
   }

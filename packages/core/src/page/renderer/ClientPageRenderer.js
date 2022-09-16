@@ -255,7 +255,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *            ): boolean
    *          ),
    *          autoScroll: boolean,
-   *          allowSPA: boolean,
    *          documentView: ?function(new: AbstractDocumentView),
    *          managedRootView: ?function(new: React.Component)
    *        }} routeOptions The current route options.

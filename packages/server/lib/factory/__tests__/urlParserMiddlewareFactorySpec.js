@@ -2,7 +2,7 @@ jest.mock('path', () => ({
   resolve: jest.fn().mockImplementation(() => './__mocks__/ima.config.js'),
 }));
 
-const UrlParser = require('../urlParser.js');
+const urlParserMiddlewareFactory = require('../urlParserMiddlewareFactory.js');
 
 const HOST = 'local.domain.cz';
 const HOST2 = 'domain.cz';
@@ -25,8 +25,11 @@ const REQUEST_GET_BOOK = Object.freeze({
   host: HOST,
 });
 
-describe('urlParser', () => {
-  const parseUrl = UrlParser(ENVIRONMENT);
+describe('urlParserMiddlewareFactory', () => {
+  const parseUrl = urlParserMiddlewareFactory({
+    environment: ENVIRONMENT,
+    applicationFolder: '.',
+  });
 
   function getMethod(requestGetBook, key) {
     // eslint-disable-next-line no-prototype-builtins

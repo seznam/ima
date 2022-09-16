@@ -19,6 +19,10 @@ describe('ima.core.event.DispatcherImpl', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe('listen method', () => {
     it('should add handler for event', () => {
       dispatcher.listen(event, handlers.handler1);
