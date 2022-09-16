@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- 0760ebb4: Removed `type` data from clear and error event emitter events in favor of automatic type detection in error-overlay
+- Updated dependencies [0760ebb4]
+  - @ima/dev-utils@18.0.0-rc.8
+
 ## 18.0.0-rc.7
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- 0760ebb4: Removed `type` data from clear and error event emitter events in favor of automatic type detection in error-overlay
+
 ## 18.0.0-rc.9
 
 ### Patch Changes
