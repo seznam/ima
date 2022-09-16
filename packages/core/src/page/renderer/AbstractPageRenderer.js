@@ -151,7 +151,6 @@ export default class AbstractPageRenderer extends PageRenderer {
    *            ): boolean
    *          ),
    *          autoScroll: boolean,
-   *          allowSPA: boolean,
    *          documentView: ?function(new: AbstractDocumentView),
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)

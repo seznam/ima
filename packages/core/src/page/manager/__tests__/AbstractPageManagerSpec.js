@@ -43,7 +43,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: null,
     managedRootView: null,
   };
@@ -103,6 +102,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   afterEach(() => {
     pageManager._clearManagedPageValue();
+    jest.clearAllMocks();
   });
 
   it('should be observe state manager', () => {

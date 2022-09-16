@@ -15,7 +15,6 @@ import PageManager from './PageManager';
  *              ): boolean
  *            ),
  *            autoScroll: boolean,
- *            allowSPA: boolean,
  *            documentView: ?function(new: AbstractDocumentView),
  *            managedRootView: ?function(new: React.Component),
  *            viewAdapter: ?function(new: React.Component)
@@ -705,7 +704,7 @@ export default class AbstractPageManager extends PageManager {
    * @return {boolean}
    */
   _hasOnlyUpdate(controller, view, options) {
-    if (options.onlyUpdate instanceof Function) {
+    if (typeof options.onlyUpdate === 'function') {
       return options.onlyUpdate(
         this._managedPage.controller,
         this._managedPage.view

@@ -173,7 +173,6 @@ export default class AbstractRoute {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
@@ -229,7 +228,6 @@ export default class AbstractRoute {
      *           ): boolean
      *         ),
      *         autoScroll: boolean,
-     *         allowSPA: boolean,
      *         documentView: ?function(new: AbstractDocumentView),
      *         managedRootView: ?function(new: React.Component),
      *         viewAdapter: ?function(new: React.Component)
@@ -239,7 +237,6 @@ export default class AbstractRoute {
       {
         onlyUpdate: false,
         autoScroll: true,
-        allowSPA: true,
         documentView: null,
         managedRootView: null,
         viewAdapter: null,
@@ -311,7 +308,6 @@ export default class AbstractRoute {
    *             ): boolean
    *           ),
    *           autoScroll: boolean,
-   *           allowSPA: boolean,
    *           documentView: ?AbstractDocumentView,
    *           managedRootView: ?function(new: React.Component),
    *           viewAdapter: ?function(new: React.Component)

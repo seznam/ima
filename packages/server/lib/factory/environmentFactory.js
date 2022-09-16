@@ -1,4 +1,5 @@
 const helpers = require('@ima/helpers');
+const path = require('path');
 
 const prod = 'prod';
 const dev = 'dev';
@@ -12,11 +13,19 @@ if (env === 'production') {
   env = prod;
 }
 
-module.exports = environment => {
-  let currentEnvironment = environment[env];
+module.exports = function environmentFactory({ applicationFolder }) {
+  let environmentConfig = require(path.resolve(
+    applicationFolder,
+    './server/config/environment.js'
+  ));
+
+  let currentEnvironment = environmentConfig[env];
   let $Language = Object.assign({}, currentEnvironment.$Language);
 
-  currentEnvironment = helpers.resolveEnvironmentSetting(environment, env);
+  currentEnvironment = helpers.resolveEnvironmentSetting(
+    environmentConfig,
+    env
+  );
   currentEnvironment.$Language = $Language;
   currentEnvironment['$Env'] = env;
 

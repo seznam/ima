@@ -80,7 +80,7 @@
     "@types/yargs": "^17.0.10"
   },
   "peerDependencies": {
-    "@ima/server": "18.0.0-rc.7"
+    "@ima/server": "^18.0.0-rc.7"
   },
   "publishConfig": {
     "access": "public",
