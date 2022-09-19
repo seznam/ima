@@ -97,6 +97,7 @@ module.exports = {
       files: [
         'website/**',
         'packages/cli/**',
+        'packages/plugin-cli/**',
         'packages/devtools/**',
         'packages/devtools-scripts/**',
         'packages/hmr-client/**',
@@ -194,6 +195,7 @@ module.exports = {
       files: [
         'website/scripts/**',
         'packages/cli/**',
+        'packages/plugin-cli/**',
         'packages/dev-utils/**',
         'packages/create-ima-app/**',
       ],

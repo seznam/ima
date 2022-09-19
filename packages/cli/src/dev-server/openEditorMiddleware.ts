@@ -1,9 +1,8 @@
+import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import envEditor from 'env-editor';
 import { Request, Response } from 'express';
 import openEditor from 'open-editor';
-
-import { logger } from '../lib/logger';
 
 /**
  * Return preferred editor identifier

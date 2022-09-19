@@ -2,13 +2,13 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import envResolver from '@ima/server/lib/environment.js';
+import { logger } from '@ima/dev-utils/dist/logger';
+import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
 import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
-import { logger } from '../lib/logger';
 import {
   ImaConfigurationContext,
   ImaEnvironment,
@@ -28,10 +28,7 @@ const IMA_CONF_FILENAME = 'ima.config.js';
 function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
 ): ImaEnvironment {
-  const envSourcePath = path.resolve(rootDir, './server/config/environment.js');
-  const envSource = envSourcePath && require(envSourcePath);
-
-  return (envSource && envResolver(envSource)) || {};
+  return environmentFactory({ applicationFolder: rootDir });
 }
 
 /**

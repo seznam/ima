@@ -1,69 +1,75 @@
-let path = require('path');
-let applicationFolder = path.resolve('.');
+'use strict';
 
-let environmentConfig = require(path.resolve(
-  applicationFolder,
-  './server/config/environment.js'
-));
-let environment = require('./lib/environment.js')(environmentConfig);
+const path = require('path');
+const applicationFolder = path.resolve('.');
+const { Emitter, Event } = require('./lib/emitter.js');
 
-global.$Debug = environment.$Debug;
-global.$IMA = global.$IMA || {};
-
-const modulePathCache = new Map();
-
-function requireUncached(module) {
-  if (!modulePathCache.has(module)) {
-    modulePathCache.set(module, path.resolve(module));
-  }
-
-  if (environment.$Env === 'dev') {
-    delete require.cache[require.resolve(modulePathCache.get(module))];
-  }
-
-  return require(modulePathCache.get(module));
-}
-
-if (environment.$Env === 'dev') {
-  requireUncached('./build/server/vendors.js');
-}
-
-function appFactory() {
-  // Require new server-side bundle on dev reload
-  if (environment.$Env === 'dev') {
-    try {
-      requireUncached('./build/server/vendors.js');
-      return requireUncached('./build/server/app.server.js');
-    } catch (error) {
-      (logger ?? console).error('Application factory error', {
-        error,
-      });
-
-      return null;
-    }
-  }
-
-  return requireUncached('./build/server/app.server.js');
-}
-
-function languageLoader(language) {
-  return requireUncached(`./build/static/locale/${language}.js`);
-}
-
-let logger = require('./lib/logger.js')(environment);
-let urlParser = require('./lib/urlParser.js')(environment);
-let clientApp = require('./lib/clientApp.js')(
+module.exports = function createIMAServer({
   environment,
   logger,
-  languageLoader,
-  appFactory
-);
-let cache = require('./lib/cache.js')(environment);
+  emitter,
+} = {}) {
+  environment =
+    environment ||
+    require('./lib/factory/environmentFactory.js')({ applicationFolder });
 
-module.exports = {
-  environment,
-  clientApp,
-  urlParser,
-  logger,
-  cache,
+  global.$Debug = environment.$Debug;
+  global.$IMA = global.$IMA || {};
+
+  const requireUncached = require('./lib/factory/devUtilsFactory.js')({
+    environment,
+  });
+
+  function appFactory() {
+    requireUncached('./build/server/vendors.js', { optional: true });
+    return requireUncached('./build/server/app.server.js');
+  }
+
+  function languageLoader(language) {
+    return requireUncached(`./build/static/locale/${language}.js`);
+  }
+
+  emitter = emitter || new Emitter({ logger, debug: false });
+  const instanceRecycler = require('./lib/instanceRecycler.js');
+  const serverGlobal = require('./lib/serverGlobal.js');
+  logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
+
+  const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
+    environment,
+    applicationFolder,
+  });
+  const serverApp = require('./lib/factory/serverAppFactory.js')({
+    environment,
+    logger,
+    applicationFolder,
+    languageLoader,
+    appFactory,
+    emitter,
+    instanceRecycler,
+    serverGlobal,
+  });
+
+  const cache = require('./lib/cache.js')({ environment });
+
+  // TODO IMA@18 new performance utilization instead of concurrent requests
+  // const performanceUtilization =
+  //   require('./lib/factory/performanceUtilizationFactory.js')({ environment });
+
+  // performanceUtilization.init();
+
+  serverApp.useIMADefaultHook();
+
+  // TODO IMA@18 prepare settings for lazy start
+  !environment.$Debug && appFactory();
+
+  return {
+    environment,
+    serverApp,
+    urlParser,
+    logger,
+    cache,
+    instanceRecycler,
+    emitter,
+    Event,
+  };
 };

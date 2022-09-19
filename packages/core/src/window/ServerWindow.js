@@ -1,12 +1,12 @@
+/* @if client **
+export default class ServerWindow {};
+/* @else */
 import Window from './Window';
-
-// @server-side class ServerWindow extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerWindow;
 
 /**
  * Server-side implementation of the `Window` utility API.
  */
 export default class ServerWindow extends Window {
-  //#if _SERVER
   static get $dependencies() {
     return [];
   }
@@ -176,5 +176,5 @@ export default class ServerWindow extends Window {
    * @inheritdoc
    */
   unbindEventListener() {}
-  //#endif
 }
+// @endif

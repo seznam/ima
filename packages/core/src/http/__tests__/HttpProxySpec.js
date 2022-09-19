@@ -7,6 +7,8 @@ import Window from 'src/window/Window';
 import GenericError from 'src/error/GenericError';
 
 describe('ima.core.http.HttpProxy', () => {
+  jest.useFakeTimers();
+
   const API_URL = 'http://localhost:3001/api/';
   const OPTIONS = {
     ttl: 3600000,
@@ -78,6 +80,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().body).toBeDefined();
         }
@@ -92,6 +95,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
         }
@@ -123,6 +127,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.FORBIDDEN);
         }
@@ -136,6 +141,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.NOT_FOUND);
         }
@@ -149,6 +155,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
         }
@@ -162,6 +169,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
         }

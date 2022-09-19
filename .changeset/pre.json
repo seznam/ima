@@ -12,20 +12,32 @@
     "@ima/helpers": "18.0.0-rc.1",
     "@ima/hmr-client": "18.0.0-rc.3",
     "@ima/server": "18.0.0-rc.3",
-    "@ima/docs": "0.0.0"
+    "@ima/docs": "0.0.0",
+    "@ima/plugin-cli": "18.0.0-rc.1"
   },
   "changesets": [
     "breezy-pens-smell",
     "early-colts-brake",
+    "five-colts-relax",
     "happy-experts-greet",
     "itchy-ladybugs-type",
+    "long-avocados-return",
+    "lovely-dancers-juggle",
     "nasty-mayflies-design",
+    "neat-candles-fail",
+    "odd-candles-help",
     "polite-kings-tickle",
     "quick-buckets-repair",
     "rare-islands-wash",
+    "serious-moles-cheer",
+    "smart-melons-help",
+    "soft-cooks-smash",
+    "sour-pumpkins-film",
     "thirty-fireants-cheer",
+    "unlucky-steaks-teach",
     "weak-coats-kiss",
     "wicked-hotels-clap",
-    "wise-llamas-cover"
+    "wise-llamas-cover",
+    "witty-queens-watch"
   ]
 }

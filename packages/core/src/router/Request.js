@@ -1,10 +1,10 @@
-// @server-side class Request {__CLEAR__}\nexports.default = Request;
-
+/* @if client **
+export default class Request {};
+/* @else */
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
-  //#if _SERVER
   static get $dependencies() {
     return [];
   }
@@ -106,5 +106,5 @@ export default class Request {
   getIPs() {
     return this._request ? this._request.ips || [] : [];
   }
-  //#endif
 }
+// @endif

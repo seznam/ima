@@ -10,3 +10,5 @@ storage
 docs/api
 .docusaurus
 build
+packages/*/.turbo
+website/.turbo

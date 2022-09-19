@@ -135,12 +135,8 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       jest.spyOn(console, 'warn').mockImplementation();
     });
 
-    it('should do nothing if active controller is null', () => {
-      pageManager._managedPage.controllerInstance = null;
-
-      pageManager._onCustomEventHandler(event);
-
-      expect(console.warn).not.toHaveBeenCalled();
+    afterEach(() => {
+      jest.resetAllMocks();
     });
 
     it('should handle event only with controller', () => {

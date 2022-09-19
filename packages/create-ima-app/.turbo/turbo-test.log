@@ -1,0 +1,6 @@
+[32mcreate-ima-app:test[0m: cache hit, replaying output [2m3d382cab8798aa2e[0m
+[32mcreate-ima-app:test: [0m
+[32mcreate-ima-app:test: [0m> create-ima-app@18.0.0-rc.4 test
+[32mcreate-ima-app:test: [0m> echo "Error: no test specified" && exit 0
+[32mcreate-ima-app:test: [0m
+[32mcreate-ima-app:test: [0mError: no test specified

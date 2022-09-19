@@ -1,5 +1,35 @@
 # Change Log
 
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- 0760ebb4: Removed `type` data from clear and error event emitter events in favor of automatic type detection in error-overlay
+
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- ec52f6ab: Fixed preprocessor exports for client/server bundles (now exports empty class instead of undefined)
+
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- 01aeb426: Changed core type to module
+- 3104f5d2: Added custom size-limit config
+  Added new tree-shaking specific size-limit test
+
+## 18.0.0-rc.7
+
+### Major Changes
+
+- 1c5f5fd8: Adds the possibility to use \$extensions getter in the Controllers to register extensions.
+
+### Patch Changes
+
+- 4a88eba1: New build using @ima/plugin-cli
+
 ## 18.0.0-rc.6
 
 ### Patch Changes

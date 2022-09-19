@@ -1,3 +1,4 @@
+import { logger } from '@ima/dev-utils/dist/logger';
 import { MultiCompiler } from 'webpack';
 
 import { ImaCliArgs, ImaConfig } from '../types';
@@ -8,7 +9,6 @@ import {
   formatWebpackErrors,
   formatWebpackWarnings,
 } from './formatStats';
-import { logger } from './logger';
 
 /**
  * Cli Error handler.
@@ -95,29 +95,11 @@ async function watchCompiler(
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
   let firstRun = true;
-  let hadErrorsOnFirstRun = false;
 
-  return new Promise<MultiCompiler>((resolve, reject) => {
+  return new Promise<MultiCompiler>(resolve => {
     compiler.watch(imaConfig.watchOptions, async (error, stats) => {
       // Stop CLI progress bar
       getProgress().stop();
-
-      // Don't continue when there are compile errors on first run
-      if (firstRun && stats?.hasErrors()) {
-        hadErrorsOnFirstRun = true;
-        await formatWebpackErrors(stats, args);
-        return;
-      }
-
-      if (hadErrorsOnFirstRun) {
-        hadErrorsOnFirstRun = false;
-        logger.info('Continuing with the compilation...');
-      }
-
-      // Reject when there are any compiler errors
-      if (error) {
-        return reject(error);
-      }
 
       // Format stats after plugin done callback
       if (firstRun) {

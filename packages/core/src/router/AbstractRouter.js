@@ -33,7 +33,6 @@ export default class AbstractRouter extends Router {
    *        {
    *          onlyUpdate: false,
    *          autoScroll: true,
-   *          allowSPA: true,
    *          documentView: null,
    *          managedRootView: null,
    *          viewAdapter: null
@@ -451,7 +450,6 @@ export default class AbstractRouter extends Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,

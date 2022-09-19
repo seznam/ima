@@ -1,5 +1,6 @@
-// @client-side
-
+/* @if server **
+export default class ClientWindow {};
+/* @else */
 import Window from './Window';
 
 /**
@@ -217,3 +218,4 @@ export default class ClientWindow extends Window {
     }
   }
 }
+// @endif

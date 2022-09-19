@@ -12,16 +12,17 @@
   "workspaces": [
     "./website",
     "./packages/dev-utils",
+    "./packages/plugin-cli",
+    "./packages/helpers",
+    "./packages/core",
+    "./packages/server",
     "./packages/devtools-scripts",
     "./packages/cli",
-    "./packages/core",
     "./packages/create-ima-app",
     "./packages/devtools",
     "./packages/error-overlay",
-    "./packages/helpers",
     "./packages/hmr-client",
-    "./packages/react-page-renderer",
-    "./packages/server"
+    "./packages/react-page-renderer"
   ],
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
