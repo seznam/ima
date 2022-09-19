@@ -1,29 +1,13 @@
 /* @if client **
 export default class ServerPageRenderer {};
 /* @else */
-import { Cache, ControllerDecorator, Dispatcher, GenericError, Response } from '@ima/core';
-import { Attributes, ComponentType, createElement, ReactElement } from 'react';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { Cache, ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
+import { ComponentType } from 'react';
 
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import { Helpers, RouteOptions, Settings } from './types';
-
-let runner = '';
-
-if (typeof window === 'undefined' || window === null) {
-  const fs = require('fs');
-  const path = require('path');
-  const runnerPath = path.resolve('./build/static/public/runner.js');
-
-  if (fs.existsSync(runnerPath)) {
-    runner = fs.readFileSync(
-      path.resolve('./build/static/public/runner.js'),
-      'utf8'
-    );
-  }
-}
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -37,7 +21,6 @@ if (typeof window === 'undefined' || window === null) {
  * @submodule ima.core.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
-  private _response: Response;
   private _cache: Cache;
 
   /**
@@ -48,8 +31,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @param dispatcher Dispatcher fires events to app.
    * @param settings Application setting for the current
    *        application environment.
-   * @param response Utility for sending the page markup to the
-   *        client as a response to the current HTTP request.
    * @param cache Resource cache caching the results of HTTP requests
    *        made by services used by the rendered page.
    */
@@ -58,16 +39,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     helpers: Helpers,
     dispatcher: Dispatcher,
     settings: Settings,
-    response: Response,
     cache: Cache
   ) {
     super(factory, helpers, dispatcher, settings);
-
-    /**
-     * Utility for sending the page markup to the client as a response to
-     * the current HTTP request.
-     */
-    this._response = response;
 
     /**
      * The resource cache, caching the results of all HTTP requests made by
@@ -87,24 +61,20 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
-    if (this._response.isResponseSent()) {
-      return Promise.resolve(this._response.getResponseParams());
-    }
-
     return this._helpers.allPromiseHash(pageResources).then(pageState => {
-      if (!this._response.isResponseSent()) {
-        controller.setState(pageState as { [key: string]: unknown });
-        controller.setMetaParams(pageState as { [key: string]: unknown });
+      controller.setState(pageState as { [key: string]: unknown });
+      controller.setMetaParams(pageState as { [key: string]: unknown });
 
-        this._response
-          .status(controller.getHttpStatus())
-          .setPageState(pageState as { [key: string]: unknown })
-          .send(
-            this._renderPageViewToString(controller, pageView, routeOptions)
-          );
-      }
+      this._prepareViewAdapter(controller, pageView, routeOptions);
 
-      return this._response.getResponseParams();
+      return {
+        controller,
+        documentView: this._getDocumentView(routeOptions),
+        revivalSettings: this._getRevivalSettings(),
+        settings: this._settings,
+        utils: this._factory.getUtils(),
+        viewAdapter: this._getViewAdapterElement()
+      };
     });
   }
 
@@ -154,41 +124,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			})(typeof window !== 'undefined' && window !== null ? window : global);
       #{$Runner}
 			`;
-  }
-
-  /**
-   * Render page content to a string containing HTML markup.
-   */
-  _renderPageViewToString(
-    controller: ControllerDecorator,
-    pageView: ComponentType,
-    routeOptions: RouteOptions
-  ) {
-    this._prepareViewAdapter(controller, pageView, routeOptions);
-
-    // Render current page to string
-    const page = renderToString(this._getViewAdapterElement() as ReactElement);
-
-    // Render document view (base HTML) to string
-    let appMarkup = renderToStaticMarkup(
-      createElement(this._getDocumentView(routeOptions), {
-        page,
-        $Utils: this._factory.getUtils(),
-        metaManager: controller.getMetaManager(),
-        revivalSettings: this._getRevivalSettings(),
-      } as Attributes)
-    );
-
-    // TODO IMA@18 - should be handled in server
-    appMarkup = this._helpers.processContent({
-      content: appMarkup,
-      SPA: false,
-      settings: this._settings,
-      runner,
-    });
-
-    // Return HTML markup with injected styles
-    return '<!doctype html>\n' + appMarkup;
   }
 }
 /* @endif */

@@ -18,7 +18,7 @@ import LegacyClientPageRenderer from './LegacyClientPageRenderer';
 import PageContext from './PageContext';
 import PageRendererFactory from './PageRendererFactory';
 import ServerPageRenderer from './ServerPageRenderer';
-import ViewAdapter from './ViewAdapter';
+import ViewAdapter from './ViewAdapter'; 
 
 export {
   AbstractComponent,

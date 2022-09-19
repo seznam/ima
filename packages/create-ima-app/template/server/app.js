@@ -8,6 +8,8 @@ const environment = imaServer.environment;
 const logger = imaServer.logger;
 const cache = imaServer.cache;
 
+require('@ima/react-page-renderer/dist/hook/server')(imaServer);
+
 const express = require('express');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');

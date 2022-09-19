@@ -1,3 +1,25 @@
-const { createClientServerConfig } = require('@ima/plugin-cli');
+const { createClientServerConfig, createConfig } = require('@ima/plugin-cli');
 
-module.exports = createClientServerConfig();
+const config = createClientServerConfig();
+
+const exclude = [
+    '**/server.ts/**'
+];
+
+config.forEach((_config) => {
+    if (_config.exclude) {
+        _config.exclude.push(...exclude)
+    } else {
+        _config.exclude = exclude;
+    }
+});
+
+const serverConfig = createConfig('commonjs');
+
+serverConfig.input = './hook';
+serverConfig.output = './dist/hook';
+serverConfig.plugins = [];
+
+config.push(serverConfig);
+
+module.exports = config;

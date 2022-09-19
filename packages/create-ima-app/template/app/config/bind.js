@@ -2,7 +2,6 @@ import {
   Cache,
   ComponentUtils,
   PageRenderer,
-  Response,
   Window,
 } from '@ima/core';
 import {
@@ -42,7 +41,6 @@ export default (ns, oc, config) => {
       '$Helper',
       '$Dispatcher',
       '$Settings',
-      Response,
       Cache,
     ]);
   }
