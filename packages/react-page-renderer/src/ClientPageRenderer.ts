@@ -1,4 +1,6 @@
-// @client-side
+/* @if server **
+export default class ClientPageRenderer {};
+/* @else */
 import {
   Controller,
   ControllerDecorator,
@@ -422,3 +424,4 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 }
+/* @endif */

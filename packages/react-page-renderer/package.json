@@ -16,13 +16,16 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "main": "./dist/server.js",
-  "module": "./dist/server.mjs",
-  "browser": "./dist/client.js",
+  "main": "./dist/server/index.js",
+  "browser": "./dist/client/index.js",
   "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "npm run test:jest && npm run test:size",
+    "test:jest": "jest -c jest.config.js",
+    "test:size": "size-limit",
+    "preversion": "npm test"
   },
   "publishConfig": {
     "access": "public",

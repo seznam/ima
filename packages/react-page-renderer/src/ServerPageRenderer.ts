@@ -1,22 +1,17 @@
-import { Cache, ControllerDecorator, Dispatcher, Response } from '@ima/core';
+/* @if client **
+export default class ServerPageRenderer {};
+/* @else */
+import { Cache, ControllerDecorator, Dispatcher, GenericError, Response } from '@ima/core';
 import { Attributes, ComponentType, createElement, ReactElement } from 'react';
-//#if _SERVER
-/* eslint-disable import/no-duplicates,import/order */
-import { GenericError } from '@ima/core';
-/* eslint-enable */
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
-//#endif
+
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import { Helpers, RouteOptions, Settings } from './types';
 
-// @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
-
 let runner = '';
 
-//#if _SERVER
-/* eslint-disable @typescript-eslint/no-var-requires */
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
@@ -29,8 +24,6 @@ if (typeof window === 'undefined' || window === null) {
     );
   }
 }
-/* eslint-enable */
-//#endif
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -44,7 +37,6 @@ if (typeof window === 'undefined' || window === null) {
  * @submodule ima.core.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
-  //#if _SERVER
   private _response: Response;
   private _cache: Cache;
 
@@ -198,8 +190,5 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     // Return HTML markup with injected styles
     return '<!doctype html>\n' + appMarkup;
   }
-  //#endif
-  /* eslint-disable */
-  ; // TODO Remove when jscc is not longer used.
-  /* eslint-enable */
 }
+/* @endif */
