@@ -14,10 +14,12 @@ import { Settings, Utils } from '../src/types';
 
 type RendererContext = {
   response: {
+    content: string,
     controller: ControllerDecorator,
     documentView: ComponentType,
     revivalSettings: string,
     settings: Settings,
+    status: number
     utils: Utils,
     viewAdapter: ReactElement,
   }
@@ -44,7 +46,9 @@ module.exports = function createReactRenderer({ emitter }: { emitter: Emitter })
       viewAdapter
     } = (event.context as RendererContext).response;
 
-    event.stopPropagation();
+    if (!controller) {
+      return event;
+    }
 
     // Render current page to string
     const page = renderToString(viewAdapter);
@@ -66,11 +70,9 @@ module.exports = function createReactRenderer({ emitter }: { emitter: Emitter })
       SPA: false
     });
 
-    return {
-      response: {
-        content: '<!doctype ima html>\n' + appMarkup,
-        status: controller.getHttpStatus()
-      }
-    };
+    (event.context as RendererContext).response.content = '<!doctype ima html>\n' + appMarkup;
+    (event.context as RendererContext).response.status = controller.getHttpStatus();
+
+    return event;
   });
 }
