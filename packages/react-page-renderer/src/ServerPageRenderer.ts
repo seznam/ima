@@ -68,11 +68,14 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       this._prepareViewAdapter(controller, pageView, routeOptions);
 
       return {
-        controller,
         documentView: this._getDocumentView(routeOptions),
-        revivalSettings: this._getRevivalSettings(),
+        documentViewProps: {
+          $Utils: this._factory.getUtils(),
+          metaManager: controller.getMetaManager(),
+          revivalSettings: this._getRevivalSettings()
+        },
         settings: this._settings,
-        utils: this._factory.getUtils(),
+        status: controller.getHttpStatus(),
         viewAdapter: this._getViewAdapterElement()
       };
     });

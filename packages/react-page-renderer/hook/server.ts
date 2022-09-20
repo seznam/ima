@@ -3,24 +3,21 @@ import path from 'path';
 
 import { Emitter } from '@esmj/emitter';
 
-import { ControllerDecorator } from '@ima/core';
 import { processContent } from '@ima/helpers';
 import { Event } from '@ima/server/lib/emitter';
 
 import { Attributes, ComponentType, createElement, ReactElement } from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
-import { Settings, Utils } from '../src/types';
+import { Settings } from '../src/types';
 
 type RendererContext = {
   response: {
     content: string,
-    controller: ControllerDecorator,
     documentView: ComponentType,
-    revivalSettings: string,
+    documentViewProps: Attributes,
     settings: Settings,
     status: number
-    utils: Utils,
     viewAdapter: ReactElement,
   }
 };
@@ -38,15 +35,13 @@ if (fs.existsSync(runnerPath)) {
 module.exports = function createReactRenderer({ emitter }: { emitter: Emitter }) {
   emitter.prependListener(Event.Response, (event) => {
     const {
-      controller,
       documentView,
-      revivalSettings,
+      documentViewProps,
       settings,
-      utils,
       viewAdapter
     } = (event.context as RendererContext).response;
 
-    if (!controller) {
+    if (!viewAdapter) {
       return event;
     }
 
@@ -56,10 +51,8 @@ module.exports = function createReactRenderer({ emitter }: { emitter: Emitter })
     // Render document view (base HTML) to string
     let appMarkup = renderToStaticMarkup(
       createElement(documentView, {
-        $Utils: utils,
-        metaManager: controller.getMetaManager(),
+        ...documentViewProps,
         page,
-        revivalSettings,
       } as Attributes)
     );
 
@@ -71,7 +64,6 @@ module.exports = function createReactRenderer({ emitter }: { emitter: Emitter })
     });
 
     (event.context as RendererContext).response.content = '<!doctype ima html>\n' + appMarkup;
-    (event.context as RendererContext).response.status = controller.getHttpStatus();
 
     return event;
   });
