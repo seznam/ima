@@ -1,7 +1,7 @@
 // TODO Use @ima types
 declare module '@ima/core' {
   global {
-    let $Debug: boolean;
+    var $Debug: boolean;
   }
 
   export interface Dictionary {

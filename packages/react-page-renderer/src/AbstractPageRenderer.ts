@@ -15,7 +15,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _helpers: Helpers;
   protected _settings: Settings;
   protected _viewAdapter?: ComponentType;
-  protected _viewAdapterProps = {};
+  protected _viewAdapterProps: { [key: string]: unknown } = {};
 
   /**
    * Initializes the abstract page renderer.

@@ -7,7 +7,6 @@ import AbstractComponent from './AbstractComponent';
 import AbstractPureComponent from './AbstractPureComponent';
 
 declare global {
-  const $Debug: boolean;
   interface Window {
     __IMA_HMR: ErrorOverlayEmitter;
   }

@@ -37,11 +37,13 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.1",
     "@esmj/emitter": "^0.0.6",
+    "@ima/dev-utils": "^18.0.0-rc.1",
+    "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@types/webpack-env": "^1.16.3"
+    "@types/webpack-env": "^1.16.3",
+    "to-mock": "^1.6.2"
   },
   "peerDependencies": {
     "@ima/core": "^18.0.0-rc.0",
