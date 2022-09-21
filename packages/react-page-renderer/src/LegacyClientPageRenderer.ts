@@ -1,31 +1,23 @@
-// @client-side
+/* @if server **
+export default class LegacyClientPageRenderer {};
+/* @else */
 import { ReactElement } from 'react';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
-import ClientPageRenderer from './ClientPageRenderer';
+import AbstractClientPageRenderer from './AbstractClientPageRenderer';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  */
-export default class LegacyClientPageRenderer extends ClientPageRenderer {
-  setState(pageState = {}) {
-    if (this._viewAdapter) {
-      render(
-        this._getViewAdapterElement({ state: pageState }) as ReactElement,
-        this._viewContainer as Element,
-        this._getUpdateCallback(pageState)
-      );
-    }
-  }
-
+export default class LegacyClientPageRenderer extends AbstractClientPageRenderer {
   unmount() {
     if (this._viewContainer && unmountComponentAtNode(this._viewContainer)) {
       this._runUnmountCallback();
     }
   }
 
-  protected _hydrate() {
+  protected _hydrateViewAdapter(): void {
     hydrate(
       this._getViewAdapterElement() as ReactElement,
       this._viewContainer as Element,
@@ -33,11 +25,15 @@ export default class LegacyClientPageRenderer extends ClientPageRenderer {
     );
   }
 
-  protected _render() {
+  protected _renderViewAdapter(
+    props?: unknown,
+    callback?: (() => void) | undefined
+  ): void {
     render(
-      this._getViewAdapterElement() as ReactElement,
+      this._getViewAdapterElement(Object.assign({}, props)) as ReactElement,
       this._viewContainer as Element,
-      this._getRenderCallback()
+      callback ? callback : this._getRenderCallback()
     );
   }
 }
+/* @endif */

@@ -2,16 +2,14 @@ const { createClientServerConfig, createConfig } = require('@ima/plugin-cli');
 
 const config = createClientServerConfig();
 
-const exclude = [
-    '**/server.ts/**'
-];
+const exclude = ['**/server.ts/**'];
 
-config.forEach((_config) => {
-    if (_config.exclude) {
-        _config.exclude.push(...exclude)
-    } else {
-        _config.exclude = exclude;
-    }
+config.forEach(_config => {
+  if (_config.exclude) {
+    _config.exclude.push(...exclude);
+  } else {
+    _config.exclude = exclude;
+  }
 });
 
 const serverConfig = createConfig('commonjs');

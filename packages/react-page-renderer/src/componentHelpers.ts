@@ -154,7 +154,7 @@ export function fire(
 ) {
   const { current: eventTarget } = component.eventBusRef;
 
-  if (eventTarget !instanceof EventTarget) {
+  if (!(eventTarget instanceof EventTarget)) {
     throw new Error(
       'The components `eventBusRef` must be set to a valid EventTarget element.'
     );

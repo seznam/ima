@@ -1,9 +1,14 @@
 /* @if client **
 export default class ServerPageRenderer {};
 /* @else */
-import { Cache, ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
-import { ComponentType } from 'react';
-
+import {
+  Cache,
+  ControllerDecorator,
+  Dispatcher,
+  GenericError,
+} from '@ima/core';
+import * as react from 'react';
+import * as reactDOM from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
@@ -12,13 +17,6 @@ import { Helpers, RouteOptions, Settings } from './types';
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
- *
- * @class ServerPageRenderer
- * @extends AbstractPageRenderer
- * @implements PageRenderer
- * @namespace ima.core.page.renderer
- * @module ima
- * @submodule ima.core.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
   private _cache: Cache;
@@ -57,7 +55,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    */
   mount(
     controller: ControllerDecorator,
-    pageView: ComponentType,
+    pageView: react.ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
@@ -72,11 +70,13 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
         documentViewProps: {
           $Utils: this._factory.getUtils(),
           metaManager: controller.getMetaManager(),
-          revivalSettings: this._getRevivalSettings()
+          revivalSettings: this._getRevivalSettings(),
         },
+        react,
+        reactDOM,
         settings: this._settings,
         status: controller.getHttpStatus(),
-        viewAdapter: this._getViewAdapterElement()
+        viewAdapter: this._getViewAdapterElement(),
       };
     });
   }

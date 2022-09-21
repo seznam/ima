@@ -2,43 +2,46 @@ import * as fs from 'fs';
 import path from 'path';
 
 import { Emitter } from '@esmj/emitter';
-
 import { processContent } from '@ima/helpers';
 import { Event } from '@ima/server/lib/emitter';
-
-import { Attributes, ComponentType, createElement, ReactElement } from 'react';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import * as react from 'react';
+import * as reactDOM from 'react-dom/server';
 
 import { Settings } from '../src/types';
 
 type RendererContext = {
   response: {
-    content: string,
-    documentView: ComponentType,
-    documentViewProps: Attributes,
-    settings: Settings,
-    status: number
-    viewAdapter: ReactElement,
-  }
+    content: string;
+    documentView: react.ComponentType;
+    documentViewProps: react.Attributes;
+    react: typeof react;
+    reactDOM: typeof reactDOM;
+    settings: Settings;
+    status: number;
+    viewAdapter: react.ReactElement;
+  };
 };
 
 let runner = '';
 
 const runnerPath = path.resolve('./build/static/public/runner.js');
 if (fs.existsSync(runnerPath)) {
-  runner = fs.readFileSync(
-    runnerPath,
-    'utf8'
-  );
+  runner = fs.readFileSync(runnerPath, 'utf8');
 }
 
-module.exports = function createReactRenderer({ emitter }: { emitter: Emitter }) {
-  emitter.prependListener(Event.Response, (event) => {
+module.exports = function createReactRenderer({
+  emitter,
+}: {
+  emitter: Emitter;
+}) {
+  emitter.prependListener(Event.Response, event => {
     const {
       documentView,
       documentViewProps,
+      react,
+      reactDOM,
       settings,
-      viewAdapter
+      viewAdapter,
     } = (event.context as RendererContext).response;
 
     if (!viewAdapter) {
@@ -46,25 +49,26 @@ module.exports = function createReactRenderer({ emitter }: { emitter: Emitter })
     }
 
     // Render current page to string
-    const page = renderToString(viewAdapter);
+    const page = reactDOM.renderToString(viewAdapter);
 
     // Render document view (base HTML) to string
-    let appMarkup = renderToStaticMarkup(
-      createElement(documentView, {
+    let appMarkup = reactDOM.renderToStaticMarkup(
+      react.createElement(documentView, {
         ...documentViewProps,
         page,
-      } as Attributes)
+      } as react.Attributes)
     );
 
     appMarkup = processContent({
       content: appMarkup,
       runner,
       settings,
-      SPA: false
+      SPA: false,
     });
 
-    (event.context as RendererContext).response.content = '<!doctype ima html>\n' + appMarkup;
+    (event.context as RendererContext).response.content =
+      '<!doctype ima html>\n' + appMarkup;
 
     return event;
   });
-}
+};
