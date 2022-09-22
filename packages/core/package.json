@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@ima/plugin-cli": "^18.0.0-rc.1",
+    "@types/express": "^4.17.14",
     "jscodeshift": "^0.13.1"
   },
   "publishConfig": {
