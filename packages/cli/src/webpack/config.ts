@@ -24,9 +24,9 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
-  extractLanguages,
   createDevServerConfig,
   getCurrentCoreJsVersion,
+  getLocaleEntryPoints,
 } from './utils';
 
 /**
@@ -210,6 +210,7 @@ export default async (
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),
+      ...getLocaleEntryPoints(imaConfig),
     },
     output: {
       path: outputDir,
@@ -498,6 +499,15 @@ export default async (
             fullySpecified: false,
           },
         },
+        {
+          test: /virtualImaLocale\.json$/,
+          type: 'javascript/auto',
+          loader: 'locale-loader',
+          options: {
+            imaConfig,
+            rootDir,
+          },
+        },
       ].filter(Boolean) as RuleSetRule[],
     },
     plugins: [
@@ -531,10 +541,7 @@ export default async (
             // Copies essential assets to static directory
             isEsVersion &&
               new CopyPlugin({
-                patterns: [
-                  { from: 'app/public', to: 'static/public' },
-                  ...extractLanguages(imaConfig),
-                ],
+                patterns: [{ from: 'app/public', to: 'static/public' }],
               }),
 
             // Enables compression for assets in production build

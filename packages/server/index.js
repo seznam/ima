@@ -26,7 +26,7 @@ module.exports = function createIMAServer({
   }
 
   function languageLoader(language) {
-    return requireUncached(`./build/static/locale/${language}.js`);
+    return requireUncached(`./build/server/${language}.js`).default;
   }
 
   emitter = emitter || new Emitter({ logger, debug: false });
