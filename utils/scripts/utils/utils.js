@@ -255,8 +255,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
       const packFilePath = path.join(pkgDir, packFileName);
 
-      // TODO IMA@18 - remove when ima works without legacy peer deps
-      shell(`npm install ${packFilePath} --legacy-peer-deps`, destDir);
+      shell(`npm install ${packFilePath}`, destDir);
       fs.rmSync(packFilePath);
     });
   }
