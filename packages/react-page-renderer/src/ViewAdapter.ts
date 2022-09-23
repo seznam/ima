@@ -94,7 +94,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
       { value: this._getContextValue(this.props, this.state) },
       createElement(
         this._managedRootView as ComponentClass,
-        Object.assign(this.state, {
+        Object.assign({}, this.state, {
           pageView: this.props.pageView,
           ref: () => {
             if (this.props.refCallback) {

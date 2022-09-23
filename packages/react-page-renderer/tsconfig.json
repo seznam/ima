@@ -4,11 +4,10 @@
     "target": "ES2022",
     "lib": [
       "DOM",
-      "ES2020"
+      "ES2022"
     ],
     "outDir": "./dist",
     "baseUrl": ".",
-    "declaration": false,
     "paths": {
       "@/*": [
         "./src/*"
@@ -17,13 +16,10 @@
         "./typings/*"
       ]
     },
-    "typeRoots": [
-      "./node_modules/@types",
-      "../../node_modules/@types",
-    ],
   },
   "include": [
-    "./typings/**/*",
+    "../../typings/**/*/*",
+    "./types/**/*",
     "./src/**/*"
   ]
 }

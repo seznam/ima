@@ -1,5 +1,8 @@
 import { Request as ExpressRequest } from 'express';
 
+/* @if client **
+export default class Request {};
+/* @else */
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
@@ -108,5 +111,5 @@ export default class Request {
   getIPs(): string[] {
     return this._request ? this._request.ips || [] : [];
   }
-  // @endif
 }
+// @endif

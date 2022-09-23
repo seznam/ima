@@ -30,17 +30,26 @@ overlayJs.onload = () => {
   imaErrorOverlay.setAttribute('public-url', options.publicUrl);
   document.body.appendChild(imaErrorOverlay);
 
+  // Track compile errors state so we know when to call emit('clear') event.
+  let hadCompileErrors = false;
+
   // Connect client to HMR Event source
   eventSource.addListener('message', (data: HMRMessageData) => {
     // Compile error handler
     if (data.action === 'built') {
       if (Array.isArray(data?.errors) && data?.errors?.length > 0) {
+        hadCompileErrors = true;
         window.__IMA_HMR.emit('error', {
           error: data.errors[0],
           type: 'compile',
         });
       } else {
-        window.__IMA_HMR.emit('clear', { type: 'compile' });
+        // Clear only when there were any compile errors previously
+        if (hadCompileErrors) {
+          window.__IMA_HMR.emit('clear');
+        }
+
+        hadCompileErrors = false;
       }
     }
 

@@ -492,7 +492,7 @@ export default async (
           /**
            * Allow interop import of .mjs modules.
            */
-          test: /\.mjs$/,
+          test: /\.m?js$/,
           type: 'javascript/auto',
           resolve: {
             fullySpecified: false,
@@ -568,6 +568,16 @@ export default async (
     externalsPresets: {
       node: isServer,
     },
+
+    // Server will use externals from node modules
+    ...(isServer && {
+      externals: {
+        react: 'react',
+        'react-dom': 'react-dom',
+        'react-dom/client': 'react-dom/client',
+        'react-dom/server': 'react-dom/server',
+      },
+    }),
 
     // Turn webpack performance reports off since we print reports ourselves
     performance: false,

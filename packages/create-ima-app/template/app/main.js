@@ -23,7 +23,7 @@ if (!$IMA.Test) {
           typeof window !== 'undefined' &&
           window?.__IMA_HMR?.emit
         ) {
-          window.__IMA_HMR.emit('error', { error, type: 'runtime' });
+          window.__IMA_HMR.emit('error', { error });
         }
 
         console.error(error);

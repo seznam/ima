@@ -1,9 +1,67 @@
 const chalk = require('chalk');
-const { createLogger, format, transports } = require('winston');
-const { printf, combine } = format;
+const { createLogger, format, transports, config } = require('winston');
+const TransportStream = require('winston-transport');
+const { printf, combine, json } = format;
+const { formatError: devFormatError } = require('@ima/dev-utils/dist/cliUtils');
 
-const devLogger = require('./logger/devLogger');
-const { colorizeLevel } = require('./logger/loggerUtils');
+function colorizeLevel(level) {
+  switch (level) {
+    case 'error':
+      return chalk.bold.red(`${level}: `);
+    case 'warn':
+      return chalk.bold.yellow(`${level}: `);
+    case 'info':
+      return chalk.bold.cyan(`${level}: `);
+    case 'http':
+      return chalk.bold.magenta(`${level}: `);
+    case 'verbose':
+      return chalk.bold.underline.white(`${level}: `);
+    case 'debug':
+      return chalk.bold.green(`${level}: `);
+    case 'silly':
+    default:
+      return chalk.bold.gray(`${level}: `);
+  }
+}
+class ConsoleAsync extends TransportStream {
+  constructor(options = {}) {
+    super(options);
+
+    this.name = options.name || 'console-async';
+    this.rootDir = options.rootDir;
+  }
+
+  log(info, callback) {
+    this._log(info, callback);
+  }
+
+  async _log(meta, callback) {
+    const message = meta.error
+      ? `${meta.message}\n\n${await devFormatError(
+          meta.error,
+          'runtime',
+          this.rootDir
+        )}`
+      : meta.message;
+
+    // eslint-disable-next-line no-console
+    (console[meta.level] ?? console.log)(
+      `${colorizeLevel(meta.level)}${message}`
+    );
+
+    callback();
+  }
+}
+
+const devLogger = createLogger({
+  format: json(),
+  levels: config.npm.levels,
+  transports: [
+    new ConsoleAsync({
+      rootDir: process.cwd(),
+    }),
+  ],
+});
 
 function formatMetaSimple(meta) {
   let keys = Object.keys(meta).filter(
@@ -96,7 +154,7 @@ function formatError(error) {
   return description;
 }
 
-module.exports = environment => {
+module.exports = function loggerFactory({ environment }) {
   let FORMATTING = environment.$Server.logger.formatting;
 
   if (['simple', 'JSON', 'dev'].indexOf(FORMATTING) === -1) {

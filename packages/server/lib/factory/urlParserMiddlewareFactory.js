@@ -1,9 +1,11 @@
+'use strict';
+
 const { URL } = require('url');
-
 const path = require('path');
-const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
-module.exports = environment => {
+module.exports = function urlParserMiddlewareFactory({ environment }) {
+  const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
+
   function _getHost(req) {
     let forwardedHost = req.get('X-Forwarded-Host');
     let host = req.get('host');

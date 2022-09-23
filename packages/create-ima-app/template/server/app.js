@@ -1,12 +1,14 @@
 const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
-const imaServer = require('@ima/server');
-const clientApp = imaServer.clientApp;
+const imaServer = require('@ima/server')();
+const serverApp = imaServer.serverApp;
 const urlParser = imaServer.urlParser;
 const environment = imaServer.environment;
 const logger = imaServer.logger;
 const cache = imaServer.cache;
+
+require('@ima/react-page-renderer/dist/hook/server')(imaServer);
 
 const express = require('express');
 const favicon = require('serve-favicon');
@@ -18,16 +20,28 @@ const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
 const expressStaticGzip = require('express-static-gzip');
 
+function errorToString(error) {
+  const jsonError = errorToJSON(error);
+  let errorString =
+    jsonError && jsonError.message
+      ? jsonError.message
+      : 'Unknown error message';
+
+  try {
+    errorString = JSON.stringify(jsonError);
+  } catch (e) {
+    logger.error(e.message);
+  }
+
+  return errorString;
+}
+
 process.on('uncaughtException', error => {
-  logger.error('Uncaught Exception', {
-    error,
-  });
+  logger.error(`Uncaught Exception:\n${errorToString(error)}`);
 });
 
 process.on('unhandledRejection', error => {
-  logger.error('Unhandled promise rejection', {
-    error,
-  });
+  logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
 });
 
 function renderApp(req, res, next) {
@@ -48,8 +62,8 @@ function renderApp(req, res, next) {
     }
   }
 
-  clientApp
-    .requestHandler(req, res)
+  serverApp
+    .requestHandlerMiddleware(req, res)
     .then(
       response => {
         if (response.error) {
@@ -77,12 +91,8 @@ function renderApp(req, res, next) {
     });
 }
 
-function errorHandler(err, req, res) {
-  clientApp.errorHandler(err, req, res);
-}
-
-function staticErrorPage(err, req, res) {
-  clientApp.showStaticErrorPage(err, req, res);
+function staticErrorPage(error, req, res) {
+  serverApp.renderStaticServerErrorPage({ error, req, res });
 }
 
 const app = express();
@@ -125,7 +135,7 @@ app
   )
   .use(urlParser)
   .use(renderApp)
-  .use(errorHandler)
+  .use(serverApp.errorHandlerMiddleware)
   .use(staticErrorPage);
 
 module.exports = {

@@ -1,1 +1,1 @@
-declare module '@ima/server/lib/environment.js';
+declare module '@ima/server/lib/factory/environmentFactory.js';

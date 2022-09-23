@@ -37,7 +37,6 @@ export default class RouteFactory {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?React.Component=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,

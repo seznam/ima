@@ -1,4 +1,6 @@
-// @if client
+/* @if server **
+export default class ClientPageManager {};
+/* @else */
 import AbstractPageManager from './AbstractPageManager';
 import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';

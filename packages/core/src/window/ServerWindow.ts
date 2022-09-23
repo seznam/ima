@@ -1,4 +1,6 @@
-// @if server
+/* @if client **
+export default class ServerWindow {};
+/* @else */
 import Window from './Window';
 import GenericError from '../error/GenericError';
 

@@ -22,7 +22,6 @@ describe('ima.core.router.AbstractRouter', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: null,
     managedRootView: null,
     viewAdapter: null,

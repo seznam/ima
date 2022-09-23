@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.3
+
+### Patch Changes
+
+- d6a4045f: Added support for pure esm modules
+
 ## 18.0.0-rc.2
 
 ### Patch Changes

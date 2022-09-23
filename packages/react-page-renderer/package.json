@@ -16,13 +16,16 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "main": "./dist/server.js",
-  "module": "./dist/server.mjs",
-  "browser": "./dist/client.js",
+  "main": "./dist/server/index.js",
+  "browser": "./dist/client/index.js",
   "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "npm run test:jest && npm run test:size",
+    "test:jest": "jest -c jest.config.js",
+    "test:size": "size-limit",
+    "preversion": "npm test"
   },
   "publishConfig": {
     "access": "public",
@@ -34,16 +37,19 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
+    "@esmj/emitter": "^0.0.6",
     "@ima/dev-utils": "^18.0.0-rc.1",
+    "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@types/webpack-env": "^1.16.3"
+    "@types/webpack-env": "^1.16.3",
+    "to-mock": "^1.6.2"
   },
   "peerDependencies": {
     "@ima/core": "^18.0.0-rc.0",
     "@ima/dev-utils": "^18.0.0-rc.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": ">17.0.2",
+    "react-dom": ">17.0.2",
     "webpack": "^5.70.0"
   }
 }

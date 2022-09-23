@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.7",
+  "version": "18.0.0-rc.10",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -16,6 +16,8 @@
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/core"
   },
+  "type": "module",
+  "sideEffects": false,
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
@@ -56,12 +58,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "size-limit": [
-    {
-      "limit": "31 KB",
-      "path": "./dist/client/index.js",
-      "running": false
-    }
-  ]
+  }
 }

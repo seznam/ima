@@ -1,4 +1,6 @@
-// @if client
+/* @if server **
+export default class ClientWindow {};
+/* @else */
 import Window, { listenerOptions } from './Window';
 
 /**

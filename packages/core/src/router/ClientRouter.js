@@ -1,4 +1,6 @@
-// @if client
+/* @if server **
+export default class ClientRouter {};
+/* @else */
 import AbstractRouter from './AbstractRouter';
 import ActionTypes from './ActionTypes';
 import RouteFactory from './RouteFactory';
@@ -188,7 +190,7 @@ export default class ClientRouter extends AbstractRouter {
       .then(params => {
         // Hide error overlay
         if (!params?.error && $Debug && window.__IMA_HMR) {
-          window.__IMA_HMR.emit('clear', { type: 'runtime' });
+          window.__IMA_HMR.emit('clear');
         }
 
         return params;
@@ -209,7 +211,6 @@ export default class ClientRouter extends AbstractRouter {
       if (window.__IMA_HMR) {
         window.__IMA_HMR.emit('error', {
           error: params.error,
-          type: 'runtime',
         });
 
         return Promise.reject({

@@ -1,3 +1,6 @@
+/* @if client **
+export default class Response {};
+/* @else */
 import GenericError from '../error/GenericError';
 import { Response as ExpressResponse } from 'express';
 
@@ -350,5 +353,5 @@ export default class Response {
 
     return expressOptions;
   }
-  // @endif
 }
+// @endif

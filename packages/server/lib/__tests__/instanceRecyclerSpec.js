@@ -1,4 +1,4 @@
-const instanceRecycler = require('../lib/instanceRecycler.js');
+const instanceRecycler = require('../instanceRecycler.js');
 
 describe('instranceRecycler', () => {
   beforeEach(() => {
