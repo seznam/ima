@@ -1,5 +1,0 @@
-[36m@ima/helpers:test[0m: cache hit, replaying output [2m92256740b47dbf3d[0m
-[36m@ima/helpers:test: [0m
-[36m@ima/helpers:test: [0m> @ima/helpers@18.0.0-rc.2 test
-[36m@ima/helpers:test: [0m> jest -c jest.config.js
-[36m@ima/helpers:test: [0m
