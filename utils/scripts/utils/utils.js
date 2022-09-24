@@ -244,6 +244,8 @@ function initApp(destDir, pkgDirs, cliArgs) {
 
   // Build, pack and install packages in the target directory.
   if (cliArgs.init) {
+    let packFiles = [];
+
     pkgDirs.forEach(pkgDir => {
       const pkgJson = require(path.join(pkgDir, 'package.json'));
 
@@ -256,8 +258,10 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFilePath = path.join(pkgDir, packFileName);
 
       shell(`npm install ${packFilePath}`, destDir);
-      fs.rmSync(packFilePath);
+      packFiles.push(packFilePath);
     });
+
+    packFiles.forEach(fs.rmSync);
   }
 }
 
