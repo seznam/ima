@@ -8,11 +8,8 @@ import ExtensibleError from './ExtensibleError';
  * {@link ExtensibleError}, which does not make much sense from the strict
  * OOP standpoint, but is necessary due to limitations of JavaScript, so that
  * IMA errors are instances of both the native errors and of this interface.
- *
- * @interface
- * @extends ExtensibleError
  */
-export default interface Error extends ExtensibleError {
+export default abstract class Error extends ExtensibleError {
   /**
    * Returns the HTTP status to send to the client.
    *
@@ -22,10 +19,10 @@ export default interface Error extends ExtensibleError {
    * This method is a shorthand for the following code snippet:
    * `this.getParams().status || 500`.
    *
-   * @return {number} The HTTP status to send to the client.
+   * @return The HTTP status to send to the client.
    * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
    */
-  getHttpStatus(): number;
+   abstract getHttpStatus(): number;
 
   /**
    * Returns the error parameters providing additional details about the
@@ -34,9 +31,9 @@ export default interface Error extends ExtensibleError {
    * `status: number` field which represents the HTTP status to send to
    * the client.
    *
-   * @return {Object<string, *>} The route parameters of the route at which
+   * @return The route parameters of the route at which
    *         the error has occurred.
    * @see Error#getHttpStatus
    */
-  getParams(): { [key: string]: unknown };
+   abstract getParams(): { [key: string]: unknown };
 }
