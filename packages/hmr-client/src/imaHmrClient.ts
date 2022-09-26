@@ -41,7 +41,6 @@ overlayJs.onload = () => {
         hadCompileErrors = true;
         window.__IMA_HMR.emit('error', {
           error: data.errors[0],
-          type: 'compile',
         });
       } else {
         // Clear only when there were any compile errors previously

@@ -1,8 +1,0 @@
-[32m@ima/helpers:build[0m: cache hit, replaying output [2m7e4e0c94972d2c94[0m
-[32m@ima/helpers:build: [0m
-[32m@ima/helpers:build: [0m> @ima/helpers@18.0.0-rc.2 build
-[32m@ima/helpers:build: [0m> rollup --config
-[32m@ima/helpers:build: [0m
-[32m@ima/helpers:build: [0m[36m
-[32m@ima/helpers:build: [0m[1m./src/index.js[22m → [1m./dist, ./dist, ./dist[22m...[39m
-[32m@ima/helpers:build: [0m[32mcreated [1m./dist, ./dist, ./dist[22m in [1m801ms[22m[39m
