@@ -38,7 +38,7 @@ export default abstract class AbstractRoute {
    * @return {string} Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
-  static pairsToQuery(pairs = []) {
+  static pairsToQuery(pairs: Array<Array<unknown>> = []) {
     if (!pairs || !pairs.length) {
       return '';
     }
@@ -389,7 +389,9 @@ export default abstract class AbstractRoute {
    * @return {Object<string, ?string>} Map of parameter names to parameter
    *         values.
    */
-  abstract extractParameters(path: string): { [key: string]: string };
+  abstract extractParameters(path: string): {
+    [key: string]: string | undefined;
+  };
 
   /**
    * Helper method to pre-process view and controller which can be

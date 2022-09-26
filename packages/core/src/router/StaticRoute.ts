@@ -117,7 +117,7 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * @inheritdoc
-   * @param {string} pathExpression A path expression specifying the URL path
+   * @param pathExpression A path expression specifying the URL path
    *        part matching this route (must not contain a query string),
    *        optionally containing named parameter placeholders specified as
    *        `:parameterName`.
@@ -133,30 +133,23 @@ export default class StaticRoute extends AbstractRoute {
 
     /**
      * The path expression with the trailing slashes trimmed.
-     *
-     * @type {string}
      */
     this._trimmedPathExpression = AbstractRoute.getTrimmedPath(pathExpression);
 
     /**
      * The names of the parameters in this route.
-     *
-     * @type {string[]}
      */
     this._parameterNames = this._getParameterNames(pathExpression);
 
     /**
      * Set to `true` if this route contains parameters in its path.
-     *
-     * @type {boolean}
+
      */
     this._hasParameters = !!this._parameterNames.length;
 
     /**
      * A regexp used to match URL path against this route and extract the
      * parameter values from the matched URL paths.
-     *
-     * @type {RegExp}
      */
     this._matcher = this._compileToRegExp(this._trimmedPathExpression);
   }
@@ -164,7 +157,7 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  toPath(params = {}) {
+  toPath(params: { [key: string]: number | string } = {}) {
     let path = this._pathExpression;
     const queryPairs = [];
 
@@ -214,16 +207,11 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Replace required parameter placeholder in path with parameter value.
-   *
-   * @param {string} path
-   * @param {string} paramName
-   * @param {string} paramValue
-   * @return {string} New path.
    */
   _substituteRequiredParamInPath(
     path: string,
     paramName: string,
-    paramValue: string
+    paramValue: string | number
   ) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
@@ -233,16 +221,11 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Replace optional param placeholder in path with parameter value.
-   *
-   * @param {string} path
-   * @param {string} paramName
-   * @param {string} paramValue
-   * @return {string} New path.
    */
   _substituteOptionalParamInPath(
     path: string,
     paramName: string,
-    paramValue: string
+    paramValue: string | number
   ) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(
@@ -253,9 +236,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Remove unused optional param placeholders in path.
-   *
-   * @param {string} path
-   * @return {string} New path.
    */
   _cleanUnusedOptionalParams(path: string) {
     let replacedPath = path;
@@ -274,10 +254,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Returns true, if paramName is placed in path.
-   *
-   * @param {string} path
-   * @param {string} paramName
-   * @return {boolean}
    */
   _isOptionalParamInPath(path: string, paramName: string) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(?:${PARAMS_END_PATTERN})`;
@@ -287,10 +263,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Returns true, if paramName is placed in path and it's required.
-   *
-   * @param {string} path
-   * @param {string} paramName
-   * @return {boolean}
    */
   _isRequiredParamInPath(path: string, paramName: string) {
     const regexp = new RegExp(`:${paramName}`);
@@ -300,9 +272,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Extract clear parameter name, e.q. '?name' or 'name'
-   *
-   * @param {string} rawParam
-   * @return {string}
    */
   _getClearParamName(rawParam: string) {
     const regExpr = /\??[a-z0-9]+/i;
@@ -314,9 +283,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Get pattern for subparameter.
-   *
-   * @param {string} delimeter Parameters delimeter
-   * @return {string}
    */
   _getSubparamPattern(delimeter: string) {
     const pattern = `([^${delimeter}?/]+)`;
@@ -326,9 +292,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Check if all optional params are below required ones
-   *
-   * @param {array<string>} allMainParams
-   * @return {boolean}
    */
   _checkOptionalParamsOrder(allMainParams: string[]) {
     let optionalLastId = -1;
@@ -353,8 +316,8 @@ export default class StaticRoute extends AbstractRoute {
    * Check if main parametres have correct order.
    * It means that required param cannot follow optional one.
    *
-   * @param {string} clearedPathExpr The cleared URL path (removed first and last slash, ...).
-   * @return {Bool} Returns TRUE if order is correct.
+   * @param clearedPathExpr The cleared URL path (removed first and last slash, ...).
+   * @return Returns TRUE if order is correct.
    */
   _checkParametersOrder(clearedPathExpr: string) {
     const mainParamsMatches = clearedPathExpr.match(PARAMS_MAIN_REGEXP) || [];
@@ -564,7 +527,7 @@ export default class StaticRoute extends AbstractRoute {
    * @return {Object<string, ?string>} Params object.
    */
   _extractParameters(parameterValues: string[]) {
-    const parameters = {};
+    const parameters: { [key: string]: string | undefined } = {};
 
     const parametersCount = this._parameterNames.length;
 

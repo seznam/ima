@@ -175,8 +175,11 @@ export default class ServerWindow extends Window {
    * @inheritdoc
    */
   createCustomEvent(name: string, options: { [key: string]: unknown }) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const dummyCustomEvent = { initCustomEvent: () => {}, detail: {} } as unknown as CustomEvent;
+    const dummyCustomEvent = {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      initCustomEvent: () => {},
+      detail: {},
+    } as unknown as CustomEvent;
 
     return Object.assign(dummyCustomEvent, options);
   }

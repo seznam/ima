@@ -198,8 +198,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  createCustomEvent(name: string,
-    options: { [key: string]: unknown }) {
+  createCustomEvent(name: string, options: { [key: string]: unknown }) {
     return new CustomEvent(name, options);
   }
 
