@@ -7,29 +7,20 @@ import { Request as ExpressRequest } from 'express';
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
-  protected _request: ExpressRequest | null;
+  /**
+   * The current ExpressJS request object, or `null` if running at
+   * the client side.
+   */
+  protected _request?: ExpressRequest;
 
   static get $dependencies() {
     return [];
   }
 
   /**
-   * Initializes the request.
-   */
-  constructor() {
-    /**
-     * The current ExpressJS request object, or `null` if running at
-     * the client side.
-     *
-     * @type {?Express.Request}
-     */
-    this._request = null;
-  }
-
-  /**
    * Initializes the request using the provided ExpressJS request object.
    *
-   * @param {?Express.Request} request The ExpressJS request object
+   * @param request The ExpressJS request object
    *        representing the current request. Use `null` at the client
    *        side.
    */
@@ -40,7 +31,7 @@ export default class Request {
   /**
    * Returns the path part of the URL to which the request was made.
    *
-   * @return {string} The path to which the request was made.
+   * @return The path to which the request was made.
    */
   getPath() {
     return this._request ? this._request.originalUrl : '';
@@ -49,7 +40,7 @@ export default class Request {
   /**
    * Returns the `Cookie` HTTP header value.
    *
-   * @return {string} The value of the `Cookie` header.
+   * @return The value of the `Cookie` header.
    */
   getCookieHeader() {
     return this._request ? this._request.get('Cookie') : '';
@@ -57,8 +48,6 @@ export default class Request {
 
   /**
    * Returns uploaded file to server and meta information.
-   *
-   * @return {?Object<string, *>}
    */
   getFile() {
     return this._request ? this._request.file : null;

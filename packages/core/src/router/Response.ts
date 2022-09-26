@@ -2,102 +2,63 @@
 export default class Response {};
 /* @else */
 import GenericError from '../error/GenericError';
-import { Response as ExpressResponse } from 'express';
+import { Response as ExpressResponse, CookieOptions } from 'express';
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
 export default class Response {
-  protected _response: ExpressResponse | null;
-  protected _isSent: boolean;
-  protected _status: number;
-  protected _content: string;
-  protected _pageState: { [key: string]: unknown };
+  /**
+   * The ExpressJS response object, or `undefined` if running at the
+   * client side.
+   */
+  protected _response?: ExpressResponse;
+  /**
+   * It is flag for sent response for request.
+   */
+  protected _isSent = false;
+  /**
+   * HTTP Status code.
+   */
+  protected _status = 500;
+  /**
+   * The content of response.
+   */
+  protected _content = '';
+  /**
+   * The rendered page state.
+   */
+  protected _pageState: { [key: string]: unknown } = {};
+  /**
+   * Internal cookie storage for Set-Cookie header.
+   */
   protected _internalCookieStorage: Map<
     string,
-    { value: string; options: { domain: string; exprires: number | string } }
-  >;
+    { value: string; options: CookieOptions }
+  > = new Map();
+  /**
+   * Transform function for cookie value.
+   */
   protected _cookieTransformFunction: {
     encode: (value: string) => string;
     decode: (value: string) => string;
-  };
+  } = {
+      encode: value => value,
+      decode: value => value,
+    };
 
   static get $dependencies() {
     return [];
   }
 
   /**
-   * Initializes the response.
-   */
-  constructor() {
-    /**
-     * The ExpressJS response object, or `null` if running at the
-     * client side.
-     *
-     * @type {?Express.Response}
-     */
-    this._response = null;
-
-    /**
-     * It is flag for sent response for request.
-     *
-     * @type {boolean}
-     */
-    this._isSent = false;
-
-    /**
-     * HTTP Status code.
-     *
-     * @type {number}
-     */
-    this._status = 500;
-
-    /**
-     * The content of response.
-     *
-     * @type {string}
-     */
-    this._content = '';
-
-    /**
-     * The rendered page state.
-     *
-     * @type {Object<string, *>}
-     */
-    this._pageState = {};
-
-    /**
-     * Internal cookie storage for Set-Cookie header.
-     *
-     * @type {Map<string, {
-     *         value: string,
-     *         options: {domain: string=, expires: (number|string)=}
-     *       }>}
-     */
-    this._internalCookieStorage = new Map();
-
-    /**
-     * Transform function for cookie value.
-     *
-     * @type {{encode: function, decode: function}}
-     */
-    this._cookieTransformFunction = {
-      encode: value => value,
-      decode: value => value,
-    };
-  }
-
-  /**
    * Initializes this response wrapper with the provided ExpressJS response
    * object.
    *
-   * @param {?Express.Response} response The ExpressJS response, or
+   * @param response The ExpressJS response, or
    *        `null` if the code is running at the client side.
-   * @param {{
-   *          encode: function(string): string=,
-   *          decode: function(string): string
-   *        }=} cookieTransformFunction
-   * @return {ima.core.router.Response} This response.
+   * @param cookieTransformFunction
+   * @return This response.
    */
   init(response: ExpressResponse, cookieTransformFunction = {}) {
     this._cookieTransformFunction = Object.assign(
@@ -123,11 +84,11 @@ export default class Response {
    *
    * Use this method only at the server side.
    *
-   * @param {string} url The URL to which the client should be redirected.
-   * @param {number=} [status=302] The HTTP status code to send to the
+   * @param url The URL to which the client should be redirected.
+   * @param[status=302] The HTTP status code to send to the
    *        client.
-   * @param {Object.<string, string>} [headers={}] Custom headers to be used on the response.
-   * @return {Response} This response.
+   * @param headers Custom headers to be used on the response.
+   * @return This response.
    */
   redirect(url: string, status = 302, headers = {}) {
     // TODO IMA@18 refactor to use an `options` object for `status` and `headers`, same as $Router
@@ -138,7 +99,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:redirect The response has already ' +
-            'been sent. Check your workflow.',
+          'been sent. Check your workflow.',
           params
         );
       }
@@ -147,8 +108,11 @@ export default class Response {
     this._isSent = true;
     this._status = status;
     this._setCookieHeaders();
-    this._response.set(headers);
-    this._response.redirect(status, url);
+
+    if (this._response) {
+      this._response.set(headers);
+      this._response.redirect(status, url);
+    }
 
     return this;
   }
@@ -162,9 +126,9 @@ export default class Response {
    *
    * Use this method only at the server side.
    *
-   * @param {number} httpStatus HTTP response status code to send to the
+   * @param httpStatus HTTP response status code to send to the
    *        client.
-   * @return {Response} This response.
+   * @return This response.
    */
   status(httpStatus: number): this {
     if ($Debug) {
@@ -173,14 +137,16 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:status The response has already ' +
-            'been sent. Check your workflow.',
+          'been sent. Check your workflow.',
           params
         );
       }
     }
 
     this._status = httpStatus;
-    this._response.status(httpStatus);
+    if (this._response) {
+      this._response.status(httpStatus);
+    }
 
     return this;
   }
@@ -189,8 +155,8 @@ export default class Response {
    * Sends the response to the client with the provided content. Use this
    * method only at the server side.
    *
-   * @param {string} content The response body.
-   * @return {Response} This response.
+   * @param content The response body.
+   * @return This response.
    */
   send(content: string): this {
     if ($Debug) {
@@ -200,7 +166,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:send The response has already been ' +
-            'sent. Check your workflow.',
+          'sent. Check your workflow.',
           params
         );
       }
@@ -209,7 +175,9 @@ export default class Response {
     this._isSent = true;
     this._content = content;
     this._setCookieHeaders();
-    this._response.send(content);
+    if (this._response) {
+      this._response.send(content);
+    }
 
     return this;
   }
@@ -217,8 +185,8 @@ export default class Response {
   /**
    * Sets the rendered page state.
    *
-   * @param {Object<string, *>} pageState The rendered page state.
-   * @return {Response} This response.
+   * @param pageState The rendered page state.
+   * @return This response.
    */
   setPageState(pageState: { [key: string]: unknown }): this {
     if ($Debug) {
@@ -228,7 +196,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:setState The response has already ' +
-            'been sent. Check your workflow.',
+          'been sent. Check your workflow.',
           params
         );
       }
@@ -242,15 +210,14 @@ export default class Response {
   /**
    * Sets a cookie, which will be sent to the client with the response.
    *
-   * @param {string} name The cookie name.
-   * @param {(boolean|number|string)} value The cookie value, will be
+   * @param name The cookie name.
+   * @param value The cookie value, will be
    *        converted to string.
-   * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
-   *        options Cookie attributes. Only the attributes listed in the type
+   * @param options Cookie attributes. Only the attributes listed in the type
    *        annotation of this field are supported. For documentation and full
    *        list of cookie attributes
    *        see http://tools.ietf.org/html/rfc2965#page-5
-   * @return {Response} This response.
+   * @return This response.
    */
   setCookie(
     name: string,
@@ -266,7 +233,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:setCookie The response has already ' +
-            'been sent. Check your workflow.',
+          'been sent. Check your workflow.',
           params
         );
       }
@@ -279,8 +246,8 @@ export default class Response {
     );
 
     this._internalCookieStorage.set(name, {
-      value,
-      options: advancedOptions,
+      value: value as string,
+      options: advancedOptions as CookieOptions,
     });
 
     return this;
@@ -289,8 +256,6 @@ export default class Response {
   /**
    * Return object which contains response status, content and rendered
    * page state.
-   *
-   * @return {{status: number, content: string, pageState: Object<string, *>}}
    */
   getResponseParams(): {
     status: number;
@@ -310,8 +275,6 @@ export default class Response {
 
   /**
    * Return true if response is sent from server to client.
-   *
-   * @return {boolean}
    */
   isResponseSent() {
     return this._isSent;
@@ -323,25 +286,22 @@ export default class Response {
   _setCookieHeaders() {
     for (const [name, param] of this._internalCookieStorage) {
       const options = this._prepareCookieOptionsForExpress(param.options);
-      this._response.cookie(name, param.value, options);
+      if (this._response) {
+        this._response.cookie(name, param.value, options);
+      }
     }
   }
 
   /**
    * Prepares cookie options for Express.
    *
-   * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
-   *        options Cookie attributes. Only the attributes listed in the type
+   * @param options Cookie attributes. Only the attributes listed in the type
    *        annotation of this field are supported. For documentation and full
    *        list of cookie attributes
    *        see http://tools.ietf.org/html/rfc2965#page-5
-   * @return {Object} Cookie options prepared for Express.
+   * @return Cookie options prepared for Express.
    */
-  _prepareCookieOptionsForExpress(options: {
-    domain: string;
-    expires: number | string;
-    maxAge?: number;
-  }) {
+  _prepareCookieOptionsForExpress(options: CookieOptions) {
     const expressOptions = Object.assign({}, options);
 
     if (typeof expressOptions.maxAge === 'number') {
