@@ -6,22 +6,21 @@ import MapStorage from './MapStorage';
  * the storage reaches the configured threshold.
  */
 export default class WeakMapStorage extends MapStorage {
-  protected _entryTtl: number;
+  /**
+   * The time-to-live of a storage entry in milliseconds.
+   */
+  private _entryTtl: number;
+
   /**
    * Initializes the storage.
    *
-   * @param {{entryTtl: number}} config Weak map storage configuration. The
+   * @param config Weak map storage configuration. The
    *        fields have the following meaning:
    *        - entryTtl The time-to-live of a storage entry in milliseconds.
    */
   constructor(config: { entryTtl: number }) {
     super();
 
-    /**
-     * The time-to-live of a storage entry in milliseconds.
-     *
-     * @type {number}
-     */
     this._entryTtl = config.entryTtl;
   }
 
@@ -44,7 +43,7 @@ export default class WeakMapStorage extends MapStorage {
       return undefined;
     }
 
-    return super.get(key).target;
+    return (super.get(key) as WeakRef).target;
   }
 
   /**
@@ -53,7 +52,7 @@ export default class WeakMapStorage extends MapStorage {
   set(key: string, value: unknown) {
     this._discardExpiredEntries();
 
-    return super.set(key, new WeakRef(value, this._entryTtl));
+    return super.set(key, new WeakRef(value as object, this._entryTtl));
   }
 
   /**
@@ -89,7 +88,7 @@ export default class WeakMapStorage extends MapStorage {
   _discardExpiredEntries() {
     for (const key of super.keys()) {
       const targetReference = super.get(key);
-      if (!targetReference.target) {
+      if (!(targetReference as WeakRef).target) {
         // the reference has died
         super.delete(key);
       }
@@ -104,14 +103,15 @@ export default class WeakMapStorage extends MapStorage {
  * there is no native way to create a weak reference.
  */
 class WeakRef {
-  protected _reference: object | null;
-  protected _expiration: number;
+  private _reference: object | null;
+  private _expiration: number;
+
   /**
    * Initializes the weak reference to the target reference.
    *
-   * @param {Object} target The target reference that should be referenced by
+   * @param target The target reference that should be referenced by
    *        this weak reference.
-   * @param {number} ttl The maximum number of milliseconds the weak
+   * @param ttl The maximum number of milliseconds the weak
    *        reference should be kept. The reference will be discarded once
    *        ACCESSED after the specified timeout.
    */
@@ -131,16 +131,12 @@ class WeakRef {
     /**
      * The actual target reference, or `null` if the reference has
      * been already discarded.
-     *
-     * @type {?Object}
      */
     this._reference = target;
 
     /**
      * The UNIX timestamp with millisecond precision marking the moment at
      * or after which the reference will be discarded.
-     *
-     * @type {number}
      */
     this._expiration = Date.now() + ttl;
   }
@@ -149,10 +145,10 @@ class WeakRef {
    * Returns the target reference, provided that the target reference is
    * still alive. Returns `null` if the reference has been discarded.
    *
-   * @return {?Object} The target reference, or `null` if the reference
+   * @return The target reference, or `null` if the reference
    *         has been discarded by the garbage collector.
    */
-  get target(): object | null {
+  get target() {
     if (this._reference && Date.now() >= this._expiration) {
       this._reference = null; // let the GC do its job
     }

@@ -1,13 +1,14 @@
 import GenericError from '../error/GenericError';
 import ImaStorage from './Storage';
 import Window from '../window/Window';
+import ClientWindow from '../window/ClientWindow';
 
 /**
  * Implementation of the `link Storage` interface that relies on the
  * native `sessionStorage` DOM storage for storing its entries.
  */
-export default class SessionStorage implements ImaStorage {
-  protected _storage: Storage;
+export default class SessionStorage extends ImaStorage {
+  private _storage: Storage;
 
   static get $dependencies() {
     return [Window];
@@ -15,13 +16,12 @@ export default class SessionStorage implements ImaStorage {
 
   /**
    * Initializes the session storage.
-   * @param {Window} window
    */
-  constructor(window: Window) {
+  constructor(window: ClientWindow) {
+    super();
+
     /**
      * The DOM storage providing the actual storage of the entries.
-     *
-     * @type {Storage}
      */
     this._storage = window.getWindow().sessionStorage;
   }
@@ -49,8 +49,8 @@ export default class SessionStorage implements ImaStorage {
     } catch (error) {
       throw new GenericError(
         'ima.storage.SessionStorage.get: Failed to parse a session ' +
-          `storage item value identified by the key ${key}: ` +
-          error.message
+        `storage item value identified by the key ${key}: ` +
+        (error as Error).message
       );
     }
   }
@@ -104,7 +104,7 @@ export default class SessionStorage implements ImaStorage {
    * @inheritdoc
    */
   keys() {
-    return new StorageIterator(this._storage);
+    return new StorageIterator(this._storage) as Iterable<string>;
   }
 
   /**
@@ -118,13 +118,17 @@ export default class SessionStorage implements ImaStorage {
    * Deletes the oldest entry in this storage.
    */
   _deleteOldestEntry() {
-    let oldestEntry = {
-      key: null,
+    type Entry = {
+      created: number;
+      key?: string;
+    };
+
+    let oldestEntry: Entry = {
       created: Date.now() + 1,
     };
 
     for (const key of this.keys()) {
-      const value = JSON.parse(this._storage.getItem(key));
+      const value = JSON.parse(this._storage.getItem(key) as string);
       if (value.created < oldestEntry.created) {
         oldestEntry = {
           key,
@@ -146,8 +150,8 @@ export default class SessionStorage implements ImaStorage {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 class StorageIterator {
-  protected _storage: Storage;
-  protected _currentKeyIndex: number;
+  private _storage: Storage;
+  private _currentKeyIndex: number;
 
   /**
    * Initializes the DOM storage iterator.
