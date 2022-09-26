@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@ima/core": "18.0.0-rc.10",
-    "@ima/react-hooks": "^1.1.1",
+    "@ima/react-hooks": "2.0.0-rc.2",
     "@ima/react-page-renderer": "18.0.0-rc.8",
     "@ima/server": "18.0.0-rc.8",
     "body-parser": "^1.19.2",

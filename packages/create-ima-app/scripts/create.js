@@ -54,8 +54,7 @@ import { info, error } from './utils.js';
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  spawnSync(npm, ['install', '--legacy-peer-deps'], {
-    // TODO IMA@18 -> remove --legacy-peer-deps
+  spawnSync(npm, ['install'], {
     stdio: 'inherit',
     cwd: appRoot,
   });
