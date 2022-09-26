@@ -22,7 +22,6 @@ export default class Response {
     decode: (value: string) => string;
   };
 
-  // @if server
   static get $dependencies() {
     return [];
   }

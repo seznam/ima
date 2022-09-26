@@ -7,7 +7,7 @@ import GenericError from '../error/GenericError';
 /**
  * Server-side implementation of the `Window` utility API.
  */
-export default class ServerWindow implements Window {
+export default class ServerWindow extends Window {
   static get $dependencies() {
     return [];
   }
@@ -176,7 +176,7 @@ export default class ServerWindow implements Window {
    */
   createCustomEvent(name: string, options: { [key: string]: unknown }) {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
+    const dummyCustomEvent = { initCustomEvent: () => {}, detail: {} } as unknown as CustomEvent;
 
     return Object.assign(dummyCustomEvent, options);
   }

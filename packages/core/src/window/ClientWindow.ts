@@ -1,12 +1,14 @@
 /* @if server **
 export default class ClientWindow {};
 /* @else */
-import Window, { listenerOptions } from './Window';
+import Window, { ListenerOptions } from './Window';
 
 /**
- * Client-side implementation of the `Window` utility API.
+ * Client-side implementation of the {@code Window} utility API.
  */
-export default class ClientWindow implements Window {
+export default class ClientWindow extends Window {
+  private _scopedListeners = new WeakMap();
+
   static get $dependencies() {
     return [];
   }
@@ -31,9 +33,9 @@ export default class ClientWindow implements Window {
   hasSessionStorage() {
     try {
       if (window.sessionStorage) {
-        const sessionKey = 'IMA.jsTest';
+        let sessionKey = 'IMA.jsTest';
 
-        sessionStorage.setItem(sessionKey, 1);
+        sessionStorage.setItem(sessionKey, '1');
         sessionStorage.removeItem(sessionKey);
 
         return true;
@@ -72,9 +74,9 @@ export default class ClientWindow implements Window {
    * @inheritdoc
    */
   getScrollX() {
-    const { pageXOffset } = window;
-    const pageOffsetSupported = pageXOffset !== undefined;
-    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    let { pageXOffset } = window;
+    let pageOffsetSupported = pageXOffset !== undefined;
+    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageXOffset
@@ -87,9 +89,9 @@ export default class ClientWindow implements Window {
    * @inheritdoc
    */
   getScrollY() {
-    const { pageYOffset } = window;
-    const pageOffsetSupported = pageYOffset !== undefined;
-    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    let { pageYOffset } = window;
+    let pageOffsetSupported = pageYOffset !== undefined;
+    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageYOffset
@@ -101,7 +103,7 @@ export default class ClientWindow implements Window {
   /**
    * @inheritdoc
    */
-  scrollTo(x: number, y: number): void {
+  scrollTo(x: number, y: number) {
     window.scrollTo(x, y);
   }
 
@@ -157,32 +159,28 @@ export default class ClientWindow implements Window {
   /**
    * @inheritdoc
    */
-  querySelector(selector: string): null | HTMLElement {
+  querySelector(selector: string) {
     return document.querySelector(selector);
   }
 
   /**
    * @inheritdoc
    */
-  querySelectorAll(selector: string): NodeList {
+  querySelectorAll(selector: string) {
     return document.querySelectorAll(selector);
   }
 
   /**
    * @inheritdoc
    */
-  redirect(url: string): void {
+  redirect(url: string) {
     window.location.href = url;
   }
 
   /**
    * @inheritdoc
    */
-  pushState(
-    state: { [key: string]: unknown },
-    title: string,
-    url: string | null = null
-  ) {
+  pushState(state: { [key: string]: unknown }, title: string, url?: string) {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
     }
@@ -191,11 +189,7 @@ export default class ClientWindow implements Window {
   /**
    * @inheritdoc
    */
-  replaceState(
-    state: { [key: string]: unknown },
-    title: string,
-    url: string | null = null
-  ) {
+  replaceState(state: { [key: string]: unknown }, title: string, url?: string) {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
     }
@@ -204,7 +198,8 @@ export default class ClientWindow implements Window {
   /**
    * @inheritdoc
    */
-  createCustomEvent(name, options) {
+  createCustomEvent(name: string,
+    options: { [key: string]: unknown }) {
     return new CustomEvent(name, options);
   }
 
@@ -215,10 +210,36 @@ export default class ClientWindow implements Window {
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
-    useCapture: boolean | listenerOptions = false
+    useCapture = false,
+    scope?: unknown
   ) {
     if (eventTarget.addEventListener) {
-      eventTarget.addEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          eventTarget,
+          event,
+          listener,
+          useCapture,
+          scope
+        );
+
+        if (!usedListener) {
+          usedListener = listener.bind(scope);
+
+          this._addScopedListener(
+            eventTarget,
+            event,
+            listener,
+            useCapture,
+            scope,
+            usedListener
+          );
+        }
+      }
+
+      eventTarget.addEventListener(event, usedListener, useCapture);
     }
   }
 
@@ -229,10 +250,91 @@ export default class ClientWindow implements Window {
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
-    useCapture: boolean | listenerOptions = false
+    useCapture = false,
+    scope?: unknown
   ) {
     if (eventTarget.removeEventListener) {
-      eventTarget.removeEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          eventTarget,
+          event,
+          listener,
+          useCapture,
+          scope,
+          true
+        );
+
+        if ($Debug && !usedListener) {
+          console.warn(
+            'ima.core.window.ClientWindow.unbindEventListener(): the provided ' +
+              `listener '${listener}' is not registered for the ` +
+              `specified event '${event}' and scope '${scope}'. Check ` +
+              `your workflow.`,
+            {
+              event,
+              listener,
+              scope,
+            }
+          );
+        }
+      }
+
+      eventTarget.removeEventListener(event, usedListener, useCapture);
+    }
+  }
+
+  _addScopedListener(
+    eventTarget: EventTarget,
+    event: string,
+    listener: (event: Event) => void,
+    useCapture = false,
+    scope?: unknown,
+    usedListener?: (event: Event) => void
+  ) {
+    if (!this._scopedListeners.has(eventTarget)) {
+      this._scopedListeners.set(eventTarget, new Map());
+    }
+
+    const scopedListeners = this._scopedListeners.get(eventTarget);
+
+    scopedListeners.set([event, listener, useCapture, scope], usedListener);
+  }
+
+  _findScopedListener(
+    eventTarget: EventTarget,
+    event: string,
+    listener: (event: Event) => void,
+    useCapture: boolean | ListenerOptions,
+    scope: unknown,
+    remove = false
+  ) {
+    if (this._scopedListeners.has(eventTarget)) {
+      const scopedListeners = this._scopedListeners.get(eventTarget);
+
+      for (const key of scopedListeners.keys()) {
+        const [_event, _listener, _useCapture, _scope] = key;
+
+        if (
+          event === _event &&
+          listener === _listener &&
+          useCapture === _useCapture &&
+          scope === _scope
+        ) {
+          const usedListener = scopedListeners.get(key);
+
+          if (remove) {
+            scopedListeners.delete(key);
+
+            if (!scopedListeners.size) {
+              this._scopedListeners.delete(eventTarget);
+            }
+          }
+
+          return usedListener;
+        }
+      }
     }
   }
 }
