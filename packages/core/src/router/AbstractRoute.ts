@@ -389,7 +389,7 @@ export default abstract class AbstractRoute {
    * @return {Object<string, ?string>} Map of parameter names to parameter
    *         values.
    */
-  abstract extractParameters(path: string): { [key: string]: ?string };
+  abstract extractParameters(path: string): { [key: string]: string };
 
   /**
    * Helper method to pre-process view and controller which can be

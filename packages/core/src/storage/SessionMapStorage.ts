@@ -8,9 +8,9 @@ import CacheEntry from '../cache/CacheEntry';
  * `link Storage` interface acting as a synchronization proxy between
  * the underlying map storage and the `sessionStorage` DOM storage.
  */
-export default class SessionMapStorage implements Storage {
-  protected _map: MapStorage;
-  protected _session: SessionStorage;
+export default class SessionMapStorage extends Storage {
+  private _map: MapStorage;
+  private _session: SessionStorage;
 
   static get $dependencies() {
     return [MapStorage, SessionStorage];
@@ -19,21 +19,19 @@ export default class SessionMapStorage implements Storage {
   /**
    * Initializes the storage.
    *
-   * @param {MapStorage} map The map storage to use.
-   * @param {SessionStorage} session The session storage to use.
+   * @param map The map storage to use.
+   * @param session The session storage to use.
    */
   constructor(map: MapStorage, session: SessionStorage) {
+    super();
+
     /**
      * The map storage, synced with the session storage.
-     *
-     * @type {MapStorage}
      */
     this._map = map;
 
     /**
      * The session storage, synced with the map storage.
-     *
-     * @type {SessionStorage}
      */
     this._session = session;
   }
@@ -44,7 +42,7 @@ export default class SessionMapStorage implements Storage {
   init() {
     this._map.clear();
     for (const key of this._session.keys()) {
-      this._map.set(key, this._session[key]);
+      this._map.set(key as string, this._session.get(key));
     }
 
     return this;

@@ -1,15 +1,14 @@
-import { Request as ExpressRequest } from 'express';
-
 /* @if client **
 export default class Request {};
 /* @else */
+import { Request as ExpressRequest } from 'express';
+
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
   protected _request: ExpressRequest | null;
 
-  // @if server
   static get $dependencies() {
     return [];
   }

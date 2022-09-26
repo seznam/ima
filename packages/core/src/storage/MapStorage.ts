@@ -4,24 +4,14 @@ import Storage from './Storage';
  * Implementation of the `link Storage` interface that relies on the
  * native `Map` for storage.
  */
-export default class MapStorage implements Storage {
-  protected _storage: Map<string, unknown>;
-
-  static get $dependencies() {
-    return [];
-  }
-
+export default class MapStorage extends Storage {
   /**
-   * Initializes the map storage.
+   * The internal storage of entries.
    */
-  constructor() {
-    /**
-     * The internal storage of entries.
-     *
-     * @protected
-     * @type {Map<string, *>}
-     */
-    this._storage = new Map();
+  private _storage: Map<string, unknown> = new Map();
+
+  static get $dependencies(): unknown[] {
+    return [];
   }
 
   /**
