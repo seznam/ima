@@ -79,8 +79,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   abstract update(
     controller: Controller,
     pageView: ComponentType,
-    pageResources: { [key: string]: unknown | Promise<unknown> },
-    routeOptions: RouteOptions
+    pageResources: { [key: string]: unknown | Promise<unknown> }
   ): Promise<
     | unknown
     | {

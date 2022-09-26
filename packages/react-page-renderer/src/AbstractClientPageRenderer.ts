@@ -285,7 +285,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         true
       );
 
-      return Promise.resolve();
+      return Promise.reject();
     }
 
     if (this._viewContainer.children.length) {
