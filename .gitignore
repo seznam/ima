@@ -6,7 +6,7 @@ out/
 .history
 jsconfig.json
 ima-app
-storage
+utils/**/storage
 docs/api
 .docusaurus
 build

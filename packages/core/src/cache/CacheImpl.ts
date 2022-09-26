@@ -39,6 +39,8 @@ export default class CacheImpl extends Cache {
     Helper: Helpers,
     config: { ttl: number; enabled: boolean } = { ttl: 30000, enabled: false }
   ) {
+    super();
+
     /**
      * Cache entry storage.
      *
