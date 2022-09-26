@@ -1,5 +1,4 @@
 import Extension from './Extension';
-import GenericError from '../error/GenericError';
 import PageStateManager from '../page/state/PageStateManager';
 
 /**
@@ -11,7 +10,7 @@ import PageStateManager from '../page/state/PageStateManager';
 export default abstract class AbstractExtension implements Extension {
   protected _pageStateManager: PageStateManager | null;
   protected _usingStateManager: boolean;
-  protected _partialStateSymbol: symbol;
+  static readonly _partialStateSymbol: unique symbol = Symbol('partialState');
   public status: number;
   public params: { [key: string]: string };
 
@@ -46,8 +45,6 @@ export default abstract class AbstractExtension implements Extension {
      * @type {Object<string, string>}
      */
     this.params = {};
-
-    this._partialStateSymbol = Symbol('partialState');
   }
 
   /**
@@ -74,12 +71,9 @@ export default abstract class AbstractExtension implements Extension {
    * @inheritdoc
    * @abstract
    */
-  load() {
-    throw new GenericError(
-      'The ima.core.extension.AbstractExtension.load method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  abstract load():
+    | Promise<{ [key: string]: Promise<unknown> | unknown }>
+    | { [key: string]: Promise<unknown> | unknown };
 
   /**
    * @inheritdoc
@@ -178,7 +172,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  setPageStateManager(pageStateManager) {
+  setPageStateManager(pageStateManager: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 

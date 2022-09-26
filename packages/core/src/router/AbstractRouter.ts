@@ -5,6 +5,10 @@ import Router from './Router';
 import RouteNames from './RouteNames';
 import GenericError from '../error/GenericError';
 import RouterMiddleware from './RouterMiddleware';
+import PageManager from '../page/manager/PageManager';
+import RouteFactory from './RouteFactory';
+import Dispatcher from '../event/Dispatcher';
+import { RouteOptions } from '@/page/manager/AbstractPageManager';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -12,7 +16,18 @@ import RouterMiddleware from './RouterMiddleware';
  *
  * @abstract
  */
-export default class AbstractRouter extends Router {
+export default abstract class AbstractRouter implements Router {
+  protected _pageManager: PageManager;
+  protected _factory: RouteFactory;
+  protected _dispatcher: Dispatcher;
+  protected _protocol: string;
+  protected _host: string;
+  protected _root: string;
+  protected _languagePartPath: string;
+  protected _routeHandlers: Map<unknown, unknown>;
+  protected _currentMiddlewareId: number;
+  protected _currentlyRoutedPath = '';
+
   /**
    * Initializes the router.
    *
@@ -39,9 +54,11 @@ export default class AbstractRouter extends Router {
    *        }
    *      );
    */
-  constructor(pageManager, factory, dispatcher) {
-    super();
-
+  constructor(
+    pageManager: PageManager,
+    factory: RouteFactory,
+    dispatcher: Dispatcher
+  ) {
     /**
      * The page manager handling UI rendering, and transitions between
      * pages if at the client side.
@@ -111,7 +128,12 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  init(config) {
+  init(config: {
+    $Protocol: string;
+    $Root: string;
+    $LanguagePartPath: string;
+    $Host: string;
+  }) {
     this._protocol = config.$Protocol || '';
     this._root = config.$Root || '';
     this._languagePartPath = config.$LanguagePartPath || '';
@@ -122,7 +144,13 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  add(name, pathExpression, controller, view, options = undefined) {
+  add(
+    name: string,
+    pathExpression: string,
+    controller: string,
+    view: string,
+    options: RouteOptions | undefined = undefined
+  ) {
     if (this._routeHandlers.has(name)) {
       throw new GenericError(
         `ima.core.router.AbstractRouter.add: The route with name ${name} ` +
@@ -130,8 +158,8 @@ export default class AbstractRouter extends Router {
       );
     }
 
-    let factory = this._factory;
-    let route = factory.createRoute(
+    const factory = this._factory;
+    const route = factory.createRoute(
       name,
       pathExpression,
       controller,
@@ -159,7 +187,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  remove(name) {
+  remove(name: string) {
     this._routeHandlers.delete(name);
 
     return this;
@@ -168,18 +196,14 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  getRouteHandler(name) {
+  getRouteHandler(name: string) {
     return this._routeHandlers.getRouteHandler(name);
   }
 
   /**
    * @inheritdoc
    */
-  getPath() {
-    throw new GenericError(
-      'The getPath() method is abstract and must be overridden.'
-    );
-  }
+  abstract getPath(): string;
 
   /**
    * @inheritdoc
@@ -220,7 +244,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   getCurrentRouteInfo() {
-    let path = this.getPath();
+    const path = this.getPath();
     let { route } = this._getRouteHandlersByPath(path);
 
     if (!route) {
@@ -234,7 +258,7 @@ export default class AbstractRouter extends Router {
       }
     }
 
-    let params = route.extractParameters(path);
+    const params = route.extractParameters(path);
 
     return { route, params, path };
   }
@@ -243,37 +267,29 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    * @abstract
    */
-  listen() {
-    throw new GenericError(
-      'The listen() method is abstract and must be overridden.'
-    );
-  }
+  abstract listen(): this;
 
   /**
    * @inheritdoc
    * @abstract
    */
-  unlisten() {
-    throw new GenericError(
-      'The unlisten() method is abstract and must be overridden.'
-    );
-  }
+  abstract unlisten(): this;
 
   /**
    * @inheritdoc
    * @abstract
    */
-  redirect() {
-    throw new GenericError(
-      'The redirect() method is abstract and must be overridden.'
-    );
-  }
+  abstract redirect(
+    url: string,
+    options: RouteOptions,
+    action: { type: string; payload: object | Event }
+  ): void;
 
   /**
    * @inheritdoc
    */
-  link(routeName, params) {
-    let route = this._routeHandlers.get(routeName);
+  link(routeName: string, params: { [key: string]: string }) {
+    const route = this._routeHandlers.get(routeName);
 
     if (!route) {
       throw new GenericError(
@@ -288,11 +304,11 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  async route(path, options = {}, action = {}, locals = {}) {
+  async route(path: string, options = {}, action = {}, locals = {}) {
     this._currentlyRoutedPath = path;
 
     let params = {};
-    let { route, middlewares } = this._getRouteHandlersByPath(path);
+    const { route, middlewares } = this._getRouteHandlersByPath(path);
 
     if (!route) {
       params.error = new GenericError(
@@ -317,10 +333,10 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleError(params, options = {}, locals = {}) {
-    let errorRoute = this._routeHandlers.get(RouteNames.ERROR);
+    const errorRoute = this._routeHandlers.get(RouteNames.ERROR);
 
     if (!errorRoute) {
-      let error = new GenericError(
+      const error = new GenericError(
         `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
           `a new route named '${RouteNames.ERROR}'.`,
@@ -356,10 +372,10 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleNotFound(params, options = {}, locals = {}) {
-    let notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
+    const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
     if (!notFoundRoute) {
-      let error = new GenericError(
+      const error = new GenericError(
         `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
           `been configured. Add new route named ` +
@@ -395,7 +411,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  isClientError(reason) {
+  isClientError(reason: GenericError | Error) {
     return (
       reason instanceof GenericError &&
       reason.getHttpStatus() >= 400 &&
@@ -406,7 +422,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  isRedirection(reason) {
+  isRedirection(reason: GenericError | Error) {
     return (
       reason instanceof GenericError &&
       reason.getHttpStatus() >= 300 &&
@@ -422,7 +438,7 @@ export default class AbstractRouter extends Router {
    * @param {string} path Relative or absolute URL path.
    * @return {string} URL path relative to the application's base URL.
    */
-  _extractRoutePath(path) {
+  _extractRoutePath(path: string) {
     return path.replace(this._root + this._languagePartPath, '');
   }
 
@@ -507,9 +523,9 @@ export default class AbstractRouter extends Router {
    *         (empty object) if no such route exists.
    */
   _getRouteHandlersByPath(path) {
-    let middlewares = [];
+    const middlewares = [];
 
-    for (let routeHandler of this._routeHandlers.values()) {
+    for (const routeHandler of this._routeHandlers.values()) {
       if (routeHandler instanceof RouterMiddleware) {
         middlewares.push(routeHandler);
 
@@ -534,9 +550,9 @@ export default class AbstractRouter extends Router {
    * @returns {Array<RouterMiddleware>=}
    */
   _getMiddlewaresForRoute(routeName) {
-    let middlewares = [];
+    const middlewares = [];
 
-    for (let routeHandler of this._routeHandlers.values()) {
+    for (const routeHandler of this._routeHandlers.values()) {
       if (routeHandler instanceof RouterMiddleware) {
         middlewares.push(routeHandler);
 

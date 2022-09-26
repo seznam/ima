@@ -10,17 +10,17 @@ const CLASS_REGEX = /^\s*class\b/;
  * @abstract
  * @extends Execution
  */
-export default class AbstractExecution extends Execution {
-  constructor(jobs = []) {
-    super();
+export default class AbstractExecution implements Execution {
+  protected _jobs: unknown[];
 
+  constructor(jobs = []) {
     this._jobs = jobs.filter(this._validateJob);
   }
 
   /**
    * @inheritDoc
    */
-  append(jobs) {
+  append(jobs: unknown[]) {
     if (!Array.isArray(jobs)) {
       jobs = [jobs];
     }
@@ -45,7 +45,7 @@ export default class AbstractExecution extends Execution {
    * @param {function(): Promise} job
    * @returns {boolean}
    */
-  _validateJob(job) {
+  _validateJob(job: () => Promise<undefined>): boolean {
     if (typeof job === 'function') {
       if (!CLASS_REGEX.test(job.toString())) {
         return true;

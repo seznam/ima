@@ -1,5 +1,6 @@
 import DynamicRoute from './DynamicRoute';
 import StaticRoute from './StaticRoute';
+import { RouteOptions } from './Router';
 
 /**
  * Utility factory used by router to create routes.
@@ -44,7 +45,13 @@ export default class RouteFactory {
    *        }} options The route additional options.
    * @return {AbstractRoute} The constructed route.
    */
-  createRoute(name, pathExpression, controller, view, options) {
+  createRoute(
+    name: string,
+    pathExpression,
+    controller: string,
+    view: string,
+    options: RouteOptions
+  ) {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,
       [name, pathExpression, controller, view, options]

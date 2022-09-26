@@ -18,7 +18,7 @@ import { Helpers } from '../types';
  * }
  * @extends Cache
  */
-export default class CacheImpl implements Cache {
+export default class CacheImpl extends Cache {
   protected _cache: MapStorage | SessionMapStorage;
   protected _factory: CacheFactory;
   protected _Helper: Helpers;

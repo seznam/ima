@@ -15,14 +15,14 @@
  *
  * @interface
  */
-export default class Execution {
+export default interface Execution {
   /**
    * Adds a new job to be executed. The job is appended at the end of the
    * list of current jobs therefore is executed last.
    *
    * @param {Array<function(): Promise>} jobs The jobs to be executed.
    */
-  append() {}
+  append(jobs: { (): Promise<undefined> }[]): void;
 
   /**
    * Start executing collected jobs. In the end a `Promise` is returned
@@ -32,5 +32,5 @@ export default class Execution {
    * @param {...any} args Arguments to be passed when executing jobs
    * @returns {Promise}
    */
-  execute() {}
+  execute(...args: unknown[]): Promise<undefined>;
 }

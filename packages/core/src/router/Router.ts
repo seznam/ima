@@ -1,10 +1,26 @@
+import RouterMiddleware from './RouterMiddleware';
+import Controller from '../controller/Controller';
+import { ComponentType } from 'react';
+import AbstractRoute from './AbstractRoute';
+import GenericError from '../error/GenericError';
+
+export type RouteOptions = {
+  httpStatus?: number;
+  onlyUpdate?: (controller: Controller, view: ComponentType) => boolean;
+  autoScroll: boolean;
+  documentView?: ComponentType;
+  managedRootView?: ComponentType;
+  viewAdapter?: ComponentType;
+  middlewares?: Promise<RouterMiddleware>[] | RouterMiddleware[];
+};
+
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  *
  * @interface
  */
-export default class Router {
+export default interface Router {
   /**
    * Initializes the router with the provided configuration.
    *
@@ -26,7 +42,12 @@ export default class Router {
    *        port number if other than the default is used) in the following
    *        form: ``${protocol}//${host}``.
    */
-  init() {}
+  init(config: {
+    $Protocol: string;
+    $Root: string;
+    $LanguagePartPath: string;
+    $Host: string;
+  }): void;
 
   /**
    * Adds a new route to router.
@@ -87,7 +108,13 @@ export default class Router {
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
    */
-  add() {}
+  add(
+    name: string,
+    pathExpression: string,
+    controller: string,
+    view: string,
+    options: RouteOptions | undefined
+  ): this;
 
   /**
    * Adds a new middleware to router.
@@ -99,7 +126,7 @@ export default class Router {
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a middleware with the same name already exists.
    */
-  use() {}
+  use(middleware): this;
 
   /**
    * Removes the specified route from the router's known routes.
@@ -108,7 +135,7 @@ export default class Router {
    *        remove.
    * @return {Router} This router.
    */
-  remove() {}
+  remove(name: string): this;
 
   /**
    * Returns specified handler from registered route handlers.
@@ -116,7 +143,7 @@ export default class Router {
    * @param {string} name The route's unique name.
    * @return {AbstractRoute|undefined} Route with given name or undefined.
    */
-  getRouteHandler() {}
+  getRouteHandler(name: string): undefined | AbstractRoute;
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -124,14 +151,14 @@ export default class Router {
    *
    * @return {string} The path and query parts of the current URL.
    */
-  getPath() {}
+  getPath(): string;
 
   /**
    * Returns the current absolute URL (including protocol, host, query, etc).
    *
    * @return {string} The current absolute URL.
    */
-  getUrl() {}
+  getUrl(): string;
 
   /**
    * Returns the application's absolute base URL, pointing to the public root
@@ -139,7 +166,7 @@ export default class Router {
    *
    * @return {string} The application's base URL.
    */
-  getBaseUrl() {}
+  getBaseUrl(): string;
 
   /**
    * Returns the application's domain in the following form
@@ -147,14 +174,14 @@ export default class Router {
    *
    * @return {string} The current application's domain.
    */
-  getDomain() {}
+  getDomain(): string;
 
   /**
    * Returns application's host (domain and, if necessary, the port number).
    *
    * @return {string} The current application's host.
    */
-  getHost() {}
+  getHost(): string;
 
   /**
    * Returns the current protocol used to access the application, terminated
@@ -163,7 +190,7 @@ export default class Router {
    * @return {string} The current application protocol used to access the
    *         application.
    */
-  getProtocol() {}
+  getProtocol(): string;
 
   /**
    * Returns the information about the currently active route.
@@ -175,7 +202,11 @@ export default class Router {
    *         }} The information about the current route.
    * @throws {ImaError} Thrown if a route is not define for current path.
    */
-  getCurrentRouteInfo() {}
+  getCurrentRouteInfo(): {
+    route: AbstractRoute;
+    params: { [key: string]: string };
+    path: string;
+  };
 
   /**
    * Registers event listeners at the client side window object allowing the
@@ -194,7 +225,7 @@ export default class Router {
    *
    * @return {Router} This router.
    */
-  listen() {}
+  listen(): this;
 
   /**
    * Unregisters event listeners at the client side window object allowing the
@@ -213,7 +244,7 @@ export default class Router {
    *
    * @return {Router} This router.
    */
-  unlisten() {}
+  unlisten(): this;
 
   /**
    * Redirects the client to the specified location.
@@ -256,7 +287,11 @@ export default class Router {
    * @param {object} [locals={}] The locals param is used to pass local data
    *        between middlewares.
    */
-  redirect() {}
+  redirect(
+    url: string,
+    options: RouteOptions,
+    action: { type: string; payload: object | Event }
+  ): void;
 
   /**
    * Generates an absolute URL (including protocol, domain, etc) for the
@@ -270,7 +305,7 @@ export default class Router {
    *        URL query.
    * @return {string} An absolute URL for the specified route and parameters.
    */
-  link() {}
+  link(routeName: string, params: { [key: string]: string }): string;
 
   /**
    * Routes the application to the route matching the providing path, renders
@@ -304,7 +339,11 @@ export default class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  route() {}
+  route(
+    path: string,
+    options: RouteOptions,
+    action: { type: string; event: Event | null; url: string | null }
+  ): Promise<{ [key: string]: unknown }>;
 
   /**
    * Handles an internal server error by responding with the appropriate
@@ -337,7 +376,11 @@ export default class Router {
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
    */
-  handleError() {}
+  handleError(
+    params: { [key: string]: Error | string },
+    options: RouteOptions,
+    locals: { [key: string]: unknown }
+  ): Promise<{ [key: string]: unknown }>;
 
   /**
    * Handles a "not found" error by responding with the appropriate "not
@@ -369,7 +412,11 @@ export default class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  handleNotFound() {}
+  handleNotFound(
+    params: { [key: string]: Error | string },
+    options: RouteOptions,
+    locals: { [key: string]: unknown }
+  ): Promise<{ [key: string]: unknown }>;
 
   /**
    * Tests, if possible, whether the specified error was caused by the
@@ -380,7 +427,7 @@ export default class Router {
    * @return {boolean} `true` if the error was caused the action of the
    *         client.
    */
-  isClientError() {}
+  isClientError(reason: GenericError | Error): boolean;
 
   /**
    * Tests, if possible, whether the specified error lead to redirection.
@@ -389,5 +436,5 @@ export default class Router {
    * @return {boolean} `true` if the error was caused the action of the
    *         redirection.
    */
-  isRedirection() {}
+  isRedirection(reason: GenericError | Error): boolean;
 }

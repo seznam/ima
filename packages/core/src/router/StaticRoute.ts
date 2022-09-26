@@ -1,4 +1,5 @@
 import AbstractRoute, { LOOSE_SLASHES_REGEXP } from './AbstractRoute';
+import { RouteOptions } from './Router';
 
 /**
  * Regular expression matching all control characters used in regular
@@ -109,6 +110,11 @@ const PARAMS_REGEXP_OPT =
  * @extends AbstractRoute
  */
 export default class StaticRoute extends AbstractRoute {
+  protected _trimmedPathExpression: string;
+  protected _parameterNames: string[];
+  protected _hasParameters: boolean;
+  protected _matcher: RegExp;
+
   /**
    * @inheritdoc
    * @param {string} pathExpression A path expression specifying the URL path
@@ -116,7 +122,13 @@ export default class StaticRoute extends AbstractRoute {
    *        optionally containing named parameter placeholders specified as
    *        `:parameterName`.
    */
-  constructor(name, pathExpression, controller, view, options) {
+  constructor(
+    name: string,
+    pathExpression: string,
+    controller: string,
+    view: string,
+    options: RouteOptions
+  ) {
     super(name, pathExpression, controller, view, options);
 
     /**
@@ -154,9 +166,9 @@ export default class StaticRoute extends AbstractRoute {
    */
   toPath(params = {}) {
     let path = this._pathExpression;
-    let queryPairs = [];
+    const queryPairs = [];
 
-    for (let paramName of Object.keys(params)) {
+    for (const paramName of Object.keys(params)) {
       if (this._isRequiredParamInPath(path, paramName)) {
         path = this._substituteRequiredParamInPath(
           path,
@@ -183,8 +195,8 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  matches(path) {
-    let trimmedPath = AbstractRoute.getTrimmedPath(path);
+  matches(path: string) {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path);
 
     return this._matcher.test(trimmedPath);
   }
@@ -192,10 +204,10 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  extractParameters(path) {
-    let trimmedPath = AbstractRoute.getTrimmedPath(path);
-    let parameters = this._getParameters(trimmedPath);
-    let query = AbstractRoute.getQuery(trimmedPath);
+  extractParameters(path: string) {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path);
+    const parameters = this._getParameters(trimmedPath);
+    const query = AbstractRoute.getQuery(trimmedPath);
 
     return Object.assign({}, parameters, query);
   }
@@ -208,7 +220,11 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramValue
    * @return {string} New path.
    */
-  _substituteRequiredParamInPath(path, paramName, paramValue) {
+  _substituteRequiredParamInPath(
+    path: string,
+    paramName: string,
+    paramValue: string
+  ) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
       paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : ''
@@ -223,7 +239,11 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramValue
    * @return {string} New path.
    */
-  _substituteOptionalParamInPath(path, paramName, paramValue) {
+  _substituteOptionalParamInPath(
+    path: string,
+    paramName: string,
+    paramValue: string
+  ) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(
       new RegExp(paramRegexp),
@@ -237,7 +257,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} path
    * @return {string} New path.
    */
-  _cleanUnusedOptionalParams(path) {
+  _cleanUnusedOptionalParams(path: string) {
     let replacedPath = path;
 
     // remove last subparameters
@@ -259,9 +279,9 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramName
    * @return {boolean}
    */
-  _isOptionalParamInPath(path, paramName) {
+  _isOptionalParamInPath(path: string, paramName: string) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(?:${PARAMS_END_PATTERN})`;
-    let regexp = new RegExp(paramRegexp);
+    const regexp = new RegExp(paramRegexp);
     return regexp.test(path);
   }
 
@@ -272,8 +292,8 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramName
    * @return {boolean}
    */
-  _isRequiredParamInPath(path, paramName) {
-    let regexp = new RegExp(`:${paramName}`);
+  _isRequiredParamInPath(path: string, paramName: string) {
+    const regexp = new RegExp(`:${paramName}`);
 
     return regexp.test(path);
   }
@@ -284,7 +304,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} rawParam
    * @return {string}
    */
-  _getClearParamName(rawParam) {
+  _getClearParamName(rawParam: string) {
     const regExpr = /\??[a-z0-9]+/i;
     const paramMatches = rawParam.match(regExpr);
     const param = paramMatches ? paramMatches[0] : '';
@@ -298,7 +318,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} delimeter Parameters delimeter
    * @return {string}
    */
-  _getSubparamPattern(delimeter) {
+  _getSubparamPattern(delimeter: string) {
     const pattern = `([^${delimeter}?/]+)`;
 
     return pattern;
@@ -310,7 +330,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {array<string>} allMainParams
    * @return {boolean}
    */
-  _checkOptionalParamsOrder(allMainParams) {
+  _checkOptionalParamsOrder(allMainParams: string[]) {
     let optionalLastId = -1;
 
     const count = allMainParams.length;
@@ -336,7 +356,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} clearedPathExpr The cleared URL path (removed first and last slash, ...).
    * @return {Bool} Returns TRUE if order is correct.
    */
-  _checkParametersOrder(clearedPathExpr) {
+  _checkParametersOrder(clearedPathExpr: string) {
     const mainParamsMatches = clearedPathExpr.match(PARAMS_MAIN_REGEXP) || [];
     const allMainParamsCleared = mainParamsMatches.map(paramExpr =>
       this._getClearParamName(paramExpr)
@@ -354,7 +374,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {array<string>} optionalParams List of main optimal parameter expressions
    * @return {string} RegExp pattern.
    */
-  _replaceOptionalParametersInPath(path, optionalParams) {
+  _replaceOptionalParametersInPath(path: string, optionalParams: string[]) {
     const pattern = optionalParams.reduce((path, paramExpr, idx, matches) => {
       const lastIdx = matches.length - 1;
       const hasSlash = paramExpr.substr(0, 2) === '\\/';
@@ -386,7 +406,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} clearedPathExpr The original cleared URL path.
    * @return {string} RegExp pattern.
    */
-  _replaceRequiredSubParametersInPath(path, clearedPathExpr) {
+  _replaceRequiredSubParametersInPath(path: string, clearedPathExpr: string) {
     const requiredSubparamsOthers =
       clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.OTHERS) || [];
     const requiredSubparamsLast =
@@ -420,9 +440,9 @@ export default class StaticRoute extends AbstractRoute {
    * @return {string} RegExp pattern.
    */
   _replaceOptionalSubParametersInPath(
-    path,
-    optionalSubparamsOthers,
-    optionalSubparamsLast
+    path: string,
+    optionalSubparamsOthers: string[],
+    optionalSubparamsLast: string[]
   ) {
     path = optionalSubparamsOthers.reduce((pattern, paramExpr) => {
       const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
@@ -451,7 +471,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} pathExpression The path expression to compile.
    * @return {RegExp} The compiled regular expression.
    */
-  _compileToRegExp(pathExpression) {
+  _compileToRegExp(pathExpression: string) {
     const clearedPathExpr = pathExpression
       .replace(LOOSE_SLASHES_REGEXP, '')
       .replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
@@ -509,7 +529,7 @@ export default class StaticRoute extends AbstractRoute {
     pattern = '^\\/' + pattern;
 
     // add query parameters matcher
-    let pairPattern = '[^=&;]*(?:=[^&;]*)?';
+    const pairPattern = '[^=&;]*(?:=[^&;]*)?';
     pattern += `(?:[\\?\\#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
@@ -527,7 +547,7 @@ export default class StaticRoute extends AbstractRoute {
       return {};
     }
 
-    let parameterValues = path.match(this._matcher);
+    const parameterValues = path.match(this._matcher);
     if (!parameterValues) {
       return {};
     }
@@ -544,14 +564,14 @@ export default class StaticRoute extends AbstractRoute {
    * @return {Object<string, ?string>} Params object.
    */
   _extractParameters(parameterValues) {
-    let parameters = {};
+    const parameters = {};
 
     const parametersCount = this._parameterNames.length;
 
     // Cycle for names and values from last to 0
     for (let i = parametersCount - 1; i >= 0; i--) {
-      let [rawName, rawValue] = [this._parameterNames[i], parameterValues[i]];
-      let cleanParamName = this._cleanOptParamName(rawName);
+      const [rawName, rawValue] = [this._parameterNames[i], parameterValues[i]];
+      const cleanParamName = this._cleanOptParamName(rawName);
 
       const matchesName = cleanParamName.match(PARAMS_REGEXP_CORE_NAME);
       const currentCoreName = matchesName ? matchesName[0] : '';
@@ -593,7 +613,7 @@ export default class StaticRoute extends AbstractRoute {
    *         path expression.
    */
   _getParameterNames(pathExpression) {
-    let rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
+    const rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
     return rawNames.map(rawParameterName => {
       return rawParameterName.substring(1).replace('?', '');

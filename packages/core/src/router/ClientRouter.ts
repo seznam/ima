@@ -46,6 +46,11 @@ const MOUSE_LEFT_BUTTON = 0;
  * The client-side implementation of the {@link Router} interface.
  */
 export default class ClientRouter extends AbstractRouter {
+  protected _window: Window;
+  protected _boundHandleClick = (event: Event) => this._handleClick(event);
+  protected _boundHandlePopState = (event: Event) =>
+    this._handlePopState(event);
+
   static get $dependencies() {
     return [PageManager, RouteFactory, Dispatcher, Window];
   }
@@ -59,7 +64,12 @@ export default class ClientRouter extends AbstractRouter {
    * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    * @param {Window} window The current global client-side APIs provider.
    */
-  constructor(pageManager, factory, dispatcher, window) {
+  constructor(
+    pageManager: PageManager,
+    factory: RouteFactory,
+    dispatcher: Dispatcher,
+    window: Window
+  ) {
     super(pageManager, factory, dispatcher);
 
     /**
@@ -68,26 +78,17 @@ export default class ClientRouter extends AbstractRouter {
      * @type {Window}
      */
     this._window = window;
-
-    /**
-     * Helper function with right context for binding listener to DOM.
-     *
-     * @type {function}
-     */
-    this._boundedHandleClick = event => this._handleClick(event);
-
-    /**
-     * Helper function with right context for binding listener to DOM.
-     *
-     * @type {function}
-     */
-    this._boundedHandlePopState = event => this._handlePopState(event);
   }
 
   /**
    * @inheritdoc
    */
-  init(config) {
+  init(config: {
+    $Protocol: string;
+    $Root: string;
+    $LanguagePartPath: string;
+    $Host: string;
+  }) {
     super.init(config);
     this._host = config.$Host || this._window.getHost();
 
@@ -112,18 +113,18 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   listen() {
-    let nativeWindow = this._window.getWindow();
+    const nativeWindow = this._window.getWindow();
 
     this._window.bindEventListener(
-      nativeWindow,
+      nativeWindow as EventTarget,
       Events.POP_STATE,
-      this._boundedHandlePopState
+      this._boundHandlePopState
     );
 
     this._window.bindEventListener(
       nativeWindow,
       Events.CLICK,
-      this._boundedHandleClick
+      this._boundHandleClick
     );
 
     return this;
@@ -133,18 +134,18 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   unlisten() {
-    let nativeWindow = this._window.getWindow();
+    const nativeWindow = this._window.getWindow();
 
     this._window.unbindEventListener(
       nativeWindow,
       Events.POP_STATE,
-      this._boundedHandlePopState
+      this._boundHandlePopState
     );
 
     this._window.unbindEventListener(
       nativeWindow,
       Events.CLICK,
-      this._boundedHandleClick
+      this._boundHandleClick
     );
 
     return this;
@@ -173,7 +174,7 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   route(
-    path,
+    path: string,
     options = {},
     { event = null, type = ActionTypes.REDIRECT, url = null } = {},
     locals = {}
@@ -226,9 +227,9 @@ export default class ClientRouter extends AbstractRouter {
     }
 
     if (this.isRedirection(params.error)) {
-      let errorParams = params.error.getParams();
+      const errorParams = params.error.getParams();
       options.httpStatus = params.error.getHttpStatus();
-      let action = {
+      const action = {
         event: null,
         type: ActionTypes.REDIRECT,
         url: errorParams.url,
@@ -314,23 +315,23 @@ export default class ClientRouter extends AbstractRouter {
    * @param {MouseEvent} event The click event.
    */
   _handleClick(event) {
-    let target = event.target || event.srcElement;
-    let anchorElement = this._getAnchorElement(target);
+    const target = event.target || event.srcElement;
+    const anchorElement = this._getAnchorElement(target);
 
     if (!anchorElement || typeof anchorElement.href !== 'string') {
       return;
     }
 
-    let targetAttribute = anchorElement.getAttribute('target');
-    let anchorHref = anchorElement.href;
-    let isDefinedTargetHref = anchorHref !== undefined && anchorHref !== null;
-    let isSetTarget = targetAttribute !== null && targetAttribute !== '_self';
-    let isLeftButton = event.button === MOUSE_LEFT_BUTTON;
-    let isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
-    let isCMDPlusLeftButton = event.metaKey && isLeftButton;
-    let isSameDomain = this._isSameDomain(anchorHref);
-    let isHashLink = this._isHashLink(anchorHref);
-    let isLinkPrevented = event.defaultPrevented;
+    const targetAttribute = anchorElement.getAttribute('target');
+    const anchorHref = anchorElement.href;
+    const isDefinedTargetHref = anchorHref !== undefined && anchorHref !== null;
+    const isSetTarget = targetAttribute !== null && targetAttribute !== '_self';
+    const isLeftButton = event.button === MOUSE_LEFT_BUTTON;
+    const isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
+    const isCMDPlusLeftButton = event.metaKey && isLeftButton;
+    const isSameDomain = this._isSameDomain(anchorHref);
+    const isHashLink = this._isHashLink(anchorHref);
+    const isLinkPrevented = event.defaultPrevented;
 
     if (
       !isDefinedTargetHref ||
@@ -362,7 +363,8 @@ export default class ClientRouter extends AbstractRouter {
    * @return {?Node}
    */
   _getAnchorElement(target) {
-    let self = this;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
 
     while (target && !hasReachedAnchor(target)) {
       target = target.parentNode;
@@ -393,12 +395,12 @@ export default class ClientRouter extends AbstractRouter {
       return false;
     }
 
-    let currentUrl = this._window.getUrl();
-    let trimmedCurrentUrl =
+    const currentUrl = this._window.getUrl();
+    const trimmedCurrentUrl =
       currentUrl.indexOf('#') === -1
         ? currentUrl
         : currentUrl.substring(0, currentUrl.indexOf('#'));
-    let trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
+    const trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
 
     return trimmedTargetUrl === trimmedCurrentUrl;
   }

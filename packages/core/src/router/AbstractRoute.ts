@@ -1,5 +1,5 @@
-import GenericError from '../error/GenericError';
 import RouterMiddleware from './RouterMiddleware';
+import { RouteOptions } from './Router';
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -14,7 +14,15 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
-export default class AbstractRoute {
+export default abstract class AbstractRoute {
+  protected _name: string;
+  protected _pathExpression: unknown;
+  protected _controller: string;
+  protected _view: string;
+  protected _options: RouteOptions;
+  protected _cachedController: unknown;
+  protected _cachedView: unknown;
+
   /**
    * TODO IMA@18 remove static method
    *
@@ -56,7 +64,7 @@ export default class AbstractRoute {
    *
    * @param {Object<string, any>} params Key/value pairs.
    */
-  static paramsToQuery(params = {}) {
+  static paramsToQuery(params: { [key: string]: unknown } = {}) {
     if (
       !params ||
       typeof params !== 'object' ||
@@ -80,7 +88,7 @@ export default class AbstractRoute {
    *        (if any).
    * @return {Object<string, ?string>} Parsed query parameters.
    */
-  static getQuery(path) {
+  static getQuery(path: string) {
     const query = {};
     const queryStart = path.indexOf('?');
 
@@ -125,7 +133,7 @@ export default class AbstractRoute {
    * @param {string} parameterValue
    * @return {string} decodedValue
    */
-  static decodeURIParameter(parameterValue) {
+  static decodeURIParameter(parameterValue: string): string | undefined {
     let decodedValue;
     if (parameterValue) {
       try {
@@ -145,7 +153,7 @@ export default class AbstractRoute {
    * @param {string} path The path to trim.
    * @return {string} Trimmed path.
    */
-  static getTrimmedPath(path) {
+  static getTrimmedPath(path: string) {
     return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 
@@ -179,7 +187,13 @@ export default class AbstractRoute {
    *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The route additional options.
    */
-  constructor(name, pathExpression, controller, view, options) {
+  constructor(
+    name: string,
+    pathExpression: unknown,
+    controller: string,
+    view: string,
+    options: RouteOptions
+  ) {
     /**
      * The unique name of this route, identifying it among the rest of the
      * routes in the application.
@@ -246,7 +260,7 @@ export default class AbstractRoute {
     );
 
     // Initialize router middlewares
-    this._options.middlewares = this._options.middlewares.map(
+    this._options.middlewares = this._options?.middlewares?.map(
       middleware => new RouterMiddleware(middleware)
     );
   }
@@ -350,12 +364,7 @@ export default class AbstractRoute {
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
-  toPath() {
-    throw new GenericError(
-      'The ima.core.router.AbstractRoute.toPath method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  abstract toPath(params: { [key: string]: number | string }): string;
 
   /**
    * Tests whether the provided URL path matches this route. The provided
@@ -365,12 +374,7 @@ export default class AbstractRoute {
    * @param {string} path The URL path.
    * @return {boolean} `true` if the provided path matches this route.
    */
-  matches() {
-    throw new GenericError(
-      'The ima.core.router.AbstractRoute.matches method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  abstract matches(path: string): boolean;
 
   /**
    * Extracts the parameter values from the provided path. The method
@@ -385,12 +389,7 @@ export default class AbstractRoute {
    * @return {Object<string, ?string>} Map of parameter names to parameter
    *         values.
    */
-  extractParameters() {
-    throw new GenericError(
-      'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  abstract extractParameters(path: string): { [key: string]: ?string };
 
   /**
    * Helper method to pre-process view and controller which can be
@@ -400,7 +399,7 @@ export default class AbstractRoute {
    * @return {Promise} Promise resolving to the actual view or controller
    *  constructor function/class.
    */
-  async _getAsyncModule(module) {
+  async _getAsyncModule(module: object | string | (() => unknown)) {
     return module.constructor.name === 'AsyncFunction'
       ? module().then(module => module.default ?? module)
       : module;

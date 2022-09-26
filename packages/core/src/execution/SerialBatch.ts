@@ -9,7 +9,7 @@ export default class SerialBatch extends AbstractExecution {
   /**
    * @inheritDoc
    */
-  execute(...args) {
+  execute(...args: unknown[]) {
     const zeroStage = Promise.resolve([]);
 
     return this._jobs.reduce(

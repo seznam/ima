@@ -4,6 +4,7 @@ import GenericError from '../error/GenericError';
  * Utility for representing and running router middleware.
  */
 export default class RouterMiddleware {
+  protected _middleware: { [key: string]: string };
   /**
    * Initializes the middleware
    *

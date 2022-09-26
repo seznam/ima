@@ -8,11 +8,11 @@ import CacheEntry from './CacheEntry';
  *
  * @interface
  */
-export default interface Cache {
+export default abstract class Cache {
   /**
    * Clears the cache by deleting all entries.
    */
-  clear(): void;
+  abstract clear(): void;
 
   /**
    * Tests whether the cache contains a fresh entry for the specified key. A
@@ -24,7 +24,7 @@ export default interface Cache {
    * @return {boolean} `true` if the cache is enabled, the entry exists and has
    *         not expired yet.
    */
-  has(key: string): boolean;
+  abstract has(key: string): boolean;
 
   /**
    * Returns the value of the entry identified by the specified key.
@@ -36,7 +36,7 @@ export default interface Cache {
    * @return {*} The value of the specified cache entry, or `null` if the entry
    *         is not available.
    */
-  get(key: string): CacheEntry | null;
+  abstract get(key: string): CacheEntry | null;
 
   /**
    * Sets the cache entry identified by the specified key to the provided
@@ -50,7 +50,7 @@ export default interface Cache {
    *        entry will expire after the specified amount of milliseconds. Use
    *        `null` or omit the parameter to use the default TTL of this cache.
    */
-  set(key: string, value: unknown, ttl?: number): void;
+  abstract set(key: string, value: unknown, ttl?: number): void;
 
   /**
    * Deletes the specified cache entry. The method has no effect if the entry
@@ -58,7 +58,7 @@ export default interface Cache {
    *
    * @param {string} key The identifier of the cache entry.
    */
-  delete(key: string): void;
+  abstract delete(key: string): void;
 
   /**
    * Disables the cache, preventing the retrieval of any cached entries and
@@ -70,14 +70,14 @@ export default interface Cache {
    *
    * The method has no effect if the cache is already disabled.
    */
-  disable(): void;
+  abstract disable(): void;
 
   /**
    * Enables the cache, allowing the retrieval of cache entries.
    *
    * The method has no effect if the cache is already enabled.
    */
-  enable(): void;
+  abstract enable(): void;
 
   /**
    * Exports the state of this cache to an HTML-safe JSON string. The data
@@ -87,7 +87,7 @@ export default interface Cache {
    * @return {string} A JSON string containing an object representing of the
    *         current state of this cache.
    */
-  serialize(): string;
+  abstract serialize(): string;
 
   /**
    * Loads the provided serialized cache data into this cache. Entries
@@ -99,7 +99,7 @@ export default interface Cache {
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
-  deserialize(serializedData: {
+  abstract deserialize(serializedData: {
     [key: string]: { value: unknown; ttl: number };
   }): void;
 }

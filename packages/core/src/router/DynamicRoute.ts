@@ -1,5 +1,6 @@
 import GenericError from '../error/GenericError';
 import AbstractRoute from './AbstractRoute';
+import { RouteOptions } from './Router';
 
 /**
  * Path expression type used for router routes definition.
@@ -14,6 +15,11 @@ import AbstractRoute from './AbstractRoute';
  *           object of key/value pairs which correspond to expected path url
  *           params and their values.
  */
+export type RoutePathExpression = {
+  matcher: RegExp;
+  toPath: (params: { [key: string]: number | string }) => string;
+  extractParameters: (path: string) => { [key: string]: unknown };
+};
 
 /**
  * Utility for representing and manipulating a single dynamic route in the
@@ -24,6 +30,10 @@ import AbstractRoute from './AbstractRoute';
  * @extends AbstractRoute
  */
 export default class DynamicRoute extends AbstractRoute {
+  protected _matcher: RegExp;
+  protected _toPath: (params: { [key: string]: number | string }) => string;
+  protected _extractParameters: (path: string) => { [key: string]: unknown };
+
   /**
    * Initializes the route.
    *
@@ -31,7 +41,13 @@ export default class DynamicRoute extends AbstractRoute {
    * @param {Route~PathExpression} pathExpression Path expression used in route matching,
    *        to generate valid path with provided params and parsing params from current path.
    */
-  constructor(name, pathExpression, controller, view, options) {
+  constructor(
+    name: string,
+    pathExpression: RoutePathExpression,
+    controller: string,
+    view: string,
+    options: RouteOptions
+  ) {
     super(name, pathExpression, controller, view, options);
 
     if (!pathExpression || typeof pathExpression !== 'object') {
@@ -92,8 +108,8 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  matches(path) {
-    let trimmedPath = AbstractRoute.getTrimmedPath(path);
+  matches(path: string) {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path);
 
     return this._matcher.test(trimmedPath);
   }
@@ -101,10 +117,10 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  extractParameters(path) {
-    let trimmedPath = AbstractRoute.getTrimmedPath(path);
-    let parameters = this._extractParameters(trimmedPath.split('?').shift());
-    let query = AbstractRoute.getQuery(trimmedPath);
+  extractParameters(path: string) {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path);
+    const parameters = this._extractParameters(trimmedPath.split('?').shift());
+    const query = AbstractRoute.getQuery(trimmedPath);
 
     return Object.assign({}, parameters, query);
   }

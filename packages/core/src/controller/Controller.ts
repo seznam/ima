@@ -1,4 +1,8 @@
+import Dictionary from '../dictionary/Dictionary';
 import Extension from '../extension/Extension';
+import MetaManager from '../meta/MetaManager';
+import Router from '../router/Router';
+import PageStateManager from '../page/state/PageStateManager';
 
 /**
  * Interface defining the common API of page controllers. A page controller is
