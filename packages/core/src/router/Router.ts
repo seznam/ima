@@ -20,7 +20,7 @@ export type RouteOptions = {
  *
  * @interface
  */
-export default interface Router {
+export default abstract class Router {
   /**
    * Initializes the router with the provided configuration.
    *
@@ -42,7 +42,7 @@ export default interface Router {
    *        port number if other than the default is used) in the following
    *        form: ``${protocol}//${host}``.
    */
-  init(config: {
+  abstract init(config: {
     $Protocol: string;
     $Root: string;
     $LanguagePartPath: string;
@@ -108,7 +108,7 @@ export default interface Router {
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
    */
-  add(
+  abstract add(
     name: string,
     pathExpression: string,
     controller: string,
@@ -126,7 +126,12 @@ export default interface Router {
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a middleware with the same name already exists.
    */
-  use(middleware): this;
+  abstract use(
+    middleware: (
+      routeParams: { [key: string]: string | number },
+      locals: object
+    ) => unknown
+  ): this;
 
   /**
    * Removes the specified route from the router's known routes.
@@ -135,7 +140,7 @@ export default interface Router {
    *        remove.
    * @return {Router} This router.
    */
-  remove(name: string): this;
+  abstract remove(name: string): this;
 
   /**
    * Returns specified handler from registered route handlers.
@@ -143,7 +148,7 @@ export default interface Router {
    * @param {string} name The route's unique name.
    * @return {AbstractRoute|undefined} Route with given name or undefined.
    */
-  getRouteHandler(name: string): undefined | AbstractRoute;
+  abstract getRouteHandler(name: string): undefined | AbstractRoute;
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -151,14 +156,14 @@ export default interface Router {
    *
    * @return {string} The path and query parts of the current URL.
    */
-  getPath(): string;
+  abstract getPath(): string;
 
   /**
    * Returns the current absolute URL (including protocol, host, query, etc).
    *
    * @return {string} The current absolute URL.
    */
-  getUrl(): string;
+  abstract getUrl(): string;
 
   /**
    * Returns the application's absolute base URL, pointing to the public root
@@ -166,7 +171,7 @@ export default interface Router {
    *
    * @return {string} The application's base URL.
    */
-  getBaseUrl(): string;
+  abstract getBaseUrl(): string;
 
   /**
    * Returns the application's domain in the following form
@@ -174,14 +179,14 @@ export default interface Router {
    *
    * @return {string} The current application's domain.
    */
-  getDomain(): string;
+  abstract getDomain(): string;
 
   /**
    * Returns application's host (domain and, if necessary, the port number).
    *
    * @return {string} The current application's host.
    */
-  getHost(): string;
+  abstract getHost(): string;
 
   /**
    * Returns the current protocol used to access the application, terminated
@@ -190,7 +195,7 @@ export default interface Router {
    * @return {string} The current application protocol used to access the
    *         application.
    */
-  getProtocol(): string;
+  abstract getProtocol(): string;
 
   /**
    * Returns the information about the currently active route.
@@ -202,7 +207,7 @@ export default interface Router {
    *         }} The information about the current route.
    * @throws {ImaError} Thrown if a route is not define for current path.
    */
-  getCurrentRouteInfo(): {
+  abstract getCurrentRouteInfo(): {
     route: AbstractRoute;
     params: { [key: string]: string };
     path: string;
@@ -225,7 +230,7 @@ export default interface Router {
    *
    * @return {Router} This router.
    */
-  listen(): this;
+  abstract listen(): this;
 
   /**
    * Unregisters event listeners at the client side window object allowing the
@@ -244,7 +249,7 @@ export default interface Router {
    *
    * @return {Router} This router.
    */
-  unlisten(): this;
+  abstract unlisten(): this;
 
   /**
    * Redirects the client to the specified location.
@@ -287,7 +292,7 @@ export default interface Router {
    * @param {object} [locals={}] The locals param is used to pass local data
    *        between middlewares.
    */
-  redirect(
+  abstract redirect(
     url: string,
     options: RouteOptions,
     action: { type: string; payload: object | Event }
@@ -305,7 +310,7 @@ export default interface Router {
    *        URL query.
    * @return {string} An absolute URL for the specified route and parameters.
    */
-  link(routeName: string, params: { [key: string]: string }): string;
+  abstract link(routeName: string, params: { [key: string]: string }): string;
 
   /**
    * Routes the application to the route matching the providing path, renders
@@ -339,7 +344,7 @@ export default interface Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  route(
+  abstract route(
     path: string,
     options: RouteOptions,
     action: { type: string; event: Event | null; url: string | null }
@@ -376,7 +381,7 @@ export default interface Router {
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
    */
-  handleError(
+  abstract handleError(
     params: { [key: string]: Error | string },
     options: RouteOptions,
     locals: { [key: string]: unknown }
@@ -412,7 +417,7 @@ export default interface Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  handleNotFound(
+  abstract handleNotFound(
     params: { [key: string]: Error | string },
     options: RouteOptions,
     locals: { [key: string]: unknown }
@@ -427,7 +432,7 @@ export default interface Router {
    * @return {boolean} `true` if the error was caused the action of the
    *         client.
    */
-  isClientError(reason: GenericError | Error): boolean;
+  abstract isClientError(reason: GenericError | Error): boolean;
 
   /**
    * Tests, if possible, whether the specified error lead to redirection.
@@ -436,5 +441,5 @@ export default interface Router {
    * @return {boolean} `true` if the error was caused the action of the
    *         redirection.
    */
-  isRedirection(reason: GenericError | Error): boolean;
+  abstract isRedirection(reason: GenericError | Error): boolean;
 }

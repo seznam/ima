@@ -16,7 +16,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  */
 export default abstract class AbstractRoute {
   protected _name: string;
-  protected _pathExpression: unknown;
+  protected _pathExpression: string;
   protected _controller: string;
   protected _view: string;
   protected _options: RouteOptions;
@@ -189,7 +189,7 @@ export default abstract class AbstractRoute {
    */
   constructor(
     name: string,
-    pathExpression: unknown,
+    pathExpression: string,
     controller: string,
     view: string,
     options: RouteOptions

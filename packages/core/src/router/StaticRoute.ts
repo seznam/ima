@@ -542,7 +542,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} path The URL path.
    * @return {Object<string, string>} The parsed path parameters.
    */
-  _getParameters(path) {
+  _getParameters(path: string) {
     if (!this._hasParameters) {
       return {};
     }
@@ -563,7 +563,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string[]} parameterValues
    * @return {Object<string, ?string>} Params object.
    */
-  _extractParameters(parameterValues) {
+  _extractParameters(parameterValues: string[]) {
     const parameters = {};
 
     const parametersCount = this._parameterNames.length;
@@ -591,7 +591,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramName Full param name with "?"
    * @return {string} Strict param name without "?"
    */
-  _cleanOptParamName(paramName) {
+  _cleanOptParamName(paramName: string) {
     return paramName.replace('?', '');
   }
 
@@ -601,7 +601,7 @@ export default class StaticRoute extends AbstractRoute {
    * @param {string} paramName
    * @return {boolean} return true if is optional, otherwise false
    */
-  _isParamOptional(paramName) {
+  _isParamOptional(paramName: string) {
     return /\?.+/.test(paramName);
   }
 
@@ -612,7 +612,7 @@ export default class StaticRoute extends AbstractRoute {
    * @return {string[]} The names of the parameters defined in the provided
    *         path expression.
    */
-  _getParameterNames(pathExpression) {
+  _getParameterNames(pathExpression: string) {
     const rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
     return rawNames.map(rawParameterName => {

@@ -4,16 +4,24 @@ import GenericError from '../error/GenericError';
  * Utility for representing and running router middleware.
  */
 export default class RouterMiddleware {
-  protected _middleware: { [key: string]: string };
+  protected _middleware: (
+    params: { [key: string]: string | number },
+    locals: object
+  ) => unknown;
   /**
    * Initializes the middleware
    *
-   * @param {function(Object<string, string>, function)} middleware Middleware
+   * @param {function(Object<string, string>, object)} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
    *        and `locals` object as second argument. This can be used to pass data
    *        between middlewares.
    */
-  constructor(middleware) {
+  constructor(
+    middleware: (
+      params: { [key: string]: string | number },
+      locals: object
+    ) => unknown
+  ) {
     if (typeof middleware !== 'function') {
       throw new GenericError(
         `The middleware must be a function, '${typeof middleware}' was given.`
@@ -25,7 +33,7 @@ export default class RouterMiddleware {
      * mutated and `locals` object as second argument. This can be used to pass data
      * between middlewares.
      *
-     * @type {function(Object<string, string>, function)}
+     * @type {function(Object<string, string>, object)}
      */
     this._middleware = middleware;
   }
@@ -37,7 +45,7 @@ export default class RouterMiddleware {
    * @param {object} locals Object used to pass data between middlewares.
    * @return {Promise<void>} Middleware function.
    */
-  async run(params, locals) {
+  async run(params: { [key: string]: number | string }, locals: object) {
     return this._middleware(params, locals);
   }
 }

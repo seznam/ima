@@ -191,7 +191,9 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  deserialize(serializedData) {
+  deserialize(serializedData: {
+    [key: string]: { value: unknown; ttl: number };
+  }) {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
 

@@ -1,6 +1,7 @@
 import DynamicRoute from './DynamicRoute';
 import StaticRoute from './StaticRoute';
 import { RouteOptions } from './Router';
+import { RoutePathExpression } from './DynamicRoute';
 
 /**
  * Utility factory used by router to create routes.
@@ -47,7 +48,7 @@ export default class RouteFactory {
    */
   createRoute(
     name: string,
-    pathExpression,
+    pathExpression: RoutePathExpression,
     controller: string,
     view: string,
     options: RouteOptions

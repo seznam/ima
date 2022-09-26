@@ -148,8 +148,8 @@ export default class Response {
     this._isSent = true;
     this._status = status;
     this._setCookieHeaders();
-    this._response.set(headers);
-    this._response.redirect(status, url);
+    this._response?.set(headers);
+    this._response?.redirect(status, url);
 
     return this;
   }
@@ -181,7 +181,7 @@ export default class Response {
     }
 
     this._status = httpStatus;
-    this._response.status(httpStatus);
+    this._response?.status(httpStatus);
 
     return this;
   }
@@ -210,7 +210,7 @@ export default class Response {
     this._isSent = true;
     this._content = content;
     this._setCookieHeaders();
-    this._response.send(content);
+    this._response?.send(content);
 
     return this;
   }

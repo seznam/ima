@@ -16,7 +16,7 @@ import { RouteOptions } from '@/page/manager/AbstractPageManager';
  *
  * @abstract
  */
-export default abstract class AbstractRouter implements Router {
+export default abstract class AbstractRouter extends Router {
   protected _pageManager: PageManager;
   protected _factory: RouteFactory;
   protected _dispatcher: Dispatcher;
@@ -59,6 +59,8 @@ export default abstract class AbstractRouter implements Router {
     factory: RouteFactory,
     dispatcher: Dispatcher
   ) {
+    super();
+
     /**
      * The page manager handling UI rendering, and transitions between
      * pages if at the client side.
