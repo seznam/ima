@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import SerialBatch from '../SerialBatch';
 
 describe('ima.core.execution.AbstractExecution', () => {

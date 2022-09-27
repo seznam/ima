@@ -4,6 +4,8 @@ import GenericError from '../error/GenericError';
  * Factory for page.
  */
 export default class PageFactory {
+  
+
   /**
    * Factory used by page management classes.
    *

@@ -1,21 +1,15 @@
-import Dispatcher from './Dispatcher';
+import Dispatcher, { Listener } from './Dispatcher';
 import GenericError from '../error/GenericError';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
  * the {@link _eventListeners} map.
- *
- * @const
- * @type {Map<function (*), Set<?Object>>}
  */
-const EMPTY_MAP = Object.freeze(new Map());
+const EMPTY_MAP: Readonly<Map<Listener, Set<unknown>>> = Object.freeze(new Map());
 
 /**
  * An empty immutable set of event listener scopes, used for a mismatch in the
  * {@link _eventListeners} map.
- *
- * @const
- * @type {Set<?Object>}
  */
 const EMPTY_SET = Object.freeze(new Set());
 
@@ -23,24 +17,15 @@ const EMPTY_SET = Object.freeze(new Set());
  * Default implementation of the {@link Dispatcher} interface.
  */
 export default class DispatcherImpl implements Dispatcher {
-  protected _eventListeners: Map<string, Map<() => unknown, Set<unknown>>>;
+  /**
+   * Map of event names to a map of event listeners to a set of scopes to
+   * which the event listener should be bound when being executed due to
+   * the event.
+   */
+  protected _eventListeners: Map<string, Map<Listener, Set<unknown>>> = new Map();
 
   static get $dependencies() {
     return [];
-  }
-
-  /**
-   * Initializes the dispatcher.
-   */
-  constructor() {
-    /**
-     * Map of event names to a map of event listeners to a set of scopes to
-     * which the event listener should be bound when being executed due to
-     * the event.
-     *
-     * @type {Map<string, Map<function(*), Set<?Object>>>}
-     */
-    this._eventListeners = new Map();
   }
 
   /**
@@ -57,7 +42,7 @@ export default class DispatcherImpl implements Dispatcher {
    */
   listen(
     event: string,
-    listener: (event: Event) => void,
+    listener: Listener,
     scope: unknown = null
   ) {
     if ($Debug) {
@@ -86,7 +71,7 @@ export default class DispatcherImpl implements Dispatcher {
    */
   unlisten(
     event: string,
-    listener: (event: Event) => void,
+    listener: Listener,
     scope: unknown = null
   ) {
     const scopes = this._getScopesOf(event, listener);
@@ -95,9 +80,9 @@ export default class DispatcherImpl implements Dispatcher {
       if (!scopes.has(scope)) {
         console.warn(
           'ima.core.event.DispatcherImpl.unlisten(): the provided ' +
-            `listener '${listener}' is not registered for the ` +
-            `specified event '${event}' and scope '${scope}'. Check ` +
-            `your workflow.`,
+          `listener '${listener}' is not registered for the ` +
+          `specified event '${event}' and scope '${scope}'. Check ` +
+          `your workflow.`,
           {
             event: event,
             listener: listener,
@@ -165,9 +150,13 @@ export default class DispatcherImpl implements Dispatcher {
    * @param {string} event The name of the event.
    * @param {function(*)} listener The event listener.
    */
-  _createNewListener(event: string, listener: (event: Event) => void) {
+  _createNewListener(event: string, listener: Listener) {
     const scopes = new Set();
-    this._eventListeners.get(event).set(listener, scopes);
+
+    const listeners = this._eventListeners.get(event);
+    if (listeners) {
+      listeners.set(listener, scopes);
+    }
   }
 
   /**
@@ -181,11 +170,11 @@ export default class DispatcherImpl implements Dispatcher {
    *         set is an unmodifiable empty set if no listeners are registered
    *         for the event.
    */
-  _getScopesOf(event: string, listener: (event: Event) => void) {
+  _getScopesOf(event: string, listener: Listener) {
     const listenersToScopes = this._getListenersOf(event);
 
     if (listenersToScopes.has(listener)) {
-      return listenersToScopes.get(listener);
+      return listenersToScopes.get(listener) as Set<unknown>;
     }
 
     return EMPTY_SET;
@@ -194,15 +183,15 @@ export default class DispatcherImpl implements Dispatcher {
   /**
    * Retrieves the map of event listeners to scopes they are bound to.
    *
-   * @param {string} event The name of the event.
-   * @return {Map<function(*), Set<?Object>>} A map of event listeners to the
+   * @param event The name of the event.
+   * @return A map of event listeners to the
    *         scopes in which they should be executed. The returned map is an
    *         unmodifiable empty map if no listeners are registered for the
    *         event.
    */
-  _getListenersOf(event: string): Map<() => void, Set<object>> {
+  _getListenersOf(event: string) {
     if (this._eventListeners.has(event)) {
-      return this._eventListeners.get(event);
+      return this._eventListeners.get(event) as Map<Listener, Set<unknown>>;
     }
 
     return EMPTY_MAP;

@@ -1,9 +1,7 @@
-import PageHandler from '../PageHandler';
+import PageHandler, { ManagedPage, PageAction } from '../PageHandler';
 import PageHandlerRegistry from '../PageHandlerRegistry';
 import SerialBatch from '../../../execution/SerialBatch';
 import { toMockedInstance } from 'to-mock';
-import ManagedPage from '../../../page/ManagedPage';
-import PageAction from '../../../page/PageAction';
 
 class TestPageHandler extends PageHandler {
   init(): void {

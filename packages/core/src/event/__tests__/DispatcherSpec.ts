@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import Dispatcher from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {
@@ -11,7 +13,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     data: 'data',
   };
 
-  let dispatcher = null;
+  let dispatcher: Dispatcher;
   beforeEach(() => {
     dispatcher = new Dispatcher();
   });
@@ -27,35 +29,39 @@ describe('ima.core.event.DispatcherImpl', () => {
     it('should add handler for event', () => {
       dispatcher.listen(event, handlers.handler1);
       dispatcher.listen(event, handlers.handler2);
-      expect(dispatcher._eventListeners.get(event).size).toBe(2);
+
+      expect(dispatcher['_eventListeners'].get(event)!.size).toBe(2);
       expect(
-        dispatcher._eventListeners.get(event).get(handlers.handler1).size
+        dispatcher['_eventListeners'].get(event)!.get(handlers.handler1)!.size
       ).toBe(1);
       expect(
-        dispatcher._eventListeners.get(event).get(handlers.handler2).size
+        dispatcher['_eventListeners'].get(event)!.get(handlers.handler2)!.size
       ).toBe(1);
     });
 
     it('should add handler with their scope for event', () => {
       dispatcher.listen(event, handlers.handler1, handlers);
       dispatcher.listen(event, handlers.handler2, handlers);
-      expect(dispatcher._eventListeners.get(event).size).toBe(2);
+      expect(dispatcher['_eventListeners'].get(event)!.size).toBe(2);
       expect(
-        dispatcher._eventListeners.get(event).get(handlers.handler1).size
+        dispatcher['_eventListeners'].get(event)!.get(handlers.handler1)!.size
       ).toBe(1);
       expect(
-        dispatcher._eventListeners.get(event).get(handlers.handler2).size
+        dispatcher['_eventListeners'].get(event)!.get(handlers.handler2)!.size
       ).toBe(1);
     });
 
     it('should throw error if handler isnt function', () => {
       expect(() => {
+        // @ts-ignore
         dispatcher.listen(event, 'string');
       }).toThrow();
       expect(() => {
+        // @ts-ignore
         dispatcher.listen(event, 1);
       }).toThrow();
       expect(() => {
+        // @ts-ignore
         dispatcher.listen(event, {});
       }).toThrow();
     });
@@ -72,7 +78,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.unlisten(event, handlers.handler1);
 
-      expect(dispatcher._eventListeners.get(event).size).toBe(1);
+      expect(dispatcher['_eventListeners'].get(event)!.size).toBe(1);
     });
 
     it('should remove handler with their scope for event', () => {
@@ -81,24 +87,25 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.unlisten(event, handlers.handler1, handlers);
 
-      expect(dispatcher._eventListeners.get(event).size).toBe(1);
+      expect(dispatcher['_eventListeners'].get(event)!.size).toBe(1);
     });
 
     it('should remove handler with their scope for event, if scope is not changing', () => {
       dispatcher.listen(event, handlers.handler1, handlers);
       dispatcher.unlisten(event, handlers.handler1, handlers);
 
-      expect(dispatcher._eventListeners.get(event)).toBeUndefined();
+      expect(dispatcher['_eventListeners'].get(event)).toBeUndefined();
     });
 
     it('should remove handler with their scope for event, if scope is changing', () => {
       dispatcher.listen(event, handlers.handler1, handlers);
 
+      // @ts-ignore
       handlers.handler3 = () => {};
 
       dispatcher.unlisten(event, handlers.handler1, handlers);
 
-      expect(dispatcher._eventListeners.get(event)).toBeUndefined();
+      expect(dispatcher['_eventListeners'].get(event)).toBeUndefined();
     });
 
     it('should show warning for undefined event', () => {
@@ -125,10 +132,12 @@ describe('ima.core.event.DispatcherImpl', () => {
       const handler2Spy = jest.spyOn(handlers, 'handler2');
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
-      const handler1SpyWrapper = (...args) => {
+      const handler1SpyWrapper = (...args: unknown[]) => {
+        // @ts-ignore
         return handler1Spy(...args);
       };
-      const handler2SpyWrapper = (...args) => {
+      const handler2SpyWrapper = (...args: unknown[]) => {
+        // @ts-ignore
         return handler2Spy(...args);
       };
 
@@ -166,7 +175,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.clear();
 
-      expect(dispatcher._eventListeners.size).toBe(0);
+      expect(dispatcher['_eventListeners'].size).toBe(0);
     });
   });
 });

@@ -8,6 +8,14 @@ const MAX_HISTORY_LIMIT = 10;
  * The implementation of the {@link PageStateManager} interface.
  */
 export default class PageStateManagerImpl extends PageStateManager {
+  private _cursor = -1;
+  private _dispatcher: Dispatcher;
+  private _ongoingTransaction = false;
+  private _statePatchQueue: { [key: string]: unknown }[] = [];
+  private _states: { [key: string]: unknown }[] = [];
+
+  onChange?: (newState: { [key: string]: unknown }) => void;
+
   static get $dependencies() {
     return [Dispatcher];
   }
@@ -17,38 +25,10 @@ export default class PageStateManagerImpl extends PageStateManager {
    *
    * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    */
-  constructor(dispatcher) {
+  constructor(dispatcher: Dispatcher) {
     super();
 
-    /**
-     * @type {Array<Object<string, *>>}
-     */
-    this._states = [];
-
-    /**
-     * @type {Array<Object<string, *>>}
-     */
-    this._statePatchQueue = [];
-
-    /**
-     * @type {number}
-     */
-    this._cursor = -1;
-
-    /**
-     * @type {?function(Object<string, *>)}
-     */
-    this.onChange = null;
-
-    /**
-     * @type {Dispatcher}
-     */
     this._dispatcher = dispatcher;
-
-    /**
-     * @type {boolean}
-     */
-    this._ongoingTransaction = false;
   }
 
   /**
@@ -62,7 +42,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritdoc
    */
-  setState(patchState) {
+  setState(patchState: { [key: string]: unknown }) {
     if (this._ongoingTransaction) {
       return this._statePatchQueue.push(patchState);
     }
@@ -111,8 +91,8 @@ export default class PageStateManagerImpl extends PageStateManager {
     if ($Debug && this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.beginTransaction():' +
-          'Another state transaction is already in progress. Check you workflow.' +
-          'These uncommited state changes will be lost:',
+        'Another state transaction is already in progress. Check you workflow.' +
+        'These uncommited state changes will be lost:',
         this._statePatchQueue
       );
     }
@@ -128,7 +108,7 @@ export default class PageStateManagerImpl extends PageStateManager {
     if ($Debug && !this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.commitTransaction():' +
-          'No transaction is in progress. Check you workflow.'
+        'No transaction is in progress. Check you workflow.'
       );
     }
 
@@ -167,20 +147,16 @@ export default class PageStateManagerImpl extends PageStateManager {
 
   /**
    * Push new state to history storage.
-   *
-   * @param {Object<string, *>} newState
    */
-  _pushToHistory(newState) {
+  _pushToHistory(newState: { [key: string]: unknown }) {
     this._states.push(newState);
     this._cursor += 1;
   }
 
   /**
    * Call registered callback function on (@link onChange) with newState.
-   *
-   * @param {Object<string, *>} newState
    */
-  _callOnChangeCallback(newState) {
+  _callOnChangeCallback(newState: { [key: string]: unknown }) {
     if (this.onChange && typeof this.onChange === 'function') {
       this.onChange(newState);
     }

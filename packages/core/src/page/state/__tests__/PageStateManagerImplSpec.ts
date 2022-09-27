@@ -1,10 +1,10 @@
 import PageStateManager from '../PageStateManagerImpl';
-import Dispatcher from '../../../event/Dispatcher';
+import Dispatcher from '../../../event/DispatcherImpl';
 import Events from '../Events';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.page.state.PageStateManagerImpl', () => {
-  let stateManager = null;
+  let stateManager: PageStateManager;
   let defaultState = { state: 'state', patch: null };
   let patchState = { patch: 'patch' };
   let queuedPatchState1 = { lazy: 'patch' };
@@ -24,8 +24,8 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   it('should clear history', () => {
     stateManager.clear();
 
-    expect(stateManager._states).toHaveLength(0);
-    expect(stateManager._cursor).toBe(-1);
+    expect(stateManager['_states']).toHaveLength(0);
+    expect(stateManager['_cursor']).toBe(-1);
   });
 
   describe('getState method', () => {
@@ -75,7 +75,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
       stateManager.setState(patchState);
 
-      expect(stateManager._statePatchQueue).toHaveLength(1);
+      expect(stateManager['_statePatchQueue']).toHaveLength(1);
       expect(stateManager._pushToHistory).not.toHaveBeenCalled();
       expect(dispatcher.fire).not.toHaveBeenCalled();
     });
@@ -87,7 +87,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
   describe('beginTransaction method', () => {
     it('should show warning for another ongoing transaction', () => {
-      stateManager._ongoingTransaction = true;
+      stateManager['_ongoingTransaction'] = true;
       jest.spyOn(console, 'warn').mockImplementation();
 
       stateManager.beginTransaction();
@@ -98,14 +98,14 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
     it('should flag transaction and empty queue', () => {
       stateManager.beginTransaction();
 
-      expect(stateManager._ongoingTransaction).toBe(true);
-      expect(stateManager._statePatchQueue).toHaveLength(0);
+      expect(stateManager['_ongoingTransaction']).toBe(true);
+      expect(stateManager['_statePatchQueue']).toHaveLength(0);
     });
   });
 
   describe('commitTransaction method', () => {
     it('should show warning for no active transaction', () => {
-      stateManager._ongoingTransaction = false;
+      stateManager['_ongoingTransaction'] = false;
       jest.spyOn(console, 'warn').mockImplementation();
 
       stateManager.commitTransaction();
@@ -140,8 +140,8 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
       stateManager.cancelTransaction();
 
-      expect(stateManager._ongoingTransaction).toBe(false);
-      expect(stateManager._statePatchQueue).toHaveLength(0);
+      expect(stateManager['_ongoingTransaction']).toBe(false);
+      expect(stateManager['_statePatchQueue']).toHaveLength(0);
     });
   });
 
