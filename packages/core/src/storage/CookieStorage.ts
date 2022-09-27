@@ -32,7 +32,7 @@ export type Options = {
   secure?: boolean;
 };
 
-type Cookie = {
+export type Cookie = {
   options: Options;
   value: string;
 };
@@ -160,7 +160,7 @@ export default class CookieStorage extends MapStorage {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value?: string, options: Options = {}) {
+  set(name: string, value?: string, options?: Options) {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
@@ -290,7 +290,6 @@ export default class CookieStorage extends MapStorage {
 
     for (let i = 0; i < cookiesArray.length; i++) {
       const cookie = this._extractCookie(cookiesArray[i]);
-
       if (typeof cookie.name === 'string') {
         // if cookie already exists in storage get its old options
         let oldCookieOptions = {};
@@ -409,12 +408,11 @@ export default class CookieStorage extends MapStorage {
 
     cookiePairs.forEach((pair, index) => {
       const [name, value] = this._extractNameAndValue(pair, index);
-
       if (index === 0) {
         cookieName = name;
         cookieValue = value;
       } else {
-        Object.assign(cookieOptions, { name: value });
+        Object.assign(cookieOptions, { [name as string]: value });
       }
     });
 
@@ -520,7 +518,7 @@ export default class CookieStorage extends MapStorage {
    *        http://tools.ietf.org/html/rfc2965#page-5
    */
   _recomputeCookieMaxAgeAndExpires(options: Options) {
-    if (typeof options.maxAge || options.expires) {
+    if (options.maxAge || options.expires) {
       options.expires = this._getExpirationAsDate(
         (options.maxAge || options.expires) as number | string | Date
       );
