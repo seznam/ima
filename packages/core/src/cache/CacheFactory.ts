@@ -16,7 +16,7 @@ export default class CacheFactory {
    *        entry will expire after the specified amount of milliseconds.
    * @return {CacheEntry} The created cache entry.
    */
-  createCacheEntry(value: unknown, ttl: number): CacheEntry {
+  createCacheEntry(value: unknown, ttl: number | string): CacheEntry {
     return new CacheEntry(value, ttl);
   }
 }

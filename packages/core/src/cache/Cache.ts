@@ -1,5 +1,3 @@
-import CacheEntry from './CacheEntry';
-
 /**
  * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
@@ -36,7 +34,7 @@ export default abstract class Cache {
    * @return {*} The value of the specified cache entry, or `null` if the entry
    *         is not available.
    */
-  abstract get(key: string): CacheEntry | null;
+  abstract get(key: string): unknown | null;
 
   /**
    * Sets the cache entry identified by the specified key to the provided
@@ -50,7 +48,7 @@ export default abstract class Cache {
    *        entry will expire after the specified amount of milliseconds. Use
    *        `null` or omit the parameter to use the default TTL of this cache.
    */
-  abstract set(key: string, value: unknown, ttl?: number): void;
+  abstract set(key: string, value: unknown, ttl?: number | string): void;
 
   /**
    * Deletes the specified cache entry. The method has no effect if the entry

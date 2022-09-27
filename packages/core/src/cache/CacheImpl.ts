@@ -103,11 +103,12 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  get(key: string): CacheEntry | null {
+  get(key: string): unknown | null {
     if (this.has(key)) {
-      const value = this._cache.get(key).getValue();
+      const cacheEntryItem = this._cache.get(key) as CacheEntry;
+      const value = cacheEntryItem.getValue();
 
-      return this._clone(value) as CacheEntry;
+      return this._clone(value);
     }
 
     return null;
@@ -116,7 +117,7 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown, ttl = 0) {
+  set(key: string, value: unknown, ttl: number | string = 0) {
     if (!this._enabled) {
       return;
     }
@@ -155,7 +156,7 @@ export default class CacheImpl extends Cache {
    * @inheritdoc
    */
   serialize() {
-    const dataToSerialize = {};
+    const dataToSerialize: { [key: string]: unknown } = {};
 
     for (const key of this._cache.keys()) {
       const currentValue = this._cache.get(key);
@@ -172,7 +173,7 @@ export default class CacheImpl extends Cache {
             throw new Error(
               `ima.core.cache.CacheImpl:serialize An ` +
                 `attempt to serialize ` +
-                `${serializeEntry.value.toString()}, stored ` +
+                `${(serializeEntry.value as CacheEntry).toString()}, stored ` +
                 `using the key ${key}, was made, but the value ` +
                 `cannot be serialized. Remove this entry from ` +
                 `the cache or change its type so that can be ` +
@@ -192,7 +193,7 @@ export default class CacheImpl extends Cache {
    * @inheritdoc
    */
   deserialize(serializedData: {
-    [key: string]: { value: unknown; ttl: number };
+    [key: string]: { value: unknown; ttl: number | string };
   }) {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
@@ -229,7 +230,7 @@ export default class CacheImpl extends Cache {
     }
 
     if (value.constructor === Array) {
-      for (const element of value) {
+      for (const element of value as Array<unknown>) {
         if (!this._canSerializeValue(element)) {
           console.warn('The provided array is not serializable: ', value);
 
@@ -240,7 +241,11 @@ export default class CacheImpl extends Cache {
 
     if (typeof value === 'object') {
       for (const propertyName of Object.keys(value)) {
-        if (!this._canSerializeValue(value[propertyName])) {
+        if (
+          !this._canSerializeValue(
+            (value as { [key: string]: unknown })[propertyName]
+          )
+        ) {
           console.warn(
             'The provided object is not serializable due to the ' +
               'following property: ',

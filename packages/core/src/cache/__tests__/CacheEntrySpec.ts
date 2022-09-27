@@ -1,7 +1,7 @@
 import CacheEntry from '../CacheEntry';
 
 describe('ima.core.cache.CacheEntry', () => {
-  let cacheEntry = null;
+  let cacheEntry: CacheEntry;
 
   beforeEach(() => {
     Date.now = () => 1000;
