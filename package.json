@@ -29,6 +29,7 @@
     "dev": "node ./utils/scripts/dev.js",
     "build": "npm run build --workspaces --if-present",
     "doc": "npm run build:doc --workspace website",
+    "commit": "echo 'This command has been replaced with \"npm run changeset\"'",
     "changeset": "changeset add",
     "postinstall": "npm run build",
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
