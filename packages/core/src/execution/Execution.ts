@@ -1,3 +1,5 @@
+import Job from './Job';
+
 /**
  * Execution is an abstract class that defines a standard for executing jobs.
  * The execution can be either done in serial or in parallel way.
@@ -12,25 +14,22 @@
  * supplied to each job individually (thus meaning one job's mutation won't
  * affect another job) or they could be supplied to the first job and then
  * piped through other jobs.
- *
- * @interface
  */
-export default interface Execution {
+export default abstract class Execution {
   /**
    * Adds a new job to be executed. The job is appended at the end of the
    * list of current jobs therefore is executed last.
    *
-   * @param {Array<function(): Promise>} jobs The jobs to be executed.
+   * @param jobs The jobs to be executed.
    */
-  append(jobs: { (): Promise<undefined> }[]): void;
+   abstract append(jobs: Job[]): void;
 
   /**
    * Start executing collected jobs. In the end a `Promise` is returned
    * with a resulting value. On the returned `Promise` a `catch`
    * method can be called to prevent any unwanted interruption.
    *
-   * @param {...any} args Arguments to be passed when executing jobs
-   * @returns {Promise}
+   * @param args Arguments to be passed when executing jobs
    */
-  execute(...args: unknown[]): Promise<undefined>;
+   abstract execute(...args: unknown[]): Promise<unknown>;
 }

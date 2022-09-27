@@ -1,10 +1,6 @@
 import AbstractExecution from './AbstractExecution';
+import Job from './Job';
 
-/**
- *
- *
- * @extends AbstractExecution
- */
 export default class SerialBatch extends AbstractExecution {
   /**
    * @inheritDoc
@@ -13,8 +9,8 @@ export default class SerialBatch extends AbstractExecution {
     const zeroStage = Promise.resolve([]);
 
     return this._jobs.reduce(
-      (lastStage, currentStage) =>
-        lastStage.then(results =>
+      (lastStage: Promise<unknown>, currentStage: Job) =>
+        lastStage.then((results: unknown) =>
           this._executeJob(currentStage, args).then(
             Array.prototype.concat.bind(results)
           )
@@ -23,13 +19,9 @@ export default class SerialBatch extends AbstractExecution {
     );
   }
 
-  _executeJob(stage, args) {
+  _executeJob(stage: Job, args: unknown[]) {
     let result = stage(...args);
 
-    if (!(result instanceof Promise)) {
-      result = Promise.resolve(result);
-    }
-
-    return result;
+    return (result instanceof Promise) ? result : Promise.resolve(result);
   }
 }

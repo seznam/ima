@@ -1,27 +1,26 @@
-import PageManagerHandler from './PageHandler';
+import PageHandler from './PageHandler';
 import Window from '../../window/Window';
 import ActionTypes from '../../router/ActionTypes';
+import ManagedPage from '../ManagedPage';
+import PageAction from '../PageAction';
 
-/**
- *
- */
-export default class PageNavigationHandler extends PageManagerHandler {
+export default class PageNavigationHandler extends PageHandler {
+  private _window: Window;
+
   static get $dependencies() {
     return [Window];
   }
 
   /**
-   * @param {Window} window The utility for manipulating the global context
+   * @param window The utility for manipulating the global context
    *        and global client-side-specific APIs.
    */
-  constructor(window) {
+  constructor(window: Window) {
     super();
 
     /**
      * The utility for manipulating the global context and global
      * client-side-specific APIs.
-     *
-     * @type {ima.core.window.Window}
      */
     this._window = window;
   }
@@ -33,15 +32,19 @@ export default class PageNavigationHandler extends PageManagerHandler {
     // Setup history object to leave the scrolling to us and to not interfere
     const browserWindow = this._window.getWindow();
 
-    if ('scrollRestoration' in browserWindow.history) {
+    if (browserWindow && 'scrollRestoration' in browserWindow.history) {
       browserWindow.history.scrollRestoration = 'manual';
     }
+  }
+
+  destroy(): void {
+    return;
   }
 
   /**
    * @inheritDoc
    */
-  handlePreManagedState(managedPage, nextManagedPage, action) {
+  handlePreManagedState(managedPage: ManagedPage, nextManagedPage: ManagedPage, action: PageAction) {
     const {
       options: { autoScroll },
     } = nextManagedPage;
@@ -68,7 +71,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
   /**
    * @inheritDoc
    */
-  handlePostManagedState(managedPage, previousManagedPage, action) {
+  handlePostManagedState(managedPage: ManagedPage, previousManagedPage: ManagedPage, action: PageAction) {
     const { event } = action;
     const {
       options: { autoScroll },
@@ -96,15 +99,11 @@ export default class PageNavigationHandler extends PageManagerHandler {
     const oldState = this._window.getHistoryState();
     const newState = Object.assign({}, oldState, state);
 
-    this._window.replaceState(newState, null, url);
+    this._window.replaceState(newState, '', url);
   }
 
   /**
    * Scrolls to give coordinates on a page.
-   *
-   * @param {Object} scroll
-   * @param {number} [scroll.x]
-   * @param {number} [scroll.y]
    */
   _scrollTo({ x = 0, y = 0 }) {
     setTimeout(() => {
@@ -120,10 +119,10 @@ export default class PageNavigationHandler extends PageManagerHandler {
    * following structure: `{url: string}`. The `url` field will
    * be set to the provided URL.
    *
-   * @param {string} url The URL.
-   * @param {boolean} isRedirection If replaceState should be used instead of pushState.
+   * @param url The URL.
+   * @param isRedirection If replaceState should be used instead of pushState.
    */
-  _setAddressBar(url, isRedirection) {
+  _setAddressBar(url: string, isRedirection: boolean) {
     let scroll = {
       x: 0,
       y: 0,
@@ -131,9 +130,9 @@ export default class PageNavigationHandler extends PageManagerHandler {
     let state = { url, scroll };
 
     if (isRedirection) {
-      this._window.replaceState(state, null, url);
+      this._window.replaceState(state, '', url);
     } else {
-      this._window.pushState(state, null, url);
+      this._window.pushState(state, '', url);
     }
   }
 }

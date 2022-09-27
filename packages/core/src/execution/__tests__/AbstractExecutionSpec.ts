@@ -1,31 +1,32 @@
-import AbstractExecution from '../AbstractExecution';
+import SerialBatch from '../SerialBatch';
 
 describe('ima.core.execution.AbstractExecution', () => {
-  let execution = null;
+  let execution: SerialBatch;
 
-  const asyncFunction = argument => {
+  const asyncFunction = (argument: unknown) => {
     return new Promise(resolve => setTimeout(() => resolve(argument), 200));
   };
 
-  const syncFunction = argument => {
+  const syncFunction = (argument: unknown) => {
     return argument;
   };
 
   beforeEach(() => {
-    execution = new AbstractExecution();
+    execution = new SerialBatch();
   });
 
   describe('append() method', () => {
     it('should append a job to the list of jobs', () => {
       execution.append([asyncFunction, syncFunction]);
 
-      expect(execution._jobs).toHaveLength(2);
+      expect(execution['_jobs']).toHaveLength(2);
     });
 
     it("should not append a job if it's invalid", () => {
+      // @ts-ignore
       execution.append({});
 
-      expect(execution._jobs).toHaveLength(0);
+      expect(execution['_jobs']).toHaveLength(0);
     });
   });
 

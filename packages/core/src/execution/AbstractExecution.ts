@@ -1,41 +1,30 @@
-import GenericError from '../error/GenericError';
 import Execution from './Execution';
+import Job from './Job';
 
 const CLASS_REGEX = /^\s*class\b/;
 
 /**
  * Basic implementation of the {@link Execution} interface. Provides the basic
  * functionality for appending and validating jobs.
- *
- * @abstract
- * @extends Execution
  */
-export default class AbstractExecution implements Execution {
-  protected _jobs: unknown[];
+export default abstract class AbstractExecution extends Execution {
+  protected _jobs: Job[];
 
-  constructor(jobs = []) {
+  constructor(jobs: Job[] = []) {
+    super();
+
     this._jobs = jobs.filter(this._validateJob);
   }
 
   /**
    * @inheritDoc
    */
-  append(jobs: unknown[]) {
+  append(jobs: Job[] | Job) {
     if (!Array.isArray(jobs)) {
       jobs = [jobs];
     }
 
     this._jobs = this._jobs.concat(jobs.filter(this._validateJob));
-  }
-
-  /**
-   * @inheritDoc
-   */
-  execute() {
-    throw new GenericError(
-      'The ima.core.execution.AbstractExecution.execute method is abstract ' +
-        'and must be overridden'
-    );
   }
 
   /**
@@ -45,7 +34,7 @@ export default class AbstractExecution implements Execution {
    * @param {function(): Promise} job
    * @returns {boolean}
    */
-  _validateJob(job: () => Promise<undefined>): boolean {
+  _validateJob(job: Job): boolean {
     if (typeof job === 'function') {
       if (!CLASS_REGEX.test(job.toString())) {
         return true;
