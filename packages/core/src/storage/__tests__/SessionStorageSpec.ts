@@ -1,20 +1,23 @@
 import SessionStorage from '../SessionStorage';
-import Window from 'src/window/Window';
+import ClientWindow from '../../window/ClientWindow';
 
 describe('ima.storage.SessionStorage', () => {
-  let session;
-  let window;
+  let session: SessionStorage;
+  let window: ClientWindow;
   let sessionStorage = {
     _storage: new Map(),
-    setItem: (key, value) => sessionStorage._storage.set(key, value),
-    getItem: key => sessionStorage._storage.get(key),
-    removeItem: key => sessionStorage._storage.delete(key),
+    setItem: (key: string, value: unknown) => sessionStorage._storage.set(key, value),
+    getItem: (key: string) => sessionStorage._storage.get(key),
+    removeItem: (key: string) => sessionStorage._storage.delete(key),
     clear: () => sessionStorage._storage.clear(),
+    length: 0,
+    key: (index: number) => ''
   };
 
   beforeEach(() => {
-    window = new Window();
+    window = new ClientWindow();
 
+    // @ts-ignore
     jest.spyOn(window, 'getWindow').mockReturnValue({ sessionStorage });
 
     session = new SessionStorage(window);

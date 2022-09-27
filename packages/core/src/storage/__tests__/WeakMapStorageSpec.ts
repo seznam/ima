@@ -1,7 +1,7 @@
 import WeakMapStorage from '../WeakMapStorage';
 
 describe('ima.storage.WeakMapStorage', () => {
-  let map;
+  let map: WeakMapStorage;
 
   beforeEach(() => {
     map = new WeakMapStorage({
