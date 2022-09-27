@@ -1,5 +1,5 @@
 import AbstractExecution from './AbstractExecution';
-import Job from './Job';
+import { Job } from './Execution';
 
 export default class SerialBatch extends AbstractExecution {
   /**

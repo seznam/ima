@@ -1,8 +1,7 @@
 import PageNavigationHandler from '../PageNavigationHandler';
 import ClientWindow from '../../../window/ClientWindow';
 import ActionTypes from '../../../router/ActionTypes';
-import ManagedPage from '@/page/ManagedPage';
-import PageAction from '@/page/PageAction';
+import { ManagedPage, PageAction } from '../PageHandler';
 
 jest.useFakeTimers();
 

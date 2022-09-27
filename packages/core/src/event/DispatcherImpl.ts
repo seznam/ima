@@ -1,11 +1,11 @@
-import Dispatcher from './Dispatcher';
+import Dispatcher, { Listener } from './Dispatcher';
 import GenericError from '../error/GenericError';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
  * the {@link _eventListeners} map.
  */
-const EMPTY_MAP: Readonly<Map<(data: { [key: string]: unknown }) => unknown, Set<unknown>>> = Object.freeze(new Map());
+const EMPTY_MAP: Readonly<Map<Listener, Set<unknown>>> = Object.freeze(new Map());
 
 /**
  * An empty immutable set of event listener scopes, used for a mismatch in the
@@ -22,7 +22,7 @@ export default class DispatcherImpl implements Dispatcher {
    * which the event listener should be bound when being executed due to
    * the event.
    */
-  protected _eventListeners: Map<string, Map<(data: { [key: string]: unknown }) => unknown, Set<unknown>>> = new Map();
+  protected _eventListeners: Map<string, Map<Listener, Set<unknown>>> = new Map();
 
   static get $dependencies() {
     return [];
@@ -42,7 +42,7 @@ export default class DispatcherImpl implements Dispatcher {
    */
   listen(
     event: string,
-    listener: (data: { [key: string]: unknown }) => void,
+    listener: Listener,
     scope: unknown = null
   ) {
     if ($Debug) {
@@ -71,7 +71,7 @@ export default class DispatcherImpl implements Dispatcher {
    */
   unlisten(
     event: string,
-    listener: (data: { [key: string]: unknown }) => void,
+    listener: Listener,
     scope: unknown = null
   ) {
     const scopes = this._getScopesOf(event, listener);
@@ -150,7 +150,7 @@ export default class DispatcherImpl implements Dispatcher {
    * @param {string} event The name of the event.
    * @param {function(*)} listener The event listener.
    */
-  _createNewListener(event: string, listener: (data: { [key: string]: unknown }) => void) {
+  _createNewListener(event: string, listener: Listener) {
     const scopes = new Set();
 
     const listeners = this._eventListeners.get(event);
@@ -170,7 +170,7 @@ export default class DispatcherImpl implements Dispatcher {
    *         set is an unmodifiable empty set if no listeners are registered
    *         for the event.
    */
-  _getScopesOf(event: string, listener: (data: { [key: string]: unknown }) => void) {
+  _getScopesOf(event: string, listener: Listener) {
     const listenersToScopes = this._getListenersOf(event);
 
     if (listenersToScopes.has(listener)) {
@@ -191,7 +191,7 @@ export default class DispatcherImpl implements Dispatcher {
    */
   _getListenersOf(event: string) {
     if (this._eventListeners.has(event)) {
-      return this._eventListeners.get(event) as Map<(data: { [key: string]: unknown }) => unknown, Set<unknown>>;
+      return this._eventListeners.get(event) as Map<Listener, Set<unknown>>;
     }
 
     return EMPTY_MAP;

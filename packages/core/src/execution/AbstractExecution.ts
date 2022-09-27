@@ -1,5 +1,4 @@
-import Execution from './Execution';
-import Job from './Job';
+import Execution, { Job } from './Execution';
 
 const CLASS_REGEX = /^\s*class\b/;
 

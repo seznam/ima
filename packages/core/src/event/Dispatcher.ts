@@ -1,3 +1,5 @@
+export type Listener = (data: { [key: string]: unknown }) => unknown;
+
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
  * and allows distributing (firing) events to the listeners registered for the
@@ -33,7 +35,7 @@ export default abstract class Dispatcher {
    *        will be bound in the event listener.
    * @return {Dispatcher} This dispatcher.
    */
-  abstract listen(event: string, listener: (data: { [key: string]: unknown }) => unknown, scope?: unknown): this;
+  abstract listen(event: string, listener: Listener, scope?: unknown): this;
 
   /**
    * Deregisters the provided event listener, so it will no longer be
@@ -48,7 +50,7 @@ export default abstract class Dispatcher {
    */
   abstract unlisten(
     event: string,
-    listener: (data: { [key: string]: unknown }) => void,
+    listener: Listener,
     scope?: unknown
   ): this;
 

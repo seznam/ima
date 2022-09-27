@@ -1,4 +1,4 @@
-import Job from './Job';
+export type Job = (...args: unknown[]) => Promise<unknown> | unknown;
 
 /**
  * Execution is an abstract class that defines a standard for executing jobs.
