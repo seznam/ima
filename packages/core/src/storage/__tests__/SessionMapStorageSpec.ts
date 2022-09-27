@@ -1,15 +1,16 @@
 import MapStorage from '../MapStorage';
 import SessionMapStorage from '../SessionMapStorage';
+import SessionStorage from '../SessionStorage';
 
 describe('ima.storage.SessionMapStorage', () => {
-  let sessionMap;
-  let mapStorage = null;
-  let sessionStorage = null;
+  let sessionMap: SessionMapStorage;
+  let mapStorage: MapStorage;
+  let sessionStorage: MapStorage;
 
   beforeEach(() => {
     mapStorage = new MapStorage();
     sessionStorage = new MapStorage();
-    sessionMap = new SessionMapStorage(mapStorage, sessionStorage);
+    sessionMap = new SessionMapStorage(mapStorage, sessionStorage as unknown as SessionStorage);
 
     sessionMap.init();
     sessionMap.clear();
