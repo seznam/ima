@@ -7,26 +7,29 @@ import GenericError from '../../error/GenericError';
  */
 export default class PageStateManagerDecorator extends PageStateManager {
   /**
+   * The current page state manager.
+   */
+  private _pageStateManager: PageStateManager;
+  /**
+   * Array of access keys for state.
+   */
+  private _allowedStateKeys: string[];
+
+  /**
    * Initializes the page state manager decorator.
    *
    * @param {PageStateManager} pageStateManager
    * @param {string[]} allowedStateKeys
    */
-  constructor(pageStateManager, allowedStateKeys) {
+  constructor(pageStateManager: PageStateManager, allowedStateKeys: string[]) {
     super();
 
     /**
      * The current page state manager.
-     *
-     * @type {PageStateManager}
      */
     this._pageStateManager = pageStateManager;
 
-    /**
-     * Array of access keys for state.
-     *
-     * @type {string[]}
-     */
+
     this._allowedStateKeys = allowedStateKeys;
   }
 
@@ -40,7 +43,7 @@ export default class PageStateManagerDecorator extends PageStateManager {
   /**
    * @inheritdoc
    */
-  setState(statePatch) {
+  setState(statePatch: { [key: string]: unknown }) {
     if ($Debug) {
       let patchKeys = Object.keys(statePatch);
       let deniedKeys = patchKeys.filter(patchKey => {
@@ -50,8 +53,8 @@ export default class PageStateManagerDecorator extends PageStateManager {
       if (deniedKeys.length > 0) {
         throw new GenericError(
           `Extension can not set state for keys ` +
-            `${deniedKeys.join()}. Check your extension or add keys ` +
-            `${deniedKeys.join()} to getAllowedStateKeys.`
+          `${deniedKeys.join()}. Check your extension or add keys ` +
+          `${deniedKeys.join()} to getAllowedStateKeys.`
         );
       }
     }

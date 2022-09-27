@@ -1,26 +1,26 @@
 /**
  * Manager of the current page state and state history.
  */
-export default class PageStateManager {
+export default abstract class PageStateManager {
   /**
    * Clears the state history.
    */
-  clear() {}
+  abstract clear(): void;
 
   /**
    * Sets a new page state by applying the provided patch to the current
    * state.
    *
-   * @param {Object<string, *>} statePatch The patch of the current state.
+   * @param statePatch The patch of the current state.
    */
-  setState() {}
+  abstract setState(statePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the current page state.
    *
-   * @return {Object<string, *>} The current page state.
+   * @return The current page state.
    */
-  getState() {}
+  abstract getState(): { [key: string]: unknown };
 
   /**
    * Returns the recorded history of page states. The states will be
@@ -29,16 +29,16 @@ export default class PageStateManager {
    * Note that the implementation may limit the size of the recorded history,
    * therefore the complete history may not be available.
    *
-   * @return {Array<Object<string, *>>} The recorded history of page states.
+   * @return The recorded history of page states.
    */
-  getAllStates() {}
+  abstract getAllStates(): { [key: string]: unknown }[];
 
   /**
    * Returns queueing state patches off the main state from the begin of transaction.
    *
-   * @return {Array<Object<string, *>>} State patches from the begin of transaction.
+   * @return State patches from the begin of transaction.
    */
-  getTransactionStatePatches() {}
+  abstract getTransactionStatePatches(): { [key: string]: unknown }[];
 
   /**
    * Starts queueing state patches off the main state. While the transaction
@@ -47,16 +47,16 @@ export default class PageStateManager {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  beginTransaction() {}
+  abstract beginTransaction(): void;
 
   /**
    * Applies queued state patches to the main state. All patches are squashed
    * and applied with one `setState` call.
    */
-  commitTransaction() {}
+  abstract commitTransaction(): void;
 
   /**
    * Cancels ongoing transaction. Uncommited state changes are lost.
    */
-  cancelTransaction() {}
+  abstract cancelTransaction(): void;
 }

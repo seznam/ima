@@ -1,17 +1,21 @@
-import PageStateManager from '../PageStateManagerImpl';
+import PageStateManagerImpl from '../PageStateManagerImpl';
 import PageStateManagerDecorator from '../PageStateManagerDecorator';
+import DispatcherImpl from '../../../event/DispatcherImpl';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.page.state.PageStateManagerDecorator', () => {
-  let pageStateManager = null;
+  let dispatcher: DispatcherImpl = toMockedInstance(DispatcherImpl);
+  let pageStateManager: PageStateManagerImpl;
   let allowedStateKeys = ['allow'];
-  let decoratedPageStateManager = null;
+  let decoratedPageStateManager: PageStateManagerDecorator;
   let state = {
     allow: 1,
     deny: 0,
   };
 
   beforeEach(() => {
-    pageStateManager = new PageStateManager();
+
+    pageStateManager = new PageStateManagerImpl(dispatcher);
     decoratedPageStateManager = new PageStateManagerDecorator(
       pageStateManager,
       allowedStateKeys
