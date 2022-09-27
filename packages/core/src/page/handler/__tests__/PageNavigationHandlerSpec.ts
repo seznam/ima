@@ -1,16 +1,19 @@
 import PageNavigationHandler from '../PageNavigationHandler';
-import Window from 'src/window/Window';
-import ActionTypes from 'src/router/ActionTypes';
+import ClientWindow from '../../../window/ClientWindow';
+import ActionTypes from '../../../router/ActionTypes';
+import ManagedPage from '@/page/ManagedPage';
+import PageAction from '@/page/PageAction';
 
 jest.useFakeTimers();
 
 describe('ima.core.page.handler.PageNavigationHandler', () => {
-  let handler;
-  let window;
+  let handler: PageNavigationHandler;
+  let window: ClientWindow;
 
   beforeEach(() => {
-    window = new Window();
+    window = new ClientWindow();
     jest.spyOn(window, 'getWindow').mockReturnValue({
+      // @ts-ignore
       history: { scrollRestoration: 'auto' },
     });
 
@@ -37,9 +40,9 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState({}, nextManagedPage, {
+      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {
         url: 'http://localhost/',
-      });
+      } as PageAction);
 
       expect(replaceStateMock).toHaveBeenCalled();
       expect(pushStateMock).toHaveBeenCalled();
@@ -52,10 +55,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
-      handler.handlePreManagedState({}, nextManagedPage, {
+      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {
         url: 'http://localhost/final_url',
         type: ActionTypes.REDIRECT,
-      });
+      } as PageAction);
 
       expect(replaceStateMock).toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
@@ -68,9 +71,9 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState(null, nextManagedPage, {
+      handler.handlePreManagedState(undefined as unknown as ManagedPage, nextManagedPage, {
         url: 'http://localhost/',
-      });
+      } as PageAction);
 
       expect(replaceStateMock).not.toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
@@ -83,10 +86,10 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState(null, nextManagedPage, {
+      handler.handlePreManagedState(undefined as unknown as ManagedPage, nextManagedPage, {
         url: 'http://localhost/',
         action: ActionTypes.POP_STATE,
-      });
+      } as PageAction);
 
       expect(replaceStateMock).not.toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
@@ -96,7 +99,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
-      handler.handlePreManagedState(null, nextManagedPage, {});
+      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {} as PageAction);
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();
@@ -106,7 +109,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState(null, nextManagedPage, {});
+      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {} as PageAction);
 
       jest.runAllTimers();
       expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -120,9 +123,9 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const managedPage = { options: { autoScroll: true } };
       const scroll = { x: 0, y: 340 };
 
-      handler.handlePostManagedState(managedPage, null, {
+      handler.handlePostManagedState(managedPage, {} as ManagedPage, {
         event: { state: { scroll } },
-      });
+      } as PageAction);
 
       jest.runAllTimers();
       expect(window.scrollTo).toHaveBeenCalledWith(scroll.x, scroll.y);
@@ -133,7 +136,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       const managedPage = { options: { autoScroll: true } };
 
-      handler.handlePostManagedState(managedPage, null, {});
+      handler.handlePostManagedState(managedPage, {} as ManagedPage, {} as PageAction);
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();
@@ -145,9 +148,9 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const managedPage = { options: { autoScroll: false } };
       const scroll = { x: 0, y: 340 };
 
-      handler.handlePostManagedState(managedPage, null, {
+      handler.handlePostManagedState(managedPage, {} as ManagedPage, {
         event: { state: { scroll } },
-      });
+      } as PageAction);
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();

@@ -1,13 +1,14 @@
 import SerialBatch from '../SerialBatch';
+import Job from '../Job';
 
 describe('ima.core.execution.SerialBatch', () => {
-  let serialBatch = null;
+  let serialBatch: SerialBatch;
 
-  const asyncFunction = argument => {
+  const asyncFunction = (argument: unknown) => {
     return new Promise(resolve => setTimeout(() => resolve(argument), 200));
   };
 
-  const syncFunction = argument => {
+  const syncFunction = (argument: unknown) => {
     return argument;
   };
 
@@ -28,14 +29,14 @@ describe('ima.core.execution.SerialBatch', () => {
     it('should pass argument to each job without mutation', async () => {
       expect.assertions(1);
 
-      const mutatingFunction = argument => {
+      const mutatingFunction = (argument: { newProp: unknown }) => {
         argument.newProp = 'value';
         return Promise.resolve(argument);
       };
 
       const argument = { oldProp: 'value' };
 
-      serialBatch.append(mutatingFunction);
+      serialBatch.append(mutatingFunction as Job);
 
       await serialBatch.execute(argument).then(result => {
         expect(result).toStrictEqual([argument, argument, argument]);

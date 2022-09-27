@@ -261,7 +261,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
       packFiles.push(packFilePath);
     });
 
-    packFiles.forEach(fs.rmSync);
+    packFiles.forEach(packFilePath => fs.rmSync(packFilePath));
   }
 }
 
