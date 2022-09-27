@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
@@ -6,6 +7,9 @@
  * each other more easily than by using the ES6 import/export mechanism.
  */
 export class Namespace {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: PropertyKey]: any;
+
   /**
    * Initializes the namespace provider.
    *
@@ -32,8 +36,8 @@ export class Namespace {
    * object.
    *
    * @deprecated
-   * @param {string} path The namespace path.
-   * @return {*} The value at the specified path in the namespace.
+   * @param path The namespace path.
+   * @return The value at the specified path in the namespace.
    */
   namespace(path: string) {
     const levels = this._resolvePathLevels(path);
@@ -54,11 +58,11 @@ export class Namespace {
    * Verifies that the specified namespace path point to an existing
    * namespace or terminal value.
    *
-   * @param {string} path The namespace path to test.
-   * @return {boolean} `true` if the namespace or terminal value exists
+   * @param path The namespace path to test.
+   * @return `true` if the namespace or terminal value exists
    *         at the specified path.
    */
-  has(path: string): boolean {
+  has(path: string) {
     let hasPath;
     try {
       hasPath = this.get(path) !== undefined;
@@ -72,8 +76,8 @@ export class Namespace {
   /**
    * Return value for the specified namespace path point or undefined if path is not type of string
    *
-   * @param {string} path The namespace path to get.
-   * @return {*} The value at the specified path in the namespace or undefined for any non-string path
+   * @param path The namespace path to get.
+   * @return The value at the specified path in the namespace or undefined for any non-string path
    */
   get(path: string) {
     const levels = this._resolvePathLevels(path);
@@ -94,13 +98,13 @@ export class Namespace {
   /**
    * Set value for the specified namespace path point.
    *
-   * @param {string} path The namespace path to set.
-   * @param {*} value
+   * @param path The namespace path to set.
+   * @param value
    */
   set(path: string, value: unknown) {
     const levels = this._resolvePathLevels(path);
 
-    const lastKey = levels.pop();
+    const lastKey = levels.pop() as string;
     const namespace = this.namespace(levels.join('.'));
 
     namespace[lastKey] = value;
@@ -109,8 +113,8 @@ export class Namespace {
   /**
    * Resolve path levels from string
    *
-   * @param {string} path The namespace path.
-   * @param {*} array of levels or undefined for not valid path
+   * @param path The namespace path.
+   * @param array of levels or undefined for not valid path
    */
   _resolvePathLevels(path: string) {
     if (!path || typeof path !== 'string') {

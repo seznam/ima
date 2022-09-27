@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { TextEncoder, TextDecoder } from 'util';
 
 globalThis.TextEncoder = TextEncoder;

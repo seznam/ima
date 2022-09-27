@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import Dispatcher from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {

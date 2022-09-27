@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import SessionStorage from '../SessionStorage';
 import ClientWindow from '../../window/ClientWindow';
 

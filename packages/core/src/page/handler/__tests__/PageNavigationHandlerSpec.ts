@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import PageNavigationHandler from '../PageNavigationHandler';
 import ClientWindow from '../../../window/ClientWindow';
 import ActionTypes from '../../../router/ActionTypes';
