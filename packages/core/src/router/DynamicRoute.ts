@@ -18,7 +18,7 @@ import { RouteOptions } from './Router';
 export type RoutePathExpression = {
   matcher: RegExp;
   toPath: (params: { [key: string]: number | string }) => string;
-  extractParameters: (path: string) => { [key: string]: unknown };
+  extractParameters: (path?: string) => { [key: string]: string | undefined };
 };
 
 /**
@@ -32,7 +32,9 @@ export type RoutePathExpression = {
 export default class DynamicRoute extends AbstractRoute {
   protected _matcher: RegExp;
   protected _toPath: (params: { [key: string]: number | string }) => string;
-  protected _extractParameters: (path: string) => { [key: string]: unknown };
+  protected _extractParameters: (path?: string) => {
+    [key: string]: string | undefined;
+  };
 
   /**
    * Initializes the route.
@@ -117,8 +119,8 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  extractParameters(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path);
+  extractParameters(path?: string) {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
     const parameters = this._extractParameters(trimmedPath.split('?').shift());
     const query = AbstractRoute.getQuery(trimmedPath);
 

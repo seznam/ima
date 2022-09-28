@@ -3,22 +3,22 @@ import { HttpProxyRequestParams } from './HttpProxy';
 /**
  * Options for a request sent using the HTTP agent.
  * @typedef {Object} HttpAgent~RequestOptions
- * @property {number} [timeout] Specifies the request timeout in milliseconds.
- * @property {number} [ttl] Specified how long the request may be cached in
+ * @property timeout Specifies the request timeout in milliseconds.
+ * @property ttl Specified how long the request may be cached in
  *           milliseconds.
- * @property {number} [repeatRequest] Specifies the maximum number of tries to
+ * @property repeatRequest Specifies the maximum number of tries to
  *           repeat the request if the request fails.
- * @property {Object<string, string>} [headers] Sets the additional request
+ * @property headers Sets the additional request
  *           headers (the keys are case-insensitive header names, the values
  *           are header values).
- * @property {Object<string, *>} [fetchOptions] Sets the fetch request options.
- * @property {boolean} [cache] Flag that enables caching the HTTP request
+ * @property fetchOptions Sets the fetch request options.
+ * @property cache Flag that enables caching the HTTP request
  *           (enabled by default, also applies to requests in progress).
- * @property {boolean} [withCredentials] Flag that indicates whether the
+ * @property withCredentials Flag that indicates whether the
  *           request should be made using credentials such as cookies or
  *           authorization headers.
- * @property {{progress: function=}} [listeners] Listeners for request events.
- * @property {function(HttpAgent~Response)} [postProcessor] Response
+ * @property listeners Listeners for request events.
+ * @property postProcessor Response
  *           post-processor applied just before the response is stored in the
  *           cache and returned.
  */
@@ -32,18 +32,18 @@ export type HttpAgentRequestOptions = {
   cache: boolean;
   withCredentials: boolean;
   listeners: { progress: (event: Event) => unknown };
-  postProcessor: (response: HttpAgentResponse) => unknown;
+  postProcessor: (response: HttpAgentResponse) => HttpAgentResponse;
   abortController: AbortController;
 };
 
 /**
  * A response from the server.
- * @typedef {Object} HttpAgent~Response
- * @property {number} status The HTTP response status code.
- * @property {*} body The parsed response body, parsed as JSON.
- * @property {HttpProxy~RequestParams} params The original request params.
- * @property {Object<string, string>} headers The response HTTP headers.
- * @property {boolean} cached Whether or not the response has been cached.
+ * @typedef HttpAgent~Response
+ * @property status The HTTP response status code.
+ * @property body The parsed response body, parsed as JSON.
+ * @property params The original request params.
+ * @property headers The response HTTP headers.
+ * @property cached Whether or not the response has been cached.
  */
 
 export type HttpAgentResponse = {
@@ -51,6 +51,7 @@ export type HttpAgentResponse = {
   body: unknown;
   params: HttpProxyRequestParams;
   headers: { [key: string]: string };
+  headersRaw?: Headers;
   cached: boolean;
 };
 
@@ -60,19 +61,19 @@ export type HttpAgentResponse = {
  *
  * @interface
  */
-export default interface HttpAgent {
+export default abstract class HttpAgent {
   /**
    * Sends an HTTP GET request to the specified URL, sending the provided
    * data as query parameters.
    *
-   * @param {string} url The URL to which the request should be made.
-   * @param {Object<string, (boolean|number|string)>} data The data to send
+   * @param url The URL to which the request should be made.
+   * @param data The data to send
    *        to the server as query parameters.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the
+   * @param options Optional request options.
+   * @return A promise that resolves to the
    *         response.
    */
-  get(
+  abstract get(
     url: string,
     data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
@@ -84,14 +85,14 @@ export default interface HttpAgent {
    * the data will be JSON-encoded. Sending other primitive non-string values
    * as the request body is not supported.
    *
-   * @param {string} url The URL to which the request should be made.
-   * @param {(string|Object<string, *>)} data The data to send to the server
+   * @param url The URL to which the request should be made.
+   * @param data The data to send to the server
    *        as the request body.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the
+   * @param options Optional request options.
+   * @return A promise that resolves to the
    *         response.
    */
-  post(
+  abstract post(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
@@ -103,14 +104,14 @@ export default interface HttpAgent {
    * the data will be JSON-encoded. Sending other primitive non-string values
    * as the request body is not supported.
    *
-   * @param {string} url The URL to which the request should be made.
-   * @param {(string|Object<string, *>)} data The data to send to the server
+   * @param url The URL to which the request should be made.
+   * @param data The data to send to the server
    *        as the request body.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the
+   * @param options Optional request options.
+   * @return A promise that resolves to the
    *         response.
    */
-  put(
+  abstract put(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
@@ -122,14 +123,14 @@ export default interface HttpAgent {
    * the data will be JSON-encoded. Sending other primitive non-string values
    * as the request body is not supported.
    *
-   * @param {string} url The URL to which the request should be made.
-   * @param {(string|Object<string, *>)} data The data to send to the server
+   * @param url The URL to which the request should be made.
+   * @param data The data to send to the server
    *        as the request body.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the
+   * @param options Optional request options.
+   * @return A promise that resolves to the
    *         response.
    */
-  patch(
+  abstract patch(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
@@ -141,14 +142,14 @@ export default interface HttpAgent {
    * the data will be JSON-encoded. Sending other primitive non-string values
    * as the request body is not supported.
    *
-   * @param {string} url The URL to which the request should be made.
-   * @param {(string|Object<string, *>)} data The data to send to the server
+   * @param url The URL to which the request should be made.
+   * @param data The data to send to the server
    *        as the request body.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the
+   * @param options Optional request options.
+   * @return A promise that resolves to the
    *         response.
    */
-  delete(
+  abstract delete(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
@@ -158,15 +159,15 @@ export default interface HttpAgent {
    * Generates a cache key to use for identifying a request to the specified
    * URL using the specified HTTP method, submitting the provided data.
    *
-   * @param {string} method The HTTP method used by the request.
-   * @param {string} url The URL to which the request is sent.
-   * @param {Object<string, string>} data The data associated with the
+   * @param method The HTTP method used by the request.
+   * @param url The URL to which the request is sent.
+   * @param data The data associated with the
    *        request. These can be either the query parameters or request body
    *        data.
-   * @return {string} The key to use for identifying such a request in the
+   * @return The key to use for identifying such a request in the
    *         cache.
    */
-  getCacheKey(
+  abstract getCacheKey(
     method: string,
     url: string,
     data: { [key: string]: string }
@@ -176,18 +177,18 @@ export default interface HttpAgent {
    * Sets the specified header to be sent with every subsequent HTTP request,
    * unless explicitly overridden by request options.
    *
-   * @param {string} header The name of the header.
-   * @param {string} value The header value. To provide multiple values,
+   * @param header The name of the header.
+   * @param value The header value. To provide multiple values,
    *        separate them with commas
    *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
-   * @return {HttpAgent} This HTTP agent.
+   * @return This HTTP agent.
    */
-  setDefaultHeader(header: string, value: string): this;
+  abstract setDefaultHeader(header: string, value: string): this;
 
   /**
    * Clears all configured default headers.
    *
-   * @return {HttpAgent} This HTTP agent.
+   * @return This HTTP agent.
    */
-  clearDefaultHeaders(): this;
+  abstract clearDefaultHeaders(): this;
 }

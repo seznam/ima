@@ -5,7 +5,9 @@ import GenericError from '../error/GenericError';
  * An empty immutable map of event listener to scopes, used for a mismatch in
  * the {@link _eventListeners} map.
  */
-const EMPTY_MAP: Readonly<Map<Listener, Set<unknown>>> = Object.freeze(new Map());
+const EMPTY_MAP: Readonly<Map<Listener, Set<unknown>>> = Object.freeze(
+  new Map()
+);
 
 /**
  * An empty immutable set of event listener scopes, used for a mismatch in the
@@ -16,16 +18,27 @@ const EMPTY_SET = Object.freeze(new Set());
 /**
  * Default implementation of the {@link Dispatcher} interface.
  */
-export default class DispatcherImpl implements Dispatcher {
-  /**
-   * Map of event names to a map of event listeners to a set of scopes to
-   * which the event listener should be bound when being executed due to
-   * the event.
-   */
-  protected _eventListeners: Map<string, Map<Listener, Set<unknown>>> = new Map();
+export default class DispatcherImpl extends Dispatcher {
+  protected _eventListeners: Map<string, Map<Listener, Set<unknown>>>;
 
   static get $dependencies() {
     return [];
+  }
+
+  /**
+   * Initializes the dispatcher.
+   */
+  constructor() {
+    super();
+
+    /**
+     * Map of event names to a map of event listeners to a set of scopes to
+     * which the event listener should be bound when being executed due to
+     * the event.
+     *
+     * @type {Map<string, Map<function(*), Set<?Object>>>}
+     */
+    this._eventListeners = new Map();
   }
 
   /**
@@ -40,11 +53,7 @@ export default class DispatcherImpl implements Dispatcher {
   /**
    * @inheritdoc
    */
-  listen(
-    event: string,
-    listener: Listener,
-    scope: unknown = null
-  ) {
+  listen(event: string, listener: Listener, scope: unknown = null) {
     if ($Debug) {
       if (typeof listener !== 'function') {
         throw new GenericError(
@@ -69,20 +78,16 @@ export default class DispatcherImpl implements Dispatcher {
   /**
    * @inheritdoc
    */
-  unlisten(
-    event: string,
-    listener: Listener,
-    scope: unknown = null
-  ) {
+  unlisten(event: string, listener: Listener, scope: unknown = null) {
     const scopes = this._getScopesOf(event, listener);
 
     if ($Debug) {
       if (!scopes.has(scope)) {
         console.warn(
           'ima.core.event.DispatcherImpl.unlisten(): the provided ' +
-          `listener '${listener}' is not registered for the ` +
-          `specified event '${event}' and scope '${scope}'. Check ` +
-          `your workflow.`,
+            `listener '${listener}' is not registered for the ` +
+            `specified event '${event}' and scope '${scope}'. Check ` +
+            `your workflow.`,
           {
             event: event,
             listener: listener,
@@ -137,7 +142,7 @@ export default class DispatcherImpl implements Dispatcher {
   /**
    * Create new Map storage of listeners for the specified event.
    *
-   * @param {string} event The name of the event.
+   * @param event The name of the event.
    */
   _createNewEvent(event: string) {
     const listeners = new Map();
@@ -147,8 +152,8 @@ export default class DispatcherImpl implements Dispatcher {
   /**
    * Create new Set storage of scopes for the specified event and listener.
    *
-   * @param {string} event The name of the event.
-   * @param {function(*)} listener The event listener.
+   * @param event The name of the event.
+   * @param listener The event listener.
    */
   _createNewListener(event: string, listener: Listener) {
     const scopes = new Set();
@@ -163,9 +168,9 @@ export default class DispatcherImpl implements Dispatcher {
    * Retrieves the scopes in which the specified event listener should be
    * executed for the specified event.
    *
-   * @param {string} event The name of the event.
-   * @param {function(*)} listener The event listener.
-   * @return {Set<?Object>} The scopes in which the specified listeners
+   * @param event The name of the event.
+   * @param listener The event listener.
+   * @return The scopes in which the specified listeners
    *         should be executed in case of the specified event. The returned
    *         set is an unmodifiable empty set if no listeners are registered
    *         for the event.

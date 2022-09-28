@@ -1,6 +1,7 @@
 import EventBus from './EventBus';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
+import { Listener } from './Dispatcher';
 
 /**
  * Global name of IMA.js custom event.
@@ -19,13 +20,10 @@ export const IMA_EVENT = '$IMA.CustomEvent';
 export default class EventBusImpl implements EventBus {
   private _window: Window;
   private _listeners: WeakMap<
-    (event: Event) => void,
-    WeakMap<EventTarget, Map<string, (event: Event) => void>>
+    Listener,
+    WeakMap<EventTarget, Map<string, Listener>>
   >;
-  private _allListenersTargets: WeakMap<
-    EventTarget,
-    WeakSet<(event: Event) => void>
-  >;
+  private _allListenersTargets: WeakMap<EventTarget, WeakSet<Listener>>;
 
   static get $dependencies() {
     return [Window];
@@ -103,15 +101,12 @@ export default class EventBusImpl implements EventBus {
   /**
    * @inheritdoc
    */
-  listenAll(
-    eventTarget: EventTarget,
-    listener: (event: CustomEvent<unknown>) => void
-  ): this {
+  listenAll(eventTarget: EventTarget, listener: Listener): this {
     if (!this._allListenersTargets.has(eventTarget)) {
-      this._allListenersTargets.set(eventTarget, new WeakMap());
+      this._allListenersTargets.set(eventTarget, new WeakSet());
     }
 
-    const nativeListener = event => {
+    const nativeListener = (event: CustomEvent) => {
       if (event.type === IMA_EVENT && event.detail && event.detail.eventName) {
         listener(event);
       }
@@ -126,7 +121,7 @@ export default class EventBusImpl implements EventBus {
   /**
    * @inheritdoc
    */
-  listen(eventTarget, eventName, listener) {
+  listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
     if (!eventTarget) {
       if ($Debug) {
         console.warn(

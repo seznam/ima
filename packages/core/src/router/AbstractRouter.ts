@@ -8,7 +8,7 @@ import RouterMiddleware from './RouterMiddleware';
 import PageManager from '../page/manager/PageManager';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
-import { RouteOptions } from '@/page/manager/AbstractPageManager';
+import { RouteOptions } from './Router';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -31,10 +31,10 @@ export default abstract class AbstractRouter extends Router {
   /**
    * Initializes the router.
    *
-   * @param {PageManager} pageManager The page manager handling UI rendering,
+   * @param pageManager The page manager handling UI rendering,
    *        and transitions between pages if at the client side.
-   * @param {RouteFactory} factory Factory for routes.
-   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
+   * @param factory Factory for routes.
+   * @param dispatcher Dispatcher fires events to app.
    * @example
    *      router.link('article', {articleId: 1});
    * @example
@@ -64,59 +64,43 @@ export default abstract class AbstractRouter extends Router {
     /**
      * The page manager handling UI rendering, and transitions between
      * pages if at the client side.
-     *
-     * @type {PageManager}
      */
     this._pageManager = pageManager;
 
     /**
      * Factory for routes.
-     *
-     * @type {RouteFactory}
      */
     this._factory = factory;
 
     /**
      * Dispatcher fires events to app.
-     *
-     * @type {Dispatcher}
      */
     this._dispatcher = dispatcher;
 
     /**
      * The current protocol used to access the application, terminated by a
      * colon (for example `https:`).
-     *
-     * @type {string}
      */
     this._protocol = '';
 
     /**
      * The application's host.
-     *
-     * @type {string}
      */
     this._host = '';
 
     /**
      * The URL path pointing to the application's root.
-     *
-     * @type {string}
      */
     this._root = '';
 
     /**
      * The URL path fragment used as a suffix to the `_root` field
      * that specifies the current language.
-     *
-     * @type {string}
      */
     this._languagePartPath = '';
 
     /**
      * Storage of all known routes and middlewares. The key are their names.
-     *
-     * @type {Map<string, AbstractRoute>}
      */
     this._routeHandlers = new Map();
 
@@ -177,7 +161,12 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  use(middleware) {
+  use(
+    middleware: (
+      params: { [key: string]: string | number },
+      locals: object
+    ) => unknown
+  ) {
     this._routeHandlers.set(
       `middleware-${this._currentMiddlewareId++}`,
       new RouterMiddleware(middleware)
@@ -199,7 +188,7 @@ export default abstract class AbstractRouter extends Router {
    * @inheritdoc
    */
   getRouteHandler(name: string) {
-    return this._routeHandlers.getRouteHandler(name);
+    return this._routeHandlers.get(name);
   }
 
   /**
@@ -283,7 +272,7 @@ export default abstract class AbstractRouter extends Router {
    */
   abstract redirect(
     url: string,
-    options: RouteOptions,
+    options: RouteOptions | object,
     action: { type: string; payload: object | Event }
   ): void;
 
@@ -310,7 +299,11 @@ export default abstract class AbstractRouter extends Router {
     this._currentlyRoutedPath = path;
 
     let params = {};
-    const { route, middlewares } = this._getRouteHandlersByPath(path);
+    const {
+      route,
+      middlewares,
+    }: { route?: AbstractRoute; middlewares: Promise<unknown>[] } =
+      this._getRouteHandlersByPath(path);
 
     if (!route) {
       params.error = new GenericError(
@@ -451,28 +444,11 @@ export default abstract class AbstractRouter extends Router {
    * The result is then sent to the client if used at the server side, or
    * displayed if used as the client side.
    *
-   * @param {AbstractRoute} route The route that should have its
+   * @param route The route that should have its
    *        associated controller rendered via the associated view.
-   * @param {Object<string, (Error|string)>} params Parameters extracted from
+   * @param params Parameters extracted from
    *        the URL path and query.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
-   *        }} options The options overrides route options defined in the
+   * @param options The options overrides route options defined in the
    *        `routes.js` configuration file.
    * @param {{ type: string, event: Event, url: string }} [action] An action
    *        object describing what triggered this routing.
@@ -480,7 +456,12 @@ export default abstract class AbstractRouter extends Router {
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
-  async _handle(route, params, options, action = {}) {
+  async _handle(
+    route: AbstractRoute,
+    params: { [key: string]: Error | string },
+    options: RouteOptions,
+    action = {}
+  ) {
     options = Object.assign({}, route.getOptions(), options);
     const eventData = {
       route,
@@ -524,7 +505,10 @@ export default abstract class AbstractRouter extends Router {
    *         matching the path and middlewares preceding it or `{}`
    *         (empty object) if no such route exists.
    */
-  _getRouteHandlersByPath(path) {
+  _getRouteHandlersByPath(path: string): {
+    route?: AbstractRoute;
+    middlewares: Promise<unknown>[];
+  } {
     const middlewares = [];
 
     for (const routeHandler of this._routeHandlers.values()) {
@@ -551,7 +535,7 @@ export default abstract class AbstractRouter extends Router {
    * @param {string} routeName
    * @returns {Array<RouterMiddleware>=}
    */
-  _getMiddlewaresForRoute(routeName) {
+  _getMiddlewaresForRoute(routeName: string) {
     const middlewares = [];
 
     for (const routeHandler of this._routeHandlers.values()) {
@@ -602,12 +586,12 @@ export default abstract class AbstractRouter extends Router {
    * Obtains original route that was handled before not-found / error route
    * and assigns its params to current params
    *
-   * @param {Object<string, string>} params Route params for not-found or
+   * @param params Route params for not-found or
    *        error page
-   * @returns {Object<string, string>} Provided params merged with params
+   * @returns Provided params merged with params
    *        from original route
    */
-  _addParamsFromOriginalRoute(params) {
+  _addParamsFromOriginalRoute(params: { [key: string]: string }) {
     const originalPath = this._getCurrentlyRoutedPath();
     const { route } = this._getRouteHandlersByPath(originalPath);
 

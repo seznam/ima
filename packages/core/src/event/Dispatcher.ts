@@ -13,8 +13,6 @@ export default abstract class Dispatcher {
   /**
    * Deregisters all event listeners currently registered with this
    * dispatcher.
-   *
-   * @return This dispatcher.
    */
   abstract clear(): this;
 
@@ -33,7 +31,7 @@ export default abstract class Dispatcher {
    * @param listener The event listener to register.
    * @param scope The object to which the `this` keyword
    *        will be bound in the event listener.
-   * @return {Dispatcher} This dispatcher.
+   * @return This dispatcher.
    */
   abstract listen(event: string, listener: Listener, scope?: unknown): this;
 
@@ -46,13 +44,9 @@ export default abstract class Dispatcher {
    * @param listener The event listener to deregister.
    * @param scope The object to which the `this` keyword
    *        would be bound in the event listener.
-   * @return {Dispatcher} This dispatcher.
+   * @return This dispatcher.
    */
-  abstract unlisten(
-    event: string,
-    listener: Listener,
-    scope?: unknown
-  ): this;
+  abstract unlisten(event: string, listener: Listener, scope?: unknown): this;
 
   /**
    * Fires a new event of the specified name, carrying the provided data.
@@ -67,12 +61,12 @@ export default abstract class Dispatcher {
    *
    * @param event The name of the event to fire.
    * @param data The data to pass to the event listeners.
-   * @param imaInternalEvent The flag signalling whether
+   * @param [imaInternalEvent=false] The flag signalling whether
    *        this is an internal IMA event. The fired event is treated as a
    *        custom application event if this flag is not set.
    *        The flag is used only for debugging and has no effect on the
    *        propagation of the event.
-   * @return {Dispatcher} This dispatcher.
+   * @return This dispatcher.
    */
   abstract fire(
     event: string,

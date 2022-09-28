@@ -16,7 +16,7 @@ export default abstract class Storage {
    *
    * @return This storage.
    */
-   abstract init(): this;
+  abstract init(): this;
 
   /**
    * Returns `true` if the entry identified by the specified key exists
@@ -25,7 +25,7 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return `true` if the storage entry exists.
    */
-   abstract has(key: string): boolean;
+  abstract has(key: string): boolean;
 
   /**
    * Retrieves the value of the entry identified by the specified . The
@@ -37,7 +37,7 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return The value of the storage entry.
    */
-   abstract get(key: string): unknown;
+  abstract get(key: string): unknown;
 
   /**
    * Sets the storage entry identified by the specified key to the provided
@@ -47,7 +47,7 @@ export default abstract class Storage {
    * @param value The storage entry value.
    * @return This storage.
    */
-   abstract set(key: string, value: unknown): this;
+  abstract set(key: string, value: unknown): this;
 
   /**
    * Deletes the entry identified by the specified key from this storage.
@@ -55,14 +55,14 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return This storage.
    */
-   abstract delete(key: string): this;
+  abstract delete(key: string): this;
 
   /**
    * Clears the storage of all entries.
    *
    * @return This storage.
    */
-   abstract clear(): this;
+  abstract clear(): this;
 
   /**
    * Returns an iterator for traversing the keys in this storage. The order
@@ -73,12 +73,12 @@ export default abstract class Storage {
    *         returning itself as its own iterator, allowing it to be used in
    *         a `for..of` loop.
    */
-   abstract keys(): Iterable<string>;
+  abstract keys(): Iterable<string>;
 
   /**
    * Returns the number of entries in this storage.
    *
    * @return The number of entries in this storage.
    */
-   abstract size(): number;
+  abstract size(): number;
 }

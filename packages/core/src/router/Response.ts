@@ -43,9 +43,9 @@ export default class Response {
     encode: (value: string) => string;
     decode: (value: string) => string;
   } = {
-      encode: value => value,
-      decode: value => value,
-    };
+    encode: value => value,
+    decode: value => value,
+  };
 
   static get $dependencies() {
     return [];
@@ -99,7 +99,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:redirect The response has already ' +
-          'been sent. Check your workflow.',
+            'been sent. Check your workflow.',
           params
         );
       }
@@ -137,7 +137,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:status The response has already ' +
-          'been sent. Check your workflow.',
+            'been sent. Check your workflow.',
           params
         );
       }
@@ -166,7 +166,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:send The response has already been ' +
-          'sent. Check your workflow.',
+            'sent. Check your workflow.',
           params
         );
       }
@@ -196,7 +196,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:setState The response has already ' +
-          'been sent. Check your workflow.',
+            'been sent. Check your workflow.',
           params
         );
       }
@@ -233,7 +233,7 @@ export default class Response {
 
         throw new GenericError(
           'ima.core.router.Response:setCookie The response has already ' +
-          'been sent. Check your workflow.',
+            'been sent. Check your workflow.',
           params
         );
       }

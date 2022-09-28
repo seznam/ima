@@ -24,12 +24,7 @@ export default abstract class Router {
   /**
    * Initializes the router with the provided configuration.
    *
-   * @param {{
-   *          $Protocol: string,
-   *          $Root: string,
-   *          $LanguagePartPath: string,
-   *          $Host: string
-   *        }} config Router configuration.
+   * @param config Router configuration.
    *        The `$Protocol` field must be the current protocol used to
    *        access the application, terminated by a colon (for example
    *        `https:`).
@@ -52,9 +47,9 @@ export default abstract class Router {
   /**
    * Adds a new route to router.
    *
-   * @param {string} name The unique name of this route, identifying it among
+   * @param name The unique name of this route, identifying it among
    *        the rest of the routes in the application.
-   * @param {string} pathExpression A path expression specifying the URL path
+   * @param pathExpression A path expression specifying the URL path
    *        part matching this route (must not contain a query string),
    *        optionally containing named parameter placeholders specified as
    *        `:parameterName`. The name of the parameter is terminated
@@ -64,28 +59,11 @@ export default abstract class Router {
    *        are specified as `:?parameterName`. It is recommended to
    *        specify the optional parameters at the end of the path
    *        expression.
-   * @param {string} controller The full name of Object Container alias
+   * @param controller The full name of Object Container alias
    *        identifying the controller associated with this route.
-   * @param {string} view The full name or Object Container alias identifying
+   * @param view The full name or Object Container alias identifying
    *        the view class associated with this route.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?function(new: React.Component)=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
-   *        }=} options
+   * @param options
    *        Additional route options, specified how the navigation to the
    *        route will be handled.
    *        The `onlyUpdate` can be either a flag signalling whether
@@ -105,8 +83,8 @@ export default abstract class Router {
    *        option), for example for rendering the content of iframes.
    *        The route specific `middlewares` which are run after
    *        extracting parameters before route handling.
-   * @return {Router} This router.
-   * @throws {ImaError} Thrown if a route with the same name already exists.
+   * @return This router.
+   * @throws Thrown if a route with the same name already exists.
    */
   abstract add(
     name: string,
@@ -119,12 +97,12 @@ export default abstract class Router {
   /**
    * Adds a new middleware to router.
    *
-   * @param {function(Object<string, string>, function)} middleware Middleware
+   * @param middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
    *        and `locals` object as second argument. This can be used to pass data
    *        between middlewares.
-   * @return {Router} This router.
-   * @throws {ImaError} Thrown if a middleware with the same name already exists.
+   * @return This router.
+   * @throws Thrown if a middleware with the same name already exists.
    */
   abstract use(
     middleware: (
@@ -136,17 +114,16 @@ export default abstract class Router {
   /**
    * Removes the specified route from the router's known routes.
    *
-   * @param {string} name The route's unique name, identifying the route to
-   *        remove.
-   * @return {Router} This router.
+   * @param name The route's unique name, identifying the route to remove.
+   * @return This router.
    */
   abstract remove(name: string): this;
 
   /**
    * Returns specified handler from registered route handlers.
    *
-   * @param {string} name The route's unique name.
-   * @return {AbstractRoute|undefined} Route with given name or undefined.
+   * @param name The route's unique name.
+   * @return Route with given name or undefined.
    */
   abstract getRouteHandler(name: string): undefined | AbstractRoute;
 
@@ -154,14 +131,14 @@ export default abstract class Router {
    * Returns the current path part of the current URL, including the query
    * string (if any).
    *
-   * @return {string} The path and query parts of the current URL.
+   * @return The path and query parts of the current URL.
    */
   abstract getPath(): string;
 
   /**
    * Returns the current absolute URL (including protocol, host, query, etc).
    *
-   * @return {string} The current absolute URL.
+   * @return The current absolute URL.
    */
   abstract getUrl(): string;
 
@@ -169,7 +146,7 @@ export default abstract class Router {
    * Returns the application's absolute base URL, pointing to the public root
    * of the application.
    *
-   * @return {string} The application's base URL.
+   * @return The application's base URL.
    */
   abstract getBaseUrl(): string;
 
@@ -177,14 +154,14 @@ export default abstract class Router {
    * Returns the application's domain in the following form
    * ``${protocol}//${host}``.
    *
-   * @return {string} The current application's domain.
+   * @return The current application's domain.
    */
   abstract getDomain(): string;
 
   /**
    * Returns application's host (domain and, if necessary, the port number).
    *
-   * @return {string} The current application's host.
+   * @return The current application's host.
    */
   abstract getHost(): string;
 
@@ -192,20 +169,14 @@ export default abstract class Router {
    * Returns the current protocol used to access the application, terminated
    * by a colon (for example `https:`).
    *
-   * @return {string} The current application protocol used to access the
+   * @return The current application protocol used to access the
    *         application.
    */
   abstract getProtocol(): string;
 
   /**
    * Returns the information about the currently active route.
-   *
-   * @return {{
-   *           route: AbstractRoute,
-   *           params: Object<string, string>,
-   *           path: string
-   *         }} The information about the current route.
-   * @throws {ImaError} Thrown if a route is not define for current path.
+   * @throws Thrown if a route is not define for current path.
    */
   abstract getCurrentRouteInfo(): {
     route: AbstractRoute;
@@ -228,7 +199,7 @@ export default abstract class Router {
    * The effects of this method can be reverted with `unlisten`. This
    * method has no effect at the server side.
    *
-   * @return {Router} This router.
+   * @return This router.
    */
   abstract listen(): this;
 
@@ -247,7 +218,7 @@ export default abstract class Router {
    * The effects of this method can be reverted with `unlisten`. This method has no effect
    * at the server side.
    *
-   * @return {Router} This router.
+   * @return This router.
    */
   abstract unlisten(): this;
 
@@ -266,35 +237,16 @@ export default abstract class Router {
    * the client to the related page if the URL is set at the client side and
    * points to the same domain and protocol.
    *
-   * @param {string} url The URL to which the client should be redirected.
-   * @param {{
-   *          httpStatus: number=,
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=,
-   *          headers: Object<string, *>
-   *        }} [options={}] The options overrides route options defined in
+   * @param url The URL to which the client should be redirected.
+   * @param [options={}] The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param {{ type: string, payload: Object|Event }} [action] An action object
-   *        describing what triggered this routing.
-   * @param {object} [locals={}] The locals param is used to pass local data
+   * @param action An action object describing what triggered this routing.
+   * @param [locals={}] The locals param is used to pass local data
    *        between middlewares.
    */
   abstract redirect(
     url: string,
-    options: RouteOptions,
+    options: RouteOptions | Record<string, never>,
     action: { type: string; payload: object | Event }
   ): void;
 
@@ -303,12 +255,12 @@ export default abstract class Router {
    * specified route by substituting the route's parameter placeholders with
    * the provided parameter values.
    *
-   * @param {string} routeName The unique name of the route, identifying the
+   * @param routeName The unique name of the route, identifying the
    *        route to use.
-   * @param {Object<string, string>} params Parameter values for the route's
+   * @param params Parameter values for the route's
    *        parameter placeholders. Extraneous parameters will be added as
    *        URL query.
-   * @return {string} An absolute URL for the specified route and parameters.
+   * @return An absolute URL for the specified route and parameters.
    */
   abstract link(routeName: string, params: { [key: string]: string }): string;
 
@@ -316,37 +268,20 @@ export default abstract class Router {
    * Routes the application to the route matching the providing path, renders
    * the route page and sends the result to the client.
    *
-   * @param {string} path The URL path part received from the client, with
+   * @param path The URL path part received from the client, with
    *        optional query.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
-   *        }} [options={}] The options overrides route options defined in
+   * @param options={} The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param {{ type: string, event: Event|null, url: string|null }} [action]
-   *        An action object describing what triggered this routing.
-   * @param {object} [locals={}] The locals param is used to pass local data
+   * @param action An action object describing what triggered this routing.
+   * @param locals={} The locals param is used to pass local data
    *        between middlewares.
-   * @return {Promise<Object<string, *>>} A promise resolved
+   * @return A promise resolved
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
   abstract route(
     path: string,
-    options: RouteOptions,
+    options: RouteOptions | Record<string, never>,
     action: { type: string; event: Event | null; url: string | null }
   ): Promise<{ [key: string]: unknown }>;
 
@@ -354,36 +289,19 @@ export default abstract class Router {
    * Handles an internal server error by responding with the appropriate
    * "internal server error" error page.
    *
-   * @param {Object<string, (Error|string)>} params Parameters extracted from
+   * @param params Parameters extracted from
    *        the current URL path and query.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          serverSPA: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
-   *        }} [options={}] The options overrides route options defined in
+   * @param options={} The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param {object} [locals={}] The locals param is used to pass local data
+   * @param [locals={}] The locals param is used to pass local data
    *        between middlewares.
-   * @return {Promise<Object<string, *>>} A promise resolved when the error
+   * @return A promise resolved when the error
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
    */
   abstract handleError(
     params: { [key: string]: Error | string },
-    options: RouteOptions,
+    options: RouteOptions | Record<string, never>,
     locals: { [key: string]: unknown }
   ): Promise<{ [key: string]: unknown }>;
 
@@ -391,35 +309,19 @@ export default abstract class Router {
    * Handles a "not found" error by responding with the appropriate "not
    * found" error page.
    *
-   * @param {Object<string, (Error|string)>} params Parameters extracted from
+   * @param params Parameters extracted from
    *        the current URL path and query.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} [options={}] The options overrides route options defined in
+   * @param options={} The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param {object} [locals={}] The locals param is used to pass local data
+   * @param locals={} The locals param is used to pass local data
    *        between middlewares.
-   * @return {Promise<Object<string, *>>} A promise resolved
+   * @return A promise resolved
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
   abstract handleNotFound(
     params: { [key: string]: Error | string },
-    options: RouteOptions,
+    options: RouteOptions | Record<string, never>,
     locals: { [key: string]: unknown }
   ): Promise<{ [key: string]: unknown }>;
 
@@ -428,8 +330,8 @@ export default abstract class Router {
    * client's action (for example wrong URL or request encoding) or by a
    * failure at the server side.
    *
-   * @param {(ImaError|Error)} reason The encountered error.
-   * @return {boolean} `true` if the error was caused the action of the
+   * @param reason The encountered error.
+   * @return `true` if the error was caused the action of the
    *         client.
    */
   abstract isClientError(reason: GenericError | Error): boolean;
@@ -437,8 +339,8 @@ export default abstract class Router {
   /**
    * Tests, if possible, whether the specified error lead to redirection.
    *
-   * @param {(ImaError|Error)} reason The encountered error.
-   * @return {boolean} `true` if the error was caused the action of the
+   * @param reason The encountered error.
+   * @return `true` if the error was caused the action of the
    *         redirection.
    */
   abstract isRedirection(reason: GenericError | Error): boolean;

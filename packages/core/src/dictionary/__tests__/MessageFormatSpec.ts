@@ -1,7 +1,7 @@
 import MessageFormatDictionary from '../MessageFormatDictionary';
 
 describe('ima.core.dictionary.MessageFormatDictionary', () => {
-  let dictionary = null;
+  let dictionary: MessageFormatDictionary;
   const config = {
     $Language: 'cs',
     dictionary: {
@@ -15,11 +15,6 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
     dictionary = new MessageFormatDictionary();
 
     dictionary.init(config);
-  });
-
-  it('should be initialization', () => {
-    expect(dictionary.language).not.toBeNull();
-    expect(dictionary.dictionary).not.toBeNull();
   });
 
   it('should be return current language', () => {

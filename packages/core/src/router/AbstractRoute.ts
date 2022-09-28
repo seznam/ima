@@ -1,5 +1,6 @@
 import RouterMiddleware from './RouterMiddleware';
 import { RouteOptions } from './Router';
+import { RoutePathExpression } from './DynamicRoute';
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -16,7 +17,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  */
 export default abstract class AbstractRoute {
   protected _name: string;
-  protected _pathExpression: string;
+  protected _pathExpression: RoutePathExpression | string;
   protected _controller: string;
   protected _view: string;
   protected _options: RouteOptions;
@@ -33,9 +34,9 @@ export default abstract class AbstractRoute {
    * let pairs = [['a', true], ['hello world', 123]];
    * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
    *
-   * @param {Array<string|number, any>} [pairs=[]] Array of arrays where the first
+   * @param [pairs=[]] Array of arrays where the first
    *         element must be string|number and the second element can be any.
-   * @return {string} Valid URI query component or empty string if
+   * @return Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
   static pairsToQuery(pairs: Array<Array<unknown>> = []) {
@@ -61,8 +62,6 @@ export default abstract class AbstractRoute {
    *
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
-   *
-   * @param {Object<string, any>} params Key/value pairs.
    */
   static paramsToQuery(params: { [key: string]: unknown } = {}) {
     if (
@@ -160,36 +159,19 @@ export default abstract class AbstractRoute {
   /**
    * Initializes the route.
    *
-   * @param {string} name The unique name of this route, identifying it among
+   * @param name The unique name of this route, identifying it among
    *        the rest of the routes in the application.
-   * @param {any} pathExpression Path expression used in route matching, to generate
+   * @param pathExpression Path expression used in route matching, to generate
    *        valid path with provided params and parsing params from current path.
-   * @param {string} controller The full name of Object Container alias
+   * @param controller The full name of Object Container alias
    *        identifying the controller associated with this route.
-   * @param {string} view The full name or Object Container alias identifying
+   * @param view The full name or Object Container alias identifying
    *        the view class associated with this route.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (string|function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              ))
-   *            ): boolean
-   *          )=,
-   *          autoScroll: boolean=,
-   *          documentView: ?React.Component=,
-   *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
-   *        }} options The route additional options.
+   * @param options The route additional options.
    */
   constructor(
     name: string,
-    pathExpression: string,
+    pathExpression: RoutePathExpression | string,
     controller: string,
     view: string,
     options: RouteOptions
@@ -197,55 +179,29 @@ export default abstract class AbstractRoute {
     /**
      * The unique name of this route, identifying it among the rest of the
      * routes in the application.
-     *
-     * @type {string}
      */
     this._name = name;
 
     /**
      * Path expression used in route matching, to generate valid path with
      * provided params and parsing params from current path.
-     *
-     * @type {any}
      */
     this._pathExpression = pathExpression;
 
     /**
      * The full name of Object Container alias identifying the controller
      * associated with this route.
-     *
-     * @type {string}
      */
     this._controller = controller;
 
     /**
      * The full name or Object Container alias identifying the view class
      * associated with this route.
-     *
-     * @type {React.Component}
      */
     this._view = view;
 
     /**
      * The route additional options.
-     *
-     * @type {{
-     *         onlyUpdate: (
-     *           boolean|
-     *           function(
-     *             (string|function(new: Controller, ...*)),
-     *             (string|function(
-     *               new: React.Component,
-     *               Object<string, *>,
-     *               ?Object<string, *>
-     *             ))
-     *           ): boolean
-     *         ),
-     *         autoScroll: boolean,
-     *         documentView: ?function(new: React.Component),
-     *         managedRootView: ?function(new: React.Component),
-     *         viewAdapter: ?function(new: React.Component)
-     *       }}
      */
     this._options = Object.assign(
       {
@@ -268,7 +224,7 @@ export default abstract class AbstractRoute {
   /**
    * Returns the unique identifying name of this route.
    *
-   * @return {string} The name of the route, identifying it.
+   * @return The name of the route, identifying it.
    */
   getName() {
     return this._name;
@@ -280,7 +236,7 @@ export default abstract class AbstractRoute {
    * meaning that once they're loaded, you get the same promise for
    * subsequent calls.
    *
-   * @return {object|string|function} The Controller class/alias/constant.
+   * @return The Controller class/alias/constant.
    */
   async getController() {
     if (!this._cachedController) {
@@ -296,7 +252,7 @@ export default abstract class AbstractRoute {
    * meaning that once they're loaded, you get the same promise for
    * subsequent calls.
    *
-   * @return {object|string|function} The View class/alias/constant.
+   * @return The View class/alias/constant.
    */
   async getView() {
     if (!this._cachedView) {
@@ -308,24 +264,6 @@ export default abstract class AbstractRoute {
 
   /**
    * Return route additional options.
-   *
-   * @return {{
-   *           onlyUpdate: (
-   *             boolean|
-   *             function(
-   *               (string|function(new: Controller, ...*)),
-   *               (string|function(
-   *                 new: React.Component,
-   *                 Object<string, *>,
-   *                 ?Object<string, *>
-   *               ))
-   *             ): boolean
-   *           ),
-   *           autoScroll: boolean,
-   *           documentView: ?React.Component,
-   *           managedRootView: ?function(new: React.Component),
-   *           viewAdapter: ?function(new: React.Component)
-   *         }}
    */
   getOptions() {
     return this._options;
@@ -335,7 +273,7 @@ export default abstract class AbstractRoute {
    * Path expression used in route matching, to generate valid path with
    * provided params and parsing params from current path.
    *
-   * @return {any} The path expression.
+   * @return The path expression.
    */
   getPathExpression() {
     return this._pathExpression;
@@ -344,7 +282,7 @@ export default abstract class AbstractRoute {
   /**
    * Preloads dynamically imported view and controller.
    *
-   * @return {Promise} Promise.All resolving to [view, controller] tuple.
+   * @return Promise.All resolving to [view, controller] tuple.
    */
   async preload() {
     return Promise.all([this.getController(), this.getView()]);
@@ -358,9 +296,9 @@ export default abstract class AbstractRoute {
    * placeholders will be appended as the query string.
    *
    * @abstract
-   * @param {Object<string, (number|string)>=} [params={}] The route
+   * @param [params={}] The route
    *        parameter values.
-   * @return {string} Path and, if necessary, query parts of the URL
+   * @return Path and, if necessary, query parts of the URL
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
@@ -371,8 +309,8 @@ export default abstract class AbstractRoute {
    * path may contain the query.
    *
    * @abstract
-   * @param {string} path The URL path.
-   * @return {boolean} `true` if the provided path matches this route.
+   * @param path The URL path.
+   * @return `true` if the provided path matches this route.
    */
   abstract matches(path: string): boolean;
 
@@ -385,11 +323,11 @@ export default abstract class AbstractRoute {
    * route.
    *
    * @abstract
-   * @param {string} path
-   * @return {Object<string, ?string>} Map of parameter names to parameter
+   * @param path
+   * @return Map of parameter names to parameter
    *         values.
    */
-  abstract extractParameters(path: string): {
+  abstract extractParameters(path?: string): {
     [key: string]: string | undefined;
   };
 
@@ -397,8 +335,8 @@ export default abstract class AbstractRoute {
    * Helper method to pre-process view and controller which can be
    * async functions in order to support dynamic async routing.
    *
-   * @param {object|string|function} module The module class/alias/constant.
-   * @return {Promise} Promise resolving to the actual view or controller
+   * @param module The module class/alias/constant.
+   * @return Promise resolving to the actual view or controller
    *  constructor function/class.
    */
   async _getAsyncModule(module: object | string | (() => unknown)) {

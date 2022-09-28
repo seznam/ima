@@ -162,15 +162,15 @@ export default class StaticRoute extends AbstractRoute {
     const queryPairs = [];
 
     for (const paramName of Object.keys(params)) {
-      if (this._isRequiredParamInPath(path, paramName)) {
+      if (this._isRequiredParamInPath(path as string, paramName)) {
         path = this._substituteRequiredParamInPath(
-          path,
+          path as string,
           paramName,
           params[paramName]
         );
-      } else if (this._isOptionalParamInPath(path, paramName)) {
+      } else if (this._isOptionalParamInPath(path as string, paramName)) {
         path = this._substituteOptionalParamInPath(
-          path,
+          path as string,
           paramName,
           params[paramName]
         );
@@ -179,7 +179,7 @@ export default class StaticRoute extends AbstractRoute {
       }
     }
 
-    path = this._cleanUnusedOptionalParams(path);
+    path = this._cleanUnusedOptionalParams(path as string);
     path += AbstractRoute.pairsToQuery(queryPairs);
 
     return AbstractRoute.getTrimmedPath(path);
@@ -333,9 +333,9 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Convert main optional parameters to capture sequences
    *
-   * @param {string} path The URL path.
-   * @param {array<string>} optionalParams List of main optimal parameter expressions
-   * @return {string} RegExp pattern.
+   * @param path The URL path.
+   * @param optionalParams List of main optimal parameter expressions
+   * @return RegExp pattern.
    */
   _replaceOptionalParametersInPath(path: string, optionalParams: string[]) {
     const pattern = optionalParams.reduce((path, paramExpr, idx, matches) => {
@@ -365,9 +365,9 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Convert required subparameters to capture sequences
    *
-   * @param {string} path The URL path (route definition).
-   * @param {string} clearedPathExpr The original cleared URL path.
-   * @return {string} RegExp pattern.
+   * @param path The URL path (route definition).
+   * @param clearedPathExpr The original cleared URL path.
+   * @return RegExp pattern.
    */
   _replaceRequiredSubParametersInPath(path: string, clearedPathExpr: string) {
     const requiredSubparamsOthers =
@@ -397,10 +397,10 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Convert optional subparameters to capture sequences
    *
-   * @param {string} path The URL path (route definition).
-   * @param {array<string>} optionalSubparamsOthers List of all subparam. expressions but last ones
-   * @param {array<string>} optionalSubparamsLast List of last subparam. expressions
-   * @return {string} RegExp pattern.
+   * @param path The URL path (route definition).
+   * @param optionalSubparamsOthers List of all subparam. expressions but last ones
+   * @param optionalSubparamsLast List of last subparam. expressions
+   * @return RegExp pattern.
    */
   _replaceOptionalSubParametersInPath(
     path: string,
@@ -431,8 +431,8 @@ export default class StaticRoute extends AbstractRoute {
    * for easier matching of URL paths against this route, and extracting the
    * path parameter values from the URL path.
    *
-   * @param {string} pathExpression The path expression to compile.
-   * @return {RegExp} The compiled regular expression.
+   * @param pathExpression The path expression to compile.
+   * @return The compiled regular expression.
    */
   _compileToRegExp(pathExpression: string) {
     const clearedPathExpr = pathExpression
@@ -501,9 +501,6 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Parses the provided path and extract the in-path parameters. The method
    * decodes the parameters and returns them in a hash object.
-   *
-   * @param {string} path The URL path.
-   * @return {Object<string, string>} The parsed path parameters.
    */
   _getParameters(path: string) {
     if (!this._hasParameters) {
@@ -522,9 +519,6 @@ export default class StaticRoute extends AbstractRoute {
 
   /**
    * Extract parameters from given path.
-   *
-   * @param {string[]} parameterValues
-   * @return {Object<string, ?string>} Params object.
    */
   _extractParameters(parameterValues: string[]) {
     const parameters: { [key: string]: string | undefined } = {};
@@ -551,8 +545,8 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Returns optional param name without "?"
    *
-   * @param {string} paramName Full param name with "?"
-   * @return {string} Strict param name without "?"
+   * @param paramName Full param name with "?"
+   * @return Strict param name without "?"
    */
   _cleanOptParamName(paramName: string) {
     return paramName.replace('?', '');
@@ -561,8 +555,8 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Checks if parameter is optional or not.
    *
-   * @param {string} paramName
-   * @return {boolean} return true if is optional, otherwise false
+   * @param paramName
+   * @return return true if is optional, otherwise false
    */
   _isParamOptional(paramName: string) {
     return /\?.+/.test(paramName);
@@ -571,8 +565,8 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Extracts the parameter names from the provided path expression.
    *
-   * @param {string} pathExpression The path expression.
-   * @return {string[]} The names of the parameters defined in the provided
+   * @param pathExpression The path expression.
+   * @return The names of the parameters defined in the provided
    *         path expression.
    */
   _getParameterNames(pathExpression: string) {

@@ -1,28 +1,36 @@
-import HttpAgent from './HttpAgent';
+import HttpAgent, {
+  HttpAgentRequestOptions,
+  HttpAgentResponse,
+} from './HttpAgent';
 import HttpProxy from './HttpProxy';
 import Cache from '../cache/Cache';
 import GenericError from '../error/GenericError';
 import CookieStorage from '../storage/CookieStorage';
+import { Helpers } from '../types';
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
-export default class HttpAgentImpl implements HttpAgent {
+export default class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
   protected _cache: Cache;
   protected _cookie: CookieStorage;
   protected _cacheOptions: { [key: string]: string };
+  protected _defaultRequestOptions: HttpAgentRequestOptions;
+  protected _Helper: Helpers;
+  protected _internalCacheOfPromises = new Map();
+
   /**
    * Initializes the HTTP handler.
    *
-   * @param {HttpProxy} proxy The low-level HTTP proxy for sending the HTTP
+   * @param proxy The low-level HTTP proxy for sending the HTTP
    *        requests.
-   * @param {Cache} cache Cache to use for caching ongoing and completed
+   * @param cache Cache to use for caching ongoing and completed
    *        requests.
-   * @param {CookieStorage} cookie The cookie storage to use internally.
-   * @param {vendor.$Helper} Helper The IMA.js helper methods.
-   * @param {Object<string, *>} config Configuration of the HTTP handler for
+   * @param cookie The cookie storage to use internally.
+   * @param Helper The IMA.js helper methods.
+   * @param config Configuration of the HTTP handler for
    *        the current application environment, specifying the various
    *        default request option values and cache option values.
    * @example
@@ -47,89 +55,61 @@ export default class HttpAgentImpl implements HttpAgent {
    *          .setDefaultHeader('Accept-Language', 'en')
    *          .clearDefaultHeaders();
    */
-  constructor(proxy, cache, cookie, Helper, config) {
+  constructor(
+    proxy: HttpProxy,
+    cache: Cache,
+    cookie: CookieStorage,
+    Helper: Helpers,
+    config: { [key: string]: unknown }
+  ) {
+    super();
+
     /**
      * HTTP proxy, used to execute the HTTP requests.
-     *
-     * @type {HttpProxy}
      */
     this._proxy = proxy;
 
     /**
      * Internal request cache, used to cache completed request results.
-     *
-     * @type {Cache}
      */
     this._cache = cache;
 
     /**
      * Cookie storage, used to keep track of cookies received from the
      * server and send them with the subsequent requests to the server.
-     *
-     * @type {CookieStorage}
      */
     this._cookie = cookie;
 
-    /**
-     * Cache options.
-     *
-     * @type {Object<string, string>}
-     */
-    this._cacheOptions = config.cacheOptions;
+    this._cacheOptions = config.cacheOptions as { [key: string]: string };
 
-    /**
-     * Default request options.
-     *
-     * @type {{
-     *         timeout: number,
-     *         ttl: number,
-     *         repeatRequest: number,
-     *         headers: Object<string, string>,
-     *         cache: boolean,
-     *         withCredentials: boolean,
-     *         fetchOptions: Object<string, *>,
-     *         postProcessor: function(Object<string, *>)
-     *       }}
-     */
-    this._defaultRequestOptions = config.defaultRequestOptions;
+    this._defaultRequestOptions =
+      config.defaultRequestOptions as HttpAgentRequestOptions;
 
     /**
      * Tha IMA.js helper methods.
-     *
-     * @type {vendor.$Helper}
      */
     this._Helper = Helper;
-
-    /**
-     * Internal request cache, used to cache ongoing requests.
-     *
-     * @type {Map<string, Promise<{
-     *         status: number,
-     *         body: *,
-     *         params: {
-     *           method: string,
-     *           url: string,
-     *           transformedUrl: string,
-     *           data: Object<string, (boolean|number|string)>
-     *         },
-     *         headers: Object<string, string>,
-     *         cached: boolean
-     *       }>>}
-     */
-    this._internalCacheOfPromises = new Map();
   }
 
   /**
    * @inheritdoc
    */
-  get(url, data, options = {}) {
+  get(
+    url: string,
+    data: { [key: string]: boolean | number | string },
+    options: HttpAgentRequestOptions
+  ) {
     return this._requestWithCheckCache('get', url, data, options);
   }
 
   /**
    * @inheritdoc
    */
-  post(url, data, options = {}) {
+  post(
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options = {} as HttpAgentRequestOptions
+  ) {
     return this._requestWithCheckCache(
       'post',
       url,
@@ -141,7 +121,11 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * @inheritdoc
    */
-  put(url, data, options = {}) {
+  put(
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options = {} as HttpAgentRequestOptions
+  ) {
     return this._requestWithCheckCache(
       'put',
       url,
@@ -153,7 +137,11 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * @inheritdoc
    */
-  patch(url, data, options = {}) {
+  patch(
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options = {} as HttpAgentRequestOptions
+  ) {
     return this._requestWithCheckCache(
       'patch',
       url,
@@ -165,7 +153,11 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * @inheritdoc
    */
-  delete(url, data, options = {}) {
+  delete(
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options = {} as HttpAgentRequestOptions
+  ) {
     return this._requestWithCheckCache(
       'delete',
       url,
@@ -177,7 +169,11 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * @inheritdoc
    */
-  getCacheKey(method, url, data) {
+  getCacheKey(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date }
+  ) {
     return (
       this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data)
     );
@@ -186,7 +182,7 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * @inheritdoc
    */
-  setDefaultHeader(header, value) {
+  setDefaultHeader(header: string, value: string) {
     this._proxy.setDefaultHeader(header, value);
 
     return this;
@@ -205,11 +201,11 @@ export default class HttpAgentImpl implements HttpAgent {
    * Attempts to clone the provided value, if possible. Values that cannot be
    * cloned (e.g. promises) will be simply returned.
    *
-   * @param {*} value The value to clone.
-   * @return {*} The created clone, or the provided value if the value cannot be
+   * @param value The value to clone.
+   * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  _clone(value) {
+  _clone(value: unknown) {
     if (
       value !== null &&
       typeof value === 'object' &&
@@ -224,15 +220,19 @@ export default class HttpAgentImpl implements HttpAgent {
   /**
    * Check cache and if data isnt available then make real request.
    *
-   * @param {string} method The HTTP method to use.
-   * @param {string} url The URL to which the request should be sent.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data to
-   *        send with the request.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise<HttpAgent~Response>} A promise that resolves to the response
+   * @param method The HTTP method to use.
+   * @param url The URL to which the request should be sent.
+   * @param data The data to send with the request.
+   * @param options Optional request options.
+   * @return A promise that resolves to the response
    *         with body parsed as JSON.
    */
-  _requestWithCheckCache(method, url, data, options) {
+  _requestWithCheckCache(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options: HttpAgentRequestOptions
+  ) {
     options = this._prepareOptions(options);
 
     if (options.cache) {
@@ -254,21 +254,25 @@ export default class HttpAgentImpl implements HttpAgent {
    * The method returns `null` if no such request is present in the
    * cache.
    *
-   * @param {string} method The HTTP method used by the request.
-   * @param {string} url The URL to which the request was made.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data sent
+   * @param method The HTTP method used by the request.
+   * @param url The URL to which the request was made.
+   * @param data The data sent
    *        to the server with the request.
    * @return {?Promise<HttpAgent~Response>} A promise that will resolve to the
    *         server response with the body parsed as JSON, or `null` if
    *         no such request is present in the cache.
    */
-  _getCachedData(method, url, data) {
+  _getCachedData(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date }
+  ) {
     const cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
       return this._internalCacheOfPromises
         .get(cacheKey)
-        .then(data => this._clone(data));
+        .then((data: unknown) => this._clone(data));
     }
 
     if (this._cache.has(cacheKey)) {
@@ -286,19 +290,24 @@ export default class HttpAgentImpl implements HttpAgent {
    * HTTP method is GET, but the data will be sent as request body for any
    * other request method.
    *
-   * @param {string} method HTTP method to use.
-   * @param {string} url The URL to which the request is sent.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data sent
+   * @param method HTTP method to use.
+   * @param url The URL to which the request is sent.
+   * @param data The data sent
    *        with the request.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
+   * @param options Optional request options.
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the response
    *         with the body parsed as JSON.
    */
-  _request(method, url, data, options) {
+  _request(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options: HttpAgentRequestOptions
+  ): Promise<HttpAgentResponse> {
     const cacheKey = this.getCacheKey(method, url, data);
 
     const cachePromise = this._proxy.request(method, url, data, options).then(
-      response => this._proxyResolved(response),
+      response => this._proxyResolved(response as HttpAgentResponse),
       error => this._proxyRejected(error)
     );
 
@@ -316,8 +325,8 @@ export default class HttpAgentImpl implements HttpAgent {
    * @param {HttpAgent~Response} response Server response.
    * @return {HttpAgent~Response} The post-processed server response.
    */
-  _proxyResolved(response) {
-    let agentResponse = {
+  _proxyResolved(response: HttpAgentResponse) {
+    let agentResponse: HttpAgentResponse = {
       status: response.status,
       body: response.body,
       params: response.params,
@@ -357,7 +366,7 @@ export default class HttpAgentImpl implements HttpAgent {
    * The method rejects the internal request promise if there are no tries
    * left.
    *
-   * @param {GenericError} error The error provided by the HttpProxy,
+   * @param error The error provided by the HttpProxy,
    *        carrying the error parameters, such as the request url, data,
    *        method, options and other useful data.
    * @return {Promise<HttpAgent~Response>} A promise that will either resolve to a
@@ -366,10 +375,10 @@ export default class HttpAgentImpl implements HttpAgent {
    *         with an error containing details of the cause of the request's
    *         failure.
    */
-  _proxyRejected(error) {
+  _proxyRejected(error: GenericError) {
     const errorParams = error.getParams();
-    const method = errorParams.method;
-    const url = errorParams.url;
+    const method = errorParams.method as string;
+    const url = errorParams.url as string;
     const data = errorParams.data;
 
     if (errorParams.options.repeatRequest > 0) {
@@ -391,12 +400,12 @@ export default class HttpAgentImpl implements HttpAgent {
    * Prepares the provided request options object by filling in missing
    * options with default values and addding extra options used internally.
    *
-   * @param {HttpAgent~RequestOptions} options Optional request options.
-   * @return {HttpAgent~RequestOptions} Request options with set filled-in
+   * @param options Optional request options.
+   * @return Request options with set filled-in
    *         default values for missing fields, and extra options used
    *         internally.
    */
-  _prepareOptions(options) {
+  _prepareOptions(options: HttpAgentRequestOptions): HttpAgentRequestOptions {
     const composedOptions = Object.assign(
       {},
       this._defaultRequestOptions,
@@ -421,14 +430,18 @@ export default class HttpAgentImpl implements HttpAgent {
    * Generates cache key suffix for an HTTP request to the specified URL with
    * the specified data.
    *
-   * @param {string} method The HTTP method used by the request.
-   * @param {string} url The URL to which the request is sent.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data sent
+   * @param method The HTTP method used by the request.
+   * @param url The URL to which the request is sent.
+   * @param data The data sent
    *        with the request.
-   * @return {string} The suffix of a cache key to use for a request to the
+   * @return The suffix of a cache key to use for a request to the
    *         specified URL, carrying the specified data.
    */
-  _getCacheKeySuffix(method, url, data) {
+  _getCacheKeySuffix(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date }
+  ) {
     let dataQuery = '';
     if (data) {
       try {
@@ -444,20 +457,14 @@ export default class HttpAgentImpl implements HttpAgent {
    * Sets all cookies from the `Set-Cookie` response header to the
    * cookie storage.
    *
-   * @param {HttpAgent~Response} agentResponse The response of the server.
+   * @param agentResponse The response of the server.
    */
-  _setCookiesFromResponse(agentResponse) {
+  _setCookiesFromResponse(agentResponse: HttpAgentResponse) {
     if (agentResponse.headersRaw) {
-      let receivedCookies = agentResponse.headersRaw.get('set-cookie');
+      const receivedCookies = agentResponse.headersRaw.get('set-cookie');
 
       if (receivedCookies) {
-        if (!Array.isArray(receivedCookies)) {
-          receivedCookies = [receivedCookies];
-        }
-
-        receivedCookies.forEach(cookieHeader => {
-          this._cookie.parseFromSetCookieHeader(cookieHeader);
-        });
+        this._cookie.parseFromSetCookieHeader(receivedCookies);
       }
     }
   }
@@ -466,9 +473,9 @@ export default class HttpAgentImpl implements HttpAgent {
    * Saves the server response to the cache to be used as the result of the
    * next request of the same properties.
    *
-   * @param {HttpAgent~Response} agentResponse The response of the server.
+   * @param agentResponse The response of the server.
    */
-  _saveAgentResponseToCache(agentResponse) {
+  _saveAgentResponseToCache(agentResponse: HttpAgentResponse) {
     /**
      * Create copy of agentResponse without AbortController and AbortController signal.
      * Setting agentResponse with AbortController or signal into cache would result in crash.

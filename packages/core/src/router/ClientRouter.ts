@@ -7,28 +7,20 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
+import { RouteOptions } from './Router';
 
 /**
  * Names of the DOM events the router responds to.
- *
- * @enum {string}
- * @type {Object<string, string>}
  */
 const Events = Object.freeze({
   /**
    * Name of the event produced when the user clicks the page using the
    * mouse, or touches the page and the touch event is not stopped.
-   *
-   * @const
-   * @type {string}
    */
   CLICK: 'click',
 
   /**
    * Name of the event fired when the user navigates back in the history.
-   *
-   * @const
-   * @type {string}
    */
   POP_STATE: 'popstate',
 });
@@ -36,9 +28,6 @@ const Events = Object.freeze({
 /**
  * The number used as the index of the mouse left button in DOM
  * `MouseEvent`s.
- *
- * @const
- * @type {number}
  */
 const MOUSE_LEFT_BUTTON = 0;
 
@@ -47,9 +36,10 @@ const MOUSE_LEFT_BUTTON = 0;
  */
 export default class ClientRouter extends AbstractRouter {
   protected _window: Window;
-  protected _boundHandleClick = (event: Event) => this._handleClick(event);
+  protected _boundHandleClick = (event: Event) =>
+    this._handleClick(event as MouseEvent);
   protected _boundHandlePopState = (event: Event) =>
-    this._handlePopState(event);
+    this._handlePopState(event as PopStateEvent);
 
   static get $dependencies() {
     return [PageManager, RouteFactory, Dispatcher, Window];
@@ -58,11 +48,11 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * Initializes the client-side router.
    *
-   * @param {PageManager} pageManager The page manager handling UI rendering,
+   * @param pageManager The page manager handling UI rendering,
    *        and transitions between pages if at the client side.
-   * @param {RouteFactory} factory Factory for routes.
-   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
-   * @param {Window} window The current global client-side APIs provider.
+   * @param factory Factory for routes.
+   * @param dispatcher Dispatcher fires events to app.
+   * @param window The current global client-side APIs provider.
    */
   constructor(
     pageManager: PageManager,
@@ -74,8 +64,6 @@ export default class ClientRouter extends AbstractRouter {
 
     /**
      * Helper for accessing the native client-side APIs.
-     *
-     * @type {Window}
      */
     this._window = window;
   }
@@ -122,7 +110,7 @@ export default class ClientRouter extends AbstractRouter {
     );
 
     this._window.bindEventListener(
-      nativeWindow,
+      nativeWindow as EventTarget,
       Events.CLICK,
       this._boundHandleClick
     );
@@ -137,13 +125,13 @@ export default class ClientRouter extends AbstractRouter {
     const nativeWindow = this._window.getWindow();
 
     this._window.unbindEventListener(
-      nativeWindow,
+      nativeWindow as EventTarget,
       Events.POP_STATE,
       this._boundHandlePopState
     );
 
     this._window.unbindEventListener(
-      nativeWindow,
+      nativeWindow as EventTarget,
       Events.CLICK,
       this._boundHandleClick
     );
@@ -204,7 +192,11 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  handleError(params, options = {}, locals = {}) {
+  async handleError(
+    params: { [key: string]: Error | string },
+    options = {},
+    locals: { [key: string]: unknown } = {}
+  ) {
     if ($Debug) {
       console.error(params.error);
 
@@ -267,9 +259,9 @@ export default class ClientRouter extends AbstractRouter {
    * Handle a fatal error application state. IMA handle fatal error when IMA
    * handle error.
    *
-   * @param {Error} error
+   * @param error
    */
-  _handleFatalError(error) {
+  _handleFatalError(error: Error) {
     if ($IMA && typeof $IMA.fatalErrorHandler === 'function') {
       $IMA.fatalErrorHandler(error);
     } else {
@@ -288,9 +280,9 @@ export default class ClientRouter extends AbstractRouter {
    * The navigation will be handled by the router if the event state is defined
    * and event is not `defaultPrevented`.
    *
-   * @param {PopStateEvent} event The popstate event.
+   * @param event The popstate event.
    */
-  _handlePopState(event) {
+  _handlePopState(event: PopStateEvent) {
     if (event.state && !event.defaultPrevented) {
       this.route(
         this.getPath(),
@@ -312,11 +304,13 @@ export default class ClientRouter extends AbstractRouter {
    * of the anchor's target location (href) is the same as the current,
    * otherwise the method results in a hard redirect.
    *
-   * @param {MouseEvent} event The click event.
+   * @param event The click event.
    */
-  _handleClick(event) {
+  _handleClick(event: MouseEvent) {
     const target = event.target || event.srcElement;
-    const anchorElement = this._getAnchorElement(target);
+    const anchorElement = this._getAnchorElement(
+      target as Node
+    ) as HTMLAnchorElement;
 
     if (!anchorElement || typeof anchorElement.href !== 'string') {
       return;
@@ -362,15 +356,15 @@ export default class ClientRouter extends AbstractRouter {
    * @param {Node} target
    * @return {?Node}
    */
-  _getAnchorElement(target) {
+  _getAnchorElement(target: Node) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
-    while (target && !hasReachedAnchor(target)) {
-      target = target.parentNode;
+    while (target && !hasReachedAnchor(target as HTMLAnchorElement)) {
+      target = target.parentNode as Node;
     }
 
-    function hasReachedAnchor(nodeElement) {
+    function hasReachedAnchor(nodeElement: HTMLAnchorElement) {
       return (
         nodeElement.parentNode &&
         nodeElement !== self._window.getBody() &&
@@ -386,11 +380,11 @@ export default class ClientRouter extends AbstractRouter {
    * Tests whether the provided target URL contains only an update of the
    * hash fragment of the current URL.
    *
-   * @param {string} targetUrl The target URL.
-   * @return {boolean} `true` if the navigation to target URL would
+   * @param targetUrl The target URL.
+   * @return `true` if the navigation to target URL would
    *         result only in updating the hash fragment of the current URL.
    */
-  _isHashLink(targetUrl) {
+  _isHashLink(targetUrl: string) {
     if (targetUrl.indexOf('#') === -1) {
       return false;
     }
@@ -409,8 +403,8 @@ export default class ClientRouter extends AbstractRouter {
    * Tests whether the the protocol and domain of the provided URL are the
    * same as the current.
    *
-   * @param {string=} [url=''] The URL.
-   * @return {boolean} `true` if the protocol and domain of the
+   * @param [url=''] The URL.
+   * @return `true` if the protocol and domain of the
    *         provided URL are the same as the current.
    */
   _isSameDomain(url = '') {

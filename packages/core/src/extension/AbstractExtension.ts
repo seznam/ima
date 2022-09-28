@@ -10,7 +10,7 @@ import PageStateManager from '../page/state/PageStateManager';
 export default abstract class AbstractExtension implements Extension {
   protected _pageStateManager: PageStateManager | null;
   protected _usingStateManager: boolean;
-  static readonly _partialStateSymbol: unique symbol = Symbol('partialState');
+  protected _partialStateSymbol = Symbol('partialState') as unknown as string;
   public status: number;
   public params: { [key: string]: string };
 

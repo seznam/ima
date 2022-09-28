@@ -54,33 +54,30 @@ export default abstract class AbstractController implements Controller {
   /**
    * @inheritdoc
    */
-  abstract init(): Promise<undefined> | undefined;
+  abstract init(): void;
 
   /**
    * @inheritdoc
    */
-  abstract destroy(): Promise<undefined> | undefined;
+  abstract destroy(): void;
 
   /**
    * @inheritdoc
    */
-  abstract activate(): Promise<undefined> | undefined;
+  abstract activate(): void;
 
   /**
    * @inheritdoc
    */
-  abstract deactivate(): Promise<undefined> | undefined;
+  abstract deactivate(): void;
 
   /**
    * @inheritdoc
    * @abstract
    */
-  load() {
-    throw new GenericError(
-      'The ima.core.controller.AbstractController.load method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  abstract load():
+    | Promise<{ [key: string]: Promise<unknown> | unknown }>
+    | { [key: string]: Promise<unknown> | unknown };
 
   /**
    * @inheritdoc

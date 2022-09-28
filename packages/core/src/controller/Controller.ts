@@ -16,10 +16,8 @@ export default interface Controller {
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
-  init(): Promise<undefined> | undefined;
+  init(): void;
 
   /**
    * Finalization callback, called when the controller is being discarded by
@@ -33,10 +31,8 @@ export default interface Controller {
    * {@link Controller#init} method. The controller must release any resources
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
-  destroy(): Promise<undefined> | undefined;
+  destroy(): void;
 
   /**
    * Callback for activating the controller in the UI. This is the last
@@ -47,10 +43,8 @@ export default interface Controller {
    * The controller may register any React and DOM event listeners in this
    * method. The controller may start receiving event bus event after this
    * method completes.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
-  activate(): Promise<undefined> | undefined;
+  activate(): void;
 
   /**
    * Callback for deactivating the controller in the UI. This is the first
@@ -62,10 +56,8 @@ export default interface Controller {
    *
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
-  deactivate(): Promise<undefined> | undefined;
+  deactivate(): void;
 
   /**
    * Callback the controller uses to request the resources it needs to render

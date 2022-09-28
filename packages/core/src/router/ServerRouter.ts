@@ -12,6 +12,9 @@ import PageManager from '../page/manager/PageManager';
  * The server-side implementation of the {@link Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
+  protected _request: Request;
+  protected _response: Response;
+
   static get $dependencies() {
     return [PageManager, RouteFactory, Dispatcher, Request, Response];
   }
@@ -25,7 +28,13 @@ export default class ServerRouter extends AbstractRouter {
    * @param {Request} request The current HTTP request.
    * @param {Response} response The current HTTP response.
    */
-  constructor(pageManager, factory, dispatcher, request, response) {
+  constructor(
+    pageManager: PageManager,
+    factory: RouteFactory,
+    dispatcher: Dispatcher,
+    request: Request,
+    response: Response
+  ) {
     super(pageManager, factory, dispatcher);
     /**
      * The current HTTP request.

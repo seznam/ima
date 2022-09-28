@@ -1,5 +1,5 @@
 import HttpStatusCode from './StatusCode';
-import { HttpAgentRequestOptions } from './HttpAgent';
+import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
 import UrlTransformer from './UrlTransformer';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
@@ -7,15 +7,15 @@ import Window from '../window/Window';
 /**
  * An object representing the complete request parameters used to create and
  * send the HTTP request.
- * @typedef {Object} HttpProxy~RequestParams
- * @property {string} method The HTTP method.
- * @property {string} url The original URL to which to make the request.
- * @property {string} transformedUrl The actual URL to which to make the
+ * @typedef HttpProxy~RequestParams
+ * @property method The HTTP method.
+ * @property url The original URL to which to make the request.
+ * @property transformedUrl The actual URL to which to make the
  *           request, created by applying the URL transformer to the
  *           original URL.
- * @property {Object<string, (boolean|number|string|Date)>} data The request
+ * @property data The request
  *           data, sent as query or body.
- * @property {HttpAgent~RequestOptions} options The high-level request options
+ * @property options The high-level request options
  *           provided by the HTTP agent.
  */
 
@@ -31,14 +31,14 @@ export type HttpProxyRequestParams = {
  * An object that describes a failed HTTP request, providing
  * information about both the failure reported by the server and how the
  * request has been sent to the server.
- * @typedef {Object} HttpProxy~ErrorParams
- * @property {string} errorName An error name.
- * @property {number} status The HTTP response status code send by the
+ * @typedef HttpProxy~ErrorParams
+ * @property errorName An error name.
+ * @property status The HTTP response status code send by the
  *           server.
- * @property {object} body The body of HTTP error response (detailed
+ * @property body The body of HTTP error response (detailed
  *           information).
- * @property {Error} cause The low-level cause error.
- * @property {HttpProxy~RequestParams} params An object representing the
+ * @property cause The low-level cause error.
+ * @property params An object representing the
  *           complete request parameters used to create and send the HTTP
  *           request.
  */
@@ -64,32 +64,26 @@ export default class HttpProxy {
   /**
    * Initializes the HTTP proxy.
    *
-   * @param {UrlTransformer} transformer A transformer of URLs to which
+   * @param transformer A transformer of URLs to which
    *        requests are made.
-   * @param {Window} window Helper for manipulating the global object `window`
+   * @param window Helper for manipulating the global object `window`
    *        regardless of the client/server-side environment.
    */
   constructor(transformer: UrlTransformer, window: Window) {
     /**
      * A transformer of URLs to which requests are made.
-     *
-     * @type {UrlTransformer}
      */
     this._transformer = transformer;
 
     /**
      * Helper for manipulating the global object `window` regardless of the
      * client/server-side environment.
-     *
-     * @type {Window}
      */
     this._window = window;
 
     /**
      * The default HTTP headers to include with the HTTP requests, unless
      * overridden.
-     *
-     * @type {Map<string, string>}
      */
     this._defaultHeaders = new Map();
   }
@@ -98,14 +92,14 @@ export default class HttpProxy {
    * Executes a HTTP request to the specified URL using the specified HTTP
    * method, carrying the provided data.
    *
-   * @param {string} method The HTTP method to use.
-   * @param {string} url The URL to which the request should be made.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data to
+   * @param method The HTTP method to use.
+   * @param url The URL to which the request should be made.
+   * @param data The data to
    *        be send to the server. The data will be included as query
    *        parameters if the request method is `GET` or `HEAD`, and as
    *        a request body for any other request method.
-   * @param {HttpAgent~RequestOptions=} options Optional request options.
-   * @return {Promise.<HttpAgent~Response>} A promise that resolves to the server
+   * @param options Optional request options.
+   * @return A promise that resolves to the server
    *         response.
    */
   request(
@@ -130,7 +124,7 @@ export default class HttpProxy {
     }
 
     // Track request timeout status
-    let requestTimeoutId = null;
+    let requestTimeoutId: number | NodeJS.Timeout | null = null;
 
     return new Promise((resolve, reject) => {
       if (options.timeout) {
@@ -192,8 +186,8 @@ export default class HttpProxy {
    * overridden by request options, or cleared by
    * {@link HttpProxy#clearDefaultHeaders} method.
    *
-   * @param {string} header A header name.
-   * @param {string} value A header value.
+   * @param header A header name.
+   * @param value A header value.
    */
   setDefaultHeader(header: string, value: string) {
     this._defaultHeaders.set(header, value);
@@ -211,16 +205,16 @@ export default class HttpProxy {
    * information about both the failure reported by the server and how the
    * request has been sent to the server.
    *
-   * @param {string} method The HTTP method used to make the request.
-   * @param {string} url The URL to which the request has been made.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data sent
+   * @param method The HTTP method used to make the request.
+   * @param url The URL to which the request has been made.
+   * @param data The data sent
    *        with the request.
-   * @param {HttpAgent~RequestOptions} options Optional request options.
-   * @param {number} status The HTTP response status code send by the server.
-   * @param {object} body The body of HTTP error response (detailed
+   * @param options Optional request options.
+   * @param status The HTTP response status code send by the server.
+   * @param body The body of HTTP error response (detailed
    *        information).
-   * @param {Error} cause The low-level cause error.
-   * @return {HttpProxy~ErrorParams} An object containing both the details of
+   * @param cause The low-level cause error.
+   * @return An object containing both the details of
    *         the error and the request that lead to it.
    */
   getErrorParams(
@@ -238,7 +232,7 @@ export default class HttpProxy {
       body = {};
     }
 
-    const error = { status, body, cause, errorName: '' };
+    const error = { status, body, cause, errorName: '', params: params };
 
     switch (status) {
       case HttpStatusCode.TIMEOUT:
@@ -264,7 +258,7 @@ export default class HttpProxy {
         break;
     }
 
-    return Object.assign(error, params);
+    return error;
   }
 
   /**
@@ -280,7 +274,7 @@ export default class HttpProxy {
    * enabled (which results in cookies being automatically processed by the
    * browser), and returns `true` or `false` accordingly.
    *
-   * @return {boolean} `true` if cookies are not processed automatically by
+   * `true` if cookies are not processed automatically by
    *         the environment and have to be handled manually by parsing
    *         response headers and setting request headers, otherwise `false`.
    */
@@ -291,19 +285,19 @@ export default class HttpProxy {
   /**
    * Processes the response received from the server.
    *
-   * @param {HttpProxy~RequestParams} requestParams The original request's
+   * @param requestParams The original request's
    *        parameters.
-   * @param {Response} response The Fetch API's `Response` object representing
+   * @param response The Fetch API's `Response` object representing
    *        the server's response.
-   * @param {*} responseBody The server's response body.
-   * @return {HttpAgent~Response} The server's response along with all related
+   * @param responseBody The server's response body.
+   * @return The server's response along with all related
    *         metadata.
    */
   _processResponse(
     requestParams: HttpProxyRequestParams,
     response: Response,
     responseBody: unknown
-  ) {
+  ): HttpAgentResponse {
     if (response.ok) {
       return {
         status: response.status,
@@ -327,7 +321,7 @@ export default class HttpProxy {
    * @param {Headers} headers The headers to convert.
    * @return {Object.<string, string>} Converted headers.
    */
-  _headersToPlainObject(headers: Headers) {
+  _headersToPlainObject(headers: typeof Headers) {
     const plainHeaders = {};
 
     for (const [key, value] of headers) {
@@ -341,13 +335,16 @@ export default class HttpProxy {
    * Processes the provided Fetch API or internal error and creates an error
    * to expose to the calling API.
    *
-   * @param {Error} fetchError The internal error to process.
-   * @param {HttpProxy~RequestParams} requestParams An object representing the
+   * @param fetchError The internal error to process.
+   * @param requestParams An object representing the
    *        complete request parameters used to create and send the HTTP
    *        request.
-   * @return {GenericError} The error to provide to the calling API.
+   * @return The error to provide to the calling API.
    */
-  _processError(fetchError: Error, requestParams: HttpProxyRequestParams) {
+  _processError(
+    fetchError: GenericError | Error,
+    requestParams: HttpProxyRequestParams
+  ) {
     const errorParams =
       fetchError instanceof GenericError ? fetchError.getParams() : {};
     return this._createError(
@@ -361,15 +358,20 @@ export default class HttpProxy {
   /**
    * Creates an error that represents a failed HTTP request.
    *
-   * @param {Error} cause The error's message.
-   * @param {HttpProxy~RequestParams} requestParams An object representing the
+   * @param cause The error's message.
+   * @param requestParams An object representing the
    *        complete request parameters used to create and send the HTTP
    *        request.
-   * @param {number} status Server's response HTTP status code.
-   * @param {*} responseBody The body of the server's response, if any.
-   * @return {GenericError} The error representing a failed HTTP request.
+   * @param status Server's response HTTP status code.
+   * @param responseBody The body of the server's response, if any.
+   * @return The error representing a failed HTTP request.
    */
-  _createError(cause, requestParams, status, responseBody = null) {
+  _createError(
+    cause: GenericError | Error,
+    requestParams: HttpProxyRequestParams,
+    status: number,
+    responseBody: unknown = null
+  ) {
     return new GenericError(
       cause.message,
       this.getErrorParams(
@@ -388,16 +390,20 @@ export default class HttpProxy {
    * Composes an object representing the HTTP request parameters from the
    * provided arguments.
    *
-   * @param {string} method The HTTP method to use.
-   * @param {string} url The URL to which the request should be sent.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data to
+   * @param method The HTTP method to use.
+   * @param url The URL to which the request should be sent.
+   * @param data The data to
    *        send with the request.
-   * @param {HttpAgent~RequestOptions} options Optional request options.
-   * @return {HttpProxy~RequestParams} An object
-   *         representing the complete request parameters used to create and
+   * @param options Optional request options.
+   * @return An object representing the complete request parameters used to create and
    *         send the HTTP request.
    */
-  _composeRequestParams(method, url, data, options) {
+  _composeRequestParams(
+    method: string,
+    url: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options: HttpAgentRequestOptions
+  ): HttpProxyRequestParams {
     return {
       method,
       url,
@@ -411,14 +417,18 @@ export default class HttpProxy {
    * Composes an init object, which can be used as a second argument of
    * `window.fetch` method.
    *
-   * @param {string} method The HTTP method to use.
-   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   * @param method The HTTP method to use.
+   * @param data The data to
    *        be send with a request.
-   * @param {HttpAgent~RequestOptions} options Options provided by the HTTP
+   * @param options Options provided by the HTTP
    *        agent.
    * @return {RequestInit} A `RequestInit` object of the Fetch API.
    */
-  _composeRequestInit(method, data, options) {
+  _composeRequestInit(
+    method: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options: HttpAgentRequestOptions
+  ): RequestInit {
     const contentType = this._getContentType(method, data, options);
 
     if (contentType) {
@@ -450,21 +460,25 @@ export default class HttpProxy {
 
     Object.assign(requestInit, options.fetchOptions || {});
 
-    return requestInit;
+    return requestInit as RequestInit;
   }
 
   /**
    * Gets a `Content-Type` header value for defined method, data and options.
    *
-   * @param {string} method The HTTP method to use.
-   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   * @param method The HTTP method to use.
+   * @param data The data to
    *        be send with a request.
-   * @param {HttpAgent~RequestOptions} options Options provided by the HTTP
+   * @param options Options provided by the HTTP
    *        agent.
-   * @return {string|null} A `Content-Type` header value, null for requests
+   * @return A `Content-Type` header value, null for requests
    *        with no body.
    */
-  _getContentType(method, data, options) {
+  _getContentType(
+    method: string,
+    data: { [key: string]: boolean | number | string | Date },
+    options: HttpAgentRequestOptions
+  ) {
     if (
       options.headers['Content-Type'] &&
       typeof options.headers['Content-Type'] === 'string'
@@ -483,13 +497,16 @@ export default class HttpProxy {
    * Transforms the provided URL using the current URL transformer and adds
    * the provided data to the URL's query string.
    *
-   * @param {string} url The URL to prepare for use with the fetch API.
-   * @param {Object<string, (boolean|number|string|Date)>} data The data to be
+   * @param url The URL to prepare for use with the fetch API.
+   * @param data The data to be
    *        attached to the query string.
-   * @return {string} The transformed URL with the provided data attached to
+   * @return The transformed URL with the provided data attached to
    *         its query string.
    */
-  _composeRequestUrl(url, data) {
+  _composeRequestUrl(
+    url: string,
+    data: { [key: string]: boolean | number | string | Date }
+  ) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimiter = queryString
@@ -505,12 +522,15 @@ export default class HttpProxy {
    * Checks if a request should have a body (`GET` and `HEAD` requests don't
    * have a body).
    *
-   * @param {string} method The HTTP method.
-   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   * @param method The HTTP method.
+   * @param data The data to
    *        be send with a request.
-   * @return {boolean} `true` if a request has a body, otherwise `false`.
+   * @return `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(method, data) {
+  _shouldRequestHaveBody(
+    method: string,
+    data: { [key: string]: boolean | number | string | Date }
+  ) {
     return !!(
       method &&
       data &&
@@ -521,14 +541,17 @@ export default class HttpProxy {
   /**
    * Formats request body according to request headers.
    *
-   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   * @param data The data to
    *        be send with a request.
    * @param {Object.<string, string>} headers Headers object from options provided by the HTTP
    *        agent.
    * @returns {string|Object|FormData}
    * @private
    */
-  _transformRequestBody(data, headers) {
+  _transformRequestBody(
+    data: { [key: string]: boolean | number | string | Date },
+    headers: { [key: string]: string }
+  ) {
     switch (headers['Content-Type']) {
       case 'application/json':
         return JSON.stringify(data);
@@ -545,11 +568,13 @@ export default class HttpProxy {
    * Returns query string representation of the data parameter.
    * (Returned string does not contain ? at the beginning)
    *
-   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
-   * @returns {string} Query string representation of the given object
+   * @param object The object to be converted
+   * @returns Query string representation of the given object
    * @private
    */
-  _convertObjectToQueryString(object) {
+  _convertObjectToQueryString(object: {
+    [key: string]: boolean | number | string | Date;
+  }) {
     return Object.keys(object)
       .map(key => [key, object[key]].map(encodeURIComponent).join('='))
       .join('&');
@@ -563,7 +588,9 @@ export default class HttpProxy {
    * @returns {Object|FormData}
    * @private
    */
-  _convertObjectToFormData(object) {
+  _convertObjectToFormData(object: {
+    [key: string]: boolean | number | string | Date;
+  }) {
     const window = this._window.getWindow();
 
     if (!window || !window.FormData) {

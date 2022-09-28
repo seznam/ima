@@ -1,3 +1,5 @@
+import { Listener } from './Dispatcher';
+
 /**
  * Utility for sending and intercepting wrapped custom DOM events on the DOM or
  * propagating them to the current controller.
@@ -59,16 +61,13 @@ export default interface EventBus {
    * The order in which the event listeners will be executed is unspecified
    * and should not be relied upon.
    *
-   * @param {EventTarget} eventTarget The event target at which the listener
+   * @param  eventTarget The event target at which the listener
    *        should listen for all event bus events.
-   * @param {function(CustomEvent)} listener The event listener to
+   * @param listener The event listener to
    *        register.
-   * @return {EventBus} This event bus.
+   * @return This event bus.
    */
-  listenAll(
-    eventTarget: EventTarget,
-    listener: (event: CustomEvent) => void
-  ): this;
+  listenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Registers the provided event listener to be executed when the specific
@@ -81,18 +80,14 @@ export default interface EventBus {
    * The order in which the event listeners will be executed is unspecified
    * and should not be relied upon.
    *
-   * @param {EventTarget} eventTarget The event target at which the listener
+   * @param eventTarget The event target at which the listener
    *        should listen for the specified event.
-   * @param {string} eventName The name of the event to listen for.
-   * @param {function(CustomEvent)} listener The event listener to
+   * @param eventName The name of the event to listen for.
+   * @param listener The event listener to
    *        register.
-   * @return {EventBus} This event bus.
+   * @return This event bus.
    */
-  listen(
-    eventTarget: EventTarget,
-    eventName: string,
-    listener: (event: CustomEvent) => void
-  ): this;
+  listen(eventTarget: EventTarget, eventName: string, listener: Listener): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -102,16 +97,13 @@ export default interface EventBus {
    * The method has no effect if the listener is not registered at the
    * specified event target.
    *
-   * @param {EventTarget} eventTarget The event target at which the event
+   * @param eventTarget The event target at which the event
    *        listener listens for events.
-   * @param {function(CustomEvent)} listener The event listener to
+   * @param listener The event listener to
    *        deregister.
-   * @return {EventBus} This event bus.
+   * @return This event bus.
    */
-  unlistenAll(
-    eventTarget: EventTarget,
-    listener: (event: CustomEvent) => void
-  ): this;
+  unlistenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -121,16 +113,16 @@ export default interface EventBus {
    * The method has no effect if the listener is not registered for the
    * specified event at the specified event target.
    *
-   * @param {EventTarget} eventTarget The event target at which the listener
+   * @param eventTarget The event target at which the listener
    *        is listening for the event.
-   * @param {string} eventName The name of the event listened for.
-   * @param {function(CustomEvent)} listener The event listener to
+   * @param eventName The name of the event listened for.
+   * @param listener The event listener to
    *        deregister.
-   * @return {EventBus} This event bus.
+   * @return This event bus.
    */
   unlisten(
     eventTarget: EventTarget,
     eventName: string,
-    listener: (event: CustomEvent) => void
+    listener: Listener
   ): this;
 }
