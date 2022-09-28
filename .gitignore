@@ -12,3 +12,4 @@ docs/api
 build
 packages/*/.turbo
 website/.turbo
+*.tgz

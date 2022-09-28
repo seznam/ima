@@ -1,6 +1,0 @@
-[33m@ima/devtools-scripts:test[0m: cache hit, replaying output [2m7270d8c04482db64[0m
-[33m@ima/devtools-scripts:test: [0m
-[33m@ima/devtools-scripts:test: [0m> @ima/devtools-scripts@18.0.0-rc.2 test
-[33m@ima/devtools-scripts:test: [0m> echo "Error: no test specified" && exit 0
-[33m@ima/devtools-scripts:test: [0m
-[33m@ima/devtools-scripts:test: [0mError: no test specified

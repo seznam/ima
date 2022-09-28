@@ -244,6 +244,8 @@ function initApp(destDir, pkgDirs, cliArgs) {
 
   // Build, pack and install packages in the target directory.
   if (cliArgs.init) {
+    let packFiles = [];
+
     pkgDirs.forEach(pkgDir => {
       const pkgJson = require(path.join(pkgDir, 'package.json'));
 
@@ -255,10 +257,11 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
       const packFilePath = path.join(pkgDir, packFileName);
 
-      // TODO IMA@18 - remove when ima works without legacy peer deps
-      shell(`npm install ${packFilePath} --legacy-peer-deps`, destDir);
-      fs.rmSync(packFilePath);
+      shell(`npm install ${packFilePath}`, destDir);
+      packFiles.push(packFilePath);
     });
+
+    packFiles.forEach(packFilePath => fs.rmSync(packFilePath));
   }
 }
 

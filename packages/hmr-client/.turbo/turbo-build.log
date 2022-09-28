@@ -1,8 +1,0 @@
-[35m@ima/hmr-client:build[0m: cache hit, replaying output [2mf2ef657f8e91a50c[0m
-[35m@ima/hmr-client:build: [0m
-[35m@ima/hmr-client:build: [0m> @ima/hmr-client@18.0.0-rc.4 build
-[35m@ima/hmr-client:build: [0m> rollup --config
-[35m@ima/hmr-client:build: [0m
-[35m@ima/hmr-client:build: [0m[36m
-[35m@ima/hmr-client:build: [0m[1m./src/imaHmrClient.ts, ./src/fastRefreshClient.ts[22m → [1m./dist, ./dist, ./dist[22m...[39m
-[35m@ima/hmr-client:build: [0m[32mcreated [1m./dist, ./dist, ./dist[22m in [1m15.5s[22m[39m
