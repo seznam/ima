@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- a73f934e: Updated @ima/react-hooks to latest RC version
+
 ## 18.0.0-rc.7
 
 ### Major Changes
