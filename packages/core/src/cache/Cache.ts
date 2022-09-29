@@ -18,8 +18,8 @@ export default abstract class Cache {
    *
    * The method always returns `false` if the cache is currently disabled.
    *
-   * @param {string} key The identifier of the cache entry.
-   * @return {boolean} `true` if the cache is enabled, the entry exists and has
+   * @param key The identifier of the cache entry.
+   * @return `true` if the cache is enabled, the entry exists and has
    *         not expired yet.
    */
   abstract has(key: string): boolean;
@@ -30,8 +30,8 @@ export default abstract class Cache {
    * The method returns `null` if the specified entry does not exist, has
    * already expired, or the cache is currently disabled.
    *
-   * @param {string} key The identifier of the cache entry.
-   * @return {*} The value of the specified cache entry, or `null` if the entry
+   * @param key The identifier of the cache entry.
+   * @return The value of the specified cache entry, or `null` if the entry
    *         is not available.
    */
   abstract get(key: string): unknown | null;
@@ -42,9 +42,9 @@ export default abstract class Cache {
    *
    * The method has no effect if the cache is currently disabled.
    *
-   * @param {string} key The identifier of the cache entry.
-   * @param {*} value The cache entry value.
-   * @param {?number=} ttl Cache entry time to live in milliseconds. The
+   * @param key The identifier of the cache entry.
+   * @param value The cache entry value.
+   * @param ttl Cache entry time to live in milliseconds. The
    *        entry will expire after the specified amount of milliseconds. Use
    *        `null` or omit the parameter to use the default TTL of this cache.
    */
@@ -54,7 +54,7 @@ export default abstract class Cache {
    * Deletes the specified cache entry. The method has no effect if the entry
    * does not exist.
    *
-   * @param {string} key The identifier of the cache entry.
+   * @param key The identifier of the cache entry.
    */
   abstract delete(key: string): void;
 
@@ -82,7 +82,7 @@ export default abstract class Cache {
    * obtained by parsing the result of this method are compatible with the
    * {@link Cache#deserialize} method.
    *
-   * @return {string} A JSON string containing an object representing of the
+   * @return A JSON string containing an object representing of the
    *         current state of this cache.
    */
   abstract serialize(): string;
@@ -92,7 +92,7 @@ export default abstract class Cache {
    * present in this cache but not specified in the provided data will remain
    * in this cache intact.
    *
-   * @param {Object<string, {value: *, ttl: number}>} serializedData An
+   * @param serializedData An
    *        object representing the state of the cache to load, obtained by
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.

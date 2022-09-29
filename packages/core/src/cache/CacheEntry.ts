@@ -3,38 +3,36 @@
  * creation and expiration of cache entries.
  */
 export default class CacheEntry {
+  /**
+   * Cache entry value.
+   */
   protected _value: unknown;
+  /**
+   * The time to live in milliseconds. The cache entry is considered
+   * expired after this time.
+   */
   protected _ttl: number | string;
-  protected _created: number;
+  /**
+   * The timestamp of creation of this cache entry.
+   */
+  protected _created = Date.now();
 
   /**
    * Initializes the cache entry.
    *
-   * @param {*} value The cache entry value.
+   * @param value The cache entry value.
    * @param ttl The time to live in milliseconds.
    */
   constructor(value: unknown, ttl: number | string) {
-    /**
-     * Cache entry value.
-     */
     this._value = value;
 
-    /**
-     * The time to live in milliseconds. The cache entry is considered
-     * expired after this time.
-     */
     this._ttl = ttl;
-
-    /**
-     * The timestamp of creation of this cache entry.
-     */
-    this._created = Date.now();
   }
 
   /**
    * Returns `true` if this entry has expired.
    *
-   * @return {boolean} `true` if this entry has expired.
+   * @return `true` if this entry has expired.
    */
   isExpired(): boolean {
     const now = Date.now();

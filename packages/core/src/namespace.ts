@@ -79,7 +79,7 @@ export class Namespace {
    * @param path The namespace path to get.
    * @return The value at the specified path in the namespace or undefined for any non-string path
    */
-  get(path: string) {
+  get(path: string): unknown {
     const levels = this._resolvePathLevels(path);
 
     let self = this;

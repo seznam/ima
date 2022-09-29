@@ -17,6 +17,7 @@ import AbstractPureComponent from '../AbstractPureComponent';
 import BlankManagedRootView from '../BlankManagedRootView';
 import PageRendererFactory from '../PageRendererFactory';
 
+// @ts-ignore
 globalThis.$Debug = true;
 
 class ClientPageRenderer extends AbstractClientPageRenderer {
