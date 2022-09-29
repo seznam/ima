@@ -1,3 +1,18 @@
+export type Config = {
+  $Language: string,
+  dictionary: Fields
+};
+
+export type Fields = {
+  [key: string]: Fields | LocalizationFunction;
+};
+
+export type LocalizationFunction = (parameters: Parameters) => string;
+
+export type Parameters = {
+  [key: string]: boolean | number | string | Date
+};
+
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
  * single language. The format of the localization phrases depends on the
@@ -14,7 +29,7 @@ export default abstract class Dictionary {
    * @param config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.
    */
-  abstract init(config: { [key: string]: unknown }): void;
+  abstract init(config: Config): void;
 
   /**
    * Returns the ISO 639-1 language code of the language this dictionary was
@@ -39,7 +54,7 @@ export default abstract class Dictionary {
    */
   abstract get(
     key: string,
-    parameters: { [key: string]: number | string }
+    parameters: Parameters
   ): string;
 
   /**

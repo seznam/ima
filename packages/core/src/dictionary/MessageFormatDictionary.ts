@@ -1,13 +1,5 @@
 import GenericError from '../error/GenericError';
-import Dictionary from './Dictionary';
-
-interface DictionaryInterface {
-  [key: string]: unknown;
-}
-
-type localizationFunction = (params: {
-  [key: string]: number | string;
-}) => string;
+import Dictionary, { Config, Fields, LocalizationFunction, Parameters } from './Dictionary';
 
 /**
  * Implementation of the {@link Dictionary} interface that relies on
@@ -17,8 +9,7 @@ type localizationFunction = (params: {
  */
 export default class MessageFormatDictionary extends Dictionary {
   protected _language: string;
-
-  protected _dictionary: DictionaryInterface;
+  protected _dictionary: Fields;
 
   static get $dependencies() {
     return [];
@@ -62,7 +53,7 @@ export default class MessageFormatDictionary extends Dictionary {
    *        using the provided placeholder values.
    * @inheritdoc
    */
-  init(config: { $Language: string; dictionary: DictionaryInterface }) {
+  init(config: Config) {
     this._language = config.$Language;
     this._dictionary = config.dictionary;
   }
@@ -90,13 +81,13 @@ export default class MessageFormatDictionary extends Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: { [key: string]: number | string } = {}) {
+  get(key: string, parameters: Parameters = {}) {
     const scope = this._getScope(key);
 
     if (!scope) {
       throw new GenericError(
         `ima.core.dictionary.MessageFormatDictionary.get: The ` +
-          `localization phrase '${key}' does not exists`,
+        `localization phrase '${key}' does not exists`,
         { key, parameters }
       );
     }
@@ -120,7 +111,7 @@ export default class MessageFormatDictionary extends Dictionary {
     if (!/^[^.]+\.[^.]+$/.test(key)) {
       throw new Error(
         `The provided key (${key}) is not a valid localization ` +
-          `phrase key, expecting a "file_name.identifier" notation`
+        `phrase key, expecting a "file_name.identifier" notation`
       );
     }
 
@@ -142,18 +133,18 @@ export default class MessageFormatDictionary extends Dictionary {
    * @return The requested localization scope, or `null` if the specified
    *         scope does not exist.
    */
-  _getScope(key: string): null | localizationFunction {
+  _getScope(key: string) {
     const path = key.split('.');
-    let scope = this._dictionary;
+    let scope: Fields | LocalizationFunction = this._dictionary;
 
     for (const scopeKey of path) {
-      if (!scope[scopeKey]) {
+      if (!(scope as Fields)[scopeKey]) {
         return null;
       }
 
-      scope = scope[scopeKey] as DictionaryInterface;
+      scope = (scope as Fields)[scopeKey];
     }
 
-    return scope as unknown as localizationFunction;
+    return scope as LocalizationFunction;
   }
 }
