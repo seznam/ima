@@ -2,15 +2,15 @@ import Controller from './Controller';
 import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import Dictionary from '../dictionary/Dictionary';
+import Extension from '../extension/Extension';
+import { PageStateManager } from '..';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities so these can be easily provided to
  * the decorated page controller when needed.
- *
- * @implements Controller
  */
-export default class ControllerDecorator implements Controller {
+export default class ControllerDecorator extends Controller {
   protected _controller: Controller;
   protected _metaManager: MetaManager;
   protected _router: Router;
@@ -34,6 +34,8 @@ export default class ControllerDecorator implements Controller {
     dictionary: Dictionary,
     settings: { [key: string]: unknown }
   ) {
+    super();
+
     /**
      * The controller being decorated.
      *
@@ -115,14 +117,7 @@ export default class ControllerDecorator implements Controller {
   /**
    * @inheritdoc
    */
-  setReactiveView(reactiveView) {
-    this._controller.setReactiveView(reactiveView);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  setState(statePatch) {
+  setState(statePatch: { [key: string]: unknown }) {
     this._controller.setState(statePatch);
   }
 
@@ -157,7 +152,7 @@ export default class ControllerDecorator implements Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension, extensionInstance) {
+  addExtension(extension: Extension, extensionInstance: Extension) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;
@@ -173,7 +168,7 @@ export default class ControllerDecorator implements Controller {
   /**
    * @inheritdoc
    */
-  setMetaParams(loadedResources) {
+  setMetaParams(loadedResources: { [key: string]: unknown }) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,
@@ -200,7 +195,7 @@ export default class ControllerDecorator implements Controller {
   /**
    * @inheritdoc
    */
-  setPageStateManager(pageStateManager) {
+  setPageStateManager(pageStateManager: PageStateManager) {
     this._controller.setPageStateManager(pageStateManager);
   }
 

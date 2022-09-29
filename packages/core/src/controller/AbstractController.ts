@@ -1,5 +1,4 @@
 import { PageStateManager } from '..';
-import GenericError from '../error/GenericError';
 import Controller from './Controller';
 import Extension from '../extension/Extension';
 
@@ -10,34 +9,23 @@ import Extension from '../extension/Extension';
  * @abstract
  * @extends Controller
  */
-export default abstract class AbstractController implements Controller {
+export default abstract class AbstractController extends Controller {
   protected _pageStateManager: PageStateManager | null;
-  protected _extensions: Extension[] | Map<unknown, unknown>;
+  protected _extensions: Map<Extension, Extension>;
   public status: number;
   public params: { [key: string]: string };
   /**
    * Initializes the controller.
    */
   constructor() {
-    /**
-     * State manager.
-     *
-     * @protected
-     * @type {PageStateManager}
-     */
+    super();
+
     this._pageStateManager = null;
 
-    /**
-     * The controller's extensions.
-     *
-     * @type {Extension[]}
-     */
     this._extensions = new Map();
 
     /**
      * The HTTP response code to send to the client.
-     *
-     * @type {number}
      */
     this.status = 200;
 
@@ -45,8 +33,6 @@ export default abstract class AbstractController implements Controller {
      * The route parameters extracted from the current route. This field is
      * set externally by IMA right before the {@link Controller#init} or the
      * {@link Controller#update} method is called.
-     *
-     * @type {Object<string, string>}
      */
     this.params = {};
   }
@@ -136,7 +122,7 @@ export default abstract class AbstractController implements Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension, extensionInstance) {
+  addExtension(extension: Extension, extensionInstance: Extension) {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
@@ -152,7 +138,7 @@ export default abstract class AbstractController implements Controller {
   /**
    * @inheritdoc
    */
-  getExtension(extension) {
+  getExtension(extension: Extension) {
     return this._extensions.get(extension);
   }
 
@@ -167,12 +153,7 @@ export default abstract class AbstractController implements Controller {
    * @inheritdoc
    * @abstract
    */
-  setMetaParams() {
-    throw new GenericError(
-      'The ima.core.controller.AbstractController.setMetaParams method is ' +
-        'abstract and must be overridden'
-    );
-  }
+  abstract setMetaParams(): void;
 
   /**
    * @inheritdoc
@@ -191,7 +172,7 @@ export default abstract class AbstractController implements Controller {
   /**
    * @inheritdoc
    */
-  setPageStateManager(pageStateManager) {
+  setPageStateManager(pageStateManager: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 

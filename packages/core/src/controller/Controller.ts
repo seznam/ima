@@ -9,15 +9,13 @@ import PageStateManager from '../page/state/PageStateManager';
  * used to manage the overall state and view of a single application page, and
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
- *
- * @interface
  */
-export default interface Controller {
+export default abstract class Controller {
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
    */
-  init(): void;
+  abstract init(): void;
 
   /**
    * Finalization callback, called when the controller is being discarded by
@@ -32,7 +30,7 @@ export default interface Controller {
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
    */
-  destroy(): void;
+  abstract destroy(): void;
 
   /**
    * Callback for activating the controller in the UI. This is the last
@@ -44,7 +42,7 @@ export default interface Controller {
    * method. The controller may start receiving event bus event after this
    * method completes.
    */
-  activate(): void;
+  abstract activate(): void;
 
   /**
    * Callback for deactivating the controller in the UI. This is the first
@@ -57,7 +55,7 @@ export default interface Controller {
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
    */
-  deactivate(): void;
+  abstract deactivate(): void;
 
   /**
    * Callback the controller uses to request the resources it needs to render
@@ -95,7 +93,7 @@ export default interface Controller {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load():
+  abstract load():
     | Promise<{ [key: string]: Promise<unknown> | unknown }>
     | { [key: string]: Promise<unknown> | unknown };
 
@@ -122,7 +120,7 @@ export default interface Controller {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(prevParams: {
+  abstract update(prevParams: {
     [key: string]: string;
   }):
     | Promise<{ [key: string]: Promise<unknown> | unknown }>
@@ -148,14 +146,14 @@ export default interface Controller {
    * @param {Object<string, *>} statePatch Patch of the controller's state to
    *        apply.
    */
-  setState(statePatch: { [key: string]: unknown }): void;
+  abstract setState(statePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the controller's current state.
    *
    * @return {Object<string, *>} The current state of this controller.
    */
-  getState(): { [key: string]: unknown };
+  abstract getState(): { [key: string]: unknown };
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -164,35 +162,35 @@ export default interface Controller {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  beginStateTransaction(): void;
+  abstract beginStateTransaction(): void;
 
   /**
    * Applies queued state patches to the controller state. All patches are squashed
    * and applied with one `setState` call.
    */
-  commitStateTransaction(): void;
+  abstract commitStateTransaction(): void;
 
   /**
    * Cancels ongoing state transaction. Uncommited state changes are lost.
    */
-  cancelStateTransaction(): void;
+  abstract cancelStateTransaction(): void;
 
   /**
    * Adds the provided extension to this controller. All extensions should be
    * added to the controller before the {@link Controller#init} method is
    * invoked.
-   *
-   * @param {Extension} extension The extension to add to this controller.
-   * @return {Controller} This controller.
    */
-  addExtension(): Controller;
+  abstract addExtension(
+    extension: Extension,
+    extensionInstance: Extension
+  ): void;
 
   /**
    * Returns the controller's extensions.
    *
    * @return {Extension[]} The extensions added to this controller.
    */
-  getExtensions(): Extension[];
+  abstract getExtensions(): Extension[];
 
   /**
    * Callback used to configure the meta attribute manager. The method is
@@ -209,7 +207,7 @@ export default interface Controller {
    * @param {Object<string, *>} settings The application settings for the
    *        current application environment.
    */
-  setMetaParams(
+  abstract setMetaParams(
     loadedResources: { [key: string]: unknown },
     metaManager: MetaManager,
     router: Router,
@@ -223,14 +221,14 @@ export default interface Controller {
    *
    * @param {Object<string, string>} [params={}] The current route parameters.
    */
-  setRouteParams(params: { [key: string]: string }): void;
+  abstract setRouteParams(params: { [key: string]: string }): void;
 
   /**
    * Returns the current route parameters.
    *
    * @return {Object<string, string>} The current route parameters.
    */
-  getRouteParams(params: { [key: string]: string }): void;
+  abstract getRouteParams(): { [key: string]: string };
 
   /**
    * Sets the page state manager. The page state manager manages the
@@ -242,7 +240,7 @@ export default interface Controller {
    * @param {?PageStateManager} pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager: PageStateManager): void;
+  abstract setPageStateManager(pageStateManager: PageStateManager): void;
 
   /**
    * Returns the HTTP status code to send to the client, should the
@@ -250,5 +248,5 @@ export default interface Controller {
    *
    * @return {number} The HTTP status code to send to the client.
    */
-  getHttpStatus(): number;
+  abstract getHttpStatus(): number;
 }
