@@ -16,7 +16,6 @@ import { Helpers } from '../types';
  *   // cache for an hour
  *   cache.set('model.articles', articles, 60 * 60 * 1000);
  * }
- * @extends Cache
  */
 export default class CacheImpl extends Cache {
   protected _cache: MapStorage | SessionMapStorage;
@@ -209,8 +208,8 @@ export default class CacheImpl extends Cache {
   /**
    * Tests whether the provided value can be serialized into JSON.
    *
-   * @param {*} value The value to test whether or not it can be serialized.
-   * @return {boolean} `true` if the provided value can be serialized into JSON,
+   * @param value The value to test whether or not it can be serialized.
+   * @return `true` if the provided value can be serialized into JSON,
    *         `false` otherwise.
    */
   _canSerializeValue(value: unknown) {
@@ -265,8 +264,8 @@ export default class CacheImpl extends Cache {
    * Attempts to clone the provided value, if possible. Values that cannot be
    * cloned (e.g. promises) will be simply returned.
    *
-   * @param {*} value The value to clone.
-   * @return {*} The created clone, or the provided value if the value cannot be
+   * @param value The value to clone.
+   * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
   _clone(value: unknown) {
