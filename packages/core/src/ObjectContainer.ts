@@ -1,6 +1,24 @@
-import ns from './namespace';
+import ns, { Namespace } from './namespace';
 
 ns.namespace('ima.core');
+
+type Options = {
+  optional: boolean
+};
+
+type Constructable<T> = (new (...args: unknown[]) => T) & {
+  $dependencies?: Dependencies;
+};
+
+type UnknownConstructable = Constructable<unknown>;
+
+type FactoryFunction = (...args: unknown[]) => unknown;
+
+type EntryName = string | UnknownConstructable | FactoryFunction;
+
+type EntryNameWithOptions = EntryName | [EntryName, Options];
+
+type Dependencies = EntryNameWithOptions[];
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
@@ -10,6 +28,27 @@ const OPTIONAL_RE = /^(...)?\?/;
  * namespace by specifying their fully qualified names.
  */
 export default class ObjectContainer {
+  /**
+   * The current binding state.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
+  private _bindingState?: string;
+  /**
+  * The current plugin binding to OC.
+  *
+  * The {@link setBindingState()} method may be called for changing
+  * object container binding state only by the bootstrap script.
+  */
+  private _bindingPlugin?: string;
+  private _entries: Map<EntryName, Entry> = new Map();
+  /**
+   * The namespace container, used to access classes and values using
+   * their fully qualified names.
+   */
+  private _namespace: Namespace;
+
   /**
    * Returns constant for plugin binding state.
    *
@@ -29,7 +68,7 @@ export default class ObjectContainer {
    * The application itself has always access to the unlocked object
    * container.
    *
-   * @return {string} The plugin binding state.
+   * @return The plugin binding state.
    */
   static get PLUGIN_BINDING_STATE() {
     return 'plugin';
@@ -46,7 +85,7 @@ export default class ObjectContainer {
    * configured using the {@link inject()} method or {@link provide()}
    * method).
    *
-   * @return {string} The IMA binding state.
+   * @return The IMA binding state.
    */
   static get IMA_BINDING_STATE() {
     return 'ima.core';
@@ -63,7 +102,7 @@ export default class ObjectContainer {
    * configured using the {@link inject()} method or {@link provide()}
    * method).
    *
-   * @return {string} The app binding state.
+   * @return The app binding state.
    */
   static get APP_BINDING_STATE() {
     return 'app';
@@ -72,43 +111,11 @@ export default class ObjectContainer {
   /**
    * Initializes the object container.
    *
-   * @param {ima.core.Namespace} namespace The namespace container, used to
+   * @param namespace The namespace container, used to
    *        access classes and values using their fully qualified names.
    */
-  constructor(namespace) {
-    /**
-     * The namespace container, used to access classes and values using
-     * their fully qualified names.
-     *
-     * @type {ima.core.Namespace}
-     */
+  constructor(namespace: Namespace) {
     this._namespace = namespace;
-
-    /**
-     *
-     * @type {Map<(string|function(new: *, ...*)|function(...*): *), Entry<*>>}
-     */
-    this._entries = new Map();
-
-    /**
-     * The current binding state.
-     *
-     * The {@link setBindingState()} method may be called for changing
-     * object container binding state only by the bootstrap script.
-     *
-     * @type {?string}
-     */
-    this._bindingState = null;
-
-    /**
-     * The current plugin binding to OC.
-     *
-     * The {@link setBindingState()} method may be called for changing
-     * object container binding state only by the bootstrap script.
-     *
-     * @type {?string}
-     */
-    this._bindingPlugin = null;
   }
 
   /**
@@ -124,15 +131,14 @@ export default class ObjectContainer {
    * The alias will use the default dependencies bound for the class if no
    * dependencies are provided.
    *
-   * @template T
-   * @param {string} name Alias name.
-   * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
+   * @param name Alias name.
+   * @param classConstructor The
    *        class constructor or a factory function.
-   * @param {Array<string|object|function>} [dependencies] The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
-   * @return {ObjectContainer} This object container.
+   * @return This object container.
    */
-  bind(name, classConstructor, dependencies) {
+  bind(name: string, classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies) {
     if ($Debug) {
       if (
         this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE &&
@@ -190,11 +196,11 @@ export default class ObjectContainer {
    * because the object container treats strings as class, interface, alias
    * or constant names.
    *
-   * @param {string} name The constant name.
-   * @param {*} value The constant value.
-   * @return {ObjectContainer} This object container.
+   * @param name The constant name.
+   * @param value The constant value.
+   * @return This object container.
    */
-  constant(name, value) {
+  constant(name: string, value: unknown) {
     if ($Debug) {
       if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
         throw new Error(
@@ -230,13 +236,12 @@ export default class ObjectContainer {
    * the provided dependencies into constructor unless custom dependencies
    * are provided.
    *
-   * @template T
-   * @param {function(new: T, ...*)} classConstructor The class constructor.
-   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
+   * @param classConstructor The class constructor.
+   * @param dependencies The dependencies to pass into the
    *        constructor function.
-   * @return {ObjectContainer} This object container.
+   * @return This object container.
    */
-  inject(classConstructor, dependencies) {
+  inject(classConstructor: UnknownConstructable, dependencies: Dependencies) {
     if ($Debug) {
       if (typeof classConstructor !== 'function') {
         throw new Error(
@@ -294,17 +299,15 @@ export default class ObjectContainer {
    * dependencies or the dependencies provided to the {@link create()}
    * method.
    *
-   * @template {Interface}
-   * @template {Implementation} extends Interface
-   * @param {function(new: Interface)} interfaceConstructor The constructor
+   * @param interfaceConstructor The constructor
    *        of the interface representing the service.
-   * @param {function(new: Implementation, ...*)} implementationConstructor
+   * @param implementationConstructor
    *        The constructor of the class implementing the service interface.
-   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor function.
-   * @return {ObjectContainer} This object container.
+   * @return This object container.
    */
-  provide(interfaceConstructor, implementationConstructor, dependencies) {
+  provide(interfaceConstructor: UnknownConstructable, implementationConstructor: UnknownConstructable, dependencies: Dependencies) {
     if ($Debug) {
       if (
         this._entries.has(interfaceConstructor) &&
@@ -364,13 +367,12 @@ export default class ObjectContainer {
    *
    * The instance or value is created lazily the first time it is requested.
    *
-   * @template T
-   * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
+   * @param name The name
    *        of the alias, class, interface, or the class, interface or a
    *        factory function.
-   * @return {T} The shared instance or value.
+   * @return The shared instance or value.
    */
-  get(name) {
+  get(name: EntryNameWithOptions) {
     let entry = this._getEntry(name);
 
     if (entry?.sharedInstance === null) {
@@ -384,27 +386,25 @@ export default class ObjectContainer {
   /**
    * Returns the class constructor function of the specified class.
    *
-   * @template T
-   * @param {string|function(new: T, ...*)} name The name by which the class
+   * @param name The name by which the class
    *        is registered with this object container.
-   * @return {function(new: T, ...*)} The constructor function.
+   * @return The constructor function.
    */
-  getConstructorOf(name) {
+  getConstructorOf(name: string | UnknownConstructable) {
     let entry = this._getEntry(name);
 
-    return entry.classConstructor;
+    return (entry as Entry).classConstructor;
   }
 
   /**
    * Returns `true` if the specified object, class or resource is
    * registered with this object container.
    *
-   * @template T
-   * @param {string|function(new: T, ...*)} name The resource name.
-   * @return {boolean} `true` if the specified object, class or
+   * @param name The resource name.
+   * @return `true` if the specified object, class or
    *         resource is registered with this object container.
    */
-  has(name) {
+  has(name: EntryName) {
     return (
       this._entries.has(name) ||
       !!this._getEntryFromConstant(name) ||
@@ -422,40 +422,34 @@ export default class ObjectContainer {
    * factory function has been registered with the object container if no
    * custom dependencies are provided.
    *
-   * @template T
-   * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
+   * @param name The name
    *        of the alias, class, interface, or the class, interface or a
    *        factory function to use.
-   * @param {Array<string|object|function>} dependencies The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
-   * @return {T} Created instance or generated value.
+   * @return Created instance or generated value.
    */
-  create(name, dependencies) {
+  create(name: EntryNameWithOptions, dependencies: Dependencies) {
     let entry = this._getEntry(name);
 
-    return this._createInstanceFromEntry(entry, dependencies);
+    return this._createInstanceFromEntry(entry as Entry, dependencies);
   }
 
   /**
    * Clears all entries from this object container and resets the locking
    * mechanism of this object container.
    *
-   * @return {ObjectContainer} This object container.
+   * @return This object container.
    */
   clear() {
     this._entries.clear();
-    this._bindingState = null;
-    this._bindingPlugin = null;
+    this._bindingState = undefined;
+    this._bindingPlugin = undefined;
 
     return this;
   }
 
-  /**
-   *
-   * @param {?string} bindingState
-   * @param {?string} bindingPluginName
-   */
-  setBindingState(bindingState, bindingPluginName = null) {
+  setBindingState(bindingState: string, bindingPluginName?: string) {
     if (
       this._bindingState === ObjectContainer.APP_BINDING_STATE &&
       bindingState !== ObjectContainer.PLUGIN_BINDING_STATE
@@ -471,7 +465,7 @@ export default class ObjectContainer {
     this._bindingPlugin =
       bindingState === ObjectContainer.PLUGIN_BINDING_STATE
         ? bindingPluginName
-        : null;
+        : undefined;
   }
 
   /**
@@ -488,15 +482,14 @@ export default class ObjectContainer {
    * the provided identifier is not a valid namespace path specifying an
    * existing class, interface or value.
    *
-   * @template T
-   * @param {string|function(new: T, ...*)} name Name of a constant or alias,
+   * @param  name Name of a constant or alias,
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
-   * @return {?Entry<T>} The retrieved entry.
-   * @throws {Error} If no such constant, alias, registry, interface
+   * @return The retrieved entry.
+   * @throws If no such constant, alias, registry, interface
    *         implementation is known to this object container.
    */
-  _getEntry(name) {
+  _getEntry(name: EntryNameWithOptions) {
     let entryName = Array.isArray(name) ? name[0] : name;
 
     // Remove all meta symbols from the start of the alias
@@ -524,9 +517,9 @@ export default class ObjectContainer {
 
     if (this._isSpread(name)) {
       if (Array.isArray(entry?.sharedInstance)) {
-        let spreadEntry = Entry.from(entry);
+        let spreadEntry = Entry.from(entry as Entry);
 
-        spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
+        spreadEntry.sharedInstance = entry!.sharedInstance.map(sharedInstance =>
           this.get(sharedInstance)
         );
 
@@ -549,14 +542,13 @@ export default class ObjectContainer {
   /**
    * Checks whether the name is marked as optional.
    *
-   * @param {string} name Name of a constant or alias,
+   * @param name Name of a constant or alias,
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
-   * @return {boolean}
    */
-  _isOptional(name) {
+  _isOptional(name: EntryNameWithOptions) {
     return (
-      name?.[1]?.optional ||
+      (Array.isArray(name) && name[1]?.optional) ||
       (typeof name === 'string' && OPTIONAL_RE.test(name))
     );
   }
@@ -564,12 +556,11 @@ export default class ObjectContainer {
   /**
    * Checks whether the name is marked as spread.
    *
-   * @param {string} name Name of a constant or alias,
+   * @param name Name of a constant or alias,
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
-   * @return {boolean}
    */
-  _isSpread(name) {
+  _isSpread(name: EntryNameWithOptions) {
     const normalizedName = Array.isArray(name) ? name[0] : name;
 
     return typeof normalizedName === 'string' && SPREAD_RE.test(normalizedName);
@@ -580,16 +571,15 @@ export default class ObjectContainer {
    * The entry throw Error for constants and if you try override dependencies
    * more than once.
    *
-   * @template T
-   * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
+   * @param classConstructor The
    *        class constructor or factory function.
-   * @param {Entry} entry The entry representing the class that should
+   * @param entry The entry representing the class that should
    *        have its instance created or factory faction to use to create a
    *        value.
-   * @param (Array<tring|object|function>} dependencies The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
    */
-  _updateEntryValues(entry, classConstructor, dependencies) {
+  _updateEntryValues(entry: Entry, classConstructor: UnknownConstructable | FactoryFunction, dependencies: Dependencies) {
     entry.classConstructor = classConstructor;
     entry.dependencies = dependencies;
   }
@@ -599,19 +589,19 @@ export default class ObjectContainer {
    * provided dependencies and entry options.
    *
    * @template T
-   * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
+   * @param classConstructor The
    *        class constructor or factory function.
-   * @param {Array<string|object|function>} [dependencies] The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
-   * @param {{ writeable: boolean }} options
-   * @return {T} Created instance or generated value.
+   * @param options
+   * @return Created instance or generated value.
    */
-  _createEntry(classConstructor, dependencies, options) {
+  _createEntry(classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies, options?: EntryOptions) {
     if (
       (!dependencies || dependencies.length === 0) &&
-      Array.isArray(classConstructor.$dependencies)
+      Array.isArray((classConstructor as UnknownConstructable).$dependencies)
     ) {
-      dependencies = classConstructor.$dependencies;
+      dependencies = (classConstructor as UnknownConstructable).$dependencies;
     }
 
     let referrer = this._bindingState;
@@ -631,15 +621,14 @@ export default class ObjectContainer {
    * The method uses the dependencies specified by the entry if no custom
    * dependencies are provided.
    *
-   * @template T
-   * @param {Entry<T>} entry The entry representing the class that should
+   * @param entry The entry representing the class that should
    *        have its instance created or factory faction to use to create a
    *        value.
-   * @param (Array<tring|object|function>} [dependencies=[]] The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
-   * @return {T} Created instance or generated value.
+   * @return Created instance or generated value.
    */
-  _createInstanceFromEntry(entry, dependencies = []) {
+  _createInstanceFromEntry(entry: Entry, dependencies: Dependencies = []) {
     if (dependencies.length === 0) {
       dependencies = [];
 
@@ -655,7 +644,7 @@ export default class ObjectContainer {
           ) {
             dependencies.push(...retrievedDependency);
           } else {
-            dependencies.push(retrievedDependency);
+            dependencies.push(retrievedDependency as EntryName);
           }
         } else {
           dependencies.push(dependency);
@@ -664,7 +653,7 @@ export default class ObjectContainer {
     }
 
     let constructor = entry.classConstructor;
-    return new constructor(...dependencies);
+    return new (constructor as UnknownConstructable)(...dependencies);
   }
 
   /**
@@ -677,12 +666,12 @@ export default class ObjectContainer {
    * Finally, if the constant composition name does not resolve to value,
    * the method return `null`.
    *
-   * @param {string} compositionName
-   * @return {?Entry<*>} An entry representing the value at the specified
+   * @param compositionName
+   * @return An entry representing the value at the specified
    *         composition name in the constants. The method returns `null`
    *         if the specified composition name does not exist in the constants.
    */
-  _getEntryFromConstant(compositionName) {
+  _getEntryFromConstant(compositionName: EntryName) {
     //TODO entries must be
     if (typeof compositionName !== 'string') {
       return null;
@@ -690,12 +679,11 @@ export default class ObjectContainer {
 
     let objectProperties = compositionName.split('.');
     let constantValue = this._entries.has(objectProperties[0])
-      ? this._entries.get(objectProperties[0]).sharedInstance
+      ? this._entries.get(objectProperties[0])!.sharedInstance
       : null;
 
-    let pathLength = objectProperties.length;
-    for (let i = 1; i < pathLength && constantValue; i++) {
-      constantValue = constantValue[objectProperties[i]];
+    for (let i = 1; i < objectProperties.length && constantValue; i++) {
+      constantValue = (constantValue as { [key: string]: unknown })[objectProperties[i]];
     }
 
     if (constantValue !== undefined && constantValue !== null) {
@@ -729,15 +717,14 @@ export default class ObjectContainer {
    * Alternatively, if a constructor function is passed in instead of a
    * namespace path, the method returns `null`.
    *
-   * @template T
-   * @param {(string|function(new: T, ...*))} path Namespace path pointing to
+   * @param path Namespace path pointing to
    *        a class or a value in the application namespace, or a constructor
    *        function.
-   * @return {?Entry<T>} An entry representing the value or class at the
+   * @return An entry representing the value or class at the
    *         specified path in the namespace. The method returns `null`
    *         if the specified path does not exist in the namespace.
    */
-  _getEntryFromNamespace(path) {
+  _getEntryFromNamespace(path: EntryName) {
     if (typeof path !== 'string' || !this._namespace.has(path)) {
       return null;
     }
@@ -745,11 +732,11 @@ export default class ObjectContainer {
     let namespaceValue = this._namespace.get(path);
 
     if (typeof namespaceValue === 'function') {
-      if (this._entries.has(namespaceValue)) {
-        return this._entries.get(namespaceValue);
+      if (this._entries.has(namespaceValue as FactoryFunction)) {
+        return this._entries.get(namespaceValue as FactoryFunction);
       }
 
-      return this._createEntry(namespaceValue);
+      return this._createEntry(namespaceValue as FactoryFunction);
     }
 
     let entry = this._createEntry(() => namespaceValue);
@@ -769,19 +756,18 @@ export default class ObjectContainer {
    * does not have defined `$dependencies` property return
    * `null`.
    *
-   * @template T
-   * @param {function(new: T, ...*)} classConstructor
-   * @return {?Entry<T>} An entry representing the value at the specified
+   * @param classConstructor
+   * @return An entry representing the value at the specified
    *         classConstructor. The method returns `null`
    *         if the specified classConstructor does not have defined
    *         `$dependencies`.
    */
-  _getEntryFromClassConstructor(classConstructor) {
+  _getEntryFromClassConstructor(classConstructor: EntryName) {
     if (typeof classConstructor !== 'function') {
       return null;
     }
 
-    if (!Array.isArray(classConstructor.$dependencies)) {
+    if (!Array.isArray((classConstructor as UnknownConstructable).$dependencies)) {
       if ($Debug) {
         throw new Error(
           `The class constructor identified as: ${this._getDebugName(
@@ -795,7 +781,7 @@ export default class ObjectContainer {
 
     let entry = this._createEntry(
       classConstructor,
-      classConstructor.$dependencies
+      (classConstructor as UnknownConstructable).$dependencies
     );
 
     this._entries.set(classConstructor, entry);
@@ -806,11 +792,8 @@ export default class ObjectContainer {
   /**
    * Formats name, function, class constructor to more compact
    * name/message to allow for cleaner debug Error messages.
-   *
-   * @param {any} name
-   * @return {string}
    */
-  _getDebugName(name) {
+  _getDebugName(name: EntryNameWithOptions) {
     return `<strong>${
       name?.toString().split('\n').slice(0, 5).join('\n') ?? name
     }</strong>`;
@@ -819,71 +802,65 @@ export default class ObjectContainer {
 
 ns.ima.core.ObjectContainer = ObjectContainer;
 
+type EntryOptions = {
+  writeable: boolean
+};
+
 /**
  * Object container entry, representing either a class, interface, constant or
  * an alias.
- *
- * @template T
  */
-class Entry {
+export class Entry {
+  /**
+   * The constructor of the class represented by this entry, or the
+   * getter of the value of the constant represented by this entry.
+   */
+  classConstructor: UnknownConstructable | FactoryFunction;
+  /**
+   * The shared instance of the class represented by this entry.
+   */
+  sharedInstance?: unknown = null;
+
+  /**
+   * Dependencies of the class constructor of the class represented by
+   * this entry.
+   */
+  private _dependencies: Dependencies;
+  /**
+   * The Entry options.
+   */
+  private _options: EntryOptions;
+  /**
+   * The override counter
+   */
+  private _overrideCounter = 0;
+  /**
+   * Reference to part of application that created
+   * this entry.
+   */
+   private _referrer?: string;
+
   /**
    * Initializes the entry.
    *
-   * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
+   * @param classConstructor The
    *        class constructor or constant value getter.
-   * @param (Array<tring|object|function>} [dependencies=[]] The dependencies to pass into the
+   * @param dependencies The dependencies to pass into the
    *        constructor function.
-   * @param {?string} referrer Reference to part of application that created
+   * @param referrer Reference to part of application that created
    *        this entry.
-   * @param {?{ writeable: boolean }} [options] The Entry options.
+   * @param options The Entry options.
    */
-  constructor(classConstructor, dependencies, referrer, options) {
-    /**
-     * The constructor of the class represented by this entry, or the
-     * getter of the value of the constant represented by this entry.
-     *
-     * @type {(function(new: T, ...*)|function(...*): T)}
-     */
+  constructor(classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies, referrer?: string, options?: EntryOptions) {
     this.classConstructor = classConstructor;
 
-    /**
-     * The shared instance of the class represented by this entry.
-     *
-     * @type {T}
-     */
-    this.sharedInstance = null;
-
-    /**
-     * The Entry options.
-     *
-     * @type {{ writeable: boolean }}
-     */
     this._options = options || {
       writeable: true,
     };
 
-    /**
-     * Reference to part of application that created
-     * this entry.
-     *
-     * @type {string}
-     */
     this._referrer = referrer;
 
-    /**
-     * Dependencies of the class constructor of the class represented by
-     * this entry.
-     *
-     * @type Array<string|object|function>
-     */
     this._dependencies = dependencies || [];
-
-    /**
-     * The override counter
-     *
-     * @type {number}
-     */
-    this._overrideCounter = 0;
   }
 
   set dependencies(dependencies) {
@@ -919,12 +896,12 @@ class Entry {
     return this._options.writeable;
   }
 
-  static from(entry) {
+  static from(entry: Entry) {
     return new Entry(
       entry.classConstructor,
       entry.dependencies,
       entry.referrer,
-      entry.options
+      entry._options
     );
   }
 }
