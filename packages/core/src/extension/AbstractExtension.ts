@@ -10,9 +10,11 @@ import PageStateManager from '../page/state/PageStateManager';
 export default abstract class AbstractExtension implements Extension {
   protected _pageStateManager: PageStateManager | null;
   protected _usingStateManager: boolean;
-  protected _partialStateSymbol = Symbol('partialState') as unknown as string;
+  protected _partialStateSymbol = Symbol('partialState');
   public status: number;
   public params: { [key: string]: string };
+
+  [key: symbol]: { [key: string]: unknown };
 
   constructor() {
     /**
