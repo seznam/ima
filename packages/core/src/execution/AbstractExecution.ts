@@ -28,10 +28,6 @@ export default abstract class AbstractExecution extends Execution {
 
   /**
    * Return `true` if the given job can be executed
-   *
-   * @protected
-   * @param {function(): Promise} job
-   * @returns {boolean}
    */
   _validateJob(job: Job): boolean {
     if (typeof job === 'function') {

@@ -13,16 +13,14 @@
  *   - specialized meta information added to the page via `&lt;meta&gt;`
  *     elements with the `property` attribute, for example the OG meta
  *     tags (`og:type`, `og:image`, etc.).
- *
- * @interface
  */
-export default interface MetaManager {
+export default abstract class MetaManager {
   /**
    * Sets the page title.
    *
-   * @param {string} title The new page title.
+   * @param title The new page title.
    */
-  setTitle(title: string): void;
+  abstract setTitle(title: string): void;
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -32,58 +30,57 @@ export default interface MetaManager {
    * may therefore differ from the current document title if it has been
    * modified by a 3rd party code.
    *
-   * @return {string} The current page title.
+   * @return The current page title.
    */
-  getTitle(): string;
+  abstract getTitle(): string;
 
   /**
    * Set the specified named meta information property.
    *
-   * @param {string} name Meta information property name, for example
+   * @param name Meta information property name, for example
    *        `keywords`.
-   * @param {string} value The meta information value.
+   * @param value The meta information value.
    */
-  setMetaName(name: string, value: string): void;
+  abstract setMetaName(name: string, value: string): void;
 
   /**
    * Returns the value of the specified named meta information property. The
    * method returns an empty string for missing meta information (to make the
    * returned value React-friendly).
    *
-   * @param {string} name The name of the named meta information property.
-   * @return {string} The value of the generic meta information, or an empty
-   *         string.
+   * @param name The name of the named meta information property.
+   * @return The value of the generic meta information, or an empty string.
    */
-  getMetaName(name: string): string;
+  abstract getMetaName(name: string): string;
 
   /**
    * Returns the names of the currently specified named meta information
    * properties.
    *
-   * @return {string[]} The names of the currently specified named meta
+   * @return The names of the currently specified named meta
    *         information properties.
    */
-  getMetaNames(): string[];
+  abstract getMetaNames(): string[];
 
   /**
    * Sets the specified specialized meta information property.
    *
-   * @param {string} name Name of the specialized meta information property.
-   * @param {string} value The value of the meta information property.
+   * @param name Name of the specialized meta information property.
+   * @param value The value of the meta information property.
    */
-  setMetaProperty(name: string, value: string): void;
+  abstract setMetaProperty(name: string, value: string): void;
 
   /**
    * Returns the value of the specified specialized meta information
    * property. The method returns an empty string for missing meta
    * information (to make the returned value React-friendly).
    *
-   * @param {string} name The name of the specialized meta information
+   * @param name The name of the specialized meta information
    *        property.
    * @return {string} The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string): string;
+  abstract getMetaProperty(name: string): string;
 
   /**
    * Returns the names of the currently specified specialized meta
@@ -92,7 +89,7 @@ export default interface MetaManager {
    * @return {string[]} The names of the currently specified specialized meta
    *         information properties.
    */
-  getMetaProperties(): string[];
+  abstract getMetaProperties(): string[];
 
   /**
    * Sets the specified specialized link information.
@@ -102,7 +99,7 @@ export default interface MetaManager {
    * @param {string} reference The reference to the location of the related
    *        document, e.g. a URL.
    */
-  setLink(relation: string, reference: string): void;
+  abstract setLink(relation: string, reference: string): void;
 
   /**
    * Return the reference to the specified related linked document. The
@@ -114,7 +111,7 @@ export default interface MetaManager {
    * @return {string} The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation: string): string;
+  abstract getLink(relation: string): string;
 
   /**
    * Returns the relations of the currently set related documents linked to
@@ -122,5 +119,5 @@ export default interface MetaManager {
    *
    * @return {string[]}
    */
-  getLinks(): string[];
+  abstract getLinks(): string[];
 }

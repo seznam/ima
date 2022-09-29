@@ -20,8 +20,8 @@ export default class SerialBatch extends AbstractExecution {
   }
 
   _executeJob(stage: Job, args: unknown[]) {
-    let result = stage(...args);
+    const result = stage(...args);
 
-    return (result instanceof Promise) ? result : Promise.resolve(result);
+    return result instanceof Promise ? result : Promise.resolve(result);
   }
 }

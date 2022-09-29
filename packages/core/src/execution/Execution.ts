@@ -22,7 +22,7 @@ export default abstract class Execution {
    *
    * @param jobs The jobs to be executed.
    */
-   abstract append(jobs: Job[]): void;
+  abstract append(jobs: Job[]): void;
 
   /**
    * Start executing collected jobs. In the end a `Promise` is returned
@@ -31,5 +31,5 @@ export default abstract class Execution {
    *
    * @param args Arguments to be passed when executing jobs
    */
-   abstract execute(...args: unknown[]): Promise<unknown>;
+  abstract execute(...args: unknown[]): Promise<unknown>;
 }
