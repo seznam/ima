@@ -1,6 +1,7 @@
 /* @if server **
 export default class ClientWindow {};
 /* @else */
+import { UnknownParameters } from '../CommonTypes';
 import Window, { ListenerOptions } from './Window';
 
 /**
@@ -33,7 +34,7 @@ export default class ClientWindow extends Window {
   hasSessionStorage() {
     try {
       if (window.sessionStorage) {
-        let sessionKey = 'IMA.jsTest';
+        const sessionKey = 'IMA.jsTest';
 
         sessionStorage.setItem(sessionKey, '1');
         sessionStorage.removeItem(sessionKey);
@@ -74,9 +75,9 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollX() {
-    let { pageXOffset } = window;
-    let pageOffsetSupported = pageXOffset !== undefined;
-    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    const { pageXOffset } = window;
+    const pageOffsetSupported = pageXOffset !== undefined;
+    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageXOffset
@@ -89,9 +90,9 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollY() {
-    let { pageYOffset } = window;
-    let pageOffsetSupported = pageYOffset !== undefined;
-    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    const { pageYOffset } = window;
+    const pageOffsetSupported = pageYOffset !== undefined;
+    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageYOffset
@@ -180,7 +181,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  pushState(state: { [key: string]: unknown }, title: string, url?: string) {
+  pushState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
     }
@@ -189,7 +190,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  replaceState(state: { [key: string]: unknown }, title: string, url?: string) {
+  replaceState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
     }
@@ -198,7 +199,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  createCustomEvent(name: string, options: { [key: string]: unknown }) {
+  createCustomEvent(name: string, options: UnknownParameters) {
     return new CustomEvent(name, options);
   }
 

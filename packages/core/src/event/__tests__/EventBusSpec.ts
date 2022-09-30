@@ -1,21 +1,29 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { toMockedInstance } from 'to-mock';
 import EventBus, { IMA_EVENT } from '../EventBusImpl';
 import ClientWindow from '../../window/ClientWindow';
 
 describe('ima.core.event.EventBusImpl', () => {
-  let listeners = {
-    listener1: () => {},
-    listener2: () => {},
+  const listeners = {
+    listener1: () => {
+      return;
+    },
+    listener2: () => {
+      return;
+    },
   };
 
-  let eventSource = {
-    dispatchEvent: () => {},
+  const eventSource = {
+    dispatchEvent: () => {
+      return;
+    },
   };
-  let notEventSource = {};
-  let eventTarget = { };
-  let event = 'event';
+  const notEventSource = {};
+  const eventTarget = {};
+  const event = 'event';
   //let IMA_EVENT = '$IMA.CustomEvent';
-  let data = {
+  const data = {
     data: 'data',
   };
 
@@ -31,7 +39,9 @@ describe('ima.core.event.EventBusImpl', () => {
     it('should bind listener for specific event', () => {
       jest
         .spyOn(windowInterface, 'bindEventListener')
-        .mockImplementation(() => {});
+        .mockImplementation(() => {
+          return;
+        });
 
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener1);
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener2);
@@ -60,7 +70,9 @@ describe('ima.core.event.EventBusImpl', () => {
     it('should bind listener for any event', () => {
       jest
         .spyOn(windowInterface, 'bindEventListener')
-        .mockImplementation(() => {});
+        .mockImplementation(() => {
+          return;
+        });
 
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener1);
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener2);
@@ -87,15 +99,17 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for listeners', () => {
-      jest.spyOn(eventSource, 'dispatchEvent').mockImplementation(() => {});
+      jest.spyOn(eventSource, 'dispatchEvent').mockImplementation(() => {
+        return;
+      });
       jest
         .spyOn(windowInterface, 'createCustomEvent')
         .mockImplementation((name: string, options) => {
-          return options as unknown as CustomEvent<any>;
+          return options as unknown as CustomEvent;
         });
 
-      let event = 'event1';
-      let data = { data: '' };
+      const event = 'event1';
+      const data = { data: '' };
 
       eventBus.fire(eventSource as unknown as EventTarget, event, data);
 
@@ -128,7 +142,9 @@ describe('ima.core.event.EventBusImpl', () => {
     it('should unbind bound listeners', () => {
       jest
         .spyOn(windowInterface, 'unbindEventListener')
-        .mockImplementation(() => {});
+        .mockImplementation(() => {
+          return;
+        });
 
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener1);
       eventBus.unlisten(eventTarget as EventTarget, event, listeners.listener1);
@@ -150,7 +166,9 @@ describe('ima.core.event.EventBusImpl', () => {
     it('should unbind bound listeners', () => {
       jest
         .spyOn(windowInterface, 'unbindEventListener')
-        .mockImplementation(() => {});
+        .mockImplementation(() => {
+          return;
+        });
 
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener1);
       eventBus.unlistenAll(eventTarget as EventTarget, listeners.listener1);

@@ -1,6 +1,7 @@
 import Events from './Events';
 import PageStateManager from './PageStateManager';
 import Dispatcher from '../../event/Dispatcher';
+import { UnknownParameters } from '../../CommonTypes';
 
 const MAX_HISTORY_LIMIT = 10;
 
@@ -11,8 +12,8 @@ export default class PageStateManagerImpl extends PageStateManager {
   private _cursor = -1;
   private _dispatcher: Dispatcher;
   private _ongoingTransaction = false;
-  private _statePatchQueue: { [key: string]: unknown }[] = [];
-  private _states: { [key: string]: unknown }[] = [];
+  private _statePatchQueue: UnknownParameters[] = [];
+  private _states: UnknownParameters[] = [];
 
   static get $dependencies() {
     return [Dispatcher];
@@ -40,7 +41,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritdoc
    */
-  setState(patchState: { [key: string]: unknown }) {
+  setState(patchState: UnknownParameters) {
     if (this._ongoingTransaction) {
       return this._statePatchQueue.push(patchState);
     }
@@ -146,7 +147,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   /**
    * Push new state to history storage.
    */
-  _pushToHistory(newState: { [key: string]: unknown }) {
+  _pushToHistory(newState: UnknownParameters) {
     this._states.push(newState);
     this._cursor += 1;
   }
@@ -154,7 +155,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   /**
    * Call registered callback function on (@link onChange) with newState.
    */
-  _callOnChangeCallback(newState: { [key: string]: unknown }) {
+  _callOnChangeCallback(newState: UnknownParameters) {
     if (this.onChange && typeof this.onChange === 'function') {
       this.onChange(newState);
     }

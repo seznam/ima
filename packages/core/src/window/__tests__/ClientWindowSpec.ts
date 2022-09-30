@@ -6,13 +6,21 @@ class TestEventTarget {
   listener?: (event: Event) => void;
   useCapture?: boolean | ListenerOptions;
 
-  addEventListener(event: string, listener: (event: Event) => void, useCapture?: boolean | ListenerOptions) {
+  addEventListener(
+    event: string,
+    listener: (event: Event) => void,
+    useCapture?: boolean | ListenerOptions
+  ) {
     this.event = event;
     this.listener = listener;
     this.useCapture = useCapture;
   }
 
-  removeEventListener(event: string, listener: (event: Event) => void, useCapture?: boolean | ListenerOptions) {
+  removeEventListener(
+    event: string,
+    listener: (event: Event) => void,
+    useCapture?: boolean | ListenerOptions
+  ) {
     if (
       event === this.event &&
       listener === this.listener &&
@@ -27,10 +35,12 @@ class TestEventTarget {
     this.listener = undefined;
     this.useCapture = undefined;
   }
-};
+}
 
 const event = 'event';
-const listener = () => {};
+const listener = () => {
+  return;
+};
 const useCapture = false;
 const scope = {};
 

@@ -4,7 +4,7 @@ import ns from '../../namespace';
 import AbstractController from '../../controller/AbstractController';
 import Extension, { IExtension } from '../../extension/Extension';
 import PageStateManager from '../state/PageStateManager';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '@/CommonTypes';
+import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;
@@ -79,10 +79,10 @@ describe('ima.core.PageFactory', () => {
     switchToPartialState(): void {
       throw new Error('Method not implemented.');
     }
-    setRouteParams(params: { [key: string]: string; }): void {
+    setRouteParams(params: StringParameters): void {
       throw new Error('Method not implemented.');
     }
-    getRouteParams(): { [key: string]: string; } {
+    getRouteParams(): StringParameters {
       throw new Error('Method not implemented.');
     }
     getAllowedStateKeys(): string[] {

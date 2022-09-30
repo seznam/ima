@@ -1,5 +1,10 @@
 import GenericError from '../error/GenericError';
-import Dictionary, { Config, Fields, LocalizationFunction, Parameters } from './Dictionary';
+import Dictionary, {
+  Config,
+  Fields,
+  LocalizationFunction,
+  Parameters,
+} from './Dictionary';
 
 /**
  * Implementation of the {@link Dictionary} interface that relies on
@@ -87,7 +92,7 @@ export default class MessageFormatDictionary extends Dictionary {
     if (!scope) {
       throw new GenericError(
         `ima.core.dictionary.MessageFormatDictionary.get: The ` +
-        `localization phrase '${key}' does not exists`,
+          `localization phrase '${key}' does not exists`,
         { key, parameters }
       );
     }
@@ -111,7 +116,7 @@ export default class MessageFormatDictionary extends Dictionary {
     if (!/^[^.]+\.[^.]+$/.test(key)) {
       throw new Error(
         `The provided key (${key}) is not a valid localization ` +
-        `phrase key, expecting a "file_name.identifier" notation`
+          `phrase key, expecting a "file_name.identifier" notation`
       );
     }
 

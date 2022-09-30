@@ -1,5 +1,6 @@
 import PageStateManager from './PageStateManager';
 import GenericError from '../../error/GenericError';
+import { UnknownParameters } from '../../CommonTypes';
 
 /**
  * Decorator for page state manager, which add logic for limiting Extension
@@ -43,7 +44,7 @@ export default class PageStateManagerDecorator extends PageStateManager {
   /**
    * @inheritdoc
    */
-  setState(statePatch: { [key: string]: unknown }) {
+  setState(statePatch: UnknownParameters) {
     if ($Debug) {
       let patchKeys = Object.keys(statePatch);
       let deniedKeys = patchKeys.filter(patchKey => {

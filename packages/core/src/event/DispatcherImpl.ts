@@ -1,5 +1,6 @@
 import Dispatcher, { Listener } from './Dispatcher';
 import GenericError from '../error/GenericError';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -113,11 +114,7 @@ export default class DispatcherImpl extends Dispatcher {
   /**
    * @inheritdoc
    */
-  fire(
-    event: string,
-    data: { [key: string]: unknown },
-    imaInternalEvent = false
-  ) {
+  fire(event: string, data: UnknownParameters, imaInternalEvent = false) {
     const listeners = this._getListenersOf(event);
 
     if (!listeners.size && !imaInternalEvent) {

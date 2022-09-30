@@ -1,4 +1,6 @@
-export type Listener = (data: { [key: string]: unknown }) => unknown;
+import { UnknownParameters } from '../CommonTypes';
+
+export type Listener = (data: UnknownParameters) => unknown;
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -70,7 +72,7 @@ export default abstract class Dispatcher {
    */
   abstract fire(
     event: string,
-    data: { [key: string]: unknown },
+    data: UnknownParameters,
     imaInternalEvent: boolean
   ): this;
 }

@@ -2,6 +2,7 @@
 
 import ObjectContainer, { Entry } from '../ObjectContainer';
 import ns from '../namespace';
+import { UnknownParameters } from '../CommonTypes';
 
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;
@@ -518,7 +519,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be return value from namespace', () => {
       let value = { a: 1 };
       let namespace = ns.get(namespacePathUnit);
-      (namespace as { [key: string]: unknown }).ObjectContainer = value;
+      (namespace as UnknownParameters).ObjectContainer = value;
 
       let entry = oc._getEntry(namespacePathOC) as Entry;
 
@@ -571,7 +572,7 @@ describe('ima.core.ObjectContainer', () => {
     let namespace: unknown;
     beforeEach(() => {
       namespace = ns.get(namespacePathUnit);
-      (namespace as { [key: string]: unknown }).ObjectContainer = classConstructor;
+      (namespace as UnknownParameters).ObjectContainer = classConstructor;
 
       oc.clear();
     });
@@ -586,7 +587,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
-      (namespace as { [key: string]: unknown }).ObjectContainer = classDependency;
+      (namespace as UnknownParameters).ObjectContainer = classDependency;
 
       jest.spyOn(oc, '_createEntry');
 
@@ -598,7 +599,7 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should be create entry with constant value if namespace return another type than function', () => {
       let constant = { a: 1 };
-      (namespace as { [key: string]: unknown }).ObjectContainer = constant;
+      (namespace as UnknownParameters).ObjectContainer = constant;
 
       jest.spyOn(oc, '_createEntry');
 

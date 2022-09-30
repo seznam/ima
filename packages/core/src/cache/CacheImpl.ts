@@ -4,6 +4,7 @@ import CacheFactory from './CacheFactory';
 import MapStorage from '../storage/MapStorage';
 import SessionMapStorage from '../storage/SessionMapStorage';
 import { Helpers } from '../types';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Configurable generic implementation of the {@link Cache} interface.
@@ -155,7 +156,7 @@ export default class CacheImpl extends Cache {
    * @inheritdoc
    */
   serialize() {
-    const dataToSerialize: { [key: string]: unknown } = {};
+    const dataToSerialize: UnknownParameters = {};
 
     for (const key of this._cache.keys()) {
       const currentValue = this._cache.get(key);
@@ -241,9 +242,7 @@ export default class CacheImpl extends Cache {
     if (typeof value === 'object') {
       for (const propertyName of Object.keys(value)) {
         if (
-          !this._canSerializeValue(
-            (value as { [key: string]: unknown })[propertyName]
-          )
+          !this._canSerializeValue((value as UnknownParameters)[propertyName])
         ) {
           console.warn(
             'The provided object is not serializable due to the ' +

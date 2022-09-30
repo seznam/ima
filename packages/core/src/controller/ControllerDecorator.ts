@@ -3,7 +3,7 @@ import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import Dictionary from '../dictionary/Dictionary';
 import Extension, { IExtension } from '../extension/Extension';
-import { PageStateManager } from '..';
+import PageStateManager from '../page/state/PageStateManager';
 import { UnknownParameters } from '../CommonTypes';
 
 /**
@@ -143,7 +143,10 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension: Extension | IExtension, extensionInstance?: Extension) {
+  addExtension(
+    extension: Extension | IExtension,
+    extensionInstance?: Extension
+  ) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;

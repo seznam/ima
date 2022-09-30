@@ -1,8 +1,10 @@
+import { UnknownParameters } from '../../CommonTypes';
+
 /**
  * Manager of the current page state and state history.
  */
 export default abstract class PageStateManager {
-  onChange?: (newState: { [key: string]: unknown }) => void;
+  onChange?: (newState: UnknownParameters) => void;
 
   /**
    * Clears the state history.
@@ -15,14 +17,14 @@ export default abstract class PageStateManager {
    *
    * @param statePatch The patch of the current state.
    */
-  abstract setState(statePatch: { [key: string]: unknown }): void;
+  abstract setState(statePatch: UnknownParameters): void;
 
   /**
    * Returns the current page state.
    *
    * @return The current page state.
    */
-  abstract getState(): { [key: string]: unknown };
+  abstract getState(): UnknownParameters;
 
   /**
    * Returns the recorded history of page states. The states will be
@@ -33,14 +35,14 @@ export default abstract class PageStateManager {
    *
    * @return The recorded history of page states.
    */
-  abstract getAllStates(): { [key: string]: unknown }[];
+  abstract getAllStates(): UnknownParameters[];
 
   /**
    * Returns queueing state patches off the main state from the begin of transaction.
    *
    * @return State patches from the begin of transaction.
    */
-  abstract getTransactionStatePatches(): { [key: string]: unknown }[];
+  abstract getTransactionStatePatches(): UnknownParameters[];
 
   /**
    * Starts queueing state patches off the main state. While the transaction

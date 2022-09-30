@@ -1,3 +1,5 @@
+import { UnknownParameters } from '../CommonTypes';
+
 export type ListenerOptions = {
   capture?: boolean;
   once?: boolean;
@@ -132,7 +134,7 @@ export default abstract class Window {
    *
    * @return The current history state
    */
-  abstract getHistoryState(): { [key: string]: unknown };
+  abstract getHistoryState(): UnknownParameters;
 
   /**
    * Returns the first element matching the specified CSS 3 selector.
@@ -172,7 +174,7 @@ export default abstract class Window {
    * @param url The new URL at which the state is available.
    */
   abstract pushState(
-    state: { [key: string]: unknown },
+    state: UnknownParameters,
     title: string,
     url?: string
   ): void;
@@ -188,7 +190,7 @@ export default abstract class Window {
    * @param url The new URL at which the state is available.
    */
   abstract replaceState(
-    state: { [key: string]: unknown },
+    state: UnknownParameters,
     title: string,
     url?: string
   ): void;
@@ -205,7 +207,7 @@ export default abstract class Window {
    */
   abstract createCustomEvent(
     name: string,
-    options: { [key: string]: unknown }
+    options: UnknownParameters
   ): CustomEvent;
 
   /**

@@ -8,15 +8,11 @@ import PageStateManager from '../state/PageStateManager';
 import EventBus from '../../event/EventBus';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
 import ImaWindow from '../../window/Window';
-import AbstractRoute from '@/router/AbstractRoute';
-import { IController } from '@/controller/Controller';
-import { RouteOptions } from '@/router/Router';
-import { StringParameters, UnknownParameters } from '@/CommonTypes';
-import { PageAction } from '../PageTypes';
-
-type WithEventMethods = {
-  [key: string]: (data?: UnknownParameters) => void;
-};
+import AbstractRoute from '../../router/AbstractRoute';
+import { IController } from '../../controller/Controller';
+import { RouteOptions } from '../../router/Router';
+import { StringParameters, UnknownParameters } from '../../CommonTypes';
+import { EventHandler, PageAction } from '../PageTypes';
 
 /**
  * Page manager for controller on the client side.
@@ -192,10 +188,10 @@ export default class ClientPageManager extends AbstractPageManager {
    *         method for processing the event.
    */
   _handleEventWithController(method: string, data: UnknownParameters) {
-    let controllerInstance = this._managedPage.controllerInstance as unknown as WithEventMethods;
+    let controllerInstance = this._managedPage.controllerInstance;
 
-    if (typeof controllerInstance[method] === 'function') {
-      controllerInstance[method](data);
+    if (typeof controllerInstance![method] === 'function') {
+      (controllerInstance![method] as EventHandler)(data);
 
       return true;
     }
@@ -218,11 +214,11 @@ export default class ClientPageManager extends AbstractPageManager {
    */
   _handleEventWithExtensions(method: string, data: UnknownParameters) {
     let controllerInstance = this._managedPage.controllerInstance;
-    let extensions = controllerInstance!.getExtensions() as unknown as WithEventMethods[];
+    let extensions = controllerInstance!.getExtensions();
 
     for (let extension of extensions) {
       if (typeof extension[method] === 'function') {
-        extension[method](data);
+        (extension[method] as EventHandler)(data);
 
         return true;
       }

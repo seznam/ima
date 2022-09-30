@@ -3,6 +3,7 @@ export default class ServerWindow {};
 /* @else */
 import Window from './Window';
 import GenericError from '../error/GenericError';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Server-side implementation of the `Window` utility API.
@@ -174,7 +175,7 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  createCustomEvent(name: string, options: { [key: string]: unknown }) {
+  createCustomEvent(name: string, options: UnknownParameters) {
     const dummyCustomEvent = {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       initCustomEvent: () => {},

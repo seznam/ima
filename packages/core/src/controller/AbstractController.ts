@@ -1,7 +1,11 @@
-import { PageStateManager } from '..';
+import PageStateManager from '../page/state/PageStateManager';
 import Controller from './Controller';
 import Extension, { IExtension } from '../extension/Extension';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../CommonTypes';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
@@ -16,7 +20,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * The HTTP response code to send to the client.
    */
-  status: number = 200;
+  status = 200;
   /**
    * The route parameters extracted from the current route. This field is
    * set externally by IMA right before the {@link Controller#init} or the
@@ -52,9 +56,7 @@ export default abstract class AbstractController extends Controller {
    * @inheritdoc
    * @abstract
    */
-  abstract load():
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * @inheritdoc
@@ -113,7 +115,10 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension: Extension | IExtension, extensionInstance?: Extension) {
+  addExtension(
+    extension: Extension | IExtension,
+    extensionInstance?: Extension
+  ) {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
