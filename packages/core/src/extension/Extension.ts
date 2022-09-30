@@ -1,3 +1,4 @@
+import { EventHandler } from '../page/PageTypes';
 import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import PageStateManager from '../page/state/PageStateManager';
 
@@ -19,6 +20,8 @@ export interface IExtension {};
  * through the same lifecycle as the controller.
  */
 export default abstract class Extension implements IExtension {
+  [key: PropertyKey]: unknown | EventHandler;
+
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.

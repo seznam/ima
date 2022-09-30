@@ -35,3 +35,5 @@ export type PageAction = {
 export type PageData = Promise<{
   status: number;
 } & UnknownParameters>;
+
+export type EventHandler = (data?: UnknownParameters) => void;

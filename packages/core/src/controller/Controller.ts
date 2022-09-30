@@ -4,6 +4,7 @@ import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import PageStateManager from '../page/state/PageStateManager';
 import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import { EventHandler } from '../page/PageTypes';
 
 export interface IController {};
 
@@ -14,6 +15,8 @@ export interface IController {};
  * on the page (or other input).
  */
 export default abstract class Controller implements IController {
+  [key: PropertyKey]: unknown | EventHandler;
+
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
