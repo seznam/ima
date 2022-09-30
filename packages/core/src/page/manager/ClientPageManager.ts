@@ -6,19 +6,47 @@ import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
 import EventBus from '../../event/EventBus';
-import Window from '../../window/Window';
+import PageHandlerRegistry from '../handler/PageHandlerRegistry';
+import ImaWindow from '../../window/Window';
+import AbstractRoute from '@/router/AbstractRoute';
+import { IController } from '@/controller/Controller';
+import { RouteOptions } from '@/router/Router';
+import { StringParameters, UnknownParameters } from '@/CommonTypes';
+import { PageAction } from '../PageTypes';
+
+type WithEventMethods = {
+  [key: string]: (data?: UnknownParameters) => void;
+};
 
 /**
  * Page manager for controller on the client side.
  */
 export default class ClientPageManager extends AbstractPageManager {
+  /**
+   * The utility for manipulating the global context and global
+   * client-side-specific APIs.
+   */
+  private _window: ImaWindow;
+  /**
+  * The event bus for dispatching and listening for custom IMA events
+  * propagated through the DOM.
+  */
+  private _eventBus: EventBus;
+  /**
+   * Event listener for the custom DOM events used by the event bus,
+   * bound to this instance.
+   */
+  private _boundOnCustomEventHandler = (event: CustomEvent) => {
+    this._onCustomEventHandler(event);
+  };
+
   static get $dependencies() {
     return [
       PageFactory,
       PageRenderer,
       PageStateManager,
       '$PageHandlerRegistry',
-      Window,
+      ImaWindow,
       EventBus,
     ];
   }
@@ -26,53 +54,31 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * Initializes the client-side page manager.
    *
-   * @param {PageFactory} pageFactory Factory used by the page manager to
+   * @param pageFactory Factory used by the page manager to
    *        create instances of the controller for the current route, and
    *        decorate the controllers and page state managers.
-   * @param {PageRenderer} pageRenderer The current renderer of the page.
-   * @param {PageStateManager} stateManager The current page state manager.
-   * @param {HandlerRegistry} handlerRegistry Instance of HandlerRegistry that
+   * @param pageRenderer The current renderer of the page.
+   * @param stateManager The current page state manager.
+   * @param handlerRegistry Instance of HandlerRegistry that
    *        holds a list of pre-manage and post-manage handlers.
-   * @param {Window} window The utility for manipulating the global context
+   * @param window The utility for manipulating the global context
    *        and global client-side-specific APIs.
-   * @param {EventBus} eventBus The event bus for dispatching and listening
+   * @param eventBus The event bus for dispatching and listening
    *        for custom IMA events propagated through the DOM.
    */
   constructor(
-    pageFactory,
-    pageRenderer,
-    stateManager,
-    handlerRegistry,
-    window,
-    eventBus
+    pageFactory: PageFactory,
+    pageRenderer: PageRenderer,
+    pageStateManager: PageStateManager,
+    handlerRegistry: PageHandlerRegistry,
+    window: ImaWindow,
+    eventBus: EventBus
   ) {
-    super(pageFactory, pageRenderer, stateManager, handlerRegistry);
+    super(pageFactory, pageRenderer, pageStateManager, handlerRegistry);
 
-    /**
-     * The utility for manipulating the global context and global
-     * client-side-specific APIs.
-     *
-     * @type {ima.core.window.Window}
-     */
     this._window = window;
 
-    /**
-     * The event bus for dispatching and listening for custom IMA events
-     * propagated through the DOM.
-     *
-     * @type {ima.core.event.EventBus}
-     */
     this._eventBus = eventBus;
-
-    /**
-     * Event listener for the custom DOM events used by the event bus,
-     * bound to this instance.
-     *
-     * @type {function(this: ClientPageManager, Event)}
-     */
-    this._boundOnCustomEventHandler = event => {
-      this._onCustomEventHandler(event);
-    };
   }
 
   /**
@@ -84,7 +90,7 @@ export default class ClientPageManager extends AbstractPageManager {
       this._onChangeStateHandler(newState);
     };
     this._eventBus.listenAll(
-      this._window.getWindow(),
+      this._window.getWindow() as Window,
       this._boundOnCustomEventHandler
     );
   }
@@ -92,8 +98,8 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  async manage(...args) {
-    const response = await super.manage(...args);
+  async manage(route: AbstractRoute, controller: IController, view: unknown, options: RouteOptions, params: StringParameters = {}, action: PageAction = {}) {
+    const response = await super.manage(route, controller, view, options, params, action);
     await this._activatePageSource();
 
     return response;
@@ -106,7 +112,7 @@ export default class ClientPageManager extends AbstractPageManager {
     await super.destroy();
 
     this._eventBus.unlistenAll(
-      this._window.getWindow(),
+      this._window.getWindow() as Window,
       this._boundOnCustomEventHandler
     );
   }
@@ -125,9 +131,9 @@ export default class ClientPageManager extends AbstractPageManager {
    * The controller's listener will be invoked with the event's data as an
    * argument.
    *
-   * @param {CustomEvent} event The encountered event bus DOM event.
+   * @param event The encountered event bus DOM event.
    */
-  _onCustomEventHandler(event) {
+  _onCustomEventHandler(event: CustomEvent) {
     let { method, data, eventName } = this._parseCustomEvent(event);
     let controllerInstance = this._managedPage.controllerInstance;
 
@@ -142,13 +148,13 @@ export default class ClientPageManager extends AbstractPageManager {
         if (!handled) {
           console.warn(
             `The active controller has no listener for ` +
-              `the encountered event '${eventName}'. Check ` +
-              `your event name for typos, or create an ` +
-              `'${method}' event listener method on the ` +
-              `active controller or add an event listener ` +
-              `that stops the propagation of this event to ` +
-              `an ancestor component of the component that ` +
-              `fired this event.`
+            `the encountered event '${eventName}'. Check ` +
+            `your event name for typos, or create an ` +
+            `'${method}' event listener method on the ` +
+            `active controller or add an event listener ` +
+            `that stops the propagation of this event to ` +
+            `an ancestor component of the component that ` +
+            `fired this event.`
           );
         }
       }
@@ -160,12 +166,12 @@ export default class ClientPageManager extends AbstractPageManager {
    * with the expected name of the current controller's method for
    * intercepting the event.
    *
-   * @param {CustomEvent} event The encountered event bus custom DOM event.
-   * @return {{ method: string, data: *, eventName: string }} The event's
+   * @param event The encountered event bus custom DOM event.
+   * @return The event's
    *         details.
    */
-  _parseCustomEvent(event) {
-    let eventName = event.detail.eventName;
+  _parseCustomEvent(event: CustomEvent) {
+    let eventName: string = event.detail.eventName;
     let method = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
     let data = event.detail.data;
 
@@ -177,16 +183,16 @@ export default class ClientPageManager extends AbstractPageManager {
    * using the current controller. The method returns `true` if the
    * event is handled by the controller.
    *
-   * @param {string} method The name of the method the current controller
+   * @param method The name of the method the current controller
    *        should use to process the currently processed event bus custom
    *        DOM event.
-   * @param {Object<string, *>} data The custom event's data.
-   * @return {boolean} `true` if the event has been handled by the
+   * @param data The custom event's data.
+   * @return `true` if the event has been handled by the
    *         controller, `false` if the controller does not have a
    *         method for processing the event.
    */
-  _handleEventWithController(method, data) {
-    let controllerInstance = this._managedPage.controllerInstance;
+  _handleEventWithController(method: string, data: UnknownParameters) {
+    let controllerInstance = this._managedPage.controllerInstance as unknown as WithEventMethods;
 
     if (typeof controllerInstance[method] === 'function') {
       controllerInstance[method](data);
@@ -202,17 +208,17 @@ export default class ClientPageManager extends AbstractPageManager {
    * using the registered extensions of the current controller. The method
    * returns `true` if the event is handled by the controller.
    *
-   * @param {string} method The name of the method the current controller
+   * @param method The name of the method the current controller
    *        should use to process the currently processed event bus custom
    *        DOM event.
-   * @param {Object<string, *>} data The custom event's data.
-   * @return {boolean} `true` if the event has been handled by one of
+   * @param data The custom event's data.
+   * @return `true` if the event has been handled by one of
    *         the controller's extensions, `false` if none of the
    *         controller's extensions has a method for processing the event.
    */
-  _handleEventWithExtensions(method, data) {
+  _handleEventWithExtensions(method: string, data: UnknownParameters) {
     let controllerInstance = this._managedPage.controllerInstance;
-    let extensions = controllerInstance.getExtensions();
+    let extensions = controllerInstance!.getExtensions() as unknown as WithEventMethods[];
 
     for (let extension of extensions) {
       if (typeof extension[method] === 'function') {
@@ -227,10 +233,8 @@ export default class ClientPageManager extends AbstractPageManager {
 
   /**
    * On change event handler set state to view.
-   *
-   * @param {Object<string, *>} state
    */
-  _onChangeStateHandler(state) {
+  _onChangeStateHandler(state: UnknownParameters) {
     let controller = this._managedPage.controllerInstance;
 
     if (controller) {
