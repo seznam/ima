@@ -3,10 +3,15 @@ import Extension, { IExtension } from '../extension/Extension';
 import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import PageStateManager from '../page/state/PageStateManager';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
 
-export interface IController {};
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IController {}
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -15,6 +20,7 @@ export interface IController {};
  * on the page (or other input).
  */
 export default abstract class Controller implements IController {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventHandler;
 
   /**
@@ -98,9 +104,7 @@ export default abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract load():
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * Callback for updating the controller after a route update. This method
@@ -124,9 +128,9 @@ export default abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(prevParams: StringParameters):
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract update(
+    prevParams: StringParameters
+  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * Patches the state of this controller using the provided object by
@@ -182,7 +186,10 @@ export default abstract class Controller implements IController {
    * added to the controller before the {@link Controller#init} method is
    * invoked.
    */
-  abstract addExtension(extension: Extension | IExtension, extensionInstance?: Extension): void;
+  abstract addExtension(
+    extension: Extension | IExtension,
+    extensionInstance?: Extension
+  ): void;
 
   /**
    * Returns the controller's extensions.

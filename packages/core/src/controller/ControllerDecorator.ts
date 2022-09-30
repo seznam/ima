@@ -143,7 +143,10 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension: Extension | IExtension, extensionInstance?: Extension) {
+  addExtension(
+    extension: Extension | IExtension,
+    extensionInstance?: Extension
+  ) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;

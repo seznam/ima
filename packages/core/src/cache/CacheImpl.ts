@@ -242,9 +242,7 @@ export default class CacheImpl extends Cache {
     if (typeof value === 'object') {
       for (const propertyName of Object.keys(value)) {
         if (
-          !this._canSerializeValue(
-            (value as UnknownParameters)[propertyName]
-          )
+          !this._canSerializeValue((value as UnknownParameters)[propertyName])
         ) {
           console.warn(
             'The provided object is not serializable due to the ' +

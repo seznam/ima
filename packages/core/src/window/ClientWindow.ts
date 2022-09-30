@@ -34,7 +34,7 @@ export default class ClientWindow extends Window {
   hasSessionStorage() {
     try {
       if (window.sessionStorage) {
-        let sessionKey = 'IMA.jsTest';
+        const sessionKey = 'IMA.jsTest';
 
         sessionStorage.setItem(sessionKey, '1');
         sessionStorage.removeItem(sessionKey);
@@ -75,9 +75,9 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollX() {
-    let { pageXOffset } = window;
-    let pageOffsetSupported = pageXOffset !== undefined;
-    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    const { pageXOffset } = window;
+    const pageOffsetSupported = pageXOffset !== undefined;
+    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageXOffset
@@ -90,9 +90,9 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollY() {
-    let { pageYOffset } = window;
-    let pageOffsetSupported = pageYOffset !== undefined;
-    let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
+    const { pageYOffset } = window;
+    const pageOffsetSupported = pageYOffset !== undefined;
+    const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
       ? pageYOffset

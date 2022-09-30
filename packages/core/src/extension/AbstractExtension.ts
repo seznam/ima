@@ -1,6 +1,10 @@
 import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
 
 /**
@@ -10,6 +14,7 @@ import { EventHandler } from '../page/PageTypes';
  * @implements Extension
  */
 export default abstract class AbstractExtension implements Extension {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventHandler | UnknownParameters;
 
   /**
@@ -20,13 +25,13 @@ export default abstract class AbstractExtension implements Extension {
    * Flag indicating whether the PageStateManager should be used instead
    * of partial state.
    */
-  protected _usingStateManager: boolean = false;
+  protected _usingStateManager = false;
   protected _partialStateSymbol = Symbol('partialState');
 
   /**
    * The HTTP response code to send to the client.
    */
-  status: number = 200;
+  status = 200;
   /**
    * The route parameters extracted from the current route.
    */
@@ -56,9 +61,7 @@ export default abstract class AbstractExtension implements Extension {
    * @inheritdoc
    * @abstract
    */
-  abstract load():
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * @inheritdoc

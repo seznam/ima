@@ -2,6 +2,12 @@ import EventBus, { Listener, NativeListener, Options } from './EventBus';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
 
+type NativeListenerMap = Map<string, NativeListener>;
+
+type ListenersWeakMap = WeakMap<EventTarget, NativeListenerMap>;
+
+type AllListenersWeakMap = WeakMap<Listener, NativeListener>;
+
 /**
  * Global name of IMA.js custom event.
  */
@@ -22,15 +28,13 @@ export default class EventBusImpl extends EventBus {
    *
    * The "listen all" event listeners are not registered in this map.
    */
-  private _listeners: WeakMap<
-    Listener,
-    WeakMap<EventTarget, Map<string, NativeListener>>
-  > = new WeakMap();
+  private _listeners: WeakMap<Listener, ListenersWeakMap> = new WeakMap();
   /**
    * Map of event targets to listeners executed on all IMA.js event bus
    * events.
    */
-  private _allListenersTargets: WeakMap<EventTarget, WeakMap<Listener, NativeListener>> = new WeakMap();
+  private _allListenersTargets: WeakMap<EventTarget, AllListenersWeakMap> =
+    new WeakMap();
 
   static get $dependencies() {
     return [Window];
@@ -74,8 +78,8 @@ export default class EventBusImpl extends EventBus {
     } else {
       throw new GenericError(
         `ima.core.event.EventBusImpl.fire: The EventSource ` +
-        `${eventTarget} is not defined or can not dispatch event ` +
-        `'${eventName}' (data: ${data}).`,
+          `${eventTarget} is not defined or can not dispatch event ` +
+          `'${eventName}' (data: ${data}).`,
         { eventTarget, eventName, data, eventInitialization }
       );
     }
@@ -92,11 +96,19 @@ export default class EventBusImpl extends EventBus {
     }
 
     const nativeListener = (event: CustomEvent | Event) => {
-      if (event.type === IMA_EVENT && (event as CustomEvent).detail && (event as CustomEvent).detail.eventName) {
+      if (
+        event.type === IMA_EVENT &&
+        (event as CustomEvent).detail &&
+        (event as CustomEvent).detail.eventName
+      ) {
         listener(event as CustomEvent);
       }
     };
-    this._allListenersTargets.get(eventTarget)!.set(listener, nativeListener);
+    (
+      this._allListenersTargets.get(
+        eventTarget
+      ) as NonNullable<AllListenersWeakMap>
+    ).set(listener, nativeListener);
 
     this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
@@ -122,11 +134,18 @@ export default class EventBusImpl extends EventBus {
     }
 
     const targetToEventName = this._listeners.get(listener);
-    if (!targetToEventName!.has(eventTarget)) {
-      targetToEventName!.set(eventTarget, new Map());
+    if (
+      !(targetToEventName as NonNullable<ListenersWeakMap>).has(eventTarget)
+    ) {
+      (targetToEventName as NonNullable<ListenersWeakMap>).set(
+        eventTarget,
+        new Map()
+      );
     }
 
-    const eventNameToNativeListener = targetToEventName!.get(eventTarget);
+    const eventNameToNativeListener = (
+      targetToEventName as NonNullable<ListenersWeakMap>
+    ).get(eventTarget);
     const nativeListener = (event: CustomEvent | Event) => {
       if (
         event.type === IMA_EVENT &&
@@ -136,7 +155,10 @@ export default class EventBusImpl extends EventBus {
         listener(event as CustomEvent);
       }
     };
-    eventNameToNativeListener!.set(eventName, nativeListener);
+    (eventNameToNativeListener as NonNullable<NativeListenerMap>).set(
+      eventName,
+      nativeListener
+    );
 
     this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
@@ -151,7 +173,7 @@ export default class EventBusImpl extends EventBus {
       if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
-          'specified event target'
+            'specified event target'
         );
       }
 
@@ -159,21 +181,27 @@ export default class EventBusImpl extends EventBus {
     }
 
     const listeners = this._allListenersTargets.get(eventTarget);
-    if (!listeners!.has(listener)) {
+    if (!(listeners as NonNullable<AllListenersWeakMap>).has(listener)) {
       if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
-          'specified event target'
+            'specified event target'
         );
       }
 
       return this;
     }
 
-    const nativeListener = listeners!.get(listener);
-    this._window.unbindEventListener(eventTarget, IMA_EVENT, nativeListener as NativeListener);
+    const nativeListener = (listeners as NonNullable<AllListenersWeakMap>).get(
+      listener
+    );
+    this._window.unbindEventListener(
+      eventTarget,
+      IMA_EVENT,
+      nativeListener as NativeListener
+    );
 
-    listeners!.delete(listener);
+    (listeners as NonNullable<AllListenersWeakMap>).delete(listener);
 
     return this;
   }
@@ -186,7 +214,7 @@ export default class EventBusImpl extends EventBus {
       if ($Debug) {
         console.warn(
           'The provided listener is not bound to listen for the ' +
-          'specified event on the specified event target.'
+            'specified event on the specified event target.'
         );
       }
 
@@ -194,38 +222,52 @@ export default class EventBusImpl extends EventBus {
     }
 
     const targets = this._listeners.get(listener);
-    if (!targets!.has(eventTarget)) {
+    if (!(targets as NonNullable<ListenersWeakMap>).has(eventTarget)) {
       if ($Debug) {
         console.warn(
           'The provided listener is not bound to listen for the ' +
-          'specified event on the specified event target.'
+            'specified event on the specified event target.'
         );
       }
 
       return this;
     }
 
-    const eventNameToNativeListener = targets!.get(eventTarget);
-    if (!eventNameToNativeListener!.has(eventName)) {
+    const eventNameToNativeListener = (
+      targets as NonNullable<ListenersWeakMap>
+    ).get(eventTarget);
+    if (
+      !(eventNameToNativeListener as NonNullable<NativeListenerMap>).has(
+        eventName
+      )
+    ) {
       if ($Debug) {
         console.warn(
           'The provided listener is not bound to listen for the ' +
-          'specified event on the specified event target.'
+            'specified event on the specified event target.'
         );
       }
 
       return this;
     }
 
-    const nativeListener = eventNameToNativeListener!.get(eventName);
-    this._window.unbindEventListener(eventTarget, IMA_EVENT, nativeListener as NativeListener);
+    const nativeListener = (
+      eventNameToNativeListener as NonNullable<NativeListenerMap>
+    ).get(eventName);
+    this._window.unbindEventListener(
+      eventTarget,
+      IMA_EVENT,
+      nativeListener as NativeListener
+    );
 
-    eventNameToNativeListener!.delete(eventName);
-    if (eventNameToNativeListener!.size) {
+    (eventNameToNativeListener as NonNullable<NativeListenerMap>).delete(
+      eventName
+    );
+    if ((eventNameToNativeListener as NonNullable<NativeListenerMap>).size) {
       return this;
     }
 
-    targets!.delete(eventTarget);
+    (targets as NonNullable<ListenersWeakMap>).delete(eventTarget);
 
     return this;
   }

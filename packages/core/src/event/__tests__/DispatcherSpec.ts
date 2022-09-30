@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import Dispatcher from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {
-  let handlers = {
-    handler1: () => {},
-    handler2: () => {},
+  const handlers = {
+    handler1: () => {
+      return;
+    },
+    handler2: () => {
+      return;
+    },
   };
 
-  let event = 'event';
-  let data = {
+  const event = 'event';
+  const data = {
     data: 'data',
   };
 
@@ -101,7 +106,9 @@ describe('ima.core.event.DispatcherImpl', () => {
       dispatcher.listen(event, handlers.handler1, handlers);
 
       // @ts-ignore
-      handlers.handler3 = () => {};
+      handlers.handler3 = () => {
+        return;
+      };
 
       dispatcher.unlisten(event, handlers.handler1, handlers);
 

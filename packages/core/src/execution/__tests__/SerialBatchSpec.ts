@@ -68,6 +68,7 @@ describe('ima.core.execution.SerialBatch', () => {
       serialBatch.append(rejectingFunction);
 
       await serialBatch.execute().catch(error => {
+        /* eslint-disable-next-line jest/no-conditional-expect */
         expect(error).toBe(error);
       });
     });

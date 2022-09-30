@@ -1,8 +1,13 @@
 import { EventHandler } from '../page/PageTypes';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../CommonTypes';
 import PageStateManager from '../page/state/PageStateManager';
 
-export interface IExtension {};
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IExtension {}
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -20,6 +25,7 @@ export interface IExtension {};
  * through the same lifecycle as the controller.
  */
 export default abstract class Extension implements IExtension {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventHandler;
 
   /**
@@ -93,9 +99,7 @@ export default abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract load():
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * Callback for updating the extension after a route update. This method
@@ -119,9 +123,9 @@ export default abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(prevParams: StringParameters):
-    | Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters;
+  abstract update(
+    prevParams: StringParameters
+  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
    * Patches the state of the controller using this extension by using the

@@ -49,7 +49,7 @@ export default abstract class EventBus {
    *         fire the event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
    */
-   abstract fire(
+  abstract fire(
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
@@ -73,7 +73,7 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-   abstract listenAll(eventTarget: EventTarget, listener: Listener): this;
+  abstract listenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Registers the provided event listener to be executed when the specific
@@ -93,7 +93,11 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-   abstract listen(eventTarget: EventTarget, eventName: string, listener: Listener): this;
+  abstract listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: Listener
+  ): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -109,7 +113,7 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-   abstract unlistenAll(eventTarget: EventTarget, listener: Listener): this;
+  abstract unlistenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -126,7 +130,7 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-   abstract unlisten(
+  abstract unlisten(
     eventTarget: EventTarget,
     eventName: string,
     listener: Listener

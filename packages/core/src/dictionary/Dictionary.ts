@@ -1,6 +1,6 @@
 export type Config = {
-  $Language: string,
-  dictionary: Fields
+  $Language: string;
+  dictionary: Fields;
 };
 
 export type Fields = {
@@ -10,7 +10,7 @@ export type Fields = {
 export type LocalizationFunction = (parameters: Parameters) => string;
 
 export type Parameters = {
-  [key: string]: boolean | number | string | Date
+  [key: string]: boolean | number | string | Date;
 };
 
 /**
@@ -52,10 +52,7 @@ export default abstract class Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  abstract get(
-    key: string,
-    parameters: Parameters
-  ): string;
+  abstract get(key: string, parameters: Parameters): string;
 
   /**
    * Tests whether the specified localization phrase exists in the

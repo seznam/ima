@@ -114,11 +114,7 @@ export default class DispatcherImpl extends Dispatcher {
   /**
    * @inheritdoc
    */
-  fire(
-    event: string,
-    data: UnknownParameters,
-    imaInternalEvent = false
-  ) {
+  fire(event: string, data: UnknownParameters, imaInternalEvent = false) {
     const listeners = this._getListenersOf(event);
 
     if (!listeners.size && !imaInternalEvent) {
