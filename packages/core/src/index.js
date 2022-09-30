@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ns from './namespace';
+import ns from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap from './Bootstrap';
 import pluginLoader from './pluginLoader';

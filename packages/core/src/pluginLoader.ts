@@ -1,5 +1,5 @@
 import { Bootstrap } from '.';
-import ns from './namespace';
+import ns from './Namespace';
 
 /**
  * Plugin loader utility used to register external IMA.js plugins. This

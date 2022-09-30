@@ -137,7 +137,7 @@ export default class ServerWindow extends Window {
    */
   querySelectorAll(_selector: string) {
     class DummyNodeList extends NodeList {
-      public length: number;
+      length: number;
       constructor() {
         super();
         this.length = 0;
