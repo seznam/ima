@@ -21,8 +21,6 @@ export default interface Extension {
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
   init(): Promise<undefined> | void;
 
@@ -38,8 +36,6 @@ export default interface Extension {
    * {@link Extension#init} method. The extension must release any resources
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
   destroy(): Promise<undefined> | void;
 
@@ -52,8 +48,6 @@ export default interface Extension {
    * The extension may register any React and DOM event listeners in this
    * method. The extension may start receiving event bus event after this
    * method completes.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
   activate(): Promise<undefined> | void;
 
@@ -67,8 +61,6 @@ export default interface Extension {
    *
    * The extension should deregister listeners registered and release all
    * resources obtained in the {@link Extension#activate} method.
-   *
-   * @return {(Promise<undefined>|undefined)}
    */
   deactivate(): Promise<undefined> | void;
 
@@ -93,8 +85,7 @@ export default interface Extension {
    * the error page. The error page that will be used depends on the status
    * code of the error.
    *
-   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
-   *         A map object of promises resolved when all resources the controller
+   * @return A map object of promises resolved when all resources the controller
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
@@ -118,10 +109,9 @@ export default interface Extension {
    * {@link Extension#deactivate}, {@link Extension#deinit}) are not call in
    * case this method is used.
    *
-   * @param {Object<string, string>=} [prevParams={}] Previous route
+   * @param [prevParams={}] Previous route
    *         parameters.
-   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
-   *         A map object of promises resolved when all resources the controller
+   * @return A map object of promises resolved when all resources the controller
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
@@ -142,15 +132,14 @@ export default interface Extension {
    * Note that the extension may modify only the fields of the state that it
    * has specified by its {@link Extension#getAllowedStateKeys} method.
    *
-   * @param {Object<string, *>} statePatch Patch of the controller's state to
-   *        apply.
+   * @param statePatch Patch of the controller's state to apply.
    */
   setState(statePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the current state of the controller using this extension.
    *
-   * @return {Object<string, *>} The current state of the controller.
+   * @return The current state of the controller.
    */
   getState(): { [key: string]: unknown };
 
@@ -179,15 +168,14 @@ export default interface Extension {
    * during its load and update phase receive state from active controller
    * using this extension and from previously loaded/updated extensions.
    *
-   * @param {Object<string, *>} partialStatePatch Patch of the controller's state to
-   *        apply.
+   * @param partialStatePatch Patch of the controller's state to apply.
    */
   setPartialState(partialStatePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the current partial state of the extension.
    *
-   * @return {Object<string, *>} The current partial state of the extension.
+   * @return The current partial state of the extension.
    */
   getPartialState(): { [key: string]: unknown };
 
@@ -199,7 +187,7 @@ export default interface Extension {
   /**
    * Sets the state manager used to manage the controller's state..
    *
-   * @param {?PageStateManager} pageStateManager The current state manager to
+   * @param pageStateManager The current state manager to
    *        use.
    */
   setPageStateManager(pageStateManager: PageStateManager): void;
@@ -218,7 +206,7 @@ export default interface Extension {
    * Sets the current route parameters. This method is invoked before the
    * {@link Extension#init} method.
    *
-   * @param {Object<string, string>} [params={}] The current route
+   * @param [params={}] The current route
    *        parameters.
    */
   setRouteParams(params: { [key: string]: string }): void;
@@ -226,7 +214,7 @@ export default interface Extension {
   /**
    * Returns the current route parameters.
    *
-   * @return {Object<string, string>} The current route parameters.
+   * @return The current route parameters.
    */
   getRouteParams(): { [key: string]: string };
 
@@ -234,7 +222,7 @@ export default interface Extension {
    * Returns the names of the state fields that may be manipulated by this
    * extension. Manipulations of other fields of the state will be ignored.
    *
-   * @return {string[]} The names of the state fields that may be manipulated
+   * @return The names of the state fields that may be manipulated
    *         by this extension.
    */
   getAllowedStateKeys(): string[];

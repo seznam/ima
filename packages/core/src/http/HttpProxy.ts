@@ -105,7 +105,7 @@ export default class HttpProxy {
   request(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
   ) {
     const requestParams = this._composeRequestParams(
@@ -318,13 +318,15 @@ export default class HttpProxy {
   /**
    * Converts the provided Fetch API's `Headers` object to a plain object.
    *
-   * @param {Headers} headers The headers to convert.
-   * @return {Object.<string, string>} Converted headers.
+   * @param headers The headers to convert.
+   * @return Converted headers.
    */
-  _headersToPlainObject(headers: typeof Headers) {
-    const plainHeaders = {};
+  _headersToPlainObject(headers: Headers) {
+    const plainHeaders: { [key: string]: string } = {};
 
-    for (const [key, value] of headers) {
+    for (const [key, value] of headers as unknown as Iterable<
+      [string, string]
+    >) {
       plainHeaders[key] = value;
     }
 
@@ -426,7 +428,7 @@ export default class HttpProxy {
    */
   _composeRequestInit(
     method: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
   ): RequestInit {
     const contentType = this._getContentType(method, data, options);
@@ -439,7 +441,7 @@ export default class HttpProxy {
       options.headers[headerName] = headerValue;
     }
 
-    const requestInit = {
+    const requestInit: { body?: unknown; [key: string]: unknown } = {
       method: method.toUpperCase(),
       headers: options.headers,
       credentials: options.withCredentials ? 'include' : 'same-origin',
@@ -498,14 +500,13 @@ export default class HttpProxy {
    * the provided data to the URL's query string.
    *
    * @param url The URL to prepare for use with the fetch API.
-   * @param data The data to be
-   *        attached to the query string.
+   * @param data The data to be atached to the query string.
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */
   _composeRequestUrl(
     url: string,
-    data: { [key: string]: boolean | number | string | Date }
+    data: { [key: string]: boolean | number | string }
   ) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
@@ -529,7 +530,7 @@ export default class HttpProxy {
    */
   _shouldRequestHaveBody(
     method: string,
-    data: { [key: string]: boolean | number | string | Date }
+    data?: { [key: string]: boolean | number | string | Date }
   ) {
     return !!(
       method &&
@@ -543,13 +544,12 @@ export default class HttpProxy {
    *
    * @param data The data to
    *        be send with a request.
-   * @param {Object.<string, string>} headers Headers object from options provided by the HTTP
+   * @param headers Headers object from options provided by the HTTP
    *        agent.
-   * @returns {string|Object|FormData}
    * @private
    */
   _transformRequestBody(
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     headers: { [key: string]: string }
   ) {
     switch (headers['Content-Type']) {
@@ -573,7 +573,7 @@ export default class HttpProxy {
    * @private
    */
   _convertObjectToQueryString(object: {
-    [key: string]: boolean | number | string | Date;
+    [key: string]: string | number | boolean;
   }) {
     return Object.keys(object)
       .map(key => [key, object[key]].map(encodeURIComponent).join('='))
@@ -584,8 +584,8 @@ export default class HttpProxy {
    * Converts given data to FormData object.
    * If FormData object is not supported by the browser the original object is returned.
    *
-   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
-   * @returns {Object|FormData}
+   * @param object The object to be converted
+   * @returns
    * @private
    */
   _convertObjectToFormData(object: {
@@ -597,7 +597,9 @@ export default class HttpProxy {
       return object;
     }
     const formDataObject = new FormData();
-    Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
+    Object.keys(object).forEach(key =>
+      formDataObject.append(key, object[key] as unknown as string)
+    );
 
     return formDataObject;
   }

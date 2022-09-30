@@ -107,7 +107,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   post(
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -123,7 +123,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   put(
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -139,7 +139,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   patch(
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -155,7 +155,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   delete(
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -230,7 +230,7 @@ export default class HttpAgentImpl extends HttpAgent {
   _requestWithCheckCache(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
   ) {
     options = this._prepareOptions(options);
@@ -265,7 +265,7 @@ export default class HttpAgentImpl extends HttpAgent {
   _getCachedData(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date }
+    data: { [key: string]: boolean | number | string }
   ) {
     const cacheKey = this.getCacheKey(method, url, data);
 
@@ -301,7 +301,7 @@ export default class HttpAgentImpl extends HttpAgent {
   _request(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     const cacheKey = this.getCacheKey(method, url, data);
@@ -379,12 +379,15 @@ export default class HttpAgentImpl extends HttpAgent {
     const errorParams = error.getParams();
     const method = errorParams.method as string;
     const url = errorParams.url as string;
-    const data = errorParams.data;
+    const data = errorParams.data as {
+      [key: string]: string | number | boolean;
+    };
+    const options = errorParams.options as HttpAgentRequestOptions;
 
-    if (errorParams.options.repeatRequest > 0) {
-      errorParams.options.repeatRequest--;
+    if (options.repeatRequest > 0) {
+      options.repeatRequest--;
 
-      return this._request(method, url, data, errorParams.options);
+      return this._request(method, url, data, options);
     } else {
       const cacheKey = this.getCacheKey(method, url, data);
       this._internalCacheOfPromises.delete(cacheKey);
