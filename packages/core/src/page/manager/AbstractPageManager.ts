@@ -17,10 +17,6 @@ import Controller, { IController } from '../../controller/Controller';
  */
 export default abstract class AbstractPageManager extends PageManager {
   /**
-   * Details of the currently managed page.
-   */
-  private _managedPage: ManagedPage = {};
-  /**
    * Snapshot of the previously managed page before it was replaced with
    * a new one
    */
@@ -31,6 +27,11 @@ export default abstract class AbstractPageManager extends PageManager {
    * page state managers.
    */
   private _pageFactory: PageFactory;
+
+  /**
+   * Details of the currently managed page.
+   */
+  protected _managedPage: ManagedPage = {};
   /**
    * The current renderer of the page.
    */
