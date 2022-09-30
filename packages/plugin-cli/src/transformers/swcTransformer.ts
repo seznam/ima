@@ -2,7 +2,7 @@ import { Options, transform } from '@swc/core';
 
 import { Transformer } from '../types';
 
-const EXTENSION_TRANSFORM_RE = /\.(t|j)sx?/;
+const EXTENSION_TRANSFORM_RE = /\.(t|j)sx?$/;
 
 export type SWCTransformerOptions = Options;
 
