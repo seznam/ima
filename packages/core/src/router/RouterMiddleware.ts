@@ -32,8 +32,6 @@ export default class RouterMiddleware {
      * Middleware function accepting `routeParams` as a first argument, which can be
      * mutated and `locals` object as second argument. This can be used to pass data
      * between middlewares.
-     *
-     * @type {function(Object<string, string>, object)}
      */
     this._middleware = middleware;
   }
@@ -41,11 +39,14 @@ export default class RouterMiddleware {
   /**
    * Passes provided params to router middleware and runs it.
    *
-   * @param {Object<string, (number|string)>=} params The route parameter values.
-   * @param {object} locals Object used to pass data between middlewares.
-   * @return {Promise<void>} Middleware function.
+   * @param params The route parameter values.
+   * @param locals Object used to pass data between middlewares.
+   * @return Middleware function.
    */
-  async run(params: { [key: string]: number | string }, locals: object) {
+  async run(
+    params: { [key: string]: number | string },
+    locals: Record<string, unknown>
+  ) {
     return this._middleware(params, locals);
   }
 }

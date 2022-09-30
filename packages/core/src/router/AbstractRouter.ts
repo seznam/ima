@@ -9,6 +9,9 @@ import PageManager from '../page/manager/PageManager';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
+import { IController } from '@/controller/Controller';
+import { StringParameters } from '@/CommonTypes';
+import { string } from 'yargs';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -485,7 +488,7 @@ export default abstract class AbstractRouter extends Router {
     params: Record<string, unknown>,
     options: RouteOptions,
     action = {}
-  ) {
+  ): Promise<void | { [key: string]: unknown }> {
     options = Object.assign({}, route.getOptions(), options);
     const eventData: Record<string, unknown> = {
       route,
@@ -504,19 +507,26 @@ export default abstract class AbstractRouter extends Router {
     ]);
 
     return this._pageManager
-      .manage(route, controller, view, options, params, action )
+      .manage(
+        route,
+        controller as IController,
+        view,
+        options,
+        params as StringParameters,
+        action
+      )
       .then(response => {
         response = response || {};
 
         if (params.error && params.error instanceof Error) {
-          response.error = params.error;
+          (response as Record<string, unknown>).error = params.error;
         }
 
         eventData.response = response;
 
         this._dispatcher.fire(Events.AFTER_HANDLE_ROUTE, eventData, true);
 
-        return response;
+        return response as void | StringParameters;
       });
   }
 
