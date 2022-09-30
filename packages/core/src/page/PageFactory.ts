@@ -9,7 +9,7 @@ import ControllerDecorator from '../controller/ControllerDecorator';
 import MetaManager from '../meta/MetaManager';
 import Dictionary from '../dictionary/Dictionary';
 import PageStateManagerDecorator from './state/PageStateManagerDecorator';
-import { UnknownParameters } from '@/CommonTypes';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Factory for page.

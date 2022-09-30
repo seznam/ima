@@ -3,7 +3,7 @@ import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import Dictionary from '../dictionary/Dictionary';
 import Extension, { IExtension } from '../extension/Extension';
-import { PageStateManager } from '..';
+import PageStateManager from '../page/state/PageStateManager';
 import { UnknownParameters } from '../CommonTypes';
 
 /**

@@ -1,7 +1,7 @@
-import { UnknownParameters, UnknownPromiseParameters } from "@/CommonTypes";
-import Controller from "../../controller/Controller";
-import { RouteOptions } from "../../router/Router";
-import { PageData } from "../PageTypes";
+import { UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
+import Controller from '../../controller/Controller';
+import { RouteOptions } from '../../router/Router';
+import { PageData } from '../PageTypes';
 
 /**
  * The page renderer is a utility for rendering the page at either the

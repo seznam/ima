@@ -1,4 +1,4 @@
-import { PageStateManager } from '..';
+import PageStateManager from '../page/state/PageStateManager';
 import Controller from './Controller';
 import Extension, { IExtension } from '../extension/Extension';
 import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';

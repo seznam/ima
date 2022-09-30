@@ -2,7 +2,7 @@
 
 import ObjectContainer, { Entry } from '../ObjectContainer';
 import ns from '../namespace';
-import { UnknownParameters } from '@/CommonTypes';
+import { UnknownParameters } from '../CommonTypes';
 
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;

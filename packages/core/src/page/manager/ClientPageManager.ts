@@ -8,10 +8,10 @@ import PageStateManager from '../state/PageStateManager';
 import EventBus from '../../event/EventBus';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
 import ImaWindow from '../../window/Window';
-import AbstractRoute from '@/router/AbstractRoute';
-import { IController } from '@/controller/Controller';
-import { RouteOptions } from '@/router/Router';
-import { StringParameters, UnknownParameters } from '@/CommonTypes';
+import AbstractRoute from '../../router/AbstractRoute';
+import { IController } from '../../controller/Controller';
+import { RouteOptions } from '../../router/Router';
+import { StringParameters, UnknownParameters } from '../../CommonTypes';
 import { EventHandler, PageAction } from '../PageTypes';
 
 /**
