@@ -1,7 +1,7 @@
 import UrlTransformer from '../UrlTransformer';
 
 describe('ima.core.http.UrlTransformer', () => {
-  var transformer = null;
+  let transformer: UrlTransformer;
 
   beforeEach(() => {
     transformer = new UrlTransformer();
@@ -14,13 +14,13 @@ describe('ima.core.http.UrlTransformer', () => {
   it('should add next rule', () => {
     transformer.addRule('aaa', 'bbb');
 
-    expect(Object.keys(transformer._rules)).toHaveLength(3);
+    expect(Object.keys(transformer['_rules'])).toHaveLength(3);
   });
 
   it('should clear rules', () => {
     transformer.clear();
 
-    expect(Object.keys(transformer._rules)).toHaveLength(0);
+    expect(Object.keys(transformer['_rules'])).toHaveLength(0);
   });
 
   it('should apply one rule', () => {
@@ -38,13 +38,13 @@ describe('ima.core.http.UrlTransformer', () => {
   });
 
   it('should return same url for not match rules', () => {
-    var url = 'http://www.example.com/something';
+    const url = 'http://www.example.com/something';
 
     expect(transformer.transform(url)).toBe(url);
   });
 
   it('should return same url for none rules', () => {
-    var url = 'http://www.example.com/something';
+    const url = 'http://www.example.com/something';
     transformer = new UrlTransformer();
 
     expect(transformer.transform(url)).toBe(url);
