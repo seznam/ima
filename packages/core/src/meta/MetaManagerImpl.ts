@@ -116,4 +116,13 @@ export default class MetaManagerImpl extends MetaManager {
   getLinks() {
     return Array.from(this._link.keys());
   }
+
+  /**
+   * @inheritdoc
+   */
+  clearMetaAttributes() {
+    this._metaProperty = new Map();
+    this._metaName = new Map();
+    this._link = new Map();
+  }
 }
