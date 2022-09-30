@@ -15,7 +15,7 @@ export interface IController {};
  * on the page (or other input).
  */
 export default abstract class Controller implements IController {
-  [key: PropertyKey]: unknown | EventHandler;
+  [key: PropertyKey]: any | EventHandler;
 
   /**
    * Callback for initializing the controller after the route parameters have

@@ -1,6 +1,7 @@
 /* @if server **
 export default class ClientWindow {};
 /* @else */
+import { UnknownParameters } from '../CommonTypes';
 import Window, { ListenerOptions } from './Window';
 
 /**
@@ -180,7 +181,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  pushState(state: { [key: string]: unknown }, title: string, url?: string) {
+  pushState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
     }
@@ -189,7 +190,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  replaceState(state: { [key: string]: unknown }, title: string, url?: string) {
+  replaceState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
     }
@@ -198,7 +199,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  createCustomEvent(name: string, options: { [key: string]: unknown }) {
+  createCustomEvent(name: string, options: UnknownParameters) {
     return new CustomEvent(name, options);
   }
 

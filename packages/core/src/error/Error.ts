@@ -1,3 +1,4 @@
+import { UnknownParameters } from '../CommonTypes';
 import ExtensibleError from './ExtensibleError';
 
 /**
@@ -35,5 +36,5 @@ export default abstract class Error extends ExtensibleError {
    *         the error has occurred.
    * @see Error#getHttpStatus
    */
-  abstract getParams(): { [key: string]: unknown };
+  abstract getParams(): UnknownParameters;
 }

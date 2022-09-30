@@ -79,10 +79,10 @@ describe('ima.core.PageFactory', () => {
     switchToPartialState(): void {
       throw new Error('Method not implemented.');
     }
-    setRouteParams(params: { [key: string]: string; }): void {
+    setRouteParams(params: StringParameters): void {
       throw new Error('Method not implemented.');
     }
-    getRouteParams(): { [key: string]: string; } {
+    getRouteParams(): StringParameters {
       throw new Error('Method not implemented.');
     }
     getAllowedStateKeys(): string[] {

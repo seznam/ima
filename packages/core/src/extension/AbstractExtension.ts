@@ -1,6 +1,7 @@
 import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
 import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import { EventHandler } from '../page/PageTypes';
 
 /**
  * Abstract extension
@@ -9,6 +10,8 @@ import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '.
  * @implements Extension
  */
 export default abstract class AbstractExtension implements Extension {
+  [key: PropertyKey]: any | EventHandler | UnknownParameters;
+
   /**
    * State manager.
    */
@@ -28,8 +31,6 @@ export default abstract class AbstractExtension implements Extension {
    * The route parameters extracted from the current route.
    */
   params: StringParameters = {};
-
-  [key: symbol]: UnknownParameters;
 
   /**
    * @inheritdoc

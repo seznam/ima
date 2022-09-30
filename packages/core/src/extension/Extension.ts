@@ -20,7 +20,7 @@ export interface IExtension {};
  * through the same lifecycle as the controller.
  */
 export default abstract class Extension implements IExtension {
-  [key: PropertyKey]: unknown | EventHandler;
+  [key: PropertyKey]: any | EventHandler;
 
   /**
    * Callback for initializing the controller extension after the route
@@ -119,9 +119,7 @@ export default abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(prevParams: {
-    [key: string]: string;
-  }):
+  abstract update(prevParams: StringParameters):
     | Promise<UnknownPromiseParameters>
     | UnknownPromiseParameters;
 

@@ -1,3 +1,4 @@
+import { UnknownParameters } from './CommonTypes';
 import ns, { Namespace } from './namespace';
 
 ns.namespace('ima.core');
@@ -689,7 +690,7 @@ export default class ObjectContainer {
       : null;
 
     for (let i = 1; i < objectProperties.length && constantValue; i++) {
-      constantValue = (constantValue as { [key: string]: unknown })[objectProperties[i]];
+      constantValue = (constantValue as UnknownParameters)[objectProperties[i]];
     }
 
     if (constantValue !== undefined && constantValue !== null) {

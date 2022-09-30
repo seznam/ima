@@ -1,4 +1,4 @@
-import ObjectContainer, { EntryNameWithOptions, UnknownConstructable } from '../ObjectContainer';
+import ObjectContainer, { UnknownConstructable } from '../ObjectContainer';
 import GenericError from '../error/GenericError';
 import AbstractController from '../controller/AbstractController';
 import { IController } from '../controller/Controller';
@@ -9,6 +9,7 @@ import ControllerDecorator from '../controller/ControllerDecorator';
 import MetaManager from '../meta/MetaManager';
 import Dictionary from '../dictionary/Dictionary';
 import PageStateManagerDecorator from './state/PageStateManagerDecorator';
+import { UnknownParameters } from '@/CommonTypes';
 
 /**
  * Factory for page.
@@ -91,7 +92,7 @@ export default class PageFactory {
     let metaManager = this._oc.get('$MetaManager') as MetaManager;
     let router = this._oc.get('$Router') as Router;
     let dictionary = this._oc.get('$Dictionary') as Dictionary;
-    let settings = this._oc.get('$Settings') as { [key: string]: unknown };
+    let settings = this._oc.get('$Settings') as UnknownParameters;
 
     let decoratedController = this._oc.create('$ControllerDecorator', [
       controller,
