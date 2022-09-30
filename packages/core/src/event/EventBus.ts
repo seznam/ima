@@ -1,4 +1,12 @@
-import { Listener } from './Dispatcher';
+export type Listener = (event: CustomEvent) => unknown;
+
+export type NativeListener = (event: CustomEvent | Event) => unknown;
+
+export type Options = {
+  bubbles?: boolean;
+  cancelable?: boolean;
+  composed?: boolean;
+};
 
 /**
  * Utility for sending and intercepting wrapped custom DOM events on the DOM or
@@ -12,10 +20,8 @@ import { Listener } from './Dispatcher';
  * interface, preventing custom event name collisions, and allowing observation
  * and capture of all fired events. The actual event name is always consistent
  * by the implementation.
- *
- * @interface
  */
-export default interface EventBus {
+export default abstract class EventBus {
   /**
    * Fires a new custom event of the specified name, carrying the provided
    * data.
@@ -29,25 +35,25 @@ export default interface EventBus {
    * default values used in the native custom events
    * (`{ bubbles: false, cancelable: false }`).
    *
-   * @param {EventTarget} eventTarget The event target at which the event
+   * @param eventTarget The event target at which the event
    *        will be  dispatched (e.g. element/document/window).
-   * @param {string} eventName The name of the event to fire.
-   * @param {*} data The data to pass to the event listeners.
-   * @param {{bubbles: boolean=, cancelable: boolean=}=} [options={}] The
+   * @param eventName The name of the event to fire.
+   * @param data The data to pass to the event listeners.
+   * @param options The
    *        override of the default options passed to the constructor of the
    *        custom event fired by this event bus.
    *        The default options passed to the custom event constructor are
    *        `{ bubbles: true, cancelable: true }`.
-   * @return {EventBus} This custom event bus.
-   * @throws {Error} Thrown if the provided event target cannot be used to
+   * @return This custom event bus.
+   * @throws Thrown if the provided event target cannot be used to
    *         fire the event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
    */
-  fire(
+   abstract fire(
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
-    options: { bubbles: boolean; cancelable: boolean }
+    options: Options
   ): this;
 
   /**
@@ -67,7 +73,7 @@ export default interface EventBus {
    *        register.
    * @return This event bus.
    */
-  listenAll(eventTarget: EventTarget, listener: Listener): this;
+   abstract listenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Registers the provided event listener to be executed when the specific
@@ -87,7 +93,7 @@ export default interface EventBus {
    *        register.
    * @return This event bus.
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: Listener): this;
+   abstract listen(eventTarget: EventTarget, eventName: string, listener: Listener): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -103,7 +109,7 @@ export default interface EventBus {
    *        deregister.
    * @return This event bus.
    */
-  unlistenAll(eventTarget: EventTarget, listener: Listener): this;
+   abstract unlistenAll(eventTarget: EventTarget, listener: Listener): this;
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -120,7 +126,7 @@ export default interface EventBus {
    *        deregister.
    * @return This event bus.
    */
-  unlisten(
+   abstract unlisten(
     eventTarget: EventTarget,
     eventName: string,
     listener: Listener

@@ -1,48 +1,40 @@
+import { StringParameters, UnknownParameters } from '../../CommonTypes';
+import ObjectContainer, { FactoryFunction, UnknownConstructable } from '../../ObjectContainer';
+
 export default class ComponentUtils {
+  /**
+   * The application's dependency injector - the object container.
+   */
+  private _oc: ObjectContainer;
+  /**
+   * Map of registered utilities.
+   */
+  private _utilityClasses: { [key: string]: UnknownConstructable | FactoryFunction } = {};
+  /**
+   * Map of instantiated utilities
+   */
+  private _utilities?: UnknownParameters;
+
+  /**
+  * Map of referrers to utilities
+  */
+  private _utilityReferrers: StringParameters = {};
+
+
   /**
    * Initializes the registry used for managing component utils.
    *
-   * @param {ObjectContainer} oc The application's dependency injector - the
+   * @param oc The application's dependency injector - the
    *        object container.
    */
-  constructor(oc) {
-    /**
-     * The application's dependency injector - the object container.
-     *
-     * @type {ObjectContainer}
-     */
+  constructor(oc: ObjectContainer) {
     this._oc = oc;
-
-    /**
-     * Map of registered utilities.
-     *
-     * @type {Object<string, function(new: T, ...*)|function(...*): T>}
-     */
-    this._utilityClasses = {};
-
-    /**
-     * Map of instantiated utilities
-     *
-     * @type {Object<string, Object>}
-     */
-    this._utilities = null;
-
-    /**
-     * Map of referrers to utilities
-     *
-     * @type {Object<string, string>}
-     */
-    this._utilityReferrers = {};
   }
 
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
-   *
-   * @param {string|Object<string, function(new: T, ...*)|function(...*): T>} name
-   * @param {function(new: T, ...*)|function(...*): T|String} componentUtilityClass
-   * @param {?string} referrer
    */
-  register(name, componentUtilityClass, referrer = null) {
+  register(name: string | UnknownConstructable | FactoryFunction | { [key: string]: UnknownConstructable | FactoryFunction }, componentUtilityClass?: UnknownConstructable | FactoryFunction, referrer?: string) {
     if (
       typeof componentUtilityClass === 'function' ||
       typeof componentUtilityClass === 'string'
@@ -77,8 +69,6 @@ export default class ComponentUtils {
 
   /**
    * Returns object containing all registered utilities
-   *
-   * @returns {Object<string, Object>}
    */
   getUtils() {
     if (this._utilities) {
@@ -100,20 +90,11 @@ export default class ComponentUtils {
     return this._utilities;
   }
 
-  /**
-   * @returns {Object<string, string>}
-   */
   getReferrers() {
     return this._utilityReferrers;
   }
 
-  /**
-   * @template T
-   * @param {string} alias
-   * @param {function(new: T, ...*)|function(...*): T|String} utilityClass
-   * @return {T}
-   */
-  _createUtilityInstance(alias, utilityClass) {
-    return (this._utilities[alias] = this._oc.get(utilityClass));
+  _createUtilityInstance(alias: string, utilityClass: UnknownConstructable | FactoryFunction) {
+    return (this._utilities![alias] = this._oc.get(utilityClass));
   }
 }

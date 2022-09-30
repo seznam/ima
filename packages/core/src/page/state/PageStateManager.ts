@@ -2,6 +2,8 @@
  * Manager of the current page state and state history.
  */
 export default abstract class PageStateManager {
+  onChange?: (newState: { [key: string]: unknown }) => void;
+
   /**
    * Clears the state history.
    */

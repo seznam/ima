@@ -1,14 +1,14 @@
 import { toMockedInstance } from 'to-mock';
 
-import ObjectContainer from 'src/ObjectContainer';
+import ObjectContainer, { UnknownConstructable } from '../../../ObjectContainer';
 import ComponentUtils from '../ComponentUtils';
 
-class SomeMockHelper {}
+class SomeMockHelper { }
 
-class SomeHelper {}
+class SomeHelper { }
 
 describe('componentUtils', () => {
-  let componentUtils = null;
+  let componentUtils: ComponentUtils;
 
   const oc = toMockedInstance(ObjectContainer);
 
@@ -23,8 +23,8 @@ describe('componentUtils', () => {
     it('should register utility class', () => {
       componentUtils.register('SomeHelper', SomeMockHelper);
 
-      expect(componentUtils._utilityClasses['SomeHelper']).toBeDefined();
-      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
+      expect(componentUtils['_utilityClasses']['SomeHelper']).toBeDefined();
+      expect(componentUtils['_utilityClasses']['SomeHelper']).toStrictEqual(
         SomeMockHelper
       );
     });
@@ -35,10 +35,10 @@ describe('componentUtils', () => {
         SomeHelper,
       });
 
-      expect(componentUtils._utilityClasses['MockHelper']).toStrictEqual(
+      expect(componentUtils['_utilityClasses']['MockHelper']).toStrictEqual(
         SomeMockHelper
       );
-      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
+      expect(componentUtils['_utilityClasses']['SomeHelper']).toStrictEqual(
         SomeHelper
       );
     });
@@ -49,7 +49,7 @@ describe('componentUtils', () => {
       jest
         .spyOn(oc, 'get')
         .mockImplementation(entity =>
-          typeof entity === 'function' ? new entity() : entity
+          typeof entity === 'function' ? new (entity as UnknownConstructable)() : entity
         );
 
       componentUtils.register({
@@ -79,7 +79,7 @@ describe('componentUtils', () => {
     });
 
     it('should not create instances again.', () => {
-      const utils = (componentUtils._utilities = {});
+      const utils = (componentUtils['_utilities'] = {});
       jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 
       expect(componentUtils.getUtils()).toBe(utils);

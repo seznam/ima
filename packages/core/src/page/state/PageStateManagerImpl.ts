@@ -14,8 +14,6 @@ export default class PageStateManagerImpl extends PageStateManager {
   private _statePatchQueue: { [key: string]: unknown }[] = [];
   private _states: { [key: string]: unknown }[] = [];
 
-  onChange?: (newState: { [key: string]: unknown }) => void;
-
   static get $dependencies() {
     return [Dispatcher];
   }

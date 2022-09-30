@@ -1,48 +1,34 @@
 /**
  * Events constants, which is firing to app.
- *
- * @enum {string}
  */
-const Events = Object.freeze({
+enum Events {
   /**
    * PageRenderer fires event `$IMA.$PageRenderer.mounted` after
    * current page view is mounted to the DOM. Event's data contain
    * `{type: string}`.
-   *
-   * @const
-   * @type {string}
    */
-  MOUNTED: '$IMA.$PageRenderer.mounted',
+  MOUNTED = '$IMA.$PageRenderer.mounted',
 
   /**
    * PageRenderer fires event `$IMA.$PageRenderer.updated` after
    * current state is updated in the DOM. Event's data contain
    * `{state: Object<string, *>}`.
-   *
-   * @const
-   * @type {string}
    */
-  UPDATED: '$IMA.$PageRenderer.updated',
+  UPDATED = '$IMA.$PageRenderer.updated',
 
   /**
    * PageRenderer fires event `$IMA.$PageRenderer.unmounted` after current view is
    * unmounted from the DOM. Event's data contain
    * `{type: string}`.
-   *
-   * @const
-   * @type {string}
    */
-  UNMOUNTED: '$IMA.$PageRenderer.unmounted',
+  UNMOUNTED = '$IMA.$PageRenderer.unmounted',
 
   /**
    * PageRenderer fires event `$IMA.$PageRenderer.error` when there is
    * no _viewContainer in _renderToDOM method. Event's data contain
    * `{message: string}`.
-   *
-   * @const
-   * @type {string}
    */
-  ERROR: '$IMA.$PageRenderer.error',
-});
+  ERROR = '$IMA.$PageRenderer.error',
+};
 
 export default Events;
