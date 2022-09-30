@@ -14,15 +14,13 @@ import { PageStateManager } from '..';
  * All extensions to be used on a page must be added to the current controller
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
- *
- * @interface
  */
-export default interface Extension {
+export default abstract class Extension {
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
    */
-  init(): Promise<undefined> | void;
+  abstract init(): Promise<undefined> | void;
 
   /**
    * Finalization callback, called when the controller is being discarded by
@@ -37,7 +35,7 @@ export default interface Extension {
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
    */
-  destroy(): Promise<undefined> | void;
+  abstract destroy(): Promise<undefined> | void;
 
   /**
    * Callback for activating the extension in the UI. This is the last
@@ -49,7 +47,7 @@ export default interface Extension {
    * method. The extension may start receiving event bus event after this
    * method completes.
    */
-  activate(): Promise<undefined> | void;
+  abstract activate(): Promise<undefined> | void;
 
   /**
    * Callback for deactivating the extension in the UI. This is the first
@@ -62,7 +60,7 @@ export default interface Extension {
    * The extension should deregister listeners registered and release all
    * resources obtained in the {@link Extension#activate} method.
    */
-  deactivate(): Promise<undefined> | void;
+  abstract deactivate(): Promise<undefined> | void;
 
   /**
    * Callback the extension uses to request the resources it needs to render
@@ -89,7 +87,7 @@ export default interface Extension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load():
+  abstract load():
     | Promise<{ [key: string]: Promise<unknown> | unknown }>
     | { [key: string]: Promise<unknown> | unknown };
 
@@ -115,7 +113,7 @@ export default interface Extension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(prevParams: {
+  abstract update(prevParams: {
     [key: string]: string;
   }):
     | Promise<{ [key: string]: Promise<unknown> | unknown }>
@@ -134,14 +132,14 @@ export default interface Extension {
    *
    * @param statePatch Patch of the controller's state to apply.
    */
-  setState(statePatch: { [key: string]: unknown }): void;
+  abstract setState(statePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the current state of the controller using this extension.
    *
    * @return The current state of the controller.
    */
-  getState(): { [key: string]: unknown };
+  abstract getState(): { [key: string]: unknown };
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -150,18 +148,18 @@ export default interface Extension {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  beginStateTransaction(): void;
+  abstract beginStateTransaction(): void;
 
   /**
    * Applies queued state patches to the controller state. All patches are squashed
    * and applied with one `setState` call.
    */
-  commitStateTransaction(): void;
+  abstract commitStateTransaction(): void;
 
   /**
    * Cancels ongoing state transaction. Uncommited state changes are lost.
    */
-  cancelStateTransaction(): void;
+  abstract cancelStateTransaction(): void;
 
   /**
    * Patches the partial state of the extension. The extension is able
@@ -170,19 +168,19 @@ export default interface Extension {
    *
    * @param partialStatePatch Patch of the controller's state to apply.
    */
-  setPartialState(partialStatePatch: { [key: string]: unknown }): void;
+  abstract setPartialState(partialStatePatch: { [key: string]: unknown }): void;
 
   /**
    * Returns the current partial state of the extension.
    *
    * @return The current partial state of the extension.
    */
-  getPartialState(): { [key: string]: unknown };
+  abstract getPartialState(): { [key: string]: unknown };
 
   /**
    * Clears the current partial state of the extension and sets it value to empty object.
    */
-  clearPartialState(): void;
+  abstract clearPartialState(): void;
 
   /**
    * Sets the state manager used to manage the controller's state..
@@ -190,17 +188,17 @@ export default interface Extension {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager: PageStateManager): void;
+  abstract setPageStateManager(pageStateManager: PageStateManager): void;
 
   /**
    * Enables using PageStateManager for getting state.
    */
-  switchToStateManager(): void;
+  abstract switchToStateManager(): void;
 
   /**
    * Disables using PageStateManager for getting state.
    */
-  switchToPartialState(): void;
+  abstract switchToPartialState(): void;
 
   /**
    * Sets the current route parameters. This method is invoked before the
@@ -209,14 +207,14 @@ export default interface Extension {
    * @param [params={}] The current route
    *        parameters.
    */
-  setRouteParams(params: { [key: string]: string }): void;
+  abstract setRouteParams(params: { [key: string]: string }): void;
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  getRouteParams(): { [key: string]: string };
+  abstract getRouteParams(): { [key: string]: string };
 
   /**
    * Returns the names of the state fields that may be manipulated by this
@@ -225,5 +223,5 @@ export default interface Extension {
    * @return The names of the state fields that may be manipulated
    *         by this extension.
    */
-  getAllowedStateKeys(): string[];
+  abstract getAllowedStateKeys(): string[];
 }
