@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { Namespace } from '../namespace';
+import { Namespace } from '../Namespace';
 
 describe('namespace', () => {
   let ns: Namespace;

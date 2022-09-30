@@ -1,5 +1,5 @@
 import * as $Helper from '@ima/helpers';
-import ns from './namespace';
+import ns from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
 

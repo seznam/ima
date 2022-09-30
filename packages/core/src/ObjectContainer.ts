@@ -1,10 +1,10 @@
 import { UnknownParameters } from './CommonTypes';
-import ns, { Namespace } from './namespace';
+import ns, { Namespace } from './Namespace';
 
 ns.namespace('ima.core');
 
 type Options = {
-  optional: boolean
+  optional: boolean;
 };
 
 type WithDependencies = {
@@ -13,7 +13,8 @@ type WithDependencies = {
 
 type Constructable<T> = (new (...args: unknown[]) => T) & WithDependencies;
 
-type NonConstructable<T> = (abstract new (...args: unknown[]) => T) & WithDependencies;
+type NonConstructable<T> = (abstract new (...args: unknown[]) => T) &
+  WithDependencies;
 
 export type UnknownConstructable = Constructable<unknown>;
 
@@ -21,11 +22,18 @@ export type UnknownNonConstructable = NonConstructable<unknown>;
 
 export type FactoryFunction = (...args: unknown[]) => unknown;
 
-type EntryName = string | UnknownConstructable | UnknownNonConstructable | FactoryFunction;
+type EntryName =
+  | string
+  | UnknownConstructable
+  | UnknownNonConstructable
+  | FactoryFunction;
 
 export type EntryNameWithOptions = EntryName | [EntryName, Options];
 
-type Dependencies = (EntryNameWithOptions | InstanceType<UnknownConstructable>)[];
+type Dependencies = (
+  | EntryNameWithOptions
+  | InstanceType<UnknownConstructable>
+)[];
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
@@ -43,11 +51,11 @@ export default class ObjectContainer {
    */
   private _bindingState?: string;
   /**
-  * The current plugin binding to OC.
-  *
-  * The {@link setBindingState()} method may be called for changing
-  * object container binding state only by the bootstrap script.
-  */
+   * The current plugin binding to OC.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
   private _bindingPlugin?: string;
   private _entries: Map<EntryName, Entry> = new Map();
   /**
@@ -145,7 +153,11 @@ export default class ObjectContainer {
    *        constructor or factory function.
    * @return This object container.
    */
-  bind(name: string, classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies) {
+  bind(
+    name: string,
+    classConstructor: UnknownConstructable | FactoryFunction,
+    dependencies?: Dependencies
+  ) {
     if ($Debug) {
       if (
         this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE &&
@@ -171,12 +183,12 @@ export default class ObjectContainer {
       }
     }
 
-    let classConstructorEntry = this._entries.get(classConstructor);
-    let nameEntry = this._entries.get(name);
-    let entry = classConstructorEntry || nameEntry;
+    const classConstructorEntry = this._entries.get(classConstructor);
+    const nameEntry = this._entries.get(name);
+    const entry = classConstructorEntry || nameEntry;
 
     if (classConstructorEntry && !nameEntry && dependencies) {
-      let entry = this._createEntry(classConstructor, dependencies);
+      const entry = this._createEntry(classConstructor, dependencies);
       this._entries.set(name, entry);
 
       return this;
@@ -189,7 +201,7 @@ export default class ObjectContainer {
         this._updateEntryValues(entry, classConstructor, dependencies);
       }
     } else {
-      let entry = this._createEntry(classConstructor, dependencies);
+      const entry = this._createEntry(classConstructor, dependencies);
       this._entries.set(classConstructor, entry);
       this._entries.set(name, entry);
     }
@@ -226,7 +238,7 @@ export default class ObjectContainer {
       }
     }
 
-    let constantEntry = this._createEntry(() => value, [], {
+    const constantEntry = this._createEntry(() => value, [], {
       writeable: false,
     });
     constantEntry.sharedInstance = value;
@@ -314,7 +326,11 @@ export default class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  provide(interfaceConstructor: UnknownConstructable, implementationConstructor: UnknownConstructable, dependencies: Dependencies) {
+  provide(
+    interfaceConstructor: UnknownConstructable,
+    implementationConstructor: UnknownConstructable,
+    dependencies: Dependencies
+  ) {
     if ($Debug) {
       if (
         this._entries.has(interfaceConstructor) &&
@@ -331,7 +347,7 @@ export default class ObjectContainer {
       }
 
       // check that implementation really extends interface
-      let prototype = implementationConstructor.prototype;
+      const prototype = implementationConstructor.prototype;
       if (!(prototype instanceof interfaceConstructor)) {
         throw new Error(
           'ima.core.ObjectContainer:provide The specified ' +
@@ -380,7 +396,7 @@ export default class ObjectContainer {
    * @return The shared instance or value.
    */
   get(name: EntryNameWithOptions) {
-    let entry = this._getEntry(name);
+    const entry = this._getEntry(name);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
@@ -398,7 +414,7 @@ export default class ObjectContainer {
    * @return The constructor function.
    */
   getConstructorOf(name: string | UnknownConstructable) {
-    let entry = this._getEntry(name);
+    const entry = this._getEntry(name);
 
     return (entry as Entry).classConstructor;
   }
@@ -437,7 +453,7 @@ export default class ObjectContainer {
    * @return Created instance or generated value.
    */
   create(name: EntryNameWithOptions, dependencies: Dependencies = []) {
-    let entry = this._getEntry(name);
+    const entry = this._getEntry(name);
 
     return this._createInstanceFromEntry(entry as Entry, dependencies);
   }
@@ -505,7 +521,7 @@ export default class ObjectContainer {
       entryName = entryName.replace(OPTIONAL_RE, '');
     }
 
-    let entry =
+    const entry =
       this._entries.get(entryName) ||
       this._getEntryFromConstant(entryName) ||
       this._getEntryFromNamespace(entryName) ||
@@ -524,11 +540,13 @@ export default class ObjectContainer {
 
     if (this._isSpread(name)) {
       if (Array.isArray(entry?.sharedInstance)) {
-        let spreadEntry = Entry.from(entry as Entry);
+        const spreadEntry = Entry.from(entry as Entry);
 
-        spreadEntry.sharedInstance = entry!.sharedInstance.map(sharedInstance =>
-          this.get(sharedInstance)
-        );
+        spreadEntry.sharedInstance = (
+          (entry as NonNullable<Entry>).sharedInstance as NonNullable<
+            Array<string>
+          >
+        ).map(sharedInstance => this.get(sharedInstance));
 
         return spreadEntry;
       }
@@ -586,7 +604,11 @@ export default class ObjectContainer {
    * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
    */
-  _updateEntryValues(entry: Entry, classConstructor: UnknownConstructable | FactoryFunction, dependencies: Dependencies) {
+  _updateEntryValues(
+    entry: Entry,
+    classConstructor: UnknownConstructable | FactoryFunction,
+    dependencies: Dependencies
+  ) {
     entry.classConstructor = classConstructor;
     entry.dependencies = dependencies;
   }
@@ -603,7 +625,14 @@ export default class ObjectContainer {
    * @param options
    * @return Created instance or generated value.
    */
-  _createEntry(classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction, dependencies?: Dependencies, options?: EntryOptions) {
+  _createEntry(
+    classConstructor:
+      | UnknownConstructable
+      | UnknownNonConstructable
+      | FactoryFunction,
+    dependencies?: Dependencies,
+    options?: EntryOptions
+  ) {
     if (
       (!dependencies || dependencies.length === 0) &&
       Array.isArray((classConstructor as WithDependencies).$dependencies)
@@ -639,12 +668,14 @@ export default class ObjectContainer {
     if (dependencies.length === 0) {
       dependencies = [];
 
-      for (let dependency of entry.dependencies) {
+      for (const dependency of entry.dependencies) {
         if (
           ['function', 'string'].indexOf(typeof dependency) > -1 ||
           Array.isArray(dependency)
         ) {
-          let retrievedDependency = this.get(dependency as EntryNameWithOptions);
+          const retrievedDependency = this.get(
+            dependency as EntryNameWithOptions
+          );
           if (
             Array.isArray(retrievedDependency) &&
             this._isSpread(dependency as EntryNameWithOptions)
@@ -659,7 +690,7 @@ export default class ObjectContainer {
       }
     }
 
-    let constructor = entry.classConstructor;
+    const constructor = entry.classConstructor;
     return new (constructor as UnknownConstructable)(...dependencies);
   }
 
@@ -684,9 +715,10 @@ export default class ObjectContainer {
       return null;
     }
 
-    let objectProperties = compositionName.split('.');
+    const objectProperties = compositionName.split('.');
     let constantValue = this._entries.has(objectProperties[0])
-      ? this._entries.get(objectProperties[0])!.sharedInstance
+      ? (this._entries.get(objectProperties[0]) as NonNullable<Entry>)
+          .sharedInstance
       : null;
 
     for (let i = 1; i < objectProperties.length && constantValue; i++) {
@@ -694,7 +726,7 @@ export default class ObjectContainer {
     }
 
     if (constantValue !== undefined && constantValue !== null) {
-      let entry = this._createEntry(() => constantValue, [], {
+      const entry = this._createEntry(() => constantValue, [], {
         writeable: false,
       });
       entry.sharedInstance = constantValue;
@@ -736,7 +768,7 @@ export default class ObjectContainer {
       return null;
     }
 
-    let namespaceValue = this._namespace.get(path);
+    const namespaceValue = this._namespace.get(path);
 
     if (typeof namespaceValue === 'function') {
       if (this._entries.has(namespaceValue as FactoryFunction)) {
@@ -746,7 +778,7 @@ export default class ObjectContainer {
       return this._createEntry(namespaceValue as FactoryFunction);
     }
 
-    let entry = this._createEntry(() => namespaceValue);
+    const entry = this._createEntry(() => namespaceValue);
     entry.sharedInstance = namespaceValue;
 
     return entry;
@@ -786,7 +818,7 @@ export default class ObjectContainer {
       return null;
     }
 
-    let entry = this._createEntry(
+    const entry = this._createEntry(
       classConstructor,
       (classConstructor as WithDependencies).$dependencies
     );
@@ -810,7 +842,7 @@ export default class ObjectContainer {
 ns.ima.core.ObjectContainer = ObjectContainer;
 
 type EntryOptions = {
-  writeable: boolean
+  writeable: boolean;
 };
 
 /**
@@ -822,7 +854,10 @@ export class Entry {
    * The constructor of the class represented by this entry, or the
    * getter of the value of the constant represented by this entry.
    */
-  classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction;
+  classConstructor:
+    | UnknownConstructable
+    | UnknownNonConstructable
+    | FactoryFunction;
   /**
    * The shared instance of the class represented by this entry.
    */
@@ -845,7 +880,7 @@ export class Entry {
    * Reference to part of application that created
    * this entry.
    */
-   private _referrer?: string;
+  private _referrer?: string;
 
   /**
    * Initializes the entry.
@@ -858,7 +893,15 @@ export class Entry {
    *        this entry.
    * @param options The Entry options.
    */
-  constructor(classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction, dependencies?: Dependencies, referrer?: string, options?: EntryOptions) {
+  constructor(
+    classConstructor:
+      | UnknownConstructable
+      | UnknownNonConstructable
+      | FactoryFunction,
+    dependencies?: Dependencies,
+    referrer?: string,
+    options?: EntryOptions
+  ) {
     this.classConstructor = classConstructor;
 
     this._options = options || {

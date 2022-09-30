@@ -1,6 +1,6 @@
 import PageFactory from '../PageFactory';
 import ObjectContainer from '../../ObjectContainer';
-import ns from '../../namespace';
+import ns from '../../Namespace';
 import AbstractController from '../../controller/AbstractController';
 import Extension, { IExtension } from '../../extension/Extension';
 import PageStateManager from '../state/PageStateManager';

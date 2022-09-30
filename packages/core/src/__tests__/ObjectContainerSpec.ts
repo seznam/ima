@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import ObjectContainer, { Entry } from '../ObjectContainer';
-import ns from '../namespace';
+import ns from '../Namespace';
 import { UnknownParameters } from '../CommonTypes';
 
 describe('ima.core.ObjectContainer', () => {
@@ -19,9 +20,9 @@ describe('ima.core.ObjectContainer', () => {
     }
   }
 
-  let alias = 'alias';
-  let alias2 = 'alias2';
-  class classParent {};
+  const alias = 'alias';
+  const alias2 = 'alias2';
+  class classParent {}
   class classConstructor extends classParent {
     dependency: unknown;
 
@@ -32,23 +33,23 @@ describe('ima.core.ObjectContainer', () => {
     }
   }
 
-  class classDependency {};
-  let dependencies = [classDependency, classConstructorWithDependencies];
+  class classDependency {}
+  const dependencies = [classDependency, classConstructorWithDependencies];
 
-  let constantName = 'constant';
-  let constantValue = 'value';
-  let constantObjectName = 'constantObject';
-  let constantCompositionName = 'constantObject.path.to.property';
-  let constantObjectProperty = 'property';
-  let constantObjectValue = {
+  const constantName = 'constant';
+  const constantValue = 'value';
+  const constantObjectName = 'constantObject';
+  const constantCompositionName = 'constantObject.path.to.property';
+  const constantObjectProperty = 'property';
+  const constantObjectValue = {
     path: { to: { property: constantObjectProperty } },
   };
 
-  let spreadConstantName = 'spreadConstant';
-  let spreadConstantValue = [classParent, classParent];
+  const spreadConstantName = 'spreadConstant';
+  const spreadConstantValue = [classParent, classParent];
 
-  let namespacePathUnit = 'test.unit';
-  let namespacePathOC = 'test.unit.ObjectContainer';
+  const namespacePathUnit = 'test.unit';
+  const namespacePathOC = 'test.unit.ObjectContainer';
   ns.namespace(namespacePathUnit);
 
   beforeEach(() => {
@@ -102,7 +103,9 @@ describe('ima.core.ObjectContainer', () => {
       oc.constant(constantName, constantValue);
 
       expect(oc._createEntry).toHaveBeenCalled();
-      expect(oc['_entries'].get(constantName)!.sharedInstance).toBe(constantValue);
+      expect(oc['_entries'].get(constantName)!.sharedInstance).toBe(
+        constantValue
+      );
     });
   });
 
@@ -132,9 +135,9 @@ describe('ima.core.ObjectContainer', () => {
 
       oc.inject(classConstructor, dependencies);
 
-      expect(oc['_entries'].get(classConstructor)!.classConstructor).toStrictEqual(
-        classConstructor
-      );
+      expect(
+        oc['_entries'].get(classConstructor)!.classConstructor
+      ).toStrictEqual(classConstructor);
       expect(oc['_entries'].get(classConstructor)!.dependencies).toStrictEqual(
         dependencies
       );
@@ -151,9 +154,9 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classConstructor, dependencies);
       oc.inject(classConstructor, dependencies);
 
-      expect(oc['_entries'].get(classConstructor)!.classConstructor).toStrictEqual(
-        classConstructor
-      );
+      expect(
+        oc['_entries'].get(classConstructor)!.classConstructor
+      ).toStrictEqual(classConstructor);
       expect(oc['_entries'].get(classConstructor)!.dependencies).toStrictEqual(
         dependencies
       );
@@ -234,7 +237,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should use entry from entries which was provided and binded', () => {
       oc.provide(classParent, classConstructor, dependencies);
       oc.bind(alias, classParent);
-      let aliasEntry = oc['_entries'].get(alias);
+      const aliasEntry = oc['_entries'].get(alias);
 
       jest.spyOn(oc, '_updateEntryValues');
 
@@ -367,15 +370,15 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should find optional aliased entity', () => {
       oc.bind(alias, classParent);
-      let entry = oc.get('?' + alias);
-      console.log(entry);
+      const entry = oc.get('?' + alias);
+
       expect(entry).not.toStrictEqual(classParent);
       expect(entry).toBeDefined();
       expect(entry).toBeInstanceOf(classParent);
     });
 
     it('should not find optional aliased entity', () => {
-      let entry = oc.get('?undefined');
+      const entry = oc.get('?undefined');
 
       expect(entry).toBeUndefined();
     });
@@ -388,7 +391,7 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should find optional entity', () => {
       oc.bind(alias, classParent);
-      let entry = oc.get([alias, { optional: true }]);
+      const entry = oc.get([alias, { optional: true }]);
 
       expect(entry).not.toStrictEqual(classParent);
       expect(entry).toBeDefined();
@@ -396,14 +399,14 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should not find optional entity', () => {
-      let entry = oc.get(['undefined', { optional: true }]);
+      const entry = oc.get(['undefined', { optional: true }]);
 
       expect(entry).toBeUndefined();
     });
 
     it('should find non optional entity', () => {
       oc.bind(alias, classParent);
-      let entry = oc.get([alias, { optional: false }]);
+      const entry = oc.get([alias, { optional: false }]);
 
       expect(entry).not.toStrictEqual(classParent);
     });
@@ -416,7 +419,7 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should find optional class entity', () => {
       oc.bind(alias, classParent);
-      let entry = oc.get([classParent, { optional: true }]);
+      const entry = oc.get([classParent, { optional: true }]);
 
       expect(entry).not.toStrictEqual(classParent);
       expect(entry).toBeDefined();
@@ -427,7 +430,9 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
-      let entry = oc.get('...' + spreadConstantName) as typeof spreadConstantValue;
+      const entry = oc.get(
+        '...' + spreadConstantName
+      ) as typeof spreadConstantValue;
 
       expect(entry).toHaveLength(2);
       expect(entry[0]).not.toStrictEqual(classParent);
@@ -440,7 +445,9 @@ describe('ima.core.ObjectContainer', () => {
         ['undefined', { optional: true }],
       ]);
 
-      let entry = oc.get('...' + spreadConstantName) as typeof spreadConstantValue;
+      const entry = oc.get(
+        '...' + spreadConstantName
+      ) as typeof spreadConstantValue;
 
       expect(entry).toHaveLength(3);
       expect(entry[2]).toBeUndefined();
@@ -458,9 +465,13 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
-      let entry1 = oc.get('...' + spreadConstantName) as typeof spreadConstantValue;
-      let entry2 = oc.get(spreadConstantName) as typeof spreadConstantValue;
-      let entry3 = oc.get('...?' + spreadConstantName) as typeof spreadConstantValue;
+      const entry1 = oc.get(
+        '...' + spreadConstantName
+      ) as typeof spreadConstantValue;
+      const entry2 = oc.get(spreadConstantName) as typeof spreadConstantValue;
+      const entry3 = oc.get(
+        '...?' + spreadConstantName
+      ) as typeof spreadConstantValue;
 
       expect(entry1[0]).toStrictEqual(entry3[0]);
       expect(entry1[0]).not.toStrictEqual(entry2[0]);
@@ -470,7 +481,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
-      let entry = oc.get(spreadConstantName) as typeof spreadConstantValue;
+      const entry = oc.get(spreadConstantName) as typeof spreadConstantValue;
 
       expect(entry).toHaveLength(2);
       expect(entry[0]).toStrictEqual(classParent);
@@ -484,7 +495,9 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should be throw Error for undefined identification of entry', () => {
       expect(() => {
-        oc._getEntry(() => {});
+        oc._getEntry(() => {
+          return;
+        });
       }).toThrow();
 
       expect(() => {
@@ -495,13 +508,15 @@ describe('ima.core.ObjectContainer', () => {
     it('should be return entry from constants', () => {
       oc.constant(constantName, constantValue);
 
-      expect((oc._getEntry(constantName) as Entry).sharedInstance).toBe(constantValue);
+      expect((oc._getEntry(constantName) as Entry).sharedInstance).toBe(
+        constantValue
+      );
     });
 
     it('should be return entry from aliases', () => {
       oc.bind(alias, classConstructor, dependencies);
 
-      let entry = oc._getEntry(alias) as Entry;
+      const entry = oc._getEntry(alias) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(classConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
@@ -510,24 +525,24 @@ describe('ima.core.ObjectContainer', () => {
     it('should be return value from registry', () => {
       oc.inject(classConstructor, dependencies);
 
-      let entry = oc._getEntry(classConstructor) as Entry;
+      const entry = oc._getEntry(classConstructor) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(classConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be return value from namespace', () => {
-      let value = { a: 1 };
-      let namespace = ns.get(namespacePathUnit);
+      const value = { a: 1 };
+      const namespace = ns.get(namespacePathUnit);
       (namespace as UnknownParameters).ObjectContainer = value;
 
-      let entry = oc._getEntry(namespacePathOC) as Entry;
+      const entry = oc._getEntry(namespacePathOC) as Entry;
 
       expect(entry.sharedInstance).toStrictEqual(value);
     });
 
     it('should be return value from registry for class constructor with $dependencies', () => {
-      let entry = oc._getEntry(classConstructorWithDependencies) as Entry;
+      const entry = oc._getEntry(classConstructorWithDependencies) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(
         classConstructorWithDependencies
@@ -546,7 +561,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should return entry by name from stored constants', () => {
       oc.constant(constantObjectName, constantObjectValue);
 
-      let entry = oc._getEntryFromConstant(constantObjectName) as Entry;
+      const entry = oc._getEntryFromConstant(constantObjectName) as Entry;
 
       expect(entry.sharedInstance).toStrictEqual(constantObjectValue);
     });
@@ -554,7 +569,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should return entry by composition name to property from stored constants', () => {
       oc.constant(constantObjectName, constantObjectValue);
 
-      let entry = oc._getEntryFromConstant(constantCompositionName) as Entry;
+      const entry = oc._getEntryFromConstant(constantCompositionName) as Entry;
 
       expect(entry.sharedInstance).toStrictEqual(constantObjectProperty);
     });
@@ -562,7 +577,9 @@ describe('ima.core.ObjectContainer', () => {
     it('should return null for bad type of composition name', () => {
       oc.constant(constantObjectName, constantObjectValue);
 
-      let entry = oc._getEntryFromConstant(() => {});
+      const entry = oc._getEntryFromConstant(() => {
+        return;
+      });
 
       expect(entry).toBeNull();
     });
@@ -580,7 +597,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be return entry from registry', () => {
       oc.inject(classConstructor, dependencies);
 
-      let entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
+      const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(classConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
@@ -591,19 +608,19 @@ describe('ima.core.ObjectContainer', () => {
 
       jest.spyOn(oc, '_createEntry');
 
-      let entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
+      const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(classDependency);
       expect(entry.dependencies).toStrictEqual([]);
     });
 
     it('should be create entry with constant value if namespace return another type than function', () => {
-      let constant = { a: 1 };
+      const constant = { a: 1 };
       (namespace as UnknownParameters).ObjectContainer = constant;
 
       jest.spyOn(oc, '_createEntry');
 
-      let entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
+      const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
       expect(entry.sharedInstance).toStrictEqual(constant);
     });
@@ -645,7 +662,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return entry if class has defined $dependencies', () => {
-      let entry = oc._getEntryFromClassConstructor(
+      const entry = oc._getEntryFromClassConstructor(
         classConstructorWithDependencies
       ) as Entry;
 
