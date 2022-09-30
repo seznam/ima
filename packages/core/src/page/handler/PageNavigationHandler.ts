@@ -1,6 +1,7 @@
-import PageHandler, { ManagedPage, PageAction } from './PageHandler';
+import PageHandler from './PageHandler';
 import Window from '../../window/Window';
 import ActionTypes from '../../router/ActionTypes';
+import { ManagedPage, PageAction } from '../PageTypes';
 
 export default class PageNavigationHandler extends PageHandler {
   private _window: Window;
@@ -43,9 +44,7 @@ export default class PageNavigationHandler extends PageHandler {
    * @inheritDoc
    */
   handlePreManagedState(managedPage: ManagedPage, nextManagedPage: ManagedPage, action: PageAction) {
-    const {
-      options: { autoScroll },
-    } = nextManagedPage;
+    const { options } = nextManagedPage;
 
     if (
       managedPage &&
@@ -58,10 +57,10 @@ export default class PageNavigationHandler extends PageHandler {
       if (!isRedirection) {
         this._saveScrollHistory();
       }
-      this._setAddressBar(action.url, isRedirection);
+      this._setAddressBar(action.url as string, isRedirection);
     }
 
-    if (autoScroll) {
+    if (options!.autoScroll) {
       this._scrollTo({ x: 0, y: 0 });
     }
   }
@@ -71,11 +70,9 @@ export default class PageNavigationHandler extends PageHandler {
    */
   handlePostManagedState(managedPage: ManagedPage, previousManagedPage: ManagedPage, action: PageAction) {
     const { event } = action;
-    const {
-      options: { autoScroll },
-    } = managedPage;
+    const { options } = managedPage;
 
-    if (event && event.state && event.state.scroll && autoScroll) {
+    if (event && event.state && event.state.scroll && options!.autoScroll) {
       this._scrollTo(event.state.scroll);
     }
   }

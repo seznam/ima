@@ -1,22 +1,4 @@
-export type ManagedPage = {
-  options: {
-    autoScroll: boolean
-  }
-};
-
-export type PageAction = {
-  action: string,
-  event: Event & {
-    state: {
-      scroll: { 
-        x: number,
-        y: number
-      }
-    }
-  },
-  type: string,
-  url: string
-};
+import { ManagedPage, PageAction } from '../PageTypes';
 
 export default abstract class PageHandler {
   /**

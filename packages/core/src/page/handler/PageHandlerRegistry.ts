@@ -1,7 +1,8 @@
 import Execution from '../../execution/Execution';
 import GenericError from '../../error/GenericError';
-import PageHandler, { ManagedPage, PageAction } from './PageHandler';
+import PageHandler from './PageHandler';
 import SerialBatch from '../../execution/SerialBatch';
+import { ManagedPage, PageAction } from '../PageTypes';
 
 export default class PageHandlerRegistry extends PageHandler {
   protected _pageHandlers: PageHandler[];

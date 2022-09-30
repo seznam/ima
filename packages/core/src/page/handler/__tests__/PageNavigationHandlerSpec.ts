@@ -3,7 +3,7 @@
 import PageNavigationHandler from '../PageNavigationHandler';
 import ClientWindow from '../../../window/ClientWindow';
 import ActionTypes from '../../../router/ActionTypes';
-import { ManagedPage, PageAction } from '../PageHandler';
+import { ManagedPage, PageAction } from '../../PageTypes';
 
 jest.useFakeTimers();
 

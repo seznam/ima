@@ -1,8 +1,13 @@
+import { UnknownParameters, UnknownPromiseParameters } from "@/CommonTypes";
+import AbstractController from "@/controller/AbstractController";
+import { RouteOptions } from "@/router/Router";
+import { PageData } from "../PageTypes";
+
 /**
  * The page renderer is a utility for rendering the page at either the
  * client-side or the server-side, handling the differences in the environment.
  */
-export default class PageRenderer {
+export default abstract class PageRenderer {
   /**
    * Renders the page using the provided controller and view. The actual
    * behavior of this method differs at the client-side and the at
@@ -22,41 +27,17 @@ export default class PageRenderer {
    * resources have been loaded if this is the first time this method is
    * invoked at the client.
    *
-   * @param {Controller} controller The current page controller.
-   * @param {Component} view The page's view.
-   * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
+   * @param controller The current page controller.
+   * @param view The page's view.
+   * @param pageResources The resources for
    *        the view loaded by the controller.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (
-   *                string|
-   *                function(
-   *                  new: Component,
-   *                  Object<string, *>,
-   *                  ?Object<string, *>
-   *                )
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          documentView: ?function(new: Component),
-   *          managedRootView: ?function(new: Component)=
-   *        }} routeOptions The current route options.
-   * @return {Promise<{
-   *           status: number,
-   *           content: ?string,
-   *           pageState: Object<string, ?>
-   *         }>} A promise that will resolve to information about the
+   * @param routeOptions The current route options.
+   * @return A promise that will resolve to information about the
    *         rendered page. The `status` will contain the HTTP status
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
-   *         The `content` field will contain the rendered markup of
-   *         the page at the server-side, or `null` at the client-side.
    */
-  mount() {}
+  abstract mount(controller: AbstractController, view: unknown, pageResources: UnknownPromiseParameters, routeOptions: RouteOptions): PageData;
 
   /**
    * Handles update of the current route that does not replace the current
@@ -67,57 +48,35 @@ export default class PageRenderer {
    * update the controller's state and view with every resource that becomes
    * resolved.
    *
-   * @param {Controller} controller The current page controller.
-   * @param {React.Component} view The page's view.
-   * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
+   * @param controller The current page controller.
+   * @param view The page's view.
+   * @param resourcesUpdate The resources
    *        that represent the update the of current state according to the
    *        current route and its parameters.
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller, ...*)),
-   *              (
-   *                string|
-   *                function(
-   *                  new: Component,
-   *                  Object<string, *>,
-   *                  ?Object<string, *>
-   *                )
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          documentView: ?function(new: Component),
-   *          managedRootView: ?function(new: Component)=
-   *        }} routeOptions The current route options.
-   * @return {Promise<{
-   *           status: number,
-   *           content: ?string,
-   *           pageState: Object<string, *>
-   *         }>} A promise that will resolve to information about the
+   * @param routeOptions The current route options.
+   * @return A promise that will resolve to information about the
    *         rendered page. The `status` will contain the HTTP status
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
    *         The `content` field will contain the rendered markup of
    *         the page at the server-side, or `null` at the client-side.
    */
-  update() {}
+  abstract update(controller: AbstractController, view: unknown, resourcesUpdate: UnknownPromiseParameters, routeOptions: RouteOptions): PageData;
 
   /**
    * Unmounts the view from the DOM.
    *
    * This method has no effect at the server-side.
    */
-  unmount() {}
+  abstract unmount(): void;
 
   /**
    * Sets the provided state to the currently rendered view.
    *
    * This method has no effect at the server-side.
    *
-   * @param {Object<string, *>=} [state={}] The state to set to the currently
+   * @param state The state to set to the currently
    *        rendered view.
    */
-  setState() {}
+  abstract setState(state: UnknownParameters): void;
 }
