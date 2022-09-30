@@ -6,19 +6,25 @@ type Options = {
   optional: boolean
 };
 
-type Constructable<T> = (new (...args: unknown[]) => T) & {
+type WithDependencies = {
   $dependencies?: Dependencies;
 };
 
-type UnknownConstructable = Constructable<unknown>;
+type Constructable<T> = (new (...args: unknown[]) => T) & WithDependencies;
 
-type FactoryFunction = (...args: unknown[]) => unknown;
+type NonConstructable<T> = (abstract new (...args: unknown[]) => T) & WithDependencies;
 
-type EntryName = string | UnknownConstructable | FactoryFunction;
+export type UnknownConstructable = Constructable<unknown>;
 
-type EntryNameWithOptions = EntryName | [EntryName, Options];
+export type UnknownNonConstructable = NonConstructable<unknown>;
 
-type Dependencies = EntryNameWithOptions[];
+export type FactoryFunction = (...args: unknown[]) => unknown;
+
+type EntryName = string | UnknownConstructable | UnknownNonConstructable | FactoryFunction;
+
+export type EntryNameWithOptions = EntryName | [EntryName, Options];
+
+type Dependencies = (EntryNameWithOptions | InstanceType<UnknownConstructable>)[];
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
@@ -429,7 +435,7 @@ export default class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  create(name: EntryNameWithOptions, dependencies: Dependencies) {
+  create(name: EntryNameWithOptions, dependencies: Dependencies = []) {
     let entry = this._getEntry(name);
 
     return this._createInstanceFromEntry(entry as Entry, dependencies);
@@ -596,12 +602,12 @@ export default class ObjectContainer {
    * @param options
    * @return Created instance or generated value.
    */
-  _createEntry(classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies, options?: EntryOptions) {
+  _createEntry(classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction, dependencies?: Dependencies, options?: EntryOptions) {
     if (
       (!dependencies || dependencies.length === 0) &&
-      Array.isArray((classConstructor as UnknownConstructable).$dependencies)
+      Array.isArray((classConstructor as WithDependencies).$dependencies)
     ) {
-      dependencies = (classConstructor as UnknownConstructable).$dependencies;
+      dependencies = (classConstructor as WithDependencies).$dependencies;
     }
 
     let referrer = this._bindingState;
@@ -637,10 +643,10 @@ export default class ObjectContainer {
           ['function', 'string'].indexOf(typeof dependency) > -1 ||
           Array.isArray(dependency)
         ) {
-          let retrievedDependency = this.get(dependency);
+          let retrievedDependency = this.get(dependency as EntryNameWithOptions);
           if (
             Array.isArray(retrievedDependency) &&
-            this._isSpread(dependency)
+            this._isSpread(dependency as EntryNameWithOptions)
           ) {
             dependencies.push(...retrievedDependency);
           } else {
@@ -767,7 +773,7 @@ export default class ObjectContainer {
       return null;
     }
 
-    if (!Array.isArray((classConstructor as UnknownConstructable).$dependencies)) {
+    if (!Array.isArray((classConstructor as WithDependencies).$dependencies)) {
       if ($Debug) {
         throw new Error(
           `The class constructor identified as: ${this._getDebugName(
@@ -781,7 +787,7 @@ export default class ObjectContainer {
 
     let entry = this._createEntry(
       classConstructor,
-      (classConstructor as UnknownConstructable).$dependencies
+      (classConstructor as WithDependencies).$dependencies
     );
 
     this._entries.set(classConstructor, entry);
@@ -815,7 +821,7 @@ export class Entry {
    * The constructor of the class represented by this entry, or the
    * getter of the value of the constant represented by this entry.
    */
-  classConstructor: UnknownConstructable | FactoryFunction;
+  classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction;
   /**
    * The shared instance of the class represented by this entry.
    */
@@ -851,7 +857,7 @@ export class Entry {
    *        this entry.
    * @param options The Entry options.
    */
-  constructor(classConstructor: UnknownConstructable | FactoryFunction, dependencies?: Dependencies, referrer?: string, options?: EntryOptions) {
+  constructor(classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction, dependencies?: Dependencies, referrer?: string, options?: EntryOptions) {
     this.classConstructor = classConstructor;
 
     this._options = options || {
