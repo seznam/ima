@@ -1,17 +1,18 @@
 import RouterMiddleware from './RouterMiddleware';
-import Controller from '../controller/Controller';
-import { ComponentType } from 'react';
+import { IController } from '../controller/Controller';
 import AbstractRoute from './AbstractRoute';
 import GenericError from '../error/GenericError';
+import { IExtension } from '../extension/Extension';
 
 export type RouteOptions = {
+  autoScroll?: boolean;
+  documentView?: unknown;
+  extensions?: IExtension[];
   httpStatus?: number;
-  onlyUpdate?: (controller: Controller, view: ComponentType) => boolean;
-  autoScroll: boolean;
-  documentView?: ComponentType;
-  managedRootView?: ComponentType;
-  viewAdapter?: ComponentType;
+  managedRootView?: unknown;
   middlewares?: Promise<RouterMiddleware>[] | RouterMiddleware[];
+  onlyUpdate?: (controller: IController, view: unknown) => boolean;
+  viewAdapter?: unknown;
 };
 
 /**

@@ -16,7 +16,7 @@ export default abstract class PageHandler {
    *        be managed.
    * @param action An action object describing what triggered the routing.
    */
-  abstract handlePreManagedState(managedPage: ManagedPage, nextManagedPage: ManagedPage, action: PageAction): void;
+  abstract handlePreManagedState(managedPage: ManagedPage | null, nextManagedPage: ManagedPage, action: PageAction): void;
 
   /**
    * Called after a PageManager finishes transition from previous page to
@@ -27,7 +27,7 @@ export default abstract class PageHandler {
    *        previously managed.
    * @param action An action object describing what triggered the routing.
    */
-  abstract handlePostManagedState(managedPage: ManagedPage, previousManagedPage: ManagedPage, action: PageAction): void;
+  abstract handlePostManagedState(managedPage: ManagedPage | null, previousManagedPage: ManagedPage, action: PageAction): void;
 
   /**
    * Finalization callback, called when the page manager is being discarded.

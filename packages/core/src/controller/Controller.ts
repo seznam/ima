@@ -1,8 +1,11 @@
 import Dictionary from '../dictionary/Dictionary';
-import Extension from '../extension/Extension';
+import Extension, { IExtension } from '../extension/Extension';
 import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import PageStateManager from '../page/state/PageStateManager';
+import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+
+export interface IController {};
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -10,7 +13,7 @@ import PageStateManager from '../page/state/PageStateManager';
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export default abstract class Controller {
+export default abstract class Controller implements IController {
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
@@ -88,14 +91,13 @@ export default abstract class Controller {
    * the error page. The error page that will be used depends on the status
    * code of the error.
    *
-   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
-   *         A map object of promises resolved when all resources the controller
+   * @return A map object of promises resolved when all resources the controller
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
   abstract load():
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * Callback for updating the controller after a route update. This method
@@ -113,18 +115,15 @@ export default abstract class Controller {
    * {@link Controller#deactivate}, {@link Controller#deinit}) are not call
    * in case this method is used.
    *
-   * @param {Object<string, string>=} [prevParams={}] Previous route
+   * @param prevParams Previous route
    *         parameters.
-   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
-   *         A map object of promises resolved when all resources the controller
+   * @return A map object of promises resolved when all resources the controller
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(prevParams: {
-    [key: string]: string;
-  }):
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+  abstract update(prevParams: StringParameters):
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * Patches the state of this controller using the provided object by
@@ -143,17 +142,17 @@ export default abstract class Controller {
    * field names in the object returned from the {@link Controller#load}
    * method.
    *
-   * @param {Object<string, *>} statePatch Patch of the controller's state to
+   * @param statePatch Patch of the controller's state to
    *        apply.
    */
-  abstract setState(statePatch: { [key: string]: unknown }): void;
+  abstract setState(statePatch: UnknownParameters): void;
 
   /**
    * Returns the controller's current state.
    *
-   * @return {Object<string, *>} The current state of this controller.
+   * @return The current state of this controller.
    */
-  abstract getState(): { [key: string]: unknown };
+  abstract getState(): UnknownParameters;
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -180,10 +179,7 @@ export default abstract class Controller {
    * added to the controller before the {@link Controller#init} method is
    * invoked.
    */
-  abstract addExtension(
-    extension: Extension,
-    extensionInstance: Extension
-  ): void;
+  abstract addExtension(extension: Extension | IExtension, extensionInstance?: Extension): void;
 
   /**
    * Returns the controller's extensions.
@@ -197,38 +193,38 @@ export default abstract class Controller {
    * called after the the controller's state has been patched with the all
    * loaded resources and the view has been rendered.
    *
-   * @param {Object<string, *>} loadedResources A plain object representing a
+   * @param loadedResources A plain object representing a
    *        map of resource names to resources loaded by the
    *        {@link Controller#load} method. This is the same object as the one
    *        passed to the {@link Controller#setState} method.
-   * @param {MetaManager} metaManager Meta attributes manager to configure.
-   * @param {Router} router The current application router.
-   * @param {Dictionary} dictionary The current localization dictionary.
-   * @param {Object<string, *>} settings The application settings for the
+   * @param metaManager Meta attributes manager to configure.
+   * @param router The current application router.
+   * @param dictionary The current localization dictionary.
+   * @param settings The application settings for the
    *        current application environment.
    */
   abstract setMetaParams(
-    loadedResources: { [key: string]: unknown },
+    loadedResources: UnknownParameters,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: { [key: string]: unknown }
+    settings: UnknownParameters
   ): void;
 
   /**
    * Sets the current route parameters. This method is invoked before the
    * {@link Controller#init} method.
    *
-   * @param {Object<string, string>} [params={}] The current route parameters.
+   * @param params The current route parameters.
    */
-  abstract setRouteParams(params: { [key: string]: string }): void;
+  abstract setRouteParams(params: StringParameters): void;
 
   /**
    * Returns the current route parameters.
    *
-   * @return {Object<string, string>} The current route parameters.
+   * @return The current route parameters.
    */
-  abstract getRouteParams(): { [key: string]: string };
+  abstract getRouteParams(): StringParameters;
 
   /**
    * Sets the page state manager. The page state manager manages the
@@ -237,16 +233,16 @@ export default abstract class Controller {
    * the user has navigated to a different route using a different
    * controller).
    *
-   * @param {?PageStateManager} pageStateManager The current state manager to
+   * @param pageStateManager The current state manager to
    *        use.
    */
-  abstract setPageStateManager(pageStateManager: PageStateManager): void;
+  abstract setPageStateManager(pageStateManager?: PageStateManager): void;
 
   /**
    * Returns the HTTP status code to send to the client, should the
    * controller be used at the server-side.
    *
-   * @return {number} The HTTP status code to send to the client.
+   * @return The HTTP status code to send to the client.
    */
   abstract getHttpStatus(): number;
 }

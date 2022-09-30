@@ -1,5 +1,6 @@
 import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
+import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 
 /**
  * Abstract extension
@@ -8,46 +9,27 @@ import PageStateManager from '../page/state/PageStateManager';
  * @implements Extension
  */
 export default abstract class AbstractExtension implements Extension {
-  protected _pageStateManager: PageStateManager | null;
-  protected _usingStateManager: boolean;
+  /**
+   * State manager.
+   */
+  protected _pageStateManager?: PageStateManager;
+  /**
+   * Flag indicating whether the PageStateManager should be used instead
+   * of partial state.
+   */
+  protected _usingStateManager: boolean = false;
   protected _partialStateSymbol = Symbol('partialState');
-  public status: number;
-  public params: { [key: string]: string };
 
-  [key: symbol]: { [key: string]: unknown };
+  /**
+   * The HTTP response code to send to the client.
+   */
+  status: number = 200;
+  /**
+   * The route parameters extracted from the current route.
+   */
+  params: StringParameters = {};
 
-  constructor() {
-    /**
-     * State manager.
-     *
-     * @protected
-     * @type {PageStateManager}
-     */
-    this._pageStateManager = null;
-
-    /**
-     * Flag indicating whether the PageStateManager should be used instead
-     * of partial state.
-     *
-     * @protected
-     * @type {boolean}
-     */
-    this._usingStateManager = false;
-
-    /**
-     * The HTTP response code to send to the client.
-     *
-     * @type {number}
-     */
-    this.status = 200;
-
-    /**
-     * The route parameters extracted from the current route.
-     *
-     * @type {Object<string, string>}
-     */
-    this.params = {};
-  }
+  [key: symbol]: UnknownParameters;
 
   /**
    * @inheritdoc
@@ -74,8 +56,8 @@ export default abstract class AbstractExtension implements Extension {
    * @abstract
    */
   abstract load():
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * @inheritdoc
@@ -87,7 +69,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  setState(statePatch: { [key: string]: unknown }) {
+  setState(statePatch: UnknownParameters) {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -134,7 +116,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  setPartialState(partialStatePatch: { [key: string]: unknown }) {
+  setPartialState(partialStatePatch: UnknownParameters) {
     const newPartialState = Object.assign(
       {},
       this[this._partialStateSymbol],
@@ -174,7 +156,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  setPageStateManager(pageStateManager: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 

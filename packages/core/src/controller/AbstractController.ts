@@ -1,6 +1,7 @@
 import { PageStateManager } from '..';
 import Controller from './Controller';
-import Extension from '../extension/Extension';
+import Extension, { IExtension } from '../extension/Extension';
+import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
@@ -10,31 +11,21 @@ import Extension from '../extension/Extension';
  * @extends Controller
  */
 export default abstract class AbstractController extends Controller {
-  protected _pageStateManager: PageStateManager | null;
-  protected _extensions: Map<Extension, Extension>;
-  public status: number;
-  public params: { [key: string]: string };
+  protected _pageStateManager?: PageStateManager;
+  protected _extensions: Map<Extension | IExtension, Extension> = new Map();
   /**
-   * Initializes the controller.
+   * The HTTP response code to send to the client.
    */
-  constructor() {
-    super();
+  status: number = 200;
+  /**
+   * The route parameters extracted from the current route. This field is
+   * set externally by IMA right before the {@link Controller#init} or the
+   * {@link Controller#update} method is called.
+   */
+  params: StringParameters = {};
 
-    this._pageStateManager = null;
-
-    this._extensions = new Map();
-
-    /**
-     * The HTTP response code to send to the client.
-     */
-    this.status = 200;
-
-    /**
-     * The route parameters extracted from the current route. This field is
-     * set externally by IMA right before the {@link Controller#init} or the
-     * {@link Controller#update} method is called.
-     */
-    this.params = {};
+  static get $extensions(): IExtension[] {
+    return [];
   }
 
   /**
@@ -62,8 +53,8 @@ export default abstract class AbstractController extends Controller {
    * @abstract
    */
   abstract load():
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * @inheritdoc
@@ -75,7 +66,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  setState(statePatch: { [key: string]: unknown }) {
+  setState(statePatch: UnknownParameters) {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -122,7 +113,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension: Extension, extensionInstance: Extension) {
+  addExtension(extension: Extension | IExtension, extensionInstance?: Extension) {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
@@ -131,14 +122,14 @@ export default abstract class AbstractController extends Controller {
 
     this._extensions.set(
       extension,
-      extensionInstance ? extensionInstance : extension
+      extensionInstance ? extensionInstance : (extension as Extension)
     );
   }
 
   /**
    * @inheritdoc
    */
-  getExtension(extension: Extension) {
+  getExtension(extension: IExtension) {
     return this._extensions.get(extension);
   }
 
@@ -172,7 +163,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  setPageStateManager(pageStateManager: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 

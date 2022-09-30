@@ -1,4 +1,7 @@
-import { PageStateManager } from '..';
+import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import PageStateManager from '../page/state/PageStateManager';
+
+export interface IExtension {};
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -15,7 +18,7 @@ import { PageStateManager } from '..';
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  */
-export default abstract class Extension {
+export default abstract class Extension implements IExtension {
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
@@ -88,8 +91,8 @@ export default abstract class Extension {
    *         controller's state.
    */
   abstract load():
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * Callback for updating the extension after a route update. This method
@@ -116,8 +119,8 @@ export default abstract class Extension {
   abstract update(prevParams: {
     [key: string]: string;
   }):
-    | Promise<{ [key: string]: Promise<unknown> | unknown }>
-    | { [key: string]: Promise<unknown> | unknown };
+    | Promise<UnknownPromiseParameters>
+    | UnknownPromiseParameters;
 
   /**
    * Patches the state of the controller using this extension by using the
@@ -132,14 +135,14 @@ export default abstract class Extension {
    *
    * @param statePatch Patch of the controller's state to apply.
    */
-  abstract setState(statePatch: { [key: string]: unknown }): void;
+  abstract setState(statePatch: UnknownParameters): void;
 
   /**
    * Returns the current state of the controller using this extension.
    *
    * @return The current state of the controller.
    */
-  abstract getState(): { [key: string]: unknown };
+  abstract getState(): UnknownParameters;
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -168,14 +171,14 @@ export default abstract class Extension {
    *
    * @param partialStatePatch Patch of the controller's state to apply.
    */
-  abstract setPartialState(partialStatePatch: { [key: string]: unknown }): void;
+  abstract setPartialState(partialStatePatch: UnknownParameters): void;
 
   /**
    * Returns the current partial state of the extension.
    *
    * @return The current partial state of the extension.
    */
-  abstract getPartialState(): { [key: string]: unknown };
+  abstract getPartialState(): UnknownParameters;
 
   /**
    * Clears the current partial state of the extension and sets it value to empty object.
@@ -188,7 +191,7 @@ export default abstract class Extension {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  abstract setPageStateManager(pageStateManager: PageStateManager): void;
+  abstract setPageStateManager(pageStateManager?: PageStateManager): void;
 
   /**
    * Enables using PageStateManager for getting state.
@@ -207,14 +210,14 @@ export default abstract class Extension {
    * @param [params={}] The current route
    *        parameters.
    */
-  abstract setRouteParams(params: { [key: string]: string }): void;
+  abstract setRouteParams(params: StringParameters): void;
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  abstract getRouteParams(): { [key: string]: string };
+  abstract getRouteParams(): StringParameters;
 
   /**
    * Returns the names of the state fields that may be manipulated by this

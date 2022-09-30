@@ -2,8 +2,9 @@ import Controller from './Controller';
 import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import Dictionary from '../dictionary/Dictionary';
-import Extension from '../extension/Extension';
+import Extension, { IExtension } from '../extension/Extension';
 import { PageStateManager } from '..';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
@@ -11,11 +12,26 @@ import { PageStateManager } from '..';
  * the decorated page controller when needed.
  */
 export default class ControllerDecorator extends Controller {
+  /**
+   * The controller being decorated.
+   */
   protected _controller: Controller;
+  /**
+   * The meta page attributes manager.
+   */
   protected _metaManager: MetaManager;
+  /**
+   * The application router.
+   */
   protected _router: Router;
+  /**
+   * Localization phrases dictionary.
+   */
   protected _dictionary: Dictionary;
-  protected _settings: { [key: string]: unknown };
+  /**
+   * Application settings for the current application environment.
+   */
+  protected _settings: UnknownParameters;
 
   /**
    * Initializes the controller decorator.
@@ -32,43 +48,18 @@ export default class ControllerDecorator extends Controller {
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: { [key: string]: unknown }
+    settings: UnknownParameters
   ) {
     super();
 
-    /**
-     * The controller being decorated.
-     *
-     * @type {Controller}
-     */
     this._controller = controller;
 
-    /**
-     * The meta page attributes manager.
-     *
-     * @type {MetaManager}
-     */
     this._metaManager = metaManager;
 
-    /**
-     * The application router.
-     *
-     * @type {Router}
-     */
     this._router = router;
 
-    /**
-     * Localization phrases dictionary.
-     *
-     * @type {Dictionary}
-     */
     this._dictionary = dictionary;
 
-    /**
-     * Application settings for the current application environment.
-     *
-     * @type {Object<string, *>}
-     */
     this._settings = settings;
   }
 
@@ -117,7 +108,7 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  setState(statePatch: { [key: string]: unknown }) {
+  setState(statePatch: UnknownParameters) {
     this._controller.setState(statePatch);
   }
 
@@ -152,7 +143,7 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  addExtension(extension: Extension, extensionInstance: Extension) {
+  addExtension(extension: Extension | IExtension, extensionInstance?: Extension) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;
@@ -168,7 +159,7 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  setMetaParams(loadedResources: { [key: string]: unknown }) {
+  setMetaParams(loadedResources: UnknownParameters) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,
@@ -210,7 +201,7 @@ export default class ControllerDecorator extends Controller {
    * Returns the meta attributes manager configured by the decorated
    * controller.
    *
-   * @return {MetaManager} The Meta attributes manager configured by the
+   * @return The Meta attributes manager configured by the
    *         decorated controller.
    */
   getMetaManager() {

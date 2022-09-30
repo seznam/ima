@@ -1,45 +1,48 @@
+import ObjectContainer, { EntryNameWithOptions, UnknownConstructable } from '../ObjectContainer';
 import GenericError from '../error/GenericError';
+import AbstractController from '../controller/AbstractController';
+import { IController } from '../controller/Controller';
+import Router, { RouteOptions } from '../router/Router';
+import Extension from '../extension/Extension';
+import PageStateManager from './state/PageStateManager';
+import ControllerDecorator from '../controller/ControllerDecorator';
+import MetaManager from '../meta/MetaManager';
+import Dictionary from '../dictionary/Dictionary';
+import PageStateManagerDecorator from './state/PageStateManagerDecorator';
 
 /**
  * Factory for page.
  */
 export default class PageFactory {
-  
+  /**
+   * The current application object container.
+   */
+  _oc: ObjectContainer;
 
   /**
    * Factory used by page management classes.
-   *
-   * @param {ObjectContainer} oc
    */
-  constructor(oc) {
-    /**
-     * The current application object container.
-     *
-     * @type {ObjectContainer}
-     */
+  constructor(oc: ObjectContainer) {
     this._oc = oc;
   }
 
   /**
    * Create new instance of {@link Controller}.
-   *
-   * @param {(string|function(new:Controller))} controller
-   * @return {Controller}
    */
-  createController(controller, options = {}) {
+  createController(controller: string | IController, options: RouteOptions = {}) {
     let { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (
-      Array.isArray(controller?.$extensions) &&
-      controller.$extensions.length
+      Array.isArray((controller as typeof AbstractController)?.$extensions) &&
+      (controller as typeof AbstractController).$extensions.length
     ) {
-      mergedExtensions = mergedExtensions.concat(controller.$extensions);
+      mergedExtensions = mergedExtensions.concat((controller as typeof AbstractController).$extensions);
     }
 
-    let controllerInstance = this._oc.create(controller);
+    let controllerInstance = this._oc.create(controller as typeof AbstractController) as AbstractController;
 
     for (let extension of mergedExtensions) {
-      let loadedExtension = this._oc.get(extension);
+      let loadedExtension = this._oc.get(extension as typeof Extension);
       if (!loadedExtension) {
         // Optional extension handling
         continue;
@@ -47,10 +50,10 @@ export default class PageFactory {
       if (Array.isArray(loadedExtension)) {
         // Spread support handling
         for (let extensionInstance of loadedExtension) {
-          controllerInstance.addExtension(extensionInstance);
+          (controllerInstance as AbstractController)!.addExtension(extensionInstance);
         }
       } else {
-        controllerInstance.addExtension(extension, loadedExtension);
+        (controllerInstance as AbstractController)!.addExtension(extension as typeof Extension, loadedExtension as Extension);
       }
     }
 
@@ -60,17 +63,17 @@ export default class PageFactory {
   /**
    * Retrieves the specified react component class.
    *
-   * @param {(string|function(new: React.Component))} view The namespace
+   * @param view The namespace
    *        referring to a react component class, or a react component class
    *        constructor.
-   * @return {function(new: React.Component)} The react component class
+   * @return The react component class
    *         constructor.
    */
-  createView(view) {
+  createView(view: unknown) {
     if (typeof view === 'function') {
       return view;
     }
-    let classConstructor = this._oc.getConstructorOf(view);
+    let classConstructor = this._oc.getConstructorOf(view as UnknownConstructable);
 
     if (classConstructor) {
       return classConstructor;
@@ -83,15 +86,12 @@ export default class PageFactory {
 
   /**
    * Returns decorated controller for ease setting seo params in controller.
-   *
-   * @param {Controller} controller
-   * @return {Controller}
    */
-  decorateController(controller) {
-    let metaManager = this._oc.get('$MetaManager');
-    let router = this._oc.get('$Router');
-    let dictionary = this._oc.get('$Dictionary');
-    let settings = this._oc.get('$Settings');
+  decorateController(controller: IController) {
+    let metaManager = this._oc.get('$MetaManager') as MetaManager;
+    let router = this._oc.get('$Router') as Router;
+    let dictionary = this._oc.get('$Dictionary') as Dictionary;
+    let settings = this._oc.get('$Settings') as { [key: string]: unknown };
 
     let decoratedController = this._oc.create('$ControllerDecorator', [
       controller,
@@ -101,22 +101,19 @@ export default class PageFactory {
       settings,
     ]);
 
-    return decoratedController;
+    return decoratedController as ControllerDecorator;
   }
 
   /**
    * Returns decorated page state manager for extension.
-   *
-   * @param {PageStateManager} pageStateManager
-   * @param {string[]} allowedStateKeys
-   * @return {PageStateManager}
    */
-  decoratePageStateManager(pageStateManager, allowedStateKeys) {
+  decoratePageStateManager(pageStateManager: PageStateManager, allowedStateKeys: string[]) {
+    this._oc.constant('allowedStateKeys', allowedStateKeys);
     let decoratedPageStateManager = this._oc.create(
       '$PageStateManagerDecorator',
-      [pageStateManager, allowedStateKeys]
+      [pageStateManager, 'allowedStateKeys']
     );
 
-    return decoratedPageStateManager;
+    return decoratedPageStateManager as PageStateManagerDecorator;
   }
 }

@@ -1,8 +1,8 @@
 import { PageAction } from '../PageTypes';
 import { RouteOptions } from '../../router/Router';
 import { StringParameters } from '../../CommonTypes';
-import AbstractController from '../../controller/AbstractController';
 import AbstractRoute from '../../router/AbstractRoute';
+import { IController } from '../../controller/Controller';
 
 /**
  * The page manager is a utility for managing the current controller and its
@@ -33,7 +33,7 @@ export default abstract class PageManager {
    *         client (at the server side) or determine the type of error page
    *         to navigate to (at the client side).
    */
-  abstract manage(route: AbstractRoute, controller: typeof AbstractController, view: unknown, options: RouteOptions, params: StringParameters, action: PageAction): Promise<unknown>;
+  abstract manage(route: AbstractRoute, controller: IController, view: unknown, options: RouteOptions, params: StringParameters, action: PageAction): Promise<unknown>;
 
   /**
    * Finalization callback, called when the page manager is being discarded.
