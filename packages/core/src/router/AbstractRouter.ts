@@ -24,7 +24,7 @@ export default abstract class AbstractRouter extends Router {
   protected _host: string;
   protected _root: string;
   protected _languagePartPath: string;
-  protected _routeHandlers: Map<unknown, unknown>;
+  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware>;
   protected _currentMiddlewareId: number;
   protected _currentlyRoutedPath = '';
 
@@ -239,7 +239,7 @@ export default abstract class AbstractRouter extends Router {
     let { route } = this._getRouteHandlersByPath(path);
 
     if (!route) {
-      route = this._routeHandlers.get(RouteNames.NOT_FOUND);
+      route = this._routeHandlers.get(RouteNames.NOT_FOUND) as AbstractRoute;
 
       if (!route) {
         throw new GenericError(
@@ -272,15 +272,16 @@ export default abstract class AbstractRouter extends Router {
    */
   abstract redirect(
     url: string,
-    options: RouteOptions | object,
-    action: { type: string; payload: object | Event }
+    options: RouteOptions | Record<string, never>,
+    action: { type?: string; payload?: object | Event; event: unknown },
+    locals: Record<string, unknown>
   ): void;
 
   /**
    * @inheritdoc
    */
   link(routeName: string, params: { [key: string]: string }) {
-    const route = this._routeHandlers.get(routeName);
+    const route = this._routeHandlers.get(routeName) as AbstractRoute;
 
     if (!route) {
       throw new GenericError(
@@ -295,15 +296,16 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  async route(path: string, options = {}, action = {}, locals = {}) {
+  async route(
+    path: string,
+    options: RouteOptions | Record<string, never> = {},
+    action: { type?: string; event: Event; url?: string },
+    locals: Record<string, unknown>
+  ): Promise<void | { [key: string]: unknown }> {
     this._currentlyRoutedPath = path;
 
-    let params = {};
-    const {
-      route,
-      middlewares,
-    }: { route?: AbstractRoute; middlewares: Promise<unknown>[] } =
-      this._getRouteHandlersByPath(path);
+    let params: Record<string, unknown> = {};
+    const { route, middlewares } = this._getRouteHandlersByPath(path);
 
     if (!route) {
       params.error = new GenericError(
@@ -311,7 +313,11 @@ export default abstract class AbstractRouter extends Router {
         { status: 404 }
       );
 
-      return this.handleNotFound(params, {}, locals);
+      return this.handleNotFound(
+        params as { [key: string]: string },
+        {},
+        locals
+      );
     }
 
     locals.action = action;
@@ -319,16 +325,26 @@ export default abstract class AbstractRouter extends Router {
 
     await this._runMiddlewares(middlewares, params, locals);
     params = Object.assign(params, route.extractParameters(path));
-    await this._runMiddlewares(route.getOptions().middlewares, params, locals);
+    await this._runMiddlewares(
+      route.getOptions().middlewares as RouterMiddleware[],
+      params,
+      locals
+    );
 
-    return this._handle(route, params, options, action);
+    return this._handle(route, params, options as RouteOptions, action);
   }
 
   /**
    * @inheritdoc
    */
-  async handleError(params, options = {}, locals = {}) {
-    const errorRoute = this._routeHandlers.get(RouteNames.ERROR);
+  async handleError(
+    params: { [key: string]: GenericError | string },
+    options: RouteOptions | Record<string, never> = {},
+    locals: Record<string, unknown> = {}
+  ): Promise<void | { [key: string]: unknown }> {
+    const errorRoute = this._routeHandlers.get(
+      RouteNames.ERROR
+    ) as AbstractRoute;
 
     if (!errorRoute) {
       const error = new GenericError(
@@ -341,7 +357,9 @@ export default abstract class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    params = this._addParamsFromOriginalRoute(params);
+    params = this._addParamsFromOriginalRoute(
+      params as { [key: string]: string }
+    );
 
     const action = {
       url: this.getUrl(),
@@ -354,20 +372,26 @@ export default abstract class AbstractRouter extends Router {
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
-        ...errorRoute.getOptions().middlewares,
+        ...(errorRoute.getOptions().middlewares as RouterMiddleware[]),
       ],
       params,
       locals
     );
 
-    return this._handle(errorRoute, params, options, action);
+    return this._handle(errorRoute, params, options as RouteOptions, action);
   }
 
   /**
    * @inheritdoc
    */
-  async handleNotFound(params, options = {}, locals = {}) {
-    const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
+  async handleNotFound(
+    params: { [key: string]: string },
+    options: RouteOptions | Record<string, never> = {},
+    locals: Record<string, unknown> = {}
+  ): Promise<void | { [key: string]: unknown }> {
+    const notFoundRoute = this._routeHandlers.get(
+      RouteNames.NOT_FOUND
+    ) as AbstractRoute;
 
     if (!notFoundRoute) {
       const error = new GenericError(
@@ -394,13 +418,13 @@ export default abstract class AbstractRouter extends Router {
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
-        ...notFoundRoute.getOptions().middlewares,
+        ...(notFoundRoute.getOptions().middlewares as RouterMiddleware[]),
       ],
       params,
       locals
     );
 
-    return this._handle(notFoundRoute, params, options, action);
+    return this._handle(notFoundRoute, params, options as RouteOptions, action);
   }
 
   /**
@@ -430,8 +454,8 @@ export default abstract class AbstractRouter extends Router {
    * URL) from the provided path.
    *
    * @protected
-   * @param {string} path Relative or absolute URL path.
-   * @return {string} URL path relative to the application's base URL.
+   * @param path Relative or absolute URL path.
+   * @return URL path relative to the application's base URL.
    */
   _extractRoutePath(path: string) {
     return path.replace(this._root + this._languagePartPath, '');
@@ -450,20 +474,20 @@ export default abstract class AbstractRouter extends Router {
    *        the URL path and query.
    * @param options The options overrides route options defined in the
    *        `routes.js` configuration file.
-   * @param {{ type: string, event: Event, url: string }} [action] An action
+   * @param action An action
    *        object describing what triggered this routing.
-   * @return {Promise<Object<string, *>>} A promise that resolves when the
+   * @return A promise that resolves when the
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
   async _handle(
     route: AbstractRoute,
-    params: { [key: string]: Error | string },
+    params: Record<string, unknown>,
     options: RouteOptions,
     action = {}
   ) {
     options = Object.assign({}, route.getOptions(), options);
-    const eventData = {
+    const eventData: Record<string, unknown> = {
       route,
       params,
       path: this._getCurrentlyRoutedPath(),
@@ -480,7 +504,7 @@ export default abstract class AbstractRouter extends Router {
     ]);
 
     return this._pageManager
-      .manage({ route, controller, view, options, params, action })
+      .manage(route, controller, view, options, params, action )
       .then(response => {
         response = response || {};
 
@@ -500,14 +524,14 @@ export default abstract class AbstractRouter extends Router {
    * Returns the route matching the provided URL path part (the path may
    * contain a query) and all middlewares preceding this route definition.
    *
-   * @param {string} path The URL path.
-   * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>}} The route
+   * @param path The URL path.
+   * @return The route
    *         matching the path and middlewares preceding it or `{}`
    *         (empty object) if no such route exists.
    */
   _getRouteHandlersByPath(path: string): {
     route?: AbstractRoute;
-    middlewares: Promise<unknown>[];
+    middlewares: RouterMiddleware[];
   } {
     const middlewares = [];
 
@@ -531,9 +555,6 @@ export default abstract class AbstractRouter extends Router {
 
   /**
    * Returns middlewares preceding given route name.
-   *
-   * @param {string} routeName
-   * @returns {Array<RouterMiddleware>=}
    */
   _getMiddlewaresForRoute(routeName: string) {
     const middlewares = [];
@@ -556,8 +577,6 @@ export default abstract class AbstractRouter extends Router {
   /**
    * Returns path that is stored in private property when a `route`
    * method is called.
-   *
-   * @returns {string}
    */
   _getCurrentlyRoutedPath() {
     return this._currentlyRoutedPath;
@@ -566,19 +585,23 @@ export default abstract class AbstractRouter extends Router {
   /**
    * Runs provided middlewares in sequence.
    *
-   * @param {Array<Promise<RouterMiddleware>>} middlewares Array of middlewares.
-   * @param {Object<string, string>} params Router params that can be
+   * @param middlewares Array of middlewares.
+   * @param params Router params that can be
    *        mutated by middlewares.
-   * @param {object} locals The locals param is used to pass local data
+   * @param locals The locals param is used to pass local data
    *        between middlewares.
    */
-  async _runMiddlewares(middlewares, params, locals) {
+  async _runMiddlewares(
+    middlewares: RouterMiddleware[],
+    params: Record<string, unknown>,
+    locals: Record<string, unknown>
+  ) {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
     for (const middleware of middlewares) {
-      await middleware.run(params, locals);
+      await middleware.run(params as { [key: string]: string }, locals);
     }
   }
 

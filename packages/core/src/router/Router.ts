@@ -1,4 +1,4 @@
-import RouterMiddleware from './RouterMiddleware';
+import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { IController } from '../controller/Controller';
 import AbstractRoute from './AbstractRoute';
 import GenericError from '../error/GenericError';
@@ -10,7 +10,10 @@ export type RouteOptions = {
   extensions?: IExtension[];
   httpStatus?: number;
   managedRootView?: unknown;
-  middlewares?: Promise<RouterMiddleware>[] | RouterMiddleware[];
+  middlewares?:
+    | Promise<RouterMiddleware>[]
+    | RouterMiddleware[]
+    | MiddleWareFunction[];
   onlyUpdate?: (controller: IController, view: unknown) => boolean;
   viewAdapter?: unknown;
 };
@@ -126,7 +129,9 @@ export default abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  abstract getRouteHandler(name: string): undefined | AbstractRoute;
+  abstract getRouteHandler(
+    name: string
+  ): undefined | AbstractRoute | RouterMiddleware;
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -181,7 +186,7 @@ export default abstract class Router {
    */
   abstract getCurrentRouteInfo(): {
     route: AbstractRoute;
-    params: { [key: string]: string };
+    params: { [key: string]: string | undefined };
     path: string;
   };
 
@@ -248,7 +253,8 @@ export default abstract class Router {
   abstract redirect(
     url: string,
     options: RouteOptions | Record<string, never>,
-    action: { type: string; payload: object | Event }
+    action: { [key: string]: unknown },
+    locals: Record<string, unknown>
   ): void;
 
   /**
@@ -283,8 +289,9 @@ export default abstract class Router {
   abstract route(
     path: string,
     options: RouteOptions | Record<string, never>,
-    action: { type: string; event: Event | null; url: string | null }
-  ): Promise<{ [key: string]: unknown }>;
+    action: { type?: string; event?: Event; url?: string },
+    locals: Record<string, unknown>
+  ): Promise<void | { [key: string]: unknown }>;
 
   /**
    * Handles an internal server error by responding with the appropriate
@@ -301,10 +308,10 @@ export default abstract class Router {
    *         or displayed if used at the client side.
    */
   abstract handleError(
-    params: { [key: string]: Error | string },
+    params: { [key: string]: string },
     options: RouteOptions | Record<string, never>,
-    locals: { [key: string]: unknown }
-  ): Promise<{ [key: string]: unknown }>;
+    locals: Record<string, unknown>
+  ): Promise<void | { [key: string]: unknown }>;
 
   /**
    * Handles a "not found" error by responding with the appropriate "not
@@ -321,10 +328,10 @@ export default abstract class Router {
    *         to the client, or displayed if used at the client side.
    */
   abstract handleNotFound(
-    params: { [key: string]: Error | string },
+    params: { [key: string]: string },
     options: RouteOptions | Record<string, never>,
-    locals: { [key: string]: unknown }
-  ): Promise<{ [key: string]: unknown }>;
+    locals: Record<string, unknown>
+  ): Promise<void | { [key: string]: unknown }>;
 
   /**
    * Tests, if possible, whether the specified error was caused by the

@@ -1,4 +1,4 @@
-import RouterMiddleware from './RouterMiddleware';
+import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
 
@@ -51,7 +51,11 @@ export default abstract class AbstractRoute {
           pair.length === 2 &&
           pair.every(v => ['boolean', 'string', 'number'].includes(typeof v))
       )
-      .map(pair => pair.map(encodeURIComponent).join('='))
+      .map(pair =>
+        (pair as (string | number | boolean)[])
+          .map(encodeURIComponent)
+          .join('=')
+      )
       .join('&');
 
     return query.length ? `?${query}` : '';
@@ -83,12 +87,12 @@ export default abstract class AbstractRoute {
    * Extracts and decodes the query parameters from the provided URL path and
    * query.
    *
-   * @param {string} path The URL path, including the optional query string
+   * @param path The URL path, including the optional query string
    *        (if any).
-   * @return {Object<string, ?string>} Parsed query parameters.
+   * @return Parsed query parameters.
    */
   static getQuery(path: string) {
-    const query = {};
+    const query: { [key: string]: unknown } = {};
     const queryStart = path.indexOf('?');
 
     if (queryStart > -1 && queryStart !== path.length - 1) {
@@ -114,7 +118,7 @@ export default abstract class AbstractRoute {
           }
         }
 
-        query[AbstractRoute.decodeURIParameter(pair[0])] =
+        query[AbstractRoute.decodeURIParameter(pair[0]) as string] =
           pair.length > 1
             ? AbstractRoute.decodeURIParameter(pair[1]) || ''
             : true;
@@ -129,8 +133,8 @@ export default abstract class AbstractRoute {
    *
    * Decoding parameters.
    *
-   * @param {string} parameterValue
-   * @return {string} decodedValue
+   * @param parameterValue
+   * @return decodedValue
    */
   static decodeURIParameter(parameterValue: string): string | undefined {
     let decodedValue;
@@ -149,8 +153,8 @@ export default abstract class AbstractRoute {
    *
    * Trims the trailing forward slash from the provided URL path.
    *
-   * @param {string} path The path to trim.
-   * @return {string} Trimmed path.
+   * @param path The path to trim.
+   * @return Trimmed path.
    */
   static getTrimmedPath(path: string) {
     return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
@@ -217,7 +221,7 @@ export default abstract class AbstractRoute {
 
     // Initialize router middlewares
     this._options.middlewares = this._options?.middlewares?.map(
-      middleware => new RouterMiddleware(middleware)
+      middleware => new RouterMiddleware(middleware as MiddleWareFunction)
     );
   }
 
@@ -341,7 +345,9 @@ export default abstract class AbstractRoute {
    */
   async _getAsyncModule(module: object | string | (() => unknown)) {
     return module.constructor.name === 'AsyncFunction'
-      ? module().then(module => module.default ?? module)
+      ? (module as () => Promise<Record<string, unknown>>)().then(
+          module => module.default ?? module
+        )
       : module;
   }
 }

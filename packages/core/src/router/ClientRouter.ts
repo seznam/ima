@@ -8,6 +8,7 @@ import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
 import { RouteOptions } from './Router';
+import { GenericError } from '..';
 
 /**
  * Names of the DOM events the router responds to.
@@ -143,28 +144,35 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   redirect(
-    url = '',
+    redirectUrl = '',
     options = {},
-    { type = ActionTypes.REDIRECT, event } = {},
+    {
+      type = ActionTypes.REDIRECT,
+      event = undefined as unknown,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      url = '',
+    } = {},
     locals = {}
   ) {
-    if (this._isSameDomain(url)) {
-      let path = url.replace(this.getDomain(), '');
+    if (this._isSameDomain(redirectUrl)) {
+      let path = redirectUrl.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
-      this.route(path, options, { type, event, url }, locals);
+      this.route(path, options, { type, event, url: redirectUrl }, locals);
     } else {
-      this._window.redirect(url);
+      this._window.redirect(redirectUrl);
     }
   }
 
   /**
    * @inheritdoc
    */
-  route(
+  async route(
     path: string,
     options = {},
-    { event = null, type = ActionTypes.REDIRECT, url = null } = {},
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    { event, type = ActionTypes.REDIRECT, url = '' } = {},
     locals = {}
   ) {
     const action = {
@@ -193,17 +201,17 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   async handleError(
-    params: { [key: string]: Error | string },
-    options = {},
-    locals: { [key: string]: unknown } = {}
-  ) {
+    params: { [key: string]: GenericError | string },
+    options: Record<string, unknown> = {},
+    locals: Record<string, unknown> = {}
+  ): Promise<void | { [key: string]: unknown }> {
     if ($Debug) {
       console.error(params.error);
 
       // Show error overlay
       if (window.__IMA_HMR) {
         window.__IMA_HMR.emit('error', {
-          error: params.error,
+          error: params.error as Error,
         });
 
         return Promise.reject({
@@ -214,21 +222,27 @@ export default class ClientRouter extends AbstractRouter {
       }
     }
 
-    if (this.isClientError(params.error)) {
-      return this.handleNotFound(params, {}, locals);
+    const error = params.error as GenericError;
+
+    if (this.isClientError(error)) {
+      return this.handleNotFound(
+        params as { [key: string]: string },
+        {},
+        locals
+      );
     }
 
-    if (this.isRedirection(params.error)) {
-      const errorParams = params.error.getParams();
-      options.httpStatus = params.error.getHttpStatus();
+    if (this.isRedirection(error)) {
+      const errorParams = error.getParams();
+      options.httpStatus = error.getHttpStatus();
       const action = {
         event: null,
         type: ActionTypes.REDIRECT,
-        url: errorParams.url,
+        url: errorParams.url as string,
       };
 
       this.redirect(
-        errorParams.url,
+        errorParams.url as string,
         Object.assign(options, errorParams.options),
         Object.assign(action, errorParams.action),
         locals
@@ -240,16 +254,19 @@ export default class ClientRouter extends AbstractRouter {
         error: params.error,
       });
     }
+    super.handleError(params, options as RouteOptions, locals);
 
-    return super.handleError(params, options, locals).catch(error => {
-      this._handleFatalError(error);
-    });
+    return super
+      .handleError(params, options as RouteOptions, locals)
+      .catch((error: Error) => {
+        this._handleFatalError(error);
+      });
   }
 
   /**
    * @inheritdoc
    */
-  handleNotFound(params, options = {}, locals = {}) {
+  handleNotFound(params: { [key: string]: string }, options = {}, locals = {}) {
     return super.handleNotFound(params, options, locals).catch(error => {
       return this.handleError({ error }, {}, locals);
     });
@@ -262,7 +279,11 @@ export default class ClientRouter extends AbstractRouter {
    * @param error
    */
   _handleFatalError(error: Error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if ($IMA && typeof $IMA.fatalErrorHandler === 'function') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       $IMA.fatalErrorHandler(error);
     } else {
       if ($Debug) {

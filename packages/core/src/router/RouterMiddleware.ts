@@ -1,27 +1,27 @@
 import GenericError from '../error/GenericError';
 
+export type MiddleWareFunction = (
+  params: { [key: string]: string | number },
+  locals: object
+) => unknown;
+
 /**
  * Utility for representing and running router middleware.
  */
 export default class RouterMiddleware {
   protected _middleware: (
     params: { [key: string]: string | number },
-    locals: object
+    locals: Record<string, unknown>
   ) => unknown;
   /**
    * Initializes the middleware
    *
-   * @param {function(Object<string, string>, object)} middleware Middleware
+   * @param middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
    *        and `locals` object as second argument. This can be used to pass data
    *        between middlewares.
    */
-  constructor(
-    middleware: (
-      params: { [key: string]: string | number },
-      locals: object
-    ) => unknown
-  ) {
+  constructor(middleware: MiddleWareFunction) {
     if (typeof middleware !== 'function') {
       throw new GenericError(
         `The middleware must be a function, '${typeof middleware}' was given.`
