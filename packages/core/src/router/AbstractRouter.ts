@@ -11,7 +11,6 @@ import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import { IController } from '@/controller/Controller';
 import { StringParameters } from '@/CommonTypes';
-import { string } from 'yargs';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the

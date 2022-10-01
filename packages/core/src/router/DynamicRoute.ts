@@ -1,25 +1,28 @@
+import { StringParameters } from '../CommonTypes';
 import GenericError from '../error/GenericError';
 import AbstractRoute from './AbstractRoute';
 import { RouteOptions } from './Router';
 
 /**
  * Path expression type used for router routes definition.
- * @typedef {Object} Route~PathExpression
- * @property {RegExp} matcher Regular expression used to match current path
+ * @typedef Route~PathExpression
+ * @property matcher Regular expression used to match current path
  *           to the specific route.
- * @property {function(Object<string, (number|string)>)} toPath Override
+ * @property toPath Override
  *           for the default toPath which generates valid path from current route
  *           and passed route params.
- * @property {function(path)} extractParameters Override for default method, which
+ * @property extractParameters Override for default method, which
  *           takes care of parsing url params from given path. It should return
  *           object of key/value pairs which correspond to expected path url
  *           params and their values.
  */
 export type RoutePathExpression = {
   matcher: RegExp;
-  toPath: (params: { [key: string]: number | string }) => string;
-  extractParameters: (path?: string) => { [key: string]: string | undefined };
+  toPath: (params: StringParameters) => string;
+  extractParameters: ExtractPathFunction;
 };
+
+export type ExtractPathFunction = (path?: string) => Record<string, string>;
 
 /**
  * Utility for representing and manipulating a single dynamic route in the
@@ -31,7 +34,7 @@ export type RoutePathExpression = {
  */
 export default class DynamicRoute extends AbstractRoute {
   protected _matcher: RegExp;
-  protected _toPath: (params: { [key: string]: number | string }) => string;
+  protected _toPath: (params: StringParameters) => string;
   protected _extractParameters: (path?: string) => {
     [key: string]: string | undefined;
   };
@@ -40,7 +43,7 @@ export default class DynamicRoute extends AbstractRoute {
    * Initializes the route.
    *
    * @inheritdoc
-   * @param {Route~PathExpression} pathExpression Path expression used in route matching,
+   * @param pathExpression Path expression used in route matching,
    *        to generate valid path with provided params and parsing params from current path.
    */
   constructor(
@@ -66,8 +69,6 @@ export default class DynamicRoute extends AbstractRoute {
 
     /**
      * RegExp use in router for path matching to current route.
-     *
-     * @type {RegExp}
      */
     this._matcher = matcher;
 
@@ -79,8 +80,6 @@ export default class DynamicRoute extends AbstractRoute {
 
     /**
      * Function that generates valid path from current route and passed route params.
-     *
-     * @type {function(Object<string, (number|string)>)}
      */
     this._toPath = toPath;
 
@@ -94,8 +93,6 @@ export default class DynamicRoute extends AbstractRoute {
      * Function which takes care of parsing url params from given path.
      * It returns object of key/value pairs which correspond to expected path url
      * params and their values.
-     *
-     * @type {function(path)}
      */
     this._extractParameters = extractParameters;
   }

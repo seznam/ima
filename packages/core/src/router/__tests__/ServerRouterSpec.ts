@@ -1,23 +1,29 @@
-import Dispatcher from 'src/event/Dispatcher';
-import PageManager from 'src/page/manager/PageManager';
+import Dispatcher from '../../event/Dispatcher';
+import PageManager from '../../page/manager/PageManager';
 import Request from '../Request';
 import Response from '../Response';
 import RouteFactory from '../RouteFactory';
 import ServerRouter from '../ServerRouter';
 
+import { toMockedInstance } from 'to-mock';
+
 describe('ima.core.router.ServerRouter', () => {
-  var router = null;
-  var pageRenderer = null;
-  var routeFactory = null;
-  var dispatcher = null;
-  var request = null;
-  var response = null;
-  var domain = 'http://locahlost:3002';
+  let router: ServerRouter;
+  let request: Request;
+  let response: Response;
+  const pageRenderer = toMockedInstance(PageManager);
+  const routeFactory = toMockedInstance(RouteFactory);
+  const dispatcher = toMockedInstance(Dispatcher);
+  const domain = 'http://locahlost:3002';
+
+  const routerConfig = {
+    $Protocol: 'http:',
+    $Root: '',
+    $LanguagePartPath: '',
+    $Host: 'www.domain.com',
+  };
 
   beforeEach(() => {
-    pageRenderer = new PageManager();
-    routeFactory = new RouteFactory();
-    dispatcher = new Dispatcher();
     request = new Request();
     response = new Response();
     router = new ServerRouter(
@@ -27,7 +33,7 @@ describe('ima.core.router.ServerRouter', () => {
       request,
       response
     );
-    router.init({ mode: router.MODE_SERVER, domain: domain });
+    router.init(routerConfig);
   });
 
   it('should be return actual path', () => {
@@ -39,8 +45,8 @@ describe('ima.core.router.ServerRouter', () => {
   });
 
   it('should be redirect to url', () => {
-    var url = domain + '/redirectUrl';
-    var options = {
+    const url = domain + '/redirectUrl';
+    const options = {
       httpStatus: 303,
       headers: { 'Custom-header': 'Some custom value' },
     };

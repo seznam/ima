@@ -1,11 +1,13 @@
 import AbstractRoute from '../AbstractRoute';
-import DynamicRoute from '../DynamicRoute';
+import DynamicRoute, { RoutePathExpression } from '../DynamicRoute';
+import { StringParameters } from '../../CommonTypes';
+import { RouteOptions } from '../Router';
 
 describe('ima.core.router.DynamicRoute', function () {
-  let route = null;
+  let route: DynamicRoute;
   const name = 'home';
-  const controller = function () {};
-  const view = function () {};
+  const controller = 'controler-mock';
+  const view = 'view-mock';
   const options = {
     onlyUpdate: false,
     autoScroll: true,
@@ -15,7 +17,7 @@ describe('ima.core.router.DynamicRoute', function () {
   };
 
   const matcher = /^\/([\w-]+)?\/?([\w-]+)?\/article\/(\w+-\d+)$/i;
-  const toPath = params => {
+  const toPath = (params: StringParameters) => {
     const { section, subsection, slug, ...restParams } = params;
 
     if (!slug || !section) {
@@ -28,7 +30,7 @@ describe('ima.core.router.DynamicRoute', function () {
         .join('/') + AbstractRoute.paramsToQuery(restParams)
     );
   };
-  const extractParameters = path => {
+  const extractParameters = (path: string) => {
     const parsedPath = matcher.exec(path);
 
     if (!parsedPath) {
@@ -49,10 +51,10 @@ describe('ima.core.router.DynamicRoute', function () {
         matcher,
         toPath,
         extractParameters,
-      },
+      } as RoutePathExpression,
       controller,
       view,
-      options
+      options as unknown as RouteOptions
     );
   });
 

@@ -1,30 +1,31 @@
 import Response from '../Response';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.router.Response', () => {
-  var response = null;
+  let response = toMockedInstance(Response);
 
   beforeEach(() => {
     response = new Response();
   });
 
   it('should convert cookie maxAge to ms for Express', () => {
-    let options = { maxAge: 1 };
-    let expressOptions = response._prepareCookieOptionsForExpress(options);
+    const options = { maxAge: 1 };
+    const expressOptions = response._prepareCookieOptionsForExpress(options);
     expect(options.maxAge).toBe(1);
     expect(expressOptions.maxAge).toBe(1000);
   });
 
   it('should remove cookie maxAge: null for Express', () => {
     // Because Express converts null to 0, which is not intended.
-    let options = { maxAge: null };
-    let expressOptions = response._prepareCookieOptionsForExpress(options);
+    const options = { maxAge: null };
+    const expressOptions = response._prepareCookieOptionsForExpress(options);
     expect(options.maxAge).toBeNull();
     expect(expressOptions.maxAge).toBeUndefined();
   });
 
   describe('redirect', () => {
     it('should set cookies, headers, and redirect', () => {
-      response._response = {
+      response['_response'] = {
         cookie: jest.fn(),
         redirect: jest.fn(),
         set: jest.fn(),

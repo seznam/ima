@@ -55,8 +55,6 @@ export default class Request {
 
   /**
    * Returns upaloaded files to server with their meta information.
-   *
-   * @return {?Object<string, *>}
    */
   getFiles() {
     return this._request ? this._request.files : null;
@@ -64,8 +62,6 @@ export default class Request {
 
   /**
    * Returns body of request.
-   *
-   * @return {?string}
    */
   getBody() {
     return this._request ? this._request.body || null : null;
@@ -73,9 +69,6 @@ export default class Request {
 
   /**
    * Returns the specified HTTP request header.
-   *
-   * @param {string} header
-   * @return {?string}
    */
   getHeader(header: string): string | null {
     return this._request ? this._request.get(header) || null : null;
@@ -83,8 +76,6 @@ export default class Request {
 
   /**
    * Returns the remote IP address of the request.
-   *
-   * @return {?string}
    */
   getIP(): string | null {
     return this._request ? this._request.ip : null;
@@ -93,8 +84,6 @@ export default class Request {
   /**
    * Returns array of IP addresses specified in the “X-Forwarded-For”
    * request header.
-   *
-   * @return {string[]}
    */
   getIPs(): string[] {
     return this._request ? this._request.ips || [] : [];

@@ -147,7 +147,7 @@ export default class ClientRouter extends AbstractRouter {
     redirectUrl = '',
     options = {},
     {
-      type = ActionTypes.REDIRECT,
+      type = ActionTypes.REDIRECT as string,
       event = undefined as unknown,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       url = '',
@@ -172,7 +172,7 @@ export default class ClientRouter extends AbstractRouter {
     options = {},
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    { event, type = ActionTypes.REDIRECT, url = '' } = {},
+    { event, type = ActionTypes.REDIRECT as string, url = '' } = {},
     locals = {}
   ) {
     const action = {
