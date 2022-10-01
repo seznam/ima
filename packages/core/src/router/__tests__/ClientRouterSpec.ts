@@ -1,29 +1,33 @@
-import Dispatcher from 'src/event/Dispatcher';
-import PageManager from 'src/page/manager/PageManager';
+import Dispatcher from '../../event/Dispatcher';
+import PageManager from '../../page/manager/PageManager';
 import ActionTypes from '../ActionTypes';
 import ClientRouter from '../ClientRouter';
 import RouteFactory from '../RouteFactory';
-import Window from 'src/window/Window';
+import ClientWindow from '../../window/ClientWindow';
+
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.router.ClientRouter', () => {
-  let router = null;
-  let pageRenderer = null;
-  let routeFactory = null;
-  let dispatcher = null;
-  let window = null;
-  let host = 'locahlost:3002';
-  let protocol = 'http:';
+  let router: ClientRouter;
+  const pageRenderer = toMockedInstance(PageManager);
+  const routeFactory = toMockedInstance(RouteFactory);
+  const dispatcher = toMockedInstance(Dispatcher);
+  const window = new ClientWindow();
+  const host = 'locahlost:3002';
+  const protocol = 'http:';
+  const routerConfig = {
+    $Protocol: protocol,
+    $Root: '',
+    $LanguagePartPath: '',
+    $Host: host,
+  };
 
   beforeEach(() => {
-    pageRenderer = new PageManager();
-    routeFactory = new RouteFactory();
-    dispatcher = new Dispatcher();
-    window = new Window();
     router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
 
     jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
 
-    router.init({ $Host: host, $Protocol: protocol });
+    router.init(routerConfig);
   });
 
   it('should return actual path', () => {
@@ -61,9 +65,9 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('redirect method', () => {
     it('redirect to a new page', () => {
-      let path = '/somePath';
-      let url = protocol + '//' + host + path;
-      let options = { httpStatus: 302 };
+      const path = '/somePath';
+      const url = protocol + '//' + host + path;
+      const options = { httpStatus: 302 };
 
       jest.spyOn(router, 'route').mockImplementation();
 
@@ -82,7 +86,7 @@ describe('ima.core.router.ClientRouter', () => {
     });
 
     it('return null for non exist route', () => {
-      let url = 'http://example.com/somePath';
+      const url = 'http://example.com/somePath';
 
       jest.spyOn(window, 'redirect').mockImplementation();
 
@@ -105,7 +109,9 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('handleNotFound method', () => {
     it('should be call router.handleError function for throwing error', done => {
-      jest.spyOn(router, 'handleError').mockReturnValue(Promise.resolve('ok'));
+      jest
+        .spyOn(router, 'handleError')
+        .mockReturnValue(Promise.resolve({ status: 'ok' }));
 
       router.handleNotFound({ path: '/path' }).then(() => {
         expect(router.handleError).toHaveBeenCalled();
@@ -116,15 +122,15 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('_isSameDomain method', () => {
     it('should be return true for same domain', () => {
-      let path = '/somePath';
-      let url = protocol + '//' + host + path;
+      const path = '/somePath';
+      const url = protocol + '//' + host + path;
 
       expect(router._isSameDomain(url)).toBeTruthy();
     });
 
     it('should be retrun false for strange domain with query for same domain', () => {
-      let path = '/somePath';
-      let url =
+      const path = '/somePath';
+      const url =
         protocol +
         '//' +
         'www.strangeDomain.com' +
@@ -139,49 +145,46 @@ describe('ima.core.router.ClientRouter', () => {
     });
 
     it('should be retrun false for strange domain', () => {
-      let path = '/somePath';
-      let url = protocol + '//' + 'www.strangeDomain.com' + path;
+      const path = '/somePath';
+      const url = protocol + '//' + 'www.strangeDomain.com' + path;
 
       expect(router._isSameDomain(url)).toBeFalsy();
     });
   });
 
   describe('_isHashLink method', () => {
-    using(
-      [
-        {
-          targetUrl: 'http://localhost/aaa#hash',
-          baseUrl: 'http://localhost/aaa',
-          result: true,
-        },
-        {
-          targetUrl: 'http://localhost/bbb#hash',
-          baseUrl: 'http://localhost/aaa',
-          result: false,
-        },
-        {
-          targetUrl: 'http://localhost/aaa',
-          baseUrl: 'http://localhost/aaa',
-          result: false,
-        },
-      ],
-      value => {
-        it(
-          'should be for ' +
-            value.targetUrl +
-            ' and base url ' +
-            value.baseUrl +
-            ' return ' +
-            value.result,
-          () => {
-            jest.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl);
+    [
+      {
+        targetUrl: 'http://localhost/aaa#hash',
+        baseUrl: 'http://localhost/aaa',
+        result: true,
+      },
+      {
+        targetUrl: 'http://localhost/bbb#hash',
+        baseUrl: 'http://localhost/aaa',
+        result: false,
+      },
+      {
+        targetUrl: 'http://localhost/aaa',
+        baseUrl: 'http://localhost/aaa',
+        result: false,
+      },
+    ].forEach((value: Record<string, unknown>) => {
+      it(
+        'should be for ' +
+          value.targetUrl +
+          ' and base url ' +
+          value.baseUrl +
+          ' return ' +
+          value.result,
+        () => {
+          jest.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl as string);
 
-            expect(router._isHashLink(value.targetUrl)).toStrictEqual(
-              value.result
-            );
-          }
-        );
-      }
-    );
+          expect(router._isHashLink(value.targetUrl as string)).toStrictEqual(
+            value.result
+          );
+        }
+      );
+    });
   });
 });
