@@ -1,14 +1,17 @@
-import Bootstrap from '../Bootstrap';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-empty-function */
+import Bootstrap, { Module, Config } from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import namespace from '../Namespace';
 
 describe('bootstrap', () => {
-  let bootstrap, objectContainer, environments, plugin, bootConfig;
+  let bootstrap: Bootstrap;
+  let objectContainer: ObjectContainer;
+  let environments: { [key: string]: unknown };
+  let plugin: Module;
+  let bootConfig: Config;
 
   beforeEach(() => {
-    bootstrap = null;
-    objectContainer = null;
-
     environments = {
       prod: {},
       test: {},
@@ -31,14 +34,17 @@ describe('bootstrap', () => {
       initBindIma: () => {},
       initBindApp: () => {},
       initRoutes: () => {},
+      initServicesApp: () => {},
+      initServicesIma: () => {},
       bind: {},
       routes: {},
+      services: {},
     };
 
     objectContainer = new ObjectContainer(namespace);
     bootstrap = new Bootstrap(objectContainer);
 
-    bootstrap._config = bootConfig;
+    bootstrap['_config'] = bootConfig;
   });
 
   describe('run method', () => {
@@ -69,13 +75,14 @@ describe('bootstrap', () => {
   });
 
   describe('initPlugin method', () => {
-    let module;
+    let module: Module;
 
     beforeEach(() => {
       jest.spyOn(bootstrap, '_initPluginSettings').mockImplementation();
       jest.spyOn(bootstrap, '_bindPluginDependencies').mockImplementation();
       jest.spyOn(bootstrap, '_initPluginServices').mockImplementation();
 
+      // @ts-ignore
       module = jest.fn(() => {});
       bootstrap.initPlugin('plugin-name', module);
     });
@@ -117,7 +124,7 @@ describe('bootstrap', () => {
 
   describe('_initPluginSettings method', () => {
     it('should init plugin settings', () => {
-      expect(bootstrap._config.bind).toStrictEqual({});
+      expect(bootstrap['_config'].bind).toStrictEqual({});
 
       bootstrap._initPluginSettings('plugin-name', plugin);
 
@@ -128,7 +135,7 @@ describe('bootstrap', () => {
         true
       );
 
-      expect(bootstrap._config.bind).toStrictEqual({
+      expect(bootstrap['_config'].bind).toStrictEqual({
         __meta__: {
           pluginSettings: 'plugin-name',
         },
@@ -137,13 +144,16 @@ describe('bootstrap', () => {
     });
 
     it('should ignore invalid module interfaces', () => {
-      expect(bootstrap._config.bind).toStrictEqual({});
+      expect(bootstrap['_config'].bind).toStrictEqual({});
 
+      // @ts-ignore
       bootstrap._initPluginSettings('invalid-plugin 1', {});
+      // @ts-ignore
       bootstrap._initPluginSettings('invalid-plugin 2');
+      // @ts-ignore
       bootstrap._initPluginSettings('invalid-plugin 3', null);
 
-      expect(bootstrap._config.bind).toStrictEqual({});
+      expect(bootstrap['_config'].bind).toStrictEqual({});
     });
   });
 
@@ -223,8 +233,9 @@ describe('bootstrap', () => {
     });
 
     it('should ignore invalid plugins', () => {
+      // @ts-ignore
       bootstrap._initPluginSettings('invalid-plugin 1', {});
-      bootstrap._initPluginSettings('invalid-plugin 2');
+      // @ts-ignore
       bootstrap._initPluginSettings('invalid-plugin 3', null);
 
       expect(objectContainer.setBindingState).not.toHaveBeenCalled();
@@ -252,13 +263,13 @@ describe('bootstrap', () => {
     it('should set binding state to "app" after binding', () => {
       bootstrap._bindPluginDependencies('plugin-name', plugin);
 
-      expect(objectContainer._bindingState).toBe('app');
+      expect(objectContainer['_bindingState']).toBe('app');
     });
   });
 
   describe('_initRoutes method', () => {
     it('should initialize app route', () => {
-      let router = {};
+      const router = {};
 
       jest.spyOn(bootConfig, 'initRoutes');
       jest.spyOn(objectContainer, 'get').mockReturnValue(router);

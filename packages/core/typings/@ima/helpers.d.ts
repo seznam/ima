@@ -10,4 +10,7 @@ declare module '@ima/helpers' {
     prototype?: any,
     includeNonEnumerable?: boolean
   ): T;
+  export function assignRecursively(target, ...sources);
+  export function assignRecursivelyWithTracking(referrer);
+  export function resolveEnvironmentSetting(setting, currentEnv);
 }
