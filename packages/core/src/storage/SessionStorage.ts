@@ -49,8 +49,8 @@ export default class SessionStorage extends ImaStorage {
     } catch (error) {
       throw new GenericError(
         'ima.storage.SessionStorage.get: Failed to parse a session ' +
-        `storage item value identified by the key ${key}: ` +
-        (error as Error).message
+          `storage item value identified by the key ${key}: ` +
+          (error as Error).message
       );
     }
   }

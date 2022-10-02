@@ -24,11 +24,11 @@ describe('ima.storage.Map', () => {
     map.set('item3', false);
     expect(map.get('item3')).toBeFalsy();
 
-    let obj = { testedProp: 'testedValue' };
+    const obj = { testedProp: 'testedValue' };
     map.set('item4', obj);
     expect(map.get('item4')).toStrictEqual(obj);
 
-    let arr = [0, 'val', true, {}];
+    const arr = [0, 'val', true, {}];
     map.set('item5', arr);
     expect(map.get('item5')).toStrictEqual(arr);
   });
@@ -64,7 +64,7 @@ describe('ima.storage.Map', () => {
     map.set('item1', 1).set('item2', 'test').set('item3', false);
 
     let index = 0;
-    let iterator = map.keys();
+    const iterator = map.keys();
     let item = iterator.next();
 
     do {

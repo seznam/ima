@@ -97,25 +97,23 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   describe('route method', () => {
-    it('should call handleError for throwing error in super.router', done => {
+    it('should call handleError for throwing error in super.router', async () => {
       jest.spyOn(router, 'handleError').mockReturnValue(Promise.resolve());
 
-      router.route('/something').then(() => {
+      await router.route('/something').then(() => {
         expect(router.handleError).toHaveBeenCalled();
-        done();
       });
     });
   });
 
   describe('handleNotFound method', () => {
-    it('should be call router.handleError function for throwing error', done => {
+    it('should be call router.handleError function for throwing error', async () => {
       jest
         .spyOn(router, 'handleError')
         .mockReturnValue(Promise.resolve({ status: 'ok' }));
 
-      router.handleNotFound({ path: '/path' }).then(() => {
+      await router.handleNotFound({ path: '/path' }).then(() => {
         expect(router.handleError).toHaveBeenCalled();
-        done();
       });
     });
   });

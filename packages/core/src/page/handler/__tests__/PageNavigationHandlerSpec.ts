@@ -5,6 +5,8 @@ import ClientWindow from '../../../window/ClientWindow';
 import ActionTypes from '../../../router/ActionTypes';
 import { ManagedPage, PageAction } from '../../PageTypes';
 
+window.scrollTo = jest.fn();
+
 jest.useFakeTimers();
 
 describe('ima.core.page.handler.PageNavigationHandler', () => {
@@ -97,7 +99,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     });
 
     it('window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
-      jest.spyOn(window, 'scrollTo').mockImplementation();
+      jest.spyOn(window, 'scrollTo').mockImplementation(() => {return;});
       const nextManagedPage = { options: { autoScroll: false } };
 
       handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {} as PageAction);
