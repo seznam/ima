@@ -1,29 +1,24 @@
-import toMock from 'to-mock';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
 
-import Cache from 'src/cache/Cache';
-import GenericError from 'src/error/GenericError';
+import Cache from '../../cache/CacheImpl';
+import GenericError from '../../error/GenericError';
 import HttpAgentImpl from '../HttpAgentImpl';
+import { HttpAgentResponse } from '../HttpAgent';
 import HttpAgentProxy from '../HttpProxy';
-import CookieStorage from 'src/storage/CookieStorage';
+import CookieStorage from '../../storage/CookieStorage';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.http.HttpAgentImpl', () => {
-  let MockedCache = toMock(Cache);
-  let MockedHttpAgentProxy = toMock(HttpAgentProxy);
-  let MockedCookieStorage = toMock(CookieStorage);
-
-  let proxy = null;
-  let http = null;
-  let cache = null;
-  let cookie = null;
+  let http: HttpAgentImpl;
+  const proxy = toMockedInstance(HttpAgentProxy);
+  const cache = toMockedInstance(Cache);
+  const cookie = toMockedInstance(CookieStorage);
   let options = null;
-  let data = null;
+  let data: HttpAgentResponse;
   let httpConfig = null;
 
   beforeEach(() => {
-    cache = new MockedCache();
-    proxy = new MockedHttpAgentProxy();
-    cookie = new MockedCookieStorage();
     httpConfig = {
       defaultRequestOptions: {
         timeout: 7000,
@@ -34,7 +29,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           'Accept-Language': 'en',
         },
         cache: true,
-        postProcessor: agentResponse => agentResponse,
+        postProcessor: (agentResponse: Response) => agentResponse,
       },
       cacheOptions: {
         prefix: 'http.',
@@ -50,6 +45,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       cache: true,
       withCredentials: true,
       postProcessor: httpConfig.defaultRequestOptions.postProcessor,
+      // @ts-ignore
       language: httpConfig.defaultRequestOptions.language,
     };
 
@@ -62,8 +58,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
         options: options,
       },
       headers: {
+        // @ts-ignore
         'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
       },
+      // @ts-ignore
       headersRaw: new Map(
         Object.entries({
           'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
@@ -76,7 +74,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
     jest.clearAllMocks();
   });
 
-  using(['get', 'post', 'put', 'patch', 'delete'], method => {
+  ['get', 'post', 'put', 'patch', 'delete'].forEach(method => {
     describe(method + ' method', () => {
       beforeEach(() => {
         data.params.method = method;
@@ -89,9 +87,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
 
         jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(false);
 
+        // @ts-ignore
         http[method](data.params.url, data.params.data, data.params.options)
-          .then(response => {
-            let agentResponse = {
+          .then((response: HttpAgentResponse) => {
+            const agentResponse = {
               status: data.status,
               params: data.params,
               body: data.body,
@@ -100,9 +99,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
               cached: false,
             };
 
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(response).toStrictEqual(agentResponse);
             done();
           })
+          // @ts-ignore
           .catch(e => {
             console.error(e.message, e.stack);
             done(e);
@@ -114,12 +115,16 @@ describe('ima.core.http.HttpAgentImpl', () => {
           return Promise.reject(new GenericError('', data.params));
         });
 
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
           data.params.options
         ).then(
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           () => {},
+          // @ts-ignore
           error => {
             expect(error instanceof GenericError).toBe(true);
             expect(proxy.request.mock.calls).toHaveLength(2);
@@ -128,6 +133,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         );
       });
 
+      // eslint-disable-next-line jest/no-focused-tests
       it('should be set cookie to response', done => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
@@ -135,14 +141,16 @@ describe('ima.core.http.HttpAgentImpl', () => {
         jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
         jest
           .spyOn(cookie, 'parseFromSetCookieHeader')
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           .mockImplementation(() => {});
 
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(cookie.parseFromSetCookieHeader.mock.calls).toHaveLength(2);
+          expect(cookie.parseFromSetCookieHeader).toHaveBeenCalled();
           done();
         });
       });
@@ -153,6 +161,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
         jest.spyOn(data.params.options, 'postProcessor');
 
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
@@ -169,6 +178,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
         jest.spyOn(cookie, 'getCookiesStringForCookieHeader');
 
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
@@ -187,6 +197,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         jest.spyOn(Helper, 'clone').mockImplementation();
 
         //the first call without a response in the _internalCacheOfPromises
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
@@ -196,6 +207,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
 
         //the second call from the _internalCacheOfPromises is cloned
+        // @ts-ignore
         http[method](
           data.params.url,
           data.params.data,
