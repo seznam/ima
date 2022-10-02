@@ -36,8 +36,6 @@ export default class DispatcherImpl extends Dispatcher {
      * Map of event names to a map of event listeners to a set of scopes to
      * which the event listener should be bound when being executed due to
      * the event.
-     *
-     * @type {Map<string, Map<function(*), Set<?Object>>>}
      */
     this._eventListeners = new Map();
   }

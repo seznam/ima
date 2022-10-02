@@ -67,7 +67,7 @@ export default abstract class EventBus {
    * The order in which the event listeners will be executed is unspecified
    * and should not be relied upon.
    *
-   * @param  eventTarget The event target at which the listener
+   * @param eventTarget The event target at which the listener
    *        should listen for all event bus events.
    * @param listener The event listener to
    *        register.
