@@ -1,5 +1,8 @@
 import { StringParameters, UnknownParameters } from '../../CommonTypes';
-import ObjectContainer, { FactoryFunction, UnknownConstructable } from '../../ObjectContainer';
+import ObjectContainer, {
+  FactoryFunction,
+  UnknownConstructable,
+} from '../../ObjectContainer';
 
 export default class ComponentUtils {
   /**
@@ -9,17 +12,18 @@ export default class ComponentUtils {
   /**
    * Map of registered utilities.
    */
-  private _utilityClasses: { [key: string]: UnknownConstructable | FactoryFunction } = {};
+  private _utilityClasses: {
+    [key: string]: UnknownConstructable | FactoryFunction;
+  } = {};
   /**
    * Map of instantiated utilities
    */
   private _utilities?: UnknownParameters;
 
   /**
-  * Map of referrers to utilities
-  */
+   * Map of referrers to utilities
+   */
   private _utilityReferrers: StringParameters = {};
-
 
   /**
    * Initializes the registry used for managing component utils.
@@ -34,7 +38,15 @@ export default class ComponentUtils {
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
    */
-  register(name: string | UnknownConstructable | FactoryFunction | { [key: string]: UnknownConstructable | FactoryFunction }, componentUtilityClass?: UnknownConstructable | FactoryFunction, referrer?: string) {
+  register(
+    name:
+      | string
+      | UnknownConstructable
+      | FactoryFunction
+      | { [key: string]: UnknownConstructable | FactoryFunction },
+    componentUtilityClass?: UnknownConstructable | FactoryFunction,
+    referrer?: string
+  ) {
     if (
       typeof componentUtilityClass === 'function' ||
       typeof componentUtilityClass === 'string'
@@ -94,7 +106,10 @@ export default class ComponentUtils {
     return this._utilityReferrers;
   }
 
-  _createUtilityInstance(alias: string, utilityClass: UnknownConstructable | FactoryFunction) {
+  _createUtilityInstance(
+    alias: string,
+    utilityClass: UnknownConstructable | FactoryFunction
+  ) {
     return (this._utilities![alias] = this._oc.get(utilityClass));
   }
 }

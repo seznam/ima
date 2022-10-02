@@ -29,6 +29,6 @@ enum Events {
    * `{message: string}`.
    */
   ERROR = '$IMA.$PageRenderer.error',
-};
+}
 
 export default Events;

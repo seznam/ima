@@ -15,6 +15,6 @@ enum Events {
    * is patched. Event's data contain `{newState: Object<string, *>}`.
    */
   AFTER_CHANGE_STATE = '$IMA.$PageStateManager.afterChangeState',
-};
+}
 
 export default Events;

@@ -14,6 +14,6 @@ enum Types {
    * The UNMOUNT type is set if unmounting use React.unmountComponentAtNode method.
    */
   UNMOUNT = '$IMA.$PageRenderer.type.unmount',
-};
+}
 
 export default Types;

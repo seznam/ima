@@ -4,17 +4,16 @@ import DispatcherImpl from '../../../event/DispatcherImpl';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.page.state.PageStateManagerDecorator', () => {
-  let dispatcher: DispatcherImpl = toMockedInstance(DispatcherImpl);
+  const dispatcher: DispatcherImpl = toMockedInstance(DispatcherImpl);
   let pageStateManager: PageStateManagerImpl;
-  let allowedStateKeys = ['allow'];
+  const allowedStateKeys = ['allow'];
   let decoratedPageStateManager: PageStateManagerDecorator;
-  let state = {
+  const state = {
     allow: 1,
     deny: 0,
   };
 
   beforeEach(() => {
-
     pageStateManager = new PageStateManagerImpl(dispatcher);
     decoratedPageStateManager = new PageStateManagerDecorator(
       pageStateManager,
@@ -62,7 +61,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
     });
 
     it('should setState for all allowed keys', () => {
-      let patchState = {
+      const patchState = {
         allow: 0,
       };
 
@@ -74,7 +73,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
     });
 
     it('should commit transaction for all allowed keys', () => {
-      let patchState = {
+      const patchState = {
         allow: 0,
       };
 

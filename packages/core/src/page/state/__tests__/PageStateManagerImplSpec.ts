@@ -5,11 +5,11 @@ import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.page.state.PageStateManagerImpl', () => {
   let stateManager: PageStateManager;
-  let defaultState = { state: 'state', patch: null };
-  let patchState = { patch: 'patch' };
-  let queuedPatchState1 = { lazy: 'patch' };
-  let queuedPatchState2 = { queued: 'patch', lazy: 'overriden' };
-  let dispatcher = toMockedInstance(Dispatcher);
+  const defaultState = { state: 'state', patch: null };
+  const patchState = { patch: 'patch' };
+  const queuedPatchState1 = { lazy: 'patch' };
+  const queuedPatchState2 = { queued: 'patch', lazy: 'overriden' };
+  const dispatcher = toMockedInstance(Dispatcher);
 
   beforeEach(() => {
     stateManager = new PageStateManager(dispatcher);
@@ -49,7 +49,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
     });
 
     it('should set smooth copy last state and state patch', () => {
-      let newState = Object.assign({}, defaultState, patchState);
+      const newState = Object.assign({}, defaultState, patchState);
 
       stateManager.setState(patchState);
 

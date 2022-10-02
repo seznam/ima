@@ -74,9 +74,13 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState(undefined as unknown as ManagedPage, nextManagedPage, {
-        url: 'http://localhost/',
-      } as PageAction);
+      handler.handlePreManagedState(
+        undefined as unknown as ManagedPage,
+        nextManagedPage,
+        {
+          url: 'http://localhost/',
+        } as PageAction
+      );
 
       expect(replaceStateMock).not.toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
@@ -89,20 +93,30 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState(undefined as unknown as ManagedPage, nextManagedPage, {
-        url: 'http://localhost/',
-        action: ActionTypes.POP_STATE,
-      } as PageAction);
+      handler.handlePreManagedState(
+        undefined as unknown as ManagedPage,
+        nextManagedPage,
+        {
+          url: 'http://localhost/',
+          action: ActionTypes.POP_STATE,
+        } as PageAction
+      );
 
       expect(replaceStateMock).not.toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
     });
 
     it('window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
-      jest.spyOn(window, 'scrollTo').mockImplementation(() => {return;});
+      jest.spyOn(window, 'scrollTo').mockImplementation(() => {
+        return;
+      });
       const nextManagedPage = { options: { autoScroll: false } };
 
-      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {} as PageAction);
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage,
+        {} as PageAction
+      );
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();
@@ -112,7 +126,11 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {} as PageAction);
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage,
+        {} as PageAction
+      );
 
       jest.runAllTimers();
       expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -126,9 +144,13 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const managedPage = { options: { autoScroll: true } };
       const scroll = { x: 0, y: 340 };
 
-      handler.handlePostManagedState(managedPage, {} as ManagedPage, {
-        event: { state: { scroll } },
-      } as PageAction);
+      handler.handlePostManagedState(
+        managedPage,
+        {} as ManagedPage,
+        {
+          event: { state: { scroll } },
+        } as PageAction
+      );
 
       jest.runAllTimers();
       expect(window.scrollTo).toHaveBeenCalledWith(scroll.x, scroll.y);
@@ -139,7 +161,11 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       const managedPage = { options: { autoScroll: true } };
 
-      handler.handlePostManagedState(managedPage, {} as ManagedPage, {} as PageAction);
+      handler.handlePostManagedState(
+        managedPage,
+        {} as ManagedPage,
+        {} as PageAction
+      );
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();
@@ -151,9 +177,13 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const managedPage = { options: { autoScroll: false } };
       const scroll = { x: 0, y: 340 };
 
-      handler.handlePostManagedState(managedPage, {} as ManagedPage, {
-        event: { state: { scroll } },
-      } as PageAction);
+      handler.handlePostManagedState(
+        managedPage,
+        {} as ManagedPage,
+        {
+          event: { state: { scroll } },
+        } as PageAction
+      );
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();

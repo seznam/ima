@@ -43,7 +43,11 @@ export default class PageNavigationHandler extends PageHandler {
   /**
    * @inheritDoc
    */
-  handlePreManagedState(managedPage: ManagedPage, nextManagedPage: ManagedPage, action: PageAction) {
+  handlePreManagedState(
+    managedPage: ManagedPage,
+    nextManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     const { options } = nextManagedPage;
 
     if (
@@ -68,7 +72,11 @@ export default class PageNavigationHandler extends PageHandler {
   /**
    * @inheritDoc
    */
-  handlePostManagedState(managedPage: ManagedPage, previousManagedPage: ManagedPage, action: PageAction) {
+  handlePostManagedState(
+    managedPage: ManagedPage,
+    previousManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     const { event } = action;
     const { options } = managedPage;
 
@@ -118,11 +126,11 @@ export default class PageNavigationHandler extends PageHandler {
    * @param isRedirection If replaceState should be used instead of pushState.
    */
   _setAddressBar(url: string, isRedirection: boolean) {
-    let scroll = {
+    const scroll = {
       x: 0,
       y: 0,
     };
-    let state = { url, scroll };
+    const state = { url, scroll };
 
     if (isRedirection) {
       this._window.replaceState(state, '', url);

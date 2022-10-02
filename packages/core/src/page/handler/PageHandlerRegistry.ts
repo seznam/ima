@@ -50,11 +50,13 @@ export default class PageHandlerRegistry extends PageHandler {
   /**
    * Executes the pre-manage handlers with given arguments
    */
-  handlePreManagedState(managedPage: ManagedPage | null, nextManagedPage: ManagedPage, action: PageAction) {
+  handlePreManagedState(
+    managedPage: ManagedPage | null,
+    nextManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     if (!this._preManageHandlers) {
-      throw new GenericError(
-        'You must call init first.'
-      );
+      throw new GenericError('You must call init first.');
     }
 
     return this._preManageHandlers.execute(
@@ -67,11 +69,13 @@ export default class PageHandlerRegistry extends PageHandler {
   /**
    * Executes the post-manage handlers with given arguments
    */
-  handlePostManagedState(managedPage: ManagedPage | null, previousManagedPage: ManagedPage, action: PageAction) {
+  handlePostManagedState(
+    managedPage: ManagedPage | null,
+    previousManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     if (!this._postManageHandlers) {
-      throw new GenericError(
-        'You must call init first.'
-      );
+      throw new GenericError('You must call init first.');
     }
 
     return this._postManageHandlers.execute(

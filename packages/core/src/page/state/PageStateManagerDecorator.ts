@@ -30,7 +30,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
      */
     this._pageStateManager = pageStateManager;
 
-
     this._allowedStateKeys = allowedStateKeys;
   }
 
@@ -46,16 +45,16 @@ export default class PageStateManagerDecorator extends PageStateManager {
    */
   setState(statePatch: UnknownParameters) {
     if ($Debug) {
-      let patchKeys = Object.keys(statePatch);
-      let deniedKeys = patchKeys.filter(patchKey => {
+      const patchKeys = Object.keys(statePatch);
+      const deniedKeys = patchKeys.filter(patchKey => {
         return this._allowedStateKeys.indexOf(patchKey) === -1;
       });
 
       if (deniedKeys.length > 0) {
         throw new GenericError(
           `Extension can not set state for keys ` +
-          `${deniedKeys.join()}. Check your extension or add keys ` +
-          `${deniedKeys.join()} to getAllowedStateKeys.`
+            `${deniedKeys.join()}. Check your extension or add keys ` +
+            `${deniedKeys.join()} to getAllowedStateKeys.`
         );
       }
     }

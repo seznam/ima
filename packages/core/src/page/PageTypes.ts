@@ -7,33 +7,35 @@ import AbstractRoute from '../router/AbstractRoute';
 export type ManagedPage = {
   controller?: IController;
   controllerInstance?: Controller;
-  decoratedController?: ControllerDecorator
+  decoratedController?: ControllerDecorator;
   options?: RouteOptions;
   params?: UnknownParameters;
   route?: AbstractRoute;
   view?: unknown;
   viewInstance?: unknown;
   state?: {
-    activated: boolean
-  }
+    activated: boolean;
+  };
 };
 
 export type PageAction = {
-  action?: string,
+  action?: string;
   event?: Event & {
     state: {
-      scroll: { 
-        x: number,
-        y: number
-      }
-    }
-  },
-  type?: string,
-  url?: string
+      scroll: {
+        x: number;
+        y: number;
+      };
+    };
+  };
+  type?: string;
+  url?: string;
 };
 
-export type PageData = Promise<{
-  status: number;
-} & UnknownParameters>;
+export type PageData = Promise<
+  {
+    status: number;
+  } & UnknownParameters
+>;
 
 export type EventHandler = (data?: UnknownParameters) => void;

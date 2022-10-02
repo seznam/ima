@@ -5,26 +5,26 @@ import { toMockedInstance } from 'to-mock';
 import { ManagedPage, PageAction } from '../../PageTypes';
 
 class TestPageHandler extends PageHandler {
-  init(): void {
-    
-  }
+  init(): void {}
 
-  handlePostManagedState(managedPage: ManagedPage, previousManagedPage: ManagedPage, action: PageAction): void {
-    
-  }
+  handlePostManagedState(
+    managedPage: ManagedPage,
+    previousManagedPage: ManagedPage,
+    action: PageAction
+  ): void {}
 
-  handlePreManagedState(managedPage: ManagedPage, nextManagedPage: ManagedPage, action: PageAction): void {
-    
-  }
+  handlePreManagedState(
+    managedPage: ManagedPage,
+    nextManagedPage: ManagedPage,
+    action: PageAction
+  ): void {}
 
-  destroy(): void {
-    
-  }
+  destroy(): void {}
 }
 
 describe('ima.core.page.handler.PageHandlerRegistry', () => {
   let registry: PageHandlerRegistry;
-  let pageManagerHandler: PageHandler = toMockedInstance(TestPageHandler);
+  const pageManagerHandler: PageHandler = toMockedInstance(TestPageHandler);
 
   beforeEach(() => {
     jest
@@ -50,17 +50,29 @@ describe('ima.core.page.handler.PageHandlerRegistry', () => {
 
   describe('handlePreManagedState() method', () => {
     it('should call subsequent pre-manage handlers', async () => {
-      await registry.handlePreManagedState({} as ManagedPage, {} as ManagedPage, {} as PageAction).then(() => {
-        expect(pageManagerHandler.handlePreManagedState).toHaveBeenCalled();
-      });
+      await registry
+        .handlePreManagedState(
+          {} as ManagedPage,
+          {} as ManagedPage,
+          {} as PageAction
+        )
+        .then(() => {
+          expect(pageManagerHandler.handlePreManagedState).toHaveBeenCalled();
+        });
     });
   });
 
   describe('handlePostManagedState() method', () => {
     it('should call subsequent post-manage handlers', async () => {
-      await registry.handlePostManagedState({} as ManagedPage, {} as ManagedPage, {} as PageAction).then(() => {
-        expect(pageManagerHandler.handlePostManagedState).toHaveBeenCalled();
-      });
+      await registry
+        .handlePostManagedState(
+          {} as ManagedPage,
+          {} as ManagedPage,
+          {} as PageAction
+        )
+        .then(() => {
+          expect(pageManagerHandler.handlePostManagedState).toHaveBeenCalled();
+        });
     });
   });
 });

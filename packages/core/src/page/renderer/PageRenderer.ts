@@ -37,7 +37,12 @@ export default abstract class PageRenderer {
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
    */
-  abstract mount(controller: Controller, view: unknown, pageResources: UnknownPromiseParameters, routeOptions: RouteOptions): PageData;
+  abstract mount(
+    controller: Controller,
+    view: unknown,
+    pageResources: UnknownPromiseParameters,
+    routeOptions: RouteOptions
+  ): PageData;
 
   /**
    * Handles update of the current route that does not replace the current
@@ -61,7 +66,12 @@ export default abstract class PageRenderer {
    *         The `content` field will contain the rendered markup of
    *         the page at the server-side, or `null` at the client-side.
    */
-  abstract update(controller: Controller, view: unknown, resourcesUpdate: UnknownPromiseParameters, routeOptions: RouteOptions): PageData;
+  abstract update(
+    controller: Controller,
+    view: unknown,
+    resourcesUpdate: UnknownPromiseParameters,
+    routeOptions: RouteOptions
+  ): PageData;
 
   /**
    * Unmounts the view from the DOM.

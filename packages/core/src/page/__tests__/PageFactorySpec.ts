@@ -4,13 +4,17 @@ import ns from '../../Namespace';
 import AbstractController from '../../controller/AbstractController';
 import Extension, { IExtension } from '../../extension/Extension';
 import PageStateManager from '../state/PageStateManager';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
+import {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../../CommonTypes';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;
   let pageFactory: PageFactory;
 
-  let namespacePathUnit = 'test.unit';
+  const namespacePathUnit = 'test.unit';
   ns.namespace(namespacePathUnit);
 
   class mockExtension extends Extension {
@@ -38,12 +42,12 @@ describe('ima.core.PageFactory', () => {
     deactivate(): void | Promise<undefined> {
       throw new Error('Method not implemented.');
     }
-    load(): Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters {
+    load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
-    update(prevParams: UnknownParameters): Promise<UnknownPromiseParameters>
-    | UnknownPromiseParameters {
+    update(
+      prevParams: UnknownParameters
+    ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
     setState(statePatch: UnknownParameters): void {
@@ -90,7 +94,7 @@ describe('ima.core.PageFactory', () => {
     }
   }
 
-  class mockExtension2 extends mockExtension { }
+  class mockExtension2 extends mockExtension {}
 
   class classConstructor extends AbstractController {
     dependency: unknown;
@@ -171,7 +175,7 @@ describe('ima.core.PageFactory', () => {
 
   describe('createController method', () => {
     it('should create controller with extension', () => {
-      let controller = pageFactory.createController(
+      const controller = pageFactory.createController(
         classConstructorWithExtensions
       );
 
@@ -182,7 +186,7 @@ describe('ima.core.PageFactory', () => {
     });
 
     it('should create controller with extension in routes', () => {
-      let controller = pageFactory.createController(classConstructor, {
+      const controller = pageFactory.createController(classConstructor, {
         extensions: [mockExtension2],
       });
 
@@ -193,7 +197,7 @@ describe('ima.core.PageFactory', () => {
     });
 
     it('should create controller with own extension and extension in route', () => {
-      let controller = pageFactory.createController(
+      const controller = pageFactory.createController(
         classConstructorWithExtensions,
         { extensions: [mockExtension2] }
       );
@@ -213,7 +217,9 @@ describe('ima.core.PageFactory', () => {
       oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
 
       classConstructorWithExtensions.extensionsTest = ['...$mockedExtensions'];
-      let controller = pageFactory.createController(classConstructorWithExtensions);
+      const controller = pageFactory.createController(
+        classConstructorWithExtensions
+      );
 
       expect(controller.getExtensions()).toHaveLength(2);
       expect(controller.getExtensions()[0]).toBe(
@@ -226,7 +232,7 @@ describe('ima.core.PageFactory', () => {
     it('should create controller with OC constant extensions in router', () => {
       oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
 
-      let controller = pageFactory.createController(classConstructor, {
+      const controller = pageFactory.createController(classConstructor, {
         extensions: ['...$mockedExtensions'],
       });
 
@@ -238,10 +244,12 @@ describe('ima.core.PageFactory', () => {
     });
 
     it('should create controller with array of extensions', () => {
-      let extensions = [mockExtension, mockExtension2];
+      const extensions = [mockExtension, mockExtension2];
 
       classConstructorWithExtensions.extensionsTest = extensions;
-      let controller = pageFactory.createController(classConstructorWithExtensions);
+      const controller = pageFactory.createController(
+        classConstructorWithExtensions
+      );
 
       expect(controller.getExtensions()).toHaveLength(2);
       expect(controller.getExtensions()[0]).toBeInstanceOf(extensions[0]);
@@ -250,9 +258,9 @@ describe('ima.core.PageFactory', () => {
     });
 
     it('should create controller with array of extensions in route', () => {
-      let extensions = [mockExtension, mockExtension2];
+      const extensions = [mockExtension, mockExtension2];
 
-      let controller = pageFactory.createController(classConstructor, {
+      const controller = pageFactory.createController(classConstructor, {
         extensions,
       });
 
@@ -265,7 +273,9 @@ describe('ima.core.PageFactory', () => {
       oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
 
       classConstructorWithExtensions.extensionsTest = ['$mockedExtensions'];
-      expect(() => pageFactory.createController(classConstructorWithExtensions)).toThrow(
+      expect(() =>
+        pageFactory.createController(classConstructorWithExtensions)
+      ).toThrow(
         'ima.core.AbstractController:addExtension: Expected instance of an extension, got function.'
       );
       classConstructorWithExtensions.extensionsTest = [];
