@@ -35,7 +35,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * The route parameters extracted from the current route.
    */
-  params: StringParameters = {};
+  params: UnknownParameters = {};
 
   /**
    * @inheritdoc

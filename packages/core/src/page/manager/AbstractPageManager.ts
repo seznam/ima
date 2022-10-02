@@ -1,6 +1,6 @@
 import { ManagedPage, PageAction } from '../PageTypes';
 import { RouteOptions } from '../../router/Router';
-import { StringParameters, UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
+import { StringParameters, UnknownParameters } from '../../CommonTypes';
 import AbstractController from '../../controller/AbstractController';
 import AbstractRoute from '../../router/AbstractRoute';
 import ControllerDecorator from '../../controller/ControllerDecorator';
@@ -85,7 +85,14 @@ export default abstract class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(route: AbstractRoute, controller: IController, view: unknown, options: RouteOptions, params: StringParameters = {}, action: PageAction = {}) {
+  async manage(
+    route: AbstractRoute,
+    controller: IController,
+    view: unknown,
+    options: RouteOptions,
+    params: UnknownParameters = {},
+    action: PageAction = {}
+  ) {
     this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {
@@ -160,7 +167,7 @@ export default abstract class AbstractPageManager extends PageManager {
     view: unknown,
     route: AbstractRoute,
     options: RouteOptions,
-    params: StringParameters,
+    params: UnknownParameters,
     controllerInstance: AbstractController,
     decoratedController: ControllerDecorator,
     viewInstance: unknown
@@ -226,13 +233,16 @@ export default abstract class AbstractPageManager extends PageManager {
    * Set page state manager to extension which has restricted rights to set
    * global state.
    */
-  _setRestrictedPageStateManager(extension: Extension, extensionState: UnknownParameters) {
-    let stateKeys = Object.keys(extensionState);
-    let allowedKey = extension.getAllowedStateKeys();
-    let allAllowedStateKeys = stateKeys.concat(allowedKey);
+  _setRestrictedPageStateManager(
+    extension: Extension,
+    extensionState: UnknownParameters
+  ) {
+    const stateKeys = Object.keys(extensionState);
+    const allowedKey = extension.getAllowedStateKeys();
+    const allAllowedStateKeys = stateKeys.concat(allowedKey);
 
-    let pageFactory = this._pageFactory;
-    let decoratedPageStateManager = pageFactory.decoratePageStateManager(
+    const pageFactory = this._pageFactory;
+    const decoratedPageStateManager = pageFactory.decoratePageStateManager(
       this._pageStateManager,
       allAllowedStateKeys
     );
@@ -244,8 +254,11 @@ export default abstract class AbstractPageManager extends PageManager {
    * For defined extension switches to pageStageManager and clears partial state
    * after extension state is loaded.
    */
-  _switchToPageStateManagerAfterLoaded(extension: Extension, extensionState: UnknownParameters) {
-    let stateValues = Object.values(extensionState);
+  _switchToPageStateManagerAfterLoaded(
+    extension: Extension,
+    extensionState: UnknownParameters
+  ) {
+    const stateValues = Object.values(extensionState);
 
     Promise.all(stateValues)
       .then(() => {
@@ -270,10 +283,12 @@ export default abstract class AbstractPageManager extends PageManager {
    * Initializes managed instance of controller with the provided parameters.
    */
   protected async _initController() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    controller!.setRouteParams(this._managedPage.params as StringParameters);
-    await controller!.init();
+    (controller as Controller).setRouteParams(
+      this._managedPage.params as StringParameters
+    );
+    await (controller as Controller).init();
   }
 
   /**
@@ -281,8 +296,8 @@ export default abstract class AbstractPageManager extends PageManager {
    * provided parameters.
    */
   protected async _initExtensions() {
-    let controller = this._managedPage.controllerInstance;
-    for (let extension of controller!.getExtensions()) {
+    const controller = this._managedPage.controllerInstance;
+    for (const extension of (controller as Controller).getExtensions()) {
       extension.setRouteParams(this._managedPage.params as StringParameters);
       await extension.init();
     }
@@ -295,7 +310,7 @@ export default abstract class AbstractPageManager extends PageManager {
   protected _switchToPageStateManager() {
     const controller = this._managedPage.controllerInstance;
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       extension.switchToStateManager();
       extension.clearPartialState();
     }
@@ -326,10 +341,10 @@ export default abstract class AbstractPageManager extends PageManager {
    * Load controller state from managed instance of controller.
    */
   protected async _getLoadedControllerState() {
-    let controller = this._managedPage.controllerInstance;
-    let controllerState = await controller!.load();
+    const controller = this._managedPage.controllerInstance;
+    const controllerState = await (controller as Controller).load();
 
-    controller!.setPageStateManager(this._pageStateManager);
+    (controller as Controller).setPageStateManager(this._pageStateManager);
 
     return controllerState;
   }
@@ -337,11 +352,13 @@ export default abstract class AbstractPageManager extends PageManager {
   /**
    * Load extensions state from managed instance of controller.
    */
-  protected async _getLoadedExtensionsState(controllerState: UnknownParameters) {
+  protected async _getLoadedExtensionsState(
+    controllerState?: UnknownParameters
+  ) {
     const controller = this._managedPage.controllerInstance;
-    let extensionsState = Object.assign({}, controllerState);
+    const extensionsState = Object.assign({}, controllerState);
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       extension.setPartialState(extensionsState);
       extension.switchToPartialState();
       const extensionState = await extension.load();
@@ -360,13 +377,14 @@ export default abstract class AbstractPageManager extends PageManager {
    * extensions.
    */
   protected async _activatePageSource() {
-    let controller = this._managedPage.controllerInstance;
-    let isNotActivated = !this._managedPage.state!.activated;
+    const controller = this._managedPage.controllerInstance;
+    const isNotActivated = !(this._managedPage.state as UnknownParameters)
+      .activated;
 
     if (controller && isNotActivated) {
       await this._activateController();
       await this._activateExtensions();
-      this._managedPage.state!.activated = true;
+      (this._managedPage.state as UnknownParameters).activated = true;
     }
   }
 
@@ -374,18 +392,18 @@ export default abstract class AbstractPageManager extends PageManager {
    * Activate managed instance of controller.
    */
   protected async _activateController() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    await controller!.activate();
+    await (controller as Controller).activate();
   }
 
   /**
    * Activate extensions for managed instance of controller.
    */
   protected async _activateExtensions() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       await extension.activate();
     }
   }
@@ -419,18 +437,22 @@ export default abstract class AbstractPageManager extends PageManager {
    * Return updated controller state for current page controller.
    */
   protected _getUpdatedControllerState() {
-    let controller = this._managedPage.controllerInstance;
-    let lastRouteParams = controller!.getRouteParams();
+    const controller = this._managedPage.controllerInstance;
+    const lastRouteParams = (controller as Controller).getRouteParams();
 
-    controller!.setRouteParams(this._managedPage.params as StringParameters);
+    (controller as Controller).setRouteParams(
+      this._managedPage.params as UnknownParameters
+    );
 
-    return controller!.update(lastRouteParams);
+    return (controller as Controller).update(lastRouteParams);
   }
 
   /**
    * Return updated extensions state for current page controller.
    */
-  protected async _getUpdatedExtensionsState(controllerState: UnknownParameters) {
+  protected async _getUpdatedExtensionsState(
+    controllerState?: UnknownParameters
+  ) {
     const controller = this._managedPage.controllerInstance;
     const extensionsState = Object.assign({}, controllerState);
     const extensionsPartialState = Object.assign(
@@ -439,9 +461,9 @@ export default abstract class AbstractPageManager extends PageManager {
       controllerState
     );
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       const lastRouteParams = extension.getRouteParams();
-      extension.setRouteParams(this._managedPage.params as StringParameters);
+      extension.setRouteParams(this._managedPage.params as UnknownParameters);
       extension.setPartialState(extensionsPartialState);
       extension.switchToPartialState();
 
@@ -465,8 +487,9 @@ export default abstract class AbstractPageManager extends PageManager {
    * extensions.
    */
   protected async _deactivatePageSource() {
-    let controller = this._managedPage.controllerInstance;
-    let isActivated = this._managedPage.state!.activated;
+    const controller = this._managedPage.controllerInstance;
+    const isActivated = (this._managedPage.state as UnknownParameters)
+      .activated;
 
     if (controller && isActivated) {
       await this._deactivateExtensions();
@@ -479,9 +502,9 @@ export default abstract class AbstractPageManager extends PageManager {
    * activated.
    */
   protected async _deactivateController() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    await controller!.deactivate();
+    await (controller as Controller).deactivate();
   }
 
   /**
@@ -490,9 +513,9 @@ export default abstract class AbstractPageManager extends PageManager {
 
    */
   protected async _deactivateExtensions() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       await extension.deactivate();
     }
   }
@@ -502,7 +525,7 @@ export default abstract class AbstractPageManager extends PageManager {
    * extensions.
    */
   protected async _destroyPageSource() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
     if (controller) {
       await this._destroyExtensions();
@@ -514,10 +537,10 @@ export default abstract class AbstractPageManager extends PageManager {
    * Destroy last managed instance of controller.
    */
   protected async _destroyController() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    await controller!.destroy();
-    controller!.setPageStateManager();
+    await (controller as Controller).destroy();
+    (controller as Controller).setPageStateManager();
   }
 
   /**
@@ -527,9 +550,9 @@ export default abstract class AbstractPageManager extends PageManager {
    * @return {Promise<undefined>}
    */
   protected async _destroyExtensions() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
-    for (let extension of controller!.getExtensions()) {
+    for (const extension of (controller as Controller).getExtensions()) {
       await extension.destroy();
       extension.setPageStateManager();
     }
@@ -541,7 +564,7 @@ export default abstract class AbstractPageManager extends PageManager {
    * @param options The current route options.
    */
   _clearComponentState(options: RouteOptions) {
-    let managedOptions = this._managedPage.options;
+    const managedOptions = this._managedPage.options;
 
     if (
       !managedOptions ||
@@ -556,7 +579,11 @@ export default abstract class AbstractPageManager extends PageManager {
   /**
    * Return true if manager has to update last managed controller and view.
    */
-  protected _hasOnlyUpdate(controller: IController, view: unknown, options: RouteOptions) {
+  protected _hasOnlyUpdate(
+    controller: IController,
+    view: unknown,
+    options: RouteOptions
+  ) {
     if (typeof options.onlyUpdate === 'function') {
       return options.onlyUpdate(
         this._managedPage.controller as Controller,
@@ -571,7 +598,10 @@ export default abstract class AbstractPageManager extends PageManager {
     );
   }
 
-  protected async _runPreManageHandlers(nextManagedPage: ManagedPage, action: PageAction) {
+  protected async _runPreManageHandlers(
+    nextManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     return this._pageHandlerRegistry.handlePreManagedState(
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)
@@ -581,7 +611,10 @@ export default abstract class AbstractPageManager extends PageManager {
     );
   }
 
-  protected async _runPostManageHandlers(previousManagedPage: ManagedPage, action: PageAction) {
+  protected async _runPostManageHandlers(
+    previousManagedPage: ManagedPage,
+    action: PageAction
+  ) {
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)

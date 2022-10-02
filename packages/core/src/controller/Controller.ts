@@ -129,7 +129,7 @@ export default abstract class Controller implements IController {
    *         controller's state.
    */
   abstract update(
-    prevParams: StringParameters
+    prevParams: UnknownParameters
   ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
@@ -227,14 +227,14 @@ export default abstract class Controller implements IController {
    *
    * @param params The current route parameters.
    */
-  abstract setRouteParams(params: StringParameters): void;
+  abstract setRouteParams(params: UnknownParameters): void;
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  abstract getRouteParams(): StringParameters;
+  abstract getRouteParams(): UnknownParameters;
 
   /**
    * Sets the page state manager. The page state manager manages the

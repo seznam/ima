@@ -10,7 +10,7 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import { IController } from '@/controller/Controller';
-import { StringParameters } from '@/CommonTypes';
+import { StringParameters, UnknownParameters } from '@/CommonTypes';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -511,7 +511,7 @@ export default abstract class AbstractRouter extends Router {
         controller as IController,
         view,
         options,
-        params as StringParameters,
+        params as UnknownParameters,
         action
       )
       .then(response => {

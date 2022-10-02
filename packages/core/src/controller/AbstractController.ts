@@ -26,7 +26,7 @@ export default abstract class AbstractController extends Controller {
    * set externally by IMA right before the {@link Controller#init} or the
    * {@link Controller#update} method is called.
    */
-  params: StringParameters = {};
+  params: UnknownParameters = {};
 
   static get $extensions(): IExtension[] {
     return [];
@@ -154,7 +154,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  setRouteParams(params = {}) {
+  setRouteParams(params: UnknownParameters = {}) {
     this.params = params;
   }
 

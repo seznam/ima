@@ -42,7 +42,7 @@ describe('ima.core.PageFactory', () => {
     | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
-    update(prevParams: StringParameters): Promise<UnknownPromiseParameters>
+    update(prevParams: UnknownParameters): Promise<UnknownPromiseParameters>
     | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
@@ -79,10 +79,10 @@ describe('ima.core.PageFactory', () => {
     switchToPartialState(): void {
       throw new Error('Method not implemented.');
     }
-    setRouteParams(params: StringParameters): void {
+    setRouteParams(params: UnknownParameters): void {
       throw new Error('Method not implemented.');
     }
-    getRouteParams(): StringParameters {
+    getRouteParams(): UnknownParameters {
       throw new Error('Method not implemented.');
     }
     getAllowedStateKeys(): string[] {

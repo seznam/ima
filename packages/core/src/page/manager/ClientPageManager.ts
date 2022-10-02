@@ -9,9 +9,9 @@ import EventBus from '../../event/EventBus';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
 import ImaWindow from '../../window/Window';
 import AbstractRoute from '../../router/AbstractRoute';
-import { IController } from '../../controller/Controller';
+import Controller, { IController } from '../../controller/Controller';
 import { RouteOptions } from '../../router/Router';
-import { StringParameters, UnknownParameters } from '../../CommonTypes';
+import { UnknownParameters } from '../../CommonTypes';
 import { EventHandler, PageAction } from '../PageTypes';
 
 /**
@@ -24,9 +24,9 @@ export default class ClientPageManager extends AbstractPageManager {
    */
   private _window: ImaWindow;
   /**
-  * The event bus for dispatching and listening for custom IMA events
-  * propagated through the DOM.
-  */
+   * The event bus for dispatching and listening for custom IMA events
+   * propagated through the DOM.
+   */
   private _eventBus: EventBus;
   /**
    * Event listener for the custom DOM events used by the event bus,
@@ -94,8 +94,22 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  async manage(route: AbstractRoute, controller: IController, view: unknown, options: RouteOptions, params: StringParameters = {}, action: PageAction = {}) {
-    const response = await super.manage(route, controller, view, options, params, action);
+  async manage(
+    route: AbstractRoute,
+    controller: IController,
+    view: unknown,
+    options: RouteOptions,
+    params: UnknownParameters = {},
+    action: PageAction = {}
+  ) {
+    const response = await super.manage(
+      route,
+      controller,
+      view,
+      options,
+      params,
+      action
+    );
     await this._activatePageSource();
 
     return response;
@@ -130,8 +144,8 @@ export default class ClientPageManager extends AbstractPageManager {
    * @param event The encountered event bus DOM event.
    */
   _onCustomEventHandler(event: CustomEvent) {
-    let { method, data, eventName } = this._parseCustomEvent(event);
-    let controllerInstance = this._managedPage.controllerInstance;
+    const { method, data, eventName } = this._parseCustomEvent(event);
+    const controllerInstance = this._managedPage.controllerInstance;
 
     if (controllerInstance) {
       let handled = this._handleEventWithController(method, data);
@@ -144,13 +158,13 @@ export default class ClientPageManager extends AbstractPageManager {
         if (!handled) {
           console.warn(
             `The active controller has no listener for ` +
-            `the encountered event '${eventName}'. Check ` +
-            `your event name for typos, or create an ` +
-            `'${method}' event listener method on the ` +
-            `active controller or add an event listener ` +
-            `that stops the propagation of this event to ` +
-            `an ancestor component of the component that ` +
-            `fired this event.`
+              `the encountered event '${eventName}'. Check ` +
+              `your event name for typos, or create an ` +
+              `'${method}' event listener method on the ` +
+              `active controller or add an event listener ` +
+              `that stops the propagation of this event to ` +
+              `an ancestor component of the component that ` +
+              `fired this event.`
           );
         }
       }
@@ -167,9 +181,10 @@ export default class ClientPageManager extends AbstractPageManager {
    *         details.
    */
   _parseCustomEvent(event: CustomEvent) {
-    let eventName: string = event.detail.eventName;
-    let method = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
-    let data = event.detail.data;
+    const eventName: string = event.detail.eventName;
+    const method =
+      'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
+    const data = event.detail.data;
 
     return { method, data, eventName };
   }
@@ -188,10 +203,10 @@ export default class ClientPageManager extends AbstractPageManager {
    *         method for processing the event.
    */
   _handleEventWithController(method: string, data: UnknownParameters) {
-    let controllerInstance = this._managedPage.controllerInstance;
+    const controllerInstance = this._managedPage.controllerInstance;
 
-    if (typeof controllerInstance![method] === 'function') {
-      (controllerInstance![method] as EventHandler)(data);
+    if (typeof (controllerInstance as Controller)[method] === 'function') {
+      ((controllerInstance as Controller)[method] as EventHandler)(data);
 
       return true;
     }
@@ -213,10 +228,10 @@ export default class ClientPageManager extends AbstractPageManager {
    *         controller's extensions has a method for processing the event.
    */
   _handleEventWithExtensions(method: string, data: UnknownParameters) {
-    let controllerInstance = this._managedPage.controllerInstance;
-    let extensions = controllerInstance!.getExtensions();
+    const controllerInstance = this._managedPage.controllerInstance;
+    const extensions = (controllerInstance as Controller).getExtensions();
 
-    for (let extension of extensions) {
+    for (const extension of extensions) {
       if (typeof extension[method] === 'function') {
         (extension[method] as EventHandler)(data);
 
@@ -231,7 +246,7 @@ export default class ClientPageManager extends AbstractPageManager {
    * On change event handler set state to view.
    */
   _onChangeStateHandler(state: UnknownParameters) {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
 
     if (controller) {
       this._pageRenderer.setState(state);

@@ -124,7 +124,7 @@ export default abstract class Extension implements IExtension {
    *         controller's state.
    */
   abstract update(
-    prevParams: StringParameters
+    prevParams: UnknownParameters
   ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
 
   /**
@@ -215,14 +215,14 @@ export default abstract class Extension implements IExtension {
    * @param [params={}] The current route
    *        parameters.
    */
-  abstract setRouteParams(params: StringParameters): void;
+  abstract setRouteParams(params: UnknownParameters): void;
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  abstract getRouteParams(): StringParameters;
+  abstract getRouteParams(): UnknownParameters;
 
   /**
    * Returns the names of the state fields that may be manipulated by this

@@ -32,10 +32,10 @@ export default class RouteFactory {
   createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string,
-    view: string,
+    controller: object | string | (() => unknown),
+    view: object | string | (() => unknown),
     options?: RouteOptions
-  ) {
+  ): StaticRoute | DynamicRoute {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,
       [name, pathExpression, controller, view, options]

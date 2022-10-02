@@ -125,8 +125,8 @@ export default class StaticRoute extends AbstractRoute {
   constructor(
     name: string,
     pathExpression: string,
-    controller: string,
-    view: string,
+    controller: object | string | (() => unknown),
+    view: object | string | (() => unknown),
     options: RouteOptions
   ) {
     super(name, pathExpression, controller, view, options);
