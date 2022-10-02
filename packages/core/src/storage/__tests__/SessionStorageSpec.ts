@@ -6,14 +6,15 @@ import ClientWindow from '../../window/ClientWindow';
 describe('ima.storage.SessionStorage', () => {
   let session: SessionStorage;
   let window: ClientWindow;
-  let sessionStorage = {
+  const sessionStorage = {
     _storage: new Map(),
-    setItem: (key: string, value: unknown) => sessionStorage._storage.set(key, value),
+    setItem: (key: string, value: unknown) =>
+      sessionStorage._storage.set(key, value),
     getItem: (key: string) => sessionStorage._storage.get(key),
     removeItem: (key: string) => sessionStorage._storage.delete(key),
     clear: () => sessionStorage._storage.clear(),
     length: 0,
-    key: (index: number) => ''
+    key: () => '',
   };
 
   beforeEach(() => {
@@ -42,11 +43,11 @@ describe('ima.storage.SessionStorage', () => {
     session.set('item3', false);
     expect(session.get('item3')).toBeFalsy();
 
-    let obj = { testedProp: 'testedValue' };
+    const obj = { testedProp: 'testedValue' };
     session.set('item4', obj);
     expect(session.get('item4')).toStrictEqual(obj);
 
-    let arr = [0, 'val', true, {}];
+    const arr = [0, 'val', true, {}];
     session.set('item5', arr);
     expect(session.get('item5')).toStrictEqual(arr);
   });

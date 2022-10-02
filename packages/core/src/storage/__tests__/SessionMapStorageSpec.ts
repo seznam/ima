@@ -10,7 +10,10 @@ describe('ima.storage.SessionMapStorage', () => {
   beforeEach(() => {
     mapStorage = new MapStorage();
     sessionStorage = new MapStorage();
-    sessionMap = new SessionMapStorage(mapStorage, sessionStorage as unknown as SessionStorage);
+    sessionMap = new SessionMapStorage(
+      mapStorage,
+      sessionStorage as unknown as SessionStorage
+    );
 
     sessionMap.init();
     sessionMap.clear();
@@ -30,11 +33,11 @@ describe('ima.storage.SessionMapStorage', () => {
     sessionMap.set('item3', false);
     expect(sessionMap.get('item3')).toBeFalsy();
 
-    let obj = { testedProp: 'testedValue' };
+    const obj = { testedProp: 'testedValue' };
     sessionMap.set('item4', obj);
     expect(sessionMap.get('item4')).toStrictEqual(obj);
 
-    let arr = [0, 'val', true, {}];
+    const arr = [0, 'val', true, {}];
     sessionMap.set('item5', arr);
     expect(sessionMap.get('item5')).toStrictEqual(arr);
   });
@@ -78,7 +81,7 @@ describe('ima.storage.SessionMapStorage', () => {
     sessionMap.set('item1', 1).set('item2', 'test').set('item3', false);
 
     let index = 0;
-    let iterator = sessionMap.keys();
+    const iterator = sessionMap.keys();
     let item = iterator.next();
 
     do {

@@ -1,30 +1,33 @@
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import Request from '../../router/Request';
 import Response from '../../router/Response';
 import ServerWindow from '../../window/ServerWindow';
 import CookieStorage, { Cookie } from '../CookieStorage';
 
 describe('ima.storage.CookieStorage', () => {
-  let cookieString =
+  const cookieString =
     'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-  let setCookieString =
+  const setCookieString =
     'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-  let setCookieStringWithFirstLetterUppercase =
+  const setCookieStringWithFirstLetterUppercase =
     'Cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-  let setCookieStringWithDomain =
+  const setCookieStringWithDomain =
     'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-  let setCookieStringWithComplex =
+  const setCookieStringWithComplex =
     'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/; SameSite=Lax';
-  let setCookieStringWithMaxAge =
+  const setCookieStringWithMaxAge =
     'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
-  let cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
+  const cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
   let request: Request;
   let requestGetCookieHeaderSpy: jest.SpyInstance;
   let response: Response;
   let cookie: CookieStorage;
   let win: ServerWindow;
-  let transformFunction = {
+  const transformFunction = {
     encode: function (s: string) {
       return s;
     },
@@ -105,7 +108,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('parse method', () => {
     it('should delete cookie from storage, which were deleted in document.cookie', () => {
-      let cookieStringWithDeletedCok1 =
+      const cookieStringWithDeletedCok1 =
         'cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithDeletedCok1);
@@ -116,7 +119,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should change value of stored cookie if in document.cookie it has different value', () => {
-      let cookieStringWithNewValues =
+      const cookieStringWithNewValues =
         'cok1=hello3;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewValues);
@@ -128,28 +131,38 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should change options if it is different in document.cookie', () => {
-      let cookieStringWithNewOptions =
+      const cookieStringWithNewOptions =
         'cok1=hello3;Path=/someDir;Domain=localhost:3001;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/differetDir;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewOptions);
 
       cookie._parse();
 
-      expect((cookie['_storage'].get('cok1') as Cookie).options.path).toBe('/someDir');
-      expect((cookie['_storage'].get('cok1') as Cookie).options.domain).toBe('localhost:3001');
-      expect((cookie['_storage'].get('cok2') as Cookie).options.path).toBe('/differetDir');
+      expect((cookie['_storage'].get('cok1') as Cookie).options.path).toBe(
+        '/someDir'
+      );
+      expect((cookie['_storage'].get('cok1') as Cookie).options.domain).toBe(
+        'localhost:3001'
+      );
+      expect((cookie['_storage'].get('cok2') as Cookie).options.path).toBe(
+        '/differetDir'
+      );
     });
 
     it('should not overwrite already set options, when none is parsed from document.cookie', () => {
-      let cookieStringWithNoOptions = 'cok1=hello3; cok2=hello4;';
+      const cookieStringWithNoOptions = 'cok1=hello3; cok2=hello4;';
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNoOptions);
 
       cookie._parse();
 
       expect((cookie['_storage'].get('cok1') as Cookie).options.path).toBe('/');
-      expect((cookie['_storage'].get('cok1') as Cookie).options.expires).not.toBeNull();
-      expect((cookie['_storage'].get('cok1') as Cookie).options.sameSite).toBe('Lax');
+      expect(
+        (cookie['_storage'].get('cok1') as Cookie).options.expires
+      ).not.toBeNull();
+      expect((cookie['_storage'].get('cok1') as Cookie).options.sameSite).toBe(
+        'Lax'
+      );
       expect((cookie['_storage'].get('cok2') as Cookie).options.path).toBe('/');
     });
   });
@@ -298,7 +311,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('_recomputeCookieMaxAgeAndExpires', () => {
     it('should compute expires as date', () => {
-      let options = { maxAge: 10, expires: undefined };
+      const options = { maxAge: 10, expires: undefined };
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
@@ -306,7 +319,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should compute maxAge as number', () => {
-      let options = { expires: new Date(), maxAge: undefined };
+      const options = { expires: new Date(), maxAge: undefined };
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
@@ -314,7 +327,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should compute maxAge as number and expires as date', () => {
-      let options = { expires: 60, maxAge: undefined };
+      const options = { expires: 60, maxAge: undefined };
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 

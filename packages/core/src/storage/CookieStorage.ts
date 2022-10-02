@@ -355,8 +355,13 @@ export default class CookieStorage extends MapStorage {
    *         to the `document.cookie` property will set the cookie to
    *         the browser's cookie storage.
    */
-  _generateCookieString(name: string, value: boolean | number | string, options: Options) {
-    let cookieString = name + '=' + this._transformFunction.encode(value as string);
+  _generateCookieString(
+    name: string,
+    value: boolean | number | string,
+    options: Options
+  ) {
+    let cookieString =
+      name + '=' + this._transformFunction.encode(value as string);
 
     cookieString += options.domain ? ';Domain=' + options.domain : '';
     cookieString += options.path ? ';Path=' + options.path : '';
@@ -498,8 +503,8 @@ export default class CookieStorage extends MapStorage {
         if ($Debug) {
           throw new GenericError(
             `Invalid char ${char} code ${charCode} in ${value}. ` +
-            `Dropping the invalid character from the cookie's ` +
-            `value.`,
+              `Dropping the invalid character from the cookie's ` +
+              `value.`,
             { value, charCode, char }
           );
         }
