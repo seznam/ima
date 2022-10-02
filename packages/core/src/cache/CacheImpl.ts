@@ -27,10 +27,10 @@ export default class CacheImpl extends Cache {
   /**
    * Initializes the cache.
    *
-   * @param {Storage} cacheStorage The cache entry storage to use.
-   * @param {CacheFactory} factory Which create new instance of cache entry.
-   * @param {vendor.$Helper} Helper The IMA.js helper methods.
-   * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
+   * @param cacheStorage The cache entry storage to use.
+   * @param factory Which create new instance of cache entry.
+   * @param Helper The IMA.js helper methods.
+   * @param [config={ttl: 30000, enabled: false}]
    *        The cache configuration.
    */
   constructor(
@@ -41,36 +41,22 @@ export default class CacheImpl extends Cache {
   ) {
     super();
 
-    /**
-     * Cache entry storage.
-     *
-     * @type {Storage}
-     */
     this._cache = cacheStorage;
 
-    /**
-     * @type {CacheFactory}
-     */
     this._factory = factory;
 
     /**
      * Tha IMA.js helper methods.
-     *
-     * @type {vendor.$Helper}
      */
     this._Helper = Helper;
 
     /**
      * Default cache entry time to live in milliseconds.
-     *
-     * @type {number}
      */
     this._ttl = config.ttl;
 
     /**
      * Flag signalling whether the cache is currently enabled.
-     *
-     * @type {boolean}
      */
     this._enabled = config.enabled;
   }
