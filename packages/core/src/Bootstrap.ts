@@ -5,30 +5,51 @@ import Router from './router/Router';
 
 ns.namespace('ima.core');
 
+export type Module = {
+  $registerImaPlugin: (...args: unknown[]) => unknown;
+  initServices: (...args: unknown[]) => unknown;
+  initBind: (...args: unknown[]) => unknown;
+  initSettings: (...args: unknown[]) => unknown;
+};
+
+export type Config = {
+  initRoutes: (...args: unknown[]) => unknown;
+  initBindIma: (...args: unknown[]) => unknown;
+  initBindApp: (...args: unknown[]) => unknown;
+  initServicesApp: (...args: unknown[]) => unknown;
+  initServicesIma: (...args: unknown[]) => unknown;
+  initSettings: (...args: unknown[]) => unknown;
+  plugins: { name: string; module: Module }[];
+  routes: { [key: string]: string };
+  services: { [key: string]: string };
+  settings: { [key: string]: string };
+  bind: { [key: string]: string };
+};
+
 /**
  * Application bootstrap used to initialize the environment and the application
  * itself.
  */
 export default class Bootstrap {
+  protected _oc: ObjectContainer;
+  protected _config: Config;
   /**
    * Initializes the bootstrap.
    *
-   * @param {ObjectContainer} oc The application's object container to use
+   * @param oc The application's object container to use
    *        for managing dependencies.
    */
-  constructor(oc) {
+  constructor(oc: ObjectContainer) {
     /**
      * The object container used to manage dependencies.
-     *
-     * @type {ObjectContainer}
      */
     this._oc = oc;
 
     /**
      * Application configuration.
-     *
-     * @type {Object<string, *>}
      */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this._config = {};
   }
 
@@ -42,10 +63,10 @@ export default class Bootstrap {
    * - UI components
    * - routing
    *
-   * @param {Object<string, *>} config The application environment
+   * @param config The application environment
    *        configuration for the current environment.
    */
-  run(config) {
+  run(config: Config) {
     this._config = config;
 
     this._initSettings();
@@ -58,10 +79,10 @@ export default class Bootstrap {
    * Initializes dynamically loaded plugin. This is explicitly called from
    * within the Plugin Loader instance.
    *
-   * @param {string} name Plugin name.
-   * @param {module} module Plugin interface (object with init functions).
+   * @param name Plugin name.
+   * @param module Plugin interface (object with init functions).
    */
-  initPlugin(name, module) {
+  initPlugin(name: string, module: Module) {
     this._initPluginSettings(name, module);
     this._bindPluginDependencies(name, module);
     this._initPluginServices(module);
@@ -69,21 +90,24 @@ export default class Bootstrap {
 
   /**
    * Initializes the application settings. The method loads the settings for
-   * all environments and then pics the settings for the current environment.
+   * all environments and then picks the settings for the current environment.
    *
    * The method also handles using the values in the production environment
    * as default values for configuration items in other environments.
    */
   _initSettings() {
-    let currentApplicationSettings = {};
-    let plugins = this._config.plugins.concat([
-      { name: ObjectContainer.APP_BINDING_STATE, module: this._config },
+    const currentApplicationSettings = {};
+    const plugins = this._config.plugins.concat([
+      {
+        name: ObjectContainer.APP_BINDING_STATE,
+        module: this._config as unknown as Module,
+      },
     ]);
 
     plugins
       .filter(({ module }) => typeof module.initSettings === 'function')
       .forEach(({ name, module }) => {
-        let allPluginSettings = module.initSettings(
+        const allPluginSettings = module.initSettings(
           ns,
           this._oc,
           this._config.settings,
@@ -112,16 +136,16 @@ export default class Bootstrap {
    * the same way as with non-dynamic import, meaning the app setting overrides
    * are prioritized over the default plugin settings.
    *
-   * @param {string} name Plugin name.
-   * @param {module} module Plugin interface (object with init functions).
+   * @param name Plugin name.
+   * @param module Plugin interface (object with init functions).
    */
-  _initPluginSettings(name, module) {
+  _initPluginSettings(name: string, module: Module) {
     if (typeof module?.initSettings !== 'function') {
       return;
     }
 
-    let newApplicationSettings = {};
-    let allPluginSettings = module.initSettings(
+    const newApplicationSettings = {};
+    const allPluginSettings = module.initSettings(
       ns,
       this._oc,
       this._config.settings,
@@ -177,10 +201,10 @@ export default class Bootstrap {
    * Binds the constants, service providers and class dependencies to the
    * object container for dynamically imported plugins.
    *
-   * @param {string} name Plugin name.
-   * @param {module} module Plugin interface (object with init functions).
+   * @param name Plugin name.
+   * @param module Plugin interface (object with init functions).
    */
-  _bindPluginDependencies(name, module) {
+  _bindPluginDependencies(name: string, module: Module) {
     if (typeof module.initBind !== 'function') {
       return;
     }
@@ -196,7 +220,7 @@ export default class Bootstrap {
    * Initializes the routes.
    */
   _initRoutes() {
-    let router = this._oc.get(Router);
+    const router = this._oc.get(Router);
     this._config.initRoutes(ns, this._oc, this._config.routes, router);
   }
 
@@ -218,10 +242,9 @@ export default class Bootstrap {
   /**
    * Service initialization for the dynamically loaded plugins.
    *
-   * @param {string} name Plugin name.
-   * @param {module} module Plugin interface (object with init functions).
+   * @param module Plugin interface (object with init functions).
    */
-  _initPluginServices(module) {
+  _initPluginServices(module: Module) {
     if (typeof module.initServices !== 'function') {
       return;
     }
