@@ -274,9 +274,9 @@ export default abstract class AbstractRouter extends Router {
    */
   abstract redirect(
     url: string,
-    options: RouteOptions | Record<string, never>,
-    action: { type?: string; payload?: object | Event; event: unknown },
-    locals: Record<string, unknown>
+    options?: RouteOptions | Record<string, never>,
+    action?: { type?: string; payload?: object | Event; event?: Event },
+    locals?: Record<string, unknown>
   ): void;
 
   /**
@@ -300,8 +300,8 @@ export default abstract class AbstractRouter extends Router {
    */
   async route(
     path: string,
-    options: RouteOptions | Record<string, never> = {},
-    action: { type?: string; event: Event; url?: string },
+    options: RouteOptions = {},
+    action = {} as { type?: string; event?: Event; url?: string },
     locals: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }> {
     this._currentlyRoutedPath = path;

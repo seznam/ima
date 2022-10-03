@@ -148,10 +148,10 @@ export default class ClientRouter extends AbstractRouter {
     options = {},
     {
       type = ActionTypes.REDIRECT as string,
-      event = undefined as unknown,
+      event = undefined,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       url = '',
-    } = {},
+    } = {} as { type?: string; event?: Event; url?: string },
     locals = {}
   ) {
     if (this._isSameDomain(redirectUrl)) {
@@ -170,9 +170,11 @@ export default class ClientRouter extends AbstractRouter {
   async route(
     path: string,
     options = {},
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    { event, type = ActionTypes.REDIRECT as string, url = '' } = {},
+    {
+      event = undefined,
+      type = ActionTypes.REDIRECT as string,
+      url = '',
+    } = {} as { type?: string; event?: Event; url?: string },
     locals = {}
   ) {
     const action = {
@@ -236,7 +238,7 @@ export default class ClientRouter extends AbstractRouter {
       const errorParams = error.getParams();
       options.httpStatus = error.getHttpStatus();
       const action = {
-        event: null,
+        event: undefined,
         type: ActionTypes.REDIRECT,
         url: errorParams.url as string,
       };
