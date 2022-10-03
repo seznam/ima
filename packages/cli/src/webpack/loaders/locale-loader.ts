@@ -39,6 +39,8 @@ const LocaleLoader: LoaderDefinitionFunction<LocaleLoaderOptions> = function (
 
   const messages: StringStructure = {};
   for (const languagePath of paths) {
+    this.dependency(languagePath);
+
     try {
       const dictionaryKey = path
         .parse(languagePath)

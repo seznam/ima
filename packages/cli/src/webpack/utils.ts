@@ -114,7 +114,7 @@ export default message;
     ).toString('base64');
 
     return Object.assign(resultEntries, {
-      [locale]: `data:text/javascript;base64,${content}`,
+      [`locale/${locale}`]: `data:text/javascript;base64,${content}`,
     });
   }, {});
 }
