@@ -97,7 +97,7 @@ export default class HttpAgentImpl extends HttpAgent {
   get(
     url: string,
     data: { [key: string]: boolean | number | string },
-    options: HttpAgentRequestOptions
+    options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache('get', url, data, options);
   }

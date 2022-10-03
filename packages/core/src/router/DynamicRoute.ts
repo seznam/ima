@@ -35,9 +35,7 @@ export type ExtractPathFunction = (path?: string) => Record<string, string>;
 export default class DynamicRoute extends AbstractRoute {
   protected _matcher: RegExp;
   protected _toPath: (params: StringParameters) => string;
-  protected _extractParameters: (path?: string) => {
-    [key: string]: string | undefined;
-  };
+  protected _extractParameters: (path?: string) => StringParameters;
 
   /**
    * Initializes the route.
@@ -116,11 +114,11 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  extractParameters(path?: string) {
+  extractParameters(path?: string): StringParameters {
     const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
     const parameters = this._extractParameters(trimmedPath.split('?').shift());
     const query = AbstractRoute.getQuery(trimmedPath);
 
-    return Object.assign({}, parameters, query);
+    return Object.assign({}, parameters, query) as StringParameters;
   }
 }

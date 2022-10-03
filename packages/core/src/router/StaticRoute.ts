@@ -521,7 +521,7 @@ export default class StaticRoute extends AbstractRoute {
    * Extract parameters from given path.
    */
   _extractParameters(parameterValues: string[]) {
-    const parameters: { [key: string]: string | undefined } = {};
+    const parameters: { [key: string]: string } = {};
 
     const parametersCount = this._parameterNames.length;
 
