@@ -123,7 +123,7 @@ export function cssClasses(
  *         to {@code true}.
  */
 export function defaultCssClasses(
-  classRules: string | object,
+  classRules: classnames.Value | classnames.Mapping,
   component: string | ComponentType
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;
