@@ -252,9 +252,9 @@ export default abstract class Router {
    */
   abstract redirect(
     url: string,
-    options: RouteOptions | Record<string, never>,
-    action: { [key: string]: unknown },
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    action?: Record<string, unknown>,
+    locals?: Record<string, unknown>
   ): void;
 
   /**
@@ -288,9 +288,9 @@ export default abstract class Router {
    */
   abstract route(
     path: string,
-    options: RouteOptions | Record<string, never>,
-    action: { type?: string; event?: Event; url?: string },
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    action?: Record<string, unknown>,
+    locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }>;
 
   /**
