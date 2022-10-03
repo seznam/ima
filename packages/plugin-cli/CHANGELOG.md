@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.4
+
+### Patch Changes
+
+- 0e00e4f7: Fixed issue where swcTransformer didn't transform jsx filenames to js extensions
+
 ## 18.0.0-rc.3
 
 ### Patch Changes
