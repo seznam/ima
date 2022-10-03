@@ -1,18 +1,11 @@
 import PageStateManager from '../page/state/PageStateManager';
 import Controller from './Controller';
 import Extension, { IExtension } from '../extension/Extension';
-import {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-} from '../CommonTypes';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
  * default implementation of the most of the API.
- *
- * @abstract
- * @extends Controller
  */
 export default abstract class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
@@ -30,39 +23,6 @@ export default abstract class AbstractController extends Controller {
 
   static get $extensions(): IExtension[] {
     return [];
-  }
-
-  /**
-   * @inheritdoc
-   */
-  abstract init(): void;
-
-  /**
-   * @inheritdoc
-   */
-  abstract destroy(): void;
-
-  /**
-   * @inheritdoc
-   */
-  abstract activate(): void;
-
-  /**
-   * @inheritdoc
-   */
-  abstract deactivate(): void;
-
-  /**
-   * @inheritdoc
-   * @abstract
-   */
-  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
-
-  /**
-   * @inheritdoc
-   */
-  update() {
-    return {};
   }
 
   /**
@@ -144,12 +104,6 @@ export default abstract class AbstractController extends Controller {
   getExtensions() {
     return Array.from(this._extensions.values());
   }
-
-  /**
-   * @inheritdoc
-   * @abstract
-   */
-  abstract setMetaParams(): void;
 
   /**
    * @inheritdoc

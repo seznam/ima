@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import Dictionary from '../dictionary/Dictionary';
 import Extension, { IExtension } from '../extension/Extension';
 import MetaManager from '../meta/MetaManager';
 import Router from '../router/Router';
 import PageStateManager from '../page/state/PageStateManager';
-import {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-} from '../CommonTypes';
+import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -27,7 +25,9 @@ export default abstract class Controller implements IController {
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
    */
-  abstract init(): void;
+  init(): void {
+    return;
+  }
 
   /**
    * Finalization callback, called when the controller is being discarded by
@@ -42,7 +42,9 @@ export default abstract class Controller implements IController {
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
    */
-  abstract destroy(): void;
+  destroy(): void {
+    return;
+  }
 
   /**
    * Callback for activating the controller in the UI. This is the last
@@ -54,7 +56,9 @@ export default abstract class Controller implements IController {
    * method. The controller may start receiving event bus event after this
    * method completes.
    */
-  abstract activate(): void;
+  activate(): void {
+    return;
+  }
 
   /**
    * Callback for deactivating the controller in the UI. This is the first
@@ -67,7 +71,9 @@ export default abstract class Controller implements IController {
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
    */
-  abstract deactivate(): void;
+  deactivate(): void {
+    return;
+  }
 
   /**
    * Callback the controller uses to request the resources it needs to render
@@ -104,7 +110,9 @@ export default abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
+  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return {};
+  }
 
   /**
    * Callback for updating the controller after a route update. This method
@@ -128,9 +136,11 @@ export default abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(
+  update(
     prevParams: UnknownParameters
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
+  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return {};
+  }
 
   /**
    * Patches the state of this controller using the provided object by
@@ -152,14 +162,18 @@ export default abstract class Controller implements IController {
    * @param statePatch Patch of the controller's state to
    *        apply.
    */
-  abstract setState(statePatch: UnknownParameters): void;
+  setState(statePatch: UnknownParameters): void {
+    return;
+  }
 
   /**
    * Returns the controller's current state.
    *
    * @return The current state of this controller.
    */
-  abstract getState(): UnknownParameters;
+  getState(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -168,35 +182,45 @@ export default abstract class Controller implements IController {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  abstract beginStateTransaction(): void;
+  beginStateTransaction(): void {
+    return;
+  }
 
   /**
    * Applies queued state patches to the controller state. All patches are squashed
    * and applied with one `setState` call.
    */
-  abstract commitStateTransaction(): void;
+  commitStateTransaction(): void {
+    return;
+  }
 
   /**
    * Cancels ongoing state transaction. Uncommited state changes are lost.
    */
-  abstract cancelStateTransaction(): void;
+  cancelStateTransaction(): void {
+    return;
+  }
 
   /**
    * Adds the provided extension to this controller. All extensions should be
    * added to the controller before the {@link Controller#init} method is
    * invoked.
    */
-  abstract addExtension(
+  addExtension(
     extension: Extension | IExtension,
     extensionInstance?: Extension
-  ): void;
+  ): void {
+    return;
+  }
 
   /**
    * Returns the controller's extensions.
    *
    * @return {Extension[]} The extensions added to this controller.
    */
-  abstract getExtensions(): Extension[];
+  getExtensions(): Extension[] {
+    return [];
+  }
 
   /**
    * Callback used to configure the meta attribute manager. The method is
@@ -213,13 +237,15 @@ export default abstract class Controller implements IController {
    * @param settings The application settings for the
    *        current application environment.
    */
-  abstract setMetaParams(
+  setMetaParams(
     loadedResources: UnknownParameters,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
     settings: UnknownParameters
-  ): void;
+  ): void {
+    return;
+  }
 
   /**
    * Sets the current route parameters. This method is invoked before the
@@ -227,14 +253,18 @@ export default abstract class Controller implements IController {
    *
    * @param params The current route parameters.
    */
-  abstract setRouteParams(params: UnknownParameters): void;
+  setRouteParams(params: UnknownParameters): void {
+    return;
+  }
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  abstract getRouteParams(): UnknownParameters;
+  getRouteParams(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Sets the page state manager. The page state manager manages the
@@ -246,7 +276,9 @@ export default abstract class Controller implements IController {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  abstract setPageStateManager(pageStateManager?: PageStateManager): void;
+  setPageStateManager(pageStateManager?: PageStateManager): void {
+    return;
+  }
 
   /**
    * Returns the HTTP status code to send to the client, should the
@@ -254,5 +286,7 @@ export default abstract class Controller implements IController {
    *
    * @return The HTTP status code to send to the client.
    */
-  abstract getHttpStatus(): number;
+  getHttpStatus(): number {
+    return 200;
+  }
 }
