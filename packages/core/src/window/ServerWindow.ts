@@ -189,16 +189,14 @@ export default class ServerWindow extends Window {
    * @inheritdoc
    */
   bindEventListener() {
-    throw new GenericError('The bindEventListener() is denied on server side.');
+    return;
   }
 
   /**
    * @inheritdoc
    */
   unbindEventListener() {
-    throw new GenericError(
-      'The unbindEventListener() is denied on server side.'
-    );
+    return;
   }
 }
 // @endif
