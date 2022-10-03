@@ -137,7 +137,7 @@ export default abstract class AbstractRouter extends Router {
     pathExpression: string,
     controller: string,
     view: string,
-    options: RouteOptions | undefined = undefined
+    options = {} as RouteOptions
   ) {
     if (this._routeHandlers.has(name)) {
       throw new GenericError(
@@ -302,7 +302,7 @@ export default abstract class AbstractRouter extends Router {
     path: string,
     options: RouteOptions = {},
     action = {} as { type?: string; event?: Event; url?: string },
-    locals: Record<string, unknown>
+    locals = {} as { action?: Record<string, unknown>; route?: AbstractRoute }
   ): Promise<void | { [key: string]: unknown }> {
     this._currentlyRoutedPath = path;
 
@@ -610,7 +610,7 @@ export default abstract class AbstractRouter extends Router {
     }
 
     for (const middleware of middlewares) {
-      await middleware.run(params as { [key: string]: string }, locals);
+      await middleware.run(params as StringParameters, locals);
     }
   }
 
@@ -623,7 +623,7 @@ export default abstract class AbstractRouter extends Router {
    * @returns Provided params merged with params
    *        from original route
    */
-  _addParamsFromOriginalRoute(params: { [key: string]: string }) {
+  _addParamsFromOriginalRoute(params: StringParameters): StringParameters {
     const originalPath = this._getCurrentlyRoutedPath();
     const { route } = this._getRouteHandlersByPath(originalPath);
 

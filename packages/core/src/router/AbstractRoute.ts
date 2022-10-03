@@ -118,7 +118,7 @@ export default abstract class AbstractRoute {
           }
         }
 
-        query[AbstractRoute.decodeURIParameter(pair[0]) as string] =
+        query[AbstractRoute.decodeURIParameter(pair[0])] =
           pair.length > 1
             ? AbstractRoute.decodeURIParameter(pair[1]) || ''
             : true;
@@ -136,14 +136,12 @@ export default abstract class AbstractRoute {
    * @param parameterValue
    * @return decodedValue
    */
-  static decodeURIParameter(parameterValue: string): string | undefined {
+  static decodeURIParameter(parameterValue: string): string {
     let decodedValue;
-    if (parameterValue) {
-      try {
-        decodedValue = decodeURIComponent(parameterValue);
-      } catch (_) {
-        return '';
-      }
+    try {
+      decodedValue = decodeURIComponent(parameterValue);
+    } catch (_) {
+      return '';
     }
     return decodedValue;
   }

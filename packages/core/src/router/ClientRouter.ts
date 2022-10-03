@@ -9,6 +9,7 @@ import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
 import { RouteOptions } from './Router';
 import { GenericError } from '..';
+import { StringParameters } from '../CommonTypes';
 
 /**
  * Names of the DOM events the router responds to.
@@ -227,11 +228,7 @@ export default class ClientRouter extends AbstractRouter {
     const error = params.error as GenericError;
 
     if (this.isClientError(error)) {
-      return this.handleNotFound(
-        params as { [key: string]: string },
-        {},
-        locals
-      );
+      return this.handleNotFound(params as StringParameters, {}, locals);
     }
 
     if (this.isRedirection(error)) {
@@ -268,7 +265,7 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  handleNotFound(params: { [key: string]: string }, options = {}, locals = {}) {
+  handleNotFound(params: StringParameters, options = {}, locals = {}) {
     return super.handleNotFound(params, options, locals).catch(error => {
       return this.handleError({ error }, {}, locals);
     });
