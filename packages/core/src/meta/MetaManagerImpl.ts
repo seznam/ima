@@ -121,8 +121,8 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritdoc
    */
   clearMetaAttributes() {
-    this._metaProperty = new Map();
-    this._metaName = new Map();
-    this._link = new Map();
+    this._metaProperty.clear();
+    this._metaName.clear();
+    this._link.clear();
   }
 }
