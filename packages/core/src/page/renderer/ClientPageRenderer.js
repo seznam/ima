@@ -76,9 +76,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
           this._firstTime = false;
         }
 
+        controller.getMetaManager().clearMetaAttributes();
         controller.setMetaParams(pageState);
         this._updateMetaAttributes(controller.getMetaManager());
-        controller.getMetaManager().clearMetaAttributes();
 
         return {
           content: null,
