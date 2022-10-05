@@ -66,6 +66,12 @@ const { metaManager } = this.props;
 </head>
 ```
 
+:::caution
+
+Dynamically rendered meta tags managed by IMA use `data-ima-meta` attribute. The meta tags won't by synced with route changes if they don't have the attribute set.
+
+:::
+
 Use the following four methods to control which meta tags should be rendered by the snippet.
 
 ### Managing document title - `setTitle()`
