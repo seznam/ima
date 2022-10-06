@@ -1,10 +1,6 @@
 import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
-import {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-} from '../CommonTypes';
+import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
 
 /**
@@ -40,28 +36,37 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  abstract init(): Promise<undefined> | void;
+  init(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * @inheritdoc
    */
-  abstract destroy(): Promise<undefined> | void;
+  destroy(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * @inheritdoc
    */
-  abstract activate(): Promise<undefined> | void;
+  activate(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * @inheritdoc
    */
-  abstract deactivate(): Promise<undefined> | void;
+  deactivate(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * @inheritdoc
-   * @abstract
    */
-  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
+  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return {};
+  }
 
   /**
    * @inheritdoc

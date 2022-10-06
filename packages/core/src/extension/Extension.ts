@@ -1,9 +1,5 @@
 import { EventHandler } from '../page/PageTypes';
-import {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-} from '../CommonTypes';
+import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import PageStateManager from '../page/state/PageStateManager';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

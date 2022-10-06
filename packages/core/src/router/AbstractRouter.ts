@@ -117,9 +117,9 @@ export default abstract class AbstractRouter extends Router {
    * @inheritdoc
    */
   init(config: {
-    $Protocol: string;
-    $Root: string;
-    $LanguagePartPath: string;
+    $Protocol?: string;
+    $Root?: string;
+    $LanguagePartPath?: string;
     $Host: string;
   }) {
     this._protocol = config.$Protocol || '';
@@ -135,8 +135,8 @@ export default abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string,
-    view: string,
+    controller: object | string | (() => unknown),
+    view: object | string | (() => unknown),
     options = {} as RouteOptions
   ) {
     if (this._routeHandlers.has(name)) {

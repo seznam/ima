@@ -45,7 +45,9 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       jest.spyOn(stateManager, '_eraseExcessHistory').mockImplementation();
       jest.spyOn(stateManager, '_pushToHistory').mockImplementation();
       jest.spyOn(stateManager, '_callOnChangeCallback');
-      jest.spyOn(dispatcher, 'fire').mockImplementation(() => {});
+      jest.spyOn(dispatcher, 'fire').mockImplementation(() => {
+        return;
+      });
     });
 
     it('should set smooth copy last state and state patch', () => {

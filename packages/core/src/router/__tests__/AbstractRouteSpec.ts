@@ -1,10 +1,30 @@
+import { StringParameters } from '@/CommonTypes';
 import AbstractRoute from '../AbstractRoute';
+import { RouteOptions } from '../Router';
+
+class MockedAbstractRoute extends AbstractRoute {
+  toPath() {
+    return '';
+  }
+
+  matches() {
+    return true;
+  }
+
+  extractParameters() {
+    return {};
+  }
+}
 
 describe('ima.core.router.AbstractRoute', function () {
-  let route = null;
+  let route: MockedAbstractRoute;
   const name = 'home';
-  const controller = function () {};
-  const view = function () {};
+  const controller = function () {
+    return;
+  };
+  const view = function () {
+    return;
+  };
   const pathExpression = '/home/:userId/something/:somethingId/:?optional';
   const options = {
     onlyUpdate: false,
@@ -16,7 +36,13 @@ describe('ima.core.router.AbstractRoute', function () {
   };
 
   beforeEach(function () {
-    route = new AbstractRoute(name, pathExpression, controller, view, options);
+    route = new MockedAbstractRoute(
+      name,
+      pathExpression,
+      controller,
+      view,
+      options as unknown as RouteOptions
+    );
   });
 
   it('should return route name', function () {
@@ -44,19 +70,19 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should return and cache async route controller', async () => {
-    route._controller = async () => controller;
+    route['_controller'] = async () => controller;
     const result = await route.getController();
 
     expect(result).toStrictEqual(controller);
-    await expect(route._cachedController).resolves.toStrictEqual(result);
+    await expect(route['_cachedController']).resolves.toStrictEqual(result);
   });
 
   it('should return and cache async route view', async () => {
-    route._view = async () => view;
+    route['_view'] = async () => view;
     const result = await route.getView();
 
     expect(result).toStrictEqual(view);
-    await expect(route._cachedView).resolves.toStrictEqual(result);
+    await expect(route['_cachedView']).resolves.toStrictEqual(result);
   });
 
   it('should parse query', function () {
@@ -70,15 +96,16 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should preload async view and controller', async () => {
-    let asyncController = async () => Promise.resolve({ default: controller });
-    let asyncView = async () => Promise.resolve({ default: view });
+    const asyncController = async () =>
+      Promise.resolve({ default: controller });
+    const asyncView = async () => Promise.resolve({ default: view });
 
-    route = new AbstractRoute(
+    route = new MockedAbstractRoute(
       name,
       pathExpression,
       asyncController,
       asyncView,
-      options
+      options as unknown as RouteOptions
     );
 
     jest.spyOn(route, 'getView');
@@ -104,7 +131,12 @@ describe('ima.core.router.AbstractRoute', function () {
       [
         [
           [{}, []],
-          ['test', () => {}],
+          [
+            'test',
+            () => {
+              return;
+            },
+          ],
           [null, 'world'],
           ['str', 123],
         ],
@@ -135,7 +167,9 @@ describe('ima.core.router.AbstractRoute', function () {
       ],
       [
         {
-          test: () => {},
+          test: () => {
+            return;
+          },
           key: null,
           str: 123,
         },
@@ -151,13 +185,15 @@ describe('ima.core.router.AbstractRoute', function () {
       ],
       [[[]], ''],
     ])('should parse %j into "%s"', (pairs, result) => {
-      expect(AbstractRoute.paramsToQuery(pairs)).toBe(result);
+      expect(
+        AbstractRoute.paramsToQuery(pairs as unknown as StringParameters)
+      ).toBe(result);
     });
   });
 
   describe('_getAsyncModule() method', () => {
     it('should return promise resolving to default export for async import', async () => {
-      let asyncController = async () =>
+      const asyncController = async () =>
         Promise.resolve({ default: controller });
 
       await expect(
@@ -166,7 +202,7 @@ describe('ima.core.router.AbstractRoute', function () {
     });
 
     it('should return promise resolving to async constructor', async () => {
-      let asyncController = async () => Promise.resolve(controller);
+      const asyncController = async () => Promise.resolve(controller);
 
       await expect(
         route._getAsyncModule(asyncController)

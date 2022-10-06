@@ -5,21 +5,21 @@ import { toMockedInstance } from 'to-mock';
 import { ManagedPage, PageAction } from '../../PageTypes';
 
 class TestPageHandler extends PageHandler {
-  init(): void {}
+  init(): void {
+    return;
+  }
 
-  handlePostManagedState(
-    managedPage: ManagedPage,
-    previousManagedPage: ManagedPage,
-    action: PageAction
-  ): void {}
+  handlePostManagedState(): void {
+    return;
+  }
 
-  handlePreManagedState(
-    managedPage: ManagedPage,
-    nextManagedPage: ManagedPage,
-    action: PageAction
-  ): void {}
+  handlePreManagedState(): void {
+    return;
+  }
 
-  destroy(): void {}
+  destroy(): void {
+    return;
+  }
 }
 
 describe('ima.core.page.handler.PageHandlerRegistry', () => {
@@ -29,10 +29,14 @@ describe('ima.core.page.handler.PageHandlerRegistry', () => {
   beforeEach(() => {
     jest
       .spyOn(pageManagerHandler, 'handlePreManagedState')
-      .mockImplementation(() => {});
+      .mockImplementation(() => {
+        return;
+      });
     jest
       .spyOn(pageManagerHandler, 'handlePostManagedState')
-      .mockImplementation(() => {});
+      .mockImplementation(() => {
+        return;
+      });
     registry = new PageHandlerRegistry(pageManagerHandler);
     registry.init();
   });

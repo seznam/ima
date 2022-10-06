@@ -3,12 +3,7 @@ import ObjectContainer from '../../ObjectContainer';
 import ns from '../../Namespace';
 import AbstractController from '../../controller/AbstractController';
 import Extension, { IExtension } from '../../extension/Extension';
-import PageStateManager from '../state/PageStateManager';
-import {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-} from '../../CommonTypes';
+import { UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;
@@ -45,12 +40,10 @@ describe('ima.core.PageFactory', () => {
     load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
-    update(
-      prevParams: UnknownParameters
-    ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    update(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
       throw new Error('Method not implemented.');
     }
-    setState(statePatch: UnknownParameters): void {
+    setState(): void {
       throw new Error('Method not implemented.');
     }
     getState(): UnknownParameters {
@@ -65,7 +58,7 @@ describe('ima.core.PageFactory', () => {
     cancelStateTransaction(): void {
       throw new Error('Method not implemented.');
     }
-    setPartialState(partialStatePatch: UnknownParameters): void {
+    setPartialState(): void {
       throw new Error('Method not implemented.');
     }
     getPartialState(): UnknownParameters {
@@ -74,7 +67,7 @@ describe('ima.core.PageFactory', () => {
     clearPartialState(): void {
       throw new Error('Method not implemented.');
     }
-    setPageStateManager(pageStateManager: PageStateManager): void {
+    setPageStateManager(): void {
       throw new Error('Method not implemented.');
     }
     switchToStateManager(): void {
@@ -83,7 +76,7 @@ describe('ima.core.PageFactory', () => {
     switchToPartialState(): void {
       throw new Error('Method not implemented.');
     }
-    setRouteParams(params: UnknownParameters): void {
+    setRouteParams(): void {
       throw new Error('Method not implemented.');
     }
     getRouteParams(): UnknownParameters {

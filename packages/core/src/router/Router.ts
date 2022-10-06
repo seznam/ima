@@ -14,7 +14,7 @@ export type RouteOptions = {
     | Promise<RouterMiddleware>[]
     | RouterMiddleware[]
     | MiddleWareFunction[];
-  onlyUpdate?: (controller: IController, view: unknown) => boolean;
+  onlyUpdate?: boolean | ((controller: IController, view: unknown) => boolean);
   viewAdapter?: unknown;
 };
 
