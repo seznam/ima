@@ -5,9 +5,12 @@ import MetaManager from './MetaManager';
  */
 export default class MetaManagerImpl extends MetaManager {
   protected _title: string;
-  protected _metaName: Map<string, string>;
-  protected _metaProperty: Map<string, string>;
-  protected _link: Map<string, string>;
+  protected _metaName: Map<string, { value: string; [key: string]: string }>;
+  protected _metaProperty: Map<
+    string,
+    { value: string; [key: string]: string }
+  >;
+  protected _link: Map<string, { value: string; [key: string]: string }>;
 
   static get $dependencies() {
     return [];
@@ -57,7 +60,7 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, value: string) {
+  setMetaName(name: string, value: { value: string; [key: string]: string }) {
     this._metaName.set(name, value);
   }
 
@@ -65,7 +68,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getMetaName(name: string) {
-    return this._metaName.get(name) || '';
+    return this._metaName.get(name) || { value: '' };
   }
 
   /**
@@ -78,7 +81,10 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaProperty(name: string, value: string) {
+  setMetaProperty(
+    name: string,
+    value: { value: string; [key: string]: string }
+  ) {
     this._metaProperty.set(name, value);
   }
 
@@ -86,7 +92,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getMetaProperty(name: string) {
-    return this._metaProperty.get(name) || '';
+    return this._metaProperty.get(name) || { value: '' };
   }
 
   /**
@@ -99,7 +105,7 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(relation: string, value: string) {
+  setLink(relation: string, value: { value: string; [key: string]: string }) {
     this._link.set(relation, value);
   }
 
@@ -107,7 +113,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getLink(relation: string) {
-    return this._link.get(relation) || '';
+    return this._link.get(relation) || { value: '' };
   }
 
   /**

@@ -77,12 +77,12 @@ declare module '@ima/core' {
   }
 
   export class MetaManager {
-    getLink(relation: string): string;
+    getLink(relation: string): { value: string; [key: string]: string };
     getLinks(): string[];
-    getMetaName(name: string): string;
+    getMetaName(name: string): { value: string; [key: string]: string };
     getMetaNames(): string[];
     getMetaProperties(): string[];
-    getMetaProperty(name: string): string;
+    getMetaProperty(name: string): { value: string; [key: string]: string };
     getTitle(): string;
     clearMetaAttributes(): void;
   }

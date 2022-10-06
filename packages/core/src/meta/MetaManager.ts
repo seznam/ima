@@ -47,7 +47,7 @@ export default abstract class MetaManager {
    *        `keywords`.
    * @param value The meta information value.
    */
-  setMetaName(name: string, value: string) {
+  setMetaName(name: string, value: { value: string; [key: string]: string }) {
     return;
   }
 
@@ -60,7 +60,7 @@ export default abstract class MetaManager {
    * @return The value of the generic meta information, or an empty string.
    */
   getMetaName(name: string) {
-    return '';
+    return { value: '' };
   }
 
   /**
@@ -80,7 +80,10 @@ export default abstract class MetaManager {
    * @param name Name of the specialized meta information property.
    * @param value The value of the meta information property.
    */
-  setMetaProperty(name: string, value: string) {
+  setMetaProperty(
+    name: string,
+    value: { value: string; [key: string]: string }
+  ) {
     return;
   }
 
@@ -95,7 +98,7 @@ export default abstract class MetaManager {
    *         empty string.
    */
   getMetaProperty(name: string) {
-    return '';
+    return { value: '' };
   }
 
   /**
@@ -117,7 +120,10 @@ export default abstract class MetaManager {
    * @param reference The reference to the location of the related
    *        document, e.g. a URL.
    */
-  setLink(relation: string, reference: string) {
+  setLink(
+    relation: string,
+    reference: { value: string; [key: string]: string }
+  ) {
     return;
   }
 
@@ -132,7 +138,7 @@ export default abstract class MetaManager {
    *         e.g. a URL.
    */
   getLink(relation: string) {
-    return '';
+    return { value: '' };
   }
 
   /**
