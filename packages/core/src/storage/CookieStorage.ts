@@ -7,18 +7,12 @@ import Window from '../window/Window';
 /**
  * Implementation note: This is the largest possible safe value that has been
  * tested, used to represent "infinity".
- *
- * @const
- * @type {Date}
  */
 const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
 
 /**
  * Separator used to separate cookie declarations in the `Cookie` HTTP
  * header or the return value of the `document.cookie` property.
- *
- * @const
- * @type {string}
  */
 const COOKIE_SEPARATOR = '; ';
 
@@ -43,13 +37,40 @@ export type Cookie = {
  * side. The storage caches the cookies internally.
  */
 export default class CookieStorage extends MapStorage {
+  /**
+   * The window utility used to determine whether the IMA is being run
+   * at the client or at the server.
+   */
   private _window: Window;
+  /**
+   * The current HTTP request. This field is used at the server side.
+   */
   private _request: Request;
+  /**
+   * The current HTTP response. This field is used at the server side.
+   */
   private _response: Response;
-  private _options: Options;
+  /**
+   * The overriding cookie attribute values.
+   */
+  private _options: Options = {
+    path: '/',
+    expires: undefined,
+    maxAge: undefined,
+    secure: false,
+    httpOnly: false,
+    domain: '',
+    sameSite: 'Lax',
+  };
+  /**
+   * Transform encode and decode functions for cookie value.
+   */
   private _transformFunction: {
     encode: (value: string) => string;
     decode: (value: string) => string;
+  } = {
+    encode: value => value,
+    decode: value => value,
   };
 
   static get $dependencies() {
@@ -71,47 +92,11 @@ export default class CookieStorage extends MapStorage {
   constructor(window: Window, request: Request, response: Response) {
     super();
 
-    /**
-     * The window utility used to determine whether the IMA is being run
-     * at the client or at the server.
-     */
     this._window = window;
 
-    /**
-     * The current HTTP request. This field is used at the server side.
-     */
     this._request = request;
 
-    /**
-     * The current HTTP response. This field is used at the server side.
-     */
     this._response = response;
-
-    /**
-     * The overriding cookie attribute values.
-     */
-    this._options = {
-      path: '/',
-      expires: undefined,
-      maxAge: undefined,
-      secure: false,
-      httpOnly: false,
-      domain: '',
-      sameSite: 'Lax',
-    };
-
-    /**
-     * Transform encode and decode functions for cookie value.
-     *
-     * @type {{
-     *         encode: function(string): string,
-     *         decode: function(string): string
-     *       }}
-     */
-    this._transformFunction = {
-      encode: value => value,
-      decode: value => value,
-    };
   }
 
   /**

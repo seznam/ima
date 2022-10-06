@@ -103,7 +103,15 @@ export default class WeakMapStorage extends MapStorage {
  * there is no native way to create a weak reference.
  */
 class WeakRef {
+  /**
+   * The actual target reference, or `null` if the reference has
+   * been already discarded.
+   */
   private _reference: object | null;
+  /**
+   * The UNIX timestamp with millisecond precision marking the moment at
+   * or after which the reference will be discarded.
+   */
   private _expiration: number;
 
   /**
@@ -128,16 +136,8 @@ class WeakRef {
       }
     }
 
-    /**
-     * The actual target reference, or `null` if the reference has
-     * been already discarded.
-     */
     this._reference = target;
 
-    /**
-     * The UNIX timestamp with millisecond precision marking the moment at
-     * or after which the reference will be discarded.
-     */
     this._expiration = Date.now() + ttl;
   }
 

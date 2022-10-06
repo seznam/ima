@@ -8,6 +8,9 @@ import ClientWindow from '../window/ClientWindow';
  * native `sessionStorage` DOM storage for storing its entries.
  */
 export default class SessionStorage extends ImaStorage {
+  /**
+   * The DOM storage providing the actual storage of the entries.
+   */
   private _storage: Storage;
 
   static get $dependencies() {
@@ -20,9 +23,6 @@ export default class SessionStorage extends ImaStorage {
   constructor(window: ClientWindow) {
     super();
 
-    /**
-     * The DOM storage providing the actual storage of the entries.
-     */
     this._storage = window.getWindow().sessionStorage;
   }
 
@@ -150,35 +150,29 @@ export default class SessionStorage extends ImaStorage {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 class StorageIterator {
+  /**
+   * The DOM storage being iterated.
+   */
   private _storage: Storage;
-  private _currentKeyIndex: number;
+  /**
+   * The current index of the DOM storage key this iterator will return
+   * next.
+   */
+  private _currentKeyIndex = 0;
 
   /**
    * Initializes the DOM storage iterator.
    *
-   * @param {Storage} storage The DOM storage to iterate through.
+   * @param storage The DOM storage to iterate through.
    */
   constructor(storage: Storage) {
-    /**
-     * The DOM storage being iterated.
-     *
-     * @type {Storage}
-     */
     this._storage = storage;
-
-    /**
-     * The current index of the DOM storage key this iterator will return
-     * next.
-     *
-     * @type {number}
-     */
-    this._currentKeyIndex = 0;
   }
 
   /**
    * Iterates to the next item. This method implements the iterator protocol.
    *
-   * @return {{done: boolean, value: (undefined|string)}} The next value in
+   * @return The next value in
    *         the sequence and whether the iterator is done iterating through
    *         the values.
    */
@@ -204,7 +198,7 @@ class StorageIterator {
    * implements the iterable protocol and provides compatibility with the
    * `for..of` loops.
    *
-   * @return {StorageIterator} This iterator.
+   * @return This iterator.
    */
   [Symbol.iterator]() {
     return this;

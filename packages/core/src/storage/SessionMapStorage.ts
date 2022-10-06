@@ -9,7 +9,13 @@ import CacheEntry from '../cache/CacheEntry';
  * the underlying map storage and the `sessionStorage` DOM storage.
  */
 export default class SessionMapStorage extends Storage {
+  /**
+   * The map storage, synced with the session storage.
+   */
   private _map: MapStorage;
+  /**
+   * The session storage, synced with the map storage.
+   */
   private _session: SessionStorage;
 
   static get $dependencies() {
@@ -25,14 +31,8 @@ export default class SessionMapStorage extends Storage {
   constructor(map: MapStorage, session: SessionStorage) {
     super();
 
-    /**
-     * The map storage, synced with the session storage.
-     */
     this._map = map;
 
-    /**
-     * The session storage, synced with the map storage.
-     */
     this._session = session;
   }
 
