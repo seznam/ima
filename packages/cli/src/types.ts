@@ -109,6 +109,15 @@ export type ImaConfig = {
   ) => Promise<Record<string, unknown>>;
 
   /**
+   * Function which receives default vendor swc-loader config and current context,
+   * this can be used for additional customization of vendor processed files.
+   */
+  swcVendor: (
+    config: Record<string, unknown>,
+    ctx: ImaConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
    * Function which receives postcss-loader config and current context, this can be used
    * to customize existing default postcss config or completely replace it with a custom one.
    */
@@ -205,6 +214,14 @@ export type ImaConfig = {
    * Disables build of 'client' legacy bundle.
    */
   disableLegacyBuild?: boolean;
+
+  /**
+   * Advanced functionality allowing you to register custom vendor paths that go through
+   * swc loader (configured using swcVendor function). Use this if you're using dependencies
+   * that don't meet the lowest supported ES version target (ES9 by default). It is enabled
+   * by default for all packages in @ima namespace.
+   */
+  transformVendorPaths?: RegExp[];
 
   /**
    * Experimental configurations which can be enabled individually on specific applications.

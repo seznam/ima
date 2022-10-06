@@ -222,6 +222,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       aggregateTimeout: 5,
     },
     swc: async config => config,
+    swcVendor: async config => config,
     postcss: async config => config,
   };
 
