@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { UnknownParameters } from '../CommonTypes';
 
 export type Listener = (data: UnknownParameters) => unknown;
@@ -16,7 +18,9 @@ export default abstract class Dispatcher {
    * Deregisters all event listeners currently registered with this
    * dispatcher.
    */
-  abstract clear(): this;
+  clear() {
+    return this;
+  }
 
   /**
    * Registers the provided event listener to be executed when the specified
@@ -35,7 +39,9 @@ export default abstract class Dispatcher {
    *        will be bound in the event listener.
    * @return This dispatcher.
    */
-  abstract listen(event: string, listener: Listener, scope?: unknown): this;
+  listen(event: string, listener: Listener, scope?: unknown) {
+    return this;
+  }
 
   /**
    * Deregisters the provided event listener, so it will no longer be
@@ -48,7 +54,9 @@ export default abstract class Dispatcher {
    *        would be bound in the event listener.
    * @return This dispatcher.
    */
-  abstract unlisten(event: string, listener: Listener, scope?: unknown): this;
+  unlisten(event: string, listener: Listener, scope?: unknown) {
+    return this;
+  }
 
   /**
    * Fires a new event of the specified name, carrying the provided data.
@@ -70,9 +78,7 @@ export default abstract class Dispatcher {
    *        propagation of the event.
    * @return This dispatcher.
    */
-  abstract fire(
-    event: string,
-    data: UnknownParameters,
-    imaInternalEvent: boolean
-  ): this;
+  fire(event: string, data: UnknownParameters, imaInternalEvent: boolean) {
+    return this;
+  }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * The {@link Storage} is an unordered collection of named values of any
  * type. Values in the storage are named using `string` keys. The storage
@@ -14,7 +16,9 @@ export default abstract class Storage {
    *
    * @return This storage.
    */
-  abstract init(): this;
+  init() {
+    return this;
+  }
 
   /**
    * Returns `true` if the entry identified by the specified key exists
@@ -23,7 +27,9 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return `true` if the storage entry exists.
    */
-  abstract has(key: string): boolean;
+  has(key: string) {
+    return false;
+  }
 
   /**
    * Retrieves the value of the entry identified by the specified . The
@@ -35,7 +41,9 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return The value of the storage entry.
    */
-  abstract get(key: string): unknown;
+  get(key: string): unknown {
+    return;
+  }
 
   /**
    * Sets the storage entry identified by the specified key to the provided
@@ -45,7 +53,9 @@ export default abstract class Storage {
    * @param value The storage entry value.
    * @return This storage.
    */
-  abstract set(key: string, value: unknown): this;
+  set(key: string, value: unknown) {
+    return this;
+  }
 
   /**
    * Deletes the entry identified by the specified key from this storage.
@@ -53,14 +63,18 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return This storage.
    */
-  abstract delete(key: string): this;
+  delete(key: string) {
+    return this;
+  }
 
   /**
    * Clears the storage of all entries.
    *
    * @return This storage.
    */
-  abstract clear(): this;
+  clear() {
+    return this;
+  }
 
   /**
    * Returns an iterator for traversing the keys in this storage. The order
@@ -71,12 +85,16 @@ export default abstract class Storage {
    *         returning itself as its own iterator, allowing it to be used in
    *         a `for..of` loop.
    */
-  abstract keys(): Iterable<string>;
+  keys(): Iterable<string> {
+    return [];
+  }
 
   /**
    * Returns the number of entries in this storage.
    *
    * @return The number of entries in this storage.
    */
-  abstract size(): number;
+  size() {
+    return 0;
+  }
 }

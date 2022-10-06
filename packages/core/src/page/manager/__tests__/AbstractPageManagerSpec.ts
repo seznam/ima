@@ -13,8 +13,6 @@ import RouteFactory from '../../../router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 import AbstractController from '../../../controller/AbstractController';
 import { UnknownParameters, UnknownPromiseParameters } from '@/CommonTypes';
-import { PageData } from '../../../page/PageTypes';
-import { RouteOptions } from '../../../router/Router';
 import PageFactory from '../../../page/PageFactory';
 import DynamicRoute from '../../../router/DynamicRoute';
 import StaticRoute from '../../../router/StaticRoute';
@@ -32,78 +30,11 @@ class AbstractControllerTest extends AbstractController {
 
     this.dependency = dependency;
   }
-
-  init(): void {
-    return;
-  }
-  destroy(): void {
-    return;
-  }
-  activate(): void {
-    return;
-  }
-  deactivate(): void {
-    return;
-  }
-  load(): UnknownPromiseParameters | Promise<UnknownPromiseParameters> {
-    return {};
-  }
-  setMetaParams(): void {
-    return;
-  }
 }
 
-class PageRendererMock extends PageRenderer {
-  mount(
-    controller: Controller,
-    view: unknown,
-    pageResources: UnknownPromiseParameters,
-    routeOptions: RouteOptions
-  ): PageData {
-    return {} as PageData;
-  }
-  update(
-    controller: Controller,
-    view: unknown,
-    resourcesUpdate: UnknownPromiseParameters,
-    routeOptions: RouteOptions
-  ): PageData {
-    return {} as PageData;
-  }
-  unmount(): void {
-    return;
-  }
-  setState(state: UnknownParameters): void {
-    return;
-  }
-}
+class PageRendererMock extends PageRenderer {}
 
-class PageStateManagerMock extends PageStateManager {
-  clear(): void {
-    return;
-  }
-  setState(statePatch: { [key: string]: unknown }): void {
-    return;
-  }
-  getState(): { [key: string]: unknown } {
-    return {};
-  }
-  getAllStates(): { [key: string]: unknown }[] {
-    return [];
-  }
-  getTransactionStatePatches(): { [key: string]: unknown }[] {
-    return [];
-  }
-  beginTransaction(): void {
-    return;
-  }
-  commitTransaction(): void {
-    return;
-  }
-  cancelTransaction(): void {
-    return;
-  }
-}
+class PageStateManagerMock extends PageStateManager {}
 
 class PageManagerMock extends AbstractPageManager {}
 
@@ -120,70 +51,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     extension: Promise.resolve('extension'),
   };
 
-  class ExtensionTest extends Extension {
-    init(): void | Promise<undefined> {
-      return;
-    }
-    destroy(): void | Promise<undefined> {
-      return;
-    }
-    activate(): void | Promise<undefined> {
-      return;
-    }
-    deactivate(): void | Promise<undefined> {
-      return;
-    }
-    load(): UnknownPromiseParameters | Promise<UnknownPromiseParameters> {
-      return extensionState;
-    }
-    update(
-      prevParams: UnknownParameters
-    ): UnknownPromiseParameters | Promise<UnknownPromiseParameters> {
-      return {};
-    }
-    setState(statePatch: UnknownParameters): void {
-      return;
-    }
-    getState(): UnknownParameters {
-      return {};
-    }
-    beginStateTransaction(): void {
-      return;
-    }
-    commitStateTransaction(): void {
-      return;
-    }
-    cancelStateTransaction(): void {
-      return;
-    }
-    setPartialState(partialStatePatch: UnknownParameters): void {
-      return;
-    }
-    getPartialState(): UnknownParameters {
-      return {};
-    }
-    clearPartialState(): void {
-      return;
-    }
-    setPageStateManager(pageStateManager?: PageStateManager | undefined): void {
-      return;
-    }
-    switchToStateManager(): void {
-      return;
-    }
-    switchToPartialState(): void {
-      return;
-    }
-    setRouteParams(params: UnknownParameters): void {
-      return;
-    }
-    getRouteParams(): UnknownParameters {
-      return {};
-    }
-    getAllowedStateKeys(): string[] {
-      return [];
-    }
-  }
+  class ExtensionTest extends Extension {}
 
   const pageState = Object.assign({}, extensionsState, controllerState);
 

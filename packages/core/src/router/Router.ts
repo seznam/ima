@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { IController } from '../controller/Controller';
 import AbstractRoute from './AbstractRoute';
@@ -41,12 +43,14 @@ export default abstract class Router {
    *        port number if other than the default is used) in the following
    *        form: ``${protocol}//${host}``.
    */
-  abstract init(config: {
+  init(config: {
     $Protocol: string;
     $Root: string;
     $LanguagePartPath: string;
     $Host: string;
-  }): void;
+  }) {
+    return;
+  }
 
   /**
    * Adds a new route to router.
@@ -90,13 +94,15 @@ export default abstract class Router {
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
-  abstract add(
+  add(
     name: string,
     pathExpression: string,
     controller: string,
     view: string,
     options: RouteOptions | undefined
-  ): this;
+  ) {
+    return this;
+  }
 
   /**
    * Adds a new middleware to router.
@@ -108,12 +114,14 @@ export default abstract class Router {
    * @return This router.
    * @throws Thrown if a middleware with the same name already exists.
    */
-  abstract use(
+  use(
     middleware: (
       routeParams: { [key: string]: string | number },
       locals: object
     ) => unknown
-  ): this;
+  ) {
+    return this;
+  }
 
   /**
    * Removes the specified route from the router's known routes.
@@ -121,7 +129,9 @@ export default abstract class Router {
    * @param name The route's unique name, identifying the route to remove.
    * @return This router.
    */
-  abstract remove(name: string): this;
+  remove(name: string) {
+    return this;
+  }
 
   /**
    * Returns specified handler from registered route handlers.
@@ -129,9 +139,9 @@ export default abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  abstract getRouteHandler(
-    name: string
-  ): undefined | AbstractRoute | RouterMiddleware;
+  getRouteHandler(name: string): undefined | AbstractRoute | RouterMiddleware {
+    return undefined;
+  }
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -139,14 +149,18 @@ export default abstract class Router {
    *
    * @return The path and query parts of the current URL.
    */
-  abstract getPath(): string;
+  getPath() {
+    return '';
+  }
 
   /**
    * Returns the current absolute URL (including protocol, host, query, etc).
    *
    * @return The current absolute URL.
    */
-  abstract getUrl(): string;
+  getUrl() {
+    return '';
+  }
 
   /**
    * Returns the application's absolute base URL, pointing to the public root
@@ -154,7 +168,9 @@ export default abstract class Router {
    *
    * @return The application's base URL.
    */
-  abstract getBaseUrl(): string;
+  getBaseUrl() {
+    return '';
+  }
 
   /**
    * Returns the application's domain in the following form
@@ -162,14 +178,18 @@ export default abstract class Router {
    *
    * @return The current application's domain.
    */
-  abstract getDomain(): string;
+  getDomain() {
+    return '';
+  }
 
   /**
    * Returns application's host (domain and, if necessary, the port number).
    *
    * @return The current application's host.
    */
-  abstract getHost(): string;
+  getHost() {
+    return '';
+  }
 
   /**
    * Returns the current protocol used to access the application, terminated
@@ -178,17 +198,23 @@ export default abstract class Router {
    * @return The current application protocol used to access the
    *         application.
    */
-  abstract getProtocol(): string;
+  getProtocol() {
+    return '';
+  }
 
   /**
    * Returns the information about the currently active route.
    * @throws Thrown if a route is not define for current path.
    */
-  abstract getCurrentRouteInfo(): {
+  getCurrentRouteInfo(): {
     route: AbstractRoute;
     params: { [key: string]: string | undefined };
     path: string;
-  };
+  } {
+    throw new GenericError(
+      'ima.core.router.Router.getCurrentRouteInfo: Method is not implemented.'
+    );
+  }
 
   /**
    * Registers event listeners at the client side window object allowing the
@@ -207,7 +233,9 @@ export default abstract class Router {
    *
    * @return This router.
    */
-  abstract listen(): this;
+  listen() {
+    return this;
+  }
 
   /**
    * Unregisters event listeners at the client side window object allowing the
@@ -226,7 +254,9 @@ export default abstract class Router {
    *
    * @return This router.
    */
-  abstract unlisten(): this;
+  unlisten() {
+    return this;
+  }
 
   /**
    * Redirects the client to the specified location.
@@ -250,12 +280,14 @@ export default abstract class Router {
    * @param [locals={}] The locals param is used to pass local data
    *        between middlewares.
    */
-  abstract redirect(
+  redirect(
     url: string,
     options?: RouteOptions,
     action?: Record<string, unknown>,
     locals?: Record<string, unknown>
-  ): void;
+  ) {
+    return;
+  }
 
   /**
    * Generates an absolute URL (including protocol, domain, etc) for the
@@ -269,7 +301,9 @@ export default abstract class Router {
    *        URL query.
    * @return An absolute URL for the specified route and parameters.
    */
-  abstract link(routeName: string, params: { [key: string]: string }): string;
+  link(routeName: string, params: { [key: string]: string }) {
+    return '';
+  }
 
   /**
    * Routes the application to the route matching the providing path, renders
@@ -286,12 +320,14 @@ export default abstract class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  abstract route(
+  route(
     path: string,
     options?: RouteOptions,
     action?: Record<string, unknown>,
     locals?: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }>;
+  ): Promise<void | { [key: string]: unknown }> {
+    return Promise.reject();
+  }
 
   /**
    * Handles an internal server error by responding with the appropriate
@@ -307,11 +343,13 @@ export default abstract class Router {
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
    */
-  abstract handleError(
+  handleError(
     params: { [key: string]: string },
     options: RouteOptions | Record<string, never>,
     locals: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }>;
+  ): Promise<void | { [key: string]: unknown }> {
+    return Promise.reject();
+  }
 
   /**
    * Handles a "not found" error by responding with the appropriate "not
@@ -327,11 +365,13 @@ export default abstract class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  abstract handleNotFound(
+  handleNotFound(
     params: { [key: string]: string },
     options: RouteOptions | Record<string, never>,
     locals: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }>;
+  ): Promise<void | { [key: string]: unknown }> {
+    return Promise.reject();
+  }
 
   /**
    * Tests, if possible, whether the specified error was caused by the
@@ -342,7 +382,9 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         client.
    */
-  abstract isClientError(reason: GenericError | Error): boolean;
+  isClientError(reason: GenericError | Error) {
+    return false;
+  }
 
   /**
    * Tests, if possible, whether the specified error lead to redirection.
@@ -351,5 +393,7 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         redirection.
    */
-  abstract isRedirection(reason: GenericError | Error): boolean;
+  isRedirection(reason: GenericError | Error) {
+    return false;
+  }
 }

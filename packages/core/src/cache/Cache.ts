@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
  * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.
- *
- * @interface
  */
 export default abstract class Cache {
   /**
    * Clears the cache by deleting all entries.
    */
-  abstract clear(): void;
+  clear() {
+    return;
+  }
 
   /**
    * Tests whether the cache contains a fresh entry for the specified key. A
@@ -22,7 +24,9 @@ export default abstract class Cache {
    * @return `true` if the cache is enabled, the entry exists and has
    *         not expired yet.
    */
-  abstract has(key: string): boolean;
+  has(key: string) {
+    return false;
+  }
 
   /**
    * Returns the value of the entry identified by the specified key.
@@ -34,7 +38,9 @@ export default abstract class Cache {
    * @return The value of the specified cache entry, or `null` if the entry
    *         is not available.
    */
-  abstract get(key: string): unknown | null;
+  get(key: string): unknown | null {
+    return;
+  }
 
   /**
    * Sets the cache entry identified by the specified key to the provided
@@ -48,7 +54,9 @@ export default abstract class Cache {
    *        entry will expire after the specified amount of milliseconds. Use
    *        `null` or omit the parameter to use the default TTL of this cache.
    */
-  abstract set(key: string, value: unknown, ttl?: number | string): void;
+  set(key: string, value: unknown, ttl?: number | string) {
+    return;
+  }
 
   /**
    * Deletes the specified cache entry. The method has no effect if the entry
@@ -56,7 +64,9 @@ export default abstract class Cache {
    *
    * @param key The identifier of the cache entry.
    */
-  abstract delete(key: string): void;
+  delete(key: string) {
+    return;
+  }
 
   /**
    * Disables the cache, preventing the retrieval of any cached entries and
@@ -68,14 +78,18 @@ export default abstract class Cache {
    *
    * The method has no effect if the cache is already disabled.
    */
-  abstract disable(): void;
+  disable() {
+    return;
+  }
 
   /**
    * Enables the cache, allowing the retrieval of cache entries.
    *
    * The method has no effect if the cache is already enabled.
    */
-  abstract enable(): void;
+  enable() {
+    return;
+  }
 
   /**
    * Exports the state of this cache to an HTML-safe JSON string. The data
@@ -85,7 +99,9 @@ export default abstract class Cache {
    * @return A JSON string containing an object representing of the
    *         current state of this cache.
    */
-  abstract serialize(): string;
+  serialize() {
+    return '';
+  }
 
   /**
    * Loads the provided serialized cache data into this cache. Entries
@@ -97,7 +113,9 @@ export default abstract class Cache {
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
-  abstract deserialize(serializedData: {
+  deserialize(serializedData: {
     [key: string]: { value: unknown; ttl: number };
-  }): void;
+  }) {
+    return;
+  }
 }

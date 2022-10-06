@@ -110,6 +110,7 @@ export default class ComponentUtils {
     alias: string,
     utilityClass: UnknownConstructable | FactoryFunction
   ) {
-    return (this._utilities![alias] = this._oc.get(utilityClass));
+    return ((this._utilities as UnknownParameters)[alias] =
+      this._oc.get(utilityClass));
   }
 }

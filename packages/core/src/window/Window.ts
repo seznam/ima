@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { UnknownParameters } from '../CommonTypes';
 
 export type ListenerOptions = {
@@ -16,7 +18,9 @@ export default abstract class Window {
   /**
    * @return `true` if invoked at the client side.
    */
-  abstract isClient(): boolean;
+  isClient() {
+    return false;
+  }
 
   /**
    * Returns `true` if the cookies are set and processed with every
@@ -25,21 +29,27 @@ export default abstract class Window {
    * @return `true` if cookies are handled automatically by
    *         the environment.
    */
-  abstract isCookieEnabled(): boolean;
+  isCookieEnabled() {
+    return false;
+  }
 
   /**
    * Returns `true` if the session storage is supported.
    *
    * @return `true` if the session storage is supported.
    */
-  abstract hasSessionStorage(): boolean;
+  hasSessionStorage() {
+    return false;
+  }
 
   /**
    * Sets the new page title of the document.
    *
    * @param title The new page title.
    */
-  abstract setTitle(title: string): void;
+  setTitle(title: string) {
+    return;
+  }
 
   /**
    * Returns the native `window` object representing the global context
@@ -49,7 +59,9 @@ export default abstract class Window {
    * @return The `window` object at the
    *         client-side, or `undefined` at the server-side.
    */
-  abstract getWindow(): undefined | globalThis.Window;
+  getWindow(): undefined | globalThis.Window {
+    return;
+  }
 
   /**
    * Returns the native `document` object representing any web page loaded
@@ -60,7 +72,9 @@ export default abstract class Window {
    * @return The `document` object at the
    *         client-side, or `undefined` at the server-side.
    */
-  abstract getDocument(): undefined | globalThis.Document;
+  getDocument(): undefined | globalThis.Document {
+    return;
+  }
 
   /**
    * Returns the number of pixels the viewport is scrolled horizontally.
@@ -68,7 +82,9 @@ export default abstract class Window {
    * @return The number of pixels the viewport is scrolled
    *         horizontally.
    */
-  abstract getScrollX(): number;
+  getScrollX() {
+    return 0;
+  }
 
   /**
    * Returns the number of pixels the document is scrolled vertically.
@@ -76,7 +92,9 @@ export default abstract class Window {
    * @return The number of pixels the document is scrolled
    *         vertically.
    */
-  abstract getScrollY(): number;
+  getScrollY() {
+    return 0;
+  }
 
   /**
    * Scrolls the viewport to the specified location (if possible).
@@ -84,7 +102,9 @@ export default abstract class Window {
    * @param x Horizontal scroll offset in pixels.
    * @param y Vertical scroll offset in pixels.
    */
-  abstract scrollTo(x: number, y: number): void;
+  scrollTo(x: number, y: number) {
+    return;
+  }
 
   /**
    * Returns the domain of the current document's URL as
@@ -92,24 +112,32 @@ export default abstract class Window {
    *
    * @return The current domain.
    */
-  abstract getDomain(): string;
+  getDomain() {
+    return '';
+  }
 
   /**
    * @return The current host.
    */
-  abstract getHost(): string;
+  getHost() {
+    return '';
+  }
 
   /**
    * Returns the path part of the current URL, including the query string.
    *
    * @return The path and query string parts of the current URL.
    */
-  abstract getPath(): string;
+  getPath() {
+    return '';
+  }
 
   /**
    * @return The current document's URL.
    */
-  abstract getUrl(): string;
+  getUrl() {
+    return '';
+  }
 
   /**
    * Returns the document's body element. The method returns
@@ -118,7 +146,9 @@ export default abstract class Window {
    * @return The document's body element, or
    *         `undefined` if invoked at the server side.
    */
-  abstract getBody(): undefined | HTMLElement;
+  getBody(): undefined | HTMLElement {
+    return;
+  }
 
   /**
    * Returns the HTML element with the specified `id` attribute value.
@@ -127,14 +157,18 @@ export default abstract class Window {
    * @return The element with the specified id, or
    *         `null` if no such element exists.
    */
-  abstract getElementById(id: string): null | HTMLElement;
+  getElementById(id: string): null | HTMLElement {
+    return null;
+  }
 
   /**
    * Returns the history state.
    *
    * @return The current history state
    */
-  abstract getHistoryState(): UnknownParameters;
+  getHistoryState(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Returns the first element matching the specified CSS 3 selector.
@@ -143,7 +177,9 @@ export default abstract class Window {
    * @return The first element matching the CSS selector or
    *         `null` if no such element exists.
    */
-  abstract querySelector(selector: string): null | Element;
+  querySelector(selector: string): null | Element {
+    return null;
+  }
 
   /**
    * Returns a node list of all elements matching the specified CSS 3
@@ -153,7 +189,9 @@ export default abstract class Window {
    * @return A node list containing all elements matching the
    *         specified CSS selector.
    */
-  abstract querySelectorAll(selector: string): NodeList;
+  querySelectorAll(selector: string): NodeList {
+    return new NodeList();
+  }
 
   /**
    * Performs a hard redirect (discarding the current JavaScript state) to
@@ -161,7 +199,9 @@ export default abstract class Window {
    *
    * @param url The URL to which the browser will be redirected.
    */
-  abstract redirect(url: string): void;
+  redirect(url: string) {
+    return;
+  }
 
   /**
    * Pushes a new state to the browser history. The method has no effect if
@@ -173,11 +213,9 @@ export default abstract class Window {
    *        this parameter is ignored by some browsers.
    * @param url The new URL at which the state is available.
    */
-  abstract pushState(
-    state: UnknownParameters,
-    title: string,
-    url?: string
-  ): void;
+  pushState(state: UnknownParameters, title: string, url?: string) {
+    return;
+  }
 
   /**
    * Replaces the current history entry. The method has no effect if the
@@ -189,11 +227,9 @@ export default abstract class Window {
    *        this parameter is ignored by some browsers.
    * @param url The new URL at which the state is available.
    */
-  abstract replaceState(
-    state: UnknownParameters,
-    title: string,
-    url?: string
-  ): void;
+  replaceState(state: UnknownParameters, title: string, url?: string) {
+    return;
+  }
 
   /**
    * Create new instance of CustomEvent of the specified name and using the
@@ -205,10 +241,9 @@ export default abstract class Window {
    * @return The created custom event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
    */
-  abstract createCustomEvent(
-    name: string,
-    options: UnknownParameters
-  ): CustomEvent;
+  createCustomEvent(name: string, options: UnknownParameters): CustomEvent {
+    return new CustomEvent('');
+  }
 
   /**
    * Registers the provided event listener to be executed when the specified
@@ -228,12 +263,14 @@ export default abstract class Window {
    *        which are bubbling upward through the tree will not trigger a
    *        listener designated to use capture.
    */
-  abstract bindEventListener(
+  bindEventListener(
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
     useCapture?: boolean | ListenerOptions
-  ): void;
+  ) {
+    return;
+  }
 
   /**
    * Deregisters the provided event listener, so it will no longer we
@@ -248,10 +285,12 @@ export default abstract class Window {
    * @param useCapture The `useCapture` flag value
    *        that was used when the listener was registered.
    */
-  abstract unbindEventListener(
+  unbindEventListener(
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
     useCapture?: boolean | ListenerOptions
-  ): void;
+  ) {
+    return;
+  }
 }

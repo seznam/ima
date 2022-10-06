@@ -4,27 +4,9 @@ import SerialBatch from '../../../execution/SerialBatch';
 import { toMockedInstance } from 'to-mock';
 import { ManagedPage, PageAction } from '../../PageTypes';
 
-class TestPageHandler extends PageHandler {
-  init(): void {
-    return;
-  }
-
-  handlePostManagedState(): void {
-    return;
-  }
-
-  handlePreManagedState(): void {
-    return;
-  }
-
-  destroy(): void {
-    return;
-  }
-}
-
 describe('ima.core.page.handler.PageHandlerRegistry', () => {
   let registry: PageHandlerRegistry;
-  const pageManagerHandler: PageHandler = toMockedInstance(TestPageHandler);
+  const pageManagerHandler: PageHandler = toMockedInstance(PageHandler);
 
   beforeEach(() => {
     jest

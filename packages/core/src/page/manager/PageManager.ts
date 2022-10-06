@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { PageAction } from '../PageTypes';
 import { RouteOptions } from '../../router/Router';
 import { UnknownParameters } from '../../CommonTypes';
@@ -12,7 +14,9 @@ export default abstract class PageManager {
   /**
    * Initializes the page manager.
    */
-  abstract init(): void;
+  init() {
+    return;
+  }
 
   /**
    * Starts to manage the provided controller and its view. The manager
@@ -33,18 +37,22 @@ export default abstract class PageManager {
    *         client (at the server side) or determine the type of error page
    *         to navigate to (at the client side).
    */
-  abstract manage(
+  manage(
     route: AbstractRoute,
     controller: IController,
     view: unknown,
     options: RouteOptions,
     params: UnknownParameters,
     action: PageAction
-  ): Promise<unknown>;
+  ): Promise<unknown> {
+    return Promise.reject();
+  }
 
   /**
    * Finalization callback, called when the page manager is being discarded.
    * This usually happens when the page is hot-reloaded at the client side.
    */
-  abstract destroy(): Promise<unknown>;
+  destroy(): Promise<unknown> {
+    return Promise.reject();
+  }
 }

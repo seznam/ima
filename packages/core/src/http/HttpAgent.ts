@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { HttpProxyRequestParams } from './HttpProxy';
 
 /**
@@ -73,11 +75,13 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  abstract get(
+  get(
     url: string,
     data: { [key: string]: boolean | number | string },
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse>;
+  ): Promise<HttpAgentResponse> {
+    return Promise.reject();
+  }
 
   /**
    * Sends an HTTP POST request to the specified URL, sending the provided
@@ -92,11 +96,13 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  abstract post(
+  post(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse>;
+  ): Promise<HttpAgentResponse> {
+    return Promise.reject();
+  }
 
   /**
    * Sends an HTTP PUT request to the specified URL, sending the provided
@@ -111,11 +117,13 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  abstract put(
+  put(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse>;
+  ): Promise<HttpAgentResponse> {
+    return Promise.reject();
+  }
 
   /**
    * Sends an HTTP PATCH request to the specified URL, sending the provided
@@ -130,11 +138,13 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  abstract patch(
+  patch(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse>;
+  ): Promise<HttpAgentResponse> {
+    return Promise.reject();
+  }
 
   /**
    * Sends an HTTP DELETE request to the specified URL, sending the provided
@@ -149,11 +159,13 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  abstract delete(
+  delete(
     url: string,
     data: { [key: string]: unknown },
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse>;
+  ): Promise<HttpAgentResponse> {
+    return Promise.reject();
+  }
 
   /**
    * Generates a cache key to use for identifying a request to the specified
@@ -167,11 +179,9 @@ export default abstract class HttpAgent {
    * @return The key to use for identifying such a request in the
    *         cache.
    */
-  abstract getCacheKey(
-    method: string,
-    url: string,
-    data: { [key: string]: string }
-  ): string;
+  getCacheKey(method: string, url: string, data: { [key: string]: string }) {
+    return '';
+  }
 
   /**
    * Sets the specified header to be sent with every subsequent HTTP request,
@@ -183,12 +193,16 @@ export default abstract class HttpAgent {
    *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
    * @return This HTTP agent.
    */
-  abstract setDefaultHeader(header: string, value: string): this;
+  setDefaultHeader(header: string, value: string) {
+    return this;
+  }
 
   /**
    * Clears all configured default headers.
    *
    * @return This HTTP agent.
    */
-  abstract clearDefaultHeaders(): this;
+  clearDefaultHeaders() {
+    return this;
+  }
 }

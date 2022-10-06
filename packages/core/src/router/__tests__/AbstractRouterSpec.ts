@@ -269,7 +269,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
     });
 
-    it('should handle "not-found" route', done => {
+    it('should handle "not-found" route', async () => {
       // @ts-ignore
       jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({});
 
@@ -277,10 +277,9 @@ describe('ima.core.router.AbstractRouter', () => {
         return Promise.resolve(params);
       });
 
-      router.route(path).then(params => {
+      await router.route(path).then(params => {
         // @ts-ignore
         expect(params.error instanceof GenericError).toBe(true);
-        done();
       });
     });
   });
@@ -313,7 +312,7 @@ describe('ima.core.router.AbstractRouter', () => {
       router['_currentlyRoutedPath'] = '/user/2345';
     });
 
-    it('should handle "error" route', done => {
+    it('should handle "error" route', async () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
@@ -331,7 +330,7 @@ describe('ima.core.router.AbstractRouter', () => {
         })
       );
 
-      router
+      await router
         .handleError(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -356,22 +355,19 @@ describe('ima.core.router.AbstractRouter', () => {
             }),
             { route, action: errorAction }
           );
-          done();
         })
         .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleError', error);
-          done(error);
         });
     });
 
-    it('should reject promise with error for undefined "error" route', done => {
+    it('should reject promise with error for undefined "error" route', async () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
-      router.handleError(params).catch(reason => {
+      await router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
-        done();
       });
     });
   });
@@ -404,7 +400,7 @@ describe('ima.core.router.AbstractRouter', () => {
       router['_currentlyRoutedPath'] = '/user/2345';
     });
 
-    it('should handle "notFound" route', done => {
+    it('should handle "notFound" route', async () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
@@ -422,7 +418,7 @@ describe('ima.core.router.AbstractRouter', () => {
         })
       );
 
-      router
+      await router
         // @ts-ignore
         .handleNotFound(params, options)
         .then(response => {
@@ -448,22 +444,19 @@ describe('ima.core.router.AbstractRouter', () => {
             }),
             { route, action: errorAction }
           );
-          done();
         })
         .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleNotFound', error);
-          done(error);
         });
     });
 
-    it('should reject promise with error for undefined "error" route', done => {
+    it('should reject promise with error for undefined "error" route', async () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
       // @ts-ignore
-      router.handleNotFound(params).catch(reason => {
+      await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
-        done();
       });
     });
   });
@@ -536,14 +529,14 @@ describe('ima.core.router.AbstractRouter', () => {
       jest.spyOn(router, '_getCurrentlyRoutedPath').mockReturnValue(routePath);
     });
 
-    it('should call page manager', done => {
+    it('should call page manager', async () => {
       router.getPath.mockReturnValue(routePath);
       jest
         .spyOn(pageManager, 'manage')
         .mockReturnValue(Promise.resolve({ content: null, status: 200 }));
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
-      router._handle(route, {}, {}, action).then(() => {
+      await router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith(
           route,
           Controller,
@@ -552,7 +545,6 @@ describe('ima.core.router.AbstractRouter', () => {
           {},
           action
         );
-        done();
       });
     });
 
@@ -582,7 +574,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
     });
 
-    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE', done => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE', async () => {
       const response = { content: null, status: 200 };
       const params = {};
 
@@ -592,7 +584,7 @@ describe('ima.core.router.AbstractRouter', () => {
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
-      router._handle(route, params, options).then(() => {
+      await router._handle(route, params, options).then(() => {
         const data = {
           route: route,
           params: params,
@@ -607,12 +599,10 @@ describe('ima.core.router.AbstractRouter', () => {
           data,
           true
         );
-
-        done();
       });
     });
 
-    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', async () => {
       const response = { content: null, status: 200 };
       const params = { error: new Error('test') };
 
@@ -622,7 +612,7 @@ describe('ima.core.router.AbstractRouter', () => {
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
-      router._handle(route, params, options).then(() => {
+      await router._handle(route, params, options).then(() => {
         const data = {
           route: route,
           params: params,
@@ -637,12 +627,10 @@ describe('ima.core.router.AbstractRouter', () => {
           data,
           true
         );
-
-        done();
       });
     });
 
-    it('should return response', done => {
+    it('should return response', async () => {
       const response = { content: null, status: 200 };
       const params = {};
 
@@ -651,13 +639,12 @@ describe('ima.core.router.AbstractRouter', () => {
         .spyOn(pageManager, 'manage')
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
 
-      router._handle(route, params, options).then(handleResponse => {
+      await router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toStrictEqual(response);
-        done();
       });
     });
 
-    it('should return response with handled error', done => {
+    it('should return response with handled error', async () => {
       const response = { content: null, status: 500 };
       const params = { error: new Error('test') };
 
@@ -667,11 +654,10 @@ describe('ima.core.router.AbstractRouter', () => {
         .spyOn(pageManager, 'manage')
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
 
-      router._handle(route, params, options).then(handleResponse => {
+      await router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toStrictEqual(
           Object.assign({}, response, params)
         );
-        done();
       });
     });
   });

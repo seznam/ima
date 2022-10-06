@@ -2,6 +2,7 @@ import PageHandler from './PageHandler';
 import Window from '../../window/Window';
 import ActionTypes from '../../router/ActionTypes';
 import { ManagedPage, PageAction } from '../PageTypes';
+import { RouteOptions } from '../../router/Router';
 
 export default class PageNavigationHandler extends PageHandler {
   private _window: Window;
@@ -64,7 +65,7 @@ export default class PageNavigationHandler extends PageHandler {
       this._setAddressBar(action.url as string, isRedirection);
     }
 
-    if (options!.autoScroll) {
+    if ((options as RouteOptions).autoScroll) {
       this._scrollTo({ x: 0, y: 0 });
     }
   }
@@ -80,7 +81,12 @@ export default class PageNavigationHandler extends PageHandler {
     const { event } = action;
     const { options } = managedPage;
 
-    if (event && event.state && event.state.scroll && options!.autoScroll) {
+    if (
+      event &&
+      event.state &&
+      event.state.scroll &&
+      (options as RouteOptions).autoScroll
+    ) {
       this._scrollTo(event.state.scroll);
     }
   }

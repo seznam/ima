@@ -3,7 +3,6 @@ import ObjectContainer from '../../ObjectContainer';
 import ns from '../../Namespace';
 import AbstractController from '../../controller/AbstractController';
 import Extension, { IExtension } from '../../extension/Extension';
-import { UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;
@@ -24,67 +23,6 @@ describe('ima.core.PageFactory', () => {
 
       this.dependency = dependency;
     }
-
-    init(): void | Promise<undefined> {
-      throw new Error('Method not implemented.');
-    }
-    destroy(): void | Promise<undefined> {
-      throw new Error('Method not implemented.');
-    }
-    activate(): void | Promise<undefined> {
-      throw new Error('Method not implemented.');
-    }
-    deactivate(): void | Promise<undefined> {
-      throw new Error('Method not implemented.');
-    }
-    load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-      throw new Error('Method not implemented.');
-    }
-    update(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-      throw new Error('Method not implemented.');
-    }
-    setState(): void {
-      throw new Error('Method not implemented.');
-    }
-    getState(): UnknownParameters {
-      throw new Error('Method not implemented.');
-    }
-    beginStateTransaction(): void {
-      throw new Error('Method not implemented.');
-    }
-    commitStateTransaction(): void {
-      throw new Error('Method not implemented.');
-    }
-    cancelStateTransaction(): void {
-      throw new Error('Method not implemented.');
-    }
-    setPartialState(): void {
-      throw new Error('Method not implemented.');
-    }
-    getPartialState(): UnknownParameters {
-      throw new Error('Method not implemented.');
-    }
-    clearPartialState(): void {
-      throw new Error('Method not implemented.');
-    }
-    setPageStateManager(): void {
-      throw new Error('Method not implemented.');
-    }
-    switchToStateManager(): void {
-      throw new Error('Method not implemented.');
-    }
-    switchToPartialState(): void {
-      throw new Error('Method not implemented.');
-    }
-    setRouteParams(): void {
-      throw new Error('Method not implemented.');
-    }
-    getRouteParams(): UnknownParameters {
-      throw new Error('Method not implemented.');
-    }
-    getAllowedStateKeys(): string[] {
-      throw new Error('Method not implemented.');
-    }
   }
 
   class mockExtension2 extends mockExtension {}
@@ -100,25 +38,6 @@ describe('ima.core.PageFactory', () => {
       super();
 
       this.dependency = dependency;
-    }
-
-    init(): void {
-      throw new Error('Method not implemented.');
-    }
-    destroy(): void {
-      throw new Error('Method not implemented.');
-    }
-    activate(): void {
-      throw new Error('Method not implemented.');
-    }
-    deactivate(): void {
-      throw new Error('Method not implemented.');
-    }
-    load(): UnknownPromiseParameters | Promise<UnknownPromiseParameters> {
-      throw new Error('Method not implemented.');
-    }
-    setMetaParams(): void {
-      throw new Error('Method not implemented.');
     }
   }
 
@@ -139,25 +58,6 @@ describe('ima.core.PageFactory', () => {
       super();
 
       this.dependency = dependency;
-    }
-
-    init(): void {
-      throw new Error('Method not implemented.');
-    }
-    destroy(): void {
-      throw new Error('Method not implemented.');
-    }
-    activate(): void {
-      throw new Error('Method not implemented.');
-    }
-    deactivate(): void {
-      throw new Error('Method not implemented.');
-    }
-    load(): UnknownPromiseParameters | Promise<UnknownPromiseParameters> {
-      throw new Error('Method not implemented.');
-    }
-    setMetaParams(): void {
-      throw new Error('Method not implemented.');
     }
   }
 

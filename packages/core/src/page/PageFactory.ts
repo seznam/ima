@@ -58,12 +58,12 @@ export default class PageFactory {
       if (Array.isArray(loadedExtension)) {
         // Spread support handling
         for (const extensionInstance of loadedExtension) {
-          (controllerInstance as AbstractController)!.addExtension(
+          (controllerInstance as AbstractController).addExtension(
             extensionInstance
           );
         }
       } else {
-        (controllerInstance as AbstractController)!.addExtension(
+        (controllerInstance as AbstractController).addExtension(
           extension as typeof Extension,
           loadedExtension as Extension
         );

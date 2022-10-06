@@ -7,7 +7,6 @@ import { EventHandler } from '../page/PageTypes';
  * Abstract extension
  *
  * @abstract
- * @implements Extension
  */
 export default abstract class AbstractExtension implements Extension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

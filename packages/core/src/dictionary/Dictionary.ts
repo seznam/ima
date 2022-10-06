@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export type Config = {
   $Language: string;
   dictionary: Fields;
@@ -29,7 +31,9 @@ export default abstract class Dictionary {
    * @param config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.
    */
-  abstract init(config: Config): void;
+  init(config: Config) {
+    return;
+  }
 
   /**
    * Returns the ISO 639-1 language code of the language this dictionary was
@@ -38,7 +42,9 @@ export default abstract class Dictionary {
    * @return The language code representing the language of the
    *         localization phrases in this dictionary.
    */
-  abstract getLanguage(): string;
+  getLanguage() {
+    return '';
+  }
 
   /**
    * Retrieves the localization phrase identified by the specified key,
@@ -52,7 +58,9 @@ export default abstract class Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  abstract get(key: string, parameters: Parameters): string;
+  get(key: string, parameters: Parameters) {
+    return '';
+  }
 
   /**
    * Tests whether the specified localization phrase exists in the
@@ -62,5 +70,7 @@ export default abstract class Dictionary {
    * @return`true` if the key exists and denotes a single
    *         localization phrase, otherwise `false`.
    */
-  abstract has(key: string): boolean;
+  has(key: string) {
+    return false;
+  }
 }

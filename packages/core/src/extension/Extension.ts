@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { EventHandler } from '../page/PageTypes';
 import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import PageStateManager from '../page/state/PageStateManager';
@@ -28,7 +30,9 @@ export default abstract class Extension implements IExtension {
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
    */
-  abstract init(): Promise<undefined> | void;
+  init(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * Finalization callback, called when the controller is being discarded by
@@ -43,7 +47,9 @@ export default abstract class Extension implements IExtension {
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
    */
-  abstract destroy(): Promise<undefined> | void;
+  destroy(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * Callback for activating the extension in the UI. This is the last
@@ -55,7 +61,9 @@ export default abstract class Extension implements IExtension {
    * method. The extension may start receiving event bus event after this
    * method completes.
    */
-  abstract activate(): Promise<undefined> | void;
+  activate(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * Callback for deactivating the extension in the UI. This is the first
@@ -68,7 +76,9 @@ export default abstract class Extension implements IExtension {
    * The extension should deregister listeners registered and release all
    * resources obtained in the {@link Extension#activate} method.
    */
-  abstract deactivate(): Promise<undefined> | void;
+  deactivate(): Promise<undefined> | void {
+    return;
+  }
 
   /**
    * Callback the extension uses to request the resources it needs to render
@@ -95,7 +105,9 @@ export default abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
+  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return {};
+  }
 
   /**
    * Callback for updating the extension after a route update. This method
@@ -119,9 +131,11 @@ export default abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  abstract update(
+  update(
     prevParams: UnknownParameters
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters;
+  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return {};
+  }
 
   /**
    * Patches the state of the controller using this extension by using the
@@ -136,14 +150,18 @@ export default abstract class Extension implements IExtension {
    *
    * @param statePatch Patch of the controller's state to apply.
    */
-  abstract setState(statePatch: UnknownParameters): void;
+  setState(statePatch: UnknownParameters) {
+    return;
+  }
 
   /**
    * Returns the current state of the controller using this extension.
    *
    * @return The current state of the controller.
    */
-  abstract getState(): UnknownParameters;
+  getState(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Starts queueing state patches off the controller state. While the transaction
@@ -152,18 +170,24 @@ export default abstract class Extension implements IExtension {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  abstract beginStateTransaction(): void;
+  beginStateTransaction() {
+    return;
+  }
 
   /**
    * Applies queued state patches to the controller state. All patches are squashed
    * and applied with one `setState` call.
    */
-  abstract commitStateTransaction(): void;
+  commitStateTransaction() {
+    return;
+  }
 
   /**
    * Cancels ongoing state transaction. Uncommited state changes are lost.
    */
-  abstract cancelStateTransaction(): void;
+  cancelStateTransaction() {
+    return;
+  }
 
   /**
    * Patches the partial state of the extension. The extension is able
@@ -172,19 +196,25 @@ export default abstract class Extension implements IExtension {
    *
    * @param partialStatePatch Patch of the controller's state to apply.
    */
-  abstract setPartialState(partialStatePatch: UnknownParameters): void;
+  setPartialState(partialStatePatch: UnknownParameters) {
+    return;
+  }
 
   /**
    * Returns the current partial state of the extension.
    *
    * @return The current partial state of the extension.
    */
-  abstract getPartialState(): UnknownParameters;
+  getPartialState(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Clears the current partial state of the extension and sets it value to empty object.
    */
-  abstract clearPartialState(): void;
+  clearPartialState() {
+    return;
+  }
 
   /**
    * Sets the state manager used to manage the controller's state..
@@ -192,17 +222,23 @@ export default abstract class Extension implements IExtension {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  abstract setPageStateManager(pageStateManager?: PageStateManager): void;
+  setPageStateManager(pageStateManager?: PageStateManager) {
+    return;
+  }
 
   /**
    * Enables using PageStateManager for getting state.
    */
-  abstract switchToStateManager(): void;
+  switchToStateManager() {
+    return;
+  }
 
   /**
    * Disables using PageStateManager for getting state.
    */
-  abstract switchToPartialState(): void;
+  switchToPartialState() {
+    return;
+  }
 
   /**
    * Sets the current route parameters. This method is invoked before the
@@ -211,14 +247,18 @@ export default abstract class Extension implements IExtension {
    * @param [params={}] The current route
    *        parameters.
    */
-  abstract setRouteParams(params: UnknownParameters): void;
+  setRouteParams(params: UnknownParameters) {
+    return;
+  }
 
   /**
    * Returns the current route parameters.
    *
    * @return The current route parameters.
    */
-  abstract getRouteParams(): UnknownParameters;
+  getRouteParams(): UnknownParameters {
+    return {};
+  }
 
   /**
    * Returns the names of the state fields that may be manipulated by this
@@ -227,5 +267,7 @@ export default abstract class Extension implements IExtension {
    * @return The names of the state fields that may be manipulated
    *         by this extension.
    */
-  abstract getAllowedStateKeys(): string[];
+  getAllowedStateKeys(): string[] {
+    return [];
+  }
 }

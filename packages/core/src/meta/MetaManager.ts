@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * The Meta manager is a utility for managing various page attributes related
  * to the SEO (search engine optimization) and social network integration.
@@ -20,7 +22,9 @@ export default abstract class MetaManager {
    *
    * @param title The new page title.
    */
-  abstract setTitle(title: string): void;
+  setTitle(title: string) {
+    return;
+  }
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -32,7 +36,9 @@ export default abstract class MetaManager {
    *
    * @return The current page title.
    */
-  abstract getTitle(): string;
+  getTitle() {
+    return '';
+  }
 
   /**
    * Set the specified named meta information property.
@@ -41,7 +47,9 @@ export default abstract class MetaManager {
    *        `keywords`.
    * @param value The meta information value.
    */
-  abstract setMetaName(name: string, value: string): void;
+  setMetaName(name: string, value: string) {
+    return;
+  }
 
   /**
    * Returns the value of the specified named meta information property. The
@@ -51,7 +59,9 @@ export default abstract class MetaManager {
    * @param name The name of the named meta information property.
    * @return The value of the generic meta information, or an empty string.
    */
-  abstract getMetaName(name: string): string;
+  getMetaName(name: string) {
+    return '';
+  }
 
   /**
    * Returns the names of the currently specified named meta information
@@ -60,7 +70,9 @@ export default abstract class MetaManager {
    * @return The names of the currently specified named meta
    *         information properties.
    */
-  abstract getMetaNames(): string[];
+  getMetaNames(): string[] {
+    return [];
+  }
 
   /**
    * Sets the specified specialized meta information property.
@@ -68,7 +80,9 @@ export default abstract class MetaManager {
    * @param name Name of the specialized meta information property.
    * @param value The value of the meta information property.
    */
-  abstract setMetaProperty(name: string, value: string): void;
+  setMetaProperty(name: string, value: string) {
+    return;
+  }
 
   /**
    * Returns the value of the specified specialized meta information
@@ -77,47 +91,55 @@ export default abstract class MetaManager {
    *
    * @param name The name of the specialized meta information
    *        property.
-   * @return {string} The value of the specified meta information, or an
+   * @return The value of the specified meta information, or an
    *         empty string.
    */
-  abstract getMetaProperty(name: string): string;
+  getMetaProperty(name: string) {
+    return '';
+  }
 
   /**
    * Returns the names of the currently specified specialized meta
    * information properties.
    *
-   * @return {string[]} The names of the currently specified specialized meta
+   * @return The names of the currently specified specialized meta
    *         information properties.
    */
-  abstract getMetaProperties(): string[];
+  getMetaProperties(): string[] {
+    return [];
+  }
 
   /**
    * Sets the specified specialized link information.
    *
-   * @param {string} relation The relation of the link target to the current
+   * @param relation The relation of the link target to the current
    *        page.
-   * @param {string} reference The reference to the location of the related
+   * @param reference The reference to the location of the related
    *        document, e.g. a URL.
    */
-  abstract setLink(relation: string, reference: string): void;
+  setLink(relation: string, reference: string) {
+    return;
+  }
 
   /**
    * Return the reference to the specified related linked document. The
    * method returns an empty string for missing meta information (to make the
    * returned value React-friendly).
    *
-   * @param {string} relation The relation of the link target to the current
+   * @param relation The relation of the link target to the current
    *        page.
-   * @return {string} The reference to the location of the related document,
+   * @return The reference to the location of the related document,
    *         e.g. a URL.
    */
-  abstract getLink(relation: string): string;
+  getLink(relation: string) {
+    return '';
+  }
 
   /**
    * Returns the relations of the currently set related documents linked to
    * the current page.
-   *
-   * @return {string[]}
    */
-  abstract getLinks(): string[];
+  getLinks(): string[] {
+    return [];
+  }
 }

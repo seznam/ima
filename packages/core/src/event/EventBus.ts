@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export type Listener = (event: CustomEvent) => unknown;
 
 export type NativeListener = (event: CustomEvent | Event) => unknown;
@@ -49,12 +51,14 @@ export default abstract class EventBus {
    *         fire the event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
    */
-  abstract fire(
+  fire(
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
     options: Options
-  ): this;
+  ) {
+    return this;
+  }
 
   /**
    * Registers the provided event listener to be executed when any custom
@@ -73,7 +77,9 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-  abstract listenAll(eventTarget: EventTarget, listener: Listener): this;
+  listenAll(eventTarget: EventTarget, listener: Listener) {
+    return this;
+  }
 
   /**
    * Registers the provided event listener to be executed when the specific
@@ -93,11 +99,9 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-  abstract listen(
-    eventTarget: EventTarget,
-    eventName: string,
-    listener: Listener
-  ): this;
+  listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
+    return this;
+  }
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -113,7 +117,9 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-  abstract unlistenAll(eventTarget: EventTarget, listener: Listener): this;
+  unlistenAll(eventTarget: EventTarget, listener: Listener) {
+    return this;
+  }
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -130,9 +136,7 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-  abstract unlisten(
-    eventTarget: EventTarget,
-    eventName: string,
-    listener: Listener
-  ): this;
+  unlisten(eventTarget: EventTarget, eventName: string, listener: Listener) {
+    return this;
+  }
 }

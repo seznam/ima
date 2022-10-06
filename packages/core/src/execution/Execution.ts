@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export type Job = (...args: unknown[]) => Promise<unknown> | unknown;
 
 /**
@@ -22,7 +24,9 @@ export default abstract class Execution {
    *
    * @param jobs The jobs to be executed.
    */
-  abstract append(jobs: Job[]): void;
+  append(jobs: Job[]) {
+    return;
+  }
 
   /**
    * Start executing collected jobs. In the end a `Promise` is returned
@@ -31,5 +35,7 @@ export default abstract class Execution {
    *
    * @param args Arguments to be passed when executing jobs
    */
-  abstract execute(...args: unknown[]): Promise<unknown>;
+  execute(...args: unknown[]): Promise<unknown> {
+    return Promise.reject();
+  }
 }

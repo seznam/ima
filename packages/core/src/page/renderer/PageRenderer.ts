@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
 import Controller from '../../controller/Controller';
 import { RouteOptions } from '../../router/Router';
@@ -37,12 +39,14 @@ export default abstract class PageRenderer {
    *         code to send to the client (at the server side) or determine the
    *         type of error page to navigate to (at the client side).
    */
-  abstract mount(
+  mount(
     controller: Controller,
     view: unknown,
     pageResources: UnknownPromiseParameters,
     routeOptions: RouteOptions
-  ): PageData;
+  ): PageData {
+    return {} as PageData;
+  }
 
   /**
    * Handles update of the current route that does not replace the current
@@ -66,19 +70,23 @@ export default abstract class PageRenderer {
    *         The `content` field will contain the rendered markup of
    *         the page at the server-side, or `null` at the client-side.
    */
-  abstract update(
+  update(
     controller: Controller,
     view: unknown,
     resourcesUpdate: UnknownPromiseParameters,
     routeOptions: RouteOptions
-  ): PageData;
+  ): PageData {
+    return {} as PageData;
+  }
 
   /**
    * Unmounts the view from the DOM.
    *
    * This method has no effect at the server-side.
    */
-  abstract unmount(): void;
+  unmount() {
+    return;
+  }
 
   /**
    * Sets the provided state to the currently rendered view.
@@ -88,5 +96,7 @@ export default abstract class PageRenderer {
    * @param state The state to set to the currently
    *        rendered view.
    */
-  abstract setState(state: UnknownParameters): void;
+  setState(state: UnknownParameters) {
+    return;
+  }
 }
