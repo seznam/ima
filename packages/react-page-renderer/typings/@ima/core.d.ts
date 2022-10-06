@@ -84,6 +84,7 @@ declare module '@ima/core' {
     getMetaProperties(): string[];
     getMetaProperty(name: string): string;
     getTitle(): string;
+    clearMetaAttributes(): void;
   }
 
   export class PageRenderer {
@@ -147,9 +148,11 @@ declare module '@ima/core' {
   }
 
   export class Window {
+    getDocument(): Document;
     getElementById(id: string): Element;
     getHistoryState(): { [key: string]: unknown };
     querySelector(selector: string): Element;
+    querySelectorAll(selector: string): Element[];
     getScrollX(): number;
     getScrollY(): number;
     getUrl(): string;
