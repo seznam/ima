@@ -274,7 +274,7 @@ export default abstract class AbstractRouter extends Router {
    */
   abstract redirect(
     url: string,
-    options?: RouteOptions | Record<string, never>,
+    options?: RouteOptions,
     action?: { type?: string; payload?: object | Event; event?: Event },
     locals?: Record<string, unknown>
   ): void;
@@ -341,7 +341,7 @@ export default abstract class AbstractRouter extends Router {
    */
   async handleError(
     params: { [key: string]: GenericError | string },
-    options: RouteOptions | Record<string, never> = {},
+    options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
     const errorRoute = this._routeHandlers.get(
@@ -388,7 +388,7 @@ export default abstract class AbstractRouter extends Router {
    */
   async handleNotFound(
     params: { [key: string]: string },
-    options: RouteOptions | Record<string, never> = {},
+    options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
     const notFoundRoute = this._routeHandlers.get(

@@ -309,8 +309,8 @@ export default abstract class Router {
    */
   abstract handleError(
     params: { [key: string]: string },
-    options: RouteOptions | Record<string, never>,
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }>;
 
   /**
@@ -329,8 +329,8 @@ export default abstract class Router {
    */
   abstract handleNotFound(
     params: { [key: string]: string },
-    options: RouteOptions | Record<string, never>,
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }>;
 
   /**

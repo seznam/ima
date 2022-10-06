@@ -22,11 +22,11 @@ export default class ServerRouter extends AbstractRouter {
   /**
    * Initializes the router.
    *
-   * @param {PageManager} pageManager The current page manager.
-   * @param {RouteFactory} factory The router factory used to create routes.
-   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
-   * @param {Request} request The current HTTP request.
-   * @param {Response} response The current HTTP response.
+   * @param pageManager The current page manager.
+   * @param factory The router factory used to create routes.
+   * @param dispatcher Dispatcher fires events to app.
+   * @param request The current HTTP request.
+   * @param response The current HTTP response.
    */
   constructor(
     pageManager: PageManager,
@@ -36,18 +36,9 @@ export default class ServerRouter extends AbstractRouter {
     response: Response
   ) {
     super(pageManager, factory, dispatcher);
-    /**
-     * The current HTTP request.
-     *
-     * @type {Request}
-     */
+
     this._request = request;
 
-    /**
-     * The current HTTP response.
-     *
-     * @type {Response}
-     */
     this._response = response;
   }
 
