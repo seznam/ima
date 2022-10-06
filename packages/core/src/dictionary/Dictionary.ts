@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { ObjectParameters } from '../CommonTypes';
+
 export type Config = {
   $Language: string;
   dictionary: Fields;
@@ -9,11 +11,7 @@ export type Fields = {
   [key: string]: Fields | LocalizationFunction;
 };
 
-export type LocalizationFunction = (parameters: Parameters) => string;
-
-export type Parameters = {
-  [key: string]: boolean | number | string | Date;
-};
+export type LocalizationFunction = (parameters: ObjectParameters) => string;
 
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
@@ -58,7 +56,7 @@ export default abstract class Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: Parameters) {
+  get(key: string, parameters: ObjectParameters) {
     return '';
   }
 

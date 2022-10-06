@@ -2,17 +2,14 @@ import GenericError from '../error/GenericError';
 
 export type MiddleWareFunction = (
   params: { [key: string]: string | number },
-  locals: object
+  locals: Record<string, unknown>
 ) => unknown;
 
 /**
  * Utility for representing and running router middleware.
  */
 export default class RouterMiddleware {
-  protected _middleware: (
-    params: { [key: string]: string | number },
-    locals: Record<string, unknown>
-  ) => unknown;
+  protected _middleware: MiddleWareFunction;
   /**
    * Initializes the middleware
    *

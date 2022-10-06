@@ -9,7 +9,7 @@ import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
 import { RouteOptions } from './Router';
 import { GenericError } from '..';
-import { StringParameters } from '../CommonTypes';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * Names of the DOM events the router responds to.
@@ -177,7 +177,7 @@ export default class ClientRouter extends AbstractRouter {
       url = '',
     } = {} as { type?: string; event?: Event; url?: string },
     locals = {}
-  ) {
+  ): Promise<void | UnknownParameters> {
     const action = {
       event,
       type,

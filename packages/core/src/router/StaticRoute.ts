@@ -6,66 +6,42 @@ import { RouteOptions } from './Router';
  * expressions. The regular expression is used to match these characters in
  * path expressions and replace them appropriately so the path expression can
  * be compiled to a regular expression.
- *
- * @const
- * @type {RegExp}
  */
 const CONTROL_CHARACTERS_REGEXP = /[\\.+*?^$[\](){}/'#]/g;
 
 /**
  * Regular expression used to match the parameter names from a path expression.
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_REGEXP_UNIVERSAL = /:\??([\w-]+)/g;
 
 /**
  * Regular expression used to match the required parameter names from a path expression.
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_REGEXP_REQUIRED = /(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
 
 /**
  * Regular expression used to separate a camelCase parameter name
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_REGEXP_CORE_NAME = /[a-z0-9]+/i;
 
 /**
  * Regular expression used to match start of parameter names from a path expression.
- *
- * @const
- * @type {String}
  */
 const PARAMS_START_PATTERN = '(^|/|[_-])';
 
 /**
  * Regular expression used to match end of parameter names from a path expression.
- *
- * @const
- * @type {String}
  */
 const PARAMS_END_PATTERN = '[/?_-]|$';
 
 /**
  * Regular expression used to never match the parameter names from a path expression.
  * It's used for wrong parameters order (optional vs. required ones)
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_NEVER_MATCH_REGEXP = /$a/;
 
 /**
  * Regular expression used to match all main parameter names from a path expression.
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_MAIN_REGEXP =
   /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
@@ -73,9 +49,6 @@ const PARAMS_MAIN_REGEXP =
 /**
  * Regular expression used to match the required subparameter names from a path expression.
  * (e.g. for path '/:paramA-:paramB/:nextParam' are subparametres 'paramA' and 'paramB')
- *
- * @const
- * @type {Object<String, RegExp>}
  */
 const SUBPARAMS_REQUIRED_REGEXP = {
   LAST: /([_-]{1})((\w-)?:[a-z0-9]+)(?=\\\/|$)/gi,
@@ -84,9 +57,6 @@ const SUBPARAMS_REQUIRED_REGEXP = {
 
 /**
  * Regular expression used to match the optional parameter names from a path expression.
- *
- * @const
- * @type {Object<String, RegExp>}
  */
 const SUBPARAMS_OPT_REGEXP = {
   LAST: /([_-]{1}(\w-)?:\\\?[a-z0-9]+)(?=\\\/|$)/gi,
@@ -95,9 +65,6 @@ const SUBPARAMS_OPT_REGEXP = {
 
 /**
  * Regular expression used to match the parameter names from a path expression.
- *
- * @const
- * @type {RegExp}
  */
 const PARAMS_REGEXP_OPT =
   /(?:^:\\\?([a-z0-9]+)(?=\\\/|$))|(?:(\\\/):\\\?([a-z0-9]+)(?=\\\/|$))/gi; // last part: |(?::\\\?([a-z0-9]+)(?=\\\/|$))
@@ -106,8 +73,6 @@ const PARAMS_REGEXP_OPT =
  * Utility for representing and manipulating a single static route in the
  * router's configuration using string representation of the path expression
  * with special param fields identified by `:paramName` prefix.
- *
- * @extends AbstractRoute
  */
 export default class StaticRoute extends AbstractRoute {
   protected _trimmedPathExpression: string;

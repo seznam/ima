@@ -36,11 +36,11 @@ export default class ControllerDecorator extends Controller {
   /**
    * Initializes the controller decorator.
    *
-   * @param {Controller} controller The controller being decorated.
-   * @param {MetaManager} metaManager The meta page attributes manager.
-   * @param {Router} router The application router.
-   * @param {Dictionary} dictionary Localization phrases dictionary.
-   * @param {Object<string, *>} settings  Application settings for the
+   * @param controller The controller being decorated.
+   * @param metaManager The meta page attributes manager.
+   * @param router The application router.
+   * @param dictionary Localization phrases dictionary.
+   * @param settings  Application settings for the
    *        current application environment.
    */
   constructor(

@@ -345,8 +345,8 @@ export default abstract class Router {
    */
   handleError(
     params: { [key: string]: string },
-    options: RouteOptions | Record<string, never>,
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }> {
     return Promise.reject();
   }
@@ -367,8 +367,8 @@ export default abstract class Router {
    */
   handleNotFound(
     params: { [key: string]: string },
-    options: RouteOptions | Record<string, never>,
-    locals: Record<string, unknown>
+    options?: RouteOptions,
+    locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }> {
     return Promise.reject();
   }
