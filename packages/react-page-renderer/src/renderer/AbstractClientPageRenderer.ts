@@ -92,6 +92,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
           await this._renderPageViewToDOM(controller, pageView, routeOptions);
         }
 
+        controller.getMetaManager().clearMetaAttributes();
         controller.setMetaParams(pageState);
         this._updateMetaAttributes(controller.getMetaManager());
 
@@ -357,14 +358,20 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    *        new values for page meta elements and title.
    */
   private _updateMetaNameAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaNames()) {
-      const metaTag = this._window.querySelector(
-        `meta[name="${metaTagKey}"]`
-      ) as HTMLMetaElement;
+    // Remove rendered meta names
+    this._window
+      .querySelectorAll('meta[name][data-ima-meta]')
+      .forEach(renderedMetaTag => {
+        renderedMetaTag.remove();
+      });
 
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaName(metaTagKey);
-      }
+    // Render new meta names
+    for (const metaTagKey of metaManager.getMetaNames()) {
+      const newMetaTag = this._window.getDocument().createElement('meta');
+      newMetaTag.setAttribute('name', metaTagKey);
+      newMetaTag.setAttribute('content', metaManager.getMetaName(metaTagKey));
+      newMetaTag.setAttribute('data-ima-meta', '');
+      this._window.querySelector('head').appendChild(newMetaTag);
     }
   }
 
@@ -375,14 +382,23 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    *        new values for page meta elements and title.
    */
   private _updateMetaPropertyAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaProperties()) {
-      const metaTag = this._window.querySelector(
-        `meta[property="${metaTagKey}"]`
-      ) as HTMLMetaElement;
+    // Remove rendered meta properties
+    this._window
+      .querySelectorAll('meta[property][data-ima-meta]')
+      .forEach(renderedMetaTag => {
+        renderedMetaTag.remove();
+      });
 
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaProperty(metaTagKey);
-      }
+    // Render new meta properties
+    for (const metaTagKey of metaManager.getMetaProperties()) {
+      const newMetaTag = this._window.getDocument().createElement('meta');
+      newMetaTag.setAttribute('property', metaTagKey);
+      newMetaTag.setAttribute(
+        'content',
+        metaManager.getMetaProperty(metaTagKey)
+      );
+      newMetaTag.setAttribute('data-ima-meta', '');
+      this._window.querySelector('head').appendChild(newMetaTag);
     }
   }
 
@@ -393,14 +409,20 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    *        new values for page meta elements and title.
    */
   private _updateMetaLinkAttributes(metaManager: MetaManager) {
-    for (const linkTagKey of metaManager.getLinks()) {
-      const linkTag = this._window.querySelector(
-        `link[rel="${linkTagKey}"]`
-      ) as HTMLLinkElement;
+    // Remove rendered meta links
+    this._window
+      .querySelectorAll('link[data-ima-meta]')
+      .forEach(renderedLinkTag => {
+        renderedLinkTag.remove();
+      });
 
-      if (linkTag && linkTag.href) {
-        linkTag.href = metaManager.getLink(linkTagKey);
-      }
+    // Render new meta links
+    for (const linkTagRel of metaManager.getLinks()) {
+      const newLinkTag = this._window.getDocument().createElement('link');
+      newLinkTag.setAttribute('rel', linkTagRel);
+      newLinkTag.setAttribute('href', metaManager.getLink(linkTagRel));
+      newLinkTag.setAttribute('data-ima-meta', '');
+      this._window.querySelector('head').appendChild(newLinkTag);
     }
   }
 }
