@@ -357,7 +357,18 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     for (const metaTagKey of metaManager.getMetaNames()) {
       const newMetaTag = this._window.getDocument().createElement('meta');
       newMetaTag.setAttribute('name', metaTagKey);
-      newMetaTag.setAttribute('content', metaManager.getMetaName(metaTagKey));
+
+      const newMetaVal = metaManager.getMetaName(metaTagKey);
+      Object.keys(newMetaVal).forEach(newMetaAttribute => {
+        if (newMetaAttribute === 'value') {
+          newMetaTag.setAttribute('content', newMetaVal[newMetaAttribute]);
+        } else {
+          newMetaTag.setAttribute(
+            newMetaAttribute,
+            newMetaVal[newMetaAttribute]
+          );
+        }
+      });
       newMetaTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newMetaTag);
     }
@@ -381,10 +392,18 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     for (const metaTagKey of metaManager.getMetaProperties()) {
       const newMetaTag = this._window.getDocument().createElement('meta');
       newMetaTag.setAttribute('property', metaTagKey);
-      newMetaTag.setAttribute(
-        'content',
-        metaManager.getMetaProperty(metaTagKey)
-      );
+
+      const newMetaVal = metaManager.getMetaProperty(metaTagKey);
+      Object.keys(newMetaVal).forEach(newMetaAttribute => {
+        if (newMetaAttribute === 'value') {
+          newMetaTag.setAttribute('content', newMetaVal[newMetaAttribute]);
+        } else {
+          newMetaTag.setAttribute(
+            newMetaAttribute,
+            newMetaVal[newMetaAttribute]
+          );
+        }
+      });
       newMetaTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newMetaTag);
     }
@@ -408,7 +427,18 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     for (const linkTagRel of metaManager.getLinks()) {
       const newLinkTag = this._window.getDocument().createElement('link');
       newLinkTag.setAttribute('rel', linkTagRel);
-      newLinkTag.setAttribute('href', metaManager.getLink(linkTagRel));
+
+      const newLinkVal = metaManager.getLink(linkTagRel);
+      Object.keys(newLinkVal).forEach(newLinkAttribute => {
+        if (newLinkAttribute === 'value') {
+          newLinkTag.setAttribute('href', newLinkVal[newLinkAttribute]);
+        } else {
+          newLinkTag.setAttribute(
+            newLinkAttribute,
+            newLinkVal[newLinkAttribute]
+          );
+        }
+      });
       newLinkTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newLinkTag);
     }

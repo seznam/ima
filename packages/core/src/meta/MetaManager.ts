@@ -49,7 +49,7 @@ export default abstract class MetaManager {
    *
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaName(name: string, value: string, otherAttrs: object) {
+  setMetaName(name: string, value: { value: string; [key: string]: string }) {
     return;
   }
 
@@ -62,7 +62,7 @@ export default abstract class MetaManager {
    * @return The value of the generic meta information, or an empty string.
    */
   getMetaName(name: string) {
-    return '';
+    return { value: '' };
   }
 
   /**
@@ -83,7 +83,10 @@ export default abstract class MetaManager {
    * @param value The value of the meta information property.
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaProperty(name: string, value: string, otherAttrs: object) {
+  setMetaProperty(
+    name: string,
+    value: { value: string; [key: string]: string }
+  ) {
     return;
   }
 
@@ -98,7 +101,7 @@ export default abstract class MetaManager {
    *         empty string.
    */
   getMetaProperty(name: string) {
-    return '';
+    return { value: '' };
   }
 
   /**
@@ -121,7 +124,10 @@ export default abstract class MetaManager {
    *        document, e.g. a URL.
    * @param otherAttrs Additional attributes to be used in the link tag (some types of link tags require them).
    */
-  setLink(relation: string, reference: string, otherAttrs: object) {
+  setLink(
+    relation: string,
+    reference: { value: string; [key: string]: string }
+  ) {
     return;
   }
 
@@ -136,7 +142,7 @@ export default abstract class MetaManager {
    *         e.g. a URL.
    */
   getLink(relation: string) {
-    return '';
+    return { value: '' };
   }
 
   /**

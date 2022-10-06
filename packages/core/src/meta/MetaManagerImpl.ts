@@ -5,9 +5,12 @@ import MetaManager from './MetaManager';
  */
 export default class MetaManagerImpl extends MetaManager {
   protected _title: string;
-  protected _metaName: Map<string, string | object>;
-  protected _metaProperty: Map<string, string | object>;
-  protected _link: Map<string, string | object>;
+  protected _metaName: Map<string, { value: string; [key: string]: string }>;
+  protected _metaProperty: Map<
+    string,
+    { value: string; [key: string]: string }
+  >;
+  protected _link: Map<string, { value: string; [key: string]: string }>;
 
   static get $dependencies() {
     return [];
@@ -57,16 +60,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaName(name: string, value: string, otherAttrs: object) {
-    const meta = otherAttrs ? { value, ...otherAttrs } : value;
-    this._metaName.set(name, meta);
+  setMetaName(name: string, value: { value: string; [key: string]: string }) {
+    this._metaName.set(name, value);
   }
 
   /**
    * @inheritdoc
    */
   getMetaName(name: string) {
-    return this._metaName.get(name) || '';
+    return this._metaName.get(name) || { value: '' };
   }
 
   /**
@@ -79,16 +81,18 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaProperty(name: string, value: string, otherAttrs: object) {
-    const meta = otherAttrs ? { value, ...otherAttrs } : value;
-    this._metaProperty.set(name, meta);
+  setMetaProperty(
+    name: string,
+    value: { value: string; [key: string]: string }
+  ) {
+    this._metaProperty.set(name, value);
   }
 
   /**
    * @inheritdoc
    */
   getMetaProperty(name: string) {
-    return this._metaProperty.get(name) || '';
+    return this._metaProperty.get(name) || { value: '' };
   }
 
   /**
@@ -101,16 +105,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setLink(relation: string, value: string, otherAttrs: object) {
-    const meta = otherAttrs ? { value, ...otherAttrs } : value;
-    this._link.set(relation, meta);
+  setLink(relation: string, value: { value: string; [key: string]: string }) {
+    this._link.set(relation, value);
   }
 
   /**
    * @inheritdoc
    */
   getLink(relation: string) {
-    return this._link.get(relation) || '';
+    return this._link.get(relation) || { value: '' };
   }
 
   /**
