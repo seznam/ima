@@ -8,8 +8,8 @@ const IMAEvent = {
 
   BeforeRequest: 'ima.server.beforeRequest',
   Request: 'ima.server.request',
-  RequestError: 'ima.server.requestError',
   AfterRequest: 'ima.server.afterRequest',
+  RequestError: 'ima.server.requestError',
   BeforeResponse: 'ima.server.beforeResponse',
   Response: 'ima.server.response',
   AfterResponse: 'ima.server.afterResponse',

@@ -92,7 +92,6 @@ module.exports = function hooksFactory({
         content: null,
         status: error.getHttpStatus(),
         error,
-        isRedirection: true,
         url: error.getParams().url,
       };
     } catch (e) {
@@ -187,11 +186,14 @@ module.exports = function hooksFactory({
         return;
       }
 
-      if (context.response.isRedirection) {
+      if (
+        context.response.status >= 300 &&
+        context.response.status < 400 &&
+        context.response.url
+      ) {
         res.redirect(context.response.status, context.response.url);
         return;
       }
-
       res.status(context.response.status);
       res.send(context.response.content);
     });
