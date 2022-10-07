@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { MetaValue, MetaAttributes } from './MetaManagerImpl';
+export type MetaValue = string | number | boolean | undefined | null;
+export type MetaAttributes = Record<string, MetaValue>;
 
 /**
  * The Meta manager is a utility for managing various page attributes related
@@ -47,11 +47,11 @@ export default abstract class MetaManager {
    *
    * @param name Meta information property name, for example
    *        `keywords`.
-   * @param value The meta information value.
+   * @param content The meta information value.
    *
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaName(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
+  setMetaName(name: string, content: MetaValue, otherAttrs?: MetaAttributes) {
     return;
   }
 
@@ -81,11 +81,15 @@ export default abstract class MetaManager {
   /**
    * Sets the specified specialized meta information property.
    *
-   * @param name Name of the specialized meta information property.
-   * @param value The value of the meta information property.
+   * @param property Name of the specialized meta information property.
+   * @param content The value of the meta information property.
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaProperty(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
+  setMetaProperty(
+    property: string,
+    content: MetaValue,
+    otherAttrs?: MetaAttributes
+  ) {
     return;
   }
 
@@ -94,12 +98,12 @@ export default abstract class MetaManager {
    * property. The method returns an empty string for missing meta
    * information (to make the returned value React-friendly).
    *
-   * @param name The name of the specialized meta information
+   * @param property The name of the specialized meta information
    *        property.
    * @return The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string): MetaAttributes {
+  getMetaProperty(property: string): MetaAttributes {
     return { content: '' };
   }
 
@@ -117,13 +121,13 @@ export default abstract class MetaManager {
   /**
    * Sets the specified specialized link information.
    *
-   * @param relation The relation of the link target to the current
+   * @param rel The relation of the link target to the current
    *        page.
-   * @param reference The reference to the location of the related
+   * @param href The reference to the location of the related
    *        document, e.g. a URL.
    * @param otherAttrs Additional attributes to be used in the link tag (some types of link tags require them).
    */
-  setLink(relation: string, reference: MetaValue, otherAttrs?: MetaAttributes) {
+  setLink(rel: string, href: MetaValue, otherAttrs?: MetaAttributes) {
     return;
   }
 
@@ -132,12 +136,12 @@ export default abstract class MetaManager {
    * method returns an empty string for missing meta information (to make the
    * returned value React-friendly).
    *
-   * @param relation The relation of the link target to the current
+   * @param rel The relation of the link target to the current
    *        page.
    * @return The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation: string): MetaAttributes {
+  getLink(rel: string): MetaAttributes {
     return { href: '' };
   }
 
