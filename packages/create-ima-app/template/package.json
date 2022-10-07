@@ -33,9 +33,9 @@
     "prettier": "^2.6.0"
   },
   "dependencies": {
-    "@ima/core": "18.0.0-rc.10",
-    "@ima/react-hooks": "2.0.0-rc.2",
-    "@ima/react-page-renderer": "18.0.0-rc.8",
+    "@ima/core": "18.0.0-ts.15",
+    "@ima/react-hooks": "2.0.0-ts.3",
+    "@ima/react-page-renderer": "18.0.0-rc.9",
     "@ima/server": "18.0.0-rc.8",
     "body-parser": "^1.19.2",
     "compression": "1.7.4",
