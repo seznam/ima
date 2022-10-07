@@ -30,7 +30,7 @@ render() {
   return (
     <html>
       <head>
-        <link href="/my-awesome-stylesheet.css" rel="stylesheet"> 
+        <meta name="googlebot" content="noindex" />
       </head>
       <body>
         {/* ... */}
