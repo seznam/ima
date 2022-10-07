@@ -53,15 +53,43 @@ const { metaManager } = this.props;
 
 // ...
 <head>
-  {metaManager.getMetaNames().map(name => (
-    <meta key={name} name={name} content={metaManager.getMetaName(name)} data-ima-meta />
-  ))}
-  {metaManager.getMetaProperties().map(property => (
-    <meta key={property} property={property} content={metaManager.getMetaProperty(property)} data-ima-meta />
-  ))}
-  {metaManager.getLinks().map(relation => (
-    <link key={relation} rel={relation} href={metaManager.getLink(relation)} data-ima-meta />
-  ))}
+  {metaManager.getMetaNames().map(name => {
+    const { value, ...otherAttrs } = metaManager.getMetaName(name);
+    return (
+      <meta
+        key={name}
+        name={name}
+        content={value}
+        {...otherAttrs}
+        data-ima-meta
+      />
+    );
+  })}
+  {metaManager.getMetaProperties().map(property => {
+    const { value, ...otherAttrs } =
+      metaManager.getMetaProperty(property);
+    return (
+      <meta
+        key={property}
+        property={property}
+        content={value}
+        {...otherAttrs}
+        data-ima-meta
+      />
+    );
+  })}
+  {metaManager.getLinks().map(rel => {
+    const { value, ...otherAttrs } = metaManager.getLink(rel);
+    return (
+      <link
+        key={rel}
+        href={value}
+        rel={rel}
+        {...otherAttrs}
+        data-ima-meta
+      />
+    );
+  })}
   <title>{metaManager.getTitle()}</title>
 </head>
 ```
@@ -72,7 +100,9 @@ Dynamically rendered meta tags managed by IMA use `data-ima-meta` attribute. The
 
 :::
 
-Use the following four methods to control which meta tags should be rendered by the snippet.
+Use the following four methods to control which meta tags should be rendered by the snippet. All of the method accept unique identifier
+as a first argument and an object as a second. The object has to have at least a `value` field which will be used in the main
+attribute (`content` for meta tags and `ref` for  links).
 
 ### Managing document title - `setTitle()`
 
@@ -98,7 +128,7 @@ Sets the information to be used in `<meta name="..." content="..."/>`.
 setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
   metaManager.setMetaName(
     'description',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
   );
 }
 ```
@@ -116,7 +146,7 @@ These methods are similar to the two above except that these are used for
 
 setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
   const { article } = loadedResources;
-  metaManager.setMetaProperty('og:image', article.thumbnailUrl);
+  metaManager.setMetaProperty('og:image', {value: article.thumbnailUrl });
 }
 ```
 
@@ -138,6 +168,6 @@ setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
     sortItems: null // doesn't have to be here, just explicitly null-ing query params
   });
 
-  metaManager.setLink('canonical', orderDetailLink);
+  metaManager.setLink('canonical', {value: orderDetailLink });
 }
 ```
