@@ -1,7 +1,7 @@
-import * as React from 'react';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import ns from './Namespace';
 import ObjectContainer from './ObjectContainer';
-import Bootstrap from './Bootstrap';
+import Bootstrap, { Config } from './Bootstrap';
 import pluginLoader from './pluginLoader';
 
 import initBindIma from './config/bind';
@@ -73,7 +73,6 @@ import WeakMapStorage from './storage/WeakMapStorage';
 import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
-/* eslint-enable no-unused-vars */
 
 function getInitialImaConfigFunctions() {
   return { initBindIma, initServicesIma };
@@ -96,19 +95,21 @@ function _isClient() {
 }
 
 function createImaApp() {
-  let oc = new ObjectContainer(ns);
-  let bootstrap = new Bootstrap(oc);
+  const oc = new ObjectContainer(ns);
+  const bootstrap = new Bootstrap(oc);
   pluginLoader.init(bootstrap);
 
   return { oc, bootstrap };
 }
 
-function getClientBootConfig(initialAppConfigFunctions) {
-  let root = _getRoot();
+function getClientBootConfig(initialAppConfigFunctions: {
+  [key: string]: () => unknown;
+}): Config {
+  const root = _getRoot();
 
   if ($Debug && _isClient()) {
     if ($IMA.$Protocol !== root.location.protocol) {
-      throw new Error(
+      throw new GenericError(
         `Your client's protocol is not same as server's protocol. ` +
           `For right setting protocol on the server site set ` +
           `'X-Forwarded-Proto' header.`
@@ -116,7 +117,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
     }
 
     if ($IMA.$Host !== root.location.host) {
-      throw new Error(
+      throw new GenericError(
         `Your client's host is not same as server's host. For right ` +
           `setting host on the server site set 'X-Forwarded-Host' ` +
           `header.`
@@ -124,7 +125,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
     }
   }
 
-  let bootConfig = {
+  const bootConfig = {
     services: {
       respond: null,
       request: null,
@@ -161,27 +162,34 @@ function getClientBootConfig(initialAppConfigFunctions) {
     initialAppConfigFunctions,
     getInitialPluginConfig(),
     getInitialImaConfigFunctions()
-  );
+  ) as unknown as Config;
 }
 
-function bootClientApp(app, bootConfig) {
+function bootClientApp(
+  app: {
+    bootstrap: Bootstrap;
+    oc: ObjectContainer;
+  },
+  bootConfig: Config
+) {
   app.bootstrap.run(bootConfig);
 
   $IMA.$Dispatcher = app.oc.get('$Dispatcher');
 
-  let cache = app.oc.get('$Cache');
+  const cache = app.oc.get('$Cache');
+  //@ts-ignore
   cache.deserialize($IMA.Cache || {});
 
   return app;
 }
 
-function routeClientApp(app) {
-  let router = app.oc.get('$Router');
+function routeClientApp(app: { bootstrap: Bootstrap; oc: ObjectContainer }) {
+  const router = app.oc.get('$Router') as AbstractRouter;
 
   return router
     .listen()
     .route(router.getPath())
-    .catch(error => {
+    .catch((error: GenericError) => {
       if (typeof $IMA.fatalErrorHandler === 'function') {
         $IMA.fatalErrorHandler(error);
       } else {
@@ -192,17 +200,20 @@ function routeClientApp(app) {
     });
 }
 
-function reviveClientApp(initialAppConfigFunctions) {
-  let root = _getRoot();
+function reviveClientApp(initialAppConfigFunctions: {
+  [key: string]: () => unknown;
+}) {
+  const root = _getRoot();
 
-  //set React for ReactJS extension for browser
-  root.React = React;
+  //@ts-ignore
   root.$Debug = root.$IMA.$Debug;
 
   let app = createImaApp();
-  let bootConfig = getClientBootConfig(initialAppConfigFunctions);
+  const bootConfig = getClientBootConfig(initialAppConfigFunctions);
+
   app = bootClientApp(app, bootConfig);
 
+  //@ts-ignore
   return routeClientApp(app).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
@@ -218,6 +229,7 @@ function onLoad() {
   }
 
   return new Promise(resolve => {
+    //@ts-ignore
     document.addEventListener('DOMContentLoaded', () => resolve(), {
       once: true,
     });
