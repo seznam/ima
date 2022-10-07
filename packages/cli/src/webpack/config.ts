@@ -438,7 +438,7 @@ export default async (
                     transform: {
                       react: {
                         runtime: imaConfig.jsxRuntime ?? 'automatic',
-                        development: false,
+                        development: isDevEnv,
                         refresh: useHMR,
                         useBuiltins: true,
                       },
