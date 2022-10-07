@@ -381,7 +381,7 @@ export default async (
               test: /\.(js|mjs|cjs)$/,
               include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
               use: [
-                {
+                !isServer && {
                   loader: require.resolve('swc-loader'),
                   options: await imaConfig.swcVendor(
                     {
