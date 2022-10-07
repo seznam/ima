@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { MetaValue, MetaAttributes } from './MetaManagerImpl';
+
 /**
  * The Meta manager is a utility for managing various page attributes related
  * to the SEO (search engine optimization) and social network integration.
@@ -49,7 +51,7 @@ export default abstract class MetaManager {
    *
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaName(name: string, value: { value: string; [key: string]: string }) {
+  setMetaName(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
     return;
   }
 
@@ -61,8 +63,8 @@ export default abstract class MetaManager {
    * @param name The name of the named meta information property.
    * @return The value of the generic meta information, or an empty string.
    */
-  getMetaName(name: string) {
-    return { value: '' };
+  getMetaName(name: string): MetaAttributes {
+    return { content: '' };
   }
 
   /**
@@ -83,10 +85,7 @@ export default abstract class MetaManager {
    * @param value The value of the meta information property.
    * @param otherAttrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaProperty(
-    name: string,
-    value: { value: string; [key: string]: string }
-  ) {
+  setMetaProperty(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
     return;
   }
 
@@ -100,8 +99,8 @@ export default abstract class MetaManager {
    * @return The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string) {
-    return { value: '' };
+  getMetaProperty(name: string): MetaAttributes {
+    return { content: '' };
   }
 
   /**
@@ -124,10 +123,7 @@ export default abstract class MetaManager {
    *        document, e.g. a URL.
    * @param otherAttrs Additional attributes to be used in the link tag (some types of link tags require them).
    */
-  setLink(
-    relation: string,
-    reference: { value: string; [key: string]: string }
-  ) {
+  setLink(relation: string, reference: MetaValue, otherAttrs?: MetaAttributes) {
     return;
   }
 
@@ -141,8 +137,8 @@ export default abstract class MetaManager {
    * @return The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation: string) {
-    return { value: '' };
+  getLink(relation: string): MetaAttributes {
+    return { href: '' };
   }
 
   /**

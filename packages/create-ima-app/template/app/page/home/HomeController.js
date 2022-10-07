@@ -97,21 +97,22 @@ export default class HomeController extends AbstractPageController {
 
     metaManager.setTitle(title);
 
-    metaManager.setMetaName('description', { value: description });
-    metaManager.setMetaName('keywords', {
-      value: 'IMA.js, isomorphic application, javascript, hello world',
-    });
+    metaManager.setMetaName('description', description);
+    metaManager.setMetaName(
+      'keywords',
+      'IMA.js, isomorphic application, javascript, hello world'
+    );
 
-    metaManager.setMetaName('twitter:title', { value: title });
-    metaManager.setMetaName('twitter:description', { value: description });
-    metaManager.setMetaName('twitter:card', { value: 'summary' });
-    metaManager.setMetaName('twitter:image', { value: image });
-    metaManager.setMetaName('twitter:url', { value: url });
+    metaManager.setMetaName('twitter:title', title);
+    metaManager.setMetaName('twitter:description', description);
+    metaManager.setMetaName('twitter:card', 'summary');
+    metaManager.setMetaName('twitter:image', image);
+    metaManager.setMetaName('twitter:url', url);
 
-    metaManager.setMetaProperty('og:title', { value: title });
-    metaManager.setMetaProperty('og:description', { value: description });
-    metaManager.setMetaProperty('og:type', { value: 'website' });
-    metaManager.setMetaProperty('og:image', { value: image });
-    metaManager.setMetaProperty('og:url', { value: url });
+    metaManager.setMetaProperty('og:title', title);
+    metaManager.setMetaProperty('og:description', description);
+    metaManager.setMetaProperty('og:type', 'website');
+    metaManager.setMetaProperty('og:image', image);
+    metaManager.setMetaProperty('og:url', url);
   }
 }

@@ -13,43 +13,30 @@ export default class DocumentView extends AbstractPureComponent {
           <meta name='viewport' content='width=device-width, initial-scale=1' />
 
           {/* Meta tags defined per-controller */}
-          {metaManager.getMetaNames().map(name => {
-            const { value, ...otherAttrs } = metaManager.getMetaName(name);
-            return (
-              <meta
-                key={name}
-                name={name}
-                content={value}
-                {...otherAttrs}
-                data-ima-meta
-              />
-            );
-          })}
-          {metaManager.getMetaProperties().map(property => {
-            const { value, ...otherAttrs } =
-              metaManager.getPropertyName(property);
-            return (
-              <meta
-                key={property}
-                property={property}
-                content={value}
-                {...otherAttrs}
-                data-ima-meta
-              />
-            );
-          })}
-          {metaManager.getLinks().map(rel => {
-            const { value, ...otherAttrs } = metaManager.getLink(rel);
-            return (
-              <link
-                key={rel}
-                href={value}
-                rel={rel}
-                {...otherAttrs}
-                data-ima-meta
-              />
-            );
-          })}
+          {metaManager.getMetaNames().map(name => (
+            <meta
+              key={name}
+              name={name}
+              {...metaManager.getMetaName(name)}
+              data-ima-meta
+            />
+          ))}
+          {metaManager.getMetaProperties().map(property => (
+            <meta
+              key={property}
+              property={property}
+              {...metaManager.getMetaProperty(property)}
+              data-ima-meta
+            />
+          ))}
+          {metaManager.getLinks().map(rel => (
+            <link
+              key={rel}
+              rel={rel}
+              {...metaManager.getLink(rel)}
+              data-ima-meta
+            />
+          ))}
 
           {/* Inject styles from $Source.styles */}
           {'#{$Styles}'}
