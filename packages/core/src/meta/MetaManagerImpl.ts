@@ -1,7 +1,4 @@
-import MetaManager from './MetaManager';
-
-export type MetaValue = string | number | boolean | undefined | null;
-export type MetaAttributes = Record<string, MetaValue>;
+import MetaManager, { MetaAttributes, MetaValue } from './MetaManager';
 
 /**
  * Default implementation of the {@link MetaManager} interface.
@@ -60,8 +57,8 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
-    this._metaName.set(name, { content: value, ...otherAttrs });
+  setMetaName(name: string, content: MetaValue, otherAttrs?: MetaAttributes) {
+    this._metaName.set(name, { content, ...otherAttrs });
   }
 
   /**
@@ -81,15 +78,19 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaProperty(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
-    this._metaProperty.set(name, { content: value, ...otherAttrs });
+  setMetaProperty(
+    property: string,
+    content: MetaValue,
+    otherAttrs?: MetaAttributes
+  ) {
+    this._metaProperty.set(property, { content, ...otherAttrs });
   }
 
   /**
    * @inheritDoc
    */
-  getMetaProperty(name: string) {
-    return this._metaProperty.get(name) || { content: '' };
+  getMetaProperty(property: string) {
+    return this._metaProperty.get(property) || { content: '' };
   }
 
   /**
@@ -102,15 +103,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(relation: string, reference: MetaValue, otherAttrs?: MetaAttributes) {
-    this._link.set(relation, { href: reference, ...otherAttrs });
+  setLink(rel: string, href: MetaValue, otherAttrs?: MetaAttributes) {
+    this._link.set(rel, { href, ...otherAttrs });
   }
 
   /**
    * @inheritDoc
    */
-  getLink(relation: string) {
-    return this._link.get(relation) || { href: '' };
+  getLink(rel: string) {
+    return this._link.get(rel) || { href: '' };
   }
 
   /**
