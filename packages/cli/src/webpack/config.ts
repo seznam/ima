@@ -157,6 +157,7 @@ export default async (
         loader: require.resolve('less-loader'),
         options: {
           sourceMap: useSourceMaps,
+          implementation: require('less'),
         },
       },
       useLessLoader && {
@@ -379,31 +380,35 @@ export default async (
              */
             {
               test: /\.(js|mjs|cjs)$/,
-              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+              include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
               use: [
                 !isServer && {
                   loader: require.resolve('swc-loader'),
-                  options: {
-                    env: {
-                      targets,
-                      mode: 'usage',
-                      coreJs: coreJsVersion,
-                      bugfixes: true,
-                      dynamicImport: true,
-                    },
-                    module: {
-                      type: 'commonjs',
-                    },
-                    jsc: {
-                      parser: {
-                        syntax: 'ecmascript',
+                  options: await imaConfig.swcVendor(
+                    {
+                      env: {
+                        targets,
+                        mode: 'usage',
+                        coreJs: coreJsVersion,
+                        bugfixes: true,
+                        dynamicImport: true,
                       },
+                      module: {
+                        type: 'es6',
+                      },
+                      jsc: {
+                        parser: {
+                          syntax: 'ecmascript',
+                        },
+                      },
+                      sourceMaps: useSourceMaps,
+                      inlineSourcesContent: useSourceMaps,
                     },
-                    sourceMaps: useSourceMaps,
-                    inlineSourcesContent: useSourceMaps,
-                  },
+                    ctx
+                  ),
                 },
                 {
+                  // TODO IMA@18 remove before release
                   // This injects new plugin loader interface into legacy plugins
                   loader: 'ima-legacy-plugin-loader',
                 },
@@ -420,7 +425,6 @@ export default async (
                     targets,
                     mode: 'usage',
                     coreJs: coreJsVersion,
-                    shippedProposals: true,
                     bugfixes: true,
                     dynamicImport: true,
                   },

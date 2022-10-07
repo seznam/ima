@@ -38,15 +38,13 @@ To bundle JS files we opted to use [swc](https://swc.rs/), a Rust-based JavaScri
 
 By default the application **compiles both**, the **application files** (sourced from `./app` folder) and **vendor files** (sourced from `./node_modules` directory) to make sure that it can run in targeted environments without any issues.
 
-The swc compiler is configured to leverage the power of "env" functionality (preset-env in babel), in combination with [core-js](https://github.com/zloirock/core-js) to **automatically polyfill missing APIs** that are used throughout the codebase, that the targeted environment doesn't support. This also includes [future ECMAscript proposals](https://github.com/zloirock/core-js#ecmascript-proposals) but in this case **only for the application bundle**.
+The swc compiler is configured to leverage the power of "env" functionality (preset-env in babel), in combination with [core-js](https://github.com/zloirock/core-js) to **automatically polyfill missing APIs** that are used throughout the codebase, that the targeted environment doesn't support.
 
 This configuration can be easily customized using [swc option in ima.config.js](./ima.config.js#swc).
 
 :::note
 
-This means that you can write your code **using the latest and greatest from the ECMAscript language**, even proposals and the swc makes sure to compile these features down to the latest supported syntax or automatically inject core-js polyfills.
-
-Any **3rd party npm package** should also be safe to use, since we run more lightweight version of swc over the vendor bundle as well.
+This means that you can write your code **using the latest and greatest from the ECMAscript language** and the swc makes sure to compile these features down to the latest supported syntax or automatically inject core-js polyfills.
 
 :::
 
