@@ -12,10 +12,10 @@ import {
 } from '@ima/core';
 import { ComponentType } from 'react';
 
+import { MetaAttributes } from '../../core/src/meta/MetaManager';
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import { Helpers, RouteOptions, Settings } from './types';
-
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
@@ -326,6 +326,41 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   /**
+   * Update specified meta or link tags in DOM.
+   *
+   * @param elName Name of the element
+   * @param elProperty Primary property of given element
+   * @param elements Array of element identifiers stored in MetaManager
+   */
+  private _updateMetaTagsOfType(
+    elName: 'link' | 'meta',
+    elProperty: 'rel' | 'property' | 'name',
+    elements: Record<string, MetaAttributes>
+  ) {
+    // Remove rendered elementss
+    this._window
+      .querySelectorAll(`${elName}[${elProperty}][data-ima-meta]`)
+      .forEach(renderedMetaTag => {
+        renderedMetaTag.remove();
+      });
+
+    // Render new elements
+    Object.keys(elements).forEach(elementKey => {
+      const newMetaTag = this._window.getDocument().createElement(elName);
+      newMetaTag.setAttribute(elProperty, elementKey);
+
+      Object.keys(elements[elementKey]).forEach(newMetaAttribute => {
+        newMetaTag.setAttribute(
+          newMetaAttribute,
+          elements[elementKey][newMetaAttribute] as string
+        );
+      });
+      newMetaTag.setAttribute('data-ima-meta', '');
+      this._window.querySelector('head').appendChild(newMetaTag);
+    });
+  }
+
+  /**
    * Updates the title and the contents of the meta elements used for SEO.
    *
    * @param metaManager meta attributes storage providing the
@@ -334,93 +369,38 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   private _updateMetaAttributes(metaManager: MetaManager) {
     this._window.setTitle(metaManager.getTitle());
 
-    this._updateMetaNameAttributes(metaManager);
-    this._updateMetaPropertyAttributes(metaManager);
-    this._updateMetaLinkAttributes(metaManager);
-  }
+    this._updateMetaTagsOfType(
+      'meta',
+      'name',
+      metaManager
+        .getMetaNames()
+        .reduce(
+          (prev, curr) => ({ ...prev, [curr]: metaManager.getMetaName(curr) }),
+          {}
+        )
+    );
 
-  /**
-   * Updates the contents of the generic meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaNameAttributes(metaManager: MetaManager) {
-    // Remove rendered meta names
-    this._window
-      .querySelectorAll('meta[name][data-ima-meta]')
-      .forEach(renderedMetaTag => {
-        renderedMetaTag.remove();
-      });
-
-    // Render new meta names
-    metaManager.getMetaNames().forEach(metaTagKey => {
-      const newMetaTag = this._window.getDocument().createElement('meta');
-      newMetaTag.setAttribute('name', metaTagKey);
-
-      const newMetaVal = metaManager.getMetaName(metaTagKey);
-      Object.keys(newMetaVal).forEach(newMetaAttribute => {
-        newMetaTag.setAttribute(newMetaAttribute, newMetaVal[newMetaAttribute]);
-      });
-      newMetaTag.setAttribute('data-ima-meta', '');
-      this._window.querySelector('head').appendChild(newMetaTag);
-    });
-  }
-
-  /**
-   * Updates the contents of the specialized meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaPropertyAttributes(metaManager: MetaManager) {
-    // Remove rendered meta properties
-    this._window
-      .querySelectorAll('meta[property][data-ima-meta]')
-      .forEach(renderedMetaTag => {
-        renderedMetaTag.remove();
-      });
-
-    // Render new meta properties
-    metaManager.getMetaProperties().forEach(metaTagKey => {
-      const newMetaTag = this._window.getDocument().createElement('meta');
-      newMetaTag.setAttribute('property', metaTagKey);
-
-      const newMetaVal = metaManager.getMetaProperty(metaTagKey);
-      Object.keys(newMetaVal).forEach(newMetaAttribute => {
-        newMetaTag.setAttribute(newMetaAttribute, newMetaVal[newMetaAttribute]);
-      });
-      newMetaTag.setAttribute('data-ima-meta', '');
-      this._window.querySelector('head').appendChild(newMetaTag);
-    });
-  }
-
-  /**
-   * Updates the href of the specialized link elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaLinkAttributes(metaManager: MetaManager) {
-    // Remove rendered meta links
-    this._window
-      .querySelectorAll('link[data-ima-meta]')
-      .forEach(renderedLinkTag => {
-        renderedLinkTag.remove();
-      });
-
-    // Render new meta links
-    metaManager.getLinks().forEach(linkTagRel => {
-      const newLinkTag = this._window.getDocument().createElement('link');
-      newLinkTag.setAttribute('rel', linkTagRel);
-
-      const newLinkVal = metaManager.getLink(linkTagRel);
-      Object.keys(newLinkVal).forEach(newLinkAttribute => {
-        newLinkTag.setAttribute(newLinkAttribute, newLinkVal[newLinkAttribute]);
-      });
-      newLinkTag.setAttribute('data-ima-meta', '');
-      this._window.querySelector('head').appendChild(newLinkTag);
-    });
+    this._updateMetaTagsOfType(
+      'meta',
+      'property',
+      metaManager.getMetaProperties().reduce(
+        (prev, curr) => ({
+          ...prev,
+          [curr]: metaManager.getMetaProperty(curr),
+        }),
+        {}
+      )
+    );
+    this._updateMetaTagsOfType(
+      'link',
+      'rel',
+      metaManager
+        .getLinks()
+        .reduce(
+          (prev, curr) => ({ ...prev, [curr]: metaManager.getLink(curr) }),
+          {}
+        )
+    );
   }
 }
 /* @endif */
