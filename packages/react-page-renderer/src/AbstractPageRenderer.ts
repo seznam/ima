@@ -1,9 +1,10 @@
 import { Controller, Dispatcher, PageRenderer } from '@ima/core';
+import { RouteOptions } from '@ima/core/dist/client/router/Router';
 import { ComponentType, createElement } from 'react';
 
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, RouteOptions, Settings } from './types';
+import { Helpers, Settings, Utils } from './types';
 import ViewAdapter, { ViewAdapterProps } from './ViewAdapter';
 
 /**
@@ -64,14 +65,11 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
-  ): Promise<
-    | unknown
-    | {
-        content?: string;
-        pageState: { [key: string]: unknown };
-        status: number;
-      }
-  >;
+  ): Promise<void | {
+    content?: string;
+    pageState?: { [key: string]: unknown };
+    status: number;
+  }>;
 
   /**
    * @inheritdoc
@@ -80,14 +78,11 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     controller: Controller,
     pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> }
-  ): Promise<
-    | unknown
-    | {
-        content?: string;
-        pageState: { [key: string]: unknown };
-        status: number;
-      }
-  >;
+  ): Promise<void | {
+    content?: string;
+    pageState: { [key: string]: unknown };
+    status: number;
+  }>;
 
   /**
    * @inheritdoc
@@ -121,7 +116,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     state: { [key: string]: unknown } = {}
   ): ViewAdapterProps {
     const props = {
-      $Utils: this._factory.getUtils(),
+      $Utils: this._factory.getUtils() as Utils,
       managedRootView,
       pageView,
       state,

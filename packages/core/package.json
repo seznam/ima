@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.10",
+  "version": "18.0.0-ts.15",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -35,6 +35,7 @@
   ],
   "main": "./dist/server/index.js",
   "browser": "./dist/client/index.js",
+  "types": "./dist/client/index.d.ts",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",

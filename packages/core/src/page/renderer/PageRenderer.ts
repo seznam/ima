@@ -44,8 +44,8 @@ export default abstract class PageRenderer {
     view: unknown,
     pageResources: UnknownPromiseParameters,
     routeOptions: RouteOptions
-  ): PageData {
-    return {} as PageData;
+  ): Promise<void | PageData> {
+    return Promise.reject();
   }
 
   /**
@@ -75,8 +75,8 @@ export default abstract class PageRenderer {
     view: unknown,
     resourcesUpdate: UnknownPromiseParameters,
     routeOptions: RouteOptions
-  ): PageData {
-    return {} as PageData;
+  ): Promise<void | PageData> {
+    return Promise.reject();
   }
 
   /**

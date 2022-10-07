@@ -32,10 +32,8 @@ export type PageAction = {
   url?: string;
 };
 
-export type PageData = Promise<
-  {
-    status: number;
-  } & UnknownParameters
->;
+export type PageData = {
+  status: number;
+} & UnknownParameters;
 
 export type EventHandler = (data?: UnknownParameters) => void;

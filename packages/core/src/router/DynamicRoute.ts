@@ -1,6 +1,6 @@
 import { StringParameters } from '../CommonTypes';
 import GenericError from '../error/GenericError';
-import AbstractRoute from './AbstractRoute';
+import AbstractRoute, { RouteParams } from './AbstractRoute';
 import { RouteOptions } from './Router';
 
 /**
@@ -18,7 +18,7 @@ import { RouteOptions } from './Router';
  */
 export type RoutePathExpression = {
   matcher: RegExp;
-  toPath: (params: StringParameters) => string;
+  toPath: (params: RouteParams) => string;
   extractParameters: ExtractPathFunction;
 };
 
@@ -34,8 +34,8 @@ export type ExtractPathFunction = (path?: string) => Record<string, string>;
  */
 export default class DynamicRoute extends AbstractRoute {
   protected _matcher: RegExp;
-  protected _toPath: (params: StringParameters) => string;
-  protected _extractParameters: (path?: string) => StringParameters;
+  protected _toPath: (params: RouteParams) => string;
+  protected _extractParameters: (path?: string) => RouteParams;
 
   /**
    * Initializes the route.
@@ -114,11 +114,11 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  extractParameters(path?: string): StringParameters {
+  extractParameters(path?: string) {
     const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
     const parameters = this._extractParameters(trimmedPath.split('?').shift());
     const query = AbstractRoute.getQuery(trimmedPath);
 
-    return Object.assign({}, parameters, query) as StringParameters;
+    return Object.assign({}, parameters, query);
   }
 }

@@ -7,12 +7,13 @@ import {
   Dispatcher,
   GenericError,
 } from '@ima/core';
+import { RouteOptions } from '@ima/core/dist/client/router/Router';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, RouteOptions, Settings } from './types';
+import { Helpers, Settings } from './types';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML

@@ -50,7 +50,7 @@ export function localize(
   params: { [key: string]: string | number }
 ): string {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$Dictionary.get(key, params);
+  return component.utils.$Dictionary.get(key, params);
 }
 
 /**
@@ -72,7 +72,7 @@ export function link(
   params: { [key: string]: string | number }
 ): string {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$Router.link(name, params);
+  return component.utils.$Router.link(name, params);
 }
 
 /**
@@ -102,7 +102,7 @@ export function cssClasses(
   includeComponentClassName: boolean
 ): string {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$CssClasses(
+  return component.utils.$CssClasses(
     classRules,
     includeComponentClassName ? component : ''
   );
@@ -161,7 +161,7 @@ export function fire(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$EventBus.fire(
+  return component.utils.$EventBus.fire(
     eventTarget as EventTarget,
     eventName,
     data
@@ -187,7 +187,7 @@ export function listen(
   listener: (event: Event) => void
 ) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$EventBus.listen(eventTarget, eventName, listener);
+  return component.utils.$EventBus.listen(eventTarget, eventName, listener);
 }
 
 /**
@@ -208,5 +208,5 @@ export function unlisten(
   listener: (event: Event) => void
 ) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils!.$EventBus.unlisten(eventTarget, eventName, listener);
+  return component.utils.$EventBus.unlisten(eventTarget, eventName, listener);
 }

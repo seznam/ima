@@ -157,7 +157,7 @@ export default abstract class Window {
    * @return The element with the specified id, or
    *         `null` if no such element exists.
    */
-  getElementById(id: string): null | HTMLElement {
+  getElementById(id: string): null | Element {
     return null;
   }
 

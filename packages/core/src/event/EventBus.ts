@@ -55,7 +55,7 @@ export default abstract class EventBus {
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
-    options: Options
+    options?: Options
   ) {
     return this;
   }

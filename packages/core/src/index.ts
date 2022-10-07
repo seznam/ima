@@ -74,6 +74,10 @@ import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
+declare global {
+  var $Debug: boolean;
+}
+
 function getInitialImaConfigFunctions() {
   return { initBindIma, initServicesIma };
 }

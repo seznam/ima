@@ -2,7 +2,7 @@
 
 import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { IController } from '../controller/Controller';
-import AbstractRoute from './AbstractRoute';
+import AbstractRoute, { RouteParams } from './AbstractRoute';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
 
@@ -116,7 +116,7 @@ export default abstract class Router {
    */
   use(
     middleware: (
-      routeParams: { [key: string]: string | number },
+      routeParams: RouteParams,
       locals: object
     ) => unknown
   ) {
@@ -208,7 +208,7 @@ export default abstract class Router {
    */
   getCurrentRouteInfo(): {
     route: AbstractRoute;
-    params: { [key: string]: string | undefined };
+    params: RouteParams;
     path: string;
   } {
     throw new GenericError(
@@ -301,7 +301,7 @@ export default abstract class Router {
    *        URL query.
    * @return An absolute URL for the specified route and parameters.
    */
-  link(routeName: string, params: { [key: string]: string }) {
+  link(routeName: string, params: RouteParams) {
     return '';
   }
 
@@ -344,7 +344,7 @@ export default abstract class Router {
    *         or displayed if used at the client side.
    */
   handleError(
-    params: { [key: string]: string },
+    params: RouteParams,
     options?: RouteOptions,
     locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }> {
@@ -366,7 +366,7 @@ export default abstract class Router {
    *         to the client, or displayed if used at the client side.
    */
   handleNotFound(
-    params: { [key: string]: string },
+    params: RouteParams,
     options?: RouteOptions,
     locals?: Record<string, unknown>
   ): Promise<void | { [key: string]: unknown }> {

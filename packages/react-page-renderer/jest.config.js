@@ -1,10 +1,9 @@
+const defaultConfig = require('../../jest.config.base.js');
+
 module.exports = {
-  bail: false,
-  verbose: true,
-  rootDir: './src',
+  ...defaultConfig,
   testEnvironment: 'jsdom',
-  modulePaths: ['<rootDir>/'],
-  testRegex: '(/__tests__/).*Spec\\.[jt]sx?$',
+  testRegex: '(/__tests__/).*Spec\\.ts$',
   transform: {
     '\\.[jt]sx?$': ['ts-jest'],
   },

@@ -5,12 +5,13 @@ import {
   RendererEvents,
   Window,
 } from '@ima/core';
+import { RouteOptions } from '@ima/core/dist/client/router/Router';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
 
-import { RouteOptions, Settings } from '@/types';
+import { Settings } from '@/types';
 
 import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
 import AbstractPureComponent from '../AbstractPureComponent';
@@ -218,7 +219,7 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        content: null,
+        content: undefined,
         pageState: pageState,
       });
     });
@@ -314,7 +315,7 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        content: null,
+        content: undefined,
         pageState,
       });
     });
