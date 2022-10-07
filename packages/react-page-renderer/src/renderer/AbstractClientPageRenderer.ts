@@ -366,24 +366,17 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       });
 
     // Render new meta names
-    for (const metaTagKey of metaManager.getMetaNames()) {
+    metaManager.getMetaNames().forEach(metaTagKey => {
       const newMetaTag = this._window.getDocument().createElement('meta');
       newMetaTag.setAttribute('name', metaTagKey);
 
       const newMetaVal = metaManager.getMetaName(metaTagKey);
       Object.keys(newMetaVal).forEach(newMetaAttribute => {
-        if (newMetaAttribute === 'value') {
-          newMetaTag.setAttribute('content', newMetaVal[newMetaAttribute]);
-        } else {
-          newMetaTag.setAttribute(
-            newMetaAttribute,
-            newMetaVal[newMetaAttribute]
-          );
-        }
+        newMetaTag.setAttribute(newMetaAttribute, newMetaVal[newMetaAttribute]);
       });
       newMetaTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newMetaTag);
-    }
+    });
   }
 
   /**
@@ -401,24 +394,17 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       });
 
     // Render new meta properties
-    for (const metaTagKey of metaManager.getMetaProperties()) {
+    metaManager.getMetaProperties().forEach(metaTagKey => {
       const newMetaTag = this._window.getDocument().createElement('meta');
       newMetaTag.setAttribute('property', metaTagKey);
 
       const newMetaVal = metaManager.getMetaProperty(metaTagKey);
       Object.keys(newMetaVal).forEach(newMetaAttribute => {
-        if (newMetaAttribute === 'value') {
-          newMetaTag.setAttribute('content', newMetaVal[newMetaAttribute]);
-        } else {
-          newMetaTag.setAttribute(
-            newMetaAttribute,
-            newMetaVal[newMetaAttribute]
-          );
-        }
+        newMetaTag.setAttribute(newMetaAttribute, newMetaVal[newMetaAttribute]);
       });
       newMetaTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newMetaTag);
-    }
+    });
   }
 
   /**
@@ -436,24 +422,17 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       });
 
     // Render new meta links
-    for (const linkTagRel of metaManager.getLinks()) {
+    metaManager.getLinks().forEach(linkTagRel => {
       const newLinkTag = this._window.getDocument().createElement('link');
       newLinkTag.setAttribute('rel', linkTagRel);
 
       const newLinkVal = metaManager.getLink(linkTagRel);
       Object.keys(newLinkVal).forEach(newLinkAttribute => {
-        if (newLinkAttribute === 'value') {
-          newLinkTag.setAttribute('href', newLinkVal[newLinkAttribute]);
-        } else {
-          newLinkTag.setAttribute(
-            newLinkAttribute,
-            newLinkVal[newLinkAttribute]
-          );
-        }
+        newLinkTag.setAttribute(newLinkAttribute, newLinkVal[newLinkAttribute]);
       });
       newLinkTag.setAttribute('data-ima-meta', '');
       this._window.querySelector('head').appendChild(newLinkTag);
-    }
+    });
   }
 }
 /* @endif */

@@ -1,16 +1,16 @@
 import MetaManager from './MetaManager';
 
+export type MetaValue = string | number | boolean | undefined | null;
+export type MetaAttributes = Record<string, MetaValue>;
+
 /**
  * Default implementation of the {@link MetaManager} interface.
  */
 export default class MetaManagerImpl extends MetaManager {
   protected _title: string;
-  protected _metaName: Map<string, { value: string; [key: string]: string }>;
-  protected _metaProperty: Map<
-    string,
-    { value: string; [key: string]: string }
-  >;
-  protected _link: Map<string, { value: string; [key: string]: string }>;
+  protected _metaName: Map<string, MetaAttributes>;
+  protected _metaProperty: Map<string, MetaAttributes>;
+  protected _link: Map<string, MetaAttributes>;
 
   static get $dependencies() {
     return [];
@@ -60,15 +60,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, value: { value: string; [key: string]: string }) {
-    this._metaName.set(name, value);
+  setMetaName(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
+    this._metaName.set(name, { content: value, ...otherAttrs });
   }
 
   /**
    * @inheritDoc
    */
   getMetaName(name: string) {
-    return this._metaName.get(name) || { value: '' };
+    return this._metaName.get(name) || { content: '' };
   }
 
   /**
@@ -81,18 +81,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaProperty(
-    name: string,
-    value: { value: string; [key: string]: string }
-  ) {
-    this._metaProperty.set(name, value);
+  setMetaProperty(name: string, value: MetaValue, otherAttrs?: MetaAttributes) {
+    this._metaProperty.set(name, { content: value, ...otherAttrs });
   }
 
   /**
    * @inheritDoc
    */
   getMetaProperty(name: string) {
-    return this._metaProperty.get(name) || { value: '' };
+    return this._metaProperty.get(name) || { content: '' };
   }
 
   /**
@@ -105,15 +102,15 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(relation: string, value: { value: string; [key: string]: string }) {
-    this._link.set(relation, value);
+  setLink(relation: string, reference: MetaValue, otherAttrs?: MetaAttributes) {
+    this._link.set(relation, { href: reference, ...otherAttrs });
   }
 
   /**
    * @inheritDoc
    */
   getLink(relation: string) {
-    return this._link.get(relation) || { value: '' };
+    return this._link.get(relation) || { href: '' };
   }
 
   /**

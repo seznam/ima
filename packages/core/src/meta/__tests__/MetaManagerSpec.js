@@ -8,41 +8,40 @@ describe('ima.core.meta.MetaManager', () => {
   });
 
   it('should directly save the value of name, property, and link by default', () => {
-    metaManager.setMetaName('alpha', { value: 'one' });
-    metaManager.setMetaProperty('beta:property', { value: 'two' });
-    metaManager.setLink('gamma', { value: 'three' });
+    metaManager.setMetaName('alpha', 'one');
+    metaManager.setMetaProperty('beta:property', 'two');
+    metaManager.setLink('gamma', 'three');
 
-    expect(metaManager.getMetaName('alpha')).toBe({ value: 'one' });
-    expect(metaManager.getMetaProperty('beta:property')).toBe({ value: 'two' });
-    expect(metaManager.getLink('gamma')).toBe({ value: 'three' });
+    expect(metaManager.getMetaName('alpha')).toBe({ content: 'one' });
+    expect(metaManager.getMetaProperty('beta:property')).toBe({
+      content: 'two',
+    });
+    expect(metaManager.getLink('gamma')).toBe({ href: 'three' });
   });
 
-  it('should save name, property, and link as object when other_attrs is supplied', () => {
-    metaManager.setMetaName('alpha', {
-      value: 'one',
+  it('should save name, property, and link as object when otherAttrs is supplied', () => {
+    metaManager.setMetaName('alpha', 'one', {
       alphaAttr: 'alpha_attr_value',
     });
-    metaManager.setMetaProperty('beta:property', {
-      value: 'two',
+    metaManager.setMetaProperty('beta:property', 'two', {
       betaAttr: 'beta_attr_value',
     });
-    metaManager.setLink('gamma', {
-      value: 'three',
+    metaManager.setLink('gamma', 'three', {
       gammaAttr: 'gamma_attr_value',
     });
 
     expect(metaManager.getMetaName('alpha')).toEqual({
-      value: 'one',
+      content: 'one',
       alphaAttr: 'alpha_attr_value',
     });
 
     expect(metaManager.getMetaProperty('beta:property')).toEqual({
-      value: 'two',
+      content: 'two',
       betaAttr: 'beta_attr_value',
     });
 
     expect(metaManager.getLink('gamma')).toEqual({
-      value: 'three',
+      href: 'three',
       gammaAttr: 'gamma_attr_value',
     });
   });
