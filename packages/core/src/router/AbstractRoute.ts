@@ -5,7 +5,7 @@ import { RoutePathExpression } from './DynamicRoute';
 export type ParamValue = string | number | boolean;
 
 export type RouteParams = {
-  [key: string]: ParamValue | Error
+  [key: string]: ParamValue | Error;
 };
 
 /**

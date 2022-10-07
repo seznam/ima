@@ -75,7 +75,7 @@ import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
 declare global {
-  var $Debug: boolean;
+  let $Debug: boolean;
 }
 
 function getInitialImaConfigFunctions() {

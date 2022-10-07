@@ -249,7 +249,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         .mockReturnValue(Promise.resolve({ status: 200 }));
 
       await pageManager
-        .manage(route, controllerInstance, viewInstance, {}, {})
+        .manage({
+          route,
+          controller: controllerInstance,
+          view: viewInstance,
+          options: {},
+        })
         .then(() => {
           expect(pageManager['_activatePageSource']).toHaveBeenCalled();
         })

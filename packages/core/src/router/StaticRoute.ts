@@ -1,4 +1,8 @@
-import AbstractRoute, { LOOSE_SLASHES_REGEXP, ParamValue, RouteParams } from './AbstractRoute';
+import AbstractRoute, {
+  LOOSE_SLASHES_REGEXP,
+  ParamValue,
+  RouteParams,
+} from './AbstractRoute';
 import { RouteOptions } from './Router';
 
 /**

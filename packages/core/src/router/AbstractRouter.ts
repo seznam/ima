@@ -10,7 +10,7 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import { IController } from '@/controller/Controller';
-import { StringParameters, UnknownParameters } from '@/CommonTypes';
+import { StringParameters } from '@/CommonTypes';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -51,7 +51,8 @@ export default abstract class AbstractRouter extends Router {
   /**
    * Storage of all known routes and middlewares. The key are their names.
    */
-  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware> = new Map();
+  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware> =
+    new Map();
   /**
    * Middleware ID counter which is used to auto-generate unique middleware
    * names when adding them to routeHandlers map.
@@ -149,12 +150,7 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  use(
-    middleware: (
-      params: RouteParams,
-      locals: object
-    ) => unknown
-  ) {
+  use(middleware: (params: RouteParams, locals: object) => unknown) {
     this._routeHandlers.set(
       `middleware-${this._currentMiddlewareId++}`,
       new RouterMiddleware(middleware)
@@ -492,14 +488,14 @@ export default abstract class AbstractRouter extends Router {
     ]);
 
     return this._pageManager
-      .manage(
+      .manage({
         route,
-        controller as IController,
+        controller: controller as IController,
         view,
         options,
         params,
-        action
-      )
+        action,
+      })
       .then(response => {
         response = response || {};
 

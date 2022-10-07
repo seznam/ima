@@ -6,6 +6,15 @@ import { UnknownParameters } from '../../CommonTypes';
 import AbstractRoute from '../../router/AbstractRoute';
 import { IController } from '../../controller/Controller';
 
+export type ManageArgs = {
+  route: AbstractRoute;
+  controller: IController;
+  view: unknown;
+  options: RouteOptions;
+  params?: UnknownParameters;
+  action?: PageAction;
+};
+
 /**
  * The page manager is a utility for managing the current controller and its
  * view.
@@ -37,14 +46,7 @@ export default abstract class PageManager {
    *         client (at the server side) or determine the type of error page
    *         to navigate to (at the client side).
    */
-  manage(
-    route: AbstractRoute,
-    controller: IController,
-    view: unknown,
-    options: RouteOptions,
-    params: UnknownParameters,
-    action: PageAction
-  ): Promise<unknown> {
+  manage(args: ManageArgs): Promise<unknown> {
     return Promise.reject();
   }
 

@@ -114,12 +114,7 @@ export default abstract class Router {
    * @return This router.
    * @throws Thrown if a middleware with the same name already exists.
    */
-  use(
-    middleware: (
-      routeParams: RouteParams,
-      locals: object
-    ) => unknown
-  ) {
+  use(middleware: (routeParams: RouteParams, locals: object) => unknown) {
     return this;
   }
 

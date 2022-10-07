@@ -6,7 +6,7 @@ import AbstractRoute from '../../router/AbstractRoute';
 import ControllerDecorator from '../../controller/ControllerDecorator';
 import PageFactory from '../PageFactory';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import PageManager from './PageManager';
+import PageManager, { ManageArgs } from './PageManager';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
 import Extension from '../../extension/Extension';
@@ -85,14 +85,14 @@ export default abstract class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(
-    route: AbstractRoute,
-    controller: IController,
-    view: unknown,
-    options: RouteOptions,
-    params: UnknownParameters = {},
-    action: PageAction = {}
-  ) {
+  async manage({
+    route,
+    controller,
+    view,
+    options,
+    params = {},
+    action = {},
+  }: ManageArgs) {
     this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {

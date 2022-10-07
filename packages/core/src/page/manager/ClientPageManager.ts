@@ -8,11 +8,10 @@ import PageStateManager from '../state/PageStateManager';
 import EventBus from '../../event/EventBus';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
 import ImaWindow from '../../window/Window';
-import AbstractRoute from '../../router/AbstractRoute';
-import Controller, { IController } from '../../controller/Controller';
-import { RouteOptions } from '../../router/Router';
+import Controller from '../../controller/Controller';
 import { UnknownParameters } from '../../CommonTypes';
-import { EventHandler, PageAction } from '../PageTypes';
+import { EventHandler } from '../PageTypes';
+import { ManageArgs } from './PageManager';
 
 /**
  * Page manager for controller on the client side.
@@ -94,22 +93,22 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  async manage(
-    route: AbstractRoute,
-    controller: IController,
-    view: unknown,
-    options: RouteOptions,
-    params: UnknownParameters = {},
-    action: PageAction = {}
-  ) {
-    const response = await super.manage(
+  async manage({
+    route,
+    controller,
+    view,
+    options,
+    params = {},
+    action = {},
+  }: ManageArgs) {
+    const response = await super.manage({
       route,
       controller,
       view,
       options,
       params,
-      action
-    );
+      action,
+    });
     await this._activatePageSource();
 
     return response;

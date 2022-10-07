@@ -1,4 +1,3 @@
-import { StringParameters } from '../CommonTypes';
 import GenericError from '../error/GenericError';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import { RouteOptions } from './Router';
