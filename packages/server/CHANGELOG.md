@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.9
+
+### Major Changes
+
+- eda23a09: allow emitter event to be defaultPrevented
+
 ## 18.0.0-rc.8
 
 ### Patch Changes
