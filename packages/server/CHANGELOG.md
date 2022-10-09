@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- 71986a9d: re-release
+
 ## 18.0.0-rc.9
 
 ### Major Changes
