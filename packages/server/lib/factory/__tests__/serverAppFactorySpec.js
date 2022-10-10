@@ -2,14 +2,6 @@ const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter, Event } = require('../../emitter.js');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
-const {
-  setGlobalMockMethod,
-  setGlobalKeepUnmock,
-  objectKeepUnmock,
-} = require('to-mock');
-
-setGlobalMockMethod(jest.fn);
-setGlobalKeepUnmock(objectKeepUnmock);
 
 jest.mock('fs', () => {
   const { toMockedInstance } = jest.requireActual('to-mock');
@@ -17,6 +9,9 @@ jest.mock('fs', () => {
 
   return {
     ...toMockedInstance(originalModule, {
+      existsSync() {
+        return true;
+      },
       readFileSync() {
         return 'read file content';
       },
@@ -57,6 +52,19 @@ describe('Server App Factory', () => {
     logger = console;
     environment = {
       $Debug: true,
+      $Source: () => ({
+        styles: ['/static/css/app.css'],
+        scripts: [
+          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/js/vendors.js?v=#{$Version}', { async: true }],
+          ['/static/js/app.client.js?v=#{$Version}', { async: true }],
+        ],
+        esScripts: [
+          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/js.es/vendors.js?v=#{$Version}', { async: true }],
+          ['/static/js.es/app.client.js?v=#{$Version}', { async: true }],
+        ],
+      }),
       $Server: {
         badRequestConcurrency: 1,
         cache: {

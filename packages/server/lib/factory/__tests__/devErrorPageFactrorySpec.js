@@ -1,15 +1,7 @@
 'use strict';
 
 const devErrorPageFactory = require('../devErrorPageFactory.js');
-const {
-  setGlobalMockMethod,
-  setGlobalKeepUnmock,
-  objectKeepUnmock,
-  toMock,
-} = require('to-mock');
-
-setGlobalMockMethod(jest.fn);
-setGlobalKeepUnmock(objectKeepUnmock);
+const { toMock } = require('to-mock');
 
 jest.mock('fs', () => {
   const { toMockedInstance } = jest.requireActual('to-mock');

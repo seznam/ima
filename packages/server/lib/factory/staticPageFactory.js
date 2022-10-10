@@ -33,6 +33,8 @@ module.exports = function staticTemplateFactory({
     };
 
     try {
+      createBootConfig(event);
+
       const content = template500(event);
 
       return {
@@ -51,6 +53,9 @@ module.exports = function staticTemplateFactory({
 
   function renderStaticClientErrorPage(event) {
     const status = 404;
+
+    createBootConfig(event);
+
     const content = template400(event);
 
     return {
