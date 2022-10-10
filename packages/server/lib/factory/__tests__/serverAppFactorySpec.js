@@ -1,5 +1,5 @@
 const serverAppFactory = require('../serverAppFactory.js');
-const { Emitter } = require('../../emitter.js');
+const { Emitter, Event } = require('../../emitter.js');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
 const {
@@ -169,86 +169,118 @@ describe('Server App Factory', () => {
     serverGlobal.clear();
   });
 
-  it('should call appFactory for all request in dev mode', async () => {
-    environment.$Env = 'dev';
+  describe('requestHandlerMiddleware method', () => {
+    it('should call appFactory for all request in dev mode', async () => {
+      environment.$Env = 'dev';
 
-    await serverApp.requestHandlerMiddleware(REQ, RES);
-    await serverApp.requestHandlerMiddleware(REQ, RES);
+      await serverApp.requestHandlerMiddleware(REQ, RES);
+      await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    expect(appFactory.mock.calls).toHaveLength(2);
-  });
-
-  it('should call appFactory only once for prod mode', async () => {
-    environment.$Env = 'prod';
-
-    await serverApp.requestHandlerMiddleware(REQ, RES);
-    await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    expect(appFactory.mock.calls).toHaveLength(1);
-  });
-
-  it('should render SPA page without cache', async () => {
-    jest
-      .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-      .mockReturnValue(true);
-
-    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    expect(page.SPA).toBeTruthy();
-    expect(page.status).toBe(200);
-    expect(page.cache).toBeFalsy();
-  });
-
-  // TODO IMA@18 need performance test for usefulness
-  // it('should render SPA page with cache', async () => {
-  //   jest
-  //     .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-  //     .mockReturnValue(true);
-
-  //   await serverApp.requestHandlerMiddleware(REQ, RES);
-  //   const page = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-  //   expect(page.SPA).toBeTruthy();
-  //   expect(page.status).toEqual(200);
-  //   expect(page.cache).toBeTruthy();
-  // });
-
-  it('should render overloaded message', async () => {
-    environment.$Server.overloadConcurrency = 0;
-
-    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    expect(page.SPA).toBeFalsy();
-    expect(page.status).toBe(503);
-    expect(page.status).toBeTruthy();
-    expect(page.cache).toBeFalsy();
-  });
-
-  it('should render 404 static page for exceed badRequestConcurrency', async () => {
-    environment.$Server.badRequestConcurrency = 0;
-
-    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    expect(page.SPA).toBeFalsy();
-    expect(page.status).toBe(404);
-    expect(page.cache).toBeFalsy();
-    expect(page.static).toBeTruthy();
-  });
-
-  it('should render 404 app page for not exceed badRequestConcurrency', async () => {
-    jest.spyOn(router, 'route').mockReturnValue({
-      status: 404,
-      content: '404 page',
+      expect(appFactory.mock.calls).toHaveLength(2);
     });
-    environment.$Server.badRequestConcurrency = 100;
 
-    const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+    it('should call appFactory only once for prod mode', async () => {
+      environment.$Env = 'prod';
 
-    expect(page.SPA).toBeFalsy();
-    expect(page.status).toBe(404);
-    expect(page.cache).toBeFalsy();
-    expect(page.static).toBeFalsy();
-    expect(page.content).toBe('404 page');
+      await serverApp.requestHandlerMiddleware(REQ, RES);
+      await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(appFactory.mock.calls).toHaveLength(1);
+    });
+
+    it('should render SPA page without cache', async () => {
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeTruthy();
+      expect(page.status).toBe(200);
+      expect(page.cache).toBeFalsy();
+    });
+
+    // TODO IMA@18 need performance test for usefulness
+    // it('should render SPA page with cache', async () => {
+    //   jest
+    //     .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+    //     .mockReturnValue(true);
+
+    //   await serverApp.requestHandlerMiddleware(REQ, RES);
+    //   const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+    //   expect(page.SPA).toBeTruthy();
+    //   expect(page.status).toEqual(200);
+    //   expect(page.cache).toBeTruthy();
+    // });
+
+    it('should render overloaded message', async () => {
+      environment.$Server.overloadConcurrency = 0;
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeFalsy();
+      expect(page.status).toBe(503);
+      expect(page.status).toBeTruthy();
+      expect(page.cache).toBeFalsy();
+    });
+
+    it('should render 404 static page for exceed badRequestConcurrency', async () => {
+      environment.$Server.badRequestConcurrency = 0;
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeFalsy();
+      expect(page.status).toBe(404);
+      expect(page.cache).toBeFalsy();
+      expect(page.static).toBeTruthy();
+    });
+
+    it('should render 404 app page for not exceed badRequestConcurrency', async () => {
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 404,
+        content: '404 page',
+      });
+      environment.$Server.badRequestConcurrency = 100;
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeFalsy();
+      expect(page.status).toBe(404);
+      expect(page.cache).toBeFalsy();
+      expect(page.static).toBeFalsy();
+      expect(page.content).toBe('404 page');
+    });
+
+    it('should preventDefaulted Event.Request hooks', async () => {
+      emitter.on(Event.BeforeRequest, event => {
+        event.preventDefault();
+      });
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeFalsy();
+      expect(page.status).toBe(204);
+      expect(page.cache).toBeFalsy();
+      expect(page.static).toBeFalsy();
+      expect(page.content).toBeNull();
+    });
+
+    it('should preventDefaulted Event.Response hooks', async () => {
+      emitter.on(Event.BeforeResponse, event => {
+        event.preventDefault();
+      });
+
+      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(page.SPA).toBeFalsy();
+      expect(page.status).toBe(204);
+      expect(page.cache).toBeFalsy();
+      expect(page.static).toBeFalsy();
+      expect(page.content).toBeNull();
+      expect(RES.send).not.toHaveBeenCalled();
+      expect(RES.status).not.toHaveBeenCalled();
+    });
   });
 
   describe('errorHandlerMiddleware method', () => {

@@ -95,7 +95,7 @@ module.exports = {
 
 Similarly to `webpack`, this function is executed with the `swc-loader` [default options](https://github.com/seznam/ima/blob/packages/cli/src/webpack/config.ts#L401) and it's result is then passed to the loader itself. This allows you to customize the swc compiler options in easier and more direct way than you'd have to do when using the `webpack` option.
 
-For example, to disable bundling of core-js files for the ECMAScript proposals, you would do the following:
+For example, to **enable support** for the [ECMAScript proposals core-js feature](https://github.com/zloirock/core-js#stage-3-proposals), you would do the following:
 
 ```js title=./ima.config.js
 /**
@@ -103,18 +103,17 @@ For example, to disable bundling of core-js files for the ECMAScript proposals, 
  */
 module.exports = {
   swc: async (swcLoaderOptions, ctx) => {
-    swcLoaderOptions.env.shippedProposals = false;
+    swcLoaderOptions.env.shippedProposals = true;
 
     return swcLoaderOptions;
   },
 };
 ```
 
-:::note
+### swcVendor
+> `async function(swcLoaderOptions, ctx): swcLoaderOptions`
 
-To see all possible options the swc compiler supports, take a look at the [documentation](https://swc.rs/docs/configuration/compilation).
-
-:::
+Works same as the aforementioned [`swc`](./ima.config.js.md#swc) options, except this config is applied to vendor files that match regular expressions defined in the [`transformVendorPaths`](./ima.config.js.md#transformvendorpaths) settings.
 
 ### postcss
 > `async function(postCssLoaderOptions, ctx): postCssLoaderOptions`
@@ -311,6 +310,26 @@ Set to true to disable building of the `client` bundle (older ECMAScript target)
 The application will now only execute the modern version of the client bundle (`client.es`), meaning that the it will only work on the latest versions of modern browsers.
 
 This can be usefull if you're building an app, where you are able to set constrains for the supported browsers (e.g. internal admin page).
+
+:::
+
+### transformVendorPaths
+
+> `RegExp[]`
+
+:::caution
+
+This is an advanced feature.
+
+:::
+
+Array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9, ES13 and node 18 currently)*.
+
+By default the CLI always matches all files under the `@ima` namespace, since we release our plugins in latest ECMA syntax and they need to be compiled down to older syntaxes with proper core-js polyfills.
+
+:::tip
+
+If you use any **3rd party** libraries that you are not sure if they support your currently supported browser environments, add their package names as regular expressions to this array and they will be compiled using swc-loader with proper polyfill injections from the core-js package.
 
 :::
 
