@@ -1,5 +1,0 @@
-[32m@ima/error-overlay:build[0m: cache hit, replaying output [2m6fe0bacc3204ecf3[0m
-[32m@ima/error-overlay:build: [0m
-[32m@ima/error-overlay:build: [0m> @ima/error-overlay@18.0.0-rc.4 build
-[32m@ima/error-overlay:build: [0m> NODE_ENV=production webpack
-[32m@ima/error-overlay:build: [0m

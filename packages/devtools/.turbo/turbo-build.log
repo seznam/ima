@@ -1,5 +1,0 @@
-[36m@ima/devtools:build[0m: cache hit, replaying output [2mf8255c4ac2037003[0m
-[36m@ima/devtools:build: [0m
-[36m@ima/devtools:build: [0m> @ima/devtools@0.4.0-rc.0 build
-[36m@ima/devtools:build: [0m> NODE_ENV=production webpack
-[36m@ima/devtools:build: [0m

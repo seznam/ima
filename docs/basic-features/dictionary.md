@@ -10,18 +10,31 @@ Dictionary in IMA.js app serves many purposes. Simplest of them is keeping text 
 First we need to tell IMA.js where to look for dictionary files. Naming convention of the files is up to you, but it should be clear what language are the files meant for and **glob pattern** has to be able to match path to the files.
 
 ```javascript
-// app/build.js
+// ima.config.js
 
-let languages = {
-  cs: [
-    './app/component/**/*CS.json',
-    './app/page/**/*CS.json'
-  ],
-  en: [
-    './app/component/**/*EN.json',
-    './app/page/**/*EN.json'
-  ]
-};
+//default value in IMA.js 
+languages: {
+    cs: ['./app/**/*CS.json'], 
+    en: ['./app/**/*EN.json']
+}
+
+//you can override languages property in your project in ima.config.js file like this:
+
+languages: {
+    cs: [
+        './app/component/**/*CS.json',
+        './app/page/**/*CS.json'
+    ], 
+    en: [
+        './app/component/**/*EN.json',
+        './app/page/**/*EN.json'
+    ],
+    de: [
+        './app/component/**/*DE.json',
+        './app/page/**/*DE.json'
+    ]
+}
+
 ```
 
 > **Note**: File name is used as a namespace for strings it defines. String defined under key `submit` in file `uploadFormCS.json` will be accessible under `uploadForm.submit`.
@@ -59,6 +72,30 @@ _renderSubmitButton() {
     </button>
   );
 }
+
+_renderResult() {
+  return (
+    <div
+      class={this.cssClasses('poll__result')}>
+      {this.localize('pollVote.resultTitle', {name: 'Quiz'})}
+      {this.localize('pollVote.voted', {count: 3})}
+    </div>
+  );
+}
 ```
+
+```javascript
+// app/component/poll/pollVoteEN.json
+
+{
+  "submitAnswer": "Send",
+  "resultTitle": "Result of {name}:",
+  "voted": "{count, plural, =0{Found no results} one{Found one result} other{Found # results} }",
+  "reader": "{gender, select, male{He said} female{She said} other{They said} }",
+}
+```
+For more information on the available selectors, formatters, and other details, please see [Format guide](http://messageformat.github.io/messageformat/guide/).
+
+
 
 Dictionary is also registered in [Object Container](./object-container.md) and thus can be obtained in Controllers, Extensions and other classes constructed through OC.

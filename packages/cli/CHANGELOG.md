@@ -1,5 +1,20 @@
 # Change Log
 
+## 18.0.0-rc.11
+
+### Patch Changes
+
+- 71986a9d: re-release
+- Updated dependencies [71986a9d]
+  - @ima/server@18.0.0-rc.10
+
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- Updated dependencies [eda23a09]
+  - @ima/server@18.0.0-rc.9
+
 ## 18.0.0-rc.9
 
 ### Patch Changes

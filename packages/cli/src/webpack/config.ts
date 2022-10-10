@@ -24,9 +24,9 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
-  extractLanguages,
   createDevServerConfig,
   getCurrentCoreJsVersion,
+  getLocaleEntryPoints,
 } from './utils';
 
 /**
@@ -157,6 +157,7 @@ export default async (
         loader: require.resolve('less-loader'),
         options: {
           sourceMap: useSourceMaps,
+          implementation: require('less'),
         },
       },
       useLessLoader && {
@@ -210,6 +211,7 @@ export default async (
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),
+      ...getLocaleEntryPoints(imaConfig),
     },
     output: {
       path: outputDir,
@@ -378,31 +380,35 @@ export default async (
              */
             {
               test: /\.(js|mjs|cjs)$/,
-              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+              include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
               use: [
                 !isServer && {
                   loader: require.resolve('swc-loader'),
-                  options: {
-                    env: {
-                      targets,
-                      mode: 'usage',
-                      coreJs: coreJsVersion,
-                      bugfixes: true,
-                      dynamicImport: true,
-                    },
-                    module: {
-                      type: 'commonjs',
-                    },
-                    jsc: {
-                      parser: {
-                        syntax: 'ecmascript',
+                  options: await imaConfig.swcVendor(
+                    {
+                      env: {
+                        targets,
+                        mode: 'usage',
+                        coreJs: coreJsVersion,
+                        bugfixes: true,
+                        dynamicImport: true,
                       },
+                      module: {
+                        type: 'es6',
+                      },
+                      jsc: {
+                        parser: {
+                          syntax: 'ecmascript',
+                        },
+                      },
+                      sourceMaps: useSourceMaps,
+                      inlineSourcesContent: useSourceMaps,
                     },
-                    sourceMaps: useSourceMaps,
-                    inlineSourcesContent: useSourceMaps,
-                  },
+                    ctx
+                  ),
                 },
                 {
+                  // TODO IMA@18 remove before release
                   // This injects new plugin loader interface into legacy plugins
                   loader: 'ima-legacy-plugin-loader',
                 },
@@ -419,7 +425,6 @@ export default async (
                     targets,
                     mode: 'usage',
                     coreJs: coreJsVersion,
-                    shippedProposals: true,
                     bugfixes: true,
                     dynamicImport: true,
                   },
@@ -498,6 +503,15 @@ export default async (
             fullySpecified: false,
           },
         },
+        {
+          test: /virtualImaLocale\.json$/,
+          type: 'javascript/auto',
+          loader: 'locale-loader',
+          options: {
+            imaConfig,
+            rootDir,
+          },
+        },
       ].filter(Boolean) as RuleSetRule[],
     },
     plugins: [
@@ -531,10 +545,7 @@ export default async (
             // Copies essential assets to static directory
             isEsVersion &&
               new CopyPlugin({
-                patterns: [
-                  { from: 'app/public', to: 'static/public' },
-                  ...extractLanguages(imaConfig),
-                ],
+                patterns: [{ from: 'app/public', to: 'static/public' }],
               }),
 
             // Enables compression for assets in production build

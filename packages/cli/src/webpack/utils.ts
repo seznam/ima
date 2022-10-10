@@ -5,8 +5,6 @@ import path from 'path';
 import { logger } from '@ima/dev-utils/dist/logger';
 import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
-import { ObjectPattern } from 'copy-webpack-plugin';
-import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
 import {
@@ -96,56 +94,36 @@ function createDevServerConfig({
 }
 
 /**
- * Returns records for CopyPlugin to extract locales to one file by locale
+ * Returns virtual entry point for every language
  *
  * @param {ImaConfig} imaConfig Current ima configuration.
- * @returns {ObjectPattern[]} ObjectPattern array for copy plugin
+ * @returns {Record<string, string>} object with entries
  */
-function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
-  const resultCopyRecords: ObjectPattern[] = [];
-  const tempLocales: Record<string, any> = {};
+function getLocaleEntryPoints(imaConfig: ImaConfig): Record<string, string> {
+  return Object.keys(imaConfig.languages).reduce((resultEntries, locale) => {
+    const localeBase64 = Buffer.from(locale).toString('base64');
+    const content = Buffer.from(
+      `import message from 'virtualImaLocale.json!=!data:text/javascript;base64,${localeBase64}';
 
-  Object.entries(imaConfig.languages).forEach(([locale, languageGlobs]) => {
-    tempLocales[locale] = {};
-    const mf = new MessageFormat(locale);
+(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
+  $IMA.i18n = message;
+})();
 
-    languageGlobs.forEach(languageGlob =>
-      resultCopyRecords.push({
-        from: languageGlob,
-        to: `static/locale/${locale}.js`,
-        force: true,
-        noErrorOnMissing: true,
-        transformAll: (assets: any[]) => {
-          tempLocales[locale] = assets.reduce((accumulator, asset) => {
-            const fileContent = JSON.parse(asset.data.toString());
-            const scopeFromFilename = (
-              asset.sourceFilename.split('/').pop() || 'none'
-            ).replace(`${locale.toUpperCase()}.json`, '');
+export default message;
+`
+    ).toString('base64');
 
-            return Object.assign(accumulator, {
-              [scopeFromFilename]: accumulator[scopeFromFilename]
-                ? Object.assign({}, accumulator[scopeFromFilename], fileContent)
-                : fileContent,
-            });
-          }, tempLocales[locale]);
-
-          return `(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
-                                        ${mf
-                                          .compile(tempLocales[locale])
-                                          .toString('$IMA.i18n')}
-                                          ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
-        },
-      })
-    );
-  });
-
-  return resultCopyRecords;
+    return Object.assign(resultEntries, {
+      [`locale/${locale}`]: `data:text/javascript;base64,${content}`,
+    });
+  }, {});
 }
 
 /**
  * Creates hash representing current webpack environment.
  *
  * @param {ImaConfigurationContext} ctx Current configuration context.
+ * @param {ImaConfig} imaConfig ima configuration
  * @returns {string}
  */
 function createCacheKey(
@@ -222,6 +200,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       aggregateTimeout: 5,
     },
     swc: async config => config,
+    swcVendor: async config => config,
     postcss: async config => config,
   };
 
@@ -444,8 +423,8 @@ export {
   requireImaConfig,
   resolveImaConfig,
   runImaPluginsHook,
-  extractLanguages,
   createPolyfillEntry,
   getCurrentCoreJsVersion,
+  getLocaleEntryPoints,
   IMA_CONF_FILENAME,
 };

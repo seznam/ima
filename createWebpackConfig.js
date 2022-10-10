@@ -61,7 +61,7 @@ function createWebpackConfig(callback) {
                   bugfixes: true,
                   modules: false,
                   useBuiltIns: 'usage',
-                  corejs: { version: '3.21', proposals: true },
+                  corejs: { version: '3.21' },
                   exclude: ['transform-typeof-symbol'],
                 },
               ],

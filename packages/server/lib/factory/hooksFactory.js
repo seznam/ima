@@ -205,7 +205,6 @@ module.exports = function hooksFactory({
         res.redirect(context.response.status, context.response.url);
         return;
       }
-
       res.status(context.response.status);
       res.send(context.response.content);
     });

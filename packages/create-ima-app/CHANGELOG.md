@@ -1,5 +1,25 @@
 # Change Log
 
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- 71986a9d: re-release
+
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- e6971ee8: Removed bundling of `shippedProposals`, this can still be enabled through ima.config.js if desired.
+  Updated @ima/react-hooks dependency to latest version.
+  Vendor files are not being processed through swc from now only, except filenames under `@ima` namespace and any additional paths defined in the `transformVendorPaths` ima.config.js option.
+
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- a73f934e: Updated @ima/react-hooks to latest RC version
+
 ## 18.0.0-rc.7
 
 ### Major Changes

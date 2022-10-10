@@ -29,11 +29,14 @@ module.exports = (() => {
       $Source: () => ({
         styles: ['/static/css/app.css'],
         scripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/js/locale/#{$Language}.js?v=#{$Version}', { async: true }],
           ['/static/js/app.bundle.js?v=#{$Version}', { async: true }],
         ],
         esScripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          [
+            '/static/js.es/locale/#{$Language}.js?v=#{$Version}',
+            { async: true },
+          ],
           ['/static/js.es/app.bundle.js?v=#{$Version}', { async: true }],
         ],
       }),
@@ -106,12 +109,15 @@ module.exports = (() => {
       $Source: () => ({
         styles: ['/static/css/app.css'],
         scripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/js/locale/#{$Language}.js?v=#{$Version}', { async: true }],
           ['/static/js/vendors.js?v=#{$Version}', { async: true }],
           ['/static/js/app.client.js?v=#{$Version}', { async: true }],
         ],
         esScripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          [
+            '/static/js.es/locale/#{$Language}.js?v=#{$Version}',
+            { async: true },
+          ],
           ['/static/js.es/vendors.js?v=#{$Version}', { async: true }],
           ['/static/js.es/app.client.js?v=#{$Version}', { async: true }],
         ],
