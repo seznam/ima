@@ -51,13 +51,7 @@
        */
       initScripts: function () {
         var runner = root.$IMA.Runner;
-        var scriptsRoot = root.document.getElementById('scripts');
-
-        if (!scriptsRoot) {
-          scriptsRoot = root.document.createElement('div');
-          scriptsRoot.id = 'scripts';
-          root.document.body.appendChild(scriptsRoot);
-        }
+        var scriptsRoot = root.document.head;
 
         function testScript(snippet) {
           try {

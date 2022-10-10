@@ -1,4 +1,4 @@
-const { Emitter, Event, createEvent, catchError } = require('@esmj/emitter');
+const { Emitter, Event, createEvent } = require('@esmj/emitter');
 
 const IMAEvent = {
   ...Event,
@@ -21,6 +21,5 @@ const IMAEvent = {
 module.exports = {
   Emitter,
   createEvent,
-  catchError,
   Event: IMAEvent,
 };

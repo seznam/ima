@@ -194,7 +194,8 @@ export default class Response {
     this._isSent = true;
     this._content = content;
     this._setCookieHeaders();
-    this._response.send(content);
+    // TODO IMA@18 rewrite response with other PR
+    //this._response.send(content);
 
     return this;
   }

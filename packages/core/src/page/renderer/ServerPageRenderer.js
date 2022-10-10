@@ -1,25 +1,8 @@
 /* @if client **
 export default class ServerPageRenderer {};
 /* @else */
-import { processContent } from '@ima/helpers';
-
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
-
-let runner = '';
-
-if (typeof window === 'undefined' || window === null) {
-  const fs = require('fs');
-  const path = require('path');
-  const runnerPath = path.resolve('./build/static/public/runner.js');
-
-  if (fs.existsSync(runnerPath)) {
-    runner = fs.readFileSync(
-      path.resolve('./build/static/public/runner.js'),
-      'utf8'
-    );
-  }
-}
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -224,16 +207,8 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       })
     );
 
-    // TODO IMA@18 - should be handled in server
-    appMarkup = processContent({
-      content: appMarkup,
-      SPA: false,
-      settings: this._settings,
-      runner,
-    });
-
     // Return HTML markup with injected styles
-    return '<!doctype html>\n' + appMarkup;
+    return appMarkup;
   }
 }
 // @endif
