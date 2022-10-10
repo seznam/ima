@@ -1,4 +1,4 @@
-import AbstractRoute from './AbstractRoute';
+import AbstractRoute, { RouteParams } from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
@@ -10,24 +10,54 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import { IController } from '@/controller/Controller';
-import { StringParameters, UnknownParameters } from '@/CommonTypes';
+import { StringParameters } from '@/CommonTypes';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
- *
- * @abstract
  */
 export default abstract class AbstractRouter extends Router {
+  /**
+   * The page manager handling UI rendering, and transitions between
+   * pages if at the client side.
+   */
   protected _pageManager: PageManager;
+  /**
+   * Factory for routes.
+   */
   protected _factory: RouteFactory;
+  /**
+   * Dispatcher fires events to app.
+   */
   protected _dispatcher: Dispatcher;
-  protected _protocol: string;
-  protected _host: string;
-  protected _root: string;
-  protected _languagePartPath: string;
-  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware>;
-  protected _currentMiddlewareId: number;
+  /**
+   * The current protocol used to access the application, terminated by a
+   * colon (for example `https:`).
+   */
+  protected _protocol = '';
+  /**
+   * The application's host.
+   */
+  protected _host = '';
+  /**
+   * The URL path pointing to the application's root.
+   */
+  protected _root = '';
+  /**
+   * The URL path fragment used as a suffix to the `_root` field
+   * that specifies the current language.
+   */
+  protected _languagePartPath = '';
+  /**
+   * Storage of all known routes and middlewares. The key are their names.
+   */
+  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware> =
+    new Map();
+  /**
+   * Middleware ID counter which is used to auto-generate unique middleware
+   * names when adding them to routeHandlers map.
+   */
+  protected _currentMiddlewareId = 0;
   protected _currentlyRoutedPath = '';
 
   /**
@@ -63,54 +93,11 @@ export default abstract class AbstractRouter extends Router {
   ) {
     super();
 
-    /**
-     * The page manager handling UI rendering, and transitions between
-     * pages if at the client side.
-     */
     this._pageManager = pageManager;
 
-    /**
-     * Factory for routes.
-     */
     this._factory = factory;
 
-    /**
-     * Dispatcher fires events to app.
-     */
     this._dispatcher = dispatcher;
-
-    /**
-     * The current protocol used to access the application, terminated by a
-     * colon (for example `https:`).
-     */
-    this._protocol = '';
-
-    /**
-     * The application's host.
-     */
-    this._host = '';
-
-    /**
-     * The URL path pointing to the application's root.
-     */
-    this._root = '';
-
-    /**
-     * The URL path fragment used as a suffix to the `_root` field
-     * that specifies the current language.
-     */
-    this._languagePartPath = '';
-
-    /**
-     * Storage of all known routes and middlewares. The key are their names.
-     */
-    this._routeHandlers = new Map();
-
-    /**
-     * Middleware ID counter which is used to auto-generate unique middleware
-     * names when adding them to routeHandlers map.
-     */
-    this._currentMiddlewareId = 0;
   }
 
   /**
@@ -163,12 +150,7 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  use(
-    middleware: (
-      params: { [key: string]: string | number },
-      locals: object
-    ) => unknown
-  ) {
+  use(middleware: (params: RouteParams, locals: object) => unknown) {
     this._routeHandlers.set(
       `middleware-${this._currentMiddlewareId++}`,
       new RouterMiddleware(middleware)
@@ -282,7 +264,7 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  link(routeName: string, params: { [key: string]: string }) {
+  link(routeName: string, params: RouteParams) {
     const route = this._routeHandlers.get(routeName) as AbstractRoute;
 
     if (!route) {
@@ -306,7 +288,7 @@ export default abstract class AbstractRouter extends Router {
   ): Promise<void | { [key: string]: unknown }> {
     this._currentlyRoutedPath = path;
 
-    let params: Record<string, unknown> = {};
+    let params: RouteParams = {};
     const { route, middlewares } = this._getRouteHandlersByPath(path);
 
     if (!route) {
@@ -340,7 +322,7 @@ export default abstract class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleError(
-    params: { [key: string]: GenericError | string },
+    params: RouteParams,
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
@@ -387,7 +369,7 @@ export default abstract class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleNotFound(
-    params: { [key: string]: string },
+    params: RouteParams,
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
@@ -484,7 +466,7 @@ export default abstract class AbstractRouter extends Router {
    */
   async _handle(
     route: AbstractRoute,
-    params: Record<string, unknown>,
+    params: RouteParams,
     options: RouteOptions,
     action = {}
   ): Promise<void | { [key: string]: unknown }> {
@@ -506,14 +488,14 @@ export default abstract class AbstractRouter extends Router {
     ]);
 
     return this._pageManager
-      .manage(
+      .manage({
         route,
-        controller as IController,
+        controller: controller as IController,
         view,
         options,
-        params as UnknownParameters,
-        action
-      )
+        params,
+        action,
+      })
       .then(response => {
         response = response || {};
 
@@ -602,7 +584,7 @@ export default abstract class AbstractRouter extends Router {
    */
   async _runMiddlewares(
     middlewares: RouterMiddleware[],
-    params: Record<string, unknown>,
+    params: RouteParams,
     locals: Record<string, unknown>
   ) {
     if (!Array.isArray(middlewares)) {
@@ -623,7 +605,7 @@ export default abstract class AbstractRouter extends Router {
    * @returns Provided params merged with params
    *        from original route
    */
-  _addParamsFromOriginalRoute(params: StringParameters): StringParameters {
+  _addParamsFromOriginalRoute(params: RouteParams) {
     const originalPath = this._getCurrentlyRoutedPath();
     const { route } = this._getRouteHandlersByPath(originalPath);
 

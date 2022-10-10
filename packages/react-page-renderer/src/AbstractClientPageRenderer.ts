@@ -10,12 +10,14 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
+import { RouteOptions } from '@ima/core/dist/client/router/Router';
 import { ComponentType } from 'react';
 
 import { MetaAttributes } from '../../core/src/meta/MetaManager';
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, RouteOptions, Settings } from './types';
+import { Helpers, Settings } from './types';
+
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
@@ -91,7 +93,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          content: null,
+          content: undefined,
           status: controller.getHttpStatus(),
           pageState,
         };
@@ -129,7 +131,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          content: null,
+          content: undefined,
           status: controller.getHttpStatus(),
           pageState: Object.assign({}, defaultPageState, fetchedResources),
         };
@@ -266,9 +268,12 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     this._prepareViewAdapter(controller, pageView, routeOptions);
 
     const masterElementId = this._settings.$Page.$Render.masterElementId;
-    this._viewContainer = this._window.getElementById(
+    const viewContainer = this._window.getElementById(
       masterElementId as string
     );
+    if (viewContainer) {
+      this._viewContainer = viewContainer;
+    }
 
     if (!this._viewContainer) {
       const errorMessage =

@@ -1,4 +1,8 @@
-import AbstractRoute, { LOOSE_SLASHES_REGEXP } from './AbstractRoute';
+import AbstractRoute, {
+  LOOSE_SLASHES_REGEXP,
+  ParamValue,
+  RouteParams,
+} from './AbstractRoute';
 import { RouteOptions } from './Router';
 
 /**
@@ -122,7 +126,7 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * @inheritdoc
    */
-  toPath(params: { [key: string]: number | string } = {}) {
+  toPath(params: RouteParams = {}) {
     let path = this._pathExpression;
     const queryPairs = [];
 
@@ -131,13 +135,13 @@ export default class StaticRoute extends AbstractRoute {
         path = this._substituteRequiredParamInPath(
           path as string,
           paramName,
-          params[paramName]
+          params[paramName] as ParamValue
         );
       } else if (this._isOptionalParamInPath(path as string, paramName)) {
         path = this._substituteOptionalParamInPath(
           path as string,
           paramName,
-          params[paramName]
+          params[paramName] as ParamValue
         );
       } else {
         queryPairs.push([paramName, params[paramName]]);
@@ -176,7 +180,7 @@ export default class StaticRoute extends AbstractRoute {
   _substituteRequiredParamInPath(
     path: string,
     paramName: string,
-    paramValue: string | number
+    paramValue: ParamValue
   ) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
@@ -190,7 +194,7 @@ export default class StaticRoute extends AbstractRoute {
   _substituteOptionalParamInPath(
     path: string,
     paramName: string,
-    paramValue: string | number
+    paramValue: ParamValue
   ) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(

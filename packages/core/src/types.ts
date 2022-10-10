@@ -8,6 +8,8 @@ import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitte
 
 declare global {
   type $Debug = boolean;
+
+  const $IMA: Record<string, unknown>;
   interface Window {
     __IMA_HMR: ErrorOverlayEmitter;
     FormData: FormData;

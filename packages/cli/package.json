@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "18.0.0-rc.9",
+  "version": "18.0.0-rc.11",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -33,6 +33,7 @@
     "@ima/dev-utils": "^18.0.0-rc.4",
     "@ima/error-overlay": "^18.0.0-rc.4",
     "@ima/hmr-client": "^18.0.0-rc.4",
+    "@messageformat/core": "^3.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@swc/core": "^1.3.0",
     "ajv": "^8.11.0",
@@ -51,7 +52,6 @@
     "kill-port": "^1.6.1",
     "less": "^4.1.3",
     "less-loader": "^11.0.0",
-    "messageformat": "2.3.0",
     "mini-css-extract-plugin": "^2.6.1",
     "nodemon": "^2.0.16",
     "open-editor": "3.0.0",
@@ -80,7 +80,7 @@
     "@types/yargs": "^17.0.10"
   },
   "peerDependencies": {
-    "@ima/server": "^18.0.0-rc.8"
+    "@ima/server": "^18.0.0-rc.10"
   },
   "publishConfig": {
     "access": "public",

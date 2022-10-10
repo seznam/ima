@@ -2,6 +2,12 @@ import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
 
+export type ParamValue = string | number | boolean;
+
+export type RouteParams = {
+  [key: string]: ParamValue | Error;
+};
+
 /**
  * Regular expression used to match and remove the starting and trailing
  * forward slashes from a path expression or a URL path.
@@ -16,10 +22,29 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * configuration.
  */
 export default abstract class AbstractRoute {
+  /**
+   * The unique name of this route, identifying it among the rest of the
+   * routes in the application.
+   */
   protected _name: string;
+  /**
+   * Path expression used in route matching, to generate valid path with
+   * provided params and parsing params from current path.
+   */
   protected _pathExpression: RoutePathExpression | string;
+  /**
+   * The full name of Object Container alias identifying the controller
+   * associated with this route.
+   */
   protected _controller: object | string | (() => unknown);
+  /**
+   * The full name or Object Container alias identifying the view class
+   * associated with this route.
+   */
   protected _view: object | string | (() => unknown);
+  /**
+   * The route additional options.
+   */
   protected _options: RouteOptions;
   protected _cachedController: unknown;
   protected _cachedView: unknown;
@@ -67,7 +92,7 @@ export default abstract class AbstractRoute {
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
    */
-  static paramsToQuery(params: { [key: string]: unknown } = {}) {
+  static paramsToQuery(params: RouteParams = {}) {
     if (
       !params ||
       typeof params !== 'object' ||
@@ -92,7 +117,7 @@ export default abstract class AbstractRoute {
    * @return Parsed query parameters.
    */
   static getQuery(path: string) {
-    const query: { [key: string]: unknown } = {};
+    const query: RouteParams = {};
     const queryStart = path.indexOf('?');
 
     if (queryStart > -1 && queryStart !== path.length - 1) {
@@ -136,16 +161,12 @@ export default abstract class AbstractRoute {
    * @param parameterValue
    * @return decodedValue
    */
-  static decodeURIParameter(parameterValue: string): string | undefined {
-    let decodedValue;
-    if (parameterValue) {
-      try {
-        decodedValue = decodeURIComponent(parameterValue);
-      } catch (_) {
-        return '';
-      }
+  static decodeURIParameter(parameterValue: string) {
+    try {
+      return decodeURIComponent(parameterValue);
+    } catch (_) {
+      return '';
     }
-    return decodedValue;
   }
 
   /**
@@ -180,33 +201,14 @@ export default abstract class AbstractRoute {
     view: object | string | (() => unknown),
     options: RouteOptions
   ) {
-    /**
-     * The unique name of this route, identifying it among the rest of the
-     * routes in the application.
-     */
     this._name = name;
 
-    /**
-     * Path expression used in route matching, to generate valid path with
-     * provided params and parsing params from current path.
-     */
     this._pathExpression = pathExpression;
 
-    /**
-     * The full name of Object Container alias identifying the controller
-     * associated with this route.
-     */
     this._controller = controller;
 
-    /**
-     * The full name or Object Container alias identifying the view class
-     * associated with this route.
-     */
     this._view = view;
 
-    /**
-     * The route additional options.
-     */
     this._options = Object.assign(
       {
         onlyUpdate: false,
@@ -306,7 +308,7 @@ export default abstract class AbstractRoute {
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
-  abstract toPath(params: { [key: string]: number | string }): string;
+  abstract toPath(params: RouteParams): string;
 
   /**
    * Tests whether the provided URL path matches this route. The provided
@@ -331,9 +333,7 @@ export default abstract class AbstractRoute {
    * @return Map of parameter names to parameter
    *         values.
    */
-  abstract extractParameters(path?: string): {
-    [key: string]: string | undefined;
-  };
+  abstract extractParameters(path?: string): RouteParams;
 
   /**
    * Helper method to pre-process view and controller which can be

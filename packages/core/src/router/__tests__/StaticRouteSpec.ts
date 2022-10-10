@@ -745,11 +745,6 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/user12',
         params: { userId: 'user12' },
       },
-      {
-        pathExpression: '/:?userId',
-        path: '/',
-        params: { userId: undefined },
-      },
 
       {
         pathExpression: '/:userId/something/:?somethingId',

@@ -537,14 +537,14 @@ describe('ima.core.router.AbstractRouter', () => {
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
       await router._handle(route, {}, {}, action).then(() => {
-        expect(pageManager.manage).toHaveBeenCalledWith(
+        expect(pageManager.manage).toHaveBeenCalledWith({
           route,
-          Controller,
-          View,
+          controller: Controller,
+          view: View,
           options,
-          {},
-          action
-        );
+          params: {},
+          action,
+        });
       });
     });
 

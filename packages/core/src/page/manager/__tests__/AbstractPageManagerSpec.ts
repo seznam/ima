@@ -153,7 +153,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .mockReturnValue(Promise.resolve() as never);
 
       await pageManager
-        .manage(route, Controller, View, options, params)
+        .manage({
+          route,
+          controller: Controller,
+          view: View,
+          options,
+          params,
+          action: {},
+        })
         .then(() => {
           expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
           expect(pageManager['_managedPage'].params).toStrictEqual(params);
@@ -195,7 +202,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .mockReturnValue(Promise.resolve() as never);
 
       await pageManager
-        .manage(route, Controller, View, options, params)
+        .manage({
+          route,
+          controller: Controller,
+          view: View,
+          options,
+          params,
+          action: {},
+        })
         .then(() => {
           expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
           expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();

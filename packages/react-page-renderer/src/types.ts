@@ -1,4 +1,4 @@
-import { Controller, Dictionary, EventBus, Router } from '@ima/core';
+import { Dictionary, EventBus, Router } from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 import { allPromiseHash, processContent } from '@ima/helpers';
 import { ComponentType } from 'react';
@@ -15,15 +15,6 @@ declare global {
 export type Helpers = {
   allPromiseHash: typeof allPromiseHash;
   processContent: typeof processContent;
-};
-
-export type RouteOptions = {
-  allowSPA: boolean;
-  autoScroll: boolean;
-  documentView?: ComponentType;
-  managedRootView?: ComponentType;
-  onlyUpdate?: (controller: Controller, view: ComponentType) => boolean;
-  viewAdapter?: ComponentType;
 };
 
 export type Settings = {

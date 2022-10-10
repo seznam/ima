@@ -13,10 +13,11 @@ import {
   GenericError,
   MetaManager,
 } from '@ima/core';
+import { RouteOptions } from '@ima/core/dist/client/router/Router';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 
-import { RouteOptions, Settings } from '@/types';
+import { Settings } from '@/types';
 
 import AbstractPureComponent from '../AbstractPureComponent';
 import BlankManagedRootView from '../BlankManagedRootView';
