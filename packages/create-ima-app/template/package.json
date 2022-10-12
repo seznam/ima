@@ -19,9 +19,9 @@
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "18.0.0-rc.9",
     "@swc/jest": "^0.2.20",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
     "@wojtekmaj/enzyme-adapter-react-17": "0.6.6",
-    "enzyme": "^3.11.0",
-    "enzyme-to-json": "^3.6.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.1.1",
@@ -30,7 +30,8 @@
     "error-to-json": "2.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
-    "prettier": "^2.6.0"
+    "prettier": "^2.6.0",
+    "react-testing-library-shallow": "0.0.3"
   },
   "dependencies": {
     "@ima/core": "18.0.0-rc.10",
