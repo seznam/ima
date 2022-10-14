@@ -12,8 +12,12 @@ function modifyWebpackConfig(config) {
       resolve: {
         fullySpecified: false,
       },
-    }
+    },
   );
+
+  config.externalsPresets = {
+    node: true,
+  };
 
   return config;
 };
