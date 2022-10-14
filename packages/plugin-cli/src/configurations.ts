@@ -98,6 +98,12 @@ export function createClientServerConfig(
   ];
 }
 
+/**
+ * Create simple config with TS suppoort. Can be used for simple Node.js
+ * CLI packages or other packages that don't require cjs/esm builds.
+ *
+ * @param {ModuleConfig['type']} [type='es6']
+ */
 export function createBaseConfig(
   type: ModuleConfig['type'] = 'es6'
 ): ImaPluginConfig {
