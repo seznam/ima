@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.5
+
+### Patch Changes
+
+- 4046f8b1: Added additional cjs build output
+- af6492c9: Add SPA template to `create-ima-app` and update `DocumentView`. Add support for new inject aliases `#{$Scripts}`, `#{$RevivalSettings}`, `#{$Runner}` and `#{$RevivalCache}` to template.
+
 ## 18.0.0-rc.4
 
 ### Patch Changes

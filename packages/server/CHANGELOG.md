@@ -1,5 +1,17 @@
 # Change Log
 
+## 18.0.0-rc.11
+
+### Minor Changes
+
+- af6492c9: Add SPA template to `create-ima-app` and update `DocumentView`. Add support for new inject aliases `#{$Scripts}`, `#{$RevivalSettings}`, `#{$Runner}` and `#{$RevivalCache}` to template.
+
+### Patch Changes
+
+- Updated dependencies [4046f8b1]
+- Updated dependencies [af6492c9]
+  - @ima/helpers@18.0.0-rc.5
+
 ## 18.0.0-rc.10
 
 ### Patch Changes
