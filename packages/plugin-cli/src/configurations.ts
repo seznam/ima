@@ -98,14 +98,7 @@ export function createClientServerConfig(
   ];
 }
 
-/**
- * Creates basic configuration with TS support that. This should be used on
- * every plugin that doesn't require server/client specific outputs using the
- * preprocess package.
- *
- * @param {ModuleConfig['type']} [type='es6']
- */
-export function createConfig(
+export function createBaseConfig(
   type: ModuleConfig['type'] = 'es6'
 ): ImaPluginConfig {
   return {
@@ -122,4 +115,25 @@ export function createConfig(
       }),
     ],
   };
+}
+
+/**
+ * Creates basic configuration with TS, CJS and ESM support. You can optionally
+ * enable built of client/server specific bundles using comment pragmas.
+ *
+ * @param {bool} [enableServerClientBundle=false] Set to true to generate server/client
+ * specific configurations using pragma comments and preprocessing.
+ */
+export function generateConfig(
+  enableServerClientBundle = false
+): ImaPluginConfig[] {
+  return enableServerClientBundle
+    ? [
+        ...createClientServerConfig(),
+        { ...createBaseConfig('commonjs'), output: './dist/cjs' },
+      ]
+    : [
+        { ...createBaseConfig(), output: './dist/esm' },
+        { ...createBaseConfig('commonjs'), output: './dist/cjs' },
+      ];
 }

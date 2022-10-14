@@ -12,4 +12,8 @@ export {
 export { swcTransformer } from './transformers/swcTransformer';
 export { preprocessTransformer } from './transformers/preprocessTransformer';
 export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
-export { createConfig, createClientServerConfig } from './configurations';
+export {
+  createBaseConfig,
+  createClientServerConfig,
+  generateConfig,
+} from './configurations';
