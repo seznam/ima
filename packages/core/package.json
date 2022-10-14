@@ -34,8 +34,8 @@
     }
   ],
   "main": "./dist/cjs/index.js",
-  "module": "./dist/server/index.js",
-  "browser": "./dist/client/index.js",
+  "module": "./dist/esm/server/index.js",
+  "browser": "./dist/esm/client/index.js",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",

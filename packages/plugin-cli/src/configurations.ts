@@ -55,7 +55,7 @@ export function createClientServerConfig(
     {
       name: type,
       input: './src',
-      output: './dist/client',
+      output: './dist/esm/client',
       transforms: [
         preprocessTransformer({ context: { client: true, server: false } }),
         [createSwcTransformer({ type }), { test: jsxRe }],
@@ -73,7 +73,7 @@ export function createClientServerConfig(
     {
       name: type,
       input: './src',
-      output: './dist/server',
+      output: './dist/esm/server',
       exclude: [
         '**/*.less/**',
         '**/*.css/**',

@@ -25,7 +25,7 @@ function modifyWebpackConfig(config) {
 module.exports = [
   {
     limit: '30 KB',
-    path: './dist/client/index.js',
+    path: './dist/esm/client/index.js',
     import: '{ onLoad, reviveClientApp }',
     running: false,
     modifyWebpackConfig,
@@ -33,7 +33,7 @@ module.exports = [
   },
   {
     limit: '30 KB',
-    path: './dist/server/index.js',
+    path: './dist/esm/server/index.js',
     import: '*',
     running: false,
     modifyWebpackConfig,
@@ -41,7 +41,7 @@ module.exports = [
   // Test tree-shaking
   {
     limit: '70 B',
-    path: './dist/client/index.js',
+    path: './dist/esm/client/index.js',
     import: '{ Cache }',
     running: false,
     modifyWebpackConfig,

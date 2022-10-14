@@ -14,6 +14,6 @@ export { preprocessTransformer } from './transformers/preprocessTransformer';
 export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
 export {
   createBaseConfig,
-  createClientServerConfig,
   generateConfig,
+  createClientServerConfig,
 } from './configurations';
