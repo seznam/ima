@@ -1,5 +1,5 @@
 export {
-  BuildConfig,
+  ImaPluginConfig as BuildConfig,
   Source,
   PipeContext,
   Command,

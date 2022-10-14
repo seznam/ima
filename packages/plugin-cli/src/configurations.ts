@@ -3,7 +3,7 @@ import { ModuleConfig, ParserConfig } from '@swc/core';
 import { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
 import { preprocessTransformer } from './transformers/preprocessTransformer';
 import { swcTransformer } from './transformers/swcTransformer';
-import { BuildConfig } from './types';
+import { ImaPluginConfig } from './types';
 
 const isBuild = process.argv.includes('build');
 const jsxRe = /\.(js|jsx)$/;
@@ -50,9 +50,10 @@ function createSwcTransformer({
  */
 export function createClientServerConfig(
   type: ModuleConfig['type'] = 'es6'
-): BuildConfig[] {
+): ImaPluginConfig[] {
   return [
     {
+      name: type,
       input: './src',
       output: './dist/client',
       transforms: [
@@ -70,6 +71,7 @@ export function createClientServerConfig(
       ],
     },
     {
+      name: type,
       input: './src',
       output: './dist/server',
       exclude: [
@@ -103,8 +105,11 @@ export function createClientServerConfig(
  *
  * @param {ModuleConfig['type']} [type='es6']
  */
-export function createConfig(type: ModuleConfig['type'] = 'es6'): BuildConfig {
+export function createConfig(
+  type: ModuleConfig['type'] = 'es6'
+): ImaPluginConfig {
   return {
+    name: type,
     input: './src',
     output: './dist',
     transforms: [

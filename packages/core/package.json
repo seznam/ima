@@ -16,7 +16,6 @@
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/core"
   },
-  "type": "module",
   "sideEffects": false,
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
@@ -34,11 +33,13 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/server/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/server/index.js",
   "browser": "./dist/client/index.js",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",
