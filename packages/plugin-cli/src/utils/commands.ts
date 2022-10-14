@@ -80,6 +80,12 @@ export async function build() {
       const inputDir = path.resolve(cwd, config.input);
       const outputDir = path.resolve(cwd, config.output);
 
+      logger.info(
+        `${config.input} ${chalk.blue('→')} ${chalk.green(config.output)} ${
+          config.name ? chalk.red(`[${config.name}]`) : ''
+        }`
+      );
+
       // Cleanup
       if (fs.existsSync(outputDir)) {
         await fs.promises.rm(outputDir, { recursive: true });

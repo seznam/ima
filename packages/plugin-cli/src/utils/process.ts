@@ -4,14 +4,14 @@ import path from 'path';
 import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 
-import { BuildConfig, PipeContext, Context, Source } from '../types';
+import { ImaPluginConfig, PipeContext, Context, Source } from '../types';
 
 const CONFIG_BASENAME = 'ima-plugin.config';
 
 /**
  * Parses ima.build.js file, initializing the build pipeline.
  */
-export async function parseConfigFile(cwd: string): Promise<BuildConfig[]> {
+export async function parseConfigFile(cwd: string): Promise<ImaPluginConfig[]> {
   const configDir = path.resolve(cwd);
   const configFile = await fs.promises
     .readdir(configDir)
@@ -28,7 +28,7 @@ export async function parseConfigFile(cwd: string): Promise<BuildConfig[]> {
   let loadedConfig = (await import(path.join(configDir, configFile))).default;
   loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
 
-  return loadedConfig.map((config: BuildConfig) => ({
+  return loadedConfig.map((config: ImaPluginConfig) => ({
     plugins: [],
     exclude: [
       '**/__tests__/**',
@@ -39,7 +39,7 @@ export async function parseConfigFile(cwd: string): Promise<BuildConfig[]> {
     ],
     skipTransform: [/\.(css|less|json)/],
     ...config,
-  })) as BuildConfig[];
+  })) as ImaPluginConfig[];
 }
 
 /**

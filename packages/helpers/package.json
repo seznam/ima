@@ -16,13 +16,14 @@
   },
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link"
   },
   "dependencies": {
     "clone": "^2.1.2"

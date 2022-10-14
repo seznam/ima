@@ -300,7 +300,7 @@ export default async (
     },
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
-      mainFields: isServer ? ['main', 'module'] : ['browser', 'module', 'main'],
+      mainFields: isServer ? ['module', 'main'] : ['browser', 'module', 'main'],
       alias: {
         // App specific aliases
         app: path.join(rootDir, 'app'),
