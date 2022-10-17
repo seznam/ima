@@ -6,7 +6,7 @@ import HttpProxy from './HttpProxy';
 import Cache from '../cache/Cache';
 import GenericError from '../error/GenericError';
 import CookieStorage from '../storage/CookieStorage';
-import { Helpers } from '../types';
+import * as Helpers from '@ima/helpers';
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
@@ -18,7 +18,7 @@ export default class HttpAgentImpl extends HttpAgent {
   protected _cookie: CookieStorage;
   protected _cacheOptions: { [key: string]: string };
   protected _defaultRequestOptions: HttpAgentRequestOptions;
-  protected _Helper: Helpers;
+  protected _Helper: typeof Helpers;
   protected _internalCacheOfPromises = new Map();
 
   /**
@@ -59,7 +59,7 @@ export default class HttpAgentImpl extends HttpAgent {
     proxy: HttpProxy,
     cache: Cache,
     cookie: CookieStorage,
-    Helper: Helpers,
+    Helper: typeof Helpers,
     config: { [key: string]: unknown }
   ) {
     super();

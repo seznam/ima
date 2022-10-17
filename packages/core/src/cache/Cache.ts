@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+export type SerializedData = {
+  [key: string]: { value: unknown; ttl: number };
+};
+
 /**
  * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
@@ -113,9 +117,7 @@ export default abstract class Cache {
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
-  deserialize(serializedData: {
-    [key: string]: { value: unknown; ttl: number };
-  }) {
+  deserialize(serializedData: SerializedData) {
     return;
   }
 }

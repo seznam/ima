@@ -7,7 +7,7 @@ export type UnknownParameters = {
 };
 
 export type UnknownPromiseParameters = {
-  [key: string]: Promise<unknown>;
+  [key: string]: unknown | Promise<unknown>;
 };
 
 export type ObjectParameters = {

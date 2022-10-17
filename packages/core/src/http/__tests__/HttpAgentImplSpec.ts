@@ -17,6 +17,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
   let options = null;
   let data: HttpAgentResponse;
   let httpConfig = null;
+  const helper = {
+    ...Helper,
+  };
 
   beforeEach(() => {
     httpConfig = {
@@ -35,7 +38,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         prefix: 'http.',
       },
     };
-    http = new HttpAgentImpl(proxy, cache, cookie, Helper, httpConfig);
+    http = new HttpAgentImpl(proxy, cache, cookie, helper, httpConfig);
 
     options = {
       ttl: httpConfig.defaultRequestOptions.ttl,
@@ -187,12 +190,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
+      /* eslint-disable jest/no-done-callback */
       it('should clone result from _internalCacheOfPromises', done => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        jest.spyOn(Helper, 'clone').mockImplementation();
+        jest.spyOn(helper, 'clone').mockImplementation();
 
         //the first call without a response in the _internalCacheOfPromises
         // @ts-ignore
@@ -201,7 +205,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(Helper.clone).not.toHaveBeenCalled();
+          expect(helper.clone).not.toHaveBeenCalled();
         });
 
         //the second call from the _internalCacheOfPromises is cloned
@@ -211,10 +215,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(Helper.clone).toHaveBeenCalled();
+          expect(helper.clone).toHaveBeenCalled();
           done();
         });
       });
+      /* eslint-enable jest/no-done-callback */
     });
   });
 });

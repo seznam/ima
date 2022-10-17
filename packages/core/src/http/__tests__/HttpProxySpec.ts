@@ -7,6 +7,7 @@ import { toMockedInstance } from 'to-mock';
 import Window from '../../window/ClientWindow';
 import GenericError from '../../error/GenericError';
 import { HttpAgentRequestOptions } from '../HttpAgent';
+import { UnknownParameters } from '@/CommonTypes';
 
 describe('ima.core.http.HttpProxy', () => {
   jest.useFakeTimers();
@@ -254,11 +255,16 @@ describe('ima.core.http.HttpProxy', () => {
         });
       }
 
-      // it('should return null body for HTTP status NO_CONTENT', async () => {
-      //   response.status = StatusCode.NO_CONTENT;
-      //   const result = await proxy.request(method, API_URL, DATA, OPTIONS);
-      //   expect(result.body).toBeNull();
-      // });
+      it('should return null body for HTTP status NO_CONTENT', async () => {
+        response = Object.assign(response, { status: StatusCode.NO_CONTENT });
+        const result = (await proxy.request(
+          method,
+          API_URL,
+          DATA,
+          OPTIONS
+        )) as UnknownParameters;
+        expect(result.body).toBeNull();
+      });
 
       it('should call provided abortController.abort on timeout', async () => {
         jest.useFakeTimers();

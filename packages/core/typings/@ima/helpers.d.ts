@@ -7,7 +7,7 @@ declare module '@ima/helpers' {
     val: T,
     circular?: boolean,
     depth?: number,
-    prototype?: any,
+    prototype?: unknown,
     includeNonEnumerable?: boolean
   ): T;
   export function assignRecursively(target, ...sources);

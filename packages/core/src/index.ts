@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import ns from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap, { Config } from './Bootstrap';
@@ -7,7 +6,7 @@ import pluginLoader from './pluginLoader';
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
 
-import Cache from './cache/Cache';
+import Cache, { SerializedData } from './cache/Cache';
 import CacheEntry from './cache/CacheEntry';
 import CacheFactory from './cache/CacheFactory';
 import CacheImpl from './cache/CacheImpl';
@@ -74,8 +73,17 @@ import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
+import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
+
 declare global {
-  let $Debug: boolean;
+  /* eslint-disable no-var */
+  var $Debug: boolean;
+  var $IMA: Record<string, unknown>;
+  /* eslint-enable no-var */
+  interface Window {
+    __IMA_HMR: ErrorOverlayEmitter;
+    FormData: FormData;
+  }
 }
 
 function getInitialImaConfigFunctions() {
@@ -107,7 +115,7 @@ function createImaApp() {
 }
 
 function getClientBootConfig(initialAppConfigFunctions: {
-  [key: string]: () => unknown;
+  [key: string]: (...args: unknown[]) => unknown;
 }): Config {
   const root = _getRoot();
 
@@ -180,9 +188,9 @@ function bootClientApp(
 
   $IMA.$Dispatcher = app.oc.get('$Dispatcher');
 
-  const cache = app.oc.get('$Cache');
-  //@ts-ignore
-  cache.deserialize($IMA.Cache || {});
+  const cache = app.oc.get('$Cache') as Cache;
+
+  cache.deserialize(($IMA.Cache || {}) as SerializedData);
 
   return app;
 }
@@ -209,15 +217,13 @@ function reviveClientApp(initialAppConfigFunctions: {
 }) {
   const root = _getRoot();
 
-  //@ts-ignore
-  root.$Debug = root.$IMA.$Debug;
+  root.$Debug = !!root.$IMA.$Debug;
 
   let app = createImaApp();
   const bootConfig = getClientBootConfig(initialAppConfigFunctions);
 
   app = bootClientApp(app, bootConfig);
 
-  //@ts-ignore
   return routeClientApp(app).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
@@ -233,8 +239,7 @@ function onLoad() {
   }
 
   return new Promise(resolve => {
-    //@ts-ignore
-    document.addEventListener('DOMContentLoaded', () => resolve(), {
+    document.addEventListener('DOMContentLoaded', () => resolve(undefined), {
       once: true,
     });
   });

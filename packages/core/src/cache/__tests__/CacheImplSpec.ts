@@ -8,11 +8,14 @@ describe('ima.core.cache.CacheImpl', () => {
   let cache: Cache;
   let cacheStorage: MapStorage;
   let cacheFactory: CacheFactory;
+  const helper = {
+    ...Helper,
+  };
 
   beforeEach(() => {
     cacheStorage = new MapStorage();
     cacheFactory = new CacheFactory();
-    cache = new Cache(cacheStorage, cacheFactory, Helper, {
+    cache = new Cache(cacheStorage, cacheFactory, helper, {
       enabled: true,
       ttl: 1000,
     });
@@ -92,11 +95,11 @@ describe('ima.core.cache.CacheImpl', () => {
 
     it('should return same value for instance of Promise', () => {
       const promise = Promise.resolve('promise');
-      jest.spyOn(Helper, 'clone').mockImplementation();
+      jest.spyOn(helper, 'clone').mockImplementation();
 
       cache.set('promise', promise);
 
-      expect(Helper.clone).not.toHaveBeenCalled();
+      expect(helper.clone).not.toHaveBeenCalled();
       expect(cache.get('promise')).toStrictEqual(promise);
     });
   });

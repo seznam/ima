@@ -21,7 +21,7 @@ function modifyWebpackConfig(config) {
 module.exports = [
   {
     limit: '4 KB',
-    path: './dist/client/index.js',
+    path: './dist/esm/client/index.js',
     import: '*',
     running: false,
     modifyWebpackConfig,
@@ -29,7 +29,7 @@ module.exports = [
   },
   {
     limit: '3 KB',
-    path: './dist/server/index.js',
+    path: './dist/esm/server/index.js',
     import: '*',
     running: false,
     modifyWebpackConfig,
