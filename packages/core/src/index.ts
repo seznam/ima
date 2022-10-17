@@ -1,6 +1,6 @@
 import ns from './Namespace';
 import ObjectContainer from './ObjectContainer';
-import Bootstrap, { Config } from './Bootstrap';
+import Bootstrap, { AppConfigFunctions, Config } from './Bootstrap';
 import pluginLoader from './pluginLoader';
 
 import initBindIma from './config/bind';
@@ -114,13 +114,14 @@ function createImaApp() {
   return { oc, bootstrap };
 }
 
-function getClientBootConfig(initialAppConfigFunctions: {
-  [key: string]: (...args: unknown[]) => unknown;
-}): Config {
+function getClientBootConfig(
+  initialAppConfigFunctions: AppConfigFunctions
+): Config {
   const root = _getRoot();
 
   if ($Debug && _isClient()) {
     if ($IMA.$Protocol !== root.location.protocol) {
+      console.log($IMA.$Protocol, root.location.protocol);
       throw new GenericError(
         `Your client's protocol is not same as server's protocol. ` +
           `For right setting protocol on the server site set ` +
@@ -129,6 +130,7 @@ function getClientBootConfig(initialAppConfigFunctions: {
     }
 
     if ($IMA.$Host !== root.location.host) {
+      console.log($IMA.$Host, root.location.host);
       throw new GenericError(
         `Your client's host is not same as server's host. For right ` +
           `setting host on the server site set 'X-Forwarded-Host' ` +
@@ -212,9 +214,7 @@ function routeClientApp(app: { bootstrap: Bootstrap; oc: ObjectContainer }) {
     });
 }
 
-function reviveClientApp(initialAppConfigFunctions: {
-  [key: string]: () => unknown;
-}) {
+async function reviveClientApp(initialAppConfigFunctions: AppConfigFunctions) {
   const root = _getRoot();
 
   root.$Debug = !!root.$IMA.$Debug;

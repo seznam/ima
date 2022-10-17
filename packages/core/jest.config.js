@@ -5,6 +5,6 @@ module.exports = {
   testEnvironment: 'jsdom',
   testRegex: '(/__tests__/).*Spec\\.ts$',
   transform: {
-    '\\.ts$': ['ts-jest'],
+    '\\.[jt]s?$': ['ts-jest'],
   },
 };

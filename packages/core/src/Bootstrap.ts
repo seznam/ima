@@ -1,5 +1,6 @@
 import * as $Helper from '@ima/helpers';
-import ns from './Namespace';
+import { StringParameters } from './CommonTypes';
+import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
 
@@ -12,19 +13,36 @@ export type Module = {
   initSettings: (...args: unknown[]) => unknown;
 };
 
+export type AppConfigFunctions = {
+  initBindApp: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    bind: StringParameters,
+    state: string
+  ) => void;
+  initRoutes: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    routes: StringParameters,
+    router: Router
+  ) => void;
+  initServicesApp: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    services?: StringParameters
+  ) => void;
+};
+
 export type Config = {
-  initRoutes: (...args: unknown[]) => unknown;
   initBindIma: (...args: unknown[]) => unknown;
-  initBindApp: (...args: unknown[]) => unknown;
-  initServicesApp: (...args: unknown[]) => unknown;
   initServicesIma: (...args: unknown[]) => unknown;
   initSettings: (...args: unknown[]) => unknown;
   plugins: { name: string; module: Module }[];
-  routes: { [key: string]: string };
-  services: { [key: string]: string };
-  settings: { [key: string]: string };
-  bind: { [key: string]: string };
-};
+  routes: StringParameters;
+  services: StringParameters;
+  settings: StringParameters;
+  bind: StringParameters;
+} & AppConfigFunctions;
 
 /**
  * Application bootstrap used to initialize the environment and the application
@@ -220,7 +238,7 @@ export default class Bootstrap {
    * Initializes the routes.
    */
   _initRoutes() {
-    const router = this._oc.get(Router);
+    const router = this._oc.get(Router) as Router;
     this._config.initRoutes(ns, this._oc, this._config.routes, router);
   }
 

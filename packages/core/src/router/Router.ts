@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import { IController } from '../controller/Controller';
+import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
@@ -97,8 +97,8 @@ export default abstract class Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string,
-    view: string,
+    controller: string | typeof Controller | (() => IController),
+    view: string | unknown | (() => unknown),
     options: RouteOptions | undefined
   ) {
     return this;

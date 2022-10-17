@@ -1,6 +1,7 @@
 import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
+import Controller, { IController } from '../controller/Controller';
 
 export type ParamValue = string | number | boolean;
 
@@ -36,12 +37,12 @@ export default abstract class AbstractRoute {
    * The full name of Object Container alias identifying the controller
    * associated with this route.
    */
-  protected _controller: object | string | (() => unknown);
+  protected _controller: string | typeof Controller | (() => IController);
   /**
    * The full name or Object Container alias identifying the view class
    * associated with this route.
    */
-  protected _view: object | string | (() => unknown);
+  protected _view: string | unknown | (() => unknown);
   /**
    * The route additional options.
    */
@@ -197,8 +198,8 @@ export default abstract class AbstractRoute {
   constructor(
     name: string,
     pathExpression: RoutePathExpression | string,
-    controller: object | string | (() => unknown),
-    view: object | string | (() => unknown),
+    controller: string | typeof Controller | (() => IController),
+    view: string | unknown | (() => unknown),
     options: RouteOptions
   ) {
     this._name = name;
@@ -343,8 +344,8 @@ export default abstract class AbstractRoute {
    * @return Promise resolving to the actual view or controller
    *  constructor function/class.
    */
-  async _getAsyncModule(module: object | string | (() => unknown)) {
-    return module.constructor.name === 'AsyncFunction'
+  async _getAsyncModule(module: string | unknown | (() => unknown)) {
+    return module?.constructor.name === 'AsyncFunction'
       ? (module as () => Promise<Record<string, unknown>>)().then(
           module => module.default ?? module
         )

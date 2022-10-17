@@ -39,8 +39,6 @@ export function typescriptDeclarationsPlugin(
           context.config.output,
           '--emitDeclarationOnly',
           '--preserveWatchOutput',
-          '-exclude',
-          '**/__tests__/**',
           ...(['dev', 'link'].includes(context.command)
             ? ['--watch', '--incremental']
             : []),

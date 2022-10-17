@@ -11,16 +11,16 @@ type WithDependencies = {
   $dependencies?: Dependencies;
 };
 
-type Constructable<T> = (new (...args: unknown[]) => T) & WithDependencies;
+type Constructable<T> = (new (...args: any[]) => T) & WithDependencies;
 
-type NonConstructable<T> = (abstract new (...args: unknown[]) => T) &
+type NonConstructable<T> = (abstract new (...args: any[]) => T) &
   WithDependencies;
 
 export type UnknownConstructable = Constructable<unknown>;
 
 export type UnknownNonConstructable = NonConstructable<unknown>;
 
-export type FactoryFunction = (...args: unknown[]) => unknown;
+export type FactoryFunction = (...args: any[]) => unknown;
 
 type EntryName =
   | string
@@ -155,7 +155,7 @@ export default class ObjectContainer {
    */
   bind(
     name: string,
-    classConstructor: UnknownConstructable | FactoryFunction,
+    classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction,
     dependencies?: Dependencies
   ) {
     if ($Debug) {
@@ -327,9 +327,9 @@ export default class ObjectContainer {
    * @return This object container.
    */
   provide(
-    interfaceConstructor: UnknownConstructable,
+    interfaceConstructor: UnknownConstructable | UnknownNonConstructable,
     implementationConstructor: UnknownConstructable,
-    dependencies: Dependencies
+    dependencies?: Dependencies
   ) {
     if ($Debug) {
       if (
@@ -606,7 +606,7 @@ export default class ObjectContainer {
    */
   _updateEntryValues(
     entry: Entry,
-    classConstructor: UnknownConstructable | FactoryFunction,
+    classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction,
     dependencies: Dependencies
   ) {
     entry.classConstructor = classConstructor;

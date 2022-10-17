@@ -60,7 +60,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
-    return this._helpers.allPromiseHash(pageResources).then(pageState => {
+    return this._helpers.allPromiseHash(pageResources).then((pageState) => {
       controller.setState(pageState as { [key: string]: unknown });
       controller.setMetaParams(pageState as { [key: string]: unknown });
 
@@ -83,7 +83,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   setState() {
-    throw new GenericError('The setState() is denied on server side.');
+    return;
   }
 
   /**

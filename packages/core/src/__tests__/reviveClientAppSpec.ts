@@ -1,13 +1,23 @@
+import { TextEncoder, TextDecoder } from 'util';
+
+globalThis.TextEncoder = TextEncoder;
+// @ts-ignore
+globalThis.TextDecoder = TextDecoder;
+
 import React from 'react';
 import jsdom from 'jsdom';
-import ControllerInterface from '../controller/Controller';
-import AbstractDocumentView from '../page/AbstractDocumentView';
-import * as ima from '../index';
+import {
+  AbstractPureComponent,
+  defaultCssClasses as cssClassNameProcessor,
+  PageRendererFactory,
+} from '@ima/react-page-renderer';
+import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/LegacyClientPageRenderer';
+import { AbstractController, getNamespace, ObjectContainer, Router, reviveClientApp, PageRenderer, ComponentUtils, ClientWindow, Window as ImaWindow } from '../index';
 
 jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
-  const resolve = (...args) => {
+  const resolve = (...args: unknown[]) => {
     if (args[1] === undefined && args[0] === '@ima/core') {
       return original.join(process.cwd(), 'index.js');
     }
@@ -27,20 +37,20 @@ describe('revive client application', () => {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com',
+    $Host: 'localhost',
   };
 
   function View() {
     return React.createElement('div', {});
   }
 
-  class DocumentView extends AbstractDocumentView {
-    static get masterElementId() {
-      return MASTER_ELEMENT_ID;
+  class DocumentView extends AbstractPureComponent {
+    render() {
+      return null;
     }
   }
 
-  class Controller extends ControllerInterface {
+  class Controller extends AbstractController {
     getHttpStatus() {
       return 200;
     }
@@ -61,7 +71,7 @@ describe('revive client application', () => {
     documentView: DocumentView,
   };
 
-  function propagateToGlobal(win) {
+  function propagateToGlobal(win: Window) {
     const forbiddenKeys = ['localStorage', 'sessionStorage'];
 
     for (let key of Object.keys(win)) {
@@ -69,11 +79,12 @@ describe('revive client application', () => {
         return;
       }
 
+      // @ts-ignore
       global[key] = global[key] ? global[key] : win[key];
     }
   }
 
-  beforeAll(done => {
+  beforeAll(() => {
     let doc = Reflect.construct(jsdom.JSDOM, [
       `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`,
     ]);
@@ -94,31 +105,56 @@ describe('revive client application', () => {
     });
 
     //mock
-    global.window.scrollTo = () => {};
-
-    done();
+    global.window.scrollTo = () => { };
   });
 
-  it('revive client app', done => {
+  it('revive client app', async () => {
     let bootConfig = Object.assign(
       {
-        initServicesApp: () => {},
-        initBindApp: () => {},
-        initRoutes: () => {},
+        initServicesApp: () => { },
+        initRoutes: () => { },
         initSettings: () => {
           return {
             prod: {
               $Http: {},
               $Page: {
-                $Render: {},
+                $Render: {
+                  masterElementId: MASTER_ELEMENT_ID
+                },
               },
             },
           };
         },
       },
       {
-        initBindApp: (ns, oc) => {
-          router = oc.get('$Router');
+        initBindApp: (ns: ReturnType<typeof getNamespace>,
+          oc: ObjectContainer) => {
+          oc.provide(ImaWindow, ClientWindow);
+
+          oc.bind('$Window', ImaWindow);
+
+          oc.bind('$CssClasses', function () {
+            return cssClassNameProcessor;
+          });
+
+          (oc.get(ComponentUtils) as ComponentUtils).register({
+            $CssClasses: '$CssClasses',
+          });
+
+          oc.inject(PageRendererFactory, [ComponentUtils]);
+          oc.bind('$PageRendererFactory', PageRendererFactory);
+
+          oc.provide(PageRenderer, ClientPageRenderer, [
+            PageRendererFactory,
+            '$Helper',
+            '$Dispatcher',
+            '$Settings',
+            Window,
+          ]);
+
+          oc.bind('$PageRenderer', PageRenderer);
+
+          router = oc.get('$Router') as Router;
           router.init(routerConfig);
           router.add('reviveClientApp', '/', Controller, View, options);
 
@@ -131,16 +167,10 @@ describe('revive client application', () => {
       }
     );
 
-    ima
-      .reviveClientApp(bootConfig)
-      .then(response => {
-        expect(response.status).toBe(200);
-        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
-        expect(response.content).toBeNull();
-        done();
-      })
-      .catch(error => {
-        done(error);
-      });
+    const response = await reviveClientApp(bootConfig)
+
+    expect(response.status).toBe(200);
+    expect(response.pageState).toStrictEqual({ hello: 'Hello' });
+    expect(response.content).toBeNull();
   });
 });

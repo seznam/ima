@@ -2,6 +2,7 @@ import DynamicRoute from './DynamicRoute';
 import StaticRoute from './StaticRoute';
 import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
+import Controller, { IController } from '../controller/Controller';
 
 /**
  * Utility factory used by router to create routes.
@@ -32,8 +33,8 @@ export default class RouteFactory {
   createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: object | string | (() => unknown),
-    view: object | string | (() => unknown),
+    controller: string | typeof Controller | (() => IController),
+    view: string | unknown | (() => unknown),
     options?: RouteOptions
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(

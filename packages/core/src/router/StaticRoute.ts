@@ -1,3 +1,4 @@
+import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, {
   LOOSE_SLASHES_REGEXP,
   ParamValue,
@@ -94,8 +95,8 @@ export default class StaticRoute extends AbstractRoute {
   constructor(
     name: string,
     pathExpression: string,
-    controller: object | string | (() => unknown),
-    view: object | string | (() => unknown),
+    controller: string | typeof Controller | (() => IController),
+    view: string | unknown | (() => unknown),
     options: RouteOptions
   ) {
     super(name, pathExpression, controller, view, options);

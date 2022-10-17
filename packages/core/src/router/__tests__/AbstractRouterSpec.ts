@@ -56,10 +56,10 @@ describe('ima.core.router.AbstractRouter', () => {
   };
   const currentRoutePath = '/currentRoutePath';
   const Controller = function Controller() {
-    return;
+    return {};
   };
   const View = function View() {
-    return;
+    return {};
   };
 
   beforeEach(() => {

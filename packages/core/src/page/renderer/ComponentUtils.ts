@@ -43,7 +43,7 @@ export default class ComponentUtils {
       | string
       | UnknownConstructable
       | FactoryFunction
-      | { [key: string]: UnknownConstructable | FactoryFunction },
+      | { [key: string]: string | UnknownConstructable | FactoryFunction },
     componentUtilityClass?: UnknownConstructable | FactoryFunction,
     referrer?: string
   ) {
@@ -74,7 +74,11 @@ export default class ComponentUtils {
           continue;
         }
 
-        this.register(alias, utilityClasses[alias], referrer);
+        this.register(
+          alias,
+          utilityClasses[alias] as UnknownConstructable | FactoryFunction,
+          referrer
+        );
       }
     }
   }

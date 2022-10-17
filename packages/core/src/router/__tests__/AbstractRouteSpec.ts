@@ -20,10 +20,10 @@ describe('ima.core.router.AbstractRoute', function () {
   let route: MockedAbstractRoute;
   const name = 'home';
   const controller = function () {
-    return;
+    return {};
   };
   const view = function () {
-    return;
+    return {};
   };
   const pathExpression = '/home/:userId/something/:somethingId/:?optional';
   const options = {

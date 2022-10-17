@@ -9,8 +9,8 @@ import PageManager from '../page/manager/PageManager';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
-import { IController } from '@/controller/Controller';
-import { StringParameters } from '@/CommonTypes';
+import Controller, { IController } from '../controller/Controller';
+import { StringParameters } from '../CommonTypes';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -122,7 +122,7 @@ export default abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: object | string | (() => unknown),
+    controller: string | typeof Controller | (() => IController),
     view: object | string | (() => unknown),
     options = {} as RouteOptions
   ) {
@@ -326,6 +326,7 @@ export default abstract class AbstractRouter extends Router {
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
+    console.log(params, options, locals);
     const errorRoute = this._routeHandlers.get(
       RouteNames.ERROR
     ) as AbstractRoute;
