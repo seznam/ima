@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- 4046f8b1: Changed mainFields resolve order -> module is before main on server
+- Updated dependencies [af6492c9]
+  - @ima/server@18.0.0-rc.11
+
 ## 18.0.0-rc.11
 
 ### Patch Changes

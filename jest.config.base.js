@@ -4,6 +4,7 @@ module.exports = {
   rootDir: '.',
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
+  setupFiles: ['<rootDir>/setupJest.js'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
   transform: {
     '\\.[jt]sx?$': [

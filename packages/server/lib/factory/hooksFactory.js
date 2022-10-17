@@ -10,6 +10,7 @@ module.exports = function hooksFactory({
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
+  processContent,
   emitter,
   instanceRecycler,
   devErrorPage,
@@ -176,12 +177,22 @@ module.exports = function hooksFactory({
   // TODO IMA@18 check redirection router.redirect
   // TODO IMA@18 router.redirection muset set isRedirection, status and url ($Response update)
   function useResponseHook() {
-    emitter.on(Event.Response, async ({ res, context }) => {
-      if (context.app && typeof context.app !== 'function') {
-        instanceRecycler.clearInstance(context.app);
-        context.app = null;
+    emitter.on(Event.BeforeResponse, async ({ res, context }) => {
+      const isRedirectResponse =
+        context.response.status >= 300 &&
+        context.response.status < 400 &&
+        context.response.url;
+
+      if (res.headersSent || isRedirectResponse || !context.response) {
+        return;
       }
 
+      context.response.content = processContent({
+        ...context,
+      });
+    });
+
+    emitter.on(Event.Response, async ({ res, context }) => {
       if (res.headersSent || !context.response) {
         return;
       }
@@ -196,6 +207,13 @@ module.exports = function hooksFactory({
       }
       res.status(context.response.status);
       res.send(context.response.content);
+    });
+
+    emitter.on(Event.AfterResponse, async ({ context }) => {
+      if (context.app && typeof context.app !== 'function') {
+        instanceRecycler.clearInstance(context.app);
+        context.app = null;
+      }
     });
   }
 

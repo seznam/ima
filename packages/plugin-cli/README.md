@@ -71,13 +71,35 @@ This package also exports 3 pre-configured `ima-plugin.config.js` configurations
 ```js
 const { createConfig } = require('@ima/plugin-cli');
 
-module.exports = createConfig();
+module.exports = generateConfig();
 ```
 
-- `createConfig(type = 'es6')` - Creates basic configuration that exports only one bundle (used at server and client)
-- `createClientServerConfig(type = 'es6')` - Creates configuration which exports client and server specific bundles. Supports JSX/TSX, preprocess pragma comments.
+- `createClientServerConfig(type = 'es6')` - Creates configuration with JS, TS support and pragma preprocessing comments. This produces client/server specific bundles.
+- `createBaseConfig(type = 'es6')` - Creates base config with JS and TS support. You can override the output module type using the function first argument.
+- `generateConfig(enableServerClientBundle = false)` - Combines both configurations above, which produces **CJS/ESM** builds, with support for TS and JS. You can optionally enable server/client specific bundles using the first function argument.
 
 > **Note:** You can override module `type` using the first argument and export other types of module syntax. For example use `commonjs` for Node-specific packages.
+
+### `package.json` entry points
+
+When a plugin is built using this cli, it should provide following entry points in the `package.json` file:
+
+```json
+"main": "./dist/cjs/index.js",
+"module": "./dist/esm/index.js",
+```
+
+And in case of server/client specific bundles:
+
+```json
+"main": "./dist/cjs/index.js",
+"module": "./dist/esm/server/index.js",
+"browser": "./dist/esm/client/index.js",
+```
+
+This makes sure that webpack uses correct entry points for each bundle, where the priorities are defined as:
+- `module` -> `main` for **server** bundle (we always prefer esm as it enables better code analys and tree-shaking)
+- `browser` -> `module` -> `main` for **client** bundle
 
 ---
 

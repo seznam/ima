@@ -33,6 +33,9 @@ export default class DocumentView extends AbstractPureComponent {
 
           {/* Inject styles from $Source.styles */}
           {'#{$Styles}'}
+          {/* Inject scripts from $Source.scripts */}
+          {'#{$RevivalSettings}'}
+          {'#{$Runner}'}
 
           <title>{this.props.metaManager.getTitle()}</title>
         </head>
@@ -41,10 +44,8 @@ export default class DocumentView extends AbstractPureComponent {
             id={this.utils.$Settings.$Page.$Render.masterElementId}
             dangerouslySetInnerHTML={{ __html: this.props.page }}
           />
-          <script
-            id='revivalSettings'
-            dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}
-          />
+          {/* Inject http cache */}
+          {'#{$RevivalCache}'}
         </body>
       </html>
     );

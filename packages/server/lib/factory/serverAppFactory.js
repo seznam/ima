@@ -6,6 +6,7 @@ const staticPageFactory = require('./staticPageFactory.js');
 const IMAInternalFactory = require('./IMAInternalFactory.js');
 const hooksFactory = require('./hooksFactory.js');
 const devErrorPageFactory = require('./devErrorPageFactory.js');
+const responseUtilsFactory = require('./responseUtilsFactory.js');
 
 module.exports = function serverAppFactory({
   environment,
@@ -18,6 +19,7 @@ module.exports = function serverAppFactory({
   serverGlobal,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
+  const { processContent } = responseUtilsFactory();
   const {
     _initApp,
     createBootConfig,
@@ -61,6 +63,7 @@ module.exports = function serverAppFactory({
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,
+    processContent,
     emitter,
     instanceRecycler,
     devErrorPage,

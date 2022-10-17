@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.5
+
+### Major Changes
+
+- 4046f8b1: Renamed `BuildConfig` type to `ImaPluginConfig`
+  Better output for build command
+  Added new optional `name` argument to `ImaPluginConfig` (default preset configuration set this to output module type but can be anything you want). This is used only in the output commands.
+
 ## 18.0.0-rc.4
 
 ### Patch Changes

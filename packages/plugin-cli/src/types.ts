@@ -9,7 +9,8 @@ export type TransformerOptions = { test: RegExp };
 
 export type Command = 'dev' | 'link' | 'build';
 
-export interface BuildConfig {
+export interface ImaPluginConfig {
+  name?: string;
   input: string;
   output: string;
   transforms?: Array<Transformer | [Transformer, TransformerOptions]>;
@@ -23,7 +24,7 @@ export type Plugin = (context: Context) => void | Promise<void>;
 export interface Context {
   command: Command;
   cwd: string;
-  config: BuildConfig;
+  config: ImaPluginConfig;
   inputDir: string;
   outputDir: string;
 }
@@ -34,7 +35,7 @@ export interface PipeContext {
   fileName: string;
   filePath: string;
   contextDir: string;
-  config: BuildConfig;
+  config: ImaPluginConfig;
   inputDir: string;
   outputDir: string;
 }
