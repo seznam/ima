@@ -1,5 +1,5 @@
 import { Controller, Dispatcher, PageRenderer } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/client/router/Router';
+import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import { ComponentType, createElement } from 'react';
 
 import BlankManagedRootView from './BlankManagedRootView';

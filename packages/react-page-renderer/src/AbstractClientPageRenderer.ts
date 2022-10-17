@@ -10,7 +10,7 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/client/router/Router';
+import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import { ComponentType } from 'react';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
@@ -66,7 +66,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   async mount(
     controller: ControllerDecorator,
     pageView: ComponentType,
-    pageResources: { [key: string]: unknown | Promise<unknown> },
+    pageResources: { [key: string]: Promise<unknown> },
     routeOptions: RouteOptions
   ) {
     const { values: defaultPageState, promises: loadedPromises } =

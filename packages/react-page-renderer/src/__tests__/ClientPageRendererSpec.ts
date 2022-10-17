@@ -7,7 +7,7 @@ import {
   RendererEvents,
   Window,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/client/router/Router';
+import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';

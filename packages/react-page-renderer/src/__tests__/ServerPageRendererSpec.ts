@@ -13,7 +13,7 @@ import {
   GenericError,
   MetaManager,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/client/router/Router';
+import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 
