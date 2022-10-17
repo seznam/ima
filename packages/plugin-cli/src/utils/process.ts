@@ -35,6 +35,7 @@ export async function parseConfigFile(cwd: string): Promise<ImaPluginConfig[]> {
       '**/node_modules/**',
       '**/dist/**',
       '**/typings/**',
+      '**/.DS_Store/**',
       'tsconfig.tsbuildinfo',
     ],
     skipTransform: [/\.(css|less|json)/],

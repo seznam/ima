@@ -19,6 +19,7 @@ import {
  */
 export async function parsePkgJSON(basePath: string): Promise<{
   name: string;
+  main: string;
 }> {
   return JSON.parse(
     await (
@@ -59,6 +60,11 @@ function timeNow() {
     s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
 
   return chalk.gray(`[${h}:${m}:${s}]`);
+}
+
+function errorHandler(error: Error) {
+  logger.error('An error occurred while wathing files');
+  console.error(error);
 }
 
 /**
@@ -139,6 +145,101 @@ export async function watch(args: Arguments) {
     logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
   }
 
+  // Get dist folder from mainfield
+  const mainFieldBaseDir = pkgJson.main
+    .split('/')
+    .reduce<string[]>((acc, cur: string) => {
+      /**
+       * Break when we have relative path to first root directory, e.g.
+       * there is no relative path indicator but there is some kind of directory
+       * present.
+       */
+      if (acc[acc.length - 1] && !['.', '..'].includes(acc[acc.length - 1])) {
+        return acc;
+      }
+
+      acc.push(cur);
+      return acc;
+    }, [])
+    .join('/');
+
+  /**
+   * Link watcher, there's only one instance per pkg, it watches the root dist
+   * directory and copies changes to the linked path.
+   */
+  if (command === 'link' && linkPath) {
+    const outputDir = path.join(cwd, mainFieldBaseDir);
+    const linkedPath = path.resolve(linkPath);
+    const linkedPkgJson = await parsePkgJSON(linkedPath);
+    const linkedBasePath = path.resolve(
+      linkedPath,
+      'node_modules',
+      pkgJson.name,
+      mainFieldBaseDir
+    );
+
+    // Clean linked folder
+    if (fs.existsSync(linkedBasePath)) {
+      await fs.promises.rm(linkedBasePath, { recursive: true });
+    }
+
+    chokidar
+      .watch([path.join(cwd, mainFieldBaseDir, '/**/*')], {
+        ignoreInitial: false,
+        ignored: [
+          '**/tsconfig.tsbuildinfo/**',
+          '**/node_modules/**',
+          '**/.DS_Store/**',
+        ],
+      })
+      .on('error', errorHandler)
+      .on('all', async (eventName, filePath) => {
+        const contextPath = path.relative(outputDir, filePath);
+        const linkedOutputPath = path.join(linkedBasePath, contextPath);
+        const linkedOutputDir = path.dirname(linkedOutputPath);
+        const outputContextPath = `./${path.join(
+          mainFieldBaseDir,
+          contextPath
+        )}`;
+
+        const elapsed = time();
+
+        switch (eventName) {
+          case 'add':
+          case 'change':
+            if (!fs.existsSync(linkedOutputDir)) {
+              await fs.promises.mkdir(linkedOutputDir, { recursive: true });
+            }
+
+            await fs.promises.copyFile(filePath, linkedOutputPath);
+            break;
+
+          case 'unlink':
+          case 'unlinkDir':
+            await fs.promises.rm(linkedOutputPath, { recursive: true });
+            break;
+
+          case 'addDir':
+            await fs.promises.mkdir(linkedOutputPath, { recursive: true });
+            break;
+        }
+
+        if (!silent) {
+          // Print info to output
+          logger.write(
+            `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
+              pkgJson.name
+            )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
+              linkedPkgJson.name
+            )}`,
+            {
+              elapsed,
+            }
+          );
+        }
+      });
+  }
+
   // Spawn watch for each config
   configurations.forEach(async config => {
     const inputDir = path.resolve(cwd, config.input);
@@ -149,6 +250,7 @@ export async function watch(args: Arguments) {
       await fs.promises.rm(outputDir, { recursive: true });
     }
 
+    // Processing pipeline context
     const context: Context = {
       command,
       inputDir,
@@ -156,74 +258,6 @@ export async function watch(args: Arguments) {
       cwd,
       outputDir,
     };
-
-    // Link watcher
-    if (command === 'link' && linkPath) {
-      const linkedPath = path.resolve(linkPath);
-      const linkedPkgJson = await parsePkgJSON(linkedPath);
-      const linkedBasePath = path.resolve(
-        linkedPath,
-        'node_modules',
-        pkgJson.name,
-        config.output
-      );
-
-      // Clean linked folder
-      if (fs.existsSync(linkedBasePath)) {
-        await fs.promises.rm(linkedBasePath, { recursive: true });
-      }
-
-      chokidar
-        .watch([path.join(outputDir, './**/*')], {
-          ignoreInitial: false,
-          ignored: ['**/tsconfig.tsbuildinfo/**', '**/node_modules/**'],
-        })
-        .on('all', async (eventName, filePath) => {
-          const contextPath = path.relative(outputDir, filePath);
-          const linkedOutputPath = path.join(linkedBasePath, contextPath);
-          const linkedOutputDir = path.dirname(linkedOutputPath);
-          const outputContextPath = `./${path.join(
-            config.output,
-            contextPath
-          )}`;
-
-          const elapsed = time();
-
-          switch (eventName) {
-            case 'add':
-            case 'change':
-              if (!fs.existsSync(linkedOutputDir)) {
-                await fs.promises.mkdir(linkedOutputDir, { recursive: true });
-              }
-
-              await fs.promises.copyFile(filePath, linkedOutputPath);
-              break;
-
-            case 'unlink':
-            case 'unlinkDir':
-              await fs.promises.rm(linkedOutputPath, { recursive: true });
-              break;
-
-            case 'addDir':
-              await fs.promises.mkdir(linkedOutputPath, { recursive: true });
-              break;
-          }
-
-          if (!silent) {
-            // Print info to output
-            logger.write(
-              `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
-                pkgJson.name
-              )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
-                linkedPkgJson.name
-              )}`,
-              {
-                elapsed,
-              }
-            );
-          }
-        });
-    }
 
     // Init processing pipeline
     const process = await createProcessingPipeline(context);
@@ -234,6 +268,7 @@ export async function watch(args: Arguments) {
         ignoreInitial: false,
         ignored: config.exclude,
       })
+      .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
         const outputContextPath = `./${path.join(config.output, contextPath)}`;

@@ -82,6 +82,7 @@ export function createClientServerConfig(
         '**/node_modules/**',
         '**/dist/**',
         '**/typings/**',
+        '**/.DS_Store/**',
         'tsconfig.tsbuildinfo',
       ],
       transforms: [
