@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 import {
   ControllerDecorator,
   Dispatcher,
@@ -20,8 +18,7 @@ import AbstractPureComponent from '../AbstractPureComponent';
 import BlankManagedRootView from '../BlankManagedRootView';
 import PageRendererFactory from '../PageRendererFactory';
 
-// @ts-ignore
-globalThis.$Debug = true;
+global.$Debug = true;
 
 class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
@@ -94,27 +91,32 @@ const pageState = {
 
 describe('ClientPageRenderer', () => {
   let pageRenderer: ClientPageRenderer;
-  const metaManager = toMockedInstance(MetaManager, {
-    getLinks: () => [],
-    getMetaNames: () => [],
-    getMetaProperties: () => [],
-  });
-  const controller = toMockedInstance(ControllerDecorator, {
-    getMetaManager: () => metaManager,
-  });
-  const $window = toMockedInstance(Window, {
-    getElementById: (id: string) => document.getElementById(id),
-  });
-  const pageRendererFactory = toMockedInstance(PageRendererFactory, {
-    getManagedRootView: () => BlankManagedRootView,
-  });
-  const dispatcher = toMockedInstance(Dispatcher);
-  const viewContainer = document.createElement('div');
-  viewContainer.id = settings.$Page.$Render.masterElementId as string;
-  viewContainer.appendChild(document.createElement('div'));
+  let metaManager: MetaManager;
+  let controller: ReturnType<typeof toMockedInstance>;
+  let $window: Window;
+  let pageRendererFactory: PageRendererFactory;
+  let dispatcher: Dispatcher;
+  let viewContainer: HTMLDivElement;
 
   beforeEach(() => {
-    document.body.appendChild(viewContainer);
+    metaManager = toMockedInstance(MetaManager, {
+      getLinks: () => [],
+      getMetaNames: () => [],
+      getMetaProperties: () => [],
+    });
+    controller = toMockedInstance(ControllerDecorator, {
+      getMetaManager: () => metaManager,
+    });
+    $window = toMockedInstance(Window, {
+      getElementById: (id: string) => document.getElementById(id),
+    });
+    pageRendererFactory = toMockedInstance(PageRendererFactory, {
+      getManagedRootView: () => BlankManagedRootView,
+    });
+    dispatcher = toMockedInstance(Dispatcher);
+    viewContainer = document.createElement('div');
+    viewContainer.id = settings.$Page.$Render.masterElementId as string;
+    viewContainer.appendChild(document.createElement('div'));
     pageRenderer = new ClientPageRenderer(
       pageRendererFactory,
       Helper,
@@ -122,18 +124,21 @@ describe('ClientPageRenderer', () => {
       settings,
       $window
     );
+
+    document.body.innerHTML = '';
+    document.body.appendChild(viewContainer);
   });
 
   describe('mount method', () => {
     beforeEach(() => {
+      jest.useRealTimers();
+
       jest
         .spyOn(pageRenderer, '_separatePromisesAndValues' as never)
         .mockReturnValue({
           values: { param1: params.param1 },
           promises: { param2: params.param2 },
         } as never);
-
-      // TODO fix test
     });
 
     it('should set default page state values', async () => {
@@ -162,33 +167,40 @@ describe('ClientPageRenderer', () => {
       );
     });
 
-    // it('should batch page state with state transaction', (done) => {
-    //   jest.useFakeTimers();
-    //   jest.spyOn(pageRenderer, '_renderPageViewToDOM' as never).mockImplementation(() => null as never);
+    it('should batch page state with state transaction', async () => {
+      jest.useFakeTimers();
+      jest
+        .spyOn(pageRenderer, '_renderPageViewToDOM' as never)
+        .mockImplementation(() => null as never);
 
-    //   pageRenderer['_viewContainer'] = document.getElementById(settings.$Page.$Render.masterElementId as string) as Element;
-    //   pageRenderer.mount(controller, () => null, {}, routeOptions).then(() => {
-    //     jest.runAllTimers();
+      jest.spyOn(controller, 'beginStateTransaction').mockImplementation();
+      jest.spyOn(controller, 'commitStateTransaction').mockImplementation();
+      jest.spyOn(controller, 'setState').mockImplementation();
 
-    //     expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
-    //     expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
-    //     expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-    //       [
-    //         [
-    //           {
-    //             "param1": "param1",
-    //           },
-    //         ],
-    //         [
-    //           {
-    //             "param2": "param2",
-    //           },
-    //         ],
-    //       ]
-    //     `);
-    //     done();
-    //   });
-    // });
+      pageRenderer['_viewContainer'] = document.getElementById(
+        settings.$Page.$Render.masterElementId as string
+      ) as Element;
+      await pageRenderer.mount(controller, () => null, {}, routeOptions);
+
+      jest.runAllTimers();
+
+      expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
+      expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
+      expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
+        [
+          [
+            {
+              "param1": "param1",
+            },
+          ],
+          [
+            {
+              "param2": "param2",
+            },
+          ],
+        ]
+      `);
+    });
 
     it('should set page meta params', async () => {
       jest.spyOn(controller, 'setMetaParams').mockImplementation();
@@ -229,6 +241,8 @@ describe('ClientPageRenderer', () => {
 
   describe('update method', () => {
     beforeEach(() => {
+      jest.useRealTimers();
+
       jest
         .spyOn(pageRenderer, '_separatePromisesAndValues' as never)
         .mockReturnValue({
@@ -251,30 +265,37 @@ describe('ClientPageRenderer', () => {
       });
     });
 
-    // it('should batch page state with state transaction', async () => {
-    //   jest.useFakeTimers();
+    it('should batch page state with state transaction', async () => {
+      jest.useFakeTimers();
 
-    //   await pageRenderer.update(controller, () => null, params);
+      jest.spyOn(controller, 'beginStateTransaction').mockImplementation();
+      jest.spyOn(controller, 'commitStateTransaction').mockImplementation();
+      jest.spyOn(controller, 'setState').mockImplementation();
 
-    //   jest.runAllTimers();
+      pageRenderer['_viewContainer'] = document.getElementById(
+        settings.$Page.$Render.masterElementId as string
+      ) as Element;
+      await pageRenderer.update(controller, () => null, params);
 
-    //   expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
-    //   expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
-    //   expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-    //         [
-    //           [
-    //             {
-    //               "param1": "param1",
-    //             },
-    //           ],
-    //           [
-    //             {
-    //               "param2": "param2",
-    //             },
-    //           ],
-    //         ]
-    //       `);
-    // });
+      jest.runAllTimers();
+
+      expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
+      expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
+      expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
+            [
+              [
+                {
+                  "param1": "param1",
+                },
+              ],
+              [
+                {
+                  "param2": "param2",
+                },
+              ],
+            ]
+          `);
+    });
 
     it('should patch promises to state', async () => {
       jest

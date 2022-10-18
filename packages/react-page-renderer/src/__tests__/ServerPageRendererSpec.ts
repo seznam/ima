@@ -1,5 +1,4 @@
 import {
-  Cache,
   ControllerDecorator,
   Dispatcher,
   GenericError,
@@ -55,7 +54,6 @@ describe('ServerPageRenderer', () => {
     getMetaNames: () => [],
     getMetaProperties: () => [],
   });
-  const cache = toMockedInstance(Cache);
   const controller = toMockedInstance(ControllerDecorator, {
     getMetaManager: () => metaManager,
   });
@@ -69,8 +67,7 @@ describe('ServerPageRenderer', () => {
       pageRendererFactory,
       Helper,
       dispatcher,
-      settings,
-      cache
+      settings
     );
   });
 
@@ -99,7 +96,6 @@ describe('ServerPageRenderer', () => {
       );
       expect(response.react).toBeTruthy();
       expect(response.reactDOM).toBeTruthy();
-      expect(response.settings).toEqual(settings);
       expect(response.status).toEqual(controller.getHttpStatus());
       expect(response.viewAdapter).toEqual(
         pageRenderer['_getViewAdapterElement']()

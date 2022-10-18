@@ -13,3 +13,4 @@ build
 packages/*/.turbo
 website/.turbo
 *.tgz
+.vscode

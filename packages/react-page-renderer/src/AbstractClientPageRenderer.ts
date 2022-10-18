@@ -74,6 +74,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       this._separatePromisesAndValues(pageResources);
 
     if (this._viewContainer && this._viewContainer.children.length) {
+      controller.setState(defaultPageState);
       await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
