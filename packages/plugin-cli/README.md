@@ -69,7 +69,7 @@ module.exports = {
 This package also exports 3 pre-configured `ima-plugin.config.js` configurations, which you can use in your plugins without a need to create your own.
 
 ```js
-const { createConfig } = require('@ima/plugin-cli');
+const { generateConfig } = require('@ima/plugin-cli');
 
 module.exports = generateConfig();
 ```
@@ -98,7 +98,7 @@ And in case of server/client specific bundles:
 ```
 
 This makes sure that webpack uses correct entry points for each bundle, where the priorities are defined as:
-- `module` -> `main` for **server** bundle (we always prefer esm as it enables better code analys and tree-shaking)
+- `module` -> `main` for **server** bundle (we always prefer esm as it enables better code analysis and tree-shaking)
 - `browser` -> `module` -> `main` for **client** bundle
 
 ---
