@@ -1,10 +1,11 @@
 import { Controller, Dispatcher, PageRenderer } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement } from 'react';
 
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, Settings, Utils } from './types';
+import { Settings, Utils } from './types';
 import ViewAdapter, { ViewAdapterProps } from './ViewAdapter';
 
 /**
@@ -13,7 +14,7 @@ import ViewAdapter, { ViewAdapterProps } from './ViewAdapter';
 export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _dispatcher: Dispatcher;
   protected _factory: PageRendererFactory;
-  protected _helpers: Helpers;
+  protected _helpers: typeof Helpers;
   protected _settings: Settings;
   protected _viewAdapter?: ComponentType;
   protected _viewAdapterProps: { [key: string]: unknown } = {};
@@ -30,7 +31,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
    */
   constructor(
     factory: PageRendererFactory,
-    helpers: Helpers,
+    helpers: typeof Helpers,
     dispatcher: Dispatcher,
     settings: Settings
   ) {

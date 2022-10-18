@@ -11,11 +11,12 @@ import {
   Window,
 } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, Settings } from './types';
+import { Settings } from './types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -46,7 +47,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    */
   constructor(
     factory: PageRendererFactory,
-    helpers: Helpers,
+    helpers: typeof Helpers,
     dispatcher: Dispatcher,
     settings: Settings,
     window: Window

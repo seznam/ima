@@ -1,11 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
-import { TextEncoder, TextDecoder } from 'util';
-
-globalThis.TextEncoder = TextEncoder;
-// @ts-ignore
-globalThis.TextDecoder = TextDecoder;
-
 import {
   Cache,
   ControllerDecorator,
@@ -117,9 +109,13 @@ describe('ServerPageRenderer', () => {
 
   describe('update method', () => {
     it('should reject promise with error', async () => {
+      let error;
+
       try {
         await pageRenderer.update();
-      } catch (error) {
+      } catch (err) {
+        error = err;
+      } finally {
         expect(error instanceof GenericError).toBeTruthy();
       }
     });

@@ -8,12 +8,13 @@ import {
   GenericError,
 } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Helpers, Settings } from './types';
+import { Settings } from './types';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -35,7 +36,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    */
   constructor(
     factory: PageRendererFactory,
-    helpers: Helpers,
+    helpers: typeof Helpers,
     dispatcher: Dispatcher,
     settings: Settings,
     cache: Cache
@@ -60,7 +61,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
   ) {
-    return this._helpers.allPromiseHash(pageResources).then((pageState) => {
+    return this._helpers.allPromiseHash(pageResources).then(pageState => {
       controller.setState(pageState as { [key: string]: unknown });
       controller.setMetaParams(pageState as { [key: string]: unknown });
 

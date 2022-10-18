@@ -1,3 +1,5 @@
+const util = require('util');
+
 var root = typeof window !== 'undefined' && window !== null ? window : global;
 root.$IMA = root.$IMA || {};
 root.$IMA.Test = true;
@@ -6,6 +8,9 @@ root.$Debug = true;
 
 root.extend = extend;
 root.using = using;
+
+root.TextEncoder = util.TextEncoder;
+root.TextDecoder = util.TextDecoder;
 
 function using(values, func) {
   for (var i = 0, count = values.length; i < count; i++) {

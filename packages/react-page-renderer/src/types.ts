@@ -1,6 +1,5 @@
 import { Dictionary, EventBus, Router } from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
-import { allPromiseHash, processContent } from '@ima/helpers';
 import { ComponentType } from 'react';
 
 import AbstractComponent from './AbstractComponent';
@@ -11,11 +10,6 @@ declare global {
     __IMA_HMR: ErrorOverlayEmitter;
   }
 }
-
-export type Helpers = {
-  allPromiseHash: typeof allPromiseHash;
-  processContent: typeof processContent;
-};
 
 export type Settings = {
   $App: unknown;

@@ -1,9 +1,3 @@
-import { TextEncoder, TextDecoder } from 'util';
-
-globalThis.TextEncoder = TextEncoder;
-// @ts-ignore
-globalThis.TextDecoder = TextDecoder;
-
 import React from 'react';
 import {
   defaultCssClasses as cssClassNameProcessor,

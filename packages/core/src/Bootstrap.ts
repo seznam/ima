@@ -1,4 +1,4 @@
-import * as $Helper from '@ima/helpers';
+import * as Helpers from '@ima/helpers';
 import { StringParameters } from './CommonTypes';
 import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';
@@ -132,9 +132,9 @@ export default class Bootstrap {
           false // Indicating static bootstraping
         );
 
-        $Helper.assignRecursivelyWithTracking(name)(
+        Helpers.assignRecursivelyWithTracking(name)(
           currentApplicationSettings,
-          $Helper.resolveEnvironmentSetting(
+          Helpers.resolveEnvironmentSetting(
             allPluginSettings,
             this._config.settings.$Env
           )
@@ -170,15 +170,15 @@ export default class Bootstrap {
       true // Indicating static dynamic bootstraping
     );
 
-    $Helper.assignRecursivelyWithTracking(name)(
+    Helpers.assignRecursivelyWithTracking(name)(
       newApplicationSettings,
-      $Helper.resolveEnvironmentSetting(
+      Helpers.resolveEnvironmentSetting(
         allPluginSettings,
         this._config.settings.$Env
       )
     );
 
-    $Helper.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
+    Helpers.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
       newApplicationSettings,
       this._config.bind
     );
