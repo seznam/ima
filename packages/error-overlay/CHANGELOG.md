@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- 97ae0a14: Updated regexp for compile error detection in runtime
+
 ## 18.0.0-rc.7
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- 97ae0a14: Fixed cached response cleaning in HttpAgent
+
 ## 18.0.0-rc.14
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.6
+
+### Patch Changes
+
+- 45603995: Changes the way link is handled which should be more performant and fix some issues with certain monorepositories.
+
 ## 18.0.0-rc.5
 
 ### Major Changes
