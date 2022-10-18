@@ -7,7 +7,7 @@ import { SourceStorage } from '@/entities';
 import { ParsedError } from '@/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
-const COMPILE_ERROR_NEEDLES_RE = [/error:\s?module/i, /module\sbuild\sfailed/i];
+const COMPILE_ERROR_NEEDLES_RE = [/error:\s?module/i, /module\s\w*\s?failed/i];
 
 async function parseError(
   error: Error | StatsError,

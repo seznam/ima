@@ -293,7 +293,7 @@ export default class HttpAgentImpl extends HttpAgent {
     const cacheKey = this.getCacheKey(method, url, data);
 
     const cachePromise = this._proxy.request(method, url, data, options).then(
-      response => this._proxyResolved(response),
+      response => this._proxyResolved(this._cleanCacheResponse(response)),
       error => this._proxyRejected(error)
     );
 
@@ -464,16 +464,6 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _saveAgentResponseToCache(agentResponse) {
-    /**
-     * Create copy of agentResponse without AbortController and AbortController signal.
-     * Setting agentResponse with AbortController or signal into cache would result in crash.
-     */
-    const { signal, ...fetchOptions } =
-      agentResponse.params.options.fetchOptions || {};
-    const { abortController, ...options } = agentResponse.params.options || {};
-
-    options.fetchOptions = fetchOptions;
-
     const cacheKey = this.getCacheKey(
       agentResponse.params.method,
       agentResponse.params.url,
@@ -484,13 +474,31 @@ export default class HttpAgentImpl extends HttpAgent {
 
     this._cache.set(
       cacheKey,
-      {
-        ...agentResponse,
-        params: { ...agentResponse.params, options },
-      },
+      this._cleanCacheResponse(agentResponse),
       agentResponse.params.options.ttl
     );
 
     agentResponse.cached = false;
+  }
+
+  /**
+   * Cleans cache response from data (abort controller), that cannot be persisted,
+   * before saving the data to the cache.
+   */
+  _cleanCacheResponse(response) {
+    /**
+     * Create copy of agentResponse without AbortController and AbortController signal.
+     * Setting agentResponse with AbortController or signal into cache would result in crash.
+     */
+    // eslint-disable-next-line no-unused-vars
+    const { signal, ...fetchOptions } =
+      response.params.options.fetchOptions || {};
+    const { abortController, ...options } = response.params.options || {};
+    options.fetchOptions = fetchOptions;
+
+    return {
+      ...response,
+      params: { ...response.params, options },
+    };
   }
 }
