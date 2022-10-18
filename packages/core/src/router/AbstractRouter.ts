@@ -326,7 +326,6 @@ export default abstract class AbstractRouter extends Router {
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
   ): Promise<void | { [key: string]: unknown }> {
-    console.log(params, options, locals);
     const errorRoute = this._routeHandlers.get(
       RouteNames.ERROR
     ) as AbstractRoute;

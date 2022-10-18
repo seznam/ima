@@ -1,10 +1,10 @@
-import { Cache, ComponentUtils, PageRenderer, Window } from '@ima/core';
+import { ComponentUtils, PageRenderer, Window } from '@ima/core';
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
   ServerPageRenderer,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/dist/client/ClientPageRenderer';
+import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/ClientPageRenderer';
 
 //eslint-disable-next-line no-unused-vars
 export default (ns, oc, config) => {
@@ -36,7 +36,6 @@ export default (ns, oc, config) => {
       '$Helper',
       '$Dispatcher',
       '$Settings',
-      Cache,
     ]);
   }
   oc.bind('$PageRenderer', PageRenderer);

@@ -11,8 +11,10 @@ type WithDependencies = {
   $dependencies?: Dependencies;
 };
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 type Constructable<T> = (new (...args: any[]) => T) & WithDependencies;
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 type NonConstructable<T> = (abstract new (...args: any[]) => T) &
   WithDependencies;
 
@@ -20,6 +22,7 @@ export type UnknownConstructable = Constructable<unknown>;
 
 export type UnknownNonConstructable = NonConstructable<unknown>;
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export type FactoryFunction = (...args: any[]) => unknown;
 
 type EntryName =
@@ -155,7 +158,10 @@ export default class ObjectContainer {
    */
   bind(
     name: string,
-    classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction,
+    classConstructor:
+      | UnknownConstructable
+      | UnknownNonConstructable
+      | FactoryFunction,
     dependencies?: Dependencies
   ) {
     if ($Debug) {
@@ -606,7 +612,10 @@ export default class ObjectContainer {
    */
   _updateEntryValues(
     entry: Entry,
-    classConstructor: UnknownConstructable | UnknownNonConstructable | FactoryFunction,
+    classConstructor:
+      | UnknownConstructable
+      | UnknownNonConstructable
+      | FactoryFunction,
     dependencies: Dependencies
   ) {
     entry.classConstructor = classConstructor;

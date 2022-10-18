@@ -79,6 +79,9 @@ declare global {
   /* eslint-disable no-var */
   var $Debug: boolean;
   var $IMA: Record<string, unknown>;
+  // Test Functions
+  var using: (values: unknown[], func: object) => void;
+  var extend: (ChildClass: object, ParentClass: object) => void;
   /* eslint-enable no-var */
   interface Window {
     __IMA_HMR: ErrorOverlayEmitter;
@@ -121,7 +124,6 @@ function getClientBootConfig(
 
   if ($Debug && _isClient()) {
     if ($IMA.$Protocol !== root.location.protocol) {
-      console.log($IMA.$Protocol, root.location.protocol);
       throw new GenericError(
         `Your client's protocol is not same as server's protocol. ` +
           `For right setting protocol on the server site set ` +
@@ -130,7 +132,6 @@ function getClientBootConfig(
     }
 
     if ($IMA.$Host !== root.location.host) {
-      console.log($IMA.$Host, root.location.host);
       throw new GenericError(
         `Your client's host is not same as server's host. For right ` +
           `setting host on the server site set 'X-Forwarded-Host' ` +

@@ -1,12 +1,21 @@
 import React from 'react';
-import jsdom from 'jsdom';
 import {
   AbstractPureComponent,
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/LegacyClientPageRenderer';
-import { AbstractController, getNamespace, ObjectContainer, Router, reviveClientApp, PageRenderer, ComponentUtils, ClientWindow, Window as ImaWindow } from '../index';
+import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/ClientPageRenderer';
+import {
+  AbstractController,
+  getNamespace,
+  ObjectContainer,
+  Router,
+  reviveClientApp,
+  PageRenderer,
+  ComponentUtils,
+  ClientWindow,
+  Window,
+} from '../index';
 
 jest.mock('fs');
 jest.mock('path', () => {
@@ -27,7 +36,7 @@ const MASTER_ELEMENT_ID = 'some-id';
 describe('revive client application', () => {
   let router = null;
 
-  let routerConfig = {
+  const routerConfig = {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
@@ -58,62 +67,50 @@ describe('revive client application', () => {
     }
   }
 
-  let options = {
+  const options = {
     onlyUpdate: false,
     autoScroll: true,
     allowSPA: true,
     documentView: DocumentView,
   };
 
-  function propagateToGlobal(win: Window) {
-    const forbiddenKeys = ['localStorage', 'sessionStorage'];
-
-    for (let key of Object.keys(win)) {
-      if (forbiddenKeys.includes(key)) {
-        return;
-      }
-
-      // @ts-ignore
-      global[key] = global[key] ? global[key] : win[key];
-    }
-  }
-
   beforeAll(() => {
-    let doc = Reflect.construct(jsdom.JSDOM, [
-      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`,
-    ]);
+    const viewContainer = document.createElement('div');
+    viewContainer.id = MASTER_ELEMENT_ID;
 
-    propagateToGlobal(doc.window);
+    document.body.innerHTML = '';
+    document.body.appendChild(viewContainer);
 
     global.$IMA = Object.assign({}, global.$IMA || {}, routerConfig, {
       $Env: 'prod',
       $Version: 1,
     });
 
-    global.document = doc.window.document;
-    global.window = doc.window;
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
-    doc.reconfigure({
-      url: `${routerConfig.$Protocol}//${routerConfig.$Host}`,
-    });
 
     //mock
-    global.window.scrollTo = () => { };
+    global.window.scrollTo = () => {
+      return;
+    };
   });
 
   it('revive client app', async () => {
-    let bootConfig = Object.assign(
+    const bootConfig = Object.assign(
       {
-        initServicesApp: () => { },
-        initRoutes: () => { },
+        initServicesApp: () => {
+          return;
+        },
+        initRoutes: () => {
+          return;
+        },
         initSettings: () => {
           return {
             prod: {
               $Http: {},
               $Page: {
                 $Render: {
-                  masterElementId: MASTER_ELEMENT_ID
+                  masterElementId: MASTER_ELEMENT_ID,
                 },
               },
             },
@@ -121,11 +118,13 @@ describe('revive client application', () => {
         },
       },
       {
-        initBindApp: (ns: ReturnType<typeof getNamespace>,
-          oc: ObjectContainer) => {
-          oc.provide(ImaWindow, ClientWindow);
+        initBindApp: (
+          ns: ReturnType<typeof getNamespace>,
+          oc: ObjectContainer
+        ) => {
+          oc.provide(Window, ClientWindow);
 
-          oc.bind('$Window', ImaWindow);
+          oc.bind('$Window', Window);
 
           oc.bind('$CssClasses', function () {
             return cssClassNameProcessor;
@@ -138,6 +137,7 @@ describe('revive client application', () => {
           oc.inject(PageRendererFactory, [ComponentUtils]);
           oc.bind('$PageRendererFactory', PageRendererFactory);
 
+          global.$Debug = false;
           oc.provide(PageRenderer, ClientPageRenderer, [
             PageRendererFactory,
             '$Helper',
@@ -145,6 +145,7 @@ describe('revive client application', () => {
             '$Settings',
             Window,
           ]);
+          global.$Debug = true;
 
           oc.bind('$PageRenderer', PageRenderer);
 
@@ -161,10 +162,10 @@ describe('revive client application', () => {
       }
     );
 
-    const response = await reviveClientApp(bootConfig)
+    const response = await reviveClientApp(bootConfig);
 
     expect(response.status).toBe(200);
     expect(response.pageState).toStrictEqual({ hello: 'Hello' });
-    expect(response.content).toBeNull();
+    expect(response.content).toBeUndefined();
   });
 });

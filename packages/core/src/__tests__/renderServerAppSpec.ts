@@ -3,6 +3,7 @@ import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
   ServerPageRenderer,
+  AbstractPureComponent,
 } from '@ima/react-page-renderer';
 import Response from '../router/Response';
 import { Response as ExpressResponse } from 'express';
@@ -63,11 +64,17 @@ describe('render server application', () => {
     $Host: 'localhost',
   };
 
+  class DocumentView extends AbstractPureComponent {
+    render() {
+      return null;
+    }
+  }
+
   const options = {
     onlyUpdate: false,
     autoScroll: true,
     allowSPA: true,
-    documentView: null,
+    documentView: DocumentView,
   };
 
   function View() {
@@ -121,6 +128,7 @@ describe('render server application', () => {
             oc.inject(PageRendererFactory, [ComponentUtils]);
             oc.bind('$PageRendererFactory', PageRendererFactory);
 
+            global.$Debug = false;
             oc.provide(PageRenderer, ServerPageRenderer, [
               PageRendererFactory,
               '$Helper',
@@ -128,6 +136,7 @@ describe('render server application', () => {
               '$Settings',
               Cache,
             ]);
+            global.$Debug = true;
 
             oc.bind('$PageRenderer', PageRenderer);
 
@@ -151,14 +160,14 @@ describe('render server application', () => {
         {
           settings: {
             $Http: {
-              cacheOptions: {}
+              cacheOptions: {},
             },
             $Page: {
               $Render: {
-                masterElementId: 'id'
-              }
-            }
-          }
+                masterElementId: 'id',
+              },
+            },
+          },
         }
       )
     );
@@ -173,6 +182,8 @@ describe('render server application', () => {
     const response = await router.route('/reviveClientApp');
 
     expect(response?.status).toBe(200);
-    expect((response?.viewAdapter as React.ReactElement).props.state).toStrictEqual({ hello: 'Hello' });
+    expect(
+      (response?.viewAdapter as React.ReactElement).props.state
+    ).toStrictEqual({ hello: 'Hello' });
   });
 });
