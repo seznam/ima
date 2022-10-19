@@ -1,8 +1,7 @@
 import Cache from './Cache';
 import CacheEntry from './CacheEntry';
 import CacheFactory from './CacheFactory';
-import MapStorage from '../storage/MapStorage';
-import SessionMapStorage from '../storage/SessionMapStorage';
+import Storage from '../storage/Storage';
 import * as Helpers from '@ima/helpers';
 import { UnknownParameters } from '../CommonTypes';
 
@@ -19,7 +18,7 @@ import { UnknownParameters } from '../CommonTypes';
  * }
  */
 export default class CacheImpl extends Cache {
-  protected _cache: MapStorage | SessionMapStorage;
+  protected _cache: Storage;
   protected _factory: CacheFactory;
   protected _Helper: typeof Helpers;
   protected _ttl: number;
@@ -34,7 +33,7 @@ export default class CacheImpl extends Cache {
    *        The cache configuration.
    */
   constructor(
-    cacheStorage: MapStorage | SessionMapStorage,
+    cacheStorage: Storage,
     factory: CacheFactory,
     Helper: typeof Helpers,
     config: { ttl: number; enabled: boolean } = { ttl: 30000, enabled: false }
