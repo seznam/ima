@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
 import CacheFactory from '../CacheFactory';
 import Cache from '../CacheImpl';
@@ -45,7 +46,7 @@ describe('ima.core.cache.CacheImpl', () => {
           number: 1,
           boolean: true,
           string: 'text',
-          array: [1, 2, 3, [4, 5]],
+          array: [1, 2, 3, [4, 5], { number: 1 }],
         },
       };
 
@@ -53,16 +54,20 @@ describe('ima.core.cache.CacheImpl', () => {
 
       object.object.number = 2;
       object.object.array[3] = 4;
+      //@ts-ignore
+      object.object.array[4].number = 2;
 
       const cacheObject = cache.get('object') as {
         object: {
           number: number;
-          array: (number | number[])[];
+          array: (number | number[] | { [key: string]: number })[];
         };
       };
 
       expect(cacheObject?.object.number).toBe(1);
       expect(cacheObject?.object.array[3]).toStrictEqual([4, 5]);
+      //@ts-ignore
+      expect(cacheObject.object.array[4].number).toBe(1);
     });
 
     it('should returns deep clone', () => {
@@ -75,7 +80,7 @@ describe('ima.core.cache.CacheImpl', () => {
           number: 1,
           boolean: true,
           string: 'text',
-          array: [1, 2, 3, [4, 5]],
+          array: [1, 2, 3, [4, 5], { number: 1 }],
         },
       };
 
@@ -89,6 +94,8 @@ describe('ima.core.cache.CacheImpl', () => {
 
       cloneObject.object.number = 2;
       cloneObject.object.array[3] = 4;
+      //@ts-ignore
+      cloneObject.object.array[4].number = 2;
 
       expect(cache.get('object')).toStrictEqual(object);
     });
