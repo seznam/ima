@@ -1,6 +1,7 @@
+import MetaManager from '../MetaManager';
 import MetaManagerImpl from '../MetaManagerImpl';
 
-let metaManager;
+let metaManager: MetaManager;
 
 describe('ima.core.meta.MetaManager', () => {
   beforeEach(() => {
@@ -12,11 +13,11 @@ describe('ima.core.meta.MetaManager', () => {
     metaManager.setMetaProperty('beta:property', 'two');
     metaManager.setLink('gamma', 'three');
 
-    expect(metaManager.getMetaName('alpha')).toBe({ content: 'one' });
-    expect(metaManager.getMetaProperty('beta:property')).toBe({
+    expect(metaManager.getMetaName('alpha')).toEqual({ content: 'one' });
+    expect(metaManager.getMetaProperty('beta:property')).toEqual({
       content: 'two',
     });
-    expect(metaManager.getLink('gamma')).toBe({ href: 'three' });
+    expect(metaManager.getLink('gamma')).toEqual({ href: 'three' });
   });
 
   it('should save name, property, and link as object when otherAttrs is supplied', () => {
