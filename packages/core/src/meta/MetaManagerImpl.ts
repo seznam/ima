@@ -65,7 +65,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getMetaName(name: string) {
-    return this._metaName.get(name) || { content: '' };
+    return this._metaName.get(name) || super.getMetaName(name);
   }
 
   /**
@@ -90,7 +90,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getMetaProperty(property: string) {
-    return this._metaProperty.get(property) || { content: '' };
+    return this._metaProperty.get(property) || super.getMetaProperty(property);
   }
 
   /**
@@ -111,7 +111,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getLink(rel: string) {
-    return this._link.get(rel) || { href: '' };
+    return this._link.get(rel) || super.getLink(rel);
   }
 
   /**
