@@ -19,28 +19,28 @@ jest.mock('fs', () => {
 });
 
 describe('responseUtilsFactory', () => {
-  const { renderStyles } = responseUtilsFactory();
+  const { _renderStyles } = responseUtilsFactory();
 
   afterAll(() => {
     jest.resetAllMocks();
   });
 
-  describe('renderStyles', () => {
+  describe('_renderStyles', () => {
     it('should return empty string for invalid input', () => {
-      expect(renderStyles()).toBe('');
-      expect(renderStyles([])).toBe('');
-      expect(renderStyles({})).toBe('');
-      expect(renderStyles(null)).toBe('');
-      expect(renderStyles('/static/app.css')).toBe('');
+      expect(_renderStyles()).toBe('');
+      expect(_renderStyles([])).toBe('');
+      expect(_renderStyles({})).toBe('');
+      expect(_renderStyles(null)).toBe('');
+      expect(_renderStyles('/static/app.css')).toBe('');
     });
 
     it('should return link stylesheet tags for string items', () => {
-      expect(renderStyles(['/static/app.css'])).toBe(
+      expect(_renderStyles(['/static/app.css'])).toBe(
         '<link rel="stylesheet" href="/static/app.css" />'
       );
 
       expect(
-        renderStyles([
+        _renderStyles([
           '/static/app1.css',
           '/static/app2.css',
           '/static/app3.css',
@@ -54,7 +54,7 @@ describe('responseUtilsFactory', () => {
 
     it('should return link tag with custom attributes', () => {
       expect(
-        renderStyles([
+        _renderStyles([
           [
             '/static/app.css',
             { type: 'text/css', rel: 'preload', as: 'style' },
@@ -67,7 +67,7 @@ describe('responseUtilsFactory', () => {
 
     it('should insert custom mini script for fallback sources', () => {
       expect(
-        renderStyles([
+        _renderStyles([
           [
             '/static/app.css',
             { rel: 'stylesheet', fallback: '/static/fallback.css' },

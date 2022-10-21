@@ -9,7 +9,7 @@ module.exports = function responseUtilsFactory() {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
 
-  function renderStyles(styles) {
+  function _renderStyles(styles) {
     if (!Array.isArray(styles)) {
       return '';
     }
@@ -42,7 +42,7 @@ module.exports = function responseUtilsFactory() {
       .join('');
   }
 
-  function getRevivalSettings({ bootConfig, response }) {
+  function _getRevivalSettings({ bootConfig, response }) {
     const { settings } = bootConfig;
 
     return `(function (root) {
@@ -63,24 +63,48 @@ module.exports = function responseUtilsFactory() {
     `;
   }
 
-  function getRevivalCache({ response }) {
+  function _getRevivalCache({ response }) {
     return `(function (root) {
       root.$IMA = root.$IMA || {};
-      $IMA.Cache = ${response?.cache?.serialize?.() ?? JSON.stringify({})};
+      $IMA.Cache = ${response?.page?.cache ?? JSON.stringify({})};
     })(typeof window !== 'undefined' && window !== null ? window : global);
     `;
   }
 
-  function renderScripts(scripts) {
+  function _renderScripts(scripts) {
     if (!Array.isArray(scripts)) {
       return '';
     }
 
-    return scripts.map(renderScript).join('');
+    return scripts.map(_renderScript).join('');
   }
 
-  function renderScript(script) {
+  function _renderScript(script) {
     return `<script>${script}</script>`;
+  }
+
+  function _setCookieHeaders({ res, context }) {
+    for (let [name, param] of context?.page?.cookie ?? []) {
+      const options = _prepareCookieOptionsForExpress(param.options);
+      res.cookie(name, param.value, options);
+    }
+  }
+
+  function _prepareCookieOptionsForExpress(options) {
+    let expressOptions = Object.assign({}, options);
+
+    if (typeof expressOptions.maxAge === 'number') {
+      expressOptions.maxAge *= 1000;
+    } else {
+      delete expressOptions.maxAge;
+    }
+
+    return expressOptions;
+  }
+
+  function sendResponseHeaders({ context, res }) {
+    _setCookieHeaders({ res, context });
+    res.set(context?.page?.headers ?? {});
   }
 
   // TODO IMA@18 add tests
@@ -93,17 +117,17 @@ module.exports = function responseUtilsFactory() {
     const interpolateRe = /#{([\w\d\-._$]+)}/g;
     const extendedSettings = { ...settings };
     const interpolate = (match, envKey) => extendedSettings[envKey];
-    const revivalSettings = getRevivalSettings({ response, bootConfig });
-    const revivalCache = getRevivalCache({ response });
+    const revivalSettings = _getRevivalSettings({ response, bootConfig });
+    const revivalCache = _getRevivalCache({ response });
 
     // Preprocess source and styles
     const { styles, ...source } = settings.$Source(response);
-    const $Styles = renderStyles(styles).replace(interpolateRe, interpolate);
-    const $RevivalSettings = renderScript(revivalSettings).replace(
+    const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
+    const $RevivalSettings = _renderScript(revivalSettings).replace(
       interpolateRe,
       interpolate
     );
-    const $RevivalCache = renderScript(revivalCache).replace(
+    const $RevivalCache = _renderScript(revivalCache).replace(
       interpolateRe,
       interpolate
     );
@@ -118,10 +142,10 @@ module.exports = function responseUtilsFactory() {
     extendedSettings.$RevivalCache = $RevivalCache;
 
     // Preprocess $Runner (with $Source already processed)
-    const $Runner = renderScript(runner).replace(interpolateRe, interpolate);
+    const $Runner = _renderScript(runner).replace(interpolateRe, interpolate);
     extendedSettings.$Runner = $Runner;
 
-    const $Scripts = renderScripts([
+    const $Scripts = _renderScripts([
       revivalSettings,
       runner,
       revivalCache,
@@ -132,5 +156,5 @@ module.exports = function responseUtilsFactory() {
     return response.content.replace(interpolateRe, interpolate);
   }
 
-  return { processContent, renderStyles };
+  return { processContent, sendResponseHeaders, _renderStyles };
 };

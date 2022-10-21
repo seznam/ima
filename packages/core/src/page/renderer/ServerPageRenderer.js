@@ -43,14 +43,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     super(factory, Helper, ReactDOMServer, dispatcher, settings);
 
     /**
-     * Utility for sending the page markup to the client as a response to
-     * the current HTTP request.
-     *
-     * @type {Response}
-     */
-    this._response = response;
-
-    /**
      * The resource cache, caching the results of all HTTP requests made by
      * the services using by the rendered page. The state of the cache will
      * then be serialized and sent to the client to re-initialize the page
@@ -67,10 +59,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @method mount
    */
   mount(controller, view, pageResources, routeOptions) {
-    if (this._response.isResponseSent()) {
-      return Promise.resolve(this._response.getResponseParams());
-    }
-
     return this._Helper
       .allPromiseHash(pageResources)
       .then(pageState =>
@@ -165,17 +153,19 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    *         pageState: Object<string, *>}}
    */
   _renderPage(controller, view, pageState, routeOptions) {
-    if (!this._response.isResponseSent()) {
-      controller.setState(pageState);
-      controller.setMetaParams(pageState);
+    controller.setState(pageState);
+    controller.setMetaParams(pageState);
 
-      this._response
-        .status(controller.getHttpStatus())
-        .setPageState(pageState)
-        .send(this._renderPageContentToString(controller, view, routeOptions));
-    }
+    const content = this._renderPageContentToString(
+      controller,
+      view,
+      routeOptions
+    );
 
-    return this._response.getResponseParams();
+    return {
+      status: controller.getHttpStatus(),
+      content,
+    };
   }
 
   /**

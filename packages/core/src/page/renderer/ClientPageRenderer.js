@@ -82,7 +82,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState,
         };
       })
       .catch(error => this._handleError(error));

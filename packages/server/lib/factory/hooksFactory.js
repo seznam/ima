@@ -11,6 +11,7 @@ module.exports = function hooksFactory({
   _getRouteInfo,
   _generateAppResponse,
   processContent,
+  sendResponseHeaders,
   emitter,
   instanceRecycler,
   devErrorPage,
@@ -175,7 +176,6 @@ module.exports = function hooksFactory({
   }
 
   // TODO IMA@18 check redirection router.redirect
-  // TODO IMA@18 router.redirection muset set isRedirection, status and url ($Response update)
   function useResponseHook() {
     emitter.on(Event.BeforeResponse, async ({ res, context }) => {
       const isRedirectResponse =
@@ -187,6 +187,21 @@ module.exports = function hooksFactory({
         return;
       }
 
+      const isAppExists = context.app && typeof context.app !== 'function';
+
+      if (isAppExists) {
+        const state = context.app.oc.get('$PageStateManager').getState();
+        const cache = context.app.oc.get('$Cache').serialize();
+        const { headers, cookie } = context.app.oc
+          .get('$Response')
+          .getResponseParams();
+
+        context.response.page = {
+          ...context.response.page,
+          ...{ state, cache, headers, cookie },
+        };
+      }
+
       context.response.content = processContent({
         ...context,
       });
@@ -196,6 +211,8 @@ module.exports = function hooksFactory({
       if (res.headersSent || !context.response) {
         return;
       }
+
+      sendResponseHeaders({ res, context });
 
       if (
         context.response.status >= 300 &&
