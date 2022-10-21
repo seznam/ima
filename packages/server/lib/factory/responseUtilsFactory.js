@@ -156,5 +156,10 @@ module.exports = function responseUtilsFactory() {
     return response.content.replace(interpolateRe, interpolate);
   }
 
-  return { processContent, sendResponseHeaders, _renderStyles };
+  return {
+    processContent,
+    sendResponseHeaders,
+    _renderStyles,
+    _prepareCookieOptionsForExpress,
+  };
 };

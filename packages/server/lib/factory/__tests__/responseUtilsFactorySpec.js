@@ -19,7 +19,8 @@ jest.mock('fs', () => {
 });
 
 describe('responseUtilsFactory', () => {
-  const { _renderStyles } = responseUtilsFactory();
+  const { _renderStyles, _prepareCookieOptionsForExpress } =
+    responseUtilsFactory();
 
   afterAll(() => {
     jest.resetAllMocks();
@@ -76,6 +77,23 @@ describe('responseUtilsFactory', () => {
       ).toBe(
         `<link href="/static/app.css" onerror="this.onerror=null;this.href='/static/fallback.css';" rel="stylesheet" />`
       );
+    });
+  });
+
+  describe('', () => {
+    it('should convert cookie maxAge to ms for Express', () => {
+      let options = { maxAge: 1 };
+      let expressOptions = _prepareCookieOptionsForExpress(options);
+      expect(options.maxAge).toBe(1);
+      expect(expressOptions.maxAge).toBe(1000);
+    });
+
+    it('should remove cookie maxAge: null for Express', () => {
+      // Because Express converts null to 0, which is not intended.
+      let options = { maxAge: null };
+      let expressOptions = _prepareCookieOptionsForExpress(options);
+      expect(options.maxAge).toBeNull();
+      expect(expressOptions.maxAge).toBeUndefined();
     });
   });
 });
