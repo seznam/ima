@@ -49,8 +49,11 @@ describe('ima.core.router.ServerRouter', () => {
 
     router.redirect(url, options);
 
-    expect(response.redirect).toHaveBeenCalledWith(url, 303, {
-      'Custom-header': 'Some custom value',
+    expect(response.redirect).toHaveBeenCalledWith(url, {
+      httpStatus: 303,
+      headers: {
+        'Custom-header': 'Some custom value',
+      },
     });
   });
 });

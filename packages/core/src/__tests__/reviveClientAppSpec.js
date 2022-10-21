@@ -135,7 +135,6 @@ describe('revive client application', () => {
       .reviveClientApp(bootConfig)
       .then(response => {
         expect(response.status).toBe(200);
-        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         expect(response.content).toBeNull();
         done();
       })

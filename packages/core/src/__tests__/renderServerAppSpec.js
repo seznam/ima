@@ -113,7 +113,6 @@ describe('render server application', () => {
       .then(response => {
         expect(response.status).toBe(200);
         expect(response.content).toBe('html');
-        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         done();
       })
       .catch(error => {

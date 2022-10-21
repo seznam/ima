@@ -19,6 +19,10 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.set('aaa', 123);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should store value for key', () => {
     cache.set('bbb', 456);
     cache.set('ccc', 321, 2000);
@@ -84,11 +88,9 @@ describe('ima.core.cache.CacheImpl', () => {
 
     it('should return same value for instance of Promise', () => {
       let promise = Promise.resolve('promise');
-      jest.spyOn(Helper, 'clone').mockImplementation();
 
       cache.set('promise', promise);
 
-      expect(Helper.clone).not.toHaveBeenCalled();
       expect(cache.get('promise')).toStrictEqual(promise);
     });
   });

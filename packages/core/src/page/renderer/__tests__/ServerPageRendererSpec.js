@@ -108,24 +108,6 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       param2: Promise.resolve('param2'),
     };
 
-    it('should return already sent data to the client', done => {
-      let responseParams = {
-        content: '',
-        status: 200,
-        pageState: loadedPageState,
-      };
-
-      jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
-      jest.spyOn(response, 'getResponseParams').mockReturnValue(responseParams);
-
-      pageRenderer
-        .mount(controller, view, loadedPageState, routeOptions)
-        .then(page => {
-          expect(page).toStrictEqual(responseParams);
-          done();
-        });
-    });
-
     it('should call _renderPage method', done => {
       jest.spyOn(pageRenderer, '_renderPage').mockImplementation();
 
@@ -143,35 +125,17 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       resource: 'json',
     };
 
-    it('should return already sent data to client', () => {
-      let responseParams = {
-        content: '',
-        status: 200,
-        pageState: fetchedResource,
-      };
-
-      jest.spyOn(response, 'isResponseSent').mockReturnValue(true);
-      jest.spyOn(response, 'getResponseParams').mockReturnValue(responseParams);
-
-      expect(
-        pageRenderer._renderPage(controller, view, fetchedResource)
-      ).toStrictEqual(responseParams);
-    });
-
     describe('render new page', () => {
-      let responseParams = { status: 200, content: '', pageState: {} };
+      let responseParams = { status: 200, content: '' };
       let pageRenderResponse = null;
 
       beforeEach(() => {
         jest.spyOn(controller, 'setState').mockImplementation();
         jest.spyOn(controller, 'setMetaParams').mockImplementation();
-        jest.spyOn(controller, 'getHttpStatus').mockImplementation();
+        jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
         jest
           .spyOn(pageRenderer, '_renderPageContentToString')
-          .mockImplementation();
-        jest.spyOn(response, 'status').mockReturnValue(response);
-        jest.spyOn(response, 'setPageState').mockReturnValue(response);
-        jest.spyOn(response, 'send').mockReturnValue(response);
+          .mockReturnValue('');
         jest
           .spyOn(response, 'getResponseParams')
           .mockReturnValue(responseParams);
@@ -193,9 +157,6 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       });
 
       it('should send response for request', () => {
-        expect(response.status).toHaveBeenCalled();
-        expect(response.setPageState).toHaveBeenCalled();
-        expect(response.send).toHaveBeenCalled();
         expect(controller.getHttpStatus).toHaveBeenCalled();
         expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(
           controller,
@@ -283,7 +244,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     });
 
     it('should return page content', () => {
-      expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
+      expect(pageContent).toBe(appMarkup);
     });
   });
 });

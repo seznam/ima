@@ -227,7 +227,6 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(response).toStrictEqual({
             status: 200,
             content: null,
-            pageState: pageState,
           });
           done();
         })

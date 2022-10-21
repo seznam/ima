@@ -1,5 +1,4 @@
 import toMock from 'to-mock';
-import * as Helper from '@ima/helpers';
 
 import Cache from 'src/cache/Cache';
 import GenericError from 'src/error/GenericError';
@@ -11,6 +10,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
   let MockedCache = toMock(Cache);
   let MockedHttpAgentProxy = toMock(HttpAgentProxy);
   let MockedCookieStorage = toMock(CookieStorage);
+  let MockedHelper = {
+    clone: jest.fn(),
+  };
 
   let proxy = null;
   let http = null;
@@ -40,13 +42,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
         prefix: 'http.',
       },
     };
-    http = new HttpAgentImpl(proxy, cache, cookie, Helper, httpConfig);
+    http = new HttpAgentImpl(proxy, cache, cookie, MockedHelper, httpConfig);
 
     options = {
       ttl: httpConfig.defaultRequestOptions.ttl,
       timeout: httpConfig.defaultRequestOptions.timeout,
       repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
       headers: {},
+      fetchOptions: {},
       cache: true,
       withCredentials: true,
       postProcessor: httpConfig.defaultRequestOptions.postProcessor,
@@ -184,15 +187,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
           return Promise.resolve(data);
         });
 
-        jest.spyOn(Helper, 'clone').mockImplementation();
-
         //the first call without a response in the _internalCacheOfPromises
         http[method](
           data.params.url,
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(Helper.clone).not.toHaveBeenCalled();
+          expect(MockedHelper.clone).not.toHaveBeenCalled();
         });
 
         //the second call from the _internalCacheOfPromises is cloned
@@ -201,7 +202,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(Helper.clone).toHaveBeenCalled();
+          expect(MockedHelper.clone).toHaveBeenCalled();
           done();
         });
       });
