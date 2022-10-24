@@ -3,10 +3,10 @@ import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement } from 'react';
 
-import BlankManagedRootView from './BlankManagedRootView';
+import BlankManagedRootView from '../component/BlankManagedRootView';
 import PageRendererFactory from './PageRendererFactory';
-import { Settings, Utils } from './types';
-import ViewAdapter, { ViewAdapterProps } from './ViewAdapter';
+import { Settings, Utils } from '../types';
+import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.

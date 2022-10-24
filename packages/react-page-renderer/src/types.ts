@@ -2,8 +2,8 @@ import { Dictionary, EventBus, Router } from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 import { ComponentType } from 'react';
 
-import AbstractComponent from './AbstractComponent';
-import AbstractPureComponent from './AbstractPureComponent';
+import AbstractComponent from './component/AbstractComponent';
+import AbstractPureComponent from './component/AbstractPureComponent';
 
 declare global {
   interface Window {

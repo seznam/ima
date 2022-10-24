@@ -16,7 +16,7 @@ import { ComponentType } from 'react';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Settings } from './types';
+import { Settings } from '../types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by

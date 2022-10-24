@@ -11,7 +11,7 @@ describe('ima.core.PageFactory', () => {
   const namespacePathUnit = 'test.unit';
   ns.namespace(namespacePathUnit);
 
-  class mockExtension extends Extension {
+  class MockExtension extends Extension {
     dependency: unknown;
 
     static get $dependencies() {
@@ -25,9 +25,9 @@ describe('ima.core.PageFactory', () => {
     }
   }
 
-  class mockExtension2 extends mockExtension {}
+  class MockExtension2 extends MockExtension {}
 
-  class classConstructor extends AbstractController {
+  class ClassConstructor extends AbstractController {
     dependency: unknown;
 
     static get $dependencies() {
@@ -41,17 +41,17 @@ describe('ima.core.PageFactory', () => {
     }
   }
 
-  class classConstructorWithExtensions extends AbstractController {
+  class ClassConstructorWithExtensions extends AbstractController {
     dependency: unknown;
 
     static get $dependencies() {
       return [];
     }
 
-    static extensionsTest: IExtension[] = [mockExtension];
+    static extensionsTest: IExtension[] = [MockExtension];
 
     static get $extensions() {
-      return classConstructorWithExtensions.extensionsTest;
+      return ClassConstructorWithExtensions.extensionsTest;
     }
 
     constructor(dependency: unknown) {
@@ -69,63 +69,63 @@ describe('ima.core.PageFactory', () => {
   describe('createController method', () => {
     it('should create controller with extension', () => {
       const controller = pageFactory.createController(
-        classConstructorWithExtensions
+        ClassConstructorWithExtensions
       );
 
       expect(controller.getExtensions()).toHaveLength(1);
-      expect(controller.getExtension(mockExtension)).toBeInstanceOf(
-        mockExtension
+      expect(controller.getExtension(MockExtension)).toBeInstanceOf(
+        MockExtension
       );
     });
 
     it('should create controller with extension in routes', () => {
-      const controller = pageFactory.createController(classConstructor, {
-        extensions: [mockExtension2],
+      const controller = pageFactory.createController(ClassConstructor, {
+        extensions: [MockExtension2],
       });
 
       expect(controller.getExtensions()).toHaveLength(1);
-      expect(controller.getExtension(mockExtension2)).toBeInstanceOf(
-        mockExtension2
+      expect(controller.getExtension(MockExtension2)).toBeInstanceOf(
+        MockExtension2
       );
     });
 
     it('should create controller with own extension and extension in route', () => {
       const controller = pageFactory.createController(
-        classConstructorWithExtensions,
-        { extensions: [mockExtension2] }
+        ClassConstructorWithExtensions,
+        { extensions: [MockExtension2] }
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
-      expect(controller.getExtensions()[0]).toBeInstanceOf(mockExtension2);
-      expect(controller.getExtensions()[1]).toBeInstanceOf(mockExtension);
-      expect(controller.getExtension(mockExtension)).toBeInstanceOf(
-        mockExtension
+      expect(controller.getExtensions()[0]).toBeInstanceOf(MockExtension2);
+      expect(controller.getExtensions()[1]).toBeInstanceOf(MockExtension);
+      expect(controller.getExtension(MockExtension)).toBeInstanceOf(
+        MockExtension
       );
-      expect(controller.getExtension(mockExtension2)).toBeInstanceOf(
-        mockExtension2
+      expect(controller.getExtension(MockExtension2)).toBeInstanceOf(
+        MockExtension2
       );
     });
 
     it('should create controller with OC constant spread extensions', () => {
-      oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
+      oc.constant('$mockedExtensions', [MockExtension, MockExtension2]);
 
-      classConstructorWithExtensions.extensionsTest = ['...$mockedExtensions'];
+      ClassConstructorWithExtensions.extensionsTest = ['...$mockedExtensions'];
       const controller = pageFactory.createController(
-        classConstructorWithExtensions
+        ClassConstructorWithExtensions
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
       expect(controller.getExtensions()[0]).toBe(
         (oc.get('...$mockedExtensions') as [0])[0]
       );
-      expect(controller.getExtensions()[0]).toBeInstanceOf(mockExtension);
-      classConstructorWithExtensions.extensionsTest = [];
+      expect(controller.getExtensions()[0]).toBeInstanceOf(MockExtension);
+      ClassConstructorWithExtensions.extensionsTest = [];
     });
 
     it('should create controller with OC constant extensions in router', () => {
-      oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
+      oc.constant('$mockedExtensions', [MockExtension, MockExtension2]);
 
-      const controller = pageFactory.createController(classConstructor, {
+      const controller = pageFactory.createController(ClassConstructor, {
         extensions: ['...$mockedExtensions'],
       });
 
@@ -133,27 +133,27 @@ describe('ima.core.PageFactory', () => {
       expect(controller.getExtensions()[0]).toBe(
         (oc.get('...$mockedExtensions') as [0])[0]
       );
-      expect(controller.getExtensions()[0]).toBeInstanceOf(mockExtension);
+      expect(controller.getExtensions()[0]).toBeInstanceOf(MockExtension);
     });
 
     it('should create controller with array of extensions', () => {
-      const extensions = [mockExtension, mockExtension2];
+      const extensions = [MockExtension, MockExtension2];
 
-      classConstructorWithExtensions.extensionsTest = extensions;
+      ClassConstructorWithExtensions.extensionsTest = extensions;
       const controller = pageFactory.createController(
-        classConstructorWithExtensions
+        ClassConstructorWithExtensions
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
       expect(controller.getExtensions()[0]).toBeInstanceOf(extensions[0]);
       expect(controller.getExtensions()[1]).toBeInstanceOf(extensions[1]);
-      classConstructorWithExtensions.extensionsTest = [];
+      ClassConstructorWithExtensions.extensionsTest = [];
     });
 
     it('should create controller with array of extensions in route', () => {
-      const extensions = [mockExtension, mockExtension2];
+      const extensions = [MockExtension, MockExtension2];
 
-      const controller = pageFactory.createController(classConstructor, {
+      const controller = pageFactory.createController(ClassConstructor, {
         extensions,
       });
 
@@ -163,15 +163,15 @@ describe('ima.core.PageFactory', () => {
     });
 
     it('should throw when spread not used in OC constant', () => {
-      oc.constant('$mockedExtensions', [mockExtension, mockExtension2]);
+      oc.constant('$mockedExtensions', [MockExtension, MockExtension2]);
 
-      classConstructorWithExtensions.extensionsTest = ['$mockedExtensions'];
+      ClassConstructorWithExtensions.extensionsTest = ['$mockedExtensions'];
       expect(() =>
-        pageFactory.createController(classConstructorWithExtensions)
+        pageFactory.createController(ClassConstructorWithExtensions)
       ).toThrow(
         'ima.core.AbstractController:addExtension: Expected instance of an extension, got function.'
       );
-      classConstructorWithExtensions.extensionsTest = [];
+      ClassConstructorWithExtensions.extensionsTest = [];
     });
   });
 });

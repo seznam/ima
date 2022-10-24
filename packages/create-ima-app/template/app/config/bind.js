@@ -4,7 +4,7 @@ import {
   PageRendererFactory,
   ServerPageRenderer,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/ClientPageRenderer';
+import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer';
 
 //eslint-disable-next-line no-unused-vars
 export default (ns, oc, config) => {

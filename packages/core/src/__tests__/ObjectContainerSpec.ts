@@ -8,7 +8,7 @@ import { UnknownParameters } from '../CommonTypes';
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;
 
-  class classConstructorWithDependencies {
+  class ClassConstructorWithDependencies {
     dependency: unknown;
 
     static get $dependencies() {
@@ -22,8 +22,8 @@ describe('ima.core.ObjectContainer', () => {
 
   const alias = 'alias';
   const alias2 = 'alias2';
-  class classParent {}
-  class classConstructor extends classParent {
+  class ClassParent {}
+  class ClassConstructor extends ClassParent {
     dependency: unknown;
 
     constructor(dependency: unknown) {
@@ -33,8 +33,8 @@ describe('ima.core.ObjectContainer', () => {
     }
   }
 
-  class classDependency {}
-  const dependencies = [classDependency, classConstructorWithDependencies];
+  class ClassDependency {}
+  const dependencies = [ClassDependency, ClassConstructorWithDependencies];
 
   const constantName = 'constant';
   const constantValue = 'value';
@@ -46,7 +46,7 @@ describe('ima.core.ObjectContainer', () => {
   };
 
   const spreadConstantName = 'spreadConstant';
-  const spreadConstantValue = [classParent, classParent];
+  const spreadConstantValue = [ClassParent, ClassParent];
 
   const namespacePathUnit = 'test.unit';
   const namespacePathOC = 'test.unit.ObjectContainer';
@@ -114,35 +114,35 @@ describe('ima.core.ObjectContainer', () => {
       oc.clear();
     });
 
-    it('should throw error, if classConstructor parameter is not function', () => {
+    it('should throw error, if ClassConstructor parameter is not function', () => {
       expect(() => {
         // @ts-ignore
         oc.inject(alias, dependencies);
       }).toThrow();
     });
 
-    it('should throw error, if classConstructor is registered and object container is locked for plugin', () => {
-      oc.inject(classConstructor, dependencies);
+    it('should throw error, if ClassConstructor is registered and object container is locked for plugin', () => {
+      oc.inject(ClassConstructor, dependencies);
       oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
 
       expect(() => {
-        oc.inject(classConstructor, dependencies);
+        oc.inject(ClassConstructor, dependencies);
       }).toThrow();
     });
 
     it('should be create new instance of entry and set it to entries', () => {
       jest.spyOn(oc, '_createEntry');
 
-      oc.inject(classConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
       expect(
-        oc['_entries'].get(classConstructor)!.classConstructor
-      ).toStrictEqual(classConstructor);
-      expect(oc['_entries'].get(classConstructor)!.dependencies).toStrictEqual(
+        oc['_entries'].get(ClassConstructor)!.classConstructor
+      ).toStrictEqual(ClassConstructor);
+      expect(oc['_entries'].get(ClassConstructor)!.dependencies).toStrictEqual(
         dependencies
       );
       expect(oc._createEntry).toHaveBeenCalledWith(
-        classConstructor,
+        ClassConstructor,
         dependencies
       );
       expect(oc['_entries'].size).toBe(1);
@@ -151,28 +151,28 @@ describe('ima.core.ObjectContainer', () => {
     it('should set instance of entry from aliases to the entries', () => {
       jest.spyOn(oc, '_createEntry');
 
-      oc.bind(alias, classConstructor, dependencies);
-      oc.inject(classConstructor, dependencies);
+      oc.bind(alias, ClassConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
       expect(
-        oc['_entries'].get(classConstructor)!.classConstructor
-      ).toStrictEqual(classConstructor);
-      expect(oc['_entries'].get(classConstructor)!.dependencies).toStrictEqual(
+        oc['_entries'].get(ClassConstructor)!.classConstructor
+      ).toStrictEqual(ClassConstructor);
+      expect(oc['_entries'].get(ClassConstructor)!.dependencies).toStrictEqual(
         dependencies
       );
       expect(oc['_entries'].size).toBe(2);
       expect(oc._createEntry).toHaveBeenCalledTimes(1);
-      expect(oc['_entries'].get(classConstructor)).toStrictEqual(
+      expect(oc['_entries'].get(ClassConstructor)).toStrictEqual(
         oc['_entries'].get(alias)
       );
     });
 
-    it('should be throw error, if yow call inject more then 2 times for same classConstructor', () => {
-      oc.inject(classConstructor, dependencies);
-      oc.inject(classConstructor, dependencies);
+    it('should be throw error, if yow call inject more then 2 times for same ClassConstructor', () => {
+      oc.inject(ClassConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
       expect(() => {
-        oc.inject(classConstructor, dependencies);
+        oc.inject(ClassConstructor, dependencies);
       }).toThrow();
     });
   });
@@ -193,84 +193,84 @@ describe('ima.core.ObjectContainer', () => {
       oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
 
       expect(() => {
-        oc.bind(alias, classConstructor, dependencies);
+        oc.bind(alias, ClassConstructor, dependencies);
       }).toThrow();
     });
 
     it('should be create new entry for defined dependencies', () => {
       jest.spyOn(oc, '_createEntry');
 
-      oc.bind(alias, classConstructor, dependencies);
+      oc.bind(alias, ClassConstructor, dependencies);
 
       expect(oc._createEntry).toHaveBeenCalledWith(
-        classConstructor,
+        ClassConstructor,
         dependencies
       );
     });
 
     it('should be use entry from entries which was defined by inject method', () => {
-      oc.inject(classConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
       jest.spyOn(oc, '_createEntry');
 
-      oc.bind(alias, classConstructor);
+      oc.bind(alias, ClassConstructor);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(0);
       expect(oc['_entries'].get(alias)).toStrictEqual(
-        oc['_entries'].get(classConstructor)
+        oc['_entries'].get(ClassConstructor)
       );
     });
 
     it('should be use entry from entries which was defined by provide method', () => {
-      oc.provide(classParent, classConstructor, dependencies);
+      oc.provide(ClassParent, ClassConstructor, dependencies);
 
       jest.spyOn(oc, '_createEntry');
 
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(0);
       expect(oc['_entries'].get(alias)).toStrictEqual(
-        oc['_entries'].get(classParent)
+        oc['_entries'].get(ClassParent)
       );
     });
 
     it('should use entry from entries which was provided and binded', () => {
-      oc.provide(classParent, classConstructor, dependencies);
-      oc.bind(alias, classParent);
+      oc.provide(ClassParent, ClassConstructor, dependencies);
+      oc.bind(alias, ClassParent);
       const aliasEntry = oc['_entries'].get(alias);
 
       jest.spyOn(oc, '_updateEntryValues');
 
       oc.bind(
         alias,
-        classConstructorWithDependencies,
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies,
+        ClassConstructorWithDependencies.$dependencies
       );
 
       expect(oc._updateEntryValues).toHaveBeenCalledWith(
         aliasEntry,
-        classConstructorWithDependencies,
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies,
+        ClassConstructorWithDependencies.$dependencies
       );
       expect(aliasEntry!.classConstructor).toStrictEqual(
-        classConstructorWithDependencies
+        ClassConstructorWithDependencies
       );
       expect(aliasEntry!.dependencies).toStrictEqual(
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies.$dependencies
       );
     });
 
     it('should create new entry for unregistered alias with defined dependencies, it is feature for AB tests', () => {
-      oc.inject(classConstructor, dependencies);
-      oc.bind(alias, classConstructor);
+      oc.inject(ClassConstructor, dependencies);
+      oc.bind(alias, ClassConstructor);
 
       jest.spyOn(oc, '_createEntry');
 
-      oc.bind(alias2, classConstructor, []);
+      oc.bind(alias2, ClassConstructor, []);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(1);
       expect(oc['_entries'].get(alias2)).not.toStrictEqual(
-        oc['_entries'].get(classConstructor)
+        oc['_entries'].get(ClassConstructor)
       );
       expect(oc['_entries'].get(alias2)!.dependencies).toStrictEqual([]);
     });
@@ -283,23 +283,23 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should be throw Error if you call provide method more times for same interfaceConstructor in plugin', () => {
       oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
-      oc.provide(classParent, classConstructor, dependencies);
+      oc.provide(ClassParent, ClassConstructor, dependencies);
 
       expect(() => {
-        oc.provide(classParent, classConstructor, dependencies);
+        oc.provide(ClassParent, ClassConstructor, dependencies);
       }).toThrow();
     });
 
     it('should be throw Error, if interface is not match with implementation', () => {
       expect(() => {
-        oc.provide(classDependency, classConstructor, dependencies);
+        oc.provide(ClassDependency, ClassConstructor, dependencies);
       }).toThrow();
     });
 
     it('should be create new Entry and set it to entries', () => {
       jest.spyOn(oc, '_createEntry');
 
-      oc.provide(classParent, classConstructor, dependencies);
+      oc.provide(ClassParent, ClassConstructor, dependencies);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(1);
       expect(oc['_entries'].size).toBe(2);
@@ -312,28 +312,28 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return true if name is exist in object container', () => {
-      oc.inject(classConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
-      expect(oc.has(classConstructor)).toBeTruthy();
+      expect(oc.has(ClassConstructor)).toBeTruthy();
       expect(oc.has(namespacePathUnit)).toBeTruthy();
     });
 
-    it('should return true if classConstructor has defined $dependencies property', () => {
-      expect(oc.has(classConstructorWithDependencies)).toBeTruthy();
+    it('should return true if ClassConstructor has defined $dependencies property', () => {
+      expect(oc.has(ClassConstructorWithDependencies)).toBeTruthy();
     });
 
     it('should return false if name is not exist in object container', () => {
       // @ts-ignore
       global.$Debug = false;
       expect(oc.has(namespacePathOC)).toBeFalsy();
-      expect(oc.has(classConstructor)).toBeFalsy();
+      expect(oc.has(ClassConstructor)).toBeFalsy();
       // @ts-ignore
       global.$Debug = true;
     });
 
     it('should throw if class is not in object container', () => {
       expect(() => {
-        oc.has(classConstructor);
+        oc.has(ClassConstructor);
       }).toThrow();
     });
   });
@@ -344,7 +344,7 @@ describe('ima.core.ObjectContainer', () => {
     beforeEach(() => {
       entry = {
         sharedInstance: null,
-        classConstructor: classConstructor,
+        classConstructor: ClassConstructor,
         dependencies: dependencies,
       } as Entry;
     });
@@ -369,12 +369,12 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find optional aliased entity', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       const entry = oc.get('?' + alias);
 
-      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).not.toStrictEqual(ClassParent);
       expect(entry).toBeDefined();
-      expect(entry).toBeInstanceOf(classParent);
+      expect(entry).toBeInstanceOf(ClassParent);
     });
 
     it('should not find optional aliased entity', () => {
@@ -390,12 +390,12 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find optional entity', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       const entry = oc.get([alias, { optional: true }]);
 
-      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).not.toStrictEqual(ClassParent);
       expect(entry).toBeDefined();
-      expect(entry).toBeInstanceOf(classParent);
+      expect(entry).toBeInstanceOf(ClassParent);
     });
 
     it('should not find optional entity', () => {
@@ -405,10 +405,10 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find non optional entity', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       const entry = oc.get([alias, { optional: false }]);
 
-      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).not.toStrictEqual(ClassParent);
     });
 
     it('should not find non optional entity and throw', () => {
@@ -418,16 +418,16 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should find optional class entity', () => {
-      oc.bind(alias, classParent);
-      const entry = oc.get([classParent, { optional: true }]);
+      oc.bind(alias, ClassParent);
+      const entry = oc.get([ClassParent, { optional: true }]);
 
-      expect(entry).not.toStrictEqual(classParent);
+      expect(entry).not.toStrictEqual(ClassParent);
       expect(entry).toBeDefined();
-      expect(entry).toBeInstanceOf(classParent);
+      expect(entry).toBeInstanceOf(ClassParent);
     });
 
     it('should spread dependencies', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
       const entry = oc.get(
@@ -435,11 +435,11 @@ describe('ima.core.ObjectContainer', () => {
       ) as typeof spreadConstantValue;
 
       expect(entry).toHaveLength(2);
-      expect(entry[0]).not.toStrictEqual(classParent);
+      expect(entry[0]).not.toStrictEqual(ClassParent);
     });
 
     it('should spread dependencies with optional parameter', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       oc.constant(spreadConstantName, [
         ...spreadConstantValue,
         ['undefined', { optional: true }],
@@ -462,7 +462,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should create new entry when spread', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
       const entry1 = oc.get(
@@ -478,13 +478,13 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should not spread dependencies', () => {
-      oc.bind(alias, classParent);
+      oc.bind(alias, ClassParent);
       oc.constant(spreadConstantName, spreadConstantValue);
 
       const entry = oc.get(spreadConstantName) as typeof spreadConstantValue;
 
       expect(entry).toHaveLength(2);
-      expect(entry[0]).toStrictEqual(classParent);
+      expect(entry[0]).toStrictEqual(ClassParent);
     });
   });
 
@@ -514,20 +514,20 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be return entry from aliases', () => {
-      oc.bind(alias, classConstructor, dependencies);
+      oc.bind(alias, ClassConstructor, dependencies);
 
       const entry = oc._getEntry(alias) as Entry;
 
-      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.classConstructor).toStrictEqual(ClassConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be return value from registry', () => {
-      oc.inject(classConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
-      const entry = oc._getEntry(classConstructor) as Entry;
+      const entry = oc._getEntry(ClassConstructor) as Entry;
 
-      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.classConstructor).toStrictEqual(ClassConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
@@ -542,13 +542,13 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be return value from registry for class constructor with $dependencies', () => {
-      const entry = oc._getEntry(classConstructorWithDependencies) as Entry;
+      const entry = oc._getEntry(ClassConstructorWithDependencies) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(
-        classConstructorWithDependencies
+        ClassConstructorWithDependencies
       );
       expect(entry.dependencies).toStrictEqual(
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies.$dependencies
       );
     });
   });
@@ -589,28 +589,28 @@ describe('ima.core.ObjectContainer', () => {
     let namespace: unknown;
     beforeEach(() => {
       namespace = ns.get(namespacePathUnit);
-      (namespace as UnknownParameters).ObjectContainer = classConstructor;
+      (namespace as UnknownParameters).ObjectContainer = ClassConstructor;
 
       oc.clear();
     });
 
     it('should be return entry from registry', () => {
-      oc.inject(classConstructor, dependencies);
+      oc.inject(ClassConstructor, dependencies);
 
       const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
-      expect(entry.classConstructor).toStrictEqual(classConstructor);
+      expect(entry.classConstructor).toStrictEqual(ClassConstructor);
       expect(entry.dependencies).toStrictEqual(dependencies);
     });
 
     it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
-      (namespace as UnknownParameters).ObjectContainer = classDependency;
+      (namespace as UnknownParameters).ObjectContainer = ClassDependency;
 
       jest.spyOn(oc, '_createEntry');
 
       const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
-      expect(entry.classConstructor).toStrictEqual(classDependency);
+      expect(entry.classConstructor).toStrictEqual(ClassDependency);
       expect(entry.dependencies).toStrictEqual([]);
     });
 
@@ -631,46 +631,46 @@ describe('ima.core.ObjectContainer', () => {
       oc.clear();
     });
 
-    it('should return null if classConstructor is not a function', () => {
+    it('should return null if ClassConstructor is not a function', () => {
       expect(oc._getEntryFromClassConstructor('')).toBeNull();
     });
 
     it('should return null for not defined $dependencies property', () => {
       // @ts-ignore
       global.$Debug = false;
-      expect(oc._getEntryFromClassConstructor(classConstructor)).toBeNull();
+      expect(oc._getEntryFromClassConstructor(ClassConstructor)).toBeNull();
       // @ts-ignore
       global.$Debug = true;
     });
 
     it('should throw for not defined $dependencies property in $Debug', () => {
       expect(() => {
-        oc._getEntryFromClassConstructor(classConstructor);
+        oc._getEntryFromClassConstructor(ClassConstructor);
       }).toThrow();
     });
 
     it('should set class to entries if class has defined $dependencies', () => {
       jest.spyOn(oc, '_createEntry');
 
-      oc._getEntryFromClassConstructor(classConstructorWithDependencies);
+      oc._getEntryFromClassConstructor(ClassConstructorWithDependencies);
 
       expect(oc._createEntry).toHaveBeenCalledWith(
-        classConstructorWithDependencies,
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies,
+        ClassConstructorWithDependencies.$dependencies
       );
       expect(oc['_entries'].size).toBe(1);
     });
 
     it('should return entry if class has defined $dependencies', () => {
       const entry = oc._getEntryFromClassConstructor(
-        classConstructorWithDependencies
+        ClassConstructorWithDependencies
       ) as Entry;
 
       expect(entry.classConstructor).toStrictEqual(
-        classConstructorWithDependencies
+        ClassConstructorWithDependencies
       );
       expect(entry.dependencies).toStrictEqual(
-        classConstructorWithDependencies.$dependencies
+        ClassConstructorWithDependencies.$dependencies
       );
     });
   });

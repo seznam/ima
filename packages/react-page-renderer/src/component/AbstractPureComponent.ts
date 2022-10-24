@@ -1,8 +1,8 @@
 import { PureComponent, ContextType, createRef } from 'react';
 
-import * as helpers from './componentHelpers';
-import PageContext from './PageContext';
-import { Utils } from './types';
+import * as helpers from '../componentHelpers';
+import PageContext from '../PageContext';
+import { Utils } from '../types';
 
 /**
  * The base class for all view components.

@@ -9,7 +9,7 @@ import * as reactDOM from 'react-dom/server';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
-import { Settings } from './types';
+import { Settings } from '../types';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML

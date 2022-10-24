@@ -74,15 +74,11 @@ export default class PageHandlerRegistry extends PageHandler {
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
-    if (!this._postManageHandlers) {
-      throw new GenericError('You must call init first.');
-    }
-
-    return this._postManageHandlers.execute(
+    return this?._postManageHandlers?.execute(
       managedPage,
       previousManagedPage,
       action
-    );
+    ) as Promise<unknown>;
   }
 
   /**

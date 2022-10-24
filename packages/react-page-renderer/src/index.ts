@@ -1,6 +1,6 @@
-import AbstractComponent from './AbstractComponent';
-import AbstractPureComponent from './AbstractPureComponent';
-import BlankManagedRootView from './BlankManagedRootView';
+import AbstractComponent from './component/AbstractComponent';
+import AbstractPureComponent from './component/AbstractPureComponent';
+import BlankManagedRootView from './component/BlankManagedRootView';
 import {
   getUtils,
   localize,
@@ -11,11 +11,11 @@ import {
   listen,
   unlisten,
 } from './componentHelpers';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from './component/ErrorBoundary';
 import PageContext from './PageContext';
-import PageRendererFactory from './PageRendererFactory';
-import ServerPageRenderer from './ServerPageRenderer';
-import ViewAdapter from './ViewAdapter';
+import PageRendererFactory from './renderer/PageRendererFactory';
+import ServerPageRenderer from './renderer/ServerPageRenderer';
+import ViewAdapter from './component/ViewAdapter';
 
 export {
   AbstractComponent,

@@ -4,7 +4,7 @@ import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/ClientPageRenderer';
+import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer';
 import {
   AbstractController,
   getNamespace,

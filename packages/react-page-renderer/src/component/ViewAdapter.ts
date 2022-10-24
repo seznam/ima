@@ -1,8 +1,8 @@
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
-import PageContext from './PageContext';
-import { Utils } from './types';
+import PageContext from '../PageContext';
+import { Utils } from '../types';
 
 export interface ViewAdapterProps {
   $Utils: Utils;

@@ -26,7 +26,7 @@ module.exports = function createReactRenderer({
     ).response;
 
     if (!viewAdapter) {
-      return event;
+      return;
     }
 
     // Render current page to string
@@ -42,7 +42,5 @@ module.exports = function createReactRenderer({
 
     (event.context as RendererContext).response.content =
       '<!doctype html>\n' + appMarkup;
-
-    return event;
   });
 };

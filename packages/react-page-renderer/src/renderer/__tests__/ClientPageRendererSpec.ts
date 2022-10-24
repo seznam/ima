@@ -14,8 +14,8 @@ import { toMockedInstance } from 'to-mock';
 import { Settings } from '@/types';
 
 import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
-import AbstractPureComponent from '../AbstractPureComponent';
-import BlankManagedRootView from '../BlankManagedRootView';
+import AbstractPureComponent from '../../component/AbstractPureComponent';
+import BlankManagedRootView from '../../component/BlankManagedRootView';
 import PageRendererFactory from '../PageRendererFactory';
 
 global.$Debug = true;

@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
 
-import AbstractComponent from './AbstractComponent';
-import AbstractPureComponent from './AbstractPureComponent';
+import AbstractComponent from './component/AbstractComponent';
+import AbstractPureComponent from './component/AbstractPureComponent';
 import PageContext from './PageContext';
 import { Utils } from './types';
 

@@ -10,8 +10,8 @@ import { toMockedInstance } from 'to-mock';
 
 import { Settings } from '@/types';
 
-import AbstractPureComponent from '../AbstractPureComponent';
-import BlankManagedRootView from '../BlankManagedRootView';
+import AbstractPureComponent from '../../component/AbstractPureComponent';
+import BlankManagedRootView from '../../component/BlankManagedRootView';
 import PageRendererFactory from '../PageRendererFactory';
 import ServerPageRenderer from '../ServerPageRenderer';
 
