@@ -7,6 +7,7 @@ import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import lessPluginGlob from 'less-plugin-glob';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
@@ -156,8 +157,16 @@ export default async (
       useLessLoader && {
         loader: require.resolve('less-loader'),
         options: {
+          webpackImporter: false,
           sourceMap: useSourceMaps,
           implementation: require('less'),
+          lessOptions: {
+            plugins: [lessPluginGlob],
+            paths: [
+              path.resolve(rootDir),
+              path.resolve(rootDir, 'node_modules'),
+            ],
+          },
         },
       },
       useLessLoader && {
