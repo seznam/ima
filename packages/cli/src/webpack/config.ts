@@ -385,44 +385,41 @@ export default async (
               ],
             },
             /**
-             * Run node_modules and app JS through swc
+             * Run vendor paths through swc for lower es client versions
              */
-            {
-              test: /\.(js|mjs|cjs)$/,
-              include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
-              use: [
-                !isServer && {
-                  loader: require.resolve('swc-loader'),
-                  options: await imaConfig.swcVendor(
-                    {
-                      env: {
-                        targets,
-                        mode: 'usage',
-                        coreJs: coreJsVersion,
-                        bugfixes: true,
+            !isServer &&
+              !isEsVersion && {
+                test: /\.(js|mjs|cjs)$/,
+                include: [
+                  /\b@ima\b/,
+                  ...(imaConfig.transformVendorPaths ?? []),
+                ],
+                loader: require.resolve('swc-loader'),
+                options: await imaConfig.swcVendor(
+                  {
+                    env: {
+                      targets,
+                      mode: 'usage',
+                      coreJs: coreJsVersion,
+                      bugfixes: true,
+                      dynamicImport: true,
+                    },
+                    module: {
+                      type: 'es6',
+                    },
+                    jsc: {
+                      parser: {
+                        syntax: 'ecmascript',
+                        decorators: false,
                         dynamicImport: true,
                       },
-                      module: {
-                        type: 'es6',
-                      },
-                      jsc: {
-                        parser: {
-                          syntax: 'ecmascript',
-                        },
-                      },
-                      sourceMaps: useSourceMaps,
-                      inlineSourcesContent: useSourceMaps,
                     },
-                    ctx
-                  ),
-                },
-                {
-                  // TODO IMA@18 remove before release
-                  // This injects new plugin loader interface into legacy plugins
-                  loader: 'ima-legacy-plugin-loader',
-                },
-              ].filter(Boolean),
-            },
+                    sourceMaps: useSourceMaps,
+                    inlineSourcesContent: useSourceMaps,
+                  },
+                  ctx
+                ),
+              },
             {
               test: /\.(js|mjs|jsx|cjs)$/,
               include: appDir,
@@ -430,19 +427,26 @@ export default async (
               loader: require.resolve('swc-loader'),
               options: await imaConfig.swc(
                 {
-                  env: {
-                    targets,
-                    mode: 'usage',
-                    coreJs: coreJsVersion,
-                    bugfixes: true,
-                    dynamicImport: true,
-                  },
+                  // We use core-js only for lower ES version build
+                  ...(!isServer &&
+                    !isEsVersion && {
+                      env: {
+                        targets,
+                        mode: 'usage',
+                        coreJs: coreJsVersion,
+                        bugfixes: true,
+                        dynamicImport: true,
+                      },
+                    }),
                   module: {
                     type: 'es6',
                   },
                   jsc: {
+                    target: isServer || isEsVersion ? 'es2022' : 'es2018',
                     parser: {
                       syntax: 'ecmascript',
+                      decorators: false,
+                      dynamicImport: true,
                       jsx: true,
                     },
                     transform: {
@@ -483,7 +487,7 @@ export default async (
               exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],
               type: 'asset/resource',
             },
-          ],
+          ].filter(Boolean),
         },
         {
           /**
