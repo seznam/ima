@@ -1,5 +1,5 @@
-import * as Helpers from '@ima/helpers';
-import { StringParameters } from './CommonTypes';
+import * as helpers from '@ima/helpers';
+import { UnknownParameters } from './CommonTypes';
 import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
@@ -7,29 +7,43 @@ import Router from './router/Router';
 ns.namespace('ima.core');
 
 export type Module = {
-  $registerImaPlugin: (...args: unknown[]) => unknown;
-  initServices: (...args: unknown[]) => unknown;
-  initBind: (...args: unknown[]) => unknown;
-  initSettings: (...args: unknown[]) => unknown;
+  initServices: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    settings: Config['settings'],
+    isDynamicallyLoaded: boolean
+  ) => Config['settings'];
+  initBind: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    settings: Config['bind'],
+    isDynamicallyLoaded: boolean
+  ) => void;
+  initSettings: (
+    ns: Namespace,
+    oc: ObjectContainer,
+    settings: Config['services'],
+    isDynamicallyLoaded: boolean
+  ) => void;
 };
 
 export type AppConfigFunctions = {
   initBindApp: (
     ns: Namespace,
     oc: ObjectContainer,
-    bind: StringParameters,
+    bind: UnknownParameters,
     state: string
   ) => void;
   initRoutes: (
     ns: Namespace,
     oc: ObjectContainer,
-    routes: StringParameters,
+    routes: UnknownParameters,
     router: Router
   ) => void;
   initServicesApp: (
     ns: Namespace,
     oc: ObjectContainer,
-    services?: StringParameters
+    services?: UnknownParameters
   ) => void;
 };
 
@@ -38,10 +52,10 @@ export type Config = {
   initServicesIma: (...args: unknown[]) => unknown;
   initSettings: (...args: unknown[]) => unknown;
   plugins: { name: string; module: Module }[];
-  routes: StringParameters;
-  services: StringParameters;
-  settings: StringParameters;
-  bind: StringParameters;
+  routes: UnknownParameters;
+  services: UnknownParameters;
+  settings: UnknownParameters;
+  bind: UnknownParameters;
 } & AppConfigFunctions;
 
 /**
@@ -132,9 +146,9 @@ export default class Bootstrap {
           false // Indicating static bootstraping
         );
 
-        Helpers.assignRecursivelyWithTracking(name)(
+        helpers.assignRecursivelyWithTracking(name)(
           currentApplicationSettings,
-          Helpers.resolveEnvironmentSetting(
+          helpers.resolveEnvironmentSetting(
             allPluginSettings,
             this._config.settings.$Env
           )
@@ -170,15 +184,15 @@ export default class Bootstrap {
       true // Indicating static dynamic bootstraping
     );
 
-    Helpers.assignRecursivelyWithTracking(name)(
+    helpers.assignRecursivelyWithTracking(name)(
       newApplicationSettings,
-      Helpers.resolveEnvironmentSetting(
+      helpers.resolveEnvironmentSetting(
         allPluginSettings,
         this._config.settings.$Env
       )
     );
 
-    Helpers.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
+    helpers.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
       newApplicationSettings,
       this._config.bind
     );

@@ -3,6 +3,7 @@ import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
 import UrlTransformer from './UrlTransformer';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * An object representing the complete request parameters used to create and
@@ -23,7 +24,7 @@ export type HttpProxyRequestParams = {
   method: string;
   url: string;
   transformedUrl: string;
-  data: { [key: string]: boolean | number | string | Date };
+  data: UnknownParameters;
   options: HttpAgentRequestOptions;
 };
 
@@ -105,7 +106,7 @@ export default class HttpProxy {
   request(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ) {
     const requestParams = this._composeRequestParams(
@@ -220,7 +221,7 @@ export default class HttpProxy {
   getErrorParams(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions,
     status: number,
     body: unknown,
@@ -403,7 +404,7 @@ export default class HttpProxy {
   _composeRequestParams(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): HttpProxyRequestParams {
     return {
@@ -428,7 +429,7 @@ export default class HttpProxy {
    */
   _composeRequestInit(
     method: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): RequestInit {
     const contentType = this._getContentType(method, data, options);
@@ -478,7 +479,7 @@ export default class HttpProxy {
    */
   _getContentType(
     method: string,
-    data: { [key: string]: boolean | number | string | Date },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ) {
     if (
@@ -504,10 +505,7 @@ export default class HttpProxy {
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */
-  _composeRequestUrl(
-    url: string,
-    data: { [key: string]: boolean | number | string }
-  ) {
+  _composeRequestUrl(url: string, data: UnknownParameters) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimiter = queryString
@@ -528,10 +526,7 @@ export default class HttpProxy {
    *        be send with a request.
    * @return `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(
-    method: string,
-    data?: { [key: string]: boolean | number | string | Date }
-  ) {
+  _shouldRequestHaveBody(method: string, data?: UnknownParameters) {
     return !!(
       method &&
       data &&
@@ -549,7 +544,7 @@ export default class HttpProxy {
    * @private
    */
   _transformRequestBody(
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     headers: { [key: string]: string }
   ) {
     switch (headers['Content-Type']) {
@@ -572,11 +567,15 @@ export default class HttpProxy {
    * @returns Query string representation of the given object
    * @private
    */
-  _convertObjectToQueryString(object: {
-    [key: string]: string | number | boolean;
-  }) {
+  _convertObjectToQueryString(object: UnknownParameters) {
     return Object.keys(object)
-      .map(key => [key, object[key]].map(encodeURIComponent).join('='))
+      .map(key =>
+        [key, object[key]]
+          .map(value => {
+            return encodeURIComponent(value as string);
+          })
+          .join('=')
+      )
       .join('&');
   }
 
@@ -588,9 +587,7 @@ export default class HttpProxy {
    * @returns
    * @private
    */
-  _convertObjectToFormData(object: {
-    [key: string]: boolean | number | string | Date;
-  }) {
+  _convertObjectToFormData(object: UnknownParameters) {
     const window = this._window.getWindow();
 
     if (!window || !window.FormData) {

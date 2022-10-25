@@ -31,7 +31,6 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "publish-webstore": "npm run build && npm run upload",
     "stylelint": "stylelint './**/*.less'",
-    "test": "jest",
     "upload": "chrome-webstore-upload upload --source ./dist --auto-publish"
   },
   "devDependencies": {

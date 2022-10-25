@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { UnknownParameters } from '../CommonTypes';
 import { HttpProxyRequestParams } from './HttpProxy';
 
 /**
@@ -77,7 +78,7 @@ export default abstract class HttpAgent {
    */
   get(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
@@ -98,7 +99,7 @@ export default abstract class HttpAgent {
    */
   post(
     url: string,
-    data: { [key: string]: unknown },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
@@ -119,7 +120,7 @@ export default abstract class HttpAgent {
    */
   put(
     url: string,
-    data: { [key: string]: unknown },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
@@ -140,7 +141,7 @@ export default abstract class HttpAgent {
    */
   patch(
     url: string,
-    data: { [key: string]: unknown },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
@@ -161,7 +162,7 @@ export default abstract class HttpAgent {
    */
   delete(
     url: string,
-    data: { [key: string]: unknown },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();

@@ -22,6 +22,7 @@ describe('bootstrap', () => {
       $registerImaPlugin: jest.fn(() => {}),
       initSettings: jest.fn(() => ({ prod: { pluginSettings: true } })),
       initBind: jest.fn(() => {}),
+      //@ts-ignore
       initServices: jest.fn(() => {}),
     };
 

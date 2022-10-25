@@ -7,6 +7,7 @@ import Cache from '../cache/Cache';
 import GenericError from '../error/GenericError';
 import CookieStorage from '../storage/CookieStorage';
 import * as Helpers from '@ima/helpers';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
@@ -96,7 +97,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   get(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache('get', url, data, options);
@@ -107,7 +108,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   post(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -123,7 +124,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   put(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -139,7 +140,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   patch(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -155,7 +156,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   delete(
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options = {} as HttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
@@ -169,11 +170,7 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritdoc
    */
-  getCacheKey(
-    method: string,
-    url: string,
-    data: { [key: string]: boolean | number | string | Date }
-  ) {
+  getCacheKey(method: string, url: string, data: UnknownParameters) {
     return (
       this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data)
     );
@@ -230,7 +227,7 @@ export default class HttpAgentImpl extends HttpAgent {
   _requestWithCheckCache(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ) {
     options = this._prepareOptions(options);
@@ -262,11 +259,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *         server response with the body parsed as JSON, or `null` if
    *         no such request is present in the cache.
    */
-  _getCachedData(
-    method: string,
-    url: string,
-    data: { [key: string]: boolean | number | string }
-  ) {
+  _getCachedData(method: string, url: string, data: UnknownParameters) {
     const cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
@@ -301,7 +294,7 @@ export default class HttpAgentImpl extends HttpAgent {
   _request(
     method: string,
     url: string,
-    data: { [key: string]: boolean | number | string },
+    data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     const cacheKey = this.getCacheKey(method, url, data);
@@ -440,11 +433,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @return The suffix of a cache key to use for a request to the
    *         specified URL, carrying the specified data.
    */
-  _getCacheKeySuffix(
-    method: string,
-    url: string,
-    data: { [key: string]: boolean | number | string | Date }
-  ) {
+  _getCacheKeySuffix(method: string, url: string, data: UnknownParameters) {
     let dataQuery = '';
     if (data) {
       try {
