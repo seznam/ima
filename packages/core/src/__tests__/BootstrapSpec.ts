@@ -249,8 +249,8 @@ describe('bootstrap', () => {
         namespace,
         objectContainer,
         {},
-        'plugin-name',
-        true
+        true,
+        'plugin-name'
       );
 
       expect(objectContainer.setBindingState).toHaveBeenNthCalledWith(

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- 103ee574: Updated template to always use latest versions
+
 ## 18.0.0-rc.11
 
 ### Patch Changes

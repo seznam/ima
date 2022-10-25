@@ -18,7 +18,7 @@ export type Module = {
     oc: ObjectContainer,
     settings: Config['bind'],
     isDynamicallyLoaded: boolean,
-    name?: string,
+    name?: string
   ) => void;
   initSettings: (
     ns: Namespace,

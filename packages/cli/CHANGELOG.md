@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.13
+
+### Patch Changes
+
+- e24be7fb: Replaced custom glob less import support with less-plugin-glob plugin
+
 ## 18.0.0-rc.12
 
 ### Patch Changes

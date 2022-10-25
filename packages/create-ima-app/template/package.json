@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
-    "@ima/cli": "18.0.0-rc.11",
+    "@ima/cli": "latest",
     "@swc/jest": "^0.2.20",
     "@zarconontol/enzyme-adapter-react-18": "0.7.3",
     "enzyme": "^3.11.0",
@@ -33,10 +33,10 @@
     "prettier": "^2.6.0"
   },
   "dependencies": {
-    "@ima/core": "18.0.0-ts.15",
-    "@ima/react-hooks": "2.0.0-ts.3",
+    "@ima/core": "rc",
+    "@ima/react-hooks": "rc",
     "@ima/react-page-renderer": "18.0.0-rc.9",
-    "@ima/server": "18.0.0-rc.11",
+    "@ima/server": "rc",
     "body-parser": "^1.19.2",
     "compression": "1.7.4",
     "cookie-parser": "^1.4.6",

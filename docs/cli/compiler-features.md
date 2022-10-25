@@ -95,25 +95,9 @@ function Home() {
 }
 ```
 
-### `extend-less-loader`
+### globals.less
 
-The LESS pipeline uses additional custom loader `extend-less-loader` which ads support for two additional features.
-
-#### Glob imports
-These are resolved through `globby` npm package, so any syntax this package can parse is fully supported:
-
-```less title=./app/less/app.less
-@import './mixins/*.less';
-
-/* Non-relative imports are resolved through node resolver. */
-@import "@ima/**/atoms/**/*.less";
-@import "@ima/**/molecules/**/*.less";
-@import "@ima/**/organisms/**/*.less";
-```
-
-#### globals.less
-
-This file is located at `./app/less/globals.less` and it is automatically imported on top of every other processed LESS file.
+This file is located at `./app/less/globals.less` and it is automatically imported on top of every other processed LESS file. It allows you to easily share globals across less files.
 
 :::tip
 
@@ -133,6 +117,18 @@ body {
 ```
 
 :::
+
+### Glob less imports
+The `less-loader` uses [less-plugin-glob](https://github.com/just-boris/less-plugin-glob) by default in it's configuration. This means that glob imports are fully supported.
+
+```less title=./app/less/app.less
+@import './mixins/*.less';
+
+/* Non-relative imports are resolved through node resolver. */
+@import "@ima/**/atoms/**/*.less";
+@import "@ima/**/molecules/**/*.less";
+@import "@ima/**/organisms/**/*.less";
+```
 
 ### PostCSS
 
