@@ -96,6 +96,9 @@ export default async (
       : 'source-map'
     : false;
 
+  // Define less loader path
+  const lessLoaderPath = imaConfig.lessLoaderPath || 'node_modules';
+
   /**
    * CSS loaders function generator. Contains postcss-loader
    * and optional less loaders.
@@ -164,7 +167,7 @@ export default async (
             plugins: [lessPluginGlob],
             paths: [
               path.resolve(rootDir),
-              path.resolve(rootDir, 'node_modules'),
+              path.resolve(rootDir, lessLoaderPath),
             ],
           },
         },
