@@ -13,9 +13,9 @@ import { toMockedInstance } from 'to-mock';
 
 import { Settings } from '@/types';
 
-import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
 import AbstractPureComponent from '../../component/AbstractPureComponent';
 import BlankManagedRootView from '../../component/BlankManagedRootView';
+import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 
 global.$Debug = true;
@@ -233,7 +233,6 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        content: undefined,
         pageState: pageState,
       });
     });
@@ -338,7 +337,6 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        content: undefined,
         pageState,
       });
     });

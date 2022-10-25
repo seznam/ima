@@ -14,9 +14,9 @@ import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
-import AbstractPageRenderer from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
 import { Settings } from '../types';
+import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
+import PageRendererFactory from './PageRendererFactory';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -69,7 +69,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     pageView: ComponentType,
     pageResources: { [key: string]: Promise<unknown> },
     routeOptions: RouteOptions
-  ) {
+  ): Promise<void | PageData> {
     const { values: defaultPageState, promises: loadedPromises } =
       this._separatePromisesAndValues(pageResources);
 
@@ -93,7 +93,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          content: undefined,
           status: controller.getHttpStatus(),
           pageState,
         };
@@ -117,7 +116,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     controller: ControllerDecorator,
     pageView: ComponentType,
     resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
-  ) {
+  ): Promise<void | PageData> {
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
 
@@ -131,7 +130,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          content: undefined,
           status: controller.getHttpStatus(),
           pageState: Object.assign({}, defaultPageState, fetchedResources),
         };

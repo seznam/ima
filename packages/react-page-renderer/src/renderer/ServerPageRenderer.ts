@@ -7,9 +7,9 @@ import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import AbstractPageRenderer from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
 import { Settings } from '../types';
+import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
+import PageRendererFactory from './PageRendererFactory';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -44,7 +44,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     pageView: react.ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
-  ) {
+  ): Promise<void | PageData> {
     return this._helpers.allPromiseHash(pageResources).then(pageState => {
       controller.setState(pageState as { [key: string]: unknown });
       controller.setMetaParams(pageState as { [key: string]: unknown });

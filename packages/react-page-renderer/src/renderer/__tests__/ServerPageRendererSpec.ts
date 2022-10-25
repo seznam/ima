@@ -12,10 +12,11 @@ import { Settings } from '@/types';
 
 import AbstractPureComponent from '../../component/AbstractPureComponent';
 import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { PageData } from '../AbstractPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 import ServerPageRenderer from '../ServerPageRenderer';
 
-globalThis.$Debug = true;
+global.$Debug = true;
 
 class DocumentView extends AbstractPureComponent {
   render() {
@@ -85,19 +86,19 @@ describe('ServerPageRenderer', () => {
         routeOptions
       );
 
-      expect(response.documentView).toEqual(
+      expect((response as PageData).documentView).toEqual(
         pageRenderer['_getDocumentView'](routeOptions)
       );
-      expect(response.documentViewProps.$Utils).toEqual(
+      expect((response as PageData).documentViewProps?.$Utils).toEqual(
         pageRendererFactory.getUtils()
       );
-      expect(response.documentViewProps.metaManager).toEqual(
+      expect((response as PageData).documentViewProps?.metaManager).toEqual(
         controller.getMetaManager()
       );
-      expect(response.react).toBeTruthy();
-      expect(response.reactDOM).toBeTruthy();
-      expect(response.status).toEqual(controller.getHttpStatus());
-      expect(response.viewAdapter).toEqual(
+      expect((response as PageData).react).toBeTruthy();
+      expect((response as PageData).reactDOM).toBeTruthy();
+      expect((response as PageData).status).toEqual(controller.getHttpStatus());
+      expect((response as PageData).viewAdapter).toEqual(
         pageRenderer['_getViewAdapterElement']()
       );
     });

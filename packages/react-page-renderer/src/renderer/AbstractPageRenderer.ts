@@ -1,12 +1,27 @@
-import { Controller, Dispatcher, PageRenderer } from '@ima/core';
+import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helpers from '@ima/helpers';
-import { ComponentType, createElement } from 'react';
+import { ComponentType, createElement, ReactElement } from 'react';
+import * as react from 'react';
+import * as reactDOM from 'react-dom/server';
 
 import BlankManagedRootView from '../component/BlankManagedRootView';
-import PageRendererFactory from './PageRendererFactory';
-import { Settings, Utils } from '../types';
 import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
+import { Settings, Utils } from '../types';
+import PageRendererFactory from './PageRendererFactory';
+
+export type PageData = {
+  documentView?: ComponentType;
+  documentViewProps?: {
+    $Utils: { [key: string]: unknown };
+    metaManager: MetaManager;
+  };
+  pageState?: { [key: string]: unknown };
+  react?: typeof react;
+  reactDOM?: typeof reactDOM;
+  status: number;
+  viewAdapter?: ReactElement;
+};
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
@@ -66,11 +81,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> },
     routeOptions: RouteOptions
-  ): Promise<void | {
-    content?: string;
-    pageState?: { [key: string]: unknown };
-    status: number;
-  }>;
+  ): Promise<void | PageData>;
 
   /**
    * @inheritdoc
@@ -79,11 +90,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     controller: Controller,
     pageView: ComponentType,
     pageResources: { [key: string]: unknown | Promise<unknown> }
-  ): Promise<void | {
-    content?: string;
-    pageState: { [key: string]: unknown };
-    status: number;
-  }>;
+  ): Promise<void | PageData>;
 
   /**
    * @inheritdoc
