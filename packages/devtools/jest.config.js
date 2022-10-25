@@ -4,7 +4,6 @@ module.exports = {
   ...defaultConfig,
   testEnvironment: 'jsdom',
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  setupFiles: ['./jest.setup.js'],
   transform: {
     '^.+\\.jsx?$': [
       'babel-jest',

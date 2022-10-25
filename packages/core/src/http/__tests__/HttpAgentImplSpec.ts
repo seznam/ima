@@ -46,6 +46,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
       headers: {},
       cache: true,
+      fetchOptions: {},
       withCredentials: true,
       postProcessor: httpConfig.defaultRequestOptions.postProcessor,
       // @ts-ignore
