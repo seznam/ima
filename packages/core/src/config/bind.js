@@ -38,6 +38,7 @@ import ServerRouter from '../router/ServerRouter';
 import CookieStorage from '../storage/CookieStorage';
 import MapStorage from '../storage/MapStorage';
 import SessionMapStorage from '../storage/SessionMapStorage';
+import SessionStorage from '../storage/SessionStorage';
 import WeakMapStorage from '../storage/WeakMapStorage';
 import ClientWindow from '../window/ClientWindow';
 import ServerWindow from '../window/ServerWindow';
@@ -84,7 +85,7 @@ export default (ns, oc, config) => {
     decode: s => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
-  oc.bind('$SessionStorage', MapStorage);
+  oc.bind('$SessionStorage', SessionStorage);
   oc.bind('$MapStorage', MapStorage);
   oc.inject(WeakMapStorage, [
     {
@@ -106,11 +107,7 @@ export default (ns, oc, config) => {
   oc.bind('$EventBus', EventBus);
 
   //Cache
-  if (oc.get('$Window').hasSessionStorage()) {
-    oc.constant('$CacheStorage', oc.get(SessionMapStorage));
-  } else {
-    oc.constant('$CacheStorage', oc.get(MapStorage));
-  }
+  oc.constant('$CacheStorage', oc.get(MapStorage));
   oc.bind('$CacheFactory', CacheFactory);
   oc.provide(Cache, CacheImpl, [
     '$CacheStorage',
