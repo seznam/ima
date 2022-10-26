@@ -1,5 +1,8 @@
 import Cache from './Cache';
-import CacheEntry from './CacheEntry';
+import CacheEntry, {
+  JSONSerializedCacheEntry,
+  SerializedCacheEntry,
+} from './CacheEntry';
 import CacheFactory from './CacheFactory';
 import Storage from '../storage/Storage';
 import * as Helpers from '@ima/helpers';
@@ -58,6 +61,8 @@ export default class CacheImpl extends Cache {
      * Flag signalling whether the cache is currently enabled.
      */
     this._enabled = config.enabled;
+
+    this._init();
   }
 
   /**
@@ -102,14 +107,15 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown, ttl: number | string = 0) {
+  set(key: string, value: unknown, ttl: number | string = 0, created?: number) {
     if (!this._enabled) {
       return;
     }
 
     const cacheEntry = this._factory.createCacheEntry(
       this._clone(value),
-      ttl || this._ttl
+      ttl || this._ttl,
+      created
     );
 
     this._cache.set(key, cacheEntry);
@@ -177,9 +183,7 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  deserialize(serializedData: {
-    [key: string]: { value: unknown; ttl: number | string };
-  }) {
+  deserialize(serializedData: { [key: string]: SerializedCacheEntry }) {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
 
@@ -187,7 +191,12 @@ export default class CacheImpl extends Cache {
         cacheEntryItem.ttl = Infinity;
       }
 
-      this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
+      this.set(
+        key,
+        cacheEntryItem.value,
+        cacheEntryItem.ttl,
+        cacheEntryItem.created
+      );
     }
   }
 
@@ -198,7 +207,7 @@ export default class CacheImpl extends Cache {
    * @return `true` if the provided value can be serialized into JSON,
    *         `false` otherwise.
    */
-  _canSerializeValue(value: unknown) {
+  private _canSerializeValue(value: unknown) {
     if (
       value instanceof Date ||
       value instanceof RegExp ||
@@ -252,7 +261,7 @@ export default class CacheImpl extends Cache {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  _clone(value: unknown) {
+  private _clone(value: unknown) {
     if (
       value !== null &&
       typeof value === 'object' &&
@@ -262,5 +271,21 @@ export default class CacheImpl extends Cache {
     }
 
     return value;
+  }
+
+  private _init() {
+    for (const key of this._cache.keys()) {
+      const entry = this._cache.get(key);
+
+      if (!(entry instanceof CacheEntry)) {
+        this.deserialize({
+          [key]: {
+            value: (entry as JSONSerializedCacheEntry)._value,
+            ttl: (entry as JSONSerializedCacheEntry)._ttl,
+            created: (entry as JSONSerializedCacheEntry)._created,
+          },
+        });
+      }
+    }
   }
 }

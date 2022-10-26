@@ -221,15 +221,15 @@ describe('ima.core.cache.CacheImpl', () => {
     });
 
     it('should return false for Date', () => {
-      expect(cache._canSerializeValue(new Date())).toBe(false);
+      expect(cache['_canSerializeValue'](new Date())).toBe(false);
     });
 
     it('should return false for RegExp', () => {
-      expect(cache._canSerializeValue(new RegExp('/'))).toBe(false);
+      expect(cache['_canSerializeValue'](new RegExp('/'))).toBe(false);
     });
 
     it('should return false for resolved promise', () => {
-      expect(cache._canSerializeValue(Promise.resolve(1))).toBe(false);
+      expect(cache['_canSerializeValue'](Promise.resolve(1))).toBe(false);
     });
 
     it('should return false for object with bad type of keys', () => {
@@ -237,7 +237,7 @@ describe('ima.core.cache.CacheImpl', () => {
         date: new Date(),
       };
 
-      expect(cache._canSerializeValue(object)).toBe(false);
+      expect(cache['_canSerializeValue'](object)).toBe(false);
     });
 
     it('should return true for serializable object', () => {
@@ -251,7 +251,7 @@ describe('ima.core.cache.CacheImpl', () => {
         },
       };
 
-      expect(cache._canSerializeValue(object)).toBe(true);
+      expect(cache['_canSerializeValue'](object)).toBe(true);
     });
   });
 });
