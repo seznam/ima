@@ -61,8 +61,6 @@ export type HttpAgentResponse = {
 /**
  * The {@link HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
- *
- * @interface
  */
 export default abstract class HttpAgent {
   /**

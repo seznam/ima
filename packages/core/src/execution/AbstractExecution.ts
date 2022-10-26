@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import GenericError from '../error/GenericError';
 import Execution, { Job } from './Execution';
 
 const CLASS_REGEX = /^\s*class\b/;
@@ -24,6 +27,16 @@ export default abstract class AbstractExecution extends Execution {
     }
 
     this._jobs = this._jobs.concat(jobs.filter(this._validateJob));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  execute(...args: unknown[]): Promise<unknown> {
+    throw new GenericError(
+      'The ima.core.execution.AbstractExecution.execute method is abstract ' +
+        'and must be overridden'
+    );
   }
 
   /**

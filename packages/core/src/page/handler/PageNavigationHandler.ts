@@ -37,10 +37,6 @@ export default class PageNavigationHandler extends PageHandler {
     }
   }
 
-  destroy(): void {
-    return;
-  }
-
   /**
    * @inheritDoc
    */

@@ -23,7 +23,9 @@ export default abstract class Error extends ExtensibleError {
    * @return The HTTP status to send to the client.
    * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
    */
-  abstract getHttpStatus(): number;
+  getHttpStatus() {
+    return 500;
+  }
 
   /**
    * Returns the error parameters providing additional details about the
@@ -36,5 +38,7 @@ export default abstract class Error extends ExtensibleError {
    *         the error has occurred.
    * @see Error#getHttpStatus
    */
-  abstract getParams(): UnknownParameters;
+  getParams(): UnknownParameters {
+    return {};
+  }
 }

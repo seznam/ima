@@ -2,11 +2,10 @@ import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
 import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
+import GenericError from '../error/GenericError';
 
 /**
  * Abstract extension
- *
- * @abstract
  */
 export default abstract class AbstractExtension implements Extension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +35,10 @@ export default abstract class AbstractExtension implements Extension {
    * @inheritdoc
    */
   init(): Promise<undefined> | void {
-    return;
+    throw new GenericError(
+      'The ima.core.extension.AbstractExtension.load method is abstract ' +
+        'and must be overridden'
+    );
   }
 
   /**

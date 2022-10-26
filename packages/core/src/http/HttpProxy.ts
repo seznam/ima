@@ -233,7 +233,7 @@ export default class HttpProxy {
       body = {};
     }
 
-    const error = { status, body, cause, errorName: '', params: params };
+    const error = { status, body, cause, errorName: '', params };
 
     switch (status) {
       case HttpStatusCode.TIMEOUT:

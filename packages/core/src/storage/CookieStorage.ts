@@ -145,7 +145,7 @@ export default class CookieStorage extends MapStorage {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value?: string, options?: Options) {
+  set(name: string, value: string | undefined, options: Options = {}) {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {

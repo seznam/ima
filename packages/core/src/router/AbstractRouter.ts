@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
@@ -178,7 +180,11 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  abstract getPath(): string;
+  getPath(): string {
+    throw new GenericError(
+      'The getPath() method is abstract and must be overridden.'
+    );
+  }
 
   /**
    * @inheritdoc
@@ -240,26 +246,35 @@ export default abstract class AbstractRouter extends Router {
 
   /**
    * @inheritdoc
-   * @abstract
    */
-  abstract listen(): this;
+  listen(): this {
+    throw new GenericError(
+      'The listen() method is abstract and must be overridden.'
+    );
+  }
 
   /**
    * @inheritdoc
-   * @abstract
    */
-  abstract unlisten(): this;
+  unlisten(): this {
+    throw new GenericError(
+      'The unlisten() method is abstract and must be overridden.'
+    );
+  }
 
   /**
    * @inheritdoc
-   * @abstract
    */
-  abstract redirect(
+  redirect(
     url: string,
     options?: RouteOptions,
     action?: { type?: string; payload?: object | Event; event?: Event },
     locals?: Record<string, unknown>
-  ): void;
+  ): void {
+    throw new GenericError(
+      'The redirect() method is abstract and must be overridden.'
+    );
+  }
 
   /**
    * @inheritdoc

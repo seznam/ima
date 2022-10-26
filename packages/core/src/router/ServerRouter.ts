@@ -66,7 +66,7 @@ export default class ServerRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  redirect(url = '/', options: { [key: string]: unknown }) {
+  redirect(url = '/', options: { [key: string]: unknown } = {}) {
     this._response.redirect(
       url,
       (options?.httpStatus as number) || 302,

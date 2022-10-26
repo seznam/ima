@@ -253,7 +253,6 @@ export default class ClientRouter extends AbstractRouter {
         error: params.error,
       });
     }
-    super.handleError(params, options as RouteOptions, locals);
 
     return super
       .handleError(params, options as RouteOptions, locals)

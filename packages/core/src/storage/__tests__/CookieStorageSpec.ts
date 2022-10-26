@@ -171,7 +171,7 @@ describe('ima.storage.CookieStorage', () => {
     it('should set cookie as expired for undefined value', () => {
       jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
-      cookie.set('cok2');
+      cookie.set('cok2', undefined);
 
       expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1);
     });
