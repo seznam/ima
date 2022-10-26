@@ -1,12 +1,6 @@
 export type SerializedCacheEntry = {
   value: unknown;
   ttl: number | string;
-  created?: number;
-};
-export type JSONSerializedCacheEntry = {
-  _value: unknown;
-  _ttl: number | string;
-  _created?: number;
 };
 
 /**
@@ -26,7 +20,7 @@ export default class CacheEntry {
   /**
    * The timestamp of creation of this cache entry.
    */
-  protected _created: number;
+  protected _created = Date.now();
 
   /**
    * Initializes the cache entry.
@@ -34,12 +28,10 @@ export default class CacheEntry {
    * @param value The cache entry value.
    * @param ttl The time to live in milliseconds.
    */
-  constructor(value: unknown, ttl: number | string, created = Date.now()) {
+  constructor(value: unknown, ttl: number | string) {
     this._value = value;
 
     this._ttl = ttl;
-
-    this._created = created;
   }
 
   /**

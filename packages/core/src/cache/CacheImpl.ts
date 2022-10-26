@@ -1,8 +1,5 @@
 import Cache from './Cache';
-import CacheEntry, {
-  JSONSerializedCacheEntry,
-  SerializedCacheEntry,
-} from './CacheEntry';
+import CacheEntry, { SerializedCacheEntry } from './CacheEntry';
 import CacheFactory from './CacheFactory';
 import Storage from '../storage/Storage';
 import * as Helpers from '@ima/helpers';
@@ -61,8 +58,6 @@ export default class CacheImpl extends Cache {
      * Flag signalling whether the cache is currently enabled.
      */
     this._enabled = config.enabled;
-
-    this._init();
   }
 
   /**
@@ -107,15 +102,14 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown, ttl: number | string = 0, created?: number) {
+  set(key: string, value: unknown, ttl: number | string = 0) {
     if (!this._enabled) {
       return;
     }
 
     const cacheEntry = this._factory.createCacheEntry(
       this._clone(value),
-      ttl || this._ttl,
-      created
+      ttl || this._ttl
     );
 
     this._cache.set(key, cacheEntry);
@@ -191,12 +185,7 @@ export default class CacheImpl extends Cache {
         cacheEntryItem.ttl = Infinity;
       }
 
-      this.set(
-        key,
-        cacheEntryItem.value,
-        cacheEntryItem.ttl,
-        cacheEntryItem.created
-      );
+      this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
     }
   }
 
@@ -271,21 +260,5 @@ export default class CacheImpl extends Cache {
     }
 
     return value;
-  }
-
-  private _init() {
-    for (const key of this._cache.keys()) {
-      const entry = this._cache.get(key);
-
-      if (!(entry instanceof CacheEntry)) {
-        this.deserialize({
-          [key]: {
-            value: (entry as JSONSerializedCacheEntry)._value,
-            ttl: (entry as JSONSerializedCacheEntry)._ttl,
-            created: (entry as JSONSerializedCacheEntry)._created,
-          },
-        });
-      }
-    }
   }
 }

@@ -17,15 +17,7 @@ export default class CacheFactory {
    * @param created Cache entry created time in milliseconds.
    * @return The created cache entry.
    */
-  createCacheEntry(
-    value: unknown,
-    ttl: number | string,
-    created?: number
-  ): CacheEntry {
-    if (created) {
-      return new CacheEntry(value, ttl, created);
-    }
-
+  createCacheEntry(value: unknown, ttl: number | string): CacheEntry {
     return new CacheEntry(value, ttl);
   }
 }
