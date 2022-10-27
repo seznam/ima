@@ -36,7 +36,7 @@ export function typescriptDeclarationsPlugin(
         options?.tscPath ? options.tscPath : 'tsc',
         [
           '--outDir',
-          context.config.output,
+          context.config.output[0].dir,
           '--emitDeclarationOnly',
           '--preserveWatchOutput',
           ...(['dev', 'link'].includes(context.command)
