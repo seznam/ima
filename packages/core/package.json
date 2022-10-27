@@ -37,9 +37,9 @@
   "module": "./dist/esm/server/index.js",
   "browser": "./dist/esm/client/index.js",
   "scripts": {
-    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
-    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
-    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev --clientServerBundle",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build --clientServerBundle",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link --clientServerBundle",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",
@@ -52,10 +52,10 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^18.0.0-rc.5",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.0.3",
     "@types/multer": "^1.4.7",
+    "@ima/plugin-cli": "^18.0.0-rc.7",
     "jscodeshift": "^0.13.1"
   },
   "publishConfig": {

@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.7
+
+### Major Changes
+
+- cc9894d2: Plugin config now has completely different configuration definition
+  Link, dev and build commands are now more efficient and use less watchers for multiple bundle options
+  Transformers option is now deprecated (they are part of the core replaced with type and bundle option)
+  New CLI argument --clientServerBundle
+
 ## 18.0.0-rc.6
 
 ### Patch Changes

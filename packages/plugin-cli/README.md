@@ -19,6 +19,8 @@ npm install @ima/plugin-cli --save-dev
 
 ## Usage
 
+Run following commands from the root of your plugin directory.
+
 ```
 npx ima-plugin dev
 npx ima-plugin build
@@ -26,59 +28,53 @@ npx ima-plugin link [target-project]
 npx ima-plugin --help
 ```
 
-### Create `ima-plugin.config.js`
-Create `ima-plugin.config.js` file in the root of your plugin directory and export some configuration:
+The plugin works **without the need to provide custom ima-plugin.config.js** and covers most cases where:
+ - `npm run [build|dev|link]` - generates two bundles, one in cjs and other in esm. Use this for almost any plugin that doesn't need server/client specific bundles.
+ - `npm run [build|dev|link] --clientServerBundle` - this generates code in cjs and two bundles in esm, where you can drop client/server specific syntax using pragma comments.
+
+### Custom `ima-plugin.config.js`
+You can always provide custom ima-plugin.config.js where you can either extend one of the provided default configurations or create completely new one:
 
 ```js
 // ima-plugin.config.js
 
-const { swcTransformer, typescriptDeclarationsPlugin } = require('@ima/plugin-cli');
+// Use one of the default provided configurations
+const {
+  defaultConfig,
+  clientServerConfig,
+  typescriptDeclarationsPlugin
+} = require('@ima/plugin-cli');
 
+/**
+ * Or create custom config. You can export an array of configuration objects to support multiple configurations.
+ *
+ * @type import('@ima/plugin-cli').ImaPluginConfig
+ */
 module.exports = {
-  input: './src',
-  output: './dist',
-  transforms: [
-    [
-      swcTransformer({
-        module: {
-          type: 'es6',
-        },
-        jsc: {
-          target: 'es2022',
-          parser: {
-            syntax: 'ecmascript',
-            jsx: true
-          },
-        },
-      }),
-      {
-        test: /\.(js|jsx)$/
-      }
-    ]
+  inputDir: './src',
+  output: [
+    {
+      dir: './dist/esm',
+      format: 'es6',
+    },
+    {
+      dir: './dist/cjs',
+      format: 'commonjs',
+    },
   ],
   plugins: [
-    typescriptDeclarationsPlugin({
-      additionalArgs: ['--skipLibCheck'],
-    }),
+    typescriptDeclarationsPlugin({ additionalArgs: ['--skipLibCheck'] }),
+  ],
+  exclude: [
+    '**/__tests__/**',
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/typings/**',
+    '**/.DS_Store/**',
+    'tsconfig.tsbuildinfo',
   ],
 };
 ```
-
-### Pre-configured configurations
-
-This package also exports 3 pre-configured `ima-plugin.config.js` configurations, which you can use in your plugins without a need to create your own.
-
-```js
-const { generateConfig } = require('@ima/plugin-cli');
-
-module.exports = generateConfig();
-```
-
-- `createClientServerConfig(type = 'es6')` - Creates configuration with JS, TS support and pragma preprocessing comments. This produces client/server specific bundles.
-- `createBaseConfig(type = 'es6')` - Creates base config with JS and TS support. You can override the output module type using the function first argument.
-- `generateConfig(enableServerClientBundle = false)` - Combines both configurations above, which produces **CJS/ESM** builds, with support for TS and JS. You can optionally enable server/client specific bundles using the first function argument.
-
-> **Note:** You can override module `type` using the first argument and export other types of module syntax. For example use `commonjs` for Node-specific packages.
 
 ### `package.json` entry points
 

@@ -26,31 +26,23 @@ yargs
     default: chalk.magenta('default'),
     required: chalk.yellow('required'),
   })
+  .option('clientServerBundle', {
+    desc: 'Use client server bundle configuration instead of the default one',
+    type: 'boolean',
+    default: false,
+  })
+  .option('silent', {
+    alias: 's',
+    desc: 'Disable logging status messages',
+    type: 'boolean',
+    default: false,
+  })
   .command('build', 'Build ima plugin at current directory', {}, build)
-  .command(
-    'dev',
-    'Watch ima plugin at current directory',
-    args => {
-      args.option('silent', {
-        alias: 's',
-        desc: 'Disable logging status messages',
-        type: 'boolean',
-        default: false,
-      });
-    },
-    watch
-  )
+  .command('dev', 'Watch ima plugin at current directory', {}, watch)
   .command(
     'link <path>',
     'Link ima plugin at current directory to ima application at given path',
-    args => {
-      args.option('silent', {
-        alias: 's',
-        desc: 'Disable logging status messages',
-        type: 'boolean',
-        default: false,
-      });
-    },
+    {},
     watch
   )
   .wrap(null).argv;
