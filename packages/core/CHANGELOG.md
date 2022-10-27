@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- cc9894d2: Removed ima-plugin.config.js in favor of CLI arg
+
 ## 18.0.0-rc.15
 
 ### Patch Changes

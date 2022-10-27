@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.15",
+  "version": "18.0.0-rc.16",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -52,7 +52,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^18.0.0-rc.5",
+    "@ima/plugin-cli": "^18.0.0-rc.7",
     "jscodeshift": "^0.13.1"
   },
   "peerDependencies": {

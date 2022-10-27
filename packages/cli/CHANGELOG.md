@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 8209c0c3: Removed ima-legacy-plugin-loader
+  CoreJS is now injected only to non-es client bundle
+
 ## 18.0.0-rc.13
 
 ### Patch Changes
