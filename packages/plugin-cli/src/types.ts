@@ -1,3 +1,5 @@
+import { ModuleConfig } from '@swc/core';
+
 export type Transformer = ({
   source,
   context,
@@ -6,16 +8,22 @@ export type Transformer = ({
   context: PipeContext;
 }) => Source | Promise<Source>;
 export type TransformerOptions = { test: RegExp };
+export type TransformerDefinition =
+  | Transformer
+  | [Transformer, TransformerOptions];
 
 export type Command = 'dev' | 'link' | 'build';
 
+export interface ImaPluginOutputConfig {
+  dir: string;
+  format: ModuleConfig['type'];
+  bundle?: 'client' | 'server';
+}
+
 export interface ImaPluginConfig {
-  name?: string;
-  input: string;
-  output: string;
-  transforms?: Array<Transformer | [Transformer, TransformerOptions]>;
+  inputDir: string;
+  output: ImaPluginOutputConfig[];
   exclude?: string[];
-  skipTransform?: RegExp[];
   plugins?: Plugin[];
 }
 
@@ -26,7 +34,6 @@ export interface Context {
   cwd: string;
   config: ImaPluginConfig;
   inputDir: string;
-  outputDir: string;
 }
 
 export interface PipeContext {

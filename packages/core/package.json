@@ -37,9 +37,9 @@
   "module": "./dist/esm/server/index.js",
   "browser": "./dist/esm/client/index.js",
   "scripts": {
-    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
-    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
-    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev --clientServerBundle",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build --clientServerBundle",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link --clientServerBundle",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",

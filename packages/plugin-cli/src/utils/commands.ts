@@ -7,17 +7,37 @@ import chokidar from 'chokidar';
 import globby from 'globby';
 import { Arguments } from 'yargs';
 
-import { Context } from '../types';
+import { Context, ImaPluginConfig } from '../types';
 import {
   createProcessingPipeline,
   parseConfigFile,
   runPlugins,
 } from './process';
+import { cleanOutput, processOutput } from './utils';
+
+/**
+ * Returns the upmost common part of output dir path of all output options.
+ */
+function getBaseCommonOutputDir(output: ImaPluginConfig['output']): string {
+  const [firstOutputDirParts, ...otherOutputDirsParts] = output.map(output =>
+    output.dir.split('/')
+  );
+
+  return firstOutputDirParts
+    .reduce<string[]>((acc, cur, index) => {
+      if (otherOutputDirsParts.every(part => part[index] === cur) && cur) {
+        acc.push(cur);
+      }
+
+      return acc;
+    }, [])
+    .join('/');
+}
 
 /**
  * Loads and parses package.json at given working directory.
  */
-export async function parsePkgJSON(basePath: string): Promise<{
+export async function parsePkgJson(basePath: string): Promise<{
   name: string;
   main: string;
 }> {
@@ -70,12 +90,15 @@ function errorHandler(error: Error) {
 /**
  * Build command function handler.
  */
-export async function build() {
+export async function build(args: Arguments) {
+  const { clientServerBundle } = args as unknown as {
+    clientServerBundle: boolean;
+  };
   const elapsed = time();
   const cwd = process.cwd();
   const [pkgJson, configurations] = await Promise.all([
-    parsePkgJSON(cwd),
-    parseConfigFile(cwd),
+    parsePkgJson(cwd),
+    parseConfigFile(cwd, clientServerBundle),
   ]);
 
   logger.info(`Building ${chalk.bold.magenta(pkgJson.name)}`);
@@ -83,19 +106,18 @@ export async function build() {
   // Spawn compilation for each config
   await Promise.all(
     configurations.map(async config => {
-      const inputDir = path.resolve(cwd, config.input);
-      const outputDir = path.resolve(cwd, config.output);
+      const inputDir = path.resolve(cwd, config.inputDir);
 
-      logger.info(
-        `${config.input} ${chalk.blue('→')} ${chalk.green(config.output)} ${
-          config.name ? chalk.red(`[${config.name}]`) : ''
-        }`
-      );
+      config.output.forEach(({ dir, format }) => {
+        logger.info(
+          `${config.inputDir} ${chalk.blue('→')} ${chalk.green(
+            dir
+          )} ${chalk.red(`[${format}]`)}`
+        );
+      });
 
-      // Cleanup
-      if (fs.existsSync(outputDir)) {
-        await fs.promises.rm(outputDir, { recursive: true });
-      }
+      // Clean output directories
+      await cleanOutput(config, cwd);
 
       // Get file paths at input directory
       const files = await globby(path.join(inputDir, './**/*'), {
@@ -108,7 +130,6 @@ export async function build() {
         inputDir,
         config,
         cwd,
-        outputDir,
       };
 
       // Init processing pipeline
@@ -130,125 +151,32 @@ export async function build() {
  */
 export async function watch(args: Arguments) {
   const [command] = args._ as ['link' | 'dev'];
-  const { path: linkPath, silent } = args as unknown as {
+  const {
+    path: linkPath,
+    silent,
+    clientServerBundle,
+  } = args as unknown as {
     path: string;
     silent: boolean;
+    clientServerBundle: boolean;
   };
 
   const cwd = process.cwd();
   const [pkgJson, configurations] = await Promise.all([
-    parsePkgJSON(cwd),
-    parseConfigFile(cwd),
+    parsePkgJson(cwd),
+    parseConfigFile(cwd, clientServerBundle),
   ]);
 
   if (!silent) {
     logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
   }
 
-  // Get dist folder from mainfield
-  const mainFieldBaseDir = pkgJson.main
-    .split('/')
-    .reduce<string[]>((acc, cur: string) => {
-      /**
-       * Break when we have relative path to first root directory, e.g.
-       * there is no relative path indicator but there is some kind of directory
-       * present.
-       */
-      if (acc[acc.length - 1] && !['.', '..'].includes(acc[acc.length - 1])) {
-        return acc;
-      }
-
-      acc.push(cur);
-      return acc;
-    }, [])
-    .join('/');
-
-  /**
-   * Link watcher, there's only one instance per pkg, it watches the root dist
-   * directory and copies changes to the linked path.
-   */
-  if (command === 'link' && linkPath) {
-    const outputDir = path.join(cwd, mainFieldBaseDir);
-    const linkedPath = path.resolve(linkPath);
-    const linkedPkgJson = await parsePkgJSON(linkedPath);
-    const linkedBasePath = path.resolve(
-      linkedPath,
-      'node_modules',
-      pkgJson.name,
-      mainFieldBaseDir
-    );
-
-    // Clean linked folder
-    if (fs.existsSync(linkedBasePath)) {
-      await fs.promises.rm(linkedBasePath, { recursive: true });
-    }
-
-    chokidar
-      .watch([path.join(cwd, mainFieldBaseDir, '/**/*')], {
-        ignoreInitial: false,
-        ignored: [
-          '**/tsconfig.tsbuildinfo/**',
-          '**/node_modules/**',
-          '**/.DS_Store/**',
-        ],
-      })
-      .on('error', errorHandler)
-      .on('all', async (eventName, filePath) => {
-        const contextPath = path.relative(outputDir, filePath);
-        const linkedOutputPath = path.join(linkedBasePath, contextPath);
-        const linkedOutputDir = path.dirname(linkedOutputPath);
-        const outputContextPath = `./${path.join(
-          mainFieldBaseDir,
-          contextPath
-        )}`;
-
-        const elapsed = time();
-
-        switch (eventName) {
-          case 'add':
-          case 'change':
-            if (!fs.existsSync(linkedOutputDir)) {
-              await fs.promises.mkdir(linkedOutputDir, { recursive: true });
-            }
-
-            await fs.promises.copyFile(filePath, linkedOutputPath);
-            break;
-
-          case 'unlink':
-          case 'unlinkDir':
-            await fs.promises.rm(linkedOutputPath, { recursive: true });
-            break;
-
-          case 'addDir':
-            await fs.promises.mkdir(linkedOutputPath, { recursive: true });
-            break;
-        }
-
-        if (!silent) {
-          // Print info to output
-          logger.write(
-            `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
-              pkgJson.name
-            )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
-              linkedPkgJson.name
-            )}`,
-            {
-              elapsed,
-            }
-          );
-        }
-      });
-  }
-
   // Spawn watch for each config
   configurations.forEach(async config => {
-    const inputDir = path.resolve(cwd, config.input);
-    const outputDir = path.resolve(cwd, config.output);
+    const inputDir = path.resolve(cwd, config.inputDir);
 
     // Cleanup
-    if (fs.existsSync(outputDir)) {
-      await fs.promises.rm(outputDir, { recursive: true });
-    }
+    await cleanOutput(config, cwd);
 
     // Processing pipeline context
     const context: Context = {
@@ -256,7 +184,6 @@ export async function watch(args: Arguments) {
       inputDir,
       config,
       cwd,
-      outputDir,
     };
 
     // Init processing pipeline
@@ -271,9 +198,6 @@ export async function watch(args: Arguments) {
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
-        const outputContextPath = `./${path.join(config.output, contextPath)}`;
-        const outputPath = path.join(outputDir, contextPath);
-
         const elapsed = time();
 
         switch (eventName) {
@@ -284,18 +208,36 @@ export async function watch(args: Arguments) {
 
           case 'unlink':
           case 'unlinkDir':
-            await fs.promises.rm(outputPath, { recursive: true });
+            await processOutput(
+              config,
+              async outputPath => {
+                const outputContextPath = path.join(outputPath, contextPath);
+
+                if (fs.existsSync(outputContextPath)) {
+                  await fs.promises.rm(outputContextPath, { recursive: true });
+                }
+              },
+              cwd
+            );
             break;
 
           case 'addDir':
-            await fs.promises.mkdir(outputPath, { recursive: true });
+            await processOutput(
+              config,
+              async outputPath => {
+                await fs.promises.mkdir(path.join(outputPath, contextPath), {
+                  recursive: true,
+                });
+              },
+              cwd
+            );
             break;
         }
 
         // Prevents duplicate logging in `link` mode
         if (command !== 'link' && !silent) {
           logger.write(
-            `${timeNow()} ${getStatusIcon(eventName)} ${outputContextPath}`,
+            `${timeNow()} ${getStatusIcon(eventName)} ${contextPath}`,
             {
               elapsed,
             }
@@ -305,5 +247,80 @@ export async function watch(args: Arguments) {
       .on('ready', async () => {
         await runPlugins(context);
       });
+
+    /**
+     * Link watcher, there's only one instance per pkg, it watches the root dist
+     * directory and copies changes to the linked path.
+     */
+    if (command === 'link' && linkPath) {
+      const distBaseDir = getBaseCommonOutputDir(config.output);
+      const outputDir = path.join(cwd, distBaseDir);
+      const linkedPath = path.resolve(linkPath);
+      const linkedPkgJson = await parsePkgJson(linkedPath);
+      const linkedBasePath = path.resolve(
+        linkedPath,
+        'node_modules',
+        pkgJson.name,
+        distBaseDir
+      );
+
+      // Clean linked folder
+      if (fs.existsSync(linkedBasePath)) {
+        await fs.promises.rm(linkedBasePath, { recursive: true });
+      }
+
+      chokidar
+        .watch([path.join(cwd, distBaseDir, '/**/*')], {
+          ignoreInitial: false,
+          ignored: [
+            '**/tsconfig.tsbuildinfo/**',
+            '**/node_modules/**',
+            '**/.DS_Store/**',
+          ],
+        })
+        .on('error', errorHandler)
+        .on('all', async (eventName, filePath) => {
+          const contextPath = path.relative(outputDir, filePath);
+          const linkedOutputPath = path.join(linkedBasePath, contextPath);
+          const linkedOutputDir = path.dirname(linkedOutputPath);
+          const outputContextPath = `./${path.join(distBaseDir, contextPath)}`;
+
+          const elapsed = time();
+
+          switch (eventName) {
+            case 'add':
+            case 'change':
+              if (!fs.existsSync(linkedOutputDir)) {
+                await fs.promises.mkdir(linkedOutputDir, { recursive: true });
+              }
+
+              await fs.promises.copyFile(filePath, linkedOutputPath);
+              break;
+
+            case 'unlink':
+            case 'unlinkDir':
+              await fs.promises.rm(linkedOutputPath, { recursive: true });
+              break;
+
+            case 'addDir':
+              await fs.promises.mkdir(linkedOutputPath, { recursive: true });
+              break;
+          }
+
+          if (!silent) {
+            // Print info to output
+            logger.write(
+              `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
+                pkgJson.name
+              )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
+                linkedPkgJson.name
+              )}`,
+              {
+                elapsed,
+              }
+            );
+          }
+        });
+    }
   });
 }

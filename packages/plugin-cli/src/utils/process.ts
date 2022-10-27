@@ -4,43 +4,45 @@ import path from 'path';
 import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 
-import { ImaPluginConfig, PipeContext, Context, Source } from '../types';
+import { preprocessTransformer } from '../transformers/preprocessTransformer';
+import { createSwcTransformer } from '../transformers/swcTransformer';
+import {
+  PipeContext,
+  Context,
+  Source,
+  TransformerDefinition,
+  ImaPluginConfig,
+} from '../types';
+import { clientServerConfig, defaultConfig } from './configurations';
 
 const CONFIG_BASENAME = 'ima-plugin.config';
 
 /**
  * Parses ima.build.js file, initializing the build pipeline.
  */
-export async function parseConfigFile(cwd: string): Promise<ImaPluginConfig[]> {
+export async function parseConfigFile(
+  cwd: string,
+  useClientServerConfig: boolean
+): Promise<ImaPluginConfig[]> {
   const configDir = path.resolve(cwd);
   const configFile = await fs.promises
     .readdir(configDir)
     .then(files =>
-      files.find(fileName => fileName.startsWith('ima-plugin.config'))
+      files.find(fileName => fileName.startsWith(CONFIG_BASENAME))
     );
 
-  if (!configFile || !fs.existsSync(configFile)) {
-    throw new Error(
-      `Unable to locate ${CONFIG_BASENAME} configuration file in the ${configDir} directory.`
-    );
+  // Define default config
+  let loadedConfig = useClientServerConfig
+    ? [clientServerConfig]
+    : [defaultConfig];
+
+  // Override with custom configuration
+  if (configFile) {
+    loadedConfig = (await import(path.join(configDir, configFile))).default;
+    loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
   }
 
-  let loadedConfig = (await import(path.join(configDir, configFile))).default;
-  loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
-
-  return loadedConfig.map((config: ImaPluginConfig) => ({
-    plugins: [],
-    exclude: [
-      '**/__tests__/**',
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/typings/**',
-      '**/.DS_Store/**',
-      'tsconfig.tsbuildinfo',
-    ],
-    skipTransform: [/\.(css|less|json)/],
-    ...config,
-  })) as ImaPluginConfig[];
+  return loadedConfig as ImaPluginConfig[];
 }
 
 /**
@@ -80,22 +82,20 @@ export async function emitSource(
  * in the ima.build.js config.
  */
 export async function processTransformers(
+  source: Source,
+  transformers: TransformerDefinition[] | undefined,
   context: PipeContext
 ): Promise<Source> {
-  const { config, filePath, fileName } = context;
-  let source: Source = {
-    fileName,
-    code: await fs.promises.readFile(context.filePath, 'utf8'),
-  };
-
-  if (!Array.isArray(config.transforms)) {
+  if (!transformers) {
     return source;
   }
 
-  for (const transformer of config.transforms) {
-    const [transform, options] = Array.isArray(transformer)
-      ? transformer
-      : [transformer];
+  const { filePath } = context;
+
+  for (const transformerDefinition of transformers) {
+    const [transform, options] = Array.isArray(transformerDefinition)
+      ? transformerDefinition
+      : [transformerDefinition];
 
     try {
       if (!options) {
@@ -126,30 +126,66 @@ export async function processTransformers(
  * Creates processing pipeline used in build, link and dev scripts.
  * It is constructed to run on each file separately.
  */
-export async function createProcessingPipeline(params: Context) {
+export async function createProcessingPipeline(ctx: Context) {
+  const { config } = ctx;
+  const transformers = new Map<string, TransformerDefinition[]>();
+
+  // Create map of transformers for each output option
+  config.output.forEach(output => {
+    transformers.set(
+      output.dir,
+      [
+        typeof output.bundle !== 'undefined' &&
+          preprocessTransformer({
+            context: {
+              client: output.bundle === 'client',
+              server: output.bundle === 'server',
+            },
+          }),
+        [
+          createSwcTransformer({ type: output.format }),
+          { test: /\.(js|jsx)$/ },
+        ],
+        [
+          createSwcTransformer({ type: output.format, syntax: 'typescript' }),
+          { test: /\.(ts|tsx)$/ },
+        ],
+      ].filter(Boolean) as TransformerDefinition[]
+    );
+  });
+
   return async (filePath: string) => {
     const fileName = path.basename(filePath);
-    const contextDir = path.dirname(path.relative(params.inputDir, filePath));
+    const contextDir = path.dirname(path.relative(ctx.inputDir, filePath));
 
-    const context: PipeContext = {
-      ...params,
-      contextDir,
+    // Read file contents
+    let source: Source = {
       fileName,
-      filePath,
+      code: await fs.promises.readFile(filePath, 'utf8'),
     };
 
-    let source: Source | undefined;
+    // Run transformers for each output and emit
+    await Promise.all(
+      config.output.map(async ({ dir }) => {
+        const outputDir = path.resolve(ctx.cwd, dir);
+        const context: PipeContext = {
+          ...ctx,
+          contextDir,
+          fileName,
+          filePath,
+          outputDir,
+        };
 
-    // Process transforms
-    if (!params.config?.skipTransform?.some(testRe => testRe.test(filePath))) {
-      source = await processTransformers(context);
-    }
+        // Process transforms
+        source = await processTransformers(
+          source,
+          transformers.get(dir),
+          context
+        );
 
-    // Write new source
-    await emitSource(
-      source,
-      context,
-      path.resolve(params.outputDir, contextDir)
+        // Write new source
+        await emitSource(source, context, path.resolve(dir, contextDir));
+      })
     );
   };
 }
