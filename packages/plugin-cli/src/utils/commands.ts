@@ -1,19 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time } from '@ima/dev-utils/dist/logger';
+import { logger, time, printTime } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
 import globby from 'globby';
 import { Arguments } from 'yargs';
 
-import { Context, ImaPluginConfig } from '../types';
+import { Args, Context, ImaPluginConfig } from '../types';
 import {
   createProcessingPipeline,
   parseConfigFile,
   runPlugins,
 } from './process';
 import { cleanOutput, processOutput } from './utils';
+
+function parseArgs(args: Arguments) {
+  const [command] = args._ as [Args['command']];
+
+  return { ...args, command } as unknown as Args;
+}
 
 /**
  * Returns the upmost common part of output dir path of all output options.
@@ -70,18 +76,6 @@ export function getStatusIcon(
   }
 }
 
-/**
- * Prints current time in HH:MM:SS format.
- */
-function timeNow() {
-  const d = new Date(),
-    h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
-    m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
-    s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
-
-  return chalk.gray(`[${h}:${m}:${s}]`);
-}
-
 function errorHandler(error: Error) {
   logger.error('An error occurred while wathing files');
   console.error(error);
@@ -91,16 +85,15 @@ function errorHandler(error: Error) {
  * Build command function handler.
  */
 export async function build(args: Arguments) {
-  const { clientServerBundle } = args as unknown as {
-    clientServerBundle: boolean;
-  };
+  const parsedArgs = parseArgs(args);
   const elapsed = time();
   const cwd = process.cwd();
   const [pkgJson, configurations] = await Promise.all([
     parsePkgJson(cwd),
-    parseConfigFile(cwd, clientServerBundle),
+    parseConfigFile(cwd, parsedArgs),
   ]);
 
+  logger.setSilent(parsedArgs.silent);
   logger.info(`Building ${chalk.bold.magenta(pkgJson.name)}`);
 
   // Spawn compilation for each config
@@ -150,26 +143,16 @@ export async function build(args: Arguments) {
  * Dev/link command function handler
  */
 export async function watch(args: Arguments) {
-  const [command] = args._ as ['link' | 'dev'];
-  const {
-    path: linkPath,
-    silent,
-    clientServerBundle,
-  } = args as unknown as {
-    path: string;
-    silent: boolean;
-    clientServerBundle: boolean;
-  };
-
   const cwd = process.cwd();
+  const parsedArgs = parseArgs(args);
+  const { command, path: linkPath } = parsedArgs;
   const [pkgJson, configurations] = await Promise.all([
     parsePkgJson(cwd),
-    parseConfigFile(cwd, clientServerBundle),
+    parseConfigFile(cwd, parsedArgs),
   ]);
 
-  if (!silent) {
-    logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
-  }
+  logger.setSilent(parsedArgs.silent);
+  logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
 
   // Spawn watch for each config
   configurations.forEach(async config => {
@@ -235,9 +218,9 @@ export async function watch(args: Arguments) {
         }
 
         // Prevents duplicate logging in `link` mode
-        if (command !== 'link' && !silent) {
+        if (command !== 'link') {
           logger.write(
-            `${timeNow()} ${getStatusIcon(eventName)} ${contextPath}`,
+            `${printTime()} ${getStatusIcon(eventName)} ${contextPath}`,
             {
               elapsed,
             }
@@ -307,19 +290,17 @@ export async function watch(args: Arguments) {
               break;
           }
 
-          if (!silent) {
-            // Print info to output
-            logger.write(
-              `${timeNow()} ${getStatusIcon(eventName)} ${chalk.cyan(
-                pkgJson.name
-              )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
-                linkedPkgJson.name
-              )}`,
-              {
-                elapsed,
-              }
-            );
-          }
+          // Print info to output
+          logger.write(
+            `${printTime()} ${getStatusIcon(eventName)} ${chalk.cyan(
+              pkgJson.name
+            )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
+              linkedPkgJson.name
+            )}`,
+            {
+              elapsed,
+            }
+          );
         });
     }
   });

@@ -45,3 +45,13 @@ export const clientServerConfig: ImaPluginConfig = {
     },
   ],
 };
+
+export const nodeConfig: ImaPluginConfig = {
+  ...defaultConfig,
+  output: [
+    {
+      dir: './dist',
+      format: 'commonjs',
+    },
+  ],
+};

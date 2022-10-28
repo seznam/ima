@@ -20,23 +20,41 @@ export function time(): () => string {
     prettyMs(Number((process.hrtime.bigint() - start) / BigInt(1e6)));
 }
 
+/**
+ * Prints current time in HH:MM:SS format.
+ */
+export function printTime() {
+  const d = new Date(),
+    h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+    m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
+    s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+
+  return chalk.gray(`[${h}:${m}:${s}]`);
+}
+
 export class Logger {
-  private _identifier?: string;
-  private _globalLogger?: Logger;
+  #identifier?: string;
+  #globalLogger?: Logger;
+  #isSilent = false;
 
   innerElapsed?: ReturnType<typeof time>;
 
   constructor(identifier?: string, globalLogger?: Logger) {
-    this._identifier = identifier;
-    this._globalLogger = globalLogger;
+    this.#identifier = identifier;
+    this.#globalLogger = globalLogger;
   }
 
-  private _log(
+  #log(
     prefix: string,
     chalkFn: (input: string | number | null | undefined) => string,
     message: string,
     { newLine = true, trackTime = false, elapsed }: LoggerOptions = {}
   ): void {
+    // Don't continue if logger is silenced
+    if (this.#isSilent) {
+      return;
+    }
+
     // Print elapsed if previously timed
     this.endTracking();
 
@@ -49,7 +67,7 @@ export class Logger {
     if (prefix) {
       process.stdout.write(
         chalkFn(
-          `${prefix}: ${this._identifier ? `(${this._identifier}) ` : ''}`
+          `${prefix}: ${this.#identifier ? `(${this.#identifier}) ` : ''}`
         )
       );
     }
@@ -73,7 +91,7 @@ export class Logger {
     }
   }
 
-  public endTracking(): void {
+  endTracking(): void {
     // Write elapsed for previous log
     if (this.innerElapsed) {
       this.writeElapsed(this.innerElapsed);
@@ -83,29 +101,29 @@ export class Logger {
     }
 
     // Write elapsed for previous log
-    if (this._globalLogger?.innerElapsed) {
-      this.writeElapsed(this._globalLogger.innerElapsed);
-      this._globalLogger.innerElapsed = undefined;
+    if (this.#globalLogger?.innerElapsed) {
+      this.writeElapsed(this.#globalLogger.innerElapsed);
+      this.#globalLogger.innerElapsed = undefined;
 
       return;
     }
   }
 
-  public info(message: string, options?: LoggerOptions) {
-    this._log('info', chalk.bold.cyan, message, options);
+  info(message: string, options?: LoggerOptions) {
+    this.#log('info', chalk.bold.cyan, message, options);
   }
 
-  public success(message: string, options?: LoggerOptions) {
-    this._log('success', chalk.bold.green, message, options);
+  success(message: string, options?: LoggerOptions) {
+    this.#log('success', chalk.bold.green, message, options);
   }
 
-  public error(message: string | Error, options?: LoggerOptions) {
+  error(message: string | Error, options?: LoggerOptions) {
     if (message instanceof Error) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [_, ...stackLines] = message.stack?.split('\n') ?? '';
 
       // Print error name and message
-      this._log(
+      this.#log(
         'error',
         chalk.bold.red,
         `${chalk.underline(message.name)}: ${message.message.trim()}`,
@@ -115,28 +133,36 @@ export class Logger {
       // Print stack
       this.write(`\n${chalk.gray(stackLines.join('\n'))}\n`);
     } else {
-      this._log('error', chalk.bold.red, message, options);
+      this.#log('error', chalk.bold.red, message, options);
     }
   }
 
-  public warn(message: string, options?: LoggerOptions) {
-    this._log('warn', chalk.bold.yellow, message, options);
+  warn(message: string, options?: LoggerOptions) {
+    this.#log('warn', chalk.bold.yellow, message, options);
   }
 
-  public sync(message: string, options?: LoggerOptions) {
-    this._log('sync', chalk.bold.magenta, message, options);
+  sync(message: string, options?: LoggerOptions) {
+    this.#log('sync', chalk.bold.magenta, message, options);
   }
 
-  public plugin(message: string, options?: LoggerOptions) {
-    this._log('plugin', chalk.bold.blue, message, options);
+  plugin(message: string, options?: LoggerOptions) {
+    this.#log('plugin', chalk.bold.blue, message, options);
   }
 
-  public write(message: string, options?: LoggerOptions) {
-    this._log('', chalk.bold.blue, message, options);
+  write(message: string, options?: LoggerOptions) {
+    this.#log('', chalk.bold.blue, message, options);
   }
 
-  public writeElapsed(elapsed: ReturnType<typeof time>): void {
+  writeElapsed(elapsed: ReturnType<typeof time>) {
     process.stdout.write(chalk.gray(` [${elapsed()}]\n`));
+  }
+
+  setSilent(isSilent: boolean) {
+    this.#isSilent = isSilent;
+  }
+
+  isSilent() {
+    return this.#isSilent;
   }
 }
 
