@@ -52,3 +52,11 @@ export interface Source {
   code: string;
   map?: string;
 }
+
+export interface Args {
+  command: 'build' | 'link' | 'dev';
+  silent: boolean;
+  clientServerConfig: boolean;
+  nodeConfig: boolean;
+  path?: string;
+}

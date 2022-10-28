@@ -12,8 +12,13 @@ import {
   Source,
   TransformerDefinition,
   ImaPluginConfig,
+  Args,
 } from '../types';
-import { clientServerConfig, defaultConfig } from './configurations';
+import {
+  clientServerConfig,
+  defaultConfig,
+  nodeConfig,
+} from './configurations';
 
 const CONFIG_BASENAME = 'ima-plugin.config';
 
@@ -22,7 +27,7 @@ const CONFIG_BASENAME = 'ima-plugin.config';
  */
 export async function parseConfigFile(
   cwd: string,
-  useClientServerConfig: boolean
+  args: Args
 ): Promise<ImaPluginConfig[]> {
   const configDir = path.resolve(cwd);
   const configFile = await fs.promises
@@ -32,9 +37,15 @@ export async function parseConfigFile(
     );
 
   // Define default config
-  let loadedConfig = useClientServerConfig
-    ? [clientServerConfig]
-    : [defaultConfig];
+  let loadedConfig: ImaPluginConfig[] = [];
+
+  if (args.clientServerConfig) {
+    loadedConfig.push(clientServerConfig);
+  } else if (args.nodeConfig) {
+    loadedConfig.push(nodeConfig);
+  } else {
+    loadedConfig.push(defaultConfig);
+  }
 
   // Override with custom configuration
   if (configFile) {

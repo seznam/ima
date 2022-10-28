@@ -28,9 +28,10 @@ npx ima-plugin link [target-project]
 npx ima-plugin --help
 ```
 
-The plugin works **without the need to provide custom ima-plugin.config.js** and covers most cases where:
+The plugin works **without the need to provide custom ima-plugin.config.js**. There are 3 configuration presets that should cover most situations, which can be forced using CLI args:
  - `npm run [build|dev|link]` - generates two bundles, one in cjs and other in esm. Use this for almost any plugin that doesn't need server/client specific bundles.
- - `npm run [build|dev|link] --clientServerBundle` - this generates code in cjs and two bundles in esm, where you can drop client/server specific syntax using pragma comments.
+ - `npm run [build|dev|link] --nodeConfig` - generates only cjs bundle (in ./dist directory), usefull for CLI and node plugins.
+ - `npm run [build|dev|link] --clientServerConfig` - generates code in cjs and two bundles in esm, where you can drop client/server specific syntax using pragma comments.
 
 ### Custom `ima-plugin.config.js`
 You can always provide custom ima-plugin.config.js where you can either extend one of the provided default configurations or create completely new one:
@@ -40,8 +41,9 @@ You can always provide custom ima-plugin.config.js where you can either extend o
 
 // Use one of the default provided configurations
 const {
-  defaultConfig,
-  clientServerConfig,
+  defaultConfig, // corresponds with CLI options described above
+  clientServerConfig, // corresponds with CLI options described above
+  nodeConfig, // corresponds with CLI options described above
   typescriptDeclarationsPlugin
 } = require('@ima/plugin-cli');
 
