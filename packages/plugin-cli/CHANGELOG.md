@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.8
+
+### Patch Changes
+
+- 0016d7ff: Added node, serverClient and config presets
+
 ## 18.0.0-rc.7
 
 ### Major Changes

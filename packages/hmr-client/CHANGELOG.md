@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- Updated dependencies [0016d7ff]
+  - @ima/dev-utils@18.0.0-rc.9
+
 ## 18.0.0-rc.8
 
 ### Patch Changes

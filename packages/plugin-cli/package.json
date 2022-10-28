@@ -1,6 +1,6 @@
 {
   "name": "@ima/plugin-cli",
-  "version": "18.0.0-rc.7",
+  "version": "18.0.0-rc.8",
   "description": "IMA.js Plugin CLI tool to build, link, develop IMA.js plugins.",
   "keywords": [
     "IMA",

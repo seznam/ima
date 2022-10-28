@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- 0016d7ff: Added new silencing option to logger and time format function
+
 ## 18.0.0-rc.8
 
 ### Patch Changes
