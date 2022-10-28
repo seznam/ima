@@ -26,8 +26,13 @@ yargs
     default: chalk.magenta('default'),
     required: chalk.yellow('required'),
   })
-  .option('clientServerBundle', {
-    desc: 'Use client server bundle configuration instead of the default one',
+  .option('clientServerConfig', {
+    desc: 'Use client/server build configuration instead of the default one',
+    type: 'boolean',
+    default: false,
+  })
+  .option('nodeConfig', {
+    desc: 'Use node build configuration instead of the default one',
     type: 'boolean',
     default: false,
   })

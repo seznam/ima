@@ -1,5 +1,5 @@
 export {
-  ImaPluginConfig as BuildConfig,
+  ImaPluginConfig,
   Source,
   PipeContext,
   Command,
@@ -10,4 +10,8 @@ export {
 } from './types';
 
 export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
-export { defaultConfig, clientServerConfig } from './utils/configurations';
+export {
+  defaultConfig,
+  clientServerConfig,
+  nodeConfig,
+} from './utils/configurations';
