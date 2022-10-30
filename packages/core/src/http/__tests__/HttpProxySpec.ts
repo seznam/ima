@@ -7,7 +7,7 @@ import { toMockedInstance } from 'to-mock';
 import Window from '../../window/ClientWindow';
 import GenericError from '../../error/GenericError';
 import { HttpAgentRequestOptions } from '../HttpAgent';
-import { UnknownParameters } from '@/CommonTypes';
+import { UnknownParameters } from '../../CommonTypes';
 
 describe('ima.core.http.HttpProxy', () => {
   jest.useFakeTimers();

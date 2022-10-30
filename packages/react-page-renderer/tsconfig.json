@@ -1,26 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ES2022"
-    ],
-    "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "*": [
-        "./typings/*"
-      ]
-    },
+    ]
   },
   "include": [
-    "../../typings/**/*/*",
-    "./types/**/*",
-    "./src/**/*"
+    "src"
   ]
 }

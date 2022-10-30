@@ -1,23 +1,50 @@
-const { generateConfig, createBaseConfig } = require('@ima/plugin-cli');
+const {
+  clientServerConfig,
+  nodeConfig,
+  typescriptDeclarationsPlugin,
+} = require('@ima/plugin-cli');
 
-const config = generateConfig(true);
+/**
+ * @type import('@ima/plugin-cli').ImaPluginConfig[]
+ */
+module.exports = [
+  {
+    ...clientServerConfig,
+    plugins: [
+      typescriptDeclarationsPlugin({
+        additionalArgs: ['--skipLibCheck', '--project', 'tsconfig.build.json'],
+      }),
+    ],
+  },
+  {
+    ...nodeConfig,
+    inputDir: './hook',
+    output: [
+      {
+        dir: './dist/hook',
+        format: 'commonjs',
+      },
+    ],
+    plugins: [],
+  },
+];
 
-const exclude = ['**/server.ts/**'];
+// const config = generateConfig(true);
 
-config.forEach(_config => {
-  if (_config.exclude) {
-    _config.exclude.push(...exclude);
-  } else {
-    _config.exclude = exclude;
-  }
-});
+// const exclude = ['**/server.ts/**'];
 
-const serverConfig = createBaseConfig('commonjs');
+// config.forEach(_config => {
+//   if (_config.exclude) {
+//     _config.exclude.push(...exclude);
+//   } else {
+//     _config.exclude = exclude;
+//   }
+// });
 
-serverConfig.input = './hook';
-serverConfig.output = './dist/hook';
-serverConfig.plugins = [];
+// const serverConfig = createBaseConfig('commonjs');
 
-config.push(serverConfig);
+// serverConfig.input = './hook';
+// serverConfig.output = './dist/hook';
+// serverConfig.plugins = [];
 
-module.exports = config;
+// config.push(serverConfig);

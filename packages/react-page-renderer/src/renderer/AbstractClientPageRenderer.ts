@@ -10,7 +10,7 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 

@@ -11,10 +11,9 @@ import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
 
-import { Settings } from '@/types';
-
 import AbstractPureComponent from '../../component/AbstractPureComponent';
 import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { Settings } from '../../types';
 import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 

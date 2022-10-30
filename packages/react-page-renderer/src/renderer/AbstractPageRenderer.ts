@@ -1,5 +1,5 @@
 import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
 import * as react from 'react';

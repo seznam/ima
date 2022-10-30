@@ -12,7 +12,7 @@ import PageStateManager from '../../../page/state/PageStateManager';
 import RouteFactory from '../../../router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 import AbstractController from '../../../controller/AbstractController';
-import { UnknownParameters, UnknownPromiseParameters } from '@/CommonTypes';
+import { UnknownParameters } from '../../../CommonTypes';
 import PageFactory from '../../../page/PageFactory';
 import DynamicRoute from '../../../router/DynamicRoute';
 import StaticRoute from '../../../router/StaticRoute';

@@ -1,4 +1,4 @@
-import { StringParameters } from '@/CommonTypes';
+import { StringParameters } from '../../CommonTypes';
 import AbstractRoute from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 

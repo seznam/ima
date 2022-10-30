@@ -8,10 +8,9 @@ import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 
-import { Settings } from '@/types';
-
 import AbstractPureComponent from '../../component/AbstractPureComponent';
 import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { Settings } from '../../types';
 import { PageData } from '../AbstractPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 import ServerPageRenderer from '../ServerPageRenderer';
