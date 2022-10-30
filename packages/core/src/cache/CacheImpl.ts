@@ -17,12 +17,13 @@ import { UnknownParameters } from '../CommonTypes';
  *   cache.set('model.articles', articles, 60 * 60 * 1000);
  * }
  */
-export default class CacheImpl extends Cache {
-  protected _cache: Storage;
-  protected _factory: CacheFactory;
+export default class CacheImpl<V> extends Cache<V> {
+  protected _cache: Storage<CacheEntry<V>>;
+  protected _factory: CacheFactory<V>;
   protected _Helper: typeof Helpers;
   protected _ttl: number;
   protected _enabled: boolean;
+
   /**
    * Initializes the cache.
    *
@@ -33,15 +34,14 @@ export default class CacheImpl extends Cache {
    *        The cache configuration.
    */
   constructor(
-    cacheStorage: Storage,
-    factory: CacheFactory,
+    cacheStorage: Storage<CacheEntry<V>>,
+    factory: CacheFactory<V>,
     Helper: typeof Helpers,
     config: { ttl: number; enabled: boolean } = { ttl: 30000, enabled: false }
   ) {
     super();
 
     this._cache = cacheStorage;
-
     this._factory = factory;
 
     /**
@@ -63,19 +63,20 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  clear() {
+  clear(): void {
     this._cache.clear();
   }
 
   /**
    * @inheritdoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     if (!this._enabled || !this._cache.has(key)) {
       return false;
     }
 
-    const cacheEntry = this._cache.get(key) as CacheEntry;
+    const cacheEntry = this._cache.get(key);
+
     if (cacheEntry && !cacheEntry.isExpired()) {
       return true;
     }
@@ -88,12 +89,15 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  get(key: string): unknown | null {
+  get(key: string): V | null {
     if (this.has(key)) {
-      const cacheEntryItem = this._cache.get(key) as CacheEntry;
-      const value = cacheEntryItem.getValue();
+      const cacheEntryItem = this._cache.get(key);
 
-      return this._clone(value);
+      if (cacheEntryItem) {
+        const value = cacheEntryItem.getValue();
+
+        return this._clone(value);
+      }
     }
 
     return null;
@@ -102,7 +106,7 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown, ttl: number | string = 0) {
+  set(key: string, value: V, ttl: number | string = 0): void {
     if (!this._enabled) {
       return;
     }
@@ -118,14 +122,14 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  delete(key: string) {
+  delete(key: string): void {
     this._cache.delete(key);
   }
 
   /**
    * @inheritdoc
    */
-  disable() {
+  disable(): void {
     this._enabled = false;
     this.clear();
   }
@@ -133,14 +137,14 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  enable() {
+  enable(): void {
     this._enabled = true;
   }
 
   /**
    * @inheritdoc
    */
-  serialize() {
+  serialize(): string {
     const dataToSerialize: UnknownParameters = {};
 
     for (const key of this._cache.keys()) {
@@ -158,7 +162,9 @@ export default class CacheImpl extends Cache {
             throw new Error(
               `ima.core.cache.CacheImpl:serialize An ` +
                 `attempt to serialize ` +
-                `${(serializeEntry.value as CacheEntry).toString()}, stored ` +
+                `${(
+                  serializeEntry.value as CacheEntry<V>
+                ).toString()}, stored ` +
                 `using the key ${key}, was made, but the value ` +
                 `cannot be serialized. Remove this entry from ` +
                 `the cache or change its type so that can be ` +
@@ -177,7 +183,7 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritdoc
    */
-  deserialize(serializedData: { [key: string]: SerializedCacheEntry }) {
+  deserialize(serializedData: { [key: string]: SerializedCacheEntry<V> }) {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
 
@@ -250,7 +256,7 @@ export default class CacheImpl extends Cache {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  private _clone(value: unknown) {
+  private _clone(value: V) {
     if (
       value !== null &&
       typeof value === 'object' &&

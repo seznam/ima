@@ -6,9 +6,9 @@ import MapStorage from '../../storage/MapStorage';
 import CacheEntry from '../CacheEntry';
 
 describe('ima.core.cache.CacheImpl', () => {
-  let cache: Cache;
-  let cacheStorage: MapStorage;
-  let cacheFactory: CacheFactory;
+  let cache: Cache<unknown>;
+  let cacheStorage: MapStorage<CacheEntry<unknown>>;
+  let cacheFactory: CacheFactory<unknown>;
   const helper = {
     ...Helper,
   };
