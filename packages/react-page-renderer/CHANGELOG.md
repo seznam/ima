@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- 4a3bef27: Changed fire syntax to use EventTarget
+
 ## 18.0.0-rc.11
 
 ### Major Changes
