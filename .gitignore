@@ -6,10 +6,11 @@ out/
 .history
 jsconfig.json
 ima-app
-storage
+utils/**/storage
 docs/api
 .docusaurus
 build
 packages/*/.turbo
 website/.turbo
 *.tgz
+.vscode

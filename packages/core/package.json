@@ -36,10 +36,11 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/server/index.js",
   "browser": "./dist/esm/client/index.js",
+  "types": "./dist/esm/client/index.d.ts",
   "scripts": {
-    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev --clientServerConfig",
-    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build --clientServerConfig",
-    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link --clientServerConfig",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",
@@ -52,12 +53,11 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/jest": "^29.0.3",
+    "@types/multer": "^1.4.7",
     "@ima/plugin-cli": "^18.0.0-rc.7",
     "jscodeshift": "^0.13.1"
-  },
-  "peerDependencies": {
-    "react": ">=16.13",
-    "react-dom": ">=16.13"
   },
   "publishConfig": {
     "access": "public",

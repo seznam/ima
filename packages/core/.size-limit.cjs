@@ -40,7 +40,7 @@ module.exports = [
   },
   // Test tree-shaking
   {
-    limit: '70 B',
+    limit: '80 B',
     path: './dist/esm/client/index.js',
     import: '{ Cache }',
     running: false,

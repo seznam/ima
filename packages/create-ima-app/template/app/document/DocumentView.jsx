@@ -1,10 +1,6 @@
-import { AbstractDocumentView } from '@ima/core';
+import { AbstractPureComponent } from '@ima/react-page-renderer';
 
-export default class DocumentView extends AbstractDocumentView {
-  static get masterElementId() {
-    return 'page';
-  }
-
+export default class DocumentView extends AbstractPureComponent {
   render() {
     const { metaManager } = this.props;
 
@@ -45,7 +41,7 @@ export default class DocumentView extends AbstractDocumentView {
         </head>
         <body>
           <div
-            id={this.constructor.masterElementId}
+            id={this.utils.$Settings.$Page.$Render.masterElementId}
             dangerouslySetInnerHTML={{ __html: this.props.page }}
           />
           {/* Inject http cache */}

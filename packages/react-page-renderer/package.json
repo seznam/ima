@@ -1,0 +1,58 @@
+{
+  "name": "@ima/react-page-renderer",
+  "version": "18.0.0-rc.10",
+  "description": "IMA.js React page renderer.",
+  "keywords": [
+    "IMA.js",
+    "react-page-renderer"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/react-page-renderer"
+  },
+  "license": "MIT",
+  "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/server/index.js",
+  "browser": "./dist/esm/client/index.js",
+  "types": "./dist/esm/client/index.js",
+  "scripts": {
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "npm run test:jest && npm run test:size",
+    "test:jest": "jest -c jest.config.js",
+    "test:size": "size-limit",
+    "preversion": "npm test"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@ima/helpers": "^18.0.0-rc.1",
+    "classnames": "^2.3.1",
+    "memoize-one": "^6.0.0"
+  },
+  "devDependencies": {
+    "@cfaester/enzyme-adapter-react-18": "^0.5.1",
+    "@esmj/emitter": "^0.0.6",
+    "@ima/dev-utils": "^18.0.0-rc.1",
+    "@testing-library/react": "^13.4.0",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/webpack-env": "^1.16.3",
+    "to-mock": "^1.6.2"
+  },
+  "peerDependencies": {
+    "@ima/core": "^18.0.0-rc.16",
+    "@ima/dev-utils": "^18.0.0-rc.0",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "webpack": "^5.70.0"
+  }
+}
