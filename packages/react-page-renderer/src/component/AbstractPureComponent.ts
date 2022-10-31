@@ -1,4 +1,4 @@
-import { PureComponent, ContextType, RefObject } from 'react';
+import { PureComponent, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
 import PageContext from '../PageContext';
@@ -87,11 +87,11 @@ export default abstract class AbstractPureComponent extends PureComponent {
    * Creates and sends a new IMA.js DOM custom event from this component.
    *
    * @param eventName The name of the event.
-   * @param ref Reference to EventTarget node.
+   * @param target EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventName: string, ref: RefObject<unknown>, data = undefined) {
-    helpers.fire(this, eventName, ref, data);
+  fire(eventName: string, target: EventTarget, data = undefined) {
+    helpers.fire(this, eventName, target, data);
   }
 
   /**
