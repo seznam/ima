@@ -39,6 +39,7 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
+    "@cfaester/enzyme-adapter-react-18": "^0.5.1",
     "@esmj/emitter": "^0.0.6",
     "@ima/dev-utils": "^18.0.0-rc.1",
     "@testing-library/react": "^13.4.0",

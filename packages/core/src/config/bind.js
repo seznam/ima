@@ -85,7 +85,11 @@ export default (ns, oc, config) => {
     decode: s => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
-  oc.bind('$SessionStorage', SessionStorage);
+  if (oc.get(Window).hasSessionStorage()) {
+    oc.bind('$SessionStorage', SessionStorage);
+  } else {
+    oc.bind('$SessionStorage', MapStorage);
+  }
   oc.bind('$MapStorage', MapStorage);
   oc.inject(WeakMapStorage, [
     {

@@ -28,7 +28,7 @@ module.exports = [
 
   },
   {
-    limit: '3 KB',
+    limit: '4 KB',
     path: './dist/esm/server/index.js',
     import: '*',
     running: false,

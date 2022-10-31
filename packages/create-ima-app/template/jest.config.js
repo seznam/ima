@@ -2,7 +2,7 @@ module.exports = {
   bail: true,
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
-  setupFiles: ['@ima/core/setupFile.js', '<rootDir>/jest.setup.js'],
+  setupFiles: ['@ima/core/setupJest.js', '<rootDir>/setupJest.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
   moduleNameMapper: {

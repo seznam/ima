@@ -72,6 +72,7 @@ import WeakMapStorage from './storage/WeakMapStorage';
 import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
+import { RouteOptions } from './router/Router';
 
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
@@ -314,6 +315,7 @@ export {
   StaticRoute as Route,
   RouteFactory,
   RouteNames,
+  RouteOptions,
   Router,
   ServerRouter,
   CookieStorage,
