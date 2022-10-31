@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { useWindowEvent } from '../windowEvent';
 import { mountHook } from '../../testUtils';
+import { useWindowEvent } from '../windowEvent';
 
 describe('useWindowEvent', () => {
   let result;
   let windowMock = {
-    dispatchEvent: jest.fn()
+    dispatchEvent: jest.fn(),
   };
 
   let contextMock = {
@@ -15,9 +15,9 @@ describe('useWindowEvent', () => {
         getWindow: jest.fn().mockReturnValue(windowMock),
         createCustomEvent: jest.fn(),
         bindEventListener: jest.fn(),
-        unbindEventListener: jest.fn()
-      }
-    }
+        unbindEventListener: jest.fn(),
+      },
+    },
   };
 
   afterEach(() => {
@@ -32,13 +32,13 @@ describe('useWindowEvent', () => {
     mountHook(() => {
       result = useWindowEvent({
         event: 'custom-event',
-        callback: jest.fn()
+        callback: jest.fn(),
       });
 
       expect(result).toEqual({
         window: windowMock,
         dispatchEvent: windowMock.dispatchEvent,
-        createCustomEvent: contextMock.$Utils.$Window.createCustomEvent
+        createCustomEvent: contextMock.$Utils.$Window.createCustomEvent,
       });
     }, contextMock);
   });
@@ -49,7 +49,7 @@ describe('useWindowEvent', () => {
     mountHook(() => {
       result = useWindowEvent({
         event: 'custom-event',
-        callback: cb
+        callback: cb,
       });
 
       expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(
@@ -69,7 +69,7 @@ describe('useWindowEvent', () => {
         eventTarget: 'custom-target',
         event: 'custom-event',
         callback: cb,
-        useCapture: true
+        useCapture: true,
       });
 
       expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(

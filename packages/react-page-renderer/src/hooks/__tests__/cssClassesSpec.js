@@ -5,8 +5,8 @@ describe('useCssClasses', () => {
   let result;
   let contextMock = {
     $Utils: {
-      $CssClasses: () => '$CssClasses'
-    }
+      $CssClasses: () => '$CssClasses',
+    },
   };
 
   it('should return shortcut to $CssClasses utility', () => {

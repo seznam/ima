@@ -33,7 +33,7 @@ export default function useComponent() {
       link: (...params) => $Utils.$Router.link(...params),
       fire: (...params) => $Utils.$EventBus.fire(...params),
       listen: (...params) => $Utils.$EventBus.listen(...params),
-      unlisten: (...params) => $Utils.$EventBus.unlisten(...params)
+      unlisten: (...params) => $Utils.$EventBus.unlisten(...params),
     }),
     [$Utils]
   );

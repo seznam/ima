@@ -7,9 +7,9 @@ describe('useSSR', () => {
   let contextMock = {
     $Utils: {
       $Window: {
-        isClient: isClientMock
-      }
-    }
+        isClient: isClientMock,
+      },
+    },
   };
 
   it('should return object with isClient and isServer properties', () => {
@@ -19,7 +19,7 @@ describe('useSSR', () => {
 
     expect(result).toEqual({
       isClient: true,
-      isServer: false
+      isServer: false,
     });
   });
 });

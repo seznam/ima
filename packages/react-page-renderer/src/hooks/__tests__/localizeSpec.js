@@ -6,9 +6,9 @@ describe('useLocalize', () => {
   let contextMock = {
     $Utils: {
       $Dictionary: {
-        get: () => 'Dictionary.get() function'
-      }
-    }
+        get: () => 'Dictionary.get() function',
+      },
+    },
   };
 
   it('should return shortcut to $Dictionary.get function', () => {

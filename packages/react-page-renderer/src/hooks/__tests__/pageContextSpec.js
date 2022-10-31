@@ -5,7 +5,7 @@ describe('usePageContext', () => {
   let result;
   let contextMock = {
     customContextValues: 'value',
-    anotherOne: false
+    anotherOne: false,
   };
 
   it('should return pageContext', () => {
@@ -15,7 +15,7 @@ describe('usePageContext', () => {
 
     expect(Object.keys(result)).toStrictEqual([
       'customContextValues',
-      'anotherOne'
+      'anotherOne',
     ]);
   });
 });

@@ -16,7 +16,7 @@ describe('useDispatcher', () => {
     });
 
     expect(result).toEqual({
-      fire: expect.any(Function)
+      fire: expect.any(Function),
     });
   });
 });

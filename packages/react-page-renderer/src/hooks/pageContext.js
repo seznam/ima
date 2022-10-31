@@ -1,6 +1,6 @@
+import { GenericError } from '@ima/core';
 import { useContext } from 'react';
 
-import { GenericError } from '@ima/core';
 import PageContext from '../PageContext';
 
 /**

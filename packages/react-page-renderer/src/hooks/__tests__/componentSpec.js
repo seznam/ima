@@ -13,7 +13,7 @@ describe('useComponent', () => {
       ['cssClasses', 'localize', 'link', 'fire', 'listen', 'unlisten'].every(
         key => typeof result[key] === 'function'
       )
-    );
+    ).toBeTruthy();
     expect(Object.keys(result)).toEqual([
       'utils',
       'cssClasses',
@@ -21,7 +21,7 @@ describe('useComponent', () => {
       'link',
       'fire',
       'listen',
-      'unlisten'
+      'unlisten',
     ]);
   });
 });

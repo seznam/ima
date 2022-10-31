@@ -44,7 +44,7 @@ function useDispatcher(event = null, callback = null) {
 
   return useMemo(
     () => ({
-      fire: (...params) => $Dispatcher.fire(...params)
+      fire: (...params) => $Dispatcher.fire(...params),
     }),
     [$Dispatcher]
   );

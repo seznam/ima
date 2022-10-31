@@ -19,7 +19,7 @@ function useSSR() {
   return useMemo(
     () => ({
       isClient: $Window.isClient(),
-      isServer: !$Window.isClient()
+      isServer: !$Window.isClient(),
     }),
     [$Window]
   );

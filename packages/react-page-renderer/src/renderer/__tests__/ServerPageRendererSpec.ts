@@ -3,8 +3,8 @@ import {
   Dispatcher,
   GenericError,
   MetaManager,
+  RouteOptions,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 

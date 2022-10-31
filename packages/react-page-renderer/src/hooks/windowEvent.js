@@ -55,7 +55,7 @@ function useWindowEvent({
   eventTarget = null,
   event,
   callback,
-  useCapture = false
+  useCapture = false,
 } = {}) {
   const { $Window } = useComponentUtils();
   const window = $Window.getWindow();
@@ -80,7 +80,7 @@ function useWindowEvent({
     () => ({
       window,
       dispatchEvent: window && window.dispatchEvent,
-      createCustomEvent: $Window.createCustomEvent
+      createCustomEvent: $Window.createCustomEvent,
     }),
     [$Window]
   );

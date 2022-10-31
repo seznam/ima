@@ -7,11 +7,11 @@ describe('useSettings', () => {
     $Utils: {
       $Settings: {
         $Page: {
-          scripts: ['script.js']
+          scripts: ['script.js'],
         },
-        documentView: 'documentView'
-      }
-    }
+        documentView: 'documentView',
+      },
+    },
   };
 
   it('should return settings object by default', () => {

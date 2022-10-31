@@ -6,9 +6,9 @@ describe('useLink', () => {
   let contextMock = {
     $Utils: {
       $Router: {
-        link: () => '$Router.link() function'
-      }
-    }
+        link: () => '$Router.link() function',
+      },
+    },
   };
 
   it('should return shortcut to router link', () => {
