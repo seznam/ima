@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.17
+
+### Major Changes
+
+- 027bb17c: New package react-page-renderer.
+
 ## 18.0.0-rc.16
 
 ### Patch Changes
