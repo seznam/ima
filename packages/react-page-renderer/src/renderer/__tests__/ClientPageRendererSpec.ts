@@ -17,8 +17,6 @@ import { Settings } from '../../types';
 import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 
-global.$Debug = true;
-
 class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
     return;
@@ -232,7 +230,6 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        pageState: pageState,
       });
     });
   });
@@ -336,7 +333,6 @@ describe('ClientPageRenderer', () => {
 
       expect(response).toStrictEqual({
         status: 200,
-        pageState,
       });
     });
   });

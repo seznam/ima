@@ -5,11 +5,13 @@ import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
+import { UnknownParameters } from '../CommonTypes';
 
 export type RouteOptions = {
   autoScroll?: boolean;
   documentView?: unknown;
   extensions?: IExtension[];
+  headers?: UnknownParameters;
   httpStatus?: number;
   managedRootView?: unknown;
   middlewares?:

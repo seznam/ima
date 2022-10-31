@@ -24,7 +24,12 @@ jest.mock('../devErrorPageFactory.js', () => {
     return jest.fn(({ error }) => ({
       SPA: false,
       static: false,
-      pageState: {},
+      page: {
+        state: {},
+        cache: null,
+        cookie: new Map(),
+        headers: {},
+      },
       cache: false,
       error,
       content: 'dev error page',
@@ -46,6 +51,8 @@ describe('Server App Factory', () => {
   let serverApp = null;
 
   let router = null;
+  let cache = null;
+  let pageStateManager = null;
   let emitter = new Emitter();
 
   beforeEach(() => {
@@ -78,7 +85,10 @@ describe('Server App Factory', () => {
     devErrorPage = jest.fn(({ error }) => ({
       SPA: false,
       static: false,
-      pageState: {},
+      page: {
+        state: {},
+        cache: null,
+      },
       cache: false,
       error,
       content: 'dev error page',
@@ -100,6 +110,16 @@ describe('Server App Factory', () => {
           },
         };
       }),
+    };
+
+    cache = {
+      serialize: jest
+        .fn()
+        .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
+    };
+
+    pageStateManager = {
+      getState: jest.fn().mockReturnValue({ page: 'state' }),
     };
 
     appFactory = jest.fn(() => {
@@ -127,7 +147,21 @@ describe('Server App Factory', () => {
                   if (name === '$Response') {
                     return {
                       init: jest.fn(),
+                      getResponseParams() {
+                        return {
+                          cookie: new Map(),
+                          headers: {},
+                        };
+                      },
                     };
+                  }
+
+                  if (name === '$Cache') {
+                    return cache;
+                  }
+
+                  if (name === '$PageStateManager') {
+                    return pageStateManager;
                   }
                 },
                 clear() {},
@@ -151,6 +185,7 @@ describe('Server App Factory', () => {
     RES = {
       status: jest.fn(),
       send: jest.fn(),
+      set: jest.fn(),
       locals: {},
       headerSent: false,
     };
@@ -201,11 +236,11 @@ describe('Server App Factory', () => {
         .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
         .mockReturnValue(true);
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeTruthy();
-      expect(page.status).toBe(200);
-      expect(page.cache).toBeFalsy();
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.cache).toBeFalsy();
     });
 
     // TODO IMA@18 need performance test for usefulness
@@ -225,23 +260,23 @@ describe('Server App Factory', () => {
     it('should render overloaded message', async () => {
       environment.$Server.overloadConcurrency = 0;
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(503);
-      expect(page.status).toBeTruthy();
-      expect(page.cache).toBeFalsy();
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(503);
+      expect(response.status).toBeTruthy();
+      expect(response.cache).toBeFalsy();
     });
 
     it('should render 404 static page for exceed badRequestConcurrency', async () => {
       environment.$Server.badRequestConcurrency = 0;
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(404);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeTruthy();
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(404);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeTruthy();
     });
 
     it('should render 404 app page for not exceed badRequestConcurrency', async () => {
@@ -251,13 +286,13 @@ describe('Server App Factory', () => {
       });
       environment.$Server.badRequestConcurrency = 100;
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(404);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeFalsy();
-      expect(page.content).toBe('404 page');
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(404);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.content).toBe('404 page');
     });
 
     it('should preventDefaulted Event.Request hooks', async () => {
@@ -265,13 +300,28 @@ describe('Server App Factory', () => {
         event.preventDefault();
       });
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(204);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeFalsy();
-      expect(page.content).toBeNull();
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(204);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.content).toBeNull();
+    });
+
+    it('should render default page response', async () => {
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(204);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.content).toBeNull();
+      expect(response.page.state).toEqual({ page: 'state' });
+      expect(response.page.cache).toBe('{"cacheKey":"cacheValue"}');
+      expect(response.page.cookie.size).toBe(0);
+      expect(response.page.headers).toEqual({});
+      expect(RES.set).toHaveBeenCalled();
     });
 
     it('should preventDefaulted Event.Response hooks', async () => {
@@ -279,13 +329,13 @@ describe('Server App Factory', () => {
         event.preventDefault();
       });
 
-      const page = await serverApp.requestHandlerMiddleware(REQ, RES);
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(204);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeFalsy();
-      expect(page.content).toBeNull();
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(204);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.content).toBeNull();
       expect(RES.send).not.toHaveBeenCalled();
       expect(RES.status).not.toHaveBeenCalled();
     });
@@ -296,42 +346,42 @@ describe('Server App Factory', () => {
       environment.$Debug = true;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
+      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(500);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeFalsy();
-      expect(page.content).toBe('dev error page');
-      expect(page.error).toEqual(error);
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(500);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.content).toBe('dev error page');
+      expect(response.error).toEqual(error);
     });
 
     it('should render static error page for non $Debug mode without initialized app in context', async () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
+      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(500);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeTruthy();
-      expect(page.content).toBe('read file content');
-      expect(page.error).toEqual(error);
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(500);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.content).toBe('read file content');
+      expect(response.error).toEqual(error);
     });
 
     it('should render static error page for overloaded server', async () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 
-      const page = await serverApp.errorHandlerMiddleware(error, REQ, RES);
+      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
 
-      expect(page.SPA).toBeFalsy();
-      expect(page.status).toBe(500);
-      expect(page.cache).toBeFalsy();
-      expect(page.static).toBeTruthy();
-      expect(page.content).toBe('read file content');
-      expect(page.error).toEqual(error);
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(500);
+      expect(response.cache).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.content).toBe('read file content');
+      expect(response.error).toEqual(error);
     });
   });
 

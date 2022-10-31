@@ -165,7 +165,6 @@ describe('revive client application', () => {
     const response = await reviveClientApp(bootConfig);
 
     expect(response.status).toBe(200);
-    expect(response.pageState).toStrictEqual({ hello: 'Hello' });
     expect(response.content).toBeUndefined();
   });
 });
