@@ -7,12 +7,13 @@ import ClientWindow from '../window/ClientWindow';
  * Implementation of the `link Storage` interface that relies on the
  * native `sessionStorage` DOM storage for storing its entries.
  */
-export default class SessionStorage extends ImaStorage {
+export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * The DOM storage providing the actual storage of the entries.
    */
   private _storage: Storage;
 
+  // TODO dependencies type
   static get $dependencies() {
     return [Window];
   }
@@ -29,21 +30,21 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritdoc
    */
-  init() {
+  init(): this {
     return this;
   }
 
   /**
    * @inheritdoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     return !!this._storage.getItem(key);
   }
 
   /**
    * @inheritdoc
    */
-  get(key: string) {
+  get(key: string): V | undefined {
     try {
       return JSON.parse(this._storage.getItem(key) as string).value;
     } catch (error) {
@@ -58,7 +59,7 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: unknown): this {
     try {
       this._storage.setItem(
         key,
@@ -87,30 +88,32 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritdoc
    */
-  delete(key: string) {
+  delete(key: string): this {
     this._storage.removeItem(key);
+
     return this;
   }
 
   /**
    * @inheritdoc
    */
-  clear() {
+  clear(): this {
     this._storage.clear();
+
     return this;
   }
 
   /**
    * @inheritdoc
    */
-  keys() {
-    return new StorageIterator(this._storage) as Iterable<string>;
+  keys(): Iterable<string> {
+    return new StorageIterator(this._storage);
   }
 
   /**
    * @override
    */
-  size() {
+  size(): number {
     return this._storage.length;
   }
 
@@ -149,7 +152,7 @@ export default class SessionStorage extends ImaStorage {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
-class StorageIterator {
+class StorageIterator implements Iterable<string> {
   /**
    * The DOM storage being iterated.
    */

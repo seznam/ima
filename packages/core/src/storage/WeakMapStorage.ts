@@ -5,7 +5,7 @@ import MapStorage from './MapStorage';
  * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
-export default class WeakMapStorage extends MapStorage {
+export default class WeakMapStorage extends MapStorage<WeakRef> {
   /**
    * The time-to-live of a storage entry in milliseconds.
    */
@@ -27,7 +27,7 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     this._discardExpiredEntries();
 
     return super.has(key);
@@ -36,29 +36,29 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  get(key: string) {
+  get(key: string): WeakRef | undefined {
     this._discardExpiredEntries();
 
-    if (!super.has(key)) {
+    if (super.has(key)) {
       return undefined;
     }
 
-    return (super.get(key) as WeakRef).target;
+    return super.get(key);
   }
 
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: object): this {
     this._discardExpiredEntries();
 
-    return super.set(key, new WeakRef(value as object, this._entryTtl));
+    return super.set(key, new WeakRef(value, this._entryTtl));
   }
 
   /**
    * @inheritdoc
    */
-  delete(key: string) {
+  delete(key: string): this {
     this._discardExpiredEntries();
 
     return super.delete(key);
@@ -67,7 +67,7 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  keys() {
+  keys(): Iterable<string> {
     this._discardExpiredEntries();
 
     return super.keys();
@@ -76,7 +76,7 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  size() {
+  size(): number {
     this._discardExpiredEntries();
 
     return super.size();
@@ -85,7 +85,7 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * Deletes all expired entries from this storage.
    */
-  _discardExpiredEntries() {
+  _discardExpiredEntries(): void {
     for (const key of super.keys()) {
       const targetReference = super.get(key);
       if (!(targetReference as WeakRef).target) {
@@ -137,7 +137,6 @@ class WeakRef {
     }
 
     this._reference = target;
-
     this._expiration = Date.now() + ttl;
   }
 

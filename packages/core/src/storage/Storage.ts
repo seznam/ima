@@ -5,7 +5,7 @@
  * type. Values in the storage are named using `string` keys. The storage
  * can be therefore thought of as a `Map<string, *>`.....
  */
-export default abstract class Storage<T = unknown> {
+export default abstract class Storage<V = unknown> {
   /**
    * This method is used to finalize the initialization of the storage after
    * the dependencies provided through the constructor have been prepared for
@@ -16,7 +16,7 @@ export default abstract class Storage<T = unknown> {
    *
    * @return This storage.
    */
-  init(): Storage<T> {
+  init(): this {
     return this;
   }
 
@@ -33,16 +33,16 @@ export default abstract class Storage<T = unknown> {
 
   /**
    * Retrieves the value of the entry identified by the specified . The
-   * method returns `null` if the entry does not exists.
+   * method returns `undefined` if the entry does not exists.
    *
-   * Entries set to the `null` value can be tested for existence
+   * Entries set to the `undefined` value can be tested for existence
    * using the `link has` method.
    *
    * @param key The key identifying the storage entry.
    * @return The value of the storage entry.
    */
-  get(key: string): T | null {
-    return null;
+  get(key: string): V | undefined {
+    return undefined;
   }
 
   /**
@@ -53,7 +53,7 @@ export default abstract class Storage<T = unknown> {
    * @param value The storage entry value.
    * @return This storage.
    */
-  set(key: string, value: T): Storage<T> {
+  set(key: string, value: V): this {
     return this;
   }
 
@@ -63,7 +63,7 @@ export default abstract class Storage<T = unknown> {
    * @param key The key identifying the storage entry.
    * @return This storage.
    */
-  delete(key: string): Storage<T> {
+  delete(key: string): this {
     return this;
   }
 
@@ -72,7 +72,7 @@ export default abstract class Storage<T = unknown> {
    *
    * @return This storage.
    */
-  clear(): Storage<T> {
+  clear(): this {
     return this;
   }
 
