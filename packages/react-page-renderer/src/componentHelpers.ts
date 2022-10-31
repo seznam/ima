@@ -1,5 +1,11 @@
 import classnames from 'classnames';
-import { Component, ComponentType, ContextType, PureComponent } from 'react';
+import {
+  Component,
+  ComponentType,
+  ContextType,
+  PureComponent,
+  RefObject,
+} from 'react';
 
 import AbstractComponent from './component/AbstractComponent';
 import AbstractPureComponent from './component/AbstractPureComponent';
@@ -150,14 +156,13 @@ export function defaultCssClasses(
 export function fire(
   component: AbstractComponent | AbstractPureComponent,
   eventName: string,
+  ref: RefObject<unknown>,
   data: unknown = null
 ) {
-  const { current: eventTarget } = component.eventBusRef;
+  const { current: eventTarget } = ref;
 
   if (!(eventTarget instanceof EventTarget)) {
-    throw new Error(
-      'The components `eventBusRef` must be set to a valid EventTarget element.'
-    );
+    throw new Error('Ref must be set to a valid EventTarget element.');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
