@@ -27,6 +27,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * Flag signalling that the page is being rendered for the first time.
    */
   private _window: Window;
+  protected _mounted = false;
   /**
    * The HTML element containing the current application view for the
    * current route.
@@ -102,10 +103,9 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
   setState(pageState = {}) {
     if (this._viewAdapter) {
-      this._renderViewAdapter(
-        { state: pageState },
-        this._getUpdateCallback(pageState)
-      );
+      this._renderViewAdapter(this._getUpdateCallback(pageState), {
+        state: pageState,
+      });
     }
   }
 
@@ -249,8 +249,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   protected abstract _renderViewAdapter(
-    props?: unknown,
-    callback?: () => void
+    callback: () => void,
+    props?: unknown
   ): void;
 
   /**
@@ -292,12 +292,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       return Promise.reject();
     }
 
-    if (this._viewContainer.children.length) {
+    if (!this._mounted && this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         this._hydrateViewAdapter();
+        this._mounted = true;
       });
     } else {
-      this._renderViewAdapter();
+      this._renderViewAdapter(this._getRenderCallback());
 
       return Promise.resolve();
     }

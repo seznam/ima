@@ -33,14 +33,11 @@ class ClientPageRenderer extends AbstractClientPageRenderer {
     );
   }
 
-  protected _renderViewAdapter(
-    props?: unknown,
-    callback?: (() => void) | undefined
-  ): void {
+  protected _renderViewAdapter(callback: () => void, props?: unknown): void {
     render(
       this._getViewAdapterElement(
         Object.assign({}, props, {
-          refCallback: callback ? callback : this._getRenderCallback(),
+          refCallback: callback,
         })
       ) as ReactElement
     );
