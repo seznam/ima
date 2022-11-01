@@ -3,6 +3,8 @@ export default class Response {};
 /* @else */
 import GenericError from '../error/GenericError';
 import { Response as ExpressResponse, CookieOptions } from 'express';
+import { UnknownParameters } from '../CommonTypes';
+import { RouteOptions } from './Router';
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
@@ -14,28 +16,13 @@ export default class Response {
    */
   protected _response?: ExpressResponse;
   /**
-   * It is flag for sent response for request.
-   */
-  protected _isSent = false;
-  /**
-   * HTTP Status code.
-   */
-  protected _status = 500;
-  /**
-   * The content of response.
-   */
-  protected _content = '';
-  /**
-   * The rendered page state.
-   */
-  protected _pageState: { [key: string]: unknown } = {};
-  /**
    * Internal cookie storage for Set-Cookie header.
    */
   protected _internalCookieStorage: Map<
     string,
     { value: string; options: CookieOptions }
   > = new Map();
+  protected _internalHeadersStorage: UnknownParameters = {};
   /**
    * Transform function for cookie value.
    */
@@ -66,11 +53,8 @@ export default class Response {
       cookieTransformFunction
     );
     this._response = response;
-    this._isSent = false;
-    this._status = 500;
-    this._content = '';
-    this._pageState = {};
-    this._internalCookieStorage = new Map();
+    this._internalCookieStorage.clear();
+    this._internalHeadersStorage = {};
 
     return this;
   }
@@ -90,120 +74,29 @@ export default class Response {
    * @param headers Custom headers to be used on the response.
    * @return This response.
    */
-  redirect(url: string, status = 302, headers = {}) {
-    // TODO IMA@18 refactor to use an `options` object for `status` and `headers`, same as $Router
+  redirect(
+    url: string,
+    options: RouteOptions = { httpStatus: 302, headers: {} }
+  ) {
     if ($Debug) {
-      if (this._isSent === true) {
-        const params = this.getResponseParams();
-        params.url = url;
-
+      if (this._response && this._response.headersSent) {
         throw new GenericError(
           'ima.core.router.Response:redirect The response has already ' +
             'been sent. Check your workflow.',
-          params
+          { url, options }
         );
       }
     }
 
-    this._isSent = true;
-    this._status = status;
-    this._setCookieHeaders();
+    this._internalHeadersStorage = {
+      ...this._internalHeadersStorage,
+      ...options?.headers,
+    };
 
-    if (this._response) {
-      this._response.set(headers);
-      this._response.redirect(status, url);
-    }
-
-    return this;
-  }
-
-  /**
-   * Sets the HTTP status code that will be sent to the client when the
-   * response is sent.
-   *
-   * For full list of available response codes see
-   * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-   *
-   * Use this method only at the server side.
-   *
-   * @param httpStatus HTTP response status code to send to the
-   *        client.
-   * @return This response.
-   */
-  status(httpStatus: number): this {
-    if ($Debug) {
-      if (this._isSent === true) {
-        const params = this.getResponseParams();
-
-        throw new GenericError(
-          'ima.core.router.Response:status The response has already ' +
-            'been sent. Check your workflow.',
-          params
-        );
-      }
-    }
-
-    this._status = httpStatus;
-    if (this._response) {
-      this._response.status(httpStatus);
-    }
-
-    return this;
-  }
-
-  /**
-   * Sends the response to the client with the provided content. Use this
-   * method only at the server side.
-   *
-   * @param content The response body.
-   * @return This response.
-   */
-  send(content: string): this {
-    if ($Debug) {
-      if (this._isSent === true) {
-        const params = this.getResponseParams();
-        params.content = content;
-
-        throw new GenericError(
-          'ima.core.router.Response:send The response has already been ' +
-            'sent. Check your workflow.',
-          params
-        );
-      }
-    }
-
-    this._isSent = true;
-    this._content = content;
-    this._setCookieHeaders();
-    // TODO IMA@18 rewrite response with other PR
-    //this._response.send(content);
-
-    return this;
-  }
-
-  /**
-   * Sets the rendered page state.
-   *
-   * @param pageState The rendered page state.
-   * @return This response.
-   */
-  setPageState(pageState: { [key: string]: unknown }): this {
-    if ($Debug) {
-      if (this._isSent === true) {
-        const params = this.getResponseParams();
-        params.pageState = pageState;
-
-        throw new GenericError(
-          'ima.core.router.Response:setState The response has already ' +
-            'been sent. Check your workflow.',
-          params
-        );
-      }
-    }
-
-    this._pageState = pageState;
-
-    return this;
+    throw new GenericError('IMA internal redirect', {
+      url,
+      status: options.httpStatus,
+    });
   }
 
   /**
@@ -224,16 +117,11 @@ export default class Response {
     options = {}
   ): this {
     if ($Debug) {
-      if (this._isSent === true) {
-        const params = this.getResponseParams();
-        params.name = name;
-        params.value = value;
-        params.options = options;
-
+      if (this._response && this._response.headersSent) {
         throw new GenericError(
           'ima.core.router.Response:setCookie The response has already ' +
             'been sent. Check your workflow.',
-          params
+          { name, value, options }
         );
       }
     }
@@ -246,70 +134,43 @@ export default class Response {
 
     this._internalCookieStorage.set(name, {
       value: value as string,
-      options: advancedOptions as CookieOptions,
+      options: advancedOptions,
     });
 
     return this;
   }
 
   /**
-   * Return object which contains response status, content and rendered
-   * page state.
+   * Sets a header, which will be sent to the client with the response.
+   *
+   * @param name The header name.
+   * @param value The header value, will be
+   * @return This response.
    */
-  getResponseParams(): {
-    status: number;
-    content: string;
-    pageState: { [key: string]: unknown };
-    name?: string;
-    value?: boolean | string | number;
-    options?: object;
-    url?: string;
-  } {
-    return {
-      status: this._status,
-      content: this._content,
-      pageState: this._pageState,
-    };
-  }
-
-  /**
-   * Return true if response is sent from server to client.
-   */
-  isResponseSent() {
-    return this._isSent;
-  }
-
-  /**
-   * Set cookie headers for response.
-   */
-  _setCookieHeaders() {
-    for (const [name, param] of this._internalCookieStorage) {
-      const options = this._prepareCookieOptionsForExpress(param.options);
-      if (this._response) {
-        this._response.cookie(name, param.value, options);
+  setHeader(name: string, value: unknown) {
+    if ($Debug) {
+      if (this._response && this._response.headersSent) {
+        throw new GenericError(
+          'ima.core.router.Response:setHeader The response has already ' +
+            'been sent. Check your workflow.',
+          { name, value }
+        );
       }
     }
+
+    this._internalHeadersStorage[name] = value;
+
+    return this;
   }
 
   /**
-   * Prepares cookie options for Express.
-   *
-   * @param options Cookie attributes. Only the attributes listed in the type
-   *        annotation of this field are supported. For documentation and full
-   *        list of cookie attributes
-   *        see http://tools.ietf.org/html/rfc2965#page-5
-   * @return Cookie options prepared for Express.
+   * Return object which contains response headers and cookie.
    */
-  _prepareCookieOptionsForExpress(options: CookieOptions) {
-    const expressOptions = Object.assign({}, options);
-
-    if (typeof expressOptions.maxAge === 'number') {
-      expressOptions.maxAge *= 1000;
-    } else {
-      delete expressOptions.maxAge;
-    }
-
-    return expressOptions;
+  getResponseParams() {
+    return {
+      cookie: this._internalCookieStorage,
+      headers: this._internalHeadersStorage,
+    };
   }
 }
 // @endif

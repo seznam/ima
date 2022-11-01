@@ -28,7 +28,12 @@ module.exports = function staticTemplateFactory({
       status: 500,
       SPA: false,
       static: true,
-      pageState: {},
+      page: {
+        state: {},
+        cache: null,
+        cookie: new Map(),
+        headers: {},
+      },
       cache: false,
     };
 

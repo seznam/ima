@@ -15,8 +15,6 @@ import { PageData } from '../AbstractPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 import ServerPageRenderer from '../ServerPageRenderer';
 
-global.$Debug = true;
-
 class DocumentView extends AbstractPureComponent {
   render() {
     return null;
