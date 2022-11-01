@@ -44,6 +44,8 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
   constructor(props: ViewAdapterProps) {
     super(props);
 
+    this.state = {};
+
     /**
      * The actual page view to render.
      */
