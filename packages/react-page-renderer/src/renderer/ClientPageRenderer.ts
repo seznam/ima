@@ -21,16 +21,14 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   }
 
   protected _hydrateViewAdapter(): void {
-    const viewAdapterElement = this._getViewAdapterElement({
-      refCallback: this._getHydrateCallback(),
-    }) as ReactElement;
-
     if (this._reactRoot) {
-      this._reactRoot.render(viewAdapterElement);
+      this._renderViewAdapter();
     } else {
       this._reactRoot = hydrateRoot(
         this._viewContainer as Element,
-        viewAdapterElement
+        this._getViewAdapterElement({
+          refCallback: this._getHydrateCallback(),
+        }) as ReactElement
       );
     }
   }
