@@ -279,17 +279,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         `Element with ID "${masterElementId}" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 
-      if ($Debug) {
-        console.warn(errorMessage);
-      }
-
       this._dispatcher.fire(
         RendererEvents.ERROR,
         { message: errorMessage },
         true
       );
 
-      return Promise.reject();
+      return Promise.reject(new Error(errorMessage));
     }
 
     if (this._viewContainer.children.length) {
