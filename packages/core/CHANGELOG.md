@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- f9c7cd82: Response class refactor
+
 ## 18.0.0-rc.18
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- f9c7cd82: Response class refactor
+- 4658f5c3: Fixed unintentional hydrate on SPA routing
+- Updated dependencies [f9c7cd82]
+  - @ima/core@18.0.0-rc.19
+
 ## 18.0.0-rc.14
 
 ### Patch Changes

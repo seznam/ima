@@ -17,6 +17,7 @@
     "@ima/react-page-renderer": "18.0.0-rc.10"
   },
   "changesets": [
+    "blue-kiwis-protect",
     "breezy-pens-smell",
     "curvy-shoes-compete",
     "early-colts-brake",
@@ -25,6 +26,7 @@
     "five-dryers-brake",
     "fluffy-rings-suffer",
     "four-queens-draw",
+    "gold-rules-smell",
     "good-singers-unite",
     "happy-experts-greet",
     "itchy-ladybugs-type",
