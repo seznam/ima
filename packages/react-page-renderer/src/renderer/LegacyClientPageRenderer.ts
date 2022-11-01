@@ -13,6 +13,7 @@ import AbstractClientPageRenderer from './AbstractClientPageRenderer';
 export default class LegacyClientPageRenderer extends AbstractClientPageRenderer {
   unmount() {
     if (this._viewContainer && unmountComponentAtNode(this._viewContainer)) {
+      this._mounted = false;
       this._runUnmountCallback();
     }
   }
@@ -25,14 +26,11 @@ export default class LegacyClientPageRenderer extends AbstractClientPageRenderer
     );
   }
 
-  protected _renderViewAdapter(
-    props?: unknown,
-    callback?: (() => void) | undefined
-  ): void {
+  protected _renderViewAdapter(callback: () => void, props?: unknown): void {
     render(
       this._getViewAdapterElement(Object.assign({}, props)) as ReactElement,
       this._viewContainer as Element,
-      callback ? callback : this._getRenderCallback()
+      callback
     );
   }
 }
