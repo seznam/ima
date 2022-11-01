@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.13
+
+### Patch Changes
+
+- 550a61ad: Multiple fixes after TS core and react-page-renderer merge
+- Updated dependencies [550a61ad]
+  - @ima/core@18.0.0-rc.18
+
 ## 18.0.0-rc.12
 
 ### Patch Changes
