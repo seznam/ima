@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 032a880e: Fixed error reporting on non-existing view container
+
 ## 18.0.0-rc.13
 
 ### Patch Changes
