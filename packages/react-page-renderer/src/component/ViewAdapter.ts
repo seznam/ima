@@ -44,10 +44,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
   constructor(props: ViewAdapterProps) {
     super(props);
 
-    /**
-     * The current page state as provided by the controller.
-     */
-    this.state = props.state;
+    this.state = {};
 
     /**
      * The actual page view to render.
@@ -72,6 +69,24 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
         };
       }
     );
+  }
+
+  static getDerivedStateFromProps(
+    props: ViewAdapterProps,
+    state: ViewAdapterProps['state']
+  ) {
+    if (!state) {
+      return props.state;
+    }
+
+    return {
+      ...Object.keys(state).reduce<Record<string, unknown>>((acc, cur) => {
+        acc[cur] = undefined;
+
+        return acc;
+      }, {}),
+      ...props.state,
+    };
   }
 
   getContextValue(props: ViewAdapterProps, state: State) {

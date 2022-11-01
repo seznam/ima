@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 import Extension from './Extension';
 import PageStateManager from '../page/state/PageStateManager';
 import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
@@ -34,12 +36,7 @@ export default abstract class AbstractExtension implements Extension {
   /**
    * @inheritdoc
    */
-  init(): Promise<undefined> | void {
-    throw new GenericError(
-      'The ima.core.extension.AbstractExtension.load method is abstract ' +
-        'and must be overridden'
-    );
-  }
+  init(): Promise<undefined> | void {}
 
   /**
    * @inheritdoc
@@ -66,7 +63,10 @@ export default abstract class AbstractExtension implements Extension {
    * @inheritdoc
    */
   load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+    throw new GenericError(
+      'The ima.core.extension.AbstractExtension.load method is abstract ' +
+        'and must be overridden'
+    );
   }
 
   /**

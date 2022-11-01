@@ -126,10 +126,9 @@ export default class PageFactory {
     pageStateManager: PageStateManager,
     allowedStateKeys: string[]
   ) {
-    this._oc.constant('allowedStateKeys', allowedStateKeys);
     const decoratedPageStateManager = this._oc.create(
       '$PageStateManagerDecorator',
-      [pageStateManager, 'allowedStateKeys']
+      [pageStateManager, allowedStateKeys]
     );
 
     return decoratedPageStateManager as PageStateManagerDecorator;

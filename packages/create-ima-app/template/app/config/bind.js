@@ -8,13 +8,12 @@ import ClientPageRenderer from '@ima/react-page-renderer/dist/esm/client/rendere
 
 //eslint-disable-next-line no-unused-vars
 export default (ns, oc, config) => {
-  // You can set own Component utils here
-
   // UI components
   oc.bind('$CssClasses', function () {
     return cssClassNameProcessor;
   });
 
+  // You can set own Component utils here
   oc.get(ComponentUtils).register({
     $CssClasses: '$CssClasses',
   });
@@ -38,5 +37,6 @@ export default (ns, oc, config) => {
       '$Settings',
     ]);
   }
+
   oc.bind('$PageRenderer', PageRenderer);
 };

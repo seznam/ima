@@ -34,14 +34,13 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@ima/helpers": "^18.0.0-rc.1",
+    "@ima/helpers": "^18.0.0-rc.5",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@cfaester/enzyme-adapter-react-18": "^0.5.1",
     "@esmj/emitter": "^0.0.6",
-    "@ima/dev-utils": "^18.0.0-rc.1",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -50,7 +49,7 @@
   },
   "peerDependencies": {
     "@ima/core": "^18.0.0-rc.17",
-    "@ima/dev-utils": "^18.0.0-rc.0",
+    "@ima/dev-utils": "^18.0.0-rc.9",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2",
     "webpack": "^5.70.0"
