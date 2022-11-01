@@ -21,12 +21,18 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   }
 
   protected _hydrateViewAdapter(): void {
-    this._reactRoot = hydrateRoot(
-      this._viewContainer as Element,
-      this._getViewAdapterElement({
-        refCallback: this._getHydrateCallback(),
-      }) as ReactElement
-    );
+    const viewAdapterElement = this._getViewAdapterElement({
+      refCallback: this._getHydrateCallback(),
+    }) as ReactElement;
+
+    if (this._reactRoot) {
+      this._reactRoot.render(viewAdapterElement);
+    } else {
+      this._reactRoot = hydrateRoot(
+        this._viewContainer as Element,
+        viewAdapterElement
+      );
+    }
   }
 
   protected _renderViewAdapter(
