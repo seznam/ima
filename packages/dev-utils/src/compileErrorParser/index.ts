@@ -8,6 +8,21 @@ import {
   CompileError,
 } from './parsers';
 
+export const COMPILE_ERROR_NEEDLES_RE = [
+  /error:\s?module/i,
+  /module\s\w*\s?failed/i,
+];
+
+export function resolveErrorType(
+  error: Error | StatsError
+): 'compile' | 'runtime' {
+  return COMPILE_ERROR_NEEDLES_RE.some(re =>
+    re.test(error?.message || error?.stack || '')
+  )
+    ? 'compile'
+    : 'runtime';
+}
+
 /**
  * Tries to parse error location from an error. Which can be
  * either webpack stats error or simple Error object.
@@ -15,7 +30,9 @@ import {
  * @param {StatsError | Error} error webpack stats object or error instance.
  * @returns {CompileError | null} Parsed compile error.
  */
-function parseCompileError(error: StatsError | Error): CompileError | null {
+export function parseCompileError(
+  error: StatsError | Error
+): CompileError | null {
   // Parse compile errors
   if (error.message?.includes('swc-loader')) {
     return swcLoaderErrorParser(error);
@@ -32,4 +49,4 @@ function parseCompileError(error: StatsError | Error): CompileError | null {
   return webpackErrorParser(error);
 }
 
-export { parseCompileError, CompileError };
+export { CompileError };

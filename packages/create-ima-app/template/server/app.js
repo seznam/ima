@@ -66,7 +66,7 @@ function renderApp(req, res, next) {
     .requestHandlerMiddleware(req, res)
     .then(
       response => {
-        if (response.error) {
+        if (response.error && environment.$Env === 'prod') {
           logger.error('Application server error', {
             error: errorToJSON(response.error),
           });

@@ -2,11 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import { URLSearchParams } from 'url';
 
+import { formatError, ParsedErrorData } from '@ima/dev-utils/dist/cliUtils';
+import { logger } from '@ima/dev-utils/dist/logger';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { ParserConfig } from '@swc/core';
 import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import lessPluginGlob from 'less-plugin-glob';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -43,6 +47,7 @@ export default async (
   const { rootDir, isServer, isEsVersion, name, processCss } = ctx;
 
   // Define helper variables derived from context
+  const useTypescript = fs.existsSync(path.join(rootDir, './tsconfig.json'));
   const isDevEnv = ctx.environment === 'development';
   const useSourceMaps = !!imaConfig.sourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -95,6 +100,50 @@ export default async (
       ? imaConfig.sourceMaps
       : 'source-map'
     : false;
+
+  /**
+   * Generates SWC loader for js and ts files
+   */
+  const getSwcLoader = async (syntax?: ParserConfig['syntax']) => {
+    return imaConfig.swc(
+      {
+        // We use core-js only for lower ES version build
+        ...(!isServer &&
+          !isEsVersion && {
+            env: {
+              targets,
+              mode: 'usage',
+              coreJs: coreJsVersion,
+              bugfixes: true,
+              dynamicImport: true,
+            },
+          }),
+        module: {
+          type: 'es6',
+        },
+        jsc: {
+          target: isServer || isEsVersion ? 'es2022' : 'es2018',
+          parser: {
+            syntax: syntax ?? 'ecmascript',
+            decorators: false,
+            dynamicImport: true,
+            [syntax === 'typescript' ? 'tsx' : 'jsx']: true,
+          },
+          transform: {
+            react: {
+              runtime: imaConfig.jsxRuntime ?? 'automatic',
+              development: isDevEnv,
+              refresh: useHMR,
+              useBuiltins: true,
+            },
+          },
+        },
+        sourceMaps: useSourceMaps,
+        inlineSourcesContent: useSourceMaps,
+      },
+      ctx
+    );
+  };
 
   /**
    * CSS loaders function generator. Contains postcss-loader
@@ -308,7 +357,7 @@ export default async (
       },
     },
     resolve: {
-      extensions: ['.mjs', '.js', '.jsx', '.json'],
+      extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.json'],
       mainFields: isServer ? ['module', 'main'] : ['browser', 'module', 'main'],
       alias: {
         // App specific aliases
@@ -420,49 +469,23 @@ export default async (
                   ctx
                 ),
               },
+            /**
+             * Handle app JS files
+             */
             {
-              test: /\.(js|mjs|jsx|cjs)$/,
+              test: /\.(mjs|js|jsx)$/,
               include: appDir,
-              exclude: /node_modules/,
               loader: require.resolve('swc-loader'),
-              options: await imaConfig.swc(
-                {
-                  // We use core-js only for lower ES version build
-                  ...(!isServer &&
-                    !isEsVersion && {
-                      env: {
-                        targets,
-                        mode: 'usage',
-                        coreJs: coreJsVersion,
-                        bugfixes: true,
-                        dynamicImport: true,
-                      },
-                    }),
-                  module: {
-                    type: 'es6',
-                  },
-                  jsc: {
-                    target: isServer || isEsVersion ? 'es2022' : 'es2018',
-                    parser: {
-                      syntax: 'ecmascript',
-                      decorators: false,
-                      dynamicImport: true,
-                      jsx: true,
-                    },
-                    transform: {
-                      react: {
-                        runtime: imaConfig.jsxRuntime ?? 'automatic',
-                        development: isDevEnv,
-                        refresh: useHMR,
-                        useBuiltins: true,
-                      },
-                    },
-                  },
-                  sourceMaps: useSourceMaps,
-                  inlineSourcesContent: useSourceMaps,
-                },
-                ctx
-              ),
+              options: await getSwcLoader('ecmascript'),
+            },
+            /**
+             * Handle app Typescript files
+             */
+            useTypescript && {
+              test: /\.(ts|tsx)$/,
+              include: appDir,
+              loader: require.resolve('swc-loader'),
+              options: await getSwcLoader('typescript'),
             },
             /**
              * CSS & LESS loaders, both have the exact same capabilities
@@ -559,6 +582,48 @@ export default async (
             isEsVersion &&
               new CopyPlugin({
                 patterns: [{ from: 'app/public', to: 'static/public' }],
+              }),
+
+            /**
+             * TS type checking plugin (since swc doesn't do type checking, we want
+             * to show errors at least during build so it fails before going to production.
+             */
+            isEsVersion &&
+              useTypescript &&
+              new ForkTsCheckerWebpackPlugin({
+                async: ctx.command === 'dev', // be async only in watch mode,
+                devServer: false,
+                // Custom formatter for async mode
+                ...(ctx.command === 'dev' && {
+                  formatter: issue => {
+                    return JSON.stringify({
+                      fileUri: issue.file,
+                      line: issue.location?.start.line,
+                      column: issue.location?.start.column,
+                      name: issue.code,
+                      message: issue.message,
+                    });
+                  },
+                  logger: {
+                    error: async (message: string) => {
+                      try {
+                        logger.error(
+                          await formatError(
+                            JSON.parse(
+                              message.split('\n')[1]
+                            ) as ParsedErrorData,
+                            ctx.rootDir
+                          )
+                        );
+                      } catch {
+                        // Fallback to original message
+                        console.error(message);
+                      }
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    log: () => {},
+                  },
+                }),
               }),
 
             // Enables compression for assets in production build

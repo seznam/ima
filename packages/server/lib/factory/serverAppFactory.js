@@ -10,13 +10,13 @@ const responseUtilsFactory = require('./responseUtilsFactory.js');
 
 module.exports = function serverAppFactory({
   environment,
-  logger,
   languageLoader,
   applicationFolder,
   appFactory,
   emitter,
   instanceRecycler,
   serverGlobal,
+  logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
   const { processContent, sendResponseHeaders } = responseUtilsFactory();

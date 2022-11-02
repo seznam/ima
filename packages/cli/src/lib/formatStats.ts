@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { formatError } from '@ima/dev-utils/dist/cliUtils';
+import { formatError, parseError } from '@ima/dev-utils/dist/cliUtils';
 import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 import prettyBytes from 'pretty-bytes';
@@ -38,15 +38,30 @@ async function formatWebpackErrors(
 
   for (const error of errors) {
     // Format error
-    const formattedError = await formatError(error, 'compile', {
-      rootDir: args.rootDir,
-      parseSourceMaps: false,
-      uniqueTracker: uniqueErrorTracker,
-    });
+    try {
+      const parsedErrorData = await parseError(error, 'compile');
+      const formattedError = await formatError(
+        parsedErrorData,
+        args.rootDir,
+        uniqueErrorTracker
+      );
 
-    // Print unique error
-    if (formattedError) {
-      logger.error(formattedError);
+      // Print unique error
+      formattedError && logger.error(formattedError);
+    } catch {
+      // Fallback to original error messsage
+      logger.error(
+        await formatError(
+          {
+            name: error?.name,
+            message: error?.message,
+            fileUri: error?.file,
+            stack: error?.stack,
+          },
+          args.rootDir,
+          uniqueErrorTracker
+        )
+      );
     }
   }
 }
@@ -90,7 +105,7 @@ function formatWebpackWarnings(
 
   // Minimal (default) verbose
   newWarnings?.forEach(warning => {
-    logger.warn(`at ${chalk.cyan(warning.moduleName)}`);
+    logger.warn(`at ${chalk.blueBright.bold.underline(warning.moduleName)}`);
     const lines = warning.message.split('\n');
     logger.write(chalk.underline(lines.shift()));
     logger.write(lines.join('\n'));

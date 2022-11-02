@@ -2,7 +2,11 @@ const chalk = require('chalk');
 const { createLogger, format, transports, config } = require('winston');
 const TransportStream = require('winston-transport');
 const { printf, combine, json } = format;
-const { formatError: devFormatError } = require('@ima/dev-utils/dist/cliUtils');
+const {
+  formatError: devFormatError,
+  parseError,
+} = require('@ima/dev-utils/dist/cliUtils');
+const { resolveErrorType } = require('@ima/dev-utils/dist/compileErrorParser');
 
 function colorizeLevel(level) {
   switch (level) {
@@ -36,13 +40,21 @@ class ConsoleAsync extends TransportStream {
   }
 
   async _log(meta, callback) {
-    const message = meta.error
-      ? `${meta.message}\n\n${await devFormatError(
+    let message = meta.message;
+
+    // Parse error
+    if (meta?.error?.message) {
+      try {
+        const parsedErrorData = await parseError(
           meta.error,
-          'runtime',
-          this.rootDir
-        )}`
-      : meta.message;
+          resolveErrorType(meta.error)
+        );
+        message = await devFormatError(parsedErrorData, this.rootDir);
+      } catch {
+        // Fallback to original error messsage
+        message = meta?.error?.message;
+      }
+    }
 
     // eslint-disable-next-line no-console
     (console[meta.level] ?? console.log)(

@@ -1,10 +1,5 @@
-import {
-  Controller,
-  Dispatcher,
-  MetaManager,
-  PageData as BasePageData,
-  PageRenderer,
-} from '@ima/core';
+import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
+import type { PageData as BasePageData } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';

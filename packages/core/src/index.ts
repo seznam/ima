@@ -74,8 +74,8 @@ import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
 export type { RouteOptions } from './router/Router';
+export type { PageData } from './page/PageTypes';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
-import { PageData } from './page/PageTypes';
 
 declare global {
   /* eslint-disable no-var */
@@ -300,7 +300,6 @@ export {
   RendererTypes,
   PageRenderer,
   RouterEvents,
-  PageData,
   PageStateManager,
   PageStateManagerDecorator,
   PageStateManagerImpl,
