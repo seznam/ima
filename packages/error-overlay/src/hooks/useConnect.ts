@@ -44,8 +44,6 @@ async function parseError(
         type,
         frames: [frame],
       };
-
-      // Add params
     } else if (type === 'runtime') {
       // Parse runtime error
       const { name, message, stack } = error;
