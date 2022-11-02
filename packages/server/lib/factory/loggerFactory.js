@@ -44,7 +44,6 @@ class ConsoleAsync extends TransportStream {
 
     // Parse error
     if (meta?.error?.message) {
-      // TODO maybe not always runtime
       try {
         const parsedErrorData = await parseError(
           meta.error,

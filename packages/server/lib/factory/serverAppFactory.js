@@ -16,8 +16,9 @@ module.exports = function serverAppFactory({
   emitter,
   instanceRecycler,
   serverGlobal,
+  logger,
 }) {
-  const devErrorPage = devErrorPageFactory();
+  const devErrorPage = devErrorPageFactory({ logger });
   const { processContent, sendResponseHeaders } = responseUtilsFactory();
   const {
     _initApp,

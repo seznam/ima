@@ -3,7 +3,7 @@ const path = require('path');
 
 const ejs = require('ejs');
 
-module.exports = function devErrorPageFactory() {
+module.exports = function devErrorPageFactory({ logger }) {
   const template = ejs.compile(
     fs.readFileSync(
       path.join(__dirname, '../template/devErrorView.ejs'),
@@ -12,6 +12,10 @@ module.exports = function devErrorPageFactory() {
   );
 
   function devErrorPage({ error, req, res }) {
+    logger.error('The application crashed due to an uncaught exception', {
+      error,
+    });
+
     return {
       error,
       content: template({
