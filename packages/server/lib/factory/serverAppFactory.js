@@ -10,7 +10,6 @@ const responseUtilsFactory = require('./responseUtilsFactory.js');
 
 module.exports = function serverAppFactory({
   environment,
-  logger,
   languageLoader,
   applicationFolder,
   appFactory,
@@ -18,7 +17,7 @@ module.exports = function serverAppFactory({
   instanceRecycler,
   serverGlobal,
 }) {
-  const devErrorPage = devErrorPageFactory({ logger });
+  const devErrorPage = devErrorPageFactory();
   const { processContent, sendResponseHeaders } = responseUtilsFactory();
   const {
     _initApp,
