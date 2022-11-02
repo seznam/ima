@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- Changed peer dependencies for react&react-dom.
+
 ## 18.0.0-rc.15
 
 ### Patch Changes
