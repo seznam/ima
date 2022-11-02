@@ -24,7 +24,10 @@ module.exports = function devErrorPageFactory({ logger }) {
           name: error.name,
           message: error.message,
           stack: error.stack.toString(),
-          params: JSON.stringify(error?.getParams(), null, 2),
+          params:
+            Object.keys(error?.getParams()).length > 0
+              ? JSON.stringify(error.getParams(), null, 2)
+              : '',
         },
         req,
         res,

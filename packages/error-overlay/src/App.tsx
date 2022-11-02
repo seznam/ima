@@ -26,7 +26,7 @@ const App: FunctionComponent<AppProps> = ({ serverError }) => {
         onClose={handleClose}
         hasCloseButton={!serverError}
       />
-      {error?.params && <ErrorParams params={error?.params} />}
+      <ErrorParams params={error?.params} />
       {error.type === 'compile' && <CompileError error={error} />}
       {error.type === 'runtime' && <RuntimeError error={error} />}
     </Overlay>

@@ -17,5 +17,5 @@ export interface ParsedError {
   message: string;
   type?: 'compile' | 'runtime';
   frames: StackFrame[];
-  params?: string;
+  params?: string | object;
 }

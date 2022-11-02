@@ -63,7 +63,7 @@ class ConsoleAsync extends TransportStream {
 
     // Log additional error params
     if (meta?.error?.getParams) {
-      (console[meta.level] ?? console.log)(chalk.redBright(`Params:\n`));
+      (console[meta.level] ?? console.log)(chalk.redBright(`Error Params:\n`));
       (console[meta.level] ?? console.log)(meta?.error?.getParams());
     }
 

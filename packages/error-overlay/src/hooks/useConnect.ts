@@ -46,8 +46,6 @@ async function parseError(
       };
 
       // Add params
-      // @ts-expect-error asdfasd
-      parsedError.params = error.params;
     } else if (type === 'runtime') {
       // Parse runtime error
       const { name, message, stack } = error;
@@ -63,10 +61,6 @@ async function parseError(
         type,
         frames,
       };
-
-      // Add params
-      // @ts-expect-error asdfasd
-      parsedError.params = error.params;
     }
   } catch (err) {
     console.error('Unable to parse an error in ima-error-overlay.');
@@ -75,6 +69,12 @@ async function parseError(
 
   // Cleanup sources to force latest on next load
   sourceStorage.cleanup();
+
+  // Append optional error params
+  if (parsedError) {
+    // @ts-expect-error not typed
+    parsedError.params = error?.params || error?._params;
+  }
 
   return parsedError;
 }
