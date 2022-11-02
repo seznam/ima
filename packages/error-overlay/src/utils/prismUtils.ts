@@ -6,6 +6,7 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-less';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-json';
 
 function getPrismLanguage(fileUri: string | undefined): {
   grammar: prismjs.Grammar;
@@ -33,6 +34,10 @@ function getPrismLanguage(fileUri: string | undefined): {
 
     case 'less':
       language = 'less';
+      break;
+
+    case 'json':
+      language = 'json';
       break;
 
     case 'html':

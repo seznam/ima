@@ -82,6 +82,12 @@ Now create `tsconfig.json` file (that may look something like this):
     "strict": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "app/*": [
+        "app/*"
+      ],
+    }
   },
   "include": ["app"]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const chalk = require('chalk');
 const { createLogger, format, transports, config } = require('winston');
 const TransportStream = require('winston-transport');
@@ -56,10 +57,15 @@ class ConsoleAsync extends TransportStream {
       }
     }
 
-    // eslint-disable-next-line no-console
     (console[meta.level] ?? console.log)(
       `${colorizeLevel(meta.level)}${message}`
     );
+
+    // Log additional error params
+    if (meta?.error?.getParams) {
+      (console[meta.level] ?? console.log)(chalk.redBright(`Params:\n`));
+      (console[meta.level] ?? console.log)(meta?.error?.getParams());
+    }
 
     callback();
   }
