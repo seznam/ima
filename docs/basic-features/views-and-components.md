@@ -3,7 +3,7 @@ title: Views & Components
 description: Basic features > Views & Components
 ---
 
-As you may have noticed when a [route is registered](./routing#3-controller-and-view),
+As you may have noticed when a [route is registered](./routing/introduction.md),
 a constructor of **Controller** and **View** is given as a 3rd and 4th argument.
 Controller takes care of loading and managing the data while View is a
 presentation for the data loaded by the Controller.
@@ -58,7 +58,7 @@ replaced with a newly rendered view.
 ### Route parameters in View
 
 In ideal case Views should only display data loaded in Controller and not even
-care about route parameters. But as nothing is ever ideal we've added [`params` object](./routing.md#2-route-path-and-parameters) to the View props for you.
+care about route parameters. But as nothing is ever ideal we've added [`params` object](./routing/introduction.md#route-params-substitutions) to the View props for you.
 
 ```
 // app/config/routes.js
