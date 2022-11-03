@@ -68,6 +68,12 @@ async function parseError(
   // Cleanup sources to force latest on next load
   sourceStorage.cleanup();
 
+  // Append optional error params
+  if (parsedError) {
+    // @ts-expect-error not typed
+    parsedError.params = error?.params || error?._params;
+  }
+
   return parsedError;
 }
 

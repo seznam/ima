@@ -35,6 +35,7 @@
     "prismjs": "^1.28.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-json-tree": "^0.17.0",
     "stacktrace-parser": "^0.1.10"
   },
   "publishConfig": {

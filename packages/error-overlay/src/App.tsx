@@ -1,6 +1,7 @@
 import { FunctionComponent, useCallback } from 'react';
 
 import { Overlay, CompileError, RuntimeError, Header } from '@/components';
+import ErrorParams from '@/components/errorParams/ErrorParams';
 
 import { useConnect } from './hooks';
 
@@ -25,6 +26,7 @@ const App: FunctionComponent<AppProps> = ({ serverError }) => {
         onClose={handleClose}
         hasCloseButton={!serverError}
       />
+      <ErrorParams params={error?.params} />
       {error.type === 'compile' && <CompileError error={error} />}
       {error.type === 'runtime' && <RuntimeError error={error} />}
     </Overlay>
