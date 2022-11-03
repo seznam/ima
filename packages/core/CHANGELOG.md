@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- e25cf524: Fixed params merging to generic error creation
+
 ## 18.0.0-rc.19
 
 ### Patch Changes

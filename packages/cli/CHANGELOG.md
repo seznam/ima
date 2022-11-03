@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- 956b8685: Added support for TypeScript applications
+- 956b8685: Improved and simplified error parsing in console and error overlay
+- Updated dependencies [956b8685]
+  - @ima/server@18.0.0-rc.14
+
 ## 18.0.0-rc.14
 
 ### Patch Changes

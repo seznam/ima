@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.9
+
+### Patch Changes
+
+- c08f0dd1: Added support for error params view
+- 956b8685: Improved and simplified error parsing in console and error overlay
+
 ## 18.0.0-rc.8
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 956b8685: Improved and simplified error parsing in console and error overlay
+- Updated dependencies [956b8685]
+  - @ima/dev-utils@18.0.0-rc.10
+
 ## 18.0.0-rc.13
 
 ### Patch Changes
