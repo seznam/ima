@@ -342,7 +342,7 @@ export default async (
       splitChunks: {
         cacheGroups: {
           vendors: {
-            test: /node_modules/,
+            test: /[\\/]node_modules[\\/](.(?!.*\.(less|css)$))*$/,
             name: 'vendors',
             enforce: isDevEnv,
             chunks: isDevEnv ? 'initial' : 'async',
