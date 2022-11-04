@@ -16,28 +16,28 @@ export default class MapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(): this {
     return this;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string): boolean {
     return this._storage.has(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): V | undefined {
     return this._storage.get(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: V): this {
     this._storage.set(key, value);
@@ -46,7 +46,7 @@ export default class MapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string): this {
     this._storage.delete(key);
@@ -55,7 +55,7 @@ export default class MapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear(): this {
     this._storage.clear();
@@ -64,7 +64,7 @@ export default class MapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   keys(): Iterable<string> {
     return this._storage.keys();

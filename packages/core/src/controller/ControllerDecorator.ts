@@ -64,84 +64,84 @@ export default class ControllerDecorator extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init() {
     this._controller.init();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   destroy() {
     this._controller.destroy();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   activate() {
     this._controller.activate();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   deactivate() {
     this._controller.deactivate();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   load() {
     return this._controller.load();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   update(params = {}) {
     return this._controller.update(params);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setState(statePatch: UnknownParameters) {
     this._controller.setState(statePatch);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getState() {
     return this._controller.getState();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   beginStateTransaction() {
     this._controller.beginStateTransaction();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   commitStateTransaction() {
     this._controller.commitStateTransaction();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   cancelStateTransaction() {
     this._controller.cancelStateTransaction();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   addExtension(
     extension: Extension | IExtension,
@@ -153,14 +153,14 @@ export default class ControllerDecorator extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getExtensions() {
     return this._controller.getExtensions();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setMetaParams(loadedResources: UnknownParameters) {
     this._controller.setMetaParams(
@@ -173,28 +173,28 @@ export default class ControllerDecorator extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setRouteParams(params = {}) {
     this._controller.setRouteParams(params);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getRouteParams() {
     return this._controller.getRouteParams();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setPageStateManager(pageStateManager: PageStateManager) {
     this._controller.setPageStateManager(pageStateManager);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHttpStatus() {
     return this._controller.getHttpStatus();

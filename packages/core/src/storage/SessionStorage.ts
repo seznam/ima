@@ -28,21 +28,21 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(): this {
     return this;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string): boolean {
     return !!this._storage.getItem(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): V | undefined {
     try {
@@ -57,7 +57,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: V): this {
     try {
@@ -86,7 +86,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string): this {
     this._storage.removeItem(key);
@@ -95,7 +95,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear(): this {
     this._storage.clear();
@@ -104,7 +104,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   keys(): Iterable<string | undefined> {
     return new StorageIterator(this._storage);

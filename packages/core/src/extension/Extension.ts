@@ -125,7 +125,7 @@ export default abstract class Extension implements IExtension {
    * {@link Extension#deactivate}, {@link Extension#deinit}) are not call in
    * case this method is used.
    *
-   * @param [prevParams={}] Previous route
+   * @param prevParams Previous route
    *         parameters.
    * @return A map object of promises resolved when all resources the controller
    *         requires are ready. The resolved values will be pushed to the
@@ -244,8 +244,7 @@ export default abstract class Extension implements IExtension {
    * Sets the current route parameters. This method is invoked before the
    * {@link Extension#init} method.
    *
-   * @param [params={}] The current route
-   *        parameters.
+   * @param params The current route parameters.
    */
   setRouteParams(params: UnknownParameters) {
     return;

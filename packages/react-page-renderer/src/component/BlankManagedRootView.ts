@@ -17,7 +17,7 @@ export default class BlankManagedRootView extends Component<ViewAdapterProps> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   render() {
     const { pageView, ...restProps } = this.props;

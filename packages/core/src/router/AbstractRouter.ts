@@ -103,7 +103,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(config: {
     $Protocol?: string;
@@ -119,7 +119,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   add(
     name: string,
@@ -150,7 +150,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   use(middleware: (params: RouteParams, locals: object) => unknown) {
     this._routeHandlers.set(
@@ -162,7 +162,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   remove(name: string) {
     this._routeHandlers.delete(name);
@@ -171,14 +171,14 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getRouteHandler(name: string) {
     return this._routeHandlers.get(name);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPath(): string {
     throw new GenericError(
@@ -187,42 +187,42 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getUrl() {
     return this.getBaseUrl() + this.getPath();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getBaseUrl() {
     return this.getDomain() + this._root + this._languagePartPath;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getDomain() {
     return this._protocol + '//' + this._host;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHost() {
     return this._host;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getProtocol() {
     return this._protocol;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getCurrentRouteInfo() {
     const path = this.getPath();
@@ -245,7 +245,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listen(): this {
     throw new GenericError(
@@ -254,7 +254,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlisten(): this {
     throw new GenericError(
@@ -263,7 +263,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   redirect(
     url: string,
@@ -277,7 +277,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   link(routeName: string, params: RouteParams) {
     const route = this._routeHandlers.get(routeName) as AbstractRoute;
@@ -293,7 +293,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async route(
     path: string,
@@ -334,7 +334,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async handleError(
     params: RouteParams,
@@ -381,7 +381,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async handleNotFound(
     params: RouteParams,
@@ -427,7 +427,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isClientError(reason: GenericError | Error) {
     return (
@@ -438,7 +438,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isRedirection(reason: GenericError | Error) {
     return (

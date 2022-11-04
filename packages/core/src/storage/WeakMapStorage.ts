@@ -25,7 +25,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string): boolean {
     this._discardExpiredEntries();
@@ -34,7 +34,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): V | undefined {
     this._discardExpiredEntries();
@@ -48,7 +48,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: V): this {
     this._discardExpiredEntries();
@@ -58,7 +58,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string): this {
     this._discardExpiredEntries();
@@ -67,7 +67,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   keys(): Iterable<string> {
     this._discardExpiredEntries();
@@ -76,7 +76,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   size(): number {
     this._discardExpiredEntries();

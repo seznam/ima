@@ -37,7 +37,7 @@ export default class SessionMapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(): this {
     this._map.clear();
@@ -58,21 +58,21 @@ export default class SessionMapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string): boolean {
     return this._map.has(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): V | undefined {
     return this._map.get(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: V): this {
     const canBeSerializedToJSON =
@@ -90,7 +90,7 @@ export default class SessionMapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string): this {
     this._session.delete(key);
@@ -100,7 +100,7 @@ export default class SessionMapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear(): this {
     this._session.clear();
@@ -110,7 +110,7 @@ export default class SessionMapStorage<V> extends Storage<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   keys(): Iterable<string> {
     return this._map.keys();

@@ -30,8 +30,7 @@ export default class CacheImpl<V> extends Cache<V> {
    * @param cacheStorage The cache entry storage to use.
    * @param factory Which create new instance of cache entry.
    * @param Helper The IMA.js helper methods.
-   * @param [config={ttl: 30000, enabled: false}]
-   *        The cache configuration.
+   * @param config The cache configuration.
    */
   constructor(
     cacheStorage: Storage<CacheEntry<V>>,
@@ -61,14 +60,14 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear(): void {
     this._cache.clear();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string): boolean {
     if (!this._enabled || !this._cache.has(key)) {
@@ -87,7 +86,7 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): V | null {
     if (this.has(key)) {
@@ -101,7 +100,7 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: V, ttl: number | string = 0): void {
     if (!this._enabled) {
@@ -117,14 +116,14 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string): void {
     this._cache.delete(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   disable(): void {
     this._enabled = false;
@@ -132,14 +131,14 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   enable(): void {
     this._enabled = true;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   serialize(): string {
     const dataToSerialize: UnknownParameters = {};
@@ -182,7 +181,7 @@ export default class CacheImpl<V> extends Cache<V> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   deserialize(serializedData: {
     [key: string]: SerializedCacheEntry<V>;

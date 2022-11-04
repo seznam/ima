@@ -18,6 +18,23 @@ const config = {
   organizationName: 'seznam',
   projectName: 'ima',
   plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPoints: [
+          '../packages/core',
+          '../packages/react-page-renderer',
+          '../packages/cli',
+          '../packages/plugin-cli',
+          '../packages/dev-utils',
+        ],
+        entryPointStrategy: 'packages',
+        out: '../../docs/api',
+        sidebar: {
+          fullNames: true,
+        },
+      },
+    ],
     () => ({
       name: 'resolve-react',
       configureWebpack() {
@@ -97,7 +114,7 @@ const config = {
           label: 'Tutorial',
         },
         {
-          to: 'api/bootstrap',
+          to: 'api/modules',
           position: 'right',
           label: 'API',
         },

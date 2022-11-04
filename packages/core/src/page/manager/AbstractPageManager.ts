@@ -75,7 +75,7 @@ export default abstract class AbstractPageManager extends PageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init() {
     this._clearManagedPageValue();
@@ -83,7 +83,7 @@ export default abstract class AbstractPageManager extends PageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async manage({
     route,
@@ -148,7 +148,7 @@ export default abstract class AbstractPageManager extends PageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async destroy() {
     this._pageHandlerRegistry.destroy();

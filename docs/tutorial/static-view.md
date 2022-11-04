@@ -285,7 +285,7 @@ Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
 will not be covered by this tutorial, but you can learn more about its interface
-in the API [/api/meta/meta-meta-manager](../api/meta/MetaManager.md)).
+in the API [/api/meta/meta-meta-manager](../api/classes/MetaManager.md)).
 
 For more information about `DocumentView` and whole rendering process of IMA.js
 application, [take a look at the documentation](../basic-features/rendering-process.md).

@@ -43,28 +43,28 @@ export default class ServerRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPath() {
     return this._extractRoutePath(this._request.getPath());
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listen() {
     return this;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlisten() {
     return this;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   redirect(url = '/', options: { [key: string]: unknown } = {}) {
     this._response.redirect(url, { httpStatus: 302, ...options });

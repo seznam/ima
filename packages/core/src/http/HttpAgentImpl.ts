@@ -93,7 +93,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(
     url: string,
@@ -104,7 +104,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   post(
     url: string,
@@ -120,7 +120,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   put(
     url: string,
@@ -136,7 +136,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   patch(
     url: string,
@@ -152,7 +152,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(
     url: string,
@@ -168,7 +168,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getCacheKey(method: string, url: string, data: UnknownParameters) {
     return (
@@ -177,7 +177,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setDefaultHeader(header: string, value: string) {
     this._proxy.setDefaultHeader(header, value);
@@ -186,7 +186,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clearDefaultHeaders() {
     this._proxy.clearDefaultHeaders();
