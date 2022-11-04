@@ -1,4 +1,6 @@
+import memoizeOne from 'memoize-one';
 import GenericError from '../error/GenericError';
+import { Dependencies } from '../ObjectContainer';
 import Request from '../router/Request';
 import Response from '../router/Response';
 import Window from '../window/Window';
@@ -70,6 +72,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     domain: '',
     sameSite: 'Lax',
   };
+
   /**
    * Transform encode and decode functions for cookie value.
    */
@@ -81,7 +84,12 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     decode: value => value,
   };
 
-  static get $dependencies() {
+  /**
+   * Memoized function of private parseRawCookies function
+   */
+  #memoParseRawCookies = memoizeOne(this.#parseRawCookies);
+
+  static get $dependencies(): Dependencies {
     return [Window, Request, Response];
   }
 
@@ -114,7 +122,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
       transformFunction
     );
     this._options = Object.assign(this._options, options);
-    this._parse();
+    this.parse();
 
     return this;
   }
@@ -123,7 +131,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * @inheritDoc
    */
   has(name: string): boolean {
-    this._parse();
+    this.parse();
 
     return this._storage.has(name);
   }
@@ -132,7 +140,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * @inheritDoc
    */
   get(name: string): Cookie['value'] {
-    this._parse();
+    this.parse();
 
     return this._storage.has(name) ? this._storage.get(name)!.value : undefined;
   }
@@ -160,7 +168,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
       this.recomputeCookieMaxAgeAndExpires(options);
     }
 
-    value = this.sanitizeCookie(value + '');
+    value = this.sanitizeCookieValue(value + '');
 
     if (this._window.isClient()) {
       document.cookie = this.#generateCookieString(name, value, options);
@@ -209,7 +217,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * @inheritDoc
    */
   keys(): Iterable<string> {
-    this._parse();
+    this.parse();
 
     return this._storage.keys();
   }
@@ -218,7 +226,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * @inheritDoc
    */
   size(): number {
-    this._parse();
+    this.parse();
 
     return this._storage.size;
   }
@@ -270,15 +278,110 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * HTTP header when used at the server side, and the `document.cookie`
    * property at the client side.
    */
-  _parse(): void {
-    const cookiesString = this._window.isClient()
-      ? document.cookie
-      : this._request.getCookieHeader();
+  parse(): void {
+    const cookiesNames = this.#memoParseRawCookies(
+      this._window.isClient()
+        ? document.cookie
+        : this._request.getCookieHeader()
+    );
 
-    const cookiesArray = cookiesString
-      ? cookiesString.split(COOKIE_SEPARATOR)
-      : [];
+    // remove cookies from storage, which were not parsed
+    for (const storageCookieName of this._storage.keys()) {
+      const index = cookiesNames.indexOf(storageCookieName);
+      if (index === -1) {
+        this._storage.delete(storageCookieName);
+      }
+    }
+  }
 
+  /**
+   * Sanitize cookie value by rules in
+   * (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1). Erase all
+   * invalid characters from cookie value.
+   *
+   * @param value Cookie value
+   * @return Sanitized value
+   */
+  sanitizeCookieValue(value: Cookie['value']): string {
+    let sanitizedValue = '';
+
+    if (typeof value !== 'string') {
+      return sanitizedValue;
+    }
+
+    for (let keyChar = 0; keyChar < value.length; keyChar++) {
+      const charCode = value.charCodeAt(keyChar);
+      const char = value[keyChar];
+
+      const isValid =
+        charCode >= 33 &&
+        charCode <= 126 &&
+        char !== '"' &&
+        char !== ';' &&
+        char !== '\\';
+      if (isValid) {
+        sanitizedValue += char;
+      } else {
+        if ($Debug) {
+          throw new GenericError(
+            `Invalid char ${char} code ${charCode} in ${value}. ` +
+              `Dropping the invalid character from the cookie's ` +
+              `value.`,
+            { value, charCode, char }
+          );
+        }
+      }
+    }
+
+    return sanitizedValue;
+  }
+
+  /**
+   * Recomputes cookie's attributes maxAge and expires between each other.
+   *
+   * @param options Cookie attributes. Only the attributes listed in the
+   *        type annotation of this field are supported. For documentation
+   *        and full list of cookie attributes see
+   *        http://tools.ietf.org/html/rfc2965#page-5
+   */
+  recomputeCookieMaxAgeAndExpires(options: Options): void {
+    if (options.maxAge || options.expires) {
+      options.expires = this.getExpirationAsDate(
+        (options.maxAge || options.expires) as number | string | Date
+      );
+    }
+
+    if (!options.maxAge && options.expires) {
+      options.maxAge = Math.floor(
+        (options.expires.valueOf() - Date.now()) / 1000
+      );
+    }
+  }
+
+  /**
+   * Converts the provided cookie expiration to a `Date` instance.
+   *
+   * @param expiration Cookie expiration in seconds
+   *        from now, or as a string compatible with the `Date`
+   *        constructor.
+   * @return Cookie expiration as a `Date` instance.
+   */
+  getExpirationAsDate(expiration: number | string | Date): Date {
+    if (expiration instanceof Date) {
+      return expiration;
+    }
+
+    if (typeof expiration === 'number') {
+      return expiration === Infinity
+        ? MAX_EXPIRE_DATE
+        : new Date(Date.now() + expiration * 1000);
+    }
+
+    return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
+  }
+
+  #parseRawCookies(rawCookies: string | undefined): string[] {
+    const cookiesArray = rawCookies ? rawCookies.split(COOKIE_SEPARATOR) : [];
     const cookiesNames: string[] = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
@@ -303,19 +406,13 @@ export default class CookieStorage extends Storage<Cookie['value']> {
 
         // add new cookie or update existing one
         this._storage.set(cookie.name, {
-          value: this.sanitizeCookie(cookie.value),
+          value: this.sanitizeCookieValue(cookie.value),
           options: cookie.options,
         });
       }
     }
 
-    // remove cookies from storage, which were not parsed
-    for (const storageCookieName of this._storage.keys()) {
-      const index = cookiesNames.indexOf(storageCookieName);
-      if (index === -1) {
-        this._storage.delete(storageCookieName);
-      }
-    }
+    return cookiesNames;
   }
 
   /**
@@ -369,28 +466,6 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     cookieString += options.sameSite ? ';SameSite=' + options.sameSite : '';
 
     return cookieString;
-  }
-
-  /**
-   * Converts the provided cookie expiration to a `Date` instance.
-   *
-   * @param expiration Cookie expiration in seconds
-   *        from now, or as a string compatible with the `Date`
-   *        constructor.
-   * @return Cookie expiration as a `Date` instance.
-   */
-  getExpirationAsDate(expiration: number | string | Date): Date {
-    if (expiration instanceof Date) {
-      return expiration;
-    }
-
-    if (typeof expiration === 'number') {
-      return expiration === Infinity
-        ? MAX_EXPIRE_DATE
-        : new Date(Date.now() + expiration * 1000);
-    }
-
-    return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
   }
 
   /**
@@ -470,69 +545,5 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     }
 
     return [name, value];
-  }
-
-  /**
-   * Sanitize cookie value by rules in
-   * (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1). Erase all
-   * invalid characters from cookie value.
-   *
-   * @param value Cookie value
-   * @return Sanitized value
-   */
-  sanitizeCookie(value: Cookie['value']): string {
-    let sanitizedValue = '';
-
-    if (typeof value !== 'string') {
-      return sanitizedValue;
-    }
-
-    for (let keyChar = 0; keyChar < value.length; keyChar++) {
-      const charCode = value.charCodeAt(keyChar);
-      const char = value[keyChar];
-
-      const isValid =
-        charCode >= 33 &&
-        charCode <= 126 &&
-        char !== '"' &&
-        char !== ';' &&
-        char !== '\\';
-      if (isValid) {
-        sanitizedValue += char;
-      } else {
-        if ($Debug) {
-          throw new GenericError(
-            `Invalid char ${char} code ${charCode} in ${value}. ` +
-              `Dropping the invalid character from the cookie's ` +
-              `value.`,
-            { value, charCode, char }
-          );
-        }
-      }
-    }
-
-    return sanitizedValue;
-  }
-
-  /**
-   * Recomputes cookie's attributes maxAge and expires between each other.
-   *
-   * @param options Cookie attributes. Only the attributes listed in the
-   *        type annotation of this field are supported. For documentation
-   *        and full list of cookie attributes see
-   *        http://tools.ietf.org/html/rfc2965#page-5
-   */
-  recomputeCookieMaxAgeAndExpires(options: Options): void {
-    if (options.maxAge || options.expires) {
-      options.expires = this.getExpirationAsDate(
-        (options.maxAge || options.expires) as number | string | Date
-      );
-    }
-
-    if (!options.maxAge && options.expires) {
-      options.maxAge = Math.floor(
-        (options.expires.valueOf() - Date.now()) / 1000
-      );
-    }
   }
 }

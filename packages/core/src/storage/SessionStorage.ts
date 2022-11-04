@@ -2,6 +2,7 @@ import GenericError from '../error/GenericError';
 import ImaStorage from './Storage';
 import Window from '../window/Window';
 import ClientWindow from '../window/ClientWindow';
+import { Dependencies } from '../ObjectContainer';
 
 /**
  * Implementation of the `link Storage` interface that relies on the
@@ -13,8 +14,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
    */
   private _storage: Storage;
 
-  // TODO dependencies type
-  static get $dependencies() {
+  static get $dependencies(): Dependencies {
     return [Window];
   }
 
@@ -107,7 +107,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
    * @inheritDoc
    */
   keys(): Iterable<string> {
-    return new StorageIterator(this._storage) as Iterable<string>;
+    return new StorageIterator(this._storage);
   }
 
   /**
@@ -131,10 +131,6 @@ export default class SessionStorage<V> extends ImaStorage<V> {
     };
 
     for (const key of this.keys()) {
-      if (!key || !this._storage.getItem(key)) {
-        continue;
-      }
-
       const value = JSON.parse(this._storage.getItem(key) as string) as Entry;
 
       if (value.created < oldestEntry.created) {
@@ -157,7 +153,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
-class StorageIterator implements Iterable<string | undefined> {
+class StorageIterator implements Iterable<string> {
   /**
    * The DOM storage being iterated.
    */
@@ -184,12 +180,13 @@ class StorageIterator implements Iterable<string | undefined> {
    *         the sequence and whether the iterator is done iterating through
    *         the values.
    */
-  next(): IteratorResult<string | undefined> {
-    const key = this._storage.key(this._currentKeyIndex);
+  next(): IteratorResult<string> {
+    // We are sure there is always a value so it can be safely cast to string
+    const key = this._storage.key(this._currentKeyIndex) as string;
 
     return {
       done: this._currentKeyIndex++ === this._storage.length,
-      value: key ?? undefined,
+      value: key,
     };
   }
 

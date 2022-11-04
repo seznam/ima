@@ -201,7 +201,7 @@ function bootClientApp(
 
   $IMA.$Dispatcher = app.oc.get('$Dispatcher');
 
-  const cache = app.oc.get('$Cache') as Cache;
+  const cache = app.oc.get('$Cache') as Cache<unknown>;
 
   cache.deserialize(($IMA.Cache || {}) as SerializedData<unknown>);
 

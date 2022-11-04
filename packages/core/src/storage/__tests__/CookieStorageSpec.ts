@@ -113,7 +113,7 @@ describe('ima.storage.CookieStorage', () => {
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithDeletedCok1);
 
-      cookie._parse();
+      cookie.parse();
 
       expect(cookie['_storage'].size).toBe(1);
     });
@@ -124,7 +124,7 @@ describe('ima.storage.CookieStorage', () => {
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewValues);
 
-      cookie._parse();
+      cookie.parse();
 
       expect((cookie['_storage'].get('cok1') as Cookie).value).toBe('hello3');
       expect((cookie['_storage'].get('cok2') as Cookie).value).toBe('hello4');
@@ -136,7 +136,7 @@ describe('ima.storage.CookieStorage', () => {
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNewOptions);
 
-      cookie._parse();
+      cookie.parse();
 
       expect((cookie['_storage'].get('cok1') as Cookie).options.path).toBe(
         '/someDir'
@@ -154,7 +154,7 @@ describe('ima.storage.CookieStorage', () => {
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNoOptions);
 
-      cookie._parse();
+      cookie.parse();
 
       expect((cookie['_storage'].get('cok1') as Cookie).options.path).toBe('/');
       expect(
@@ -292,7 +292,9 @@ describe('ima.storage.CookieStorage', () => {
       it(
         'should return ' + item.sanitizedValue + 'for value ' + item.value,
         () => {
-          expect(cookie.sanitizeCookie(item.value)).toBe(item.sanitizedValue);
+          expect(cookie.sanitizeCookieValue(item.value)).toBe(
+            item.sanitizedValue
+          );
         }
       );
     });

@@ -1,3 +1,4 @@
+import { Dependencies } from '../ObjectContainer';
 import Storage from './Storage';
 
 /**
@@ -10,8 +11,7 @@ export default class MapStorage<V> extends Storage<V> {
    */
   private _storage: Map<string, V> = new Map();
 
-  // TODO type dependencies
-  static get $dependencies() {
+  static get $dependencies(): Dependencies {
     return [];
   }
 

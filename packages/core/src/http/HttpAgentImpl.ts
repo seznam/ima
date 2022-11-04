@@ -15,7 +15,7 @@ import { UnknownParameters } from '../CommonTypes';
  */
 export default class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache;
+  protected _cache: Cache<unknown>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: { [key: string]: string };
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -58,7 +58,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   constructor(
     proxy: HttpProxy,
-    cache: Cache,
+    cache: Cache<unknown>,
     cookie: CookieStorage,
     Helper: typeof Helpers,
     config: { [key: string]: unknown }
