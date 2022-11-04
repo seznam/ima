@@ -1,6 +1,7 @@
 import {
   ControllerDecorator,
   Dispatcher,
+  DispatcherImpl,
   MetaManager,
   RendererEvents,
   Window,
@@ -107,7 +108,7 @@ describe('ClientPageRenderer', () => {
     pageRendererFactory = toMockedInstance(PageRendererFactory, {
       getManagedRootView: () => BlankManagedRootView,
     });
-    dispatcher = toMockedInstance(Dispatcher);
+    dispatcher = new DispatcherImpl();
     viewContainer = document.createElement('div');
     viewContainer.id = settings.$Page.$Render.masterElementId as string;
     viewContainer.appendChild(document.createElement('div'));
@@ -355,10 +356,9 @@ describe('ClientPageRenderer', () => {
     it('should set new state and re-render react component', async () => {
       const state = { state: 'state' };
 
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
-
       await pageRenderer.mount(controller, () => null, {}, routeOptions);
-      pageRenderer.setState(state);
+      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      await pageRenderer.setState(state);
 
       expect(dispatcher.fire).toHaveBeenLastCalledWith(
         RendererEvents.UPDATED,

@@ -13,9 +13,9 @@ import AbstractClientPageRenderer from './AbstractClientPageRenderer';
 export default class LegacyClientPageRenderer extends AbstractClientPageRenderer {
   unmount() {
     if (this._viewContainer && unmountComponentAtNode(this._viewContainer)) {
-      this._mounted = false;
       this._runUnmountCallback();
     }
+    super.unmount();
   }
 
   protected _hydrateViewAdapter(): void {
