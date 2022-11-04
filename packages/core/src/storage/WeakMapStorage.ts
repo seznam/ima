@@ -5,7 +5,7 @@ import MapStorage from './MapStorage';
  * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
-export default class WeakMapStorage extends MapStorage<WeakRef> {
+export default class WeakMapStorage<V = object> extends MapStorage<V> {
   /**
    * The time-to-live of a storage entry in milliseconds.
    */
@@ -36,23 +36,25 @@ export default class WeakMapStorage extends MapStorage<WeakRef> {
   /**
    * @inheritdoc
    */
-  get(key: string): WeakRef | undefined {
+  get(key: string): V | undefined {
     this._discardExpiredEntries();
 
     if (super.has(key)) {
       return undefined;
     }
 
-    return super.get(key);
+    // Hacky cast solution to WeakRef being wrapper around set value
+    return (super.get(key) as WeakRef<V>)?.target ?? undefined;
   }
 
   /**
    * @inheritdoc
    */
-  set(key: string, value: object): this {
+  set(key: string, value: V): this {
     this._discardExpiredEntries();
 
-    return super.set(key, new WeakRef(value as object, this._entryTtl));
+    // Hacky cast solution to WeakRef being wrapper around set value
+    return super.set(key, new WeakRef<V>(value, this._entryTtl) as V);
   }
 
   /**
@@ -88,7 +90,7 @@ export default class WeakMapStorage extends MapStorage<WeakRef> {
   _discardExpiredEntries(): void {
     for (const key of super.keys()) {
       const targetReference = super.get(key);
-      if (!(targetReference as WeakRef).target) {
+      if (!(targetReference as WeakRef<V>).target) {
         // the reference has died
         super.delete(key);
       }
@@ -102,12 +104,12 @@ export default class WeakMapStorage extends MapStorage<WeakRef> {
  * the point of WeakMap and WeakSet if you still need to manage the keys?!) and
  * there is no native way to create a weak reference.
  */
-class WeakRef {
+class WeakRef<V = object> {
   /**
    * The actual target reference, or `null` if the reference has
    * been already discarded.
    */
-  private _reference: object | null;
+  private _reference: V | null;
   /**
    * The UNIX timestamp with millisecond precision marking the moment at
    * or after which the reference will be discarded.
@@ -123,7 +125,7 @@ class WeakRef {
    *        reference should be kept. The reference will be discarded once
    *        ACCESSED after the specified timeout.
    */
-  constructor(target: object, ttl: number) {
+  constructor(target: V, ttl: number) {
     if ($Debug) {
       if (!(target instanceof Object)) {
         throw new TypeError(
@@ -147,7 +149,7 @@ class WeakRef {
    * @return The target reference, or `null` if the reference
    *         has been discarded by the garbage collector.
    */
-  get target() {
+  get target(): V | null {
     if (this._reference && Date.now() >= this._expiration) {
       this._reference = null; // let the GC do its job
     }
