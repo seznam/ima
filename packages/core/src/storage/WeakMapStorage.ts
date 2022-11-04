@@ -1,15 +1,20 @@
-import MapStorage from './MapStorage';
+import Storage from './Storage';
 
 /**
  * A specialization of the `link MapStorage` storage mimicking the native
  * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
-export default class WeakMapStorage<V = object> extends MapStorage<V> {
+export default class WeakMapStorage<V = object> extends Storage<V> {
   /**
    * The time-to-live of a storage entry in milliseconds.
    */
   private _entryTtl: number;
+
+  /**
+   * The internal storage of entries.
+   */
+  private _storage: Map<string, WeakRef<V>> = new Map();
 
   /**
    * Initializes the storage.
@@ -30,7 +35,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   has(key: string): boolean {
     this._discardExpiredEntries();
 
-    return super.has(key);
+    return this._storage.has(key);
   }
 
   /**
@@ -39,12 +44,11 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   get(key: string): V | undefined {
     this._discardExpiredEntries();
 
-    if (!super.has(key)) {
+    if (!this._storage.has(key)) {
       return undefined;
     }
 
-    // Hacky cast solution to WeakRef being wrapper around set value
-    return (super.get(key) as WeakRef<V>)?.target ?? undefined;
+    return this._storage.get(key)?.target ?? undefined;
   }
 
   /**
@@ -52,9 +56,9 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
    */
   set(key: string, value: V): this {
     this._discardExpiredEntries();
+    this._storage.set(key, new WeakRef<V>(value, this._entryTtl));
 
-    // Hacky cast solution to WeakRef being wrapper around set value
-    return super.set(key, new WeakRef<V>(value, this._entryTtl) as V);
+    return this;
   }
 
   /**
@@ -62,8 +66,15 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
    */
   delete(key: string): this {
     this._discardExpiredEntries();
+    this._storage.delete(key);
 
-    return super.delete(key);
+    return this;
+  }
+
+  clear(): this {
+    this._storage.clear();
+
+    return this;
   }
 
   /**
@@ -72,7 +83,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   keys(): Iterable<string> {
     this._discardExpiredEntries();
 
-    return super.keys();
+    return this._storage.keys();
   }
 
   /**
@@ -81,19 +92,19 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   size(): number {
     this._discardExpiredEntries();
 
-    return super.size();
+    return this._storage.size;
   }
 
   /**
    * Deletes all expired entries from this storage.
    */
   _discardExpiredEntries(): void {
-    for (const key of super.keys()) {
-      const targetReference = super.get(key);
+    for (const key of this._storage.keys()) {
+      const targetReference = this._storage.get(key);
 
       if (!(targetReference as WeakRef<V>).target) {
         // the reference has died
-        super.delete(key);
+        this._storage.delete(key);
       }
     }
   }
