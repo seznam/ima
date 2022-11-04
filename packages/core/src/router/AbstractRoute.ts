@@ -248,7 +248,7 @@ export default abstract class AbstractRoute {
    *
    * @return The Controller class/alias/constant.
    */
-  async getController() {
+  getController() {
     if (!this._cachedController) {
       this._cachedController = this._getAsyncModule(this._controller);
     }
@@ -264,7 +264,7 @@ export default abstract class AbstractRoute {
    *
    * @return The View class/alias/constant.
    */
-  async getView() {
+  getView() {
     if (!this._cachedView) {
       this._cachedView = this._getAsyncModule(this._view);
     }

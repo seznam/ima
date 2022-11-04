@@ -646,7 +646,7 @@ export default async (
             useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: '@ima/hmr-client',
+                  module: require.resolve('@ima/hmr-client'),
                   sockIntegration: 'whm',
                 },
               }),

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- 371f2ea2: Fixed issue with incorrectly resolved @ima/hmr-client in monorepos
+
 ## 18.0.0-rc.15
 
 ### Patch Changes
