@@ -17,6 +17,7 @@
     "@ima/react-page-renderer": "18.0.0-rc.10"
   },
   "changesets": [
+    "afraid-carpets-hear",
     "blue-kiwis-protect",
     "breezy-pens-smell",
     "chilly-carrots-divide",

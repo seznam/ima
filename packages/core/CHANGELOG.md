@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.21
+
+### Patch Changes
+
+- 4fbbd000: route.getController() and getView() methods are now sync but can still return promises
+
 ## 18.0.0-rc.20
 
 ### Patch Changes
