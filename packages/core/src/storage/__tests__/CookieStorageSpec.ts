@@ -169,27 +169,27 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('set method', () => {
     it('should set cookie as expired for undefined value', () => {
-      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
+      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', undefined);
 
-      expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1);
+      expect(cookie.getExpirationAsDate).toHaveBeenCalledWith(-1);
     });
 
     it('should prefer maxAge before expires', () => {
-      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
+      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
 
-      expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(5);
+      expect(cookie.getExpirationAsDate).toHaveBeenCalledWith(5);
     });
 
     it('should set session cookie', () => {
-      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
+      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2222', 'val2');
 
-      expect(cookie._getExpirationAsDate).not.toHaveBeenCalled();
+      expect(cookie.getExpirationAsDate).not.toHaveBeenCalled();
     });
   });
 
@@ -269,12 +269,12 @@ describe('ima.storage.CookieStorage', () => {
       new Date('Fri, 31 Dec 2000 23:59:59 GMT'),
     ].forEach(value => {
       it('for value ' + value, () => {
-        expect(cookie._getExpirationAsDate(value) instanceof Date).toBeTruthy();
+        expect(cookie.getExpirationAsDate(value) instanceof Date).toBeTruthy();
       });
     });
   });
 
-  describe('_sanitizeCookieValue method', () => {
+  describe('sanitizeCookieValue method', () => {
     beforeEach(() => {
       $Debug = false;
     });
@@ -292,7 +292,7 @@ describe('ima.storage.CookieStorage', () => {
       it(
         'should return ' + item.sanitizedValue + 'for value ' + item.value,
         () => {
-          expect(cookie._sanitizeCookieValue(item.value)).toBe(
+          expect(cookie.sanitizeCookieValue(item.value)).toBe(
             item.sanitizedValue
           );
         }
@@ -300,11 +300,11 @@ describe('ima.storage.CookieStorage', () => {
     });
   });
 
-  describe('_recomputeCookieMaxAgeAndExpires', () => {
+  describe('recomputeCookieMaxAgeAndExpires', () => {
     it('should compute expires as date', () => {
       const options = { maxAge: 10, expires: undefined };
 
-      cookie._recomputeCookieMaxAgeAndExpires(options);
+      cookie.recomputeCookieMaxAgeAndExpires(options);
 
       expect(options.expires).toStrictEqual(expect.any(Date));
     });
@@ -312,7 +312,7 @@ describe('ima.storage.CookieStorage', () => {
     it('should compute maxAge as number', () => {
       const options = { expires: new Date(), maxAge: undefined };
 
-      cookie._recomputeCookieMaxAgeAndExpires(options);
+      cookie.recomputeCookieMaxAgeAndExpires(options);
 
       expect(options.maxAge).toStrictEqual(expect.any(Number));
     });
@@ -320,7 +320,7 @@ describe('ima.storage.CookieStorage', () => {
     it('should compute maxAge as number and expires as date', () => {
       const options = { expires: 60, maxAge: undefined };
 
-      cookie._recomputeCookieMaxAgeAndExpires(options);
+      cookie.recomputeCookieMaxAgeAndExpires(options);
 
       expect(options.maxAge).toStrictEqual(expect.any(Number));
       expect(options.expires).toStrictEqual(expect.any(Date));

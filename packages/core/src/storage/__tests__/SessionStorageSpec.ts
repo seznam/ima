@@ -4,7 +4,7 @@ import SessionStorage from '../SessionStorage';
 import ClientWindow from '../../window/ClientWindow';
 
 describe('ima.storage.SessionStorage', () => {
-  let session: SessionStorage;
+  let session: SessionStorage<unknown>;
   let window: ClientWindow;
   const sessionStorage = {
     _storage: new Map(),

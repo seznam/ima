@@ -86,7 +86,8 @@ export default abstract class Storage<V = unknown> {
    *         returning itself as its own iterator, allowing it to be used in
    *         a `for..of` loop.
    */
-  keys(): Iterable<string> {
+  // TODO
+  keys(): Iterable<string | undefined> {
     return [];
   }
 

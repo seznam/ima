@@ -28,17 +28,15 @@ export type Options = {
 
 export type Cookie = {
   options: Options;
-  value: string;
+  value: string | number | boolean | Date | undefined;
 };
-
-export type CookieValue = string | undefined;
 
 /**
  * Storage of cookies, mirroring the cookies to the current request / response
  * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
-export default class CookieStorage extends Storage<CookieValue> {
+export default class CookieStorage extends Storage<Cookie['value']> {
   /**
    * The window utility used to determine whether the IMA is being run
    * at the client or at the server.
@@ -133,7 +131,7 @@ export default class CookieStorage extends Storage<CookieValue> {
   /**
    * @inheritDoc
    */
-  get(name: string): CookieValue {
+  get(name: string): Cookie['value'] {
     this._parse();
 
     return this._storage.has(name) ? this._storage.get(name)!.value : undefined;
@@ -151,21 +149,21 @@ export default class CookieStorage extends Storage<CookieValue> {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value: CookieValue, options: Options = {}): this {
+  set(name: string, value: Cookie['value'], options: Options = {}): this {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
       // Deletes the cookie
       options.maxAge = 0;
-      options.expires = this._getExpirationAsDate(-1);
+      options.expires = this.getExpirationAsDate(-1);
     } else {
-      this._recomputeCookieMaxAgeAndExpires(options);
+      this.recomputeCookieMaxAgeAndExpires(options);
     }
 
-    value = this._sanitizeCookieValue(value + '');
+    value = this.sanitizeCookie(value + '');
 
     if (this._window.isClient()) {
-      document.cookie = this._generateCookieString(name, value, options);
+      document.cookie = this.#generateCookieString(name, value, options);
     } else {
       this._response.setCookie(name, value, options);
     }
@@ -235,11 +233,11 @@ export default class CookieStorage extends Storage<CookieValue> {
   getCookiesStringForCookieHeader(): string {
     const cookieStrings = [];
 
-    for (const cookieName of this.keys()) {
+    for (const cookieName of this._storage.keys()) {
       const cookieItem = this._storage.get(cookieName);
 
       cookieStrings.push(
-        this._generateCookieString(cookieName, cookieItem!.value, {})
+        this.#generateCookieString(cookieName, cookieItem!.value, {})
       );
     }
 
@@ -257,7 +255,7 @@ export default class CookieStorage extends Storage<CookieValue> {
    *        header.
    */
   parseFromSetCookieHeader(setCookieHeader: string): void {
-    const cookie = this._extractCookie(setCookieHeader);
+    const cookie = this.#extractCookie(setCookieHeader);
 
     if (typeof cookie.name === 'string') {
       this.set(cookie.name, cookie.value, cookie.options);
@@ -284,7 +282,8 @@ export default class CookieStorage extends Storage<CookieValue> {
     const cookiesNames: string[] = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
-      const cookie = this._extractCookie(cookiesArray[i]);
+      const cookie = this.#extractCookie(cookiesArray[i]);
+
       if (typeof cookie.name === 'string') {
         // if cookie already exists in storage get its old options
         let oldCookieOptions = {};
@@ -304,7 +303,7 @@ export default class CookieStorage extends Storage<CookieValue> {
 
         // add new cookie or update existing one
         this._storage.set(cookie.name, {
-          value: this._sanitizeCookieValue(cookie.value),
+          value: this.sanitizeCookie(cookie.value),
           options: cookie.options,
         });
       }
@@ -328,7 +327,7 @@ export default class CookieStorage extends Storage<CookieValue> {
    * @return A copy of the provided string with its first character
    *         converted to lower case.
    */
-  _firstLetterToLowerCase(word: string): string {
+  #firstLetterToLowerCase(word: string): string {
     return word.charAt(0).toLowerCase() + word.substring(1);
   }
 
@@ -351,9 +350,9 @@ export default class CookieStorage extends Storage<CookieValue> {
    *         to the `document.cookie` property will set the cookie to
    *         the browser's cookie storage.
    */
-  _generateCookieString(
+  #generateCookieString(
     name: string,
-    value: boolean | number | string,
+    value: Cookie['value'],
     options: Options
   ): string {
     let cookieString =
@@ -380,7 +379,7 @@ export default class CookieStorage extends Storage<CookieValue> {
    *        constructor.
    * @return Cookie expiration as a `Date` instance.
    */
-  _getExpirationAsDate(expiration: number | string | Date): Date {
+  getExpirationAsDate(expiration: number | string | Date): Date {
     if (expiration instanceof Date) {
       return expiration;
     }
@@ -400,21 +399,23 @@ export default class CookieStorage extends Storage<CookieValue> {
    * @param cookieString The value of the `Set-Cookie` HTTP
    *        header.
    */
-  // TODO type
-  _extractCookie(cookieString: string) {
+  #extractCookie(cookieString: string): Cookie & { name?: string } {
     const cookieOptions: Options = {};
     let cookieName;
     let cookieValue;
 
-    const cookiePairs = cookieString.split(COOKIE_SEPARATOR.trim());
+    cookieString.split(COOKIE_SEPARATOR.trim()).forEach((pair, index) => {
+      const [name, value] = this.#extractNameAndValue(pair, index);
 
-    cookiePairs.forEach((pair, index) => {
-      const [name, value] = this._extractNameAndValue(pair, index);
+      if (!name) {
+        return;
+      }
+
       if (index === 0) {
         cookieName = name;
         cookieValue = value;
       } else {
-        Object.assign(cookieOptions, { [name as string]: value });
+        Object.assign(cookieOptions, { [name]: value });
       }
     });
 
@@ -428,8 +429,10 @@ export default class CookieStorage extends Storage<CookieValue> {
   /**
    * Extract name and value for defined pair and pair index.
    */
-  // TODO type
-  _extractNameAndValue(pair: string, pairIndex: number) {
+  #extractNameAndValue(
+    pair: string,
+    pairIndex: number
+  ): [string | null, Cookie['value'] | null] {
     const separatorIndexEqual = pair.indexOf('=');
     let name = '';
     let value = null;
@@ -443,7 +446,6 @@ export default class CookieStorage extends Storage<CookieValue> {
       value = true;
     } else {
       name = pair.substring(0, separatorIndexEqual).trim();
-
       value = this._transformFunction.decode(
         pair.substring(separatorIndexEqual + 1).trim()
       );
@@ -454,7 +456,7 @@ export default class CookieStorage extends Storage<CookieValue> {
       }
 
       if (name === 'Expires') {
-        value = this._getExpirationAsDate(value);
+        value = this.getExpirationAsDate(value);
       }
 
       if (name === 'Max-Age') {
@@ -464,7 +466,7 @@ export default class CookieStorage extends Storage<CookieValue> {
     }
 
     if (pairIndex !== 0) {
-      name = this._firstLetterToLowerCase(name);
+      name = this.#firstLetterToLowerCase(name);
     }
 
     return [name, value];
@@ -478,10 +480,10 @@ export default class CookieStorage extends Storage<CookieValue> {
    * @param value Cookie value
    * @return Sanitized value
    */
-  _sanitizeCookieValue(value?: string): string {
+  sanitizeCookie(value: Cookie['value']): string {
     let sanitizedValue = '';
 
-    if (!value) {
+    if (typeof value !== 'string') {
       return sanitizedValue;
     }
 
@@ -520,9 +522,9 @@ export default class CookieStorage extends Storage<CookieValue> {
    *        and full list of cookie attributes see
    *        http://tools.ietf.org/html/rfc2965#page-5
    */
-  _recomputeCookieMaxAgeAndExpires(options: Options): void {
+  recomputeCookieMaxAgeAndExpires(options: Options): void {
     if (options.maxAge || options.expires) {
-      options.expires = this._getExpirationAsDate(
+      options.expires = this.getExpirationAsDate(
         (options.maxAge || options.expires) as number | string | Date
       );
     }

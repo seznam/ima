@@ -144,7 +144,7 @@ describe('ima.core.cache.CacheImpl', () => {
   it('should serialize only instances of the CacheEntry', () => {
     jest
       .spyOn(cacheFactory, 'createCacheEntry')
-      .mockReturnValue({ foo: 'bar' } as unknown as CacheEntry);
+      .mockReturnValue({ foo: 'bar' } as unknown as CacheEntry<unknown>);
 
     cache.set('myKey', {
       foo: 'bar',
@@ -201,7 +201,9 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.clear();
     cache.deserialize(serialization);
 
-    expect((cache['_cache'].get('key') as CacheEntry)['_ttl']).toBe(Infinity);
+    expect((cache['_cache'].get('key') as CacheEntry<unknown>)['_ttl']).toBe(
+      Infinity
+    );
   });
 
   it('should throw error for serialize if value is instance of Promise', () => {

@@ -3,16 +3,16 @@ import SessionMapStorage from '../SessionMapStorage';
 import SessionStorage from '../SessionStorage';
 
 describe('ima.storage.SessionMapStorage', () => {
-  let sessionMap: SessionMapStorage;
-  let mapStorage: MapStorage;
-  let sessionStorage: MapStorage;
+  let sessionMap: SessionMapStorage<unknown>;
+  let mapStorage: MapStorage<unknown>;
+  let sessionStorage: MapStorage<unknown>;
 
   beforeEach(() => {
     mapStorage = new MapStorage();
     sessionStorage = new MapStorage();
     sessionMap = new SessionMapStorage(
       mapStorage,
-      sessionStorage as unknown as SessionStorage
+      sessionStorage as unknown as SessionStorage<unknown>
     );
 
     sessionMap.init();
@@ -81,25 +81,24 @@ describe('ima.storage.SessionMapStorage', () => {
     sessionMap.set('item1', 1).set('item2', 'test').set('item3', false);
 
     let index = 0;
-    const iterator = sessionMap.keys();
-    let item = iterator.next();
 
-    do {
+    for (const item of sessionMap.keys()) {
       switch (index++) {
         case 0:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item1');
+          expect(item).toBe('item1');
           break;
         case 1:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item2');
+          expect(item).toBe('item2');
           break;
         default:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item3');
+          expect(item).toBe('item3');
           break;
       }
-      item = iterator.next();
-    } while (item.done !== true);
+    }
+
+    expect(index).toBe(3);
   });
 });

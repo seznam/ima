@@ -107,6 +107,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
    * @inheritDoc
    */
   keys(): Iterable<string | undefined> {
+    // TODO
     return new StorageIterator(this._storage);
   }
 
