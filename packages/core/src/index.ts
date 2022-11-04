@@ -75,6 +75,14 @@ import ClientWindow from './window/ClientWindow';
 
 export type { RouteOptions } from './router/Router';
 export type { PageData } from './page/PageTypes';
+export type {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+  ObjectParameters,
+} from './CommonTypes';
+export type { IExtension } from './extension/Extension';
+export type { IController } from './controller/Controller';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 declare global {

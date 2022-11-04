@@ -31,7 +31,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear() {
     this._states = [];
@@ -39,7 +39,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setState(patchState: UnknownParameters) {
     if (this._ongoingTransaction) {
@@ -63,28 +63,28 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getState() {
     return this._states[this._cursor] || {};
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getAllStates() {
     return this._states;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getTransactionStatePatches() {
     return this._statePatchQueue;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   beginTransaction() {
     if ($Debug && this._ongoingTransaction) {
@@ -101,7 +101,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   commitTransaction() {
     if ($Debug && !this._ongoingTransaction) {
@@ -126,7 +126,7 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   cancelTransaction() {
     this._ongoingTransaction = false;

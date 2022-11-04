@@ -41,7 +41,7 @@ export default class DispatcherImpl extends Dispatcher {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear() {
     this._eventListeners.clear();
@@ -50,7 +50,7 @@ export default class DispatcherImpl extends Dispatcher {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listen(event: string, listener: Listener, scope: unknown = null) {
     if ($Debug) {
@@ -75,7 +75,7 @@ export default class DispatcherImpl extends Dispatcher {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlisten(event: string, listener: Listener, scope: unknown = null) {
     const scopes = this._getScopesOf(event, listener);
@@ -110,7 +110,7 @@ export default class DispatcherImpl extends Dispatcher {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   fire(event: string, data: UnknownParameters, imaInternalEvent = false) {
     const listeners = this._getListenersOf(event);

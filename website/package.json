@@ -6,8 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "dev": "docusaurus start",
-    "build:api": "node ./scripts/jsdoc2md.mjs",
-    "build:doc": "npm run build:api; docusaurus build",
+    "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -28,8 +27,11 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "docusaurus-plugin-typedoc": "^0.17.5",
     "globby": "^13.1.2",
-    "jsdoc-to-markdown": "^7.1.1"
+    "jsdoc-to-markdown": "^7.1.1",
+    "typedoc": "^0.23.20",
+    "typedoc-plugin-markdown": "^3.13.6"
   },
   "browserslist": {
     "production": [

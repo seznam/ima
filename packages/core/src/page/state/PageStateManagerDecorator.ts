@@ -34,14 +34,14 @@ export default class PageStateManagerDecorator extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear() {
     this._pageStateManager.clear();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setState(statePatch: UnknownParameters) {
     if ($Debug) {
@@ -63,42 +63,42 @@ export default class PageStateManagerDecorator extends PageStateManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getState() {
     return this._pageStateManager.getState();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getAllStates() {
     return this._pageStateManager.getAllStates();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getTransactionStatePatches() {
     return this._pageStateManager.getTransactionStatePatches();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   beginTransaction() {
     return this._pageStateManager.beginTransaction();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   commitTransaction() {
     return this._pageStateManager.commitTransaction();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   cancelTransaction() {
     return this._pageStateManager.cancelTransaction();

@@ -18,6 +18,13 @@ const config = {
   organizationName: 'seznam',
   projectName: 'ima',
   plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPoints: ['../packages/core/src/index.ts'],
+        tsconfig: '../packages/core/tsconfig.json',
+      },
+    ],
     () => ({
       name: 'resolve-react',
       configureWebpack() {
@@ -41,7 +48,7 @@ const config = {
       ({
         docs: {
           breadcrumbs: false,
-          path: '../docs',
+          path: './docs',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           routeBasePath: '/',
@@ -97,7 +104,7 @@ const config = {
           label: 'Tutorial',
         },
         {
-          to: 'api/bootstrap',
+          to: 'api/modules',
           position: 'right',
           label: 'API',
         },

@@ -101,7 +101,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   render() {
     return createElement(

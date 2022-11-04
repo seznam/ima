@@ -305,7 +305,7 @@ export default abstract class AbstractRoute {
    * The extraneous parameters that do not match any of the route's
    * placeholders will be appended as the query string.
    *
-   * @param [params={}] The route
+   * @param params The route
    *        parameter values.
    * @return Path and, if necessary, query parts of the URL
    *         representing this route with its parameters replaced by the

@@ -41,77 +41,77 @@ export default class MetaManagerImpl extends MetaManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setTitle(title: string) {
     this._title = title;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getTitle() {
     return this._title;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setMetaName(name: string, value: string) {
     this._metaName.set(name, value);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getMetaName(name: string) {
     return this._metaName.get(name) || '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getMetaNames() {
     return Array.from(this._metaName.keys());
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setMetaProperty(name: string, value: string) {
     this._metaProperty.set(name, value);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getMetaProperty(name: string) {
     return this._metaProperty.get(name) || '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getMetaProperties() {
     return Array.from(this._metaProperty.keys());
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setLink(relation: string, value: string) {
     this._link.set(relation, value);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getLink(relation: string) {
     return this._link.get(relation) || '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getLinks() {
     return Array.from(this._link.keys());
