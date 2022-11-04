@@ -19,6 +19,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   let httpConfig = null;
   const helper = {
     ...Helper,
+    clone: jest.fn(),
   };
 
   beforeEach(() => {
@@ -196,8 +197,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-
-        jest.spyOn(helper, 'clone').mockImplementation();
 
         //the first call without a response in the _internalCacheOfPromises
         // @ts-ignore

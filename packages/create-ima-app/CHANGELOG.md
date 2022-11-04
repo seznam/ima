@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.13
+
+### Patch Changes
+
+- 550a61ad: Multiple fixes after TS core and react-page-renderer merge
+
 ## 18.0.0-rc.12
 
 ### Patch Changes

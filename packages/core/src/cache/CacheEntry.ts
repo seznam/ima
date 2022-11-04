@@ -40,7 +40,6 @@ export default class CacheEntry<V> {
    */
   isExpired(): boolean {
     const now = Date.now();
-
     return now > this._created + (this._ttl as number);
   }
 

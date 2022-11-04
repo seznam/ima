@@ -52,7 +52,7 @@ export default class WeakMapStorage extends MapStorage<WeakRef> {
   set(key: string, value: object): this {
     this._discardExpiredEntries();
 
-    return super.set(key, new WeakRef(value, this._entryTtl));
+    return super.set(key, new WeakRef(value as object, this._entryTtl));
   }
 
   /**

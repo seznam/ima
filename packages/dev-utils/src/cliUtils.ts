@@ -10,6 +10,16 @@ import { parseCompileError } from './compileErrorParser';
 import { createSourceFragment, FragmentLine } from './sourceFragment';
 import { extractSourceMappingUrl } from './sourceMapUtils';
 
+export type ParsedErrorData = {
+  fileUri?: string;
+  line?: number;
+  column?: number;
+  name?: string;
+  message?: string;
+  stack?: string;
+  functionName?: string;
+};
+
 /**
  * Get source fragment from provided source metadata.
  * Optionally it tries to parse original content if
@@ -18,15 +28,12 @@ import { extractSourceMappingUrl } from './sourceMapUtils';
  * @param {string?} fileUri source file uri.
  * @param {number?} line errored line number.
  * @param {number?} column errored column number.
- * @param {boolean} [parseSourceMaps=true] flag to
- *  parse source maps or not.
  * @returns {Promise<string[]>} Formatted error lines.
  */
-async function getSource(
+export async function getSource(
   fileUri?: string,
   line?: number,
-  column = 0,
-  parseSourceMaps = true
+  column = 0
 ): Promise<string[] | undefined> {
   if (!fileUri || typeof line !== 'number') {
     return;
@@ -34,11 +41,10 @@ async function getSource(
 
   let sourceLines: FragmentLine[] = [];
   const fileContents = await fs.promises.readFile(fileUri, 'utf8');
+  const sourceMapUrl = extractSourceMappingUrl(fileUri, fileContents);
 
   // Parse source maps
-  if (parseSourceMaps) {
-    const sourceMapUrl = extractSourceMappingUrl(fileUri, fileContents);
-
+  if (sourceMapUrl) {
     // Try to parse original content
     if (sourceMapUrl && fs.existsSync(sourceMapUrl)) {
       const rawSourceMap = JSON.parse(
@@ -73,9 +79,11 @@ async function getSource(
 
   return sourceLines.map(
     line =>
-      chalk.gray(`${line.highlight ? chalk.red('>') : ' '}  ${line.line} | `) +
+      chalk.gray(
+        `  ${line.highlight ? chalk.red('> ') : '  '}${line.line} | `
+      ) +
       // Replace tabs with spaces and highlight
-      highlight(line.source.replace(/\t/g, '    '), {
+      highlight(line.source.replace(/\t/g, '  '), {
         language: fileUri?.split('.').pop() ?? 'javascript',
         ignoreIllegals: true,
         theme: fromJson({
@@ -113,96 +121,85 @@ async function getSource(
  *  in this array, this function returns empty string.
  * @returns {Promise<string>} Formatted error output.
  */
-async function formatError(
+export async function parseError(
   error: Error | StatsError,
-  type?: 'compile' | 'runtime',
-  options?: {
-    rootDir?: string;
-    parseSourceMaps?: boolean;
-    uniqueTracker?: string[];
-  }
-): Promise<string> {
-  let fileUri: string | undefined,
-    line: number | undefined,
-    column: number | undefined,
-    name: string | undefined,
-    message: string | undefined,
-    stack: string | undefined,
-    functionName: string | undefined,
-    sourceFragment: string[] | undefined;
-
-  const optionsWithDefaults = {
-    rootDir: process.cwd(),
-    parseSourceMaps: true,
-    ...options,
+  type?: 'compile' | 'runtime'
+): Promise<ParsedErrorData> {
+  const parsedErrorData: ParsedErrorData = {
+    name: error.name,
+    message: error.message,
+    stack: error.stack,
   };
 
-  if (!error) {
-    return `${chalk.underline(`Empty ${type} error`)}`;
-  }
-
   // Try to parse an error
-  try {
-    if (type === 'compile') {
-      const compileError = parseCompileError(error);
+  if (type === 'compile') {
+    const compileError = parseCompileError(error);
 
-      // Extract parsed parts
-      name = compileError?.name;
-      message = compileError?.message;
-      fileUri = compileError?.fileUri;
-      column = compileError?.column;
-      line = compileError?.line;
-    } else if (type === 'runtime') {
-      name = error?.name;
-      message = error?.message;
-      stack = error.stack;
+    // Extract parsed parts
+    parsedErrorData.name = compileError?.name;
+    parsedErrorData.message = compileError?.message;
+    parsedErrorData.fileUri = compileError?.fileUri;
+    parsedErrorData.column = compileError?.column;
+    parsedErrorData.line = compileError?.line;
 
-      // Extract parsed parts
-      if (error.stack) {
-        const parsedStack = stackTraceParser.parse(error.stack);
-        functionName = parsedStack[0].methodName;
-        fileUri = parsedStack[0].file ?? undefined;
-        column = parsedStack[0].column ?? undefined;
-        line = parsedStack[0].lineNumber ?? undefined;
-      }
-    } else {
-      name = error.name;
-      message = error.message;
-      stack = error.stack;
-    }
-
-    // Get source fragment
-    sourceFragment = await getSource(
-      fileUri,
-      line,
-      column,
-      optionsWithDefaults.parseSourceMaps
-    );
-
-    // Normalize fileUri
-    if (fileUri && optionsWithDefaults.rootDir) {
-      fileUri = fileUri.replace(optionsWithDefaults.rootDir, '.');
-    }
-  } catch (error) {
-    if (error && error instanceof Error) {
-      name = error.name;
-      message = error.message;
-      stack = error.stack;
-    } else {
-      // Fallback in case everything fails
-      return `${chalk.underline(`Unknown ${type} error`)}:\n${error}`;
-    }
+    return parsedErrorData;
   }
+
+  if (type === 'runtime' && error.stack) {
+    const parsedStack = stackTraceParser.parse(error.stack);
+
+    // Extract parsed parts from error stack
+    parsedErrorData.functionName = parsedStack[0].methodName;
+    parsedErrorData.fileUri = parsedStack[0].file ?? undefined;
+    parsedErrorData.column = parsedStack[0].column ?? undefined;
+    parsedErrorData.line = parsedStack[0].lineNumber ?? undefined;
+
+    return parsedErrorData;
+  }
+
+  return parsedErrorData;
+}
+
+/**
+ * Formats provided error object into readable format including
+ * the errored source code fragment with line highlight. Works
+ * with runtime and compile errors while trying to show all
+ * relevant information that can be extracted from provided object.
+ *
+ * @param {ParsedErrorData} parsedErrorData Parsed error data object
+ *  obtained from parseError function (or provided directly).
+ * @param {string?} rootDir Optional root directory used to print
+ *  absolute URLs as relative to the current rootDir.
+ * @param {string[]?} uniqueTracker Array of error identifiers to
+ *  track uniques, if the error matches identifier already included
+ *  in this array, this function returns empty string.
+ * @returns {Promise<string>} Formatted error output.
+ */
+export async function formatError(
+  parsedErrorData: ParsedErrorData,
+  rootDir?: string,
+  uniqueTracker?: string[]
+): Promise<string> {
+  let { fileUri } = parsedErrorData;
+  const { column, functionName, line, message, name, stack } = parsedErrorData;
+
+  // Normalize fileUri
+  if (fileUri && rootDir) {
+    fileUri = fileUri.replace(rootDir, '.');
+  }
+
+  // Get source fragment
+  const sourceFragment = await getSource(fileUri, line, column);
 
   // Track unique errors
-  if (options && Array.isArray(options?.uniqueTracker)) {
+  if (Array.isArray(uniqueTracker)) {
     const errorIdentifier = `${fileUri}:${line}:${column}`;
 
     // Return empty string for already processed errors
-    if (options?.uniqueTracker.includes(errorIdentifier)) {
+    if (uniqueTracker.includes(errorIdentifier)) {
       return '';
     } else {
-      options.uniqueTracker.push(errorIdentifier);
+      uniqueTracker.push(errorIdentifier);
     }
   }
 
@@ -211,17 +208,15 @@ async function formatError(
     fileUri &&
       [
         functionName && `${chalk.magenta(`${functionName}`)} at`,
-        chalk.cyan(`${fileUri}:${line}:${column}`),
+        chalk.underline.bold.blueBright(fileUri) + `:${line}:${column}`,
       ]
         .filter(Boolean)
         .join(' '),
-    `${chalk.underline(`${name}:`)} ${message}`,
+    name && `${chalk.redBright(`${name}:`)} ` + message,
     ...(sourceFragment ? ['', ...sourceFragment] : []),
-    stack && `\n${chalk.gray(stack)}`,
+    stack && `\n${chalk.gray(stack.replace('', ''))}`,
     '', // Empty line
   ]
     .filter(value => value === '' || !!value)
     .join('\n');
 }
-
-export { formatError };

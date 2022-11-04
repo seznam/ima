@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSettings, useLocalize } from '@ima/react-hooks';
+import { useSettings, useLocalize } from '@ima/react-page-renderer';
 
 import Card from 'app/component/card/Card';
 import './homeView.less';

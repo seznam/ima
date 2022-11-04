@@ -4,7 +4,7 @@ import {
   GenericError,
   MetaManager,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/cjs/router/Router';
+import type { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 
@@ -14,8 +14,6 @@ import { Settings } from '../../types';
 import { PageData } from '../AbstractPageRenderer';
 import PageRendererFactory from '../PageRendererFactory';
 import ServerPageRenderer from '../ServerPageRenderer';
-
-global.$Debug = true;
 
 class DocumentView extends AbstractPureComponent {
   render() {

@@ -24,6 +24,10 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.set('aaa', 123);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should store value for key', () => {
     cache.set('bbb', 456);
     cache.set('ccc', 321, 2000);

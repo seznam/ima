@@ -49,8 +49,7 @@ export type HttpProxyErrorParams = {
   status: number;
   body: unknown;
   cause: Error;
-  params: HttpProxyRequestParams;
-};
+} & HttpProxyRequestParams;
 
 /**
  * Middleware proxy between {@link HttpAgent} implementations and the
@@ -132,7 +131,11 @@ export default class HttpProxy {
         requestTimeoutId = setTimeout(() => {
           options.abortController?.abort();
 
-          return reject();
+          return reject(
+            new GenericError('The HTTP request timed out', {
+              status: HttpStatusCode.TIMEOUT,
+            })
+          );
         }, options.timeout);
       }
 
@@ -164,19 +167,6 @@ export default class HttpProxy {
         )
         .then(resolve, reject);
     }).catch(fetchError => {
-      /**
-       * If requestTimeoutId is truthy, that means that the there's a time out,
-       * since the request handler didn't managed to reset timeout callback on time.
-       */
-      if (requestTimeoutId) {
-        throw this._processError(
-          new GenericError('The HTTP request timed out', {
-            status: HttpStatusCode.TIMEOUT,
-          }),
-          requestParams
-        );
-      }
-
       throw this._processError(fetchError, requestParams);
     });
   }
@@ -227,39 +217,38 @@ export default class HttpProxy {
     body: unknown,
     cause: Error
   ): HttpProxyErrorParams {
+    let errorName = '';
     const params = this._composeRequestParams(method, url, data, options);
 
     if (typeof body === 'undefined') {
       body = {};
     }
 
-    const error = { status, body, cause, errorName: '', params };
-
     switch (status) {
       case HttpStatusCode.TIMEOUT:
-        error.errorName = 'Timeout';
+        errorName = 'Timeout';
         break;
       case HttpStatusCode.BAD_REQUEST:
-        error.errorName = 'Bad Request';
+        errorName = 'Bad Request';
         break;
       case HttpStatusCode.UNAUTHORIZED:
-        error.errorName = 'Unauthorized';
+        errorName = 'Unauthorized';
         break;
       case HttpStatusCode.FORBIDDEN:
-        error.errorName = 'Forbidden';
+        errorName = 'Forbidden';
         break;
       case HttpStatusCode.NOT_FOUND:
-        error.errorName = 'Not Found';
+        errorName = 'Not Found';
         break;
       case HttpStatusCode.SERVER_ERROR:
-        error.errorName = 'Internal Server Error';
+        errorName = 'Internal Server Error';
         break;
       default:
-        error.errorName = 'Unknown';
+        errorName = 'Unknown';
         break;
     }
 
-    return error;
+    return { errorName, status, body, cause, ...params };
   }
 
   /**
@@ -350,6 +339,7 @@ export default class HttpProxy {
   ) {
     const errorParams =
       fetchError instanceof GenericError ? fetchError.getParams() : {};
+
     return this._createError(
       fetchError,
       requestParams,

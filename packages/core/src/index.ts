@@ -73,6 +73,8 @@ import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
+export type { RouteOptions } from './router/Router';
+export type { PageData } from './page/PageTypes';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 declare global {

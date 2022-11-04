@@ -16,6 +16,8 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
     if (this._reactRoot) {
       this._reactRoot.unmount();
+      this._mounted = false;
+      this._reactRoot = undefined;
       this._runUnmountCallback();
     }
   }
@@ -29,10 +31,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
     );
   }
 
-  protected _renderViewAdapter(
-    props?: unknown,
-    callback?: (() => void) | undefined
-  ): void {
+  protected _renderViewAdapter(callback: () => void, props?: unknown): void {
     if (!this._reactRoot) {
       this._reactRoot = createRoot(this._viewContainer as Element);
     }
@@ -40,7 +39,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
     this._reactRoot.render(
       this._getViewAdapterElement(
         Object.assign({}, props, {
-          refCallback: callback ? callback : this._getRenderCallback(),
+          refCallback: callback,
         })
       ) as ReactElement
     );

@@ -182,8 +182,5 @@ describe('render server application', () => {
     const response = await router.route('/reviveClientApp');
 
     expect(response?.status).toBe(200);
-    expect(
-      (response?.viewAdapter as React.ReactElement).props.state
-    ).toStrictEqual({ hello: 'Hello' });
   });
 });

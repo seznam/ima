@@ -150,22 +150,14 @@ export function defaultCssClasses(
 export function fire(
   component: AbstractComponent | AbstractPureComponent,
   eventName: string,
+  target: EventTarget,
   data: unknown = null
 ) {
-  const { current: eventTarget } = component.eventBusRef;
-
-  if (!(eventTarget instanceof EventTarget)) {
-    throw new Error(
-      'The components `eventBusRef` must be set to a valid EventTarget element.'
-    );
+  if (!(target instanceof EventTarget)) {
+    throw new Error('Ref must be set to a valid EventTarget element.');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return component.utils.$EventBus.fire(
-    eventTarget as EventTarget,
-    eventName,
-    data
-  );
+  return component.utils.$EventBus.fire(target, eventName, data);
 }
 
 /**

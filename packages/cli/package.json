@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "18.0.0-rc.14",
+  "version": "18.0.0-rc.15",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -48,6 +48,7 @@
     "ejs": "^3.1.7",
     "express": "^4.18.1",
     "express-static-gzip": "^2.1.7",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
     "globby": "11.1.0",
     "kill-port": "^1.6.1",
     "less": "^4.1.3",
@@ -81,7 +82,7 @@
     "@types/yargs": "^17.0.10"
   },
   "peerDependencies": {
-    "@ima/server": "^18.0.0-rc.11"
+    "@ima/server": "^18.0.0-rc.14"
   },
   "publishConfig": {
     "access": "public",

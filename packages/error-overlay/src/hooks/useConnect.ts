@@ -1,4 +1,7 @@
-import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
+import {
+  parseCompileError,
+  resolveErrorType,
+} from '@ima/dev-utils/dist/compileErrorParser';
 import { useContext, useEffect, useState } from 'react';
 import { StatsError } from 'webpack';
 
@@ -7,20 +10,14 @@ import { SourceStorage } from '@/entities';
 import { ParsedError } from '@/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
-const COMPILE_ERROR_NEEDLES_RE = [/error:\s?module/i, /module\s\w*\s?failed/i];
-
 async function parseError(
   error: Error | StatsError,
   sourceStorage: SourceStorage
 ): Promise<ParsedError | undefined> {
   let parsedError: ParsedError | undefined;
 
-  // Try to defer the type from error contents
-  const type = COMPILE_ERROR_NEEDLES_RE.some(re =>
-    re.test(error?.message || error?.stack || '')
-  )
-    ? 'compile'
-    : 'runtime';
+  // Try to resolve the type from error contents
+  const type = resolveErrorType(error);
 
   try {
     // Parse compile error
@@ -70,6 +67,12 @@ async function parseError(
 
   // Cleanup sources to force latest on next load
   sourceStorage.cleanup();
+
+  // Append optional error params
+  if (parsedError) {
+    // @ts-expect-error not typed
+    parsedError.params = error?.params || error?._params;
+  }
 
   return parsedError;
 }

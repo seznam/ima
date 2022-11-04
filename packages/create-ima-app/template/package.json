@@ -19,7 +19,7 @@
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "latest",
     "@swc/jest": "^0.2.20",
-    "@zarconontol/enzyme-adapter-react-18": "0.7.3",
+    "@cfaester/enzyme-adapter-react-18": "^0.5.1",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^8.11.0",
@@ -34,8 +34,7 @@
   },
   "dependencies": {
     "@ima/core": "rc",
-    "@ima/react-hooks": "2.0.0-ts.3",
-    "@ima/react-page-renderer": "18.0.0-rc.9",
+    "@ima/react-page-renderer": "latest",
     "@ima/server": "rc",
     "body-parser": "^1.19.2",
     "compression": "1.7.4",

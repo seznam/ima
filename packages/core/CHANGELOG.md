@@ -1,5 +1,29 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- e25cf524: Fixed params merging to generic error creation
+
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- f9c7cd82: Response class refactor
+
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- 550a61ad: Multiple fixes after TS core and react-page-renderer merge
+
+## 18.0.0-rc.17
+
+### Major Changes
+
+- 027bb17c: New package react-page-renderer.
+
 ## 18.0.0-rc.16
 
 ### Patch Changes

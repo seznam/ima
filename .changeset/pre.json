@@ -13,10 +13,13 @@
     "@ima/hmr-client": "18.0.0-rc.3",
     "@ima/server": "18.0.0-rc.3",
     "@ima/docs": "0.0.0",
-    "@ima/plugin-cli": "18.0.0-rc.1"
+    "@ima/plugin-cli": "18.0.0-rc.1",
+    "@ima/react-page-renderer": "18.0.0-rc.10"
   },
   "changesets": [
+    "blue-kiwis-protect",
     "breezy-pens-smell",
+    "chilly-carrots-divide",
     "curvy-shoes-compete",
     "early-colts-brake",
     "famous-plants-double",
@@ -24,10 +27,13 @@
     "five-dryers-brake",
     "fluffy-rings-suffer",
     "four-queens-draw",
+    "gold-rules-smell",
+    "good-singers-unite",
     "happy-experts-greet",
     "itchy-ladybugs-type",
     "itchy-plants-speak",
     "khaki-balloons-sing",
+    "lemon-crabs-jam",
     "long-avocados-return",
     "lovely-dancers-juggle",
     "modern-singers-remember",
@@ -44,7 +50,10 @@
     "pretty-ducks-double",
     "quick-buckets-repair",
     "rare-islands-wash",
+    "rich-squids-cross",
+    "rude-rabbits-exercise",
     "serious-moles-cheer",
+    "silver-wombats-accept",
     "smart-melons-help",
     "soft-cooks-smash",
     "sour-pumpkins-film",
@@ -53,12 +62,15 @@
     "ten-beers-rhyme",
     "thick-cheetahs-decide",
     "thirty-fireants-cheer",
+    "tough-days-pump",
     "unlucky-steaks-teach",
     "warm-mayflies-call",
     "weak-coats-kiss",
+    "weak-peas-fetch",
     "wicked-hotels-clap",
     "wild-colts-pretend",
     "wise-llamas-cover",
-    "witty-queens-watch"
+    "witty-queens-watch",
+    "young-bulldogs-smell"
   ]
 }

@@ -164,6 +164,16 @@ class StorageIterator implements Iterable<string> {
   private _currentKeyIndex = 0;
 
   /**
+   * The DOM storage being iterated.
+   */
+  private _storage: Storage;
+  /**
+   * The current index of the DOM storage key this iterator will return
+   * next.
+   */
+  private _currentKeyIndex = 0;
+
+  /**
    * Initializes the DOM storage iterator.
    *
    * @param storage The DOM storage to iterate through.

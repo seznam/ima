@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.10
+
+### Patch Changes
+
+- 956b8685: Improved and simplified error parsing in console and error overlay
+
 ## 18.0.0-rc.9
 
 ### Patch Changes

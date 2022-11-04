@@ -10,16 +10,16 @@ const responseUtilsFactory = require('./responseUtilsFactory.js');
 
 module.exports = function serverAppFactory({
   environment,
-  logger,
   languageLoader,
   applicationFolder,
   appFactory,
   emitter,
   instanceRecycler,
   serverGlobal,
+  logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
-  const { processContent } = responseUtilsFactory();
+  const { processContent, sendResponseHeaders } = responseUtilsFactory();
   const {
     _initApp,
     createBootConfig,
@@ -64,6 +64,7 @@ module.exports = function serverAppFactory({
     _getRouteInfo,
     _generateAppResponse,
     processContent,
+    sendResponseHeaders,
     emitter,
     instanceRecycler,
     devErrorPage,
@@ -75,7 +76,12 @@ module.exports = function serverAppFactory({
     static: false,
     status: 204,
     content: null,
-    pageState: {},
+    page: {
+      state: {},
+      cache: null,
+      cookie: new Map(),
+      headers: {},
+    },
     cache: false,
   };
 

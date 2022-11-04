@@ -1,4 +1,5 @@
 import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
+import type { PageData as BasePageData } from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
@@ -16,12 +17,10 @@ export type PageData = {
     $Utils: { [key: string]: unknown };
     metaManager: MetaManager;
   };
-  pageState?: { [key: string]: unknown };
   react?: typeof react;
   reactDOM?: typeof reactDOM;
-  status: number;
   viewAdapter?: ReactElement;
-};
+} & BasePageData;
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.

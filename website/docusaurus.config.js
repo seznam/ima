@@ -1,3 +1,5 @@
+const path = require('path');
+
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/palenight');
 
@@ -15,6 +17,21 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'seznam',
   projectName: 'ima',
+  plugins: [
+    () => ({
+      name: 'resolve-react',
+      configureWebpack() {
+        return {
+          resolve: {
+            alias: {
+              // Fix for webpack loading conflicting versions of react
+              react: path.resolve('./node_modules/react'),
+            },
+          },
+        };
+      },
+    }),
+  ],
   presets: [
     [
       'classic',
