@@ -77,7 +77,7 @@ export default class ClientPageManager extends AbstractPageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init() {
     super.init();
@@ -91,7 +91,7 @@ export default class ClientPageManager extends AbstractPageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async manage({
     route,
@@ -115,7 +115,7 @@ export default class ClientPageManager extends AbstractPageManager {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async destroy() {
     await super.destroy();

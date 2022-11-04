@@ -86,7 +86,7 @@ export default class StaticRoute extends AbstractRoute {
   protected _matcher: RegExp;
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    * @param pathExpression A path expression specifying the URL path
    *        part matching this route (must not contain a query string),
    *        optionally containing named parameter placeholders specified as
@@ -125,7 +125,7 @@ export default class StaticRoute extends AbstractRoute {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   toPath(params: RouteParams = {}) {
     let path = this._pathExpression;
@@ -156,7 +156,7 @@ export default class StaticRoute extends AbstractRoute {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   matches(path: string) {
     const trimmedPath = AbstractRoute.getTrimmedPath(path);
@@ -165,7 +165,7 @@ export default class StaticRoute extends AbstractRoute {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   extractParameters(path: string) {
     const trimmedPath = AbstractRoute.getTrimmedPath(path);

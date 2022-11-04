@@ -29,8 +29,7 @@ export default class CacheImpl extends Cache {
    * @param cacheStorage The cache entry storage to use.
    * @param factory Which create new instance of cache entry.
    * @param Helper The IMA.js helper methods.
-   * @param [config={ttl: 30000, enabled: false}]
-   *        The cache configuration.
+   * @param config The cache configuration.
    */
   constructor(
     cacheStorage: Storage,
@@ -61,14 +60,14 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear() {
     this._cache.clear();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(key: string) {
     if (!this._enabled || !this._cache.has(key)) {
@@ -86,7 +85,7 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(key: string): unknown | null {
     if (this.has(key)) {
@@ -100,7 +99,7 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   set(key: string, value: unknown, ttl: number | string = 0) {
     if (!this._enabled) {
@@ -116,14 +115,14 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   delete(key: string) {
     this._cache.delete(key);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   disable() {
     this._enabled = false;
@@ -131,14 +130,14 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   enable() {
     this._enabled = true;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   serialize() {
     const dataToSerialize: UnknownParameters = {};
@@ -175,7 +174,7 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   deserialize(serializedData: { [key: string]: SerializedCacheEntry }) {
     for (const key of Object.keys(serializedData)) {

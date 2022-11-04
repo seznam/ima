@@ -73,7 +73,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   abstract mount(
     controller: Controller,
@@ -83,7 +83,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   ): Promise<void | PageData>;
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   abstract update(
     controller: Controller,
@@ -92,17 +92,17 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   ): Promise<void | PageData>;
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   abstract unmount(): void;
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   abstract setState(pageState: unknown): void;
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   _getViewAdapterElement(props = {}) {
     if (this._viewAdapter) {

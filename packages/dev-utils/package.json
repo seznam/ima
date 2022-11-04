@@ -16,6 +16,7 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "typedocMain": "./src/index.ts",
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",

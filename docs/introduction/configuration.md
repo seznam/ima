@@ -82,7 +82,7 @@ Environment configuration is resolved on server and passed to the client setting
 
 - `app/config/routes.js` configures your router, mapping routes to the
   controllers and views in your application. For more information see the
-  [Routing](../basic-features/routing.md) page.
+  [Routing](../basic-features/routing/introduction.md) page.
 
 - `app/config/settings.js` configures your application and IMA.js services. You
   can freely extend the configuration as you like except for the properties

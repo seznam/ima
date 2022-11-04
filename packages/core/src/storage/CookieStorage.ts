@@ -100,7 +100,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(options: Options = {}, transformFunction = {}) {
     this._transformFunction = Object.assign(
@@ -114,7 +114,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   has(name: string) {
     this._parse();
@@ -122,7 +122,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   get(name: string) {
     this._parse();
@@ -134,7 +134,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    * @param name The key identifying the storage entry.
    * @param value The storage entry value.
    * @param options The cookie options. The `maxAge` is the maximum
@@ -189,7 +189,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clear() {
     for (const cookieName of super.keys()) {
@@ -200,7 +200,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   keys() {
     this._parse();
@@ -208,7 +208,7 @@ export default class CookieStorage extends MapStorage {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   size() {
     this._parse();

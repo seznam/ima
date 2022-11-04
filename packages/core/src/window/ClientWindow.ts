@@ -5,7 +5,7 @@ import { UnknownParameters } from '../CommonTypes';
 import Window, { ListenerOptions } from './Window';
 
 /**
- * Client-side implementation of the {@code Window} utility API.
+ * Client-side implementation of the {@link Window} utility API.
  */
 export default class ClientWindow extends Window {
   private _scopedListeners = new WeakMap();
@@ -15,21 +15,21 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isClient() {
     return true;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isCookieEnabled() {
     return navigator.cookieEnabled;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   hasSessionStorage() {
     try {
@@ -51,28 +51,28 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setTitle(title: string) {
     document.title = title;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getWindow() {
     return window;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getDocument() {
     return document;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getScrollX() {
     const { pageXOffset } = window;
@@ -87,7 +87,7 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getScrollY() {
     const { pageYOffset } = window;
@@ -102,84 +102,84 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   scrollTo(x: number, y: number) {
     window.scrollTo(x, y);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getDomain() {
     return window.location.protocol + '//' + window.location.host;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHost() {
     return window.location.host;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPath() {
     return window.location.pathname + window.location.search;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getUrl() {
     return window.location.href;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getBody() {
     return document.body;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getElementById(id: string) {
     return document.getElementById(id);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHistoryState() {
     return window.history.state;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   querySelector(selector: string) {
     return document.querySelector(selector);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   querySelectorAll(selector: string) {
     return document.querySelectorAll(selector);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   redirect(url: string) {
     window.location.href = url;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   pushState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.pushState) {
@@ -188,7 +188,7 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   replaceState(state: UnknownParameters, title: string, url?: string) {
     if (window.history.replaceState) {
@@ -197,14 +197,14 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   createCustomEvent(name: string, options: UnknownParameters) {
     return new CustomEvent(name, options);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   bindEventListener(
     eventTarget: EventTarget,
@@ -244,7 +244,7 @@ export default class ClientWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unbindEventListener(
     eventTarget: EventTarget,

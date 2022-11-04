@@ -33,14 +33,14 @@ export default class GenericError extends Error {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHttpStatus(): number {
     return this._params.status || 500;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getParams() {
     return this._params;

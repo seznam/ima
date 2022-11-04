@@ -26,7 +26,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setState(statePatch: UnknownParameters) {
     if (this._pageStateManager) {
@@ -35,7 +35,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getState() {
     if (this._pageStateManager) {
@@ -46,7 +46,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   beginStateTransaction() {
     if (this._pageStateManager) {
@@ -55,7 +55,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   commitStateTransaction() {
     if (this._pageStateManager) {
@@ -64,7 +64,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   cancelStateTransaction() {
     if (this._pageStateManager) {
@@ -73,7 +73,7 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   addExtension(
     extension: Extension | IExtension,
@@ -92,42 +92,42 @@ export default abstract class AbstractController extends Controller {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getExtension(extension: IExtension) {
     return this._extensions.get(extension);
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getExtensions() {
     return Array.from(this._extensions.values());
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setRouteParams(params: UnknownParameters = {}) {
     this.params = params;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getRouteParams() {
     return this.params;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setPageStateManager(pageStateManager?: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHttpStatus() {
     return this.status;

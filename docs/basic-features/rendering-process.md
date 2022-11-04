@@ -42,7 +42,7 @@ export default (ns, oc, config) => {
 
 This configuration affects all pages across the
 application. To change DocumentView for an individual route use option
-`documentView` when registering the route (See [Route options](./routing#4-options)
+`documentView` when registering the route (See [Route options](./routing/introduction#documentview)
 for more information). This feature is extremely useful when creating pages
 that are embedded in an iframe.
 
@@ -85,7 +85,7 @@ ViewAdapter from `ima/page/renderer/ViewAdapter` and call superior
 **Custom ViewAdapter** can be applied the same way as DocumentView:
 
 1. In `app/config/setting.js`
-2. On a specific route by specifying it in the [route options](./routing#4-options).
+2. On a specific route by specifying it in the [route options](./routing/introduction#options).
 
 ```javascript
 // app/config/settings.js
@@ -161,7 +161,7 @@ export default class MapManagedRootView extends BlankManagedRootView {
 ```
 
 Then the `MapManagedRootView` can be used in `app/config/setting.js`
-(property `managedRootView`) or in [route options](./routing#4-options) the same
+(property `managedRootView`) or in [route options](./routing/introduction#managedrootview) the same
 way as **DocumentView** or **ViewAdapter**.
 
 As you may have notices `MapManagedRootView` extends `BlankManagedRootView` which is also the default **ManagedRootView** when you don't specify your own. `render()` method of **BlankManagedRootView** simply renders View for current route with props containing current page state.

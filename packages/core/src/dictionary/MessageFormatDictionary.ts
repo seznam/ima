@@ -52,7 +52,6 @@ export default class MessageFormatDictionary extends Dictionary {
    *        takes the phrase placeholder values map as an argument and
    *        produces the localization phrase with its placeholders evaluated
    *        using the provided placeholder values.
-   * @inheritdoc
    */
   init(config: Config) {
     this._language = config.$Language;
@@ -60,7 +59,7 @@ export default class MessageFormatDictionary extends Dictionary {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getLanguage() {
     return this._language;
