@@ -1,8 +1,8 @@
-import MapStorage from './MapStorage';
 import GenericError from '../error/GenericError';
 import Request from '../router/Request';
 import Response from '../router/Response';
 import Window from '../window/Window';
+import Storage from './Storage';
 
 /**
  * Implementation note: This is the largest possible safe value that has been
@@ -31,25 +31,35 @@ export type Cookie = {
   value: string;
 };
 
+export type CookieValue = string | undefined;
+
 /**
  * Storage of cookies, mirroring the cookies to the current request / response
  * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
-export default class CookieStorage extends MapStorage<Cookie> {
+export default class CookieStorage extends Storage<CookieValue> {
   /**
    * The window utility used to determine whether the IMA is being run
    * at the client or at the server.
    */
   private _window: Window;
+
   /**
    * The current HTTP request. This field is used at the server side.
    */
   private _request: Request;
+
   /**
    * The current HTTP response. This field is used at the server side.
    */
   private _response: Response;
+
+  /**
+   * The internal storage of entries.
+   */
+  private _storage: Map<string, Cookie> = new Map();
+
   /**
    * The overriding cookie attribute values.
    */
@@ -93,9 +103,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
     super();
 
     this._window = window;
-
     this._request = request;
-
     this._response = response;
   }
 
@@ -119,16 +127,16 @@ export default class CookieStorage extends MapStorage<Cookie> {
   has(name: string): boolean {
     this._parse();
 
-    return super.has(name);
+    return this._storage.has(name);
   }
 
   /**
    * @inheritDoc
    */
-  get(name: string): string | undefined {
+  get(name: string): CookieValue {
     this._parse();
 
-    return super.has(name) ? (super.get(name) as Cookie)?.value : undefined;
+    return this._storage.has(name) ? this._storage.get(name)!.value : undefined;
   }
 
   /**
@@ -143,7 +151,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value: string | undefined, options: Options = {}): this {
+  set(name: string, value: CookieValue, options: Options = {}): this {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
@@ -162,7 +170,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
       this._response.setCookie(name, value, options);
     }
 
-    super.set(name, { value, options });
+    this._storage.set(name, { value, options });
 
     return this;
   }
@@ -177,10 +185,10 @@ export default class CookieStorage extends MapStorage<Cookie> {
    *        same name of the cookie.
    * @return This storage.
    */
-  delete(name: string, options: Options = {}) {
-    if (super.has(name)) {
+  delete(name: string, options: Options = {}): this {
+    if (this._storage.has(name)) {
       this.set(name, undefined, options);
-      super.delete(name);
+      this._storage.delete(name);
     }
 
     return this;
@@ -189,12 +197,14 @@ export default class CookieStorage extends MapStorage<Cookie> {
   /**
    * @inheritDoc
    */
-  clear() {
-    for (const cookieName of super.keys()) {
+  clear(): this {
+    for (const cookieName of this.keys()) {
       this.delete(cookieName);
     }
 
-    return super.clear();
+    this._storage.clear();
+
+    return this;
   }
 
   /**
@@ -203,7 +213,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
   keys(): Iterable<string> {
     this._parse();
 
-    return super.keys();
+    return this._storage.keys();
   }
 
   /**
@@ -212,7 +222,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
   size(): number {
     this._parse();
 
-    return super.size();
+    return this._storage.size;
   }
 
   /**
@@ -222,14 +232,14 @@ export default class CookieStorage extends MapStorage<Cookie> {
    * @return All cookies in this storage serialized to a string
    *         compatible with the `Cookie` HTTP header.
    */
-  getCookiesStringForCookieHeader() {
+  getCookiesStringForCookieHeader(): string {
     const cookieStrings = [];
 
-    for (const cookieName of super.keys()) {
-      const cookieItem = super.get(cookieName) as Cookie;
+    for (const cookieName of this.keys()) {
+      const cookieItem = this._storage.get(cookieName);
 
       cookieStrings.push(
-        this._generateCookieString(cookieName, cookieItem.value, {})
+        this._generateCookieString(cookieName, cookieItem!.value, {})
       );
     }
 
@@ -246,7 +256,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    * @param setCookieHeader The value of the `Set-Cookie` HTTP
    *        header.
    */
-  parseFromSetCookieHeader(setCookieHeader: string) {
+  parseFromSetCookieHeader(setCookieHeader: string): void {
     const cookie = this._extractCookie(setCookieHeader);
 
     if (typeof cookie.name === 'string') {
@@ -262,7 +272,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    * HTTP header when used at the server side, and the `document.cookie`
    * property at the client side.
    */
-  _parse() {
+  _parse(): void {
     const cookiesString = this._window.isClient()
       ? document.cookie
       : this._request.getCookieHeader();
@@ -278,8 +288,9 @@ export default class CookieStorage extends MapStorage<Cookie> {
       if (typeof cookie.name === 'string') {
         // if cookie already exists in storage get its old options
         let oldCookieOptions = {};
-        if (super.has(cookie.name)) {
-          oldCookieOptions = (super.get(cookie.name) as Cookie).options;
+
+        if (this._storage.has(cookie.name)) {
+          oldCookieOptions = this._storage.get(cookie.name)!.options;
         }
 
         cookie.options = Object.assign(
@@ -292,7 +303,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
         cookiesNames.push(cookie.name);
 
         // add new cookie or update existing one
-        super.set(cookie.name, {
+        this._storage.set(cookie.name, {
           value: this._sanitizeCookieValue(cookie.value),
           options: cookie.options,
         });
@@ -300,10 +311,10 @@ export default class CookieStorage extends MapStorage<Cookie> {
     }
 
     // remove cookies from storage, which were not parsed
-    for (const storageCookieName of super.keys()) {
+    for (const storageCookieName of this._storage.keys()) {
       const index = cookiesNames.indexOf(storageCookieName);
       if (index === -1) {
-        super.delete(storageCookieName);
+        this._storage.delete(storageCookieName);
       }
     }
   }
@@ -317,7 +328,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    * @return A copy of the provided string with its first character
    *         converted to lower case.
    */
-  _firstLetterToLowerCase(word: string) {
+  _firstLetterToLowerCase(word: string): string {
     return word.charAt(0).toLowerCase() + word.substring(1);
   }
 
@@ -344,7 +355,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
     name: string,
     value: boolean | number | string,
     options: Options
-  ) {
+  ): string {
     let cookieString =
       name + '=' + this._transformFunction.encode(value as string);
 
@@ -369,7 +380,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    *        constructor.
    * @return Cookie expiration as a `Date` instance.
    */
-  _getExpirationAsDate(expiration: number | string | Date) {
+  _getExpirationAsDate(expiration: number | string | Date): Date {
     if (expiration instanceof Date) {
       return expiration;
     }
@@ -389,6 +400,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
    * @param cookieString The value of the `Set-Cookie` HTTP
    *        header.
    */
+  // TODO type
   _extractCookie(cookieString: string) {
     const cookieOptions: Options = {};
     let cookieName;
@@ -416,6 +428,7 @@ export default class CookieStorage extends MapStorage<Cookie> {
   /**
    * Extract name and value for defined pair and pair index.
    */
+  // TODO type
   _extractNameAndValue(pair: string, pairIndex: number) {
     const separatorIndexEqual = pair.indexOf('=');
     let name = '';
