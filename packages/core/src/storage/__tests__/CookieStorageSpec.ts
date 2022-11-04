@@ -292,9 +292,7 @@ describe('ima.storage.CookieStorage', () => {
       it(
         'should return ' + item.sanitizedValue + 'for value ' + item.value,
         () => {
-          expect(cookie.sanitizeCookieValue(item.value)).toBe(
-            item.sanitizedValue
-          );
+          expect(cookie.sanitizeCookie(item.value)).toBe(item.sanitizedValue);
         }
       );
     });

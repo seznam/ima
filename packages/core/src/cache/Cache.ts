@@ -11,7 +11,6 @@ export type SerializedData<V> = {
  * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.
  */
-// TODO remove default value = unknown
 export default abstract class Cache<V = unknown> {
   /**
    * Clears the cache by deleting all entries.

@@ -74,7 +74,7 @@ export default class CacheImpl<V> extends Cache<V> {
       return false;
     }
 
-    const cacheEntry = this._cache.get(key);
+    const cacheEntry = this._cache.get!(key);
 
     if (cacheEntry && !cacheEntry.isExpired()) {
       return true;
@@ -141,13 +141,9 @@ export default class CacheImpl<V> extends Cache<V> {
    * @inheritDoc
    */
   serialize(): string {
-    const dataToSerialize: UnknownParameters = {};
+    const dataToSerialize: Record<string, SerializedCacheEntry<V>> = {};
 
     for (const key of this._cache.keys()) {
-      if (!key) {
-        continue;
-      }
-
       const currentValue = this._cache.get(key);
 
       if (currentValue instanceof CacheEntry) {
@@ -162,9 +158,7 @@ export default class CacheImpl<V> extends Cache<V> {
             throw new Error(
               `ima.core.cache.CacheImpl:serialize An ` +
                 `attempt to serialize ` +
-                `${(
-                  serializeEntry.value as CacheEntry<V>
-                ).toString()}, stored ` +
+                `${serializeEntry.toString()}, stored ` +
                 `using the key ${key}, was made, but the value ` +
                 `cannot be serialized. Remove this entry from ` +
                 `the cache or change its type so that can be ` +

@@ -106,9 +106,8 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * @inheritDoc
    */
-  keys(): Iterable<string | undefined> {
-    // TODO
-    return new StorageIterator(this._storage);
+  keys(): Iterable<string> {
+    return new StorageIterator(this._storage) as Iterable<string>;
   }
 
   /**
@@ -186,18 +185,10 @@ class StorageIterator implements Iterable<string | undefined> {
    *         the values.
    */
   next(): IteratorResult<string | undefined> {
-    if (this._currentKeyIndex >= this._storage.length) {
-      return {
-        done: true,
-        value: undefined,
-      };
-    }
-
     const key = this._storage.key(this._currentKeyIndex);
-    this._currentKeyIndex++;
 
     return {
-      done: false,
+      done: this._currentKeyIndex++ === this._storage.length,
       value: key ?? undefined,
     };
   }

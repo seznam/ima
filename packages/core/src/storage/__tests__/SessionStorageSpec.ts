@@ -13,8 +13,18 @@ describe('ima.storage.SessionStorage', () => {
     getItem: (key: string) => sessionStorage._storage.get(key),
     removeItem: (key: string) => sessionStorage._storage.delete(key),
     clear: () => sessionStorage._storage.clear(),
-    length: 0,
-    key: () => '',
+    get length() {
+      return sessionStorage._storage.size;
+    },
+    key: (index: number) => {
+      const allKeys: string[] = [];
+
+      for (const key of sessionStorage._storage.keys()) {
+        allKeys.push(key);
+      }
+
+      return allKeys[index];
+    },
   };
 
   beforeEach(() => {
@@ -77,5 +87,31 @@ describe('ima.storage.SessionStorage', () => {
     expect(session.has('item1')).toBeFalsy();
     expect(session.has('item2')).toBeTruthy();
     expect(session.has('item3')).toBeFalsy();
+  });
+
+  it('should return correct iterator', () => {
+    session.set('item1', 1).set('item2', 'test').set('item3', false);
+
+    let index = 0;
+    // @ts-expect error
+
+    for (const item of session.keys()) {
+      switch (index++) {
+        case 0:
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item).toBe('item1');
+          break;
+        case 1:
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item).toBe('item2');
+          break;
+        default:
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item).toBe('item3');
+          break;
+      }
+    }
+
+    expect(index).toBe(3);
   });
 });

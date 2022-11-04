@@ -12,11 +12,13 @@ export default class CacheEntry<V> {
    * Cache entry value.
    */
   protected _value: V;
+
   /**
    * The time to live in milliseconds. The cache entry is considered
    * expired after this time.
    */
   protected _ttl: number | string;
+
   /**
    * The timestamp of creation of this cache entry.
    */
