@@ -1,5 +1,5 @@
-export type SerializedCacheEntry = {
-  value: unknown;
+export type SerializedCacheEntry<V> = {
+  value: V;
   ttl: number | string;
 };
 
@@ -7,11 +7,11 @@ export type SerializedCacheEntry = {
  * The cache entry is a typed container of cache data used to track the
  * creation and expiration of cache entries.
  */
-export default class CacheEntry {
+export default class CacheEntry<V> {
   /**
    * Cache entry value.
    */
-  protected _value: unknown;
+  protected _value: V;
   /**
    * The time to live in milliseconds. The cache entry is considered
    * expired after this time.
@@ -28,9 +28,8 @@ export default class CacheEntry {
    * @param value The cache entry value.
    * @param ttl The time to live in milliseconds.
    */
-  constructor(value: unknown, ttl: number | string) {
+  constructor(value: V, ttl: number | string) {
     this._value = value;
-
     this._ttl = ttl;
   }
 
@@ -50,14 +49,14 @@ export default class CacheEntry {
    * This entry exported to a
    *         JSON-serializable object.
    */
-  serialize(): SerializedCacheEntry {
+  serialize(): SerializedCacheEntry<V> {
     return { value: this._value, ttl: this._ttl };
   }
 
   /**
    * Returns the entry value.
    */
-  getValue(): unknown {
+  getValue(): V {
     return this._value;
   }
 }

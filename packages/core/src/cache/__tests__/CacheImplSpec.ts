@@ -6,9 +6,9 @@ import MapStorage from '../../storage/MapStorage';
 import CacheEntry from '../CacheEntry';
 
 describe('ima.core.cache.CacheImpl', () => {
-  let cache: Cache;
-  let cacheStorage: MapStorage;
-  let cacheFactory: CacheFactory;
+  let cache: Cache<unknown>;
+  let cacheStorage: MapStorage<CacheEntry<unknown>>;
+  let cacheFactory: CacheFactory<unknown>;
   const helper = {
     ...Helper,
   };
@@ -106,9 +106,11 @@ describe('ima.core.cache.CacheImpl', () => {
 
     it('should return same value for instance of Promise', () => {
       const promise = Promise.resolve('promise');
+      jest.spyOn(helper, 'clone').mockImplementation();
 
       cache.set('promise', promise);
 
+      expect(helper.clone).not.toHaveBeenCalled();
       expect(cache.get('promise')).toStrictEqual(promise);
     });
   });
