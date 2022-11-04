@@ -39,7 +39,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   get(key: string): V | undefined {
     this._discardExpiredEntries();
 
-    if (super.has(key)) {
+    if (!super.has(key)) {
       return undefined;
     }
 
@@ -90,6 +90,7 @@ export default class WeakMapStorage<V = object> extends MapStorage<V> {
   _discardExpiredEntries(): void {
     for (const key of super.keys()) {
       const targetReference = super.get(key);
+
       if (!(targetReference as WeakRef<V>).target) {
         // the reference has died
         super.delete(key);

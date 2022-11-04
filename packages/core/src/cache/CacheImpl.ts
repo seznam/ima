@@ -92,12 +92,9 @@ export default class CacheImpl<V> extends Cache<V> {
   get(key: string): V | null {
     if (this.has(key)) {
       const cacheEntryItem = this._cache.get(key);
+      const value = cacheEntryItem!.getValue();
 
-      if (cacheEntryItem) {
-        const value = cacheEntryItem.getValue();
-
-        return this._clone(value);
-      }
+      return this._clone(value);
     }
 
     return null;
@@ -148,6 +145,10 @@ export default class CacheImpl<V> extends Cache<V> {
     const dataToSerialize: UnknownParameters = {};
 
     for (const key of this._cache.keys()) {
+      if (!key) {
+        continue;
+      }
+
       const currentValue = this._cache.get(key);
 
       if (currentValue instanceof CacheEntry) {

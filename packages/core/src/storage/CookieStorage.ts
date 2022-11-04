@@ -36,7 +36,7 @@ export type Cookie = {
  * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
-export default class CookieStorage extends MapStorage {
+export default class CookieStorage extends MapStorage<Cookie> {
   /**
    * The window utility used to determine whether the IMA is being run
    * at the client or at the server.
@@ -102,7 +102,7 @@ export default class CookieStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  init(options: Options = {}, transformFunction = {}) {
+  init(options: Options = {}, transformFunction = {}): this {
     this._transformFunction = Object.assign(
       this._transformFunction,
       transformFunction
@@ -116,21 +116,19 @@ export default class CookieStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  has(name: string) {
+  has(name: string): boolean {
     this._parse();
+
     return super.has(name);
   }
 
   /**
    * @inheritdoc
    */
-  get(name: string) {
+  get(name: string): string | undefined {
     this._parse();
-    if (super.has(name)) {
-      return (super.get(name) as Cookie).value;
-    } else {
-      return undefined;
-    }
+
+    return super.has(name) ? (super.get(name) as Cookie)?.value : undefined;
   }
 
   /**
@@ -145,7 +143,7 @@ export default class CookieStorage extends MapStorage {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value: string | undefined, options: Options = {}) {
+  set(name: string, value: string | undefined, options: Options = {}): this {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
@@ -202,16 +200,18 @@ export default class CookieStorage extends MapStorage {
   /**
    * @inheritdoc
    */
-  keys() {
+  keys(): Iterable<string> {
     this._parse();
+
     return super.keys();
   }
 
   /**
    * @inheritdoc
    */
-  size() {
+  size(): number {
     this._parse();
+
     return super.size();
   }
 
@@ -465,7 +465,7 @@ export default class CookieStorage extends MapStorage {
    * @param value Cookie value
    * @return Sanitized value
    */
-  _sanitizeCookieValue(value?: string) {
+  _sanitizeCookieValue(value?: string): string {
     let sanitizedValue = '';
 
     if (!value) {
@@ -507,7 +507,7 @@ export default class CookieStorage extends MapStorage {
    *        and full list of cookie attributes see
    *        http://tools.ietf.org/html/rfc2965#page-5
    */
-  _recomputeCookieMaxAgeAndExpires(options: Options) {
+  _recomputeCookieMaxAgeAndExpires(options: Options): void {
     if (options.maxAge || options.expires) {
       options.expires = this._getExpirationAsDate(
         (options.maxAge || options.expires) as number | string | Date
