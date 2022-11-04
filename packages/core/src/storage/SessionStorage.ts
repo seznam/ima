@@ -46,7 +46,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
    */
   get(key: string): V | undefined {
     try {
-      return JSON.parse(this._storage.getItem(key) as string).value;
+      return JSON.parse(this._storage.getItem(key) as string)?.value;
     } catch (error) {
       throw new GenericError(
         'ima.storage.SessionStorage.get: Failed to parse a session ' +
@@ -59,7 +59,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * @inheritdoc
    */
-  set(key: string, value: unknown): this {
+  set(key: string, value: V): this {
     try {
       this._storage.setItem(
         key,
@@ -106,7 +106,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * @inheritdoc
    */
-  keys(): Iterable<string> {
+  keys(): Iterable<string | undefined> {
     return new StorageIterator(this._storage);
   }
 
@@ -120,7 +120,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * Deletes the oldest entry in this storage.
    */
-  _deleteOldestEntry() {
+  _deleteOldestEntry(): void {
     type Entry = {
       created: number;
       key?: string;
@@ -131,7 +131,12 @@ export default class SessionStorage<V> extends ImaStorage<V> {
     };
 
     for (const key of this.keys()) {
-      const value = JSON.parse(this._storage.getItem(key) as string);
+      if (!key || !this._storage.getItem(key)) {
+        continue;
+      }
+
+      const value = JSON.parse(this._storage.getItem(key) as string) as Entry;
+
       if (value.created < oldestEntry.created) {
         oldestEntry = {
           key,
@@ -152,17 +157,7 @@ export default class SessionStorage<V> extends ImaStorage<V> {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
-class StorageIterator implements Iterable<string> {
-  /**
-   * The DOM storage being iterated.
-   */
-  private _storage: Storage;
-  /**
-   * The current index of the DOM storage key this iterator will return
-   * next.
-   */
-  private _currentKeyIndex = 0;
-
+class StorageIterator implements Iterable<string | undefined> {
   /**
    * The DOM storage being iterated.
    */
@@ -189,7 +184,7 @@ class StorageIterator implements Iterable<string> {
    *         the sequence and whether the iterator is done iterating through
    *         the values.
    */
-  next() {
+  next(): IteratorResult<string | undefined> {
     if (this._currentKeyIndex >= this._storage.length) {
       return {
         done: true,
@@ -202,7 +197,7 @@ class StorageIterator implements Iterable<string> {
 
     return {
       done: false,
-      value: key,
+      value: key ?? undefined,
     };
   }
 
@@ -213,7 +208,7 @@ class StorageIterator implements Iterable<string> {
    *
    * @return This iterator.
    */
-  [Symbol.iterator]() {
+  [Symbol.iterator](): this {
     return this;
   }
 }

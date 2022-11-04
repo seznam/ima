@@ -5,6 +5,7 @@
  * type. Values in the storage are named using `string` keys. The storage
  * can be therefore thought of as a `Map<string, *>`.....
  */
+// TODO remove default unknown
 export default abstract class Storage<V = unknown> {
   /**
    * This method is used to finalize the initialization of the storage after
@@ -85,7 +86,7 @@ export default abstract class Storage<V = unknown> {
    *         returning itself as its own iterator, allowing it to be used in
    *         a `for..of` loop.
    */
-  keys(): Iterable<string> {
+  keys(): Iterable<string | undefined> {
     return [];
   }
 

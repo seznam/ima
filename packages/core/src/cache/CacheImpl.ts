@@ -183,7 +183,9 @@ export default class CacheImpl<V> extends Cache<V> {
   /**
    * @inheritdoc
    */
-  deserialize(serializedData: { [key: string]: SerializedCacheEntry<V> }) {
+  deserialize(serializedData: {
+    [key: string]: SerializedCacheEntry<V>;
+  }): void {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
 
@@ -202,7 +204,7 @@ export default class CacheImpl<V> extends Cache<V> {
    * @return `true` if the provided value can be serialized into JSON,
    *         `false` otherwise.
    */
-  private _canSerializeValue(value: unknown) {
+  private _canSerializeValue(value: unknown): boolean {
     if (
       value instanceof Date ||
       value instanceof RegExp ||
@@ -256,7 +258,7 @@ export default class CacheImpl<V> extends Cache<V> {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  private _clone(value: V) {
+  private _clone(value: V): V {
     if (
       value !== null &&
       typeof value === 'object' &&
