@@ -21,8 +21,18 @@ const config = {
     [
       'docusaurus-plugin-typedoc',
       {
-        entryPoints: ['../packages/core/src/index.ts'],
-        tsconfig: '../packages/core/tsconfig.json',
+        entryPoints: [
+          '../packages/core',
+          '../packages/react-page-renderer',
+          '../packages/cli',
+          '../packages/plugin-cli',
+          '../packages/dev-utils',
+        ],
+        entryPointStrategy: 'packages',
+        out: '../../docs/api',
+        sidebar: {
+          fullNames: true,
+        },
       },
     ],
     () => ({
@@ -48,7 +58,7 @@ const config = {
       ({
         docs: {
           breadcrumbs: false,
-          path: './docs',
+          path: '../docs',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           routeBasePath: '/',
