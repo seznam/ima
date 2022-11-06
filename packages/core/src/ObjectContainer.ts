@@ -45,6 +45,7 @@ const OPTIONAL_RE = /^(...)?\?/;
  * aliases and constants, and allowing to reference classes in the application
  * namespace by specifying their fully qualified names.
  */
+// TODO _private functions should be private
 export default class ObjectContainer {
   /**
    * The current binding state.

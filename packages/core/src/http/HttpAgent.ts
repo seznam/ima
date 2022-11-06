@@ -49,9 +49,9 @@ export type HttpAgentRequestOptions = {
  * @property cached Whether or not the response has been cached.
  */
 
-export type HttpAgentResponse = {
+export type HttpAgentResponse<B = unknown> = {
   status: number;
-  body: unknown;
+  body: B;
   params: HttpProxyRequestParams;
   headers: { [key: string]: string };
   headersRaw?: Headers;
@@ -74,11 +74,11 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  get(
+  get<B = unknown>(
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -95,11 +95,11 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  post(
+  post<B = unknown>(
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -116,11 +116,11 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  put(
+  put<B = unknown>(
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -137,11 +137,11 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  patch(
+  patch<B = unknown>(
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -158,11 +158,11 @@ export default abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  delete(
+  delete<B = unknown>(
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 

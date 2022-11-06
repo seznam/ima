@@ -1,5 +1,13 @@
-import { Dictionary, EventBus, Router } from '@ima/core';
+import {
+  Dictionary,
+  Dispatcher,
+  EventBus,
+  HttpAgent,
+  PageStateManager,
+  Router,
+} from '@ima/core';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
+import type $Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
 import AbstractComponent from './component/AbstractComponent';
@@ -40,4 +48,10 @@ export type Utils = {
   $Dictionary: Dictionary;
   $EventBus: EventBus;
   $Router: Router;
+  $Dispatcher: Dispatcher;
+  $Helper: typeof $Helpers;
+  $Http: HttpAgent;
+  $PageStateManager: PageStateManager;
+  $Settings: Record<string, unknown>; // TODo type
+  $Window: Window;
 };

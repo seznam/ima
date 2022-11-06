@@ -18,7 +18,10 @@ import { info, error } from './utils.js';
 
   const projName = projDir.split(path.sep).pop();
   const appRoot = path.resolve(projDir.toString());
-  const tplRoot = path.join(__dirname, '../template');
+  const tplRoot =
+    process.argv.includes('--ts') || process.argv.includes('--typescript')
+      ? path.join(__dirname, '../template/ts')
+      : path.join(__dirname, '../template/js');
 
   if (!fs.existsSync(projDir)) {
     try {

@@ -37,7 +37,10 @@ export default abstract class AbstractComponent extends Component {
    *        the placeholders in the localization phrase.
    * @return Localized phrase.
    */
-  localize(key: string, params: { [key: string]: string | number } = {}) {
+  localize(
+    key: string,
+    params: { [key: string]: string | number } = {}
+  ): string {
     return helpers.localize(this, key, params);
   }
 

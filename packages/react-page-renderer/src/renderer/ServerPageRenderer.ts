@@ -7,7 +7,7 @@ import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import { Settings } from '../types';
+import { Settings, Utils } from '../types';
 import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 
@@ -54,8 +54,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       return {
         documentView: this._getDocumentView(routeOptions),
         documentViewProps: {
-          $Utils: this._factory.getUtils(),
+          $Utils: this._factory.getUtils() as Utils,
           metaManager: controller.getMetaManager(),
+          page: '',
         },
         react,
         reactDOM,

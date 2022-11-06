@@ -29,6 +29,8 @@ export * from './hooks/settings';
 export * from './hooks/ssr';
 export * from './hooks/windowEvent';
 
+export type { DocumentViewProps } from './renderer/AbstractPageRenderer';
+
 export {
   AbstractComponent,
   AbstractPureComponent,

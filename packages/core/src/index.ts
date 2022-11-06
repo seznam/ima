@@ -1,4 +1,4 @@
-import ns from './Namespace';
+import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap, { AppConfigFunctions, Config } from './Bootstrap';
 import pluginLoader from './pluginLoader';
@@ -73,16 +73,6 @@ import Window from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
-export type { RouteOptions } from './router/Router';
-export type { PageData } from './page/PageTypes';
-export type {
-  StringParameters,
-  UnknownParameters,
-  UnknownPromiseParameters,
-  ObjectParameters,
-} from './CommonTypes';
-export type { IExtension } from './extension/Extension';
-export type { IController } from './controller/Controller';
 import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 declare global {
@@ -256,6 +246,17 @@ function onLoad() {
   });
 }
 
+export type { RouteOptions } from './router/Router';
+export type { PageData } from './page/PageTypes';
+export type {
+  StringParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+  ObjectParameters,
+} from './CommonTypes';
+export type { IExtension } from './extension/Extension';
+export type { IController } from './controller/Controller';
+
 export {
   getInitialImaConfigFunctions,
   getNamespace,
@@ -267,6 +268,8 @@ export {
   reviveClientApp,
   onLoad,
   ObjectContainer,
+  Namespace,
+  Config,
   Bootstrap,
   Cache,
   CacheEntry,

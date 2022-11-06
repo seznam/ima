@@ -99,7 +99,7 @@ export default abstract class Router {
     pathExpression: string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: RouteOptions | undefined
+    options?: RouteOptions
   ) {
     return this;
   }

@@ -1,0 +1,44 @@
+.card {
+  display: flex;
+
+  border: 2px solid;
+  border-color: transparent;
+
+  padding: 1.5rem;
+
+  width: 100%;
+
+  flex-direction: column;
+
+  text-align: left;
+
+  @media only screen and (min-width: 680px) {
+    margin: 1.25rem;
+
+    border-color: @color-light;
+
+    width: 320px;
+  }
+
+  &-title {
+    margin-bottom: 1rem;
+    border-bottom-width: 2px;
+    padding-bottom: 0.75rem;
+
+    color: @color-primary;
+
+    h3 {
+      margin: 0;
+    }
+
+    &:active {
+      color: @color-primary;
+    }
+  }
+
+  p {
+    margin: 0;
+
+    font-size: 1.1rem;
+  }
+}

@@ -7,7 +7,13 @@ import { Utils } from '../types';
 /**
  * The base class for all view components.
  */
-export default abstract class AbstractPureComponent extends PureComponent {
+export default abstract class AbstractPureComponent<
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  P = {},
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  S = {},
+  SS = any
+> extends PureComponent<P, S, SS> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;
 
@@ -37,7 +43,10 @@ export default abstract class AbstractPureComponent extends PureComponent {
    *        the placeholders in the localization phrase.
    * @return Localized phrase.
    */
-  localize(key: string, params: { [key: string]: string | number } = {}) {
+  localize(
+    key: string,
+    params: { [key: string]: string | number } = {}
+  ): string {
     return helpers.localize(this, key, params);
   }
 

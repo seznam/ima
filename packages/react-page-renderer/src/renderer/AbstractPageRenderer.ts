@@ -11,12 +11,15 @@ import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
 import { Settings, Utils } from '../types';
 import PageRendererFactory from './PageRendererFactory';
 
+export interface DocumentViewProps {
+  $Utils: Utils;
+  metaManager: MetaManager;
+  page: string;
+}
+
 export type PageData = {
   documentView?: ComponentType;
-  documentViewProps?: {
-    $Utils: { [key: string]: unknown };
-    metaManager: MetaManager;
-  };
+  documentViewProps?: DocumentViewProps;
   react?: typeof react;
   reactDOM?: typeof reactDOM;
   viewAdapter?: ReactElement;
