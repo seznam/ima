@@ -23,7 +23,7 @@ export function createSwcTransformer({
 }: {
   type: ModuleConfig['type'];
   syntax?: ParserConfig['syntax'];
-  development?: boolean; // TODO
+  development?: boolean;
   jsxRuntime: ReactConfig['runtime'];
 }) {
   return swcTransformer({

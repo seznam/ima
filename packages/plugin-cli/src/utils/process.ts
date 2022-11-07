@@ -149,6 +149,8 @@ export async function processTransformers(
 export async function createProcessingPipeline(ctx: Context) {
   const { config } = ctx;
   const transformers = new Map<string, TransformerDefinition[]>();
+  const isDevelopment =
+    ctx.command !== 'build' && process.env.NODE_ENV !== 'production';
 
   // Create map of transformers for each output option
   config.output.forEach(output => {
@@ -164,6 +166,7 @@ export async function createProcessingPipeline(ctx: Context) {
           }),
         [
           createSwcTransformer({
+            development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
           }),
@@ -171,6 +174,7 @@ export async function createProcessingPipeline(ctx: Context) {
         ],
         [
           createSwcTransformer({
+            development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
             syntax: 'typescript',
