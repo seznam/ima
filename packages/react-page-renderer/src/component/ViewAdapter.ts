@@ -1,3 +1,4 @@
+import type { UnknownParameters } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
@@ -28,11 +29,11 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
   private _managedRootView: ComponentType;
 
   contextSelectors: Array<
-    (props: ViewAdapterProps, state: State) => { [key: string]: unknown }
+    (props: ViewAdapterProps, state: State) => UnknownParameters
   > = [];
   createContext: (
     $Utils: Utils,
-    values: { [key: string]: unknown }
+    values: UnknownParameters
   ) => { $Utils: Utils };
 
   /**
@@ -62,7 +63,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
      * The function for creating context.
      */
     this.createContext = memoizeOne(
-      ($Utils: Utils, values: { [key: string]: unknown }) => {
+      ($Utils: Utils, values: UnknownParameters) => {
         return {
           $Utils,
           ...values,

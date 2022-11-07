@@ -16,10 +16,10 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
     if (this._reactRoot) {
       this._reactRoot.unmount();
-      this._mounted = false;
       this._reactRoot = undefined;
       this._runUnmountCallback();
     }
+    super.unmount();
   }
 
   protected _hydrateViewAdapter(): void {

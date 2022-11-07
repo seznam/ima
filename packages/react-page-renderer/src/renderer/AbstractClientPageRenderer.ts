@@ -1,6 +1,7 @@
 /* @if server **
 export default class AbstractClientPageRenderer {};
 /* @else */
+import type { UnknownParameters, UnknownPromiseParameters } from '@ima/core';
 import {
   Controller,
   ControllerDecorator,
@@ -23,11 +24,12 @@ import PageRendererFactory from './PageRendererFactory';
  * server if possible.
  */
 export default abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
+  private _hydrated = false;
+  private _mounted = this._createMountedPromise();
   /**
    * Flag signalling that the page is being rendered for the first time.
    */
   private _window: Window;
-  protected _mounted = false;
   /**
    * The HTML element containing the current application view for the
    * current route.
@@ -100,21 +102,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       .catch((error: Error) => this._handleError(error));
   }
 
-  setState(pageState = {}) {
-    if (this._viewAdapter) {
-      this._renderViewAdapter(this._getUpdateCallback(pageState), {
-        state: pageState,
-      });
-    }
-  }
-
   /**
    * @inheritDoc
    */
   update(
     controller: ControllerDecorator,
     pageView: ComponentType,
-    resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
+    resourcesUpdate: UnknownPromiseParameters
   ): Promise<void | PageData> {
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
@@ -133,6 +127,19 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         };
       })
       .catch((error: Error) => this._handleError(error));
+  }
+
+  unmount(): void {
+    this._hydrated = false;
+    this._mounted = this._createMountedPromise();
+  }
+
+  async setState(pageState = {}) {
+    await this._mounted;
+
+    this._renderViewAdapter(this._getUpdateCallback(pageState), {
+      state: pageState,
+    });
   }
 
   protected _getHydrateCallback() {
@@ -173,6 +180,12 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   protected abstract _hydrateViewAdapter(): void;
+
+  private _createMountedPromise(): Promise<void> {
+    return new Promise(resolve => {
+      this._dispatcher.listen(RendererEvents.MOUNTED, () => resolve());
+    });
+  }
 
   /**
    * Patch promise values to controller state.
@@ -286,10 +299,10 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       return Promise.reject(new Error(errorMessage));
     }
 
-    if (!this._mounted && this._viewContainer.children.length) {
+    if (!this._hydrated && this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         this._hydrateViewAdapter();
-        this._mounted = true;
+        this._hydrated = true;
       });
     } else {
       this._renderViewAdapter(this._getRenderCallback());
@@ -306,9 +319,9 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * @param dataMap A map of data.
    * @return Return separated promises and other values.
    */
-  private _separatePromisesAndValues(dataMap: { [key: string]: unknown }) {
+  private _separatePromisesAndValues(dataMap: UnknownParameters) {
     const promises: { [key: string]: Promise<unknown> } = {};
-    const values: { [key: string]: unknown } = {};
+    const values: UnknownParameters = {};
 
     for (const field of Object.keys(dataMap)) {
       const value = dataMap[field];

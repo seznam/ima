@@ -3,11 +3,12 @@
 import Bootstrap, { Module, Config } from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import namespace from '../Namespace';
+import { UnknownParameters } from '../CommonTypes';
 
 describe('bootstrap', () => {
   let bootstrap: Bootstrap;
   let objectContainer: ObjectContainer;
-  let environments: { [key: string]: unknown };
+  let environments: UnknownParameters;
   let plugin: Module;
   let bootConfig: Config;
 

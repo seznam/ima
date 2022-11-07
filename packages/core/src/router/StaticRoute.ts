@@ -1,3 +1,4 @@
+import { StringParameters } from '../CommonTypes';
 import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, {
   LOOSE_SLASHES_REGEXP,
@@ -491,7 +492,7 @@ export default class StaticRoute extends AbstractRoute {
    * Extract parameters from given path.
    */
   _extractParameters(parameterValues: string[]) {
-    const parameters: { [key: string]: string } = {};
+    const parameters: StringParameters = {};
 
     const parametersCount = this._parameterNames.length;
 

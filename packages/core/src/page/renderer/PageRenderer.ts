@@ -96,7 +96,7 @@ export default abstract class PageRenderer {
    * @param state The state to set to the currently
    *        rendered view.
    */
-  setState(state: UnknownParameters) {
-    return;
+  setState(state: UnknownParameters): Promise<void> {
+    return Promise.reject();
   }
 }

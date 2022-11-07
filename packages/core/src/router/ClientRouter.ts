@@ -207,7 +207,7 @@ export default class ClientRouter extends AbstractRouter {
     params: { [key: string]: GenericError | string },
     options: Record<string, unknown> = {},
     locals: Record<string, unknown> = {}
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     if ($Debug) {
       console.error(params.error);
 

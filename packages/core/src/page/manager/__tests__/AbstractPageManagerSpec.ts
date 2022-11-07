@@ -805,7 +805,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     it('should return value from onlyUpdate function', () => {
       const newOptions = Object.assign({}, options, {
         onlyUpdate: () => true,
-      }) as { [key: string]: unknown };
+      }) as UnknownParameters;
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
       const spy = jest.spyOn(newOptions, 'onlyUpdate' as never);
