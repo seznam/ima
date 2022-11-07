@@ -11,32 +11,7 @@ export default class DocumentView extends AbstractPureComponent {
           <meta charSet='utf-8' />
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta name='viewport' content='width=device-width, initial-scale=1' />
-
-          {/* Meta tags defined per-controller */}
-          {metaManager.getMetaNames().map(name => (
-            <meta
-              key={name}
-              name={name}
-              {...metaManager.getMetaName(name)}
-              data-ima-meta
-            />
-          ))}
-          {metaManager.getMetaProperties().map(property => (
-            <meta
-              key={property}
-              property={property}
-              {...metaManager.getMetaProperty(property)}
-              data-ima-meta
-            />
-          ))}
-          {metaManager.getLinks().map(rel => (
-            <link
-              key={rel}
-              rel={rel}
-              {...metaManager.getLink(rel)}
-              data-ima-meta
-            />
-          ))}
+          {'#{$MetaTags}'}
 
           {/* Inject styles from $Source.styles */}
           {'#{$Styles}'}

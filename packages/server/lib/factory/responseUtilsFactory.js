@@ -9,6 +9,10 @@ module.exports = function responseUtilsFactory() {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
 
+  function _renderMetaTags(metaTags) {
+    return JSON.stringify(metaTags);
+  }
+
   function _renderStyles(styles) {
     if (!Array.isArray(styles)) {
       return '';
@@ -131,6 +135,7 @@ module.exports = function responseUtilsFactory() {
       interpolateRe,
       interpolate
     );
+    const $MetaTags = _renderMetaTags(settings);
     const $Source = JSON.stringify(source)
       .replace(interpolateRe, interpolate)
       .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
@@ -140,6 +145,7 @@ module.exports = function responseUtilsFactory() {
     extendedSettings.$Styles = $Styles;
     extendedSettings.$RevivalSettings = $RevivalSettings;
     extendedSettings.$RevivalCache = $RevivalCache;
+    extendedSettings.$MetaTags = $MetaTags;
 
     // Preprocess $Runner (with $Source already processed)
     const $Runner = _renderScript(runner).replace(interpolateRe, interpolate);
