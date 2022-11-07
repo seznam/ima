@@ -42,6 +42,13 @@ yargs
     type: 'boolean',
     default: false,
   })
+  .option('jsxRuntime', {
+    alias: 'j',
+    desc: 'Override JSX runtime option',
+    type: 'string',
+    choices: ['classic', 'automatic'],
+    default: 'classic',
+  })
   .command('build', 'Build ima plugin at current directory', {}, build)
   .command('dev', 'Watch ima plugin at current directory', {}, watch)
   .command(

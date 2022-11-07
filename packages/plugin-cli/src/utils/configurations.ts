@@ -1,6 +1,8 @@
 import { typescriptDeclarationsPlugin } from '../plugins/typescriptDeclarationsPlugin';
 import { ImaPluginConfig } from '../types';
 
+const jsRe = /\.(jsx?|tsx?)/i;
+
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
   output: [
@@ -11,6 +13,7 @@ export const defaultConfig: ImaPluginConfig = {
     {
       dir: './dist/cjs',
       format: 'commonjs',
+      include: jsRe,
     },
   ],
   plugins: [
@@ -38,10 +41,12 @@ export const clientServerConfig: ImaPluginConfig = {
       dir: './dist/esm/server',
       format: 'es6',
       bundle: 'server',
+      include: jsRe,
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
+      include: jsRe,
     },
   ],
 };
