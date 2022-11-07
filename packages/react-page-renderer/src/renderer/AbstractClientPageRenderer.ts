@@ -43,7 +43,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * @param settings The application setting for the
    *        current application environment.
    * @param window Helper for manipulating the global object
-   *        ({@code window}) regardless of the client/server-side
+   *        (`window`) regardless of the client/server-side
    *        environment.
    */
   constructor(
@@ -56,7 +56,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     super(factory, helpers, dispatcher, settings);
 
     /**
-     * Helper for manipulating the global object ({@code window})
+     * Helper for manipulating the global object (`window`)
      * regardless of the client/server-side environment.
      */
     this._window = window;

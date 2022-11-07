@@ -60,7 +60,7 @@ export let init = (ns, oc, config) => {
 
 :::info
 
-Notice that in the `toPath` function, we're appending other unused params to the final path as query params. This is to mimic the same functionality as the [`StaticRoutes`](../../api/classes/StaticRoute.md) provide by default.
+Notice that in the `toPath` function, we're appending other unused params to the final path as query params. This is to mimic the same functionality as the [`StaticRoutes`](../../api/classes/ima_core.StaticRoute.md) provide by default.
 
 To make this process easier you can use the `AbstractRoute.paramsToQuery()` helper method, which filters and transforms object key-value pairs to query params string.
 

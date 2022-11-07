@@ -29,6 +29,8 @@ export * from './hooks/settings';
 export * from './hooks/ssr';
 export * from './hooks/windowEvent';
 
+export type { Utils, Settings } from './types';
+
 export {
   AbstractComponent,
   AbstractPureComponent,
