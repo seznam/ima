@@ -53,6 +53,15 @@ export async function parseConfigFile(
     loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
   }
 
+  // Override jsx runtime option from CLI args
+  if (args.jsxRuntime) {
+    loadedConfig = loadedConfig.map(config => {
+      config.jsxRuntime = args.jsxRuntime;
+
+      return config;
+    });
+  }
+
   return loadedConfig as ImaPluginConfig[];
 }
 
@@ -140,6 +149,8 @@ export async function processTransformers(
 export async function createProcessingPipeline(ctx: Context) {
   const { config } = ctx;
   const transformers = new Map<string, TransformerDefinition[]>();
+  const isDevelopment =
+    ctx.command !== 'build' && process.env.NODE_ENV !== 'production';
 
   // Create map of transformers for each output option
   config.output.forEach(output => {
@@ -154,11 +165,20 @@ export async function createProcessingPipeline(ctx: Context) {
             },
           }),
         [
-          createSwcTransformer({ type: output.format }),
+          createSwcTransformer({
+            development: isDevelopment,
+            type: output.format,
+            jsxRuntime: config.jsxRuntime,
+          }),
           { test: /\.(js|jsx)$/ },
         ],
         [
-          createSwcTransformer({ type: output.format, syntax: 'typescript' }),
+          createSwcTransformer({
+            development: isDevelopment,
+            type: output.format,
+            jsxRuntime: config.jsxRuntime,
+            syntax: 'typescript',
+          }),
           { test: /\.(ts|tsx)$/ },
         ],
       ].filter(Boolean) as TransformerDefinition[]
@@ -177,7 +197,11 @@ export async function createProcessingPipeline(ctx: Context) {
 
     // Run transformers for each output and emit
     await Promise.all(
-      config.output.map(async ({ dir }) => {
+      config.output.map(async ({ dir, include }) => {
+        if (include && !include.test(filePath)) {
+          return;
+        }
+
         const outputDir = path.resolve(ctx.cwd, dir);
         const context: PipeContext = {
           ...ctx,

@@ -33,6 +33,9 @@ The plugin works **without the need to provide custom ima-plugin.config.js**. Th
  - `npm run [build|dev|link] --nodeConfig` - generates only cjs bundle (in ./dist directory), usefull for CLI and node plugins.
  - `npm run [build|dev|link] --clientServerConfig` - generates code in cjs and two bundles in esm, where you can drop client/server specific syntax using pragma comments.
 
+### jsxRuntime
+You can override used React jsxRuntime to `classic` or newer `automatic` using `jsxRuntime` config option, or `-j=automatic` or `--jsxRuntime=classic` CLI argument.
+
 ### Custom `ima-plugin.config.js`
 You can always provide custom ima-plugin.config.js where you can either extend one of the provided default configurations or create completely new one:
 
@@ -54,6 +57,7 @@ const {
  */
 module.exports = {
   inputDir: './src',
+  jsxRuntime: 'classic', // 'classic' or 'automatic' JSX runtime settings
   output: [
     {
       dir: './dist/esm',
@@ -62,6 +66,14 @@ module.exports = {
     {
       dir: './dist/cjs',
       format: 'commonjs',
+      /**
+       * This makes sure that cjs folder only contains JS files. When the option
+       * is not defined, it copies all files to the dist folder.
+       *
+       * We use this option for example to only have less, json and other assets in
+       * one output folder.
+       */
+      include: /\.(jsx?|tsx?)/i
     },
   ],
   plugins: [
