@@ -9,8 +9,8 @@ module.exports = function responseUtilsFactory() {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
 
-  function _renderMetaTags(metaTags) {
-    return JSON.stringify(metaTags);
+  function _renderMetaTags(metaManager) {
+    return JSON.stringify(metaManager.getMetaNames());
   }
 
   function _renderStyles(styles) {
@@ -112,7 +112,7 @@ module.exports = function responseUtilsFactory() {
   }
 
   // TODO IMA@18 add tests
-  function processContent({ response, bootConfig }) {
+  function processContent({ response, bootConfig, app }) {
     if (!response?.content || !bootConfig) {
       return response?.content;
     }
@@ -135,7 +135,7 @@ module.exports = function responseUtilsFactory() {
       interpolateRe,
       interpolate
     );
-    const $MetaTags = _renderMetaTags(settings);
+    const $MetaTags = _renderMetaTags(app.oc.get('$MetaManager'));
     const $Source = JSON.stringify(source)
       .replace(interpolateRe, interpolate)
       .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
