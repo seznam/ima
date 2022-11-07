@@ -201,7 +201,7 @@ module.exports = function hooksFactory({
           ...{ state, cache, headers, cookie },
         };
       }
-
+      console.log(context);
       context.response.content = processContent({
         ...context,
       });
