@@ -76,6 +76,8 @@ function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
  * @returns {Promise<void>}
  */
 const dev: HandlerFn = async args => {
+  process.env.IMA_CLI_WATCH = 'true';
+
   if (args.forceSPA) {
     // Set force SPA flag so server can react accordingly
     process.env.IMA_CLI_FORCE_SPA = 'true';
