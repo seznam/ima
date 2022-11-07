@@ -9,8 +9,46 @@ module.exports = function responseUtilsFactory() {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
 
+  function _renderMetaTag(tagType, tagName, attributes) {
+    const renderedAttributes = Object.keys(attributes).reduce(
+      (acc, key) => acc + `${key}="${attributes[key]}" `,
+      ''
+    );
+    return `<meta ${tagType}="${tagName}" ${renderedAttributes} data-ima-meta=""/>`;
+  }
+
   function _renderMetaTags(metaManager) {
-    return JSON.stringify(metaManager.getMetaNames());
+    const metaNames = metaManager
+      .getMetaNames()
+      .reduce(
+        (acc, curr) => [
+          ...acc,
+          _renderMetaTag('name', curr, metaManager.getMetaName(curr)),
+        ],
+        []
+      );
+
+    const metaProperties = metaManager
+      .getMetaProperties()
+      .reduce(
+        (acc, curr) => [
+          ...acc,
+          _renderMetaTag('property', curr, metaManager.getMetaProperty(curr)),
+        ],
+        []
+      );
+
+    const links = metaManager
+      .getLinks()
+      .reduce(
+        (acc, curr) => [
+          ...acc,
+          _renderMetaTag('link', curr, metaManager.getLink(curr)),
+        ],
+        []
+      );
+
+    return [...metaNames, ...metaProperties, ...links].join('\n');
   }
 
   function _renderStyles(styles) {
