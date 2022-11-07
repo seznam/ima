@@ -190,8 +190,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         })
         .catch(error => this._handleError(error));
     }
-
-    this._startBatchTransactions(controller, patchedPromises);
   }
 
   protected _runUnmountCallback() {
@@ -200,50 +198,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       { type: RendererTypes.UNMOUNT },
       true
     );
-  }
-
-  /**
-   * Batch patch promise values to controller state.
-   */
-  private _startBatchTransactions(
-    controller: ControllerDecorator,
-    patchedPromises: { [key: string]: Promise<unknown> }
-  ) {
-    let hasResourcesLoaded = false;
-    const options = {
-      timeout: 100,
-    };
-
-    const Window = this._window.getWindow();
-    let requestIdleCallback: (
-      callback: IdleRequestCallback,
-      options?: IdleRequestOptions | undefined
-    ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
-    if (Window && Window['requestIdleCallback']) {
-      requestIdleCallback = Window.requestIdleCallback;
-    }
-    const handler = () => {
-      controller.commitStateTransaction();
-
-      if (!hasResourcesLoaded) {
-        controller.beginStateTransaction();
-        setTimeout(() => {
-          requestIdleCallback(handler, options);
-        }, 1000 / 60);
-      }
-    };
-
-    controller.beginStateTransaction();
-    requestIdleCallback(handler, options);
-
-    this._helpers
-      .allPromiseHash(patchedPromises)
-      .then(() => {
-        hasResourcesLoaded = true;
-      })
-      .catch(() => {
-        hasResourcesLoaded = true;
-      });
   }
 
   protected abstract _renderViewAdapter(

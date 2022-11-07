@@ -161,41 +161,6 @@ describe('ClientPageRenderer', () => {
       );
     });
 
-    it('should batch page state with state transaction', async () => {
-      jest.useFakeTimers();
-      jest
-        .spyOn(pageRenderer, '_renderPageViewToDOM' as never)
-        .mockImplementation(() => null as never);
-
-      jest.spyOn(controller, 'beginStateTransaction').mockImplementation();
-      jest.spyOn(controller, 'commitStateTransaction').mockImplementation();
-      jest.spyOn(controller, 'setState').mockImplementation();
-
-      pageRenderer['_viewContainer'] = document.getElementById(
-        settings.$Page.$Render.masterElementId as string
-      ) as Element;
-      await pageRenderer.mount(controller, () => null, {}, routeOptions);
-
-      jest.runAllTimers();
-
-      expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
-      expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
-      expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-        [
-          [
-            {
-              "param1": "param1",
-            },
-          ],
-          [
-            {
-              "param2": "param2",
-            },
-          ],
-        ]
-      `);
-    });
-
     it('should set page meta params', async () => {
       jest.spyOn(controller, 'setMetaParams').mockImplementation();
       jest.spyOn(controller, 'getState').mockReturnValue(pageState);
@@ -255,38 +220,6 @@ describe('ClientPageRenderer', () => {
       expect(controller.setState).toHaveBeenCalledWith({
         param1: params.param1,
       });
-    });
-
-    it('should batch page state with state transaction', async () => {
-      jest.useFakeTimers();
-
-      jest.spyOn(controller, 'beginStateTransaction').mockImplementation();
-      jest.spyOn(controller, 'commitStateTransaction').mockImplementation();
-      jest.spyOn(controller, 'setState').mockImplementation();
-
-      pageRenderer['_viewContainer'] = document.getElementById(
-        settings.$Page.$Render.masterElementId as string
-      ) as Element;
-      await pageRenderer.update(controller, () => null, params);
-
-      jest.runAllTimers();
-
-      expect(controller.beginStateTransaction.mock.calls).toHaveLength(1);
-      expect(controller.commitStateTransaction.mock.calls).toHaveLength(1);
-      expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
-            [
-              [
-                {
-                  "param1": "param1",
-                },
-              ],
-              [
-                {
-                  "param2": "param2",
-                },
-              ],
-            ]
-          `);
     });
 
     it('should patch promises to state', async () => {
