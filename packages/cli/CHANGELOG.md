@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+- Updated dependencies [0a2c8866]
+  - @ima/server@18.0.0-rc.15
+
 ## 18.0.0-rc.17
 
 ### Patch Changes

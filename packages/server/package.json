@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "18.0.0-rc.14",
+  "version": "18.0.0-rc.15",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -33,8 +33,8 @@
     "express": "^4.17.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "18.0.0-rc.10",
-    "@ima/helpers": "18.0.0-rc.5"
+    "@ima/dev-utils": "18.0.0-rc.11",
+    "@ima/helpers": "18.0.0-rc.6"
   },
   "publishConfig": {
     "access": "public",

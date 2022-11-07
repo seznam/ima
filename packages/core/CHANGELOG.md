@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+
 ## 18.0.0-rc.21
 
 ### Patch Changes
