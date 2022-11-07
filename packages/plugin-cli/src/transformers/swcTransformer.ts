@@ -1,4 +1,10 @@
-import { ModuleConfig, Options, ParserConfig, transform } from '@swc/core';
+import {
+  ModuleConfig,
+  Options,
+  ParserConfig,
+  ReactConfig,
+  transform,
+} from '@swc/core';
 
 import { Transformer } from '../types';
 
@@ -13,10 +19,12 @@ export function createSwcTransformer({
   type,
   syntax,
   development,
+  jsxRuntime,
 }: {
   type: ModuleConfig['type'];
   syntax?: ParserConfig['syntax'];
   development?: boolean; // TODO
+  jsxRuntime: ReactConfig['runtime'];
 }) {
   return swcTransformer({
     isModule: true,
@@ -35,6 +43,7 @@ export function createSwcTransformer({
         react: {
           useBuiltins: true,
           development: !!development,
+          runtime: jsxRuntime,
         },
       },
     },
