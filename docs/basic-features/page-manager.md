@@ -9,7 +9,7 @@ Page Manager is an essential part of IMA.js. It's something like a puppeteer tha
 
 ## Managing process
 
-If the new matched route has [`onlyUpdate` option](./routing#4-options) set to `true` and the controller and view hasn't changed the route transition is dispatched only through [`update` method](./controller-lifecycle#update-client) of the controller.
+If the new matched route has [`onlyUpdate` option](./routing/introduction#onlyupdate) set to `true` and the controller and view hasn't changed the route transition is dispatched only through [`update` method](./controller-lifecycle#update-client) of the controller.
 
 In every other case the manager goes through it's full process:
 
@@ -58,7 +58,7 @@ and finally the `action` is an object describing what triggered the routing. If 
 
 This method is a counterpart to `handlePreManagedState()` method. It's called after page transition is finished. It receives similar arguments (`managedPage`, `previousManagedPage` and `action`). `previousManagedPage` holds information about previous page.
 
-> **Note:** `handlePreManagedState()` and `handlePostManagedState()` methods can interrupt transition process by throwing an error. The thrown error should be instance of [`GenericError`](./errors) with a status code specified. That way the router can handle thrown error accordingly.
+> **Note:** `handlePreManagedState()` and `handlePostManagedState()` methods can interrupt transition process by throwing an error. The thrown error should be instance of [`GenericError`](./error-handling) with a status code specified. That way the router can handle thrown error accordingly.
 
 #### 4. `destroy()` method
 For purpose of destructing

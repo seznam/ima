@@ -55,7 +55,7 @@ export default class EventBusImpl extends EventBus {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   fire(
     eventTarget: EventTarget,
@@ -88,7 +88,7 @@ export default class EventBusImpl extends EventBus {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listenAll(eventTarget: EventTarget, listener: Listener): this {
     if (!this._allListenersTargets.has(eventTarget)) {
@@ -116,7 +116,7 @@ export default class EventBusImpl extends EventBus {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
     if (!eventTarget) {
@@ -166,7 +166,7 @@ export default class EventBusImpl extends EventBus {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlistenAll(eventTarget: EventTarget, listener: Listener) {
     if (!this._allListenersTargets.has(eventTarget)) {
@@ -207,7 +207,7 @@ export default class EventBusImpl extends EventBus {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlisten(eventTarget: EventTarget, eventName: string, listener: Listener) {
     if (!this._listeners.has(listener)) {

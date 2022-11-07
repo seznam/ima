@@ -34,33 +34,33 @@ export default abstract class AbstractExtension implements Extension {
   params: UnknownParameters = {};
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(): Promise<undefined> | void {}
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   destroy(): Promise<undefined> | void {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   activate(): Promise<undefined> | void {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   deactivate(): Promise<undefined> | void {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
     throw new GenericError(
@@ -70,14 +70,14 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   update() {
     return {};
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setState(statePatch: UnknownParameters) {
     if (this._pageStateManager) {
@@ -86,7 +86,7 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getState() {
     if (this._usingStateManager && this._pageStateManager) {
@@ -97,7 +97,7 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   beginStateTransaction() {
     if (this._pageStateManager) {
@@ -106,7 +106,7 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   commitStateTransaction() {
     if (this._pageStateManager) {
@@ -115,7 +115,7 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   cancelStateTransaction() {
     if (this._pageStateManager) {
@@ -124,7 +124,7 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setPartialState(partialStatePatch: UnknownParameters) {
     const newPartialState = Object.assign(
@@ -136,56 +136,56 @@ export default abstract class AbstractExtension implements Extension {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPartialState() {
     return this[this._partialStateSymbol] || {};
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   clearPartialState() {
     this[this._partialStateSymbol] = {};
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setRouteParams(params = {}) {
     this.params = params;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getRouteParams() {
     return this.params;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setPageStateManager(pageStateManager?: PageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   switchToStateManager() {
     this._usingStateManager = true;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   switchToPartialState() {
     this._usingStateManager = false;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHttpStatus() {
     return this.status;
@@ -193,8 +193,6 @@ export default abstract class AbstractExtension implements Extension {
 
   /**
    * Returns array of allowed state keys for extension.
-   *
-   * @inheritdoc
    */
   getAllowedStateKeys() {
     return [];

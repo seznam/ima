@@ -269,10 +269,10 @@ export default abstract class Router {
    * points to the same domain and protocol.
    *
    * @param url The URL to which the client should be redirected.
-   * @param [options={}] The options overrides route options defined in
+   * @param options The options overrides route options defined in
    *        the `routes.js` configuration file.
    * @param action An action object describing what triggered this routing.
-   * @param [locals={}] The locals param is used to pass local data
+   * @param locals The locals param is used to pass local data
    *        between middlewares.
    */
   redirect(
@@ -306,10 +306,10 @@ export default abstract class Router {
    *
    * @param path The URL path part received from the client, with
    *        optional query.
-   * @param options={} The options overrides route options defined in
+   * @param options The options overrides route options defined in
    *        the `routes.js` configuration file.
    * @param action An action object describing what triggered this routing.
-   * @param locals={} The locals param is used to pass local data
+   * @param locals The locals param is used to pass local data
    *        between middlewares.
    * @return A promise resolved
    *         when the error has been handled and the response has been sent
@@ -330,9 +330,9 @@ export default abstract class Router {
    *
    * @param params Parameters extracted from
    *        the current URL path and query.
-   * @param options={} The options overrides route options defined in
+   * @param options The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param [locals={}] The locals param is used to pass local data
+   * @param locals The locals param is used to pass local data
    *        between middlewares.
    * @return A promise resolved when the error
    *         has been handled and the response has been sent to the client,
@@ -352,9 +352,9 @@ export default abstract class Router {
    *
    * @param params Parameters extracted from
    *        the current URL path and query.
-   * @param options={} The options overrides route options defined in
+   * @param options The options overrides route options defined in
    *        the `routes.js` configuration file.
-   * @param locals={} The locals param is used to pass local data
+   * @param locals The locals param is used to pass local data
    *        between middlewares.
    * @return A promise resolved
    *         when the error has been handled and the response has been sent

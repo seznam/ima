@@ -37,7 +37,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   mount(
     controller: ControllerDecorator,
@@ -70,7 +70,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   update() {
     return Promise.reject(
@@ -79,7 +79,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unmount() {
     // nothing to do

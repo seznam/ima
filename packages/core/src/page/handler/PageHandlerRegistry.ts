@@ -23,7 +23,7 @@ export default class PageHandlerRegistry extends PageHandler {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init() {
     this._pageHandlers.forEach(handler => handler.init());
@@ -82,7 +82,7 @@ export default class PageHandlerRegistry extends PageHandler {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   destroy() {
     this._pageHandlers.forEach(handler => handler.destroy());

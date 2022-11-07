@@ -64,7 +64,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async mount(
     controller: ControllerDecorator,
@@ -102,7 +102,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   update(
     controller: ControllerDecorator,

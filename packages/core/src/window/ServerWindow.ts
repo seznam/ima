@@ -14,126 +14,126 @@ export default class ServerWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isClient() {
     return false;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   isCookieEnabled() {
     return false;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   hasSessionStorage() {
     return false;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   setTitle() {
     throw new GenericError('The setTitle() is denied on server side.');
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getWindow() {
     return undefined;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getDocument() {
     return undefined;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getScrollX() {
     return 0;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getScrollY() {
     return 0;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   scrollTo() {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getDomain() {
     return '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHost() {
     return '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPath() {
     return '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getUrl() {
     return '';
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getBody() {
     return undefined;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getElementById() {
     return null;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getHistoryState() {
     return {};
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   querySelector() {
     return null;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   querySelectorAll(_selector: string) {
     class DummyNodeList extends NodeList {
@@ -152,28 +152,28 @@ export default class ServerWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   redirect() {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   pushState() {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   replaceState() {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   createCustomEvent(name: string, options: UnknownParameters) {
     const dummyCustomEvent = {
@@ -186,14 +186,14 @@ export default class ServerWindow extends Window {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   bindEventListener() {
     return;
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unbindEventListener() {
     return;

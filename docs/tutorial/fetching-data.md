@@ -257,7 +257,7 @@ The object container allows us to:
 
 **We can only access the object container in this configuration file**. After that
 it works behind the scenes, providing dependencies and managing our shared
-instances as needed. You can find out more about its [API](../api/Bootstrap.md) by studying the
+instances as needed. You can find out more about its [API](../api/classes/Bootstrap.md) by studying the
 [documentation](../basic-features/object-container.md) or the [source code](https://github.com/seznam/ima/blob/master/packages/core/src/ObjectContainer.js).
 
 ### Using PostServices in HomeController

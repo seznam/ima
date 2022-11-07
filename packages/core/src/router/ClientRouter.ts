@@ -71,7 +71,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   init(config: {
     $Protocol: string;
@@ -86,21 +86,21 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getUrl() {
     return this._window.getUrl();
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   getPath() {
     return this._extractRoutePath(this._window.getPath());
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   listen() {
     const nativeWindow = this._window.getWindow();
@@ -121,7 +121,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   unlisten() {
     const nativeWindow = this._window.getWindow();
@@ -142,7 +142,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   redirect(
     redirectUrl = '',
@@ -166,7 +166,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async route(
     path: string,
@@ -201,7 +201,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   async handleError(
     params: { [key: string]: GenericError | string },
@@ -262,7 +262,7 @@ export default class ClientRouter extends AbstractRouter {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   handleNotFound(params: StringParameters, options = {}, locals = {}) {
     return super.handleNotFound(params, options, locals).catch(error => {

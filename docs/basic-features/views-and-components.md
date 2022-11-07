@@ -145,7 +145,7 @@ export default class Gallery extends AbstractComponent {
 
 For some heavy-used utilities we've created a shortcut methods in **AbstractComponent**.
 
-- **`link`**`(name, params)` = [**Router.link()**](./routing#linking-to-routes)
+- **`link`**`(name, params)` = [**Router.link()**](./routing/introduction#linking-between-routes)
 - **`localize`**`(key, params` = [**Dictionary.get()**](./dictionary)
 - **`fire`**`(eventName, data)` = [**EventBus.fire()**](./events#eventbus)
 - **`listen`**`(eventTarget, eventName, listener)` = [**EventBus.listen()**](./events#eventbus)

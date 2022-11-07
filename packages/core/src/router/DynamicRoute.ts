@@ -40,7 +40,6 @@ export default class DynamicRoute extends AbstractRoute {
   /**
    * Initializes the route.
    *
-   * @inheritdoc
    * @param pathExpression Path expression used in route matching,
    *        to generate valid path with provided params and parsing params from current path.
    */
@@ -96,14 +95,14 @@ export default class DynamicRoute extends AbstractRoute {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   toPath(params = {}) {
     return AbstractRoute.getTrimmedPath(this._toPath(params));
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   matches(path: string) {
     const trimmedPath = AbstractRoute.getTrimmedPath(path);
@@ -112,7 +111,7 @@ export default class DynamicRoute extends AbstractRoute {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    */
   extractParameters(path?: string) {
     const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
