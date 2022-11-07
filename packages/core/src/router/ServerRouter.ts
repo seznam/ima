@@ -7,6 +7,7 @@ import Response from './Response';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * The server-side implementation of the {@link Router} interface.
@@ -66,7 +67,7 @@ export default class ServerRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  redirect(url = '/', options: { [key: string]: unknown } = {}) {
+  redirect(url = '/', options: UnknownParameters = {}) {
     this._response.redirect(url, { httpStatus: 302, ...options });
   }
 }

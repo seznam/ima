@@ -1,8 +1,10 @@
+import { StringParameters } from '../CommonTypes';
+
 /**
  * Utility for transforming URLs according to the configured replacement rules.
  */
 export default class UrlTransformer {
-  protected _rules: { [key: string]: string };
+  protected _rules: StringParameters;
 
   static get $dependencies() {
     return [];

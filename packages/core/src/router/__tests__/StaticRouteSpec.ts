@@ -1,3 +1,4 @@
+import { StringParameters } from '../../CommonTypes';
 import { RouteOptions } from '../Router';
 import StaticRoute from '../StaticRoute';
 
@@ -222,7 +223,7 @@ describe('ima.core.router.StaticRoute', function () {
           JSON.stringify(value.params),
         function () {
           expect(
-            localStaticRoute.toPath(value.params as { [key: string]: string })
+            localStaticRoute.toPath(value.params as StringParameters)
           ).toBe(value.result);
         }
       );

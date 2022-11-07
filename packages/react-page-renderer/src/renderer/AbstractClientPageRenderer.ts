@@ -1,6 +1,7 @@
 /* @if server **
 export default class AbstractClientPageRenderer {};
 /* @else */
+import type { UnknownParameters, UnknownPromiseParameters } from '@ima/core';
 import {
   Controller,
   ControllerDecorator,
@@ -107,7 +108,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   update(
     controller: ControllerDecorator,
     pageView: ComponentType,
-    resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
+    resourcesUpdate: UnknownPromiseParameters
   ): Promise<void | PageData> {
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
@@ -318,9 +319,9 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * @param dataMap A map of data.
    * @return Return separated promises and other values.
    */
-  private _separatePromisesAndValues(dataMap: { [key: string]: unknown }) {
+  private _separatePromisesAndValues(dataMap: UnknownParameters) {
     const promises: { [key: string]: Promise<unknown> } = {};
-    const values: { [key: string]: unknown } = {};
+    const values: UnknownParameters = {};
 
     for (const field of Object.keys(dataMap)) {
       const value = dataMap[field];

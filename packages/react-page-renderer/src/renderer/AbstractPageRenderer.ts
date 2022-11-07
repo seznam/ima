@@ -1,5 +1,9 @@
 import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
-import type { PageData as BasePageData } from '@ima/core';
+import type {
+  UnknownParameters,
+  UnknownPromiseParameters,
+  PageData as BasePageData,
+} from '@ima/core';
 import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
@@ -14,7 +18,7 @@ import PageRendererFactory from './PageRendererFactory';
 export type PageData = {
   documentView?: ComponentType;
   documentViewProps?: {
-    $Utils: { [key: string]: unknown };
+    $Utils: UnknownParameters;
     metaManager: MetaManager;
   };
   react?: typeof react;
@@ -31,7 +35,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _helpers: typeof Helpers;
   protected _settings: Settings;
   protected _viewAdapter?: ComponentType;
-  protected _viewAdapterProps: { [key: string]: unknown } = {};
+  protected _viewAdapterProps: UnknownParameters = {};
 
   /**
    * Initializes the abstract page renderer.
@@ -78,7 +82,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   abstract mount(
     controller: Controller,
     pageView: ComponentType,
-    pageResources: { [key: string]: unknown | Promise<unknown> },
+    pageResources: UnknownPromiseParameters,
     routeOptions: RouteOptions
   ): Promise<void | PageData>;
 
@@ -88,7 +92,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   abstract update(
     controller: Controller,
     pageView: ComponentType,
-    pageResources: { [key: string]: unknown | Promise<unknown> }
+    pageResources: UnknownPromiseParameters
   ): Promise<void | PageData>;
 
   /**
@@ -99,7 +103,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   /**
    * @inheritDoc
    */
-  abstract setState(pageState: unknown): void;
+  abstract setState(pageState: UnknownParameters): Promise<void>;
 
   /**
    * @inheritDoc
@@ -120,7 +124,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
   protected _generateViewAdapterProps(
     managedRootView: ComponentType,
     pageView: ComponentType,
-    state: { [key: string]: unknown } = {}
+    state: UnknownParameters = {}
   ): ViewAdapterProps {
     const props = {
       $Utils: this._factory.getUtils() as Utils,
