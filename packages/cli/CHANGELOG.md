@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.17
+
+### Patch Changes
+
+- 70d78a42: Fixed cacheGroups excluding CSS which might sometimes throw away some CSS from node_modules
+
 ## 18.0.0-rc.16
 
 ### Patch Changes
