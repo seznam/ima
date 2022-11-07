@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- e3a8cfbd: `ClientPageRenderer` method `mount` will no longer batch the state transactions
+
 ## 18.0.0-rc.17
 
 ### Patch Changes

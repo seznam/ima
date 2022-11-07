@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- 1b77b104: Added new global env IMA_CLI_WATCH indicating dev command run
+  Server no longer deletes require cache during refresh in dev environments, rather this functionality is now connected to IMA_CLI_WATCH variable. This means that it only happens during local watch development.
+- Updated dependencies [1b77b104]
+  - @ima/server@18.0.0-rc.16
+
 ## 18.0.0-rc.18
 
 ### Patch Changes
