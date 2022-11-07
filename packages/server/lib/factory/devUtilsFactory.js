@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-module.exports = function devUtilsFactory({ environment }) {
+module.exports = function devUtilsFactory() {
   const modulePathCache = new Map();
 
   function requireUncached(module, options = {}) {
@@ -12,7 +12,8 @@ module.exports = function devUtilsFactory({ environment }) {
     const modulePath = modulePathCache.get(module);
 
     const moduleName = path.resolve(modulePath);
-    if (environment.$Env === 'dev') {
+
+    if (process.env.IMA_CLI_WATCH) {
       if (!moduleName) {
         return;
       }

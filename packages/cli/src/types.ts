@@ -4,6 +4,7 @@ import { CommandBuilder } from 'yargs';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      IMA_CLI_WATCH?: string;
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
     }

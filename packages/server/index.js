@@ -16,9 +16,7 @@ module.exports = function createIMAServer({
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
-  const requireUncached = require('./lib/factory/devUtilsFactory.js')({
-    environment,
-  });
+  const requireUncached = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
     requireUncached('./build/server/vendors.js', { optional: true });
