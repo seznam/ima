@@ -54,11 +54,11 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.14",
-    "@types/jest": "^29.0.3",
-    "@types/multer": "^1.4.7",
     "@ima/plugin-cli": "^18.0.0-rc.7",
-    "jscodeshift": "^0.13.1"
+    "@types/express": "^4.17.14",
+    "@types/jest": "^29.2.2",
+    "@types/multer": "^1.4.7",
+    "jscodeshift": "^0.14.0"
   },
   "publishConfig": {
     "access": "public",

@@ -59,40 +59,21 @@ export default async (
   const mode = isDevEnv ? 'development' : 'production';
 
   // Define browserslist targets for current context
-  let targets: Record<string, string> | string[];
   const coreJsVersion = await getCurrentCoreJsVersion();
 
-  if (isEsVersion) {
-    // es2022 targets (taken from 'browserslist-generator')
-    targets = [
-      'and_chr >= 91',
-      'chrome >= 91',
-      'and_ff >= 90',
-      'android >= 103',
-      'edge >= 91',
-      'samsung >= 16.0',
-      'safari >= 15',
-      'ios_saf >= 15.1',
-      'opera >= 77',
-      'firefox >= 90',
-    ];
-  } else if (isServer) {
-    targets = { node: '18' };
-  } else {
-    // es2018 targets
-    targets = [
-      'and_chr >= 63',
-      'chrome >= 63',
-      'and_ff >= 58',
-      'android >= 103',
-      'edge >= 79',
-      'samsung >= 8.2',
-      'safari >= 11.1',
-      'ios_saf >= 11.4',
-      'opera >= 50',
-      'firefox >= 58',
-    ];
-  }
+  // es2018 targets (taken from 'browserslist-generator')
+  const targets = [
+    'and_chr >= 63',
+    'chrome >= 63',
+    'and_ff >= 58',
+    'android >= 103',
+    'edge >= 79',
+    'samsung >= 8.2',
+    'safari >= 11.1',
+    'ios_saf >= 11.4',
+    'opera >= 50',
+    'firefox >= 58',
+  ];
 
   // Set correct devtool source maps config
   const devtool = useSourceMaps
@@ -108,16 +89,15 @@ export default async (
     return imaConfig.swc(
       {
         // We use core-js only for lower ES version build
-        ...(!isServer &&
-          !isEsVersion && {
-            env: {
-              targets,
-              mode: 'usage',
-              coreJs: coreJsVersion,
-              bugfixes: true,
-              dynamicImport: true,
-            },
-          }),
+        ...(ctx.name === 'client' && {
+          env: {
+            targets,
+            mode: 'usage',
+            coreJs: coreJsVersion,
+            bugfixes: true,
+            dynamicImport: true,
+          },
+        }),
         module: {
           type: 'es6',
         },
@@ -434,41 +414,37 @@ export default async (
               ],
             },
             /**
-             * Run vendor paths through swc for lower es client versions
+             * Run vendor paths through swc for lower client versions
              */
-            !isServer &&
-              !isEsVersion && {
-                test: /\.(js|mjs|cjs)$/,
-                include: [
-                  /\b@ima\b/,
-                  ...(imaConfig.transformVendorPaths ?? []),
-                ],
-                loader: require.resolve('swc-loader'),
-                options: await imaConfig.swcVendor(
-                  {
-                    env: {
-                      targets,
-                      mode: 'usage',
-                      coreJs: coreJsVersion,
-                      bugfixes: true,
+            ctx.name === 'client' && {
+              test: /\.(js|mjs|cjs)$/,
+              include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
+              loader: require.resolve('swc-loader'),
+              options: await imaConfig.swcVendor(
+                {
+                  env: {
+                    targets,
+                    mode: 'usage',
+                    coreJs: coreJsVersion,
+                    bugfixes: true,
+                    dynamicImport: true,
+                  },
+                  module: {
+                    type: 'es6',
+                  },
+                  jsc: {
+                    parser: {
+                      syntax: 'ecmascript',
+                      decorators: false,
                       dynamicImport: true,
                     },
-                    module: {
-                      type: 'es6',
-                    },
-                    jsc: {
-                      parser: {
-                        syntax: 'ecmascript',
-                        decorators: false,
-                        dynamicImport: true,
-                      },
-                    },
-                    sourceMaps: useSourceMaps,
-                    inlineSourcesContent: useSourceMaps,
                   },
-                  ctx
-                ),
-              },
+                  sourceMaps: useSourceMaps,
+                  inlineSourcesContent: useSourceMaps,
+                },
+                ctx
+              ),
+            },
             /**
              * Handle app JS files
              */

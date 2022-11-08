@@ -14,7 +14,6 @@ jobs:
       - npm run stylelint
       - npm run test:all
       - npm run test:size
-      # - npm run doc
       - npm run benchmark
       # - npm audit || echo \"audit found some vulnerabilities.\"
     - if: branch =~ /^(master|next)$/

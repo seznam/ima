@@ -32,10 +32,6 @@ module.exports = {
     'keyframes-name-pattern': null,
     'color-function-notation': null,
     'alpha-value-notation': ['number'],
-    'declaration-property-unit-disallowed-list': {
-      '/^animation/': ['ms'],
-      '/^transition/': ['ms'],
-    },
     'plugin/declaration-block-no-ignored-properties': true,
     'order/order': ['at-variables', 'declarations', 'rules'],
     'order/properties-order': [
