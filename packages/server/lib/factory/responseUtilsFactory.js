@@ -17,38 +17,29 @@ module.exports = function responseUtilsFactory() {
     return `<meta ${tagType}="${tagName}" ${renderedAttributes} data-ima-meta=""/>`;
   }
 
-  function _renderMetaTags(metaManager) {
-    const metaNames = metaManager
-      .getMetaNames()
-      .reduce(
-        (acc, curr) => [
-          ...acc,
-          _renderMetaTag('name', curr, metaManager.getMetaName(curr)),
-        ],
-        []
-      );
+  function _getMetaTagsOfTypeAndRender(tagType, tagNames, tagGetter) {
+    return tagNames.reduce(
+      (acc, curr) => [...acc, _renderMetaTag(tagType, curr, tagGetter(curr))],
+      []
+    );
+  }
 
-    const metaProperties = metaManager
-      .getMetaProperties()
-      .reduce(
-        (acc, curr) => [
-          ...acc,
-          _renderMetaTag('property', curr, metaManager.getMetaProperty(curr)),
-        ],
-        []
-      );
-
-    const links = metaManager
-      .getLinks()
-      .reduce(
-        (acc, curr) => [
-          ...acc,
-          _renderMetaTag('link', curr, metaManager.getLink(curr)),
-        ],
-        []
-      );
-
-    return [...metaNames, ...metaProperties, ...links].join('\n');
+  function _getConcattedMetaTags(metaManager) {
+    return [
+      ..._getMetaTagsOfTypeAndRender(
+        'name',
+        metaManager.getMetaNames(),
+        tagName => metaManager.getMetaName(tagName)
+      ),
+      ..._getMetaTagsOfTypeAndRender(
+        'property',
+        metaManager.getMetaProperties(),
+        tagName => metaManager.getMetaProperty(tagName)
+      ),
+      ..._getMetaTagsOfTypeAndRender('link', metaManager.getLinks(), tagName =>
+        metaManager.getLink(tagName)
+      ),
+    ].join('\n');
   }
 
   function _renderStyles(styles) {
@@ -173,7 +164,7 @@ module.exports = function responseUtilsFactory() {
       interpolateRe,
       interpolate
     );
-    const $MetaTags = _renderMetaTags(app.oc.get('$MetaManager'));
+    const $MetaTags = _getConcattedMetaTags(app.oc.get('$MetaManager'));
     const $Source = JSON.stringify(source)
       .replace(interpolateRe, interpolate)
       .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
