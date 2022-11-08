@@ -28,6 +28,7 @@ module.exports = {
     'keyframe-declaration-no-important': [true, { severity: 'warning' }],
     'selector-max-id': 2,
     'max-line-length': null,
+    'import-notation': null,
     'selector-class-pattern': null,
     'keyframes-name-pattern': null,
     'color-function-notation': null,
