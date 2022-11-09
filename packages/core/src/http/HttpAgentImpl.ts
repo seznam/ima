@@ -60,8 +60,8 @@ export default class HttpAgentImpl extends HttpAgent {
     proxy: HttpProxy,
     cache: Cache,
     cookie: CookieStorage,
-    Helper: typeof Helpers,
-    config: UnknownParameters
+    config: UnknownParameters,
+    Helper: typeof Helpers
   ) {
     super();
 

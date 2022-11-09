@@ -232,7 +232,7 @@ export default async (
                   name,
                   path: `${devServerConfig.publicUrl}/__webpack_hmr`,
                   timeout: '3000',
-                  reload: 'true',
+                  reload: 'false',
                   overlay: 'false',
                   overlayWarnings: 'false',
                   noInfo: 'true',
