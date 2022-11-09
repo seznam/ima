@@ -6,11 +6,43 @@ module.exports = {
   modulePaths: ['<rootDir>/'],
   setupFiles: ['<rootDir>/setupJest.js'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
   transform: {
-    '\\.[jt]sx?$': [
-      'babel-jest',
+    '^.+\\.(js|jsx)$': [
+      '@swc/jest',
       {
-        plugins: ['@babel/plugin-transform-modules-commonjs'],
+        jsc: {
+          target: 'es2022',
+          parser: {
+            syntax: 'ecmascript',
+            jsx: true,
+          },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+        },
+      },
+    ],
+    '^.+\\.(ts|tsx)$': [
+      '@swc/jest',
+      {
+        jsc: {
+          target: 'es2022',
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+          },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+        },
       },
     ],
   },
