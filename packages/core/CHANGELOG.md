@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.23
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+
 ## 18.0.0-rc.22
 
 ### Patch Changes

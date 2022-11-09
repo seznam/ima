@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+- Updated dependencies [a34b793e]
+  - @ima/server@18.0.0-rc.17
+
 ## 18.0.0-rc.19
 
 ### Patch Changes

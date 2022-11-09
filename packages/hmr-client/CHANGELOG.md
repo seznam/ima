@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+- Updated dependencies [a34b793e]
+  - @ima/dev-utils@18.0.0-rc.12
+
 ## 18.0.0-rc.11
 
 ### Patch Changes
