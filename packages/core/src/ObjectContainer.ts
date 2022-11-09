@@ -191,7 +191,7 @@ export default class ObjectContainer {
 
     const classConstructorEntry = this._entries.get(classConstructor);
     const nameEntry = this._entries.get(name);
-    const entry = classConstructorEntry || nameEntry;
+    const entry = nameEntry || classConstructorEntry;
 
     if (classConstructorEntry && !nameEntry && dependencies) {
       const entry = this._createEntry(classConstructor, dependencies);
