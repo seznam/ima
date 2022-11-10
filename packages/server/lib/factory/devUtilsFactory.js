@@ -2,32 +2,35 @@ const path = require('path');
 const fs = require('fs');
 
 module.exports = function devUtilsFactory() {
-  const modulePathCache = new Map();
+  const moduleCache = new Map();
+
+  function getFileStats(modulePath) {
+    return fs.statSync(modulePath, { throwIfNoEntry: false });
+  }
 
   function requireUncached(module, options = {}) {
-    if (!modulePathCache.has(module)) {
-      modulePathCache.set(module, path.resolve(module));
-    }
-
-    const modulePath = modulePathCache.get(module);
-
-    const moduleName = path.resolve(modulePath);
+    const modulePath = path.resolve(module);
 
     if (process.env.IMA_CLI_WATCH) {
-      if (!moduleName) {
+      const stats = getFileStats(modulePath) ?? { mtimeMs: -1 };
+      if (!moduleCache.has(modulePath)) {
+        moduleCache.set(modulePath, stats);
+      }
+
+      if (!modulePath) {
         return;
       }
 
-      searchCache(moduleName, function (mod) {
-        delete require.cache[mod.id];
-      });
+      if (stats.mtimeMs > moduleCache.get(modulePath).mtimeMs) {
+        moduleCache.set(modulePath, stats);
+
+        searchCache(modulePath, function (mod) {
+          delete require.cache[mod.id];
+        });
+      }
     }
 
-    if (
-      options.optional &&
-      moduleName &&
-      !fs.statSync(moduleName, { throwIfNoEntry: false })
-    ) {
+    if (options.optional && modulePath && !getFileStats(modulePath)) {
       return;
     }
 
