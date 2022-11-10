@@ -20,8 +20,9 @@ module.exports = function responseUtilsFactory() {
           return `<link rel="stylesheet" href="${style}" />`;
         }
 
-        const [href, { fallback = null, ...options }] = style;
-        const linkTagParts = [`<link href="${href}"`];
+        const [href, { fallback = null, rel = 'stylesheet', ...options }] =
+          style;
+        const linkTagParts = [`<link href="${href}" rel="${rel}"`];
 
         // Generate fallback handler
         if (fallback) {
