@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- acd9de23: Fix not set \$Language for dev environment
+- a2d9f825: Moved runner.js output to build/server directory
+- 162e08f2: clear require.cache only for changed files
+
 ## 18.0.0-rc.17
 
 ### Patch Changes

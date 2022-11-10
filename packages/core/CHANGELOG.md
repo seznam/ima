@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.0.0-rc.24
+
+### Major Changes
+
+- 94fee0c6: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+
+### Patch Changes
+
+- 4e4d79bc: Fixed constructor DI order in HttpAgentImpl
+
 ## 18.0.0-rc.23
 
 ### Patch Changes
