@@ -37,6 +37,7 @@ overlayJs.onload = () => {
   eventSource.addListener('message', (data: HMRMessageData) => {
     // Compile error handler
     if (data.action === 'built') {
+      window.__IMA_HMR.emit('built');
       if (Array.isArray(data?.errors) && data?.errors?.length > 0) {
         hadCompileErrors = true;
         window.__IMA_HMR.emit('error', {

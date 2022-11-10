@@ -226,18 +226,6 @@ export default async (
           }
         : {
             [name]: [
-              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
-              useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
-                  name,
-                  path: `${devServerConfig.publicUrl}/__webpack_hmr`,
-                  timeout: '3000',
-                  reload: 'false',
-                  overlay: 'false',
-                  overlayWarnings: 'false',
-                  noInfo: 'true',
-                  quiet: 'true',
-                }).toString()}`,
               useHMR &&
                 isDebug &&
                 `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
@@ -245,6 +233,19 @@ export default async (
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
                 }).toString()}`,
+              useHMR && path.join(rootDir, 'app/hmr.js'),
+              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
+              // useHMR &&
+              //   `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
+              //     name,
+              //     path: `${devServerConfig.publicUrl}/__webpack_hmr`,
+              //     timeout: '3000',
+              //     reload: 'false',
+              //     overlay: 'false',
+              //     overlayWarnings: 'false',
+              //     noInfo: 'true',
+              //     quiet: 'true',
+              //   }).toString()}`,
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),

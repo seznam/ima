@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-export type EventName = 'error' | 'clear' | 'close';
+export type EventName = 'error' | 'clear' | 'close' | 'destroy' | 'built';
 export type ListenerData = {
   error?: StatsError | Error;
 };

@@ -199,10 +199,7 @@ function bootClientApp(
 ) {
   app.bootstrap.run(bootConfig);
 
-  $IMA.$Dispatcher = app.oc.get('$Dispatcher');
-
   const cache = app.oc.get('$Cache') as Cache;
-
   cache.deserialize(($IMA.Cache || {}) as SerializedData);
 
   return app;
