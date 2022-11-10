@@ -557,7 +557,13 @@ export default async (
             // Copies essential assets to static directory
             isEsVersion &&
               new CopyPlugin({
-                patterns: [{ from: 'app/public', to: 'static/public' }],
+                patterns: [
+                  {
+                    from: 'app/public',
+                    to: 'static/public',
+                    noErrorOnMissing: true,
+                  },
+                ],
               }),
 
             /**
