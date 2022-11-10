@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = function responseUtilsFactory() {
   let runner = '';
 
-  const runnerPath = path.resolve('./build/static/public/runner.js');
+  const runnerPath = path.resolve('./build/server/runner.js');
   if (fs.existsSync(runnerPath)) {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
