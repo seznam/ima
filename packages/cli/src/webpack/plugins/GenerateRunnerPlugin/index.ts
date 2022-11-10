@@ -114,7 +114,7 @@ class GenerateRunnerPlugin {
 
       // Emit compiled ima runner with embedded runtime codes
       return compilation.emitAsset(
-        'static/public/runner.js',
+        './server/runner.js',
         new sources.RawSource(generatedRunner)
       );
     }
