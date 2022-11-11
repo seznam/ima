@@ -415,11 +415,36 @@ export default async (
               ],
             },
             /**
+             * Handle app JS files
+             */
+            {
+              test: /\.(mjs|js|jsx)$/,
+              include: appDir,
+              loader: require.resolve('swc-loader'),
+              options: await getSwcLoader('ecmascript'),
+            },
+            /**
+             * Handle app Typescript files
+             */
+            useTypescript && {
+              test: /\.(ts|tsx)$/,
+              include: appDir,
+              loader: require.resolve('swc-loader'),
+              options: await getSwcLoader('typescript'),
+            },
+            /**
              * Run vendor paths through swc for lower client versions
              */
             ctx.name === 'client' && {
               test: /\.(js|mjs|cjs)$/,
-              include: [/@ima/, ...(imaConfig.transformVendorPaths ?? [])],
+              include: [
+                /@ima/,
+                ...(imaConfig.transformVendorPaths?.include ?? []),
+              ],
+              exclude: [
+                appDir,
+                ...(imaConfig.transformVendorPaths?.exclude ?? []),
+              ],
               loader: require.resolve('swc-loader'),
               options: await imaConfig.swcVendor(
                 {
@@ -446,24 +471,6 @@ export default async (
                 },
                 ctx
               ),
-            },
-            /**
-             * Handle app JS files
-             */
-            {
-              test: /\.(mjs|js|jsx)$/,
-              include: appDir,
-              loader: require.resolve('swc-loader'),
-              options: await getSwcLoader('ecmascript'),
-            },
-            /**
-             * Handle app Typescript files
-             */
-            useTypescript && {
-              test: /\.(ts|tsx)$/,
-              include: appDir,
-              loader: require.resolve('swc-loader'),
-              options: await getSwcLoader('typescript'),
             },
             /**
              * CSS & LESS loaders, both have the exact same capabilities

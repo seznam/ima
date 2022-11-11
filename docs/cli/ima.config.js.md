@@ -315,7 +315,7 @@ This can be usefull if you're building an app, where you are able to set constra
 
 ### transformVendorPaths
 
-> `RegExp[]`
+> `{ include?: RegExp[]; exclude?: RegExp[]; }
 
 :::caution
 
@@ -323,7 +323,7 @@ This is an advanced feature.
 
 :::
 
-Array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9, ES13 and node 18 currently)*.
+Using this option you can include/exclude array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9)*. This transformation is executed only for the **legacy client bundle**.
 
 By default the CLI always matches all files under the `@ima` namespace, since we release our plugins in latest ECMA syntax and they need to be compiled down to older syntaxes with proper core-js polyfills.
 

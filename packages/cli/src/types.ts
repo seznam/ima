@@ -217,12 +217,15 @@ export type ImaConfig = {
   disableLegacyBuild?: boolean;
 
   /**
-   * Advanced functionality allowing you to register custom vendor paths that go through
+   * Advanced functionality allowing you to include/exclude custom vendor paths that go through
    * swc loader (configured using swcVendor function). Use this if you're using dependencies
-   * that don't meet the lowest supported ES version target (ES9 by default). It is enabled
-   * by default for all packages in @ima namespace.
+   * that don't meet the lowest supported ES version target (ES9 by default). all packages in
+   * @ima namespace are included by default.
    */
-  transformVendorPaths?: RegExp[];
+  transformVendorPaths?: {
+    include?: RegExp[];
+    exclude?: RegExp[];
+  };
 
   /**
    * Experimental configurations which can be enabled individually on specific applications.
