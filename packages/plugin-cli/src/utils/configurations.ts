@@ -5,6 +5,7 @@ const jsRe = /\.(jsx?|tsx?)/i;
 
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
+  target: 'es2022',
   output: [
     {
       dir: './dist/esm',

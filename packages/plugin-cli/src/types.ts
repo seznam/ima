@@ -1,4 +1,4 @@
-import { ModuleConfig, ReactConfig } from '@swc/core';
+import { JscTarget, ModuleConfig, ReactConfig } from '@swc/core';
 
 export type Transformer = ({
   source,
@@ -46,6 +46,7 @@ export interface ImaPluginOutputConfig {
 export interface ImaPluginConfig {
   inputDir: string;
   output: ImaPluginOutputConfig[];
+  target: JscTarget;
   exclude?: string[];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];

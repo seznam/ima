@@ -1,4 +1,5 @@
 import {
+  JscTarget,
   ModuleConfig,
   Options,
   ParserConfig,
@@ -17,11 +18,13 @@ export type SWCTransformerOptions = Options;
  */
 export function createSwcTransformer({
   type,
+  target,
   syntax,
   development,
   jsxRuntime,
 }: {
   type: ModuleConfig['type'];
+  target: JscTarget;
   syntax?: ParserConfig['syntax'];
   development?: boolean;
   jsxRuntime: ReactConfig['runtime'];
@@ -32,7 +35,7 @@ export function createSwcTransformer({
       type: type ?? 'es6',
     },
     jsc: {
-      target: 'es2022',
+      target,
       parser: {
         syntax: syntax ?? 'ecmascript',
         decorators: false,
