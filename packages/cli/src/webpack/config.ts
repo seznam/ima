@@ -98,11 +98,12 @@ export default async (
             dynamicImport: true,
           },
         }),
+        isModule: true,
         module: {
           type: 'es6',
         },
         jsc: {
-          target: isServer || isEsVersion ? 'es2022' : 'es2018',
+          target: ctx.name === 'client' ? 'es2018' : 'es2022',
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -418,7 +419,8 @@ export default async (
              */
             ctx.name === 'client' && {
               test: /\.(js|mjs|cjs)$/,
-              include: [/\b@ima\b/, ...(imaConfig.transformVendorPaths ?? [])],
+              include: [/@ima/, ...(imaConfig.transformVendorPaths ?? [])],
+              exclude: /\bcli-plugin/,
               loader: require.resolve('swc-loader'),
               options: await imaConfig.swcVendor(
                 {
@@ -433,6 +435,7 @@ export default async (
                     type: 'es6',
                   },
                   jsc: {
+                    target: 'es2018',
                     parser: {
                       syntax: 'ecmascript',
                       decorators: false,

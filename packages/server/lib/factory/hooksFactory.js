@@ -102,7 +102,7 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
-    if (environment.$Debug) {
+    if (environment.$Debug && process.env.IMA_CLI_WATCH) {
       return devErrorPage(event);
     } else {
       try {
