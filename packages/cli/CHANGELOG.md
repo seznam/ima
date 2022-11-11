@@ -1,5 +1,20 @@
 # Change Log
 
+## 18.0.0-rc.21
+
+### Patch Changes
+
+- a2d9f825: Moved runner.js output to build/server directory
+- 1fc4a339: webpack build no longer requires `app/public` folder to exist
+- ba6d880e: Changed transformVendorPaths option to object, that can receive include and exclude arrays
+- f52ba908: Fixed client vendor dependencies built (wrong regexp on ima pkgs)
+- 4e4d79bc: Disabled 'reload' option on hmr client when hmr fails
+- Updated dependencies [acd9de23]
+- Updated dependencies [a2d9f825]
+- Updated dependencies [f52ba908]
+- Updated dependencies [162e08f2]
+  - @ima/server@18.0.0-rc.18
+
 ## 18.0.0-rc.20
 
 ### Patch Changes

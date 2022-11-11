@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.13
+
+### Patch Changes
+
+- 976c4394: Added option to override default JS target
+
 ## 18.0.0-rc.12
 
 ### Patch Changes

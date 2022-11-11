@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- 8a2c9f1b: componentHelper fire - remove specific target condition
+- Updated dependencies [4e4d79bc]
+- Updated dependencies [94fee0c6]
+  - @ima/core@18.0.0-rc.24
+
 ## 18.0.0-rc.19
 
 ### Patch Changes
