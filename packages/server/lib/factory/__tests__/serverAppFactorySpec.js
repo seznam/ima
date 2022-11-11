@@ -344,9 +344,11 @@ describe('Server App Factory', () => {
   describe('errorHandlerMiddleware method', () => {
     it('should render dev error page for $Debug mode', async () => {
       environment.$Debug = true;
+      process.env.IMA_CLI_WATCH = 'true';
       const error = new Error('Custom');
 
       const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
+      delete process.env.IMA_CLI_WATCH;
 
       expect(response.SPA).toBeFalsy();
       expect(response.status).toBe(500);
