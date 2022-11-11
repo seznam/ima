@@ -420,7 +420,6 @@ export default async (
             ctx.name === 'client' && {
               test: /\.(js|mjs|cjs)$/,
               include: [/@ima/, ...(imaConfig.transformVendorPaths ?? [])],
-              exclude: /\bcli-plugin/,
               loader: require.resolve('swc-loader'),
               options: await imaConfig.swcVendor(
                 {
