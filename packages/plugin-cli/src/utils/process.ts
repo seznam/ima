@@ -166,6 +166,7 @@ export async function createProcessingPipeline(ctx: Context) {
           }),
         [
           createSwcTransformer({
+            target: config.target,
             development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
@@ -174,6 +175,7 @@ export async function createProcessingPipeline(ctx: Context) {
         ],
         [
           createSwcTransformer({
+            target: config.target,
             development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
