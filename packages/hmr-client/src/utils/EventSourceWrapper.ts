@@ -1,7 +1,7 @@
 import { StatsError } from 'webpack';
 
 import { getIndicator } from './IndicatorWrapper';
-import { logger } from './Logger';
+import { Logger } from './Logger';
 import { HMROptions } from './utils';
 
 export interface HMRMessageData {
@@ -16,34 +16,38 @@ export interface HMRMessageData {
 
 export type EventSourceListener = (data: HMRMessageData) => void;
 
-const TIMEOUT = 5000;
-
 /**
  * Initiates connection to webpack-hot-middleware SSE event source.
  *
  * Based on https://github.com/webpack-contrib/webpack-hot-middleware/blob/master/client.js
  */
 export class EventSourceWrapper {
-  #listeners: Record<string, EventSourceListener[]> = {};
+  #options: HMROptions;
+  #logger: Logger;
+  #liveCheck: number;
   #eventSource?: EventSource;
+
+  #listeners: Record<string, EventSourceListener[]> = {};
   #lastActivity = Date.now();
-  #liveCheck = setInterval(() => {
-    if (Date.now() - this.#lastActivity > TIMEOUT) {
-      this.disconnect();
-    }
-  }, TIMEOUT / 2);
 
-  public publicUrl: string;
-
-  constructor(publicUrl: string) {
-    this.publicUrl = publicUrl;
+  constructor(options: HMROptions, logger: Logger) {
+    this.#options = options;
+    this.#logger = logger;
 
     // Init event source
     this.#init();
+
+    this.#liveCheck = setInterval(() => {
+      if (Date.now() - this.#lastActivity > this.#options.timeout) {
+        this.disconnect();
+      }
+    }, this.#options.timeout / 2);
   }
 
   #init(): void {
-    this.#eventSource = new EventSource(`${this.publicUrl}/__webpack_hmr`);
+    this.#eventSource = new EventSource(
+      `${this.#options.publicUrl}/__webpack_hmr`
+    );
 
     this.#eventSource.addEventListener('error', () => this.#errorHandler());
     this.#eventSource.addEventListener('open', () => this.#openHandler());
@@ -54,7 +58,7 @@ export class EventSourceWrapper {
 
   #openHandler(): void {
     this.#lastActivity = Date.now();
-    logger.info('connected');
+    this.#logger.info('connected');
   }
 
   #messageHandler(event: MessageEvent): void {
@@ -80,7 +84,11 @@ export class EventSourceWrapper {
         this.#listeners[name].forEach(listener => listener(data));
       }
     } catch (error) {
-      logger.error('Unable to parse event source data', event.data, error);
+      this.#logger.error(
+        'Unable to parse event source data',
+        event.data,
+        error
+      );
     }
   }
 
@@ -96,7 +104,7 @@ export class EventSourceWrapper {
     }
 
     // Autoconnect
-    setTimeout(() => this.#init(), TIMEOUT);
+    setTimeout(() => this.#init(), this.#options.timeout);
   }
 
   disconnect(): void {
@@ -115,10 +123,10 @@ export class EventSourceWrapper {
 /**
  * Returns singleton instance of EventSource across multiple clients.
  */
-export function getEventSource(options: HMROptions) {
+export function getEventSource(options: HMROptions, logger: Logger) {
   if (!window.__IMA_HMR?.eventSource) {
     window.__IMA_HMR = window.__IMA_HMR || {};
-    window.__IMA_HMR.eventSource = new EventSourceWrapper(options.publicUrl);
+    window.__IMA_HMR.eventSource = new EventSourceWrapper(options, logger);
   }
 
   return window.__IMA_HMR.eventSource;

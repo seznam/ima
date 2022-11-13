@@ -1,4 +1,4 @@
-import { init, isUpToDate, logger, processUpdate } from '@/utils';
+import { init, isUpToDate, processUpdate } from '@/utils';
 
 if (!module.hot) {
   throw new Error(
@@ -6,7 +6,7 @@ if (!module.hot) {
   );
 }
 
-const { emitter, eventSource, indicator, options } = init();
+const { emitter, eventSource, indicator, options, logger } = init();
 
 eventSource.addListener(options.name, data => {
   let applyUpdate = true;
@@ -39,7 +39,7 @@ eventSource.addListener(options.name, data => {
         module.hot?.status() === 'idle'
       ) {
         logger.info('Checking for updates on the server...');
-        processUpdate(data.hash, data.modules, options);
+        processUpdate(data.hash, options, logger);
       }
 
       indicator.destroy();

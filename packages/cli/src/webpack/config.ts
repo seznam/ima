@@ -227,21 +227,13 @@ export default async (
           }
         : {
             [name]: [
-              // useHMR &&
-              // `webpack-hot-middleware/client?${new URLSearchParams({
-              //   name,
-              //   path: `${devServerConfig.publicUrl}/__webpack_hmr`,
-              //   timeout: '3000',
-              //   reload: 'false',
-              //   overlay: 'false',
-              //   overlayWarnings: 'false',
-              //   noInfo: 'true',
-              //   quiet: 'true',
-              // }).toString()}`,
               useHMR &&
                 isDebug &&
                 `@ima/hmr-client/dist/client?${new URLSearchParams({
                   name,
+                  noInfo: 'true',
+                  reload: 'true',
+                  timeout: '3000',
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,

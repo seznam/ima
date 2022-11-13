@@ -1,13 +1,16 @@
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
 import { HMREmitter } from './HMREmitter';
 import { getIndicator } from './IndicatorWrapper';
-import { logger } from './Logger';
+import { Logger } from './Logger';
 
 const FAILURE_STATUSES = ['abort', 'fail'];
 const HMR_DOCS_URL = 'https://webpack.js.org/concepts/hot-module-replacement/';
 
 export interface HMROptions {
   name: 'server' | 'client' | 'client.es';
+  timeout: number;
+  noInfo: boolean;
+  reload: boolean;
   port: number;
   hostname: string;
   publicUrl: string;
@@ -17,9 +20,23 @@ export interface HMROptions {
  * Parses options provided through webpack import query with defaults.
  */
 export function parseOptions(): HMROptions {
-  return Object.fromEntries(
-    new URLSearchParams(__resourceQuery)
-  ) as unknown as HMROptions;
+  const queryEntries = Object.fromEntries(new URLSearchParams(__resourceQuery));
+
+  if (!queryEntries['name']) {
+    throw Error(
+      `[HMR] Invalid name provided: ${queryEntries['name']}, it must match one of the webpack configuration names and is required.`
+    );
+  }
+
+  return {
+    name: queryEntries['name'] as HMROptions['name'],
+    timeout: parseInt(queryEntries['timeout']) || 3000,
+    noInfo: queryEntries['noInfo'] ? queryEntries['noInfo'] === 'true' : false,
+    reload: queryEntries['reload'] ? queryEntries['reload'] === 'true' : false,
+    port: 3101,
+    hostname: 'localhost',
+    publicUrl: 'http://localhost:3101',
+  };
 }
 
 /**
@@ -27,6 +44,7 @@ export function parseOptions(): HMROptions {
  */
 export function init() {
   const options = parseOptions();
+  const logger = new Logger(options);
   const overlayScriptEl = document.createElement('script');
 
   // Init ErrorOverlay
@@ -42,9 +60,10 @@ export function init() {
 
   return {
     options,
-    eventSource: getEventSource(options),
+    eventSource: getEventSource(options, logger),
     indicator: getIndicator(),
     emitter: new HMREmitter(),
+    logger,
   };
 }
 
@@ -72,8 +91,8 @@ export const isUpToDate = (() => {
  */
 export async function processUpdate(
   hash: HMRMessageData['hash'],
-  moduleMap: HMRMessageData['modules'],
-  options: HMROptions
+  options: HMROptions,
+  logger: Logger
 ) {
   try {
     // Check for updates
@@ -83,7 +102,7 @@ export async function processUpdate(
       logger.warn('Cannot find update. Need to do a full reload!');
       logger.warn('(Probably because of restarting the webpack-dev-server)');
 
-      return window.location.reload();
+      return options.reload && window.location.reload();
     }
 
     // Apply changes to modules
@@ -119,21 +138,19 @@ export async function processUpdate(
 
     // Log unaccepted modules info
     if (unacceptedModules.length > 0) {
-      logger.warn(
-        `[HMR] The following modules couldn't be hot updated: (Full reload needed)\nThis is usually because the modules which have changed (and their parents) do not know how to hot reload themselves. See ${HMR_DOCS_URL} for more details.`
+      logger.group(
+        `The following modules couldn't be hot updated: (Full reload needed)\n\nThis is usually because the modules which have changed (and their parents) do not know how to hot reload themselves. See ${HMR_DOCS_URL} for more details.`
       );
-
-      logger.group('Unaccepted modules:');
       unacceptedModules.forEach(module => console.log(module));
       console.groupEnd();
 
-      return window.location.reload();
+      return options.reload && window.location.reload();
     }
 
     // Log updated modules info
     if (!renewedModules || renewedModules.length === 0) {
       logger.info('Nothing hot updated');
-    } else {
+    } else if (!options.noInfo) {
       logger.group('Updated modules:');
       renewedModules.forEach(module => console.log(module));
       console.groupEnd();
@@ -141,7 +158,7 @@ export async function processUpdate(
 
     // Check if all is up to date
     if (!isUpToDate()) {
-      processUpdate(hash, moduleMap, options);
+      processUpdate(hash, options, logger);
     } else {
       logger.info('App is up to date');
     }
@@ -151,7 +168,7 @@ export async function processUpdate(
     if (status && FAILURE_STATUSES.includes(status)) {
       logger.warn('Cannot check for update. Need to do a full reload!', error);
 
-      return window.location.reload();
+      return options.reload && window.location.reload();
     } else {
       logger.warn('Update check failed: ', error);
     }
