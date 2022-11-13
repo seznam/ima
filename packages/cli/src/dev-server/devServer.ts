@@ -59,14 +59,15 @@ async function createDevServer({
         devMiddleware(compiler, {
           index: false,
           publicPath: '/',
-          writeToDisk: true,
+          writeToDisk: filePath => filePath.endsWith('runner.js'),
           ...(isVerbose ? undefined : { stats: 'none' }),
           serverSideRender: false,
         })
       )
       .use(
         hotMiddleware(compiler, {
-          ...(isVerbose ? undefined : { quite: true, log: false }),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          ...(isVerbose ? undefined : { quiet: true, log: () => {} }),
           path: '/__webpack_hmr',
           heartbeat: 1500,
         })
@@ -79,7 +80,7 @@ async function createDevServer({
         }
 
         res.status(500).json({
-          status: 'Something happened with the @ima/cli/devServer 😢',
+          status: 'Something is wrong with the @ima/cli/devServer',
           error: err,
         });
       })
