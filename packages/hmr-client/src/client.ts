@@ -44,7 +44,12 @@ eventSource.addListener(options.name, data => {
         module.hot?.status() === 'idle'
       ) {
         logger.info('Checking for updates on the server...');
-        processUpdate(data.hash, options, logger);
+        processUpdate({
+          hash: data.hash,
+          options,
+          logger,
+          emitter,
+        });
       }
 
       indicator.destroy();

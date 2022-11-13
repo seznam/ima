@@ -1,7 +1,7 @@
 import { StatsError } from 'webpack';
 
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
-import { getHMREmitter } from './HMREmitter';
+import { getHMREmitter, HMREmitter } from './HMREmitter';
 import { getIndicator } from './IndicatorWrapper';
 import { Logger } from './Logger';
 
@@ -111,11 +111,17 @@ export const isUpToDate = (() => {
  * - https://github.com/webpack/webpack/blob/main/hot/log-apply-result.js
  * - https://github.com/webpack-contrib/webpack-hot-middleware/blob/master/client.js
  */
-export async function processUpdate(
-  hash: HMRMessageData['hash'],
-  options: HMROptions,
-  logger: Logger
-) {
+export async function processUpdate({
+  logger,
+  options,
+  hash,
+  emitter,
+}: {
+  hash: HMRMessageData['hash'];
+  options: HMROptions;
+  logger: Logger;
+  emitter: HMREmitter;
+}) {
   try {
     // Check for updates
     const updatedModules = await module.hot?.check();
@@ -125,6 +131,12 @@ export async function processUpdate(
       logger.warn('(Probably because of restarting the webpack-dev-server)');
 
       return options.reload && window.location.reload();
+    }
+
+    // TODO needs better solution
+    // Kill ima app before hot reloading
+    if (updatedModules.some(file => file.toString().endsWith('.js'))) {
+      emitter.emit('destroy');
     }
 
     // Apply changes to modules
@@ -180,7 +192,12 @@ export async function processUpdate(
 
     // Check if all is up to date
     if (!isUpToDate()) {
-      processUpdate(hash, options, logger);
+      processUpdate({
+        hash,
+        options,
+        logger,
+        emitter,
+      });
     } else {
       logger.info('App is up to date');
     }
