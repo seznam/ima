@@ -577,9 +577,10 @@ export default class HttpProxy {
   _convertObjectToFormData(object: UnknownParameters) {
     const window = this._window.getWindow();
 
-    if (!window || !window.FormData) {
+    if (!window || !FormData) {
       return object;
     }
+
     const formDataObject = new FormData();
     Object.keys(object).forEach(key =>
       formDataObject.append(key, object[key] as unknown as string)

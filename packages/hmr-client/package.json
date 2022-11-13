@@ -19,6 +19,7 @@
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "main": "./dist/fastRefreshClient.js",
   "module": "./dist/fastRefreshClient.mjs",
+  "types": "./dist/types.d.ts",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",

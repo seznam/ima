@@ -11,41 +11,41 @@ export type PendingEvents = Record<EventName, (ListenerData | undefined)[]>;
  * Tiny event emitter used for communication between
  * application, hmr client and error overlay.
  */
-class ErrorOverlayEmitter {
-  private _listeners: Map<EventName, Listener[]>;
-  private _pendingEvents: PendingEvents | Record<string, never>;
+export class HMREmitter {
+  #listeners: Map<EventName, Listener[]>;
+  #pendingEvents: PendingEvents | Record<string, never>;
 
   constructor() {
-    this._listeners = new Map();
-    this._pendingEvents = {};
+    this.#listeners = new Map();
+    this.#pendingEvents = {};
   }
 
   on(eventName: EventName, listener: Listener): void {
-    const listeners = this._listeners.get(eventName) ?? [];
+    const listeners = this.#listeners.get(eventName) ?? [];
 
     listeners.push(listener);
-    this._listeners.set(eventName, listeners);
+    this.#listeners.set(eventName, listeners);
 
     // Emit pending events
     if (
-      Array.isArray(this._pendingEvents[eventName]) &&
-      this._pendingEvents[eventName].length
+      Array.isArray(this.#pendingEvents[eventName]) &&
+      this.#pendingEvents[eventName].length
     ) {
-      for (const pendingData of Object.values(this._pendingEvents[eventName])) {
+      for (const pendingData of Object.values(this.#pendingEvents[eventName])) {
         this.emit(eventName, pendingData);
       }
     }
   }
 
   emit(eventName: EventName, data?: ListenerData): void {
-    const listeners = this._listeners.get(eventName);
+    const listeners = this.#listeners.get(eventName);
 
     if (!listeners) {
-      if (!Array.isArray(this._pendingEvents[eventName])) {
-        this._pendingEvents[eventName] = [];
+      if (!Array.isArray(this.#pendingEvents[eventName])) {
+        this.#pendingEvents[eventName] = [];
       }
 
-      this._pendingEvents[eventName].push(data);
+      this.#pendingEvents[eventName].push(data);
 
       return;
     }
@@ -55,5 +55,3 @@ class ErrorOverlayEmitter {
     }
   }
 }
-
-export { ErrorOverlayEmitter };

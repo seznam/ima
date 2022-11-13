@@ -1,7 +1,18 @@
-import { HMRMessageData, HMROptions } from '@/types';
-import { getIndicator } from '@/utils/IndicatorWrapper';
+import { StatsError } from 'webpack';
 
+import { getIndicator } from './IndicatorWrapper';
 import { logger } from './Logger';
+import { HMROptions } from './utils';
+
+export interface HMRMessageData {
+  action: 'built' | 'building' | 'sync';
+  hash?: string;
+  name?: string;
+  time?: number;
+  errors?: StatsError[];
+  warnings?: StatsError[];
+  modules?: Record<string, string>;
+}
 
 export type EventSourceListener = (data: HMRMessageData) => void;
 

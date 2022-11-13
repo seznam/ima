@@ -8,11 +8,11 @@
 
 ---
 
-Creates **event emitter** on client window `window.__IMA_HMR`, which servers as a communication interface between `@ima/error-overlay`, `webpack-hot-middleware` and the application. It also manages the HMR indicator rendering (little IMA icon in bottom right corner) and HMR reconnections.
+Initializes buch of helpers classes on client window under `window.__IMA_HMR` object, which servers as a communication interface between `@ima/error-overlay`, `webpack-hot-middleware` and the application. It also manages the HMR indicator rendering (little IMA icon in bottom right corner).
 
 ## Description
 
-The companion script is injected at the top of the client entry point in the webpack configuration, which then initializes the event emitter on `window.__IMA_HMR` upon application load.
+The companion script is injected at the top of the client entry point in the webpack configuration, which then initializes the event emitter on `window.__IMA_HMR` upon application load. This client code directly replaces the ones used in `webpack-hot-middleware`, we are still using `webpack-hot-middleware` on the server, but with our custom client script.
 
 Additionally the package provides custom module for `@pmmmwh/react-refresh-webpack-plugin` (available as default entry point), that noops all the refresh-plugin callback methods in order to disable the ability of the plugin to display runtime and compile error overlays. This is because we have our own handler for these in form of `@ima/error-overlay`.
 

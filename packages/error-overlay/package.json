@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@ima/dev-utils": "^18.0.0-rc.4",
+    "@ima/hmr-client": "^18.0.0-rc.12",
     "@types/prismjs": "^1.26.0",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",

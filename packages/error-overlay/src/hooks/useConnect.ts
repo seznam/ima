@@ -114,16 +114,16 @@ function useConnect(serverError: string | null) {
     })();
 
     // Connect to IMA HMR
-    if (window?.__IMA_HMR) {
-      window.__IMA_HMR.on('close', async () => {
+    if (window?.__IMA_HMR?.emitter) {
+      window.__IMA_HMR.emitter.on('close', async () => {
         setError(null);
       });
 
-      window.__IMA_HMR.on('clear', async () => {
+      window.__IMA_HMR.emitter.on('clear', async () => {
         setError(null);
       });
 
-      window.__IMA_HMR.on('error', async data => {
+      window.__IMA_HMR.emitter.on('error', async data => {
         if (!data?.error) {
           return;
         }

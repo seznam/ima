@@ -23,15 +23,15 @@ export default class ErrorBoundary extends PureComponent<Props, State> {
 
   componentDidMount() {
     // Clear reported errors
-    if (typeof window !== 'undefined' && window?.__IMA_HMR?.emit) {
-      window.__IMA_HMR.emit('clear');
+    if (typeof window !== 'undefined' && window?.__IMA_HMR?.emitter) {
+      window.__IMA_HMR.emitter.emit('clear');
     }
   }
 
   componentDidCatch(error: Error) {
     // Report errors to overlay
-    if (typeof window !== 'undefined' && window?.__IMA_HMR?.emit) {
-      window.__IMA_HMR.emit('error', { error });
+    if (typeof window !== 'undefined' && window?.__IMA_HMR?.emitter) {
+      window.__IMA_HMR.emitter.emit('error', { error });
       this.setState({ hasError: true });
     }
   }

@@ -1,13 +1,17 @@
-import { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
-
-import { HMRMessageData, HMROptions } from '@/types';
-
-import { getEventSource } from './EventSourceWrapper';
+import { getEventSource, HMRMessageData } from './EventSourceWrapper';
+import { HMREmitter } from './HMREmitter';
 import { getIndicator } from './IndicatorWrapper';
 import { logger } from './Logger';
 
 const FAILURE_STATUSES = ['abort', 'fail'];
 const HMR_DOCS_URL = 'https://webpack.js.org/concepts/hot-module-replacement/';
+
+export interface HMROptions {
+  name: 'server' | 'client' | 'client.es';
+  port: number;
+  hostname: string;
+  publicUrl: string;
+}
 
 /**
  * Parses options provided through webpack import query with defaults.
@@ -40,7 +44,7 @@ export function init() {
     options,
     eventSource: getEventSource(options),
     indicator: getIndicator(),
-    emitter: new ErrorOverlayEmitter(),
+    emitter: new HMREmitter(),
   };
 }
 
