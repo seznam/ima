@@ -17,24 +17,19 @@ if (!$IMA.Test) {
       ima.reviveClientApp(getInitialAppConfigFunctions());
     })
     .catch(error => {
-      if (error) {
-        if (
-          $Debug &&
-          typeof window !== 'undefined' &&
-          window?.__IMA_HMR?.emit
-        ) {
-          window.__IMA_HMR.emit('error', { error });
-        }
-
-        console.error(error);
+      if (error && $Debug && typeof window !== 'undefined') {
+        window.__IMA_HMR?.emitter?.emit('error', { error });
       }
+
+      console.error(error);
     });
 }
 
 if (module.hot) {
-  module.hot.accept((err, { module }) => {
-    // Try to accept again and in any case reload on error
-    module.hot.accept(window.location.reload);
+  module.hot.accept((error, { module }) => {
+    typeof window !== 'undefined' &&
+      window.__IMA_HMR?.emit('error', { error, module });
+    console.error('Failed to hot replace module:', module);
   });
 }
 
