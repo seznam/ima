@@ -10,7 +10,6 @@
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
-    "./website",
     "./packages/hmr-client",
     "./packages/dev-utils",
     "./packages/plugin-cli",
@@ -22,7 +21,8 @@
     "./packages/create-ima-app",
     "./packages/devtools",
     "./packages/error-overlay",
-    "./packages/react-page-renderer"
+    "./packages/react-page-renderer",
+    "./website"
   ],
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
