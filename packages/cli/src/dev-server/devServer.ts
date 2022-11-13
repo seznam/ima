@@ -1,10 +1,10 @@
 import path from 'path';
 
-import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
+import hotMiddleware from 'webpack-hot-middleware';
 
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';

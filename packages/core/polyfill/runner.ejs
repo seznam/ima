@@ -184,8 +184,8 @@
         console.error('IMA Runner ERROR:', error);
 
         // Show compile errors in error-overlay in $Debug
-        if (window.__IMA_HMR && window.$Debug) {
-          window.__IMA_HMR.emit('error', { error: error });
+        if (window.__IMA_HMR?.emitter && window.$Debug) {
+          window.__IMA_HMR.emitter.emit('error', { error: error });
         }
       },
 

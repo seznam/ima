@@ -30,7 +30,6 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
-    "@gatsbyjs/webpack-hot-middleware": "2.25.2",
     "@ima/dev-utils": "^18.0.0-rc.4",
     "@ima/error-overlay": "^18.0.0-rc.4",
     "@ima/hmr-client": "^18.0.0-rc.4",
@@ -70,6 +69,7 @@
     "swc-loader": "^0.2.1",
     "webpack": "^5.74.0",
     "webpack-dev-middleware": "^5.3.3",
+    "webpack-hot-middleware": "^2.25.3",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

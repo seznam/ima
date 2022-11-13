@@ -227,21 +227,21 @@ export default async (
           }
         : {
             [name]: [
-              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
-              useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
-                  name,
-                  path: `${devServerConfig.publicUrl}/__webpack_hmr`,
-                  timeout: '3000',
-                  reload: 'false',
-                  overlay: 'false',
-                  overlayWarnings: 'false',
-                  noInfo: 'true',
-                  quiet: 'true',
-                }).toString()}`,
+              // useHMR &&
+              // `webpack-hot-middleware/client?${new URLSearchParams({
+              //   name,
+              //   path: `${devServerConfig.publicUrl}/__webpack_hmr`,
+              //   timeout: '3000',
+              //   reload: 'false',
+              //   overlay: 'false',
+              //   overlayWarnings: 'false',
+              //   noInfo: 'true',
+              //   quiet: 'true',
+              // }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                `@ima/hmr-client/dist/client?${new URLSearchParams({
+                  name,
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,

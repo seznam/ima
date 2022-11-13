@@ -1,15 +1,8 @@
 import { Dictionary, EventBus, Router } from '@ima/core';
-import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 import { ComponentType } from 'react';
 
 import AbstractComponent from './component/AbstractComponent';
 import AbstractPureComponent from './component/AbstractPureComponent';
-
-declare global {
-  interface Window {
-    __IMA_HMR: ErrorOverlayEmitter;
-  }
-}
 
 export type Settings = {
   $App: unknown;

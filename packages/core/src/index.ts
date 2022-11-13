@@ -83,7 +83,6 @@ export type {
 } from './CommonTypes';
 export type { IExtension } from './extension/Extension';
 export type { IController } from './controller/Controller';
-import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 declare global {
   /* eslint-disable no-var */
@@ -92,11 +91,6 @@ declare global {
   // Test Functions
   var using: (values: unknown[], func: object) => void;
   var extend: (ChildClass: object, ParentClass: object) => void;
-  /* eslint-enable no-var */
-  interface Window {
-    __IMA_HMR: ErrorOverlayEmitter;
-    FormData: FormData;
-  }
 }
 
 function getInitialImaConfigFunctions() {
