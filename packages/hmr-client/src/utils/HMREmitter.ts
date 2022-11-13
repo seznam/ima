@@ -4,7 +4,10 @@ export type EventName = 'error' | 'clear' | 'close' | 'destroy';
 export type ListenerData = {
   error?: StatsError | Error;
 };
-export type Listener = (data?: ListenerData) => Promise<void>;
+export interface ListenerObj {
+  listener: (data?: ListenerData) => Promise<void>;
+  once: boolean;
+}
 export type PendingEvents = Record<EventName, (ListenerData | undefined)[]>;
 
 /**
@@ -12,7 +15,7 @@ export type PendingEvents = Record<EventName, (ListenerData | undefined)[]>;
  * application, hmr client and error overlay.
  */
 export class HMREmitter {
-  #listeners: Map<EventName, Listener[]>;
+  #listeners: Map<EventName, ListenerObj[]>;
   #pendingEvents: PendingEvents | Record<string, never>;
 
   constructor() {
@@ -20,10 +23,17 @@ export class HMREmitter {
     this.#pendingEvents = {};
   }
 
-  on(eventName: EventName, listener: Listener): void {
+  on(
+    eventName: EventName,
+    listener: ListenerObj['listener'],
+    once = false
+  ): void {
     const listeners = this.#listeners.get(eventName) ?? [];
+    listeners.push({
+      listener,
+      once,
+    });
 
-    listeners.push(listener);
     this.#listeners.set(eventName, listeners);
 
     // Emit pending events
@@ -50,8 +60,13 @@ export class HMREmitter {
       return;
     }
 
-    for (const listener of listeners) {
-      listener(data);
+    for (let i = 0; i < listeners.length; i++) {
+      listeners[i].listener(data);
+
+      // Delete once used
+      if (listeners[i].once) {
+        listeners.splice(i, 1);
+      }
     }
   }
 }

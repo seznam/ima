@@ -11,6 +11,7 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "workspaces": [
     "./website",
+    "./packages/hmr-client",
     "./packages/dev-utils",
     "./packages/plugin-cli",
     "./packages/helpers",
@@ -21,7 +22,6 @@
     "./packages/create-ima-app",
     "./packages/devtools",
     "./packages/error-overlay",
-    "./packages/hmr-client",
     "./packages/react-page-renderer"
   ],
   "scripts": {

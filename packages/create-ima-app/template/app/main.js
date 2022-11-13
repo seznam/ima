@@ -28,7 +28,9 @@ if (!$IMA.Test) {
 if (module.hot) {
   module.hot.accept((error, { module }) => {
     typeof window !== 'undefined' &&
-      window.__IMA_HMR?.emit('error', { error, module });
+      window.__IMA_HMR?.emitter?.emit('error', {
+        error: { ...error, params: module },
+      });
     console.error('Failed to hot replace module:', module);
   });
 }

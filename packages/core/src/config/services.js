@@ -30,12 +30,16 @@ export default (ns, oc, config) => {
    * before creating new one.
    */
   if ($Debug && typeof window !== 'undefined') {
-    window.__IMA_HMR?.emitter?.on('destroy', () => {
-      oc.get('$Router').unlisten();
-      oc.get('$EventBus').unlistenAll();
-      oc.get('$PageManager').destroy();
-      oc.get('$PageRenderer').unmount();
-      oc.get('$Dispatcher').clear();
-    });
+    window.__IMA_HMR?.emitter?.on(
+      'destroy',
+      () => {
+        oc.get('$Router').unlisten();
+        oc.get('$EventBus').unlistenAll();
+        oc.get('$PageManager').destroy();
+        oc.get('$PageRenderer').unmount();
+        oc.get('$Dispatcher').clear();
+      },
+      true
+    );
   }
 };

@@ -29,7 +29,6 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.4",
     "express": "^4.17.3"
   },
   "peerDependencies": {

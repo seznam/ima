@@ -30,11 +30,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.4",
     "@types/webpack-env": "^1.16.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "18.0.0-rc.12",
     "webpack": "^5.70.0"
   }
 }
