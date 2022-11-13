@@ -1,5 +1,3 @@
-import { StatsError } from 'webpack';
-
 import { getIndicator } from './IndicatorWrapper';
 import { Logger } from './Logger';
 import { HMROptions } from './utils';
@@ -9,8 +7,8 @@ export interface HMRMessageData {
   hash?: string;
   name?: string;
   time?: number;
-  errors?: StatsError[];
-  warnings?: StatsError[];
+  errors?: string[];
+  warnings?: string[];
   modules?: Record<string, string>;
 }
 

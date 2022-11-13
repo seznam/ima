@@ -1,4 +1,9 @@
-import { init, isUpToDate, processUpdate } from '@/utils';
+import {
+  init,
+  isUpToDate,
+  parseEventSourceError,
+  processUpdate,
+} from '@/utils';
 
 if (!module.hot) {
   throw new Error(
@@ -22,9 +27,9 @@ eventSource.addListener(options.name, data => {
       if (Array.isArray(data.errors) && data.errors.length > 0) {
         applyUpdate = false;
 
-        // Send error to error-overlay
+        // Event source sends flatten errors, so we have to parse it back
         emitter.emit('error', {
-          error: data.errors[0],
+          error: parseEventSourceError(data.errors[0]),
         });
       } else if (Array.isArray(data.warnings) && data.warnings.length > 0) {
         // TODO handle warnings... maybe

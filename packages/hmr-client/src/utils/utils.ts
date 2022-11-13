@@ -1,5 +1,7 @@
+import { StatsError } from 'webpack';
+
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
-import { HMREmitter } from './HMREmitter';
+import { getHMREmitter } from './HMREmitter';
 import { getIndicator } from './IndicatorWrapper';
 import { Logger } from './Logger';
 
@@ -47,6 +49,15 @@ export function init() {
   const logger = new Logger(options);
   const overlayScriptEl = document.createElement('script');
 
+  // Init instances
+  const instances = {
+    options,
+    eventSource: getEventSource(options, logger),
+    indicator: getIndicator(),
+    emitter: getHMREmitter(),
+    logger,
+  };
+
   // Init ErrorOverlay
   overlayScriptEl.setAttribute(
     'src',
@@ -57,13 +68,24 @@ export function init() {
     imaErrorOverlay.setAttribute('public-url', options.publicUrl);
     document.body.appendChild(imaErrorOverlay);
   };
+  document.body.appendChild(overlayScriptEl);
+
+  return instances;
+}
+
+/**
+ * Parses string version of webpack StatsError back to object version
+ * https://github.com/webpack-contrib/webpack-hot-middleware/blob/master/middleware.js#L174
+ */
+export function parseEventSourceError(error: string): StatsError {
+  const [moduleName, ...restError] = error.split(' ');
+  const [loc, ...restErrorMessage] = restError.join(' ').split('\n');
+  const message = restErrorMessage.join('\n');
 
   return {
-    options,
-    eventSource: getEventSource(options, logger),
-    indicator: getIndicator(),
-    emitter: new HMREmitter(),
-    logger,
+    moduleIdentifier: moduleName,
+    loc,
+    message,
   };
 }
 

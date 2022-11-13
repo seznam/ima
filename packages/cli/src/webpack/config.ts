@@ -231,7 +231,7 @@ export default async (
                 isDebug &&
                 `@ima/hmr-client/dist/client?${new URLSearchParams({
                   name,
-                  noInfo: 'true',
+                  noInfo: 'false',
                   reload: 'true',
                   timeout: '3000',
                   port: devServerConfig.port.toString(),

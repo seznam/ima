@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-export type EventName = 'error' | 'clear' | 'close';
+export type EventName = 'error' | 'clear' | 'close' | 'destroy';
 export type ListenerData = {
   error?: StatsError | Error;
 };
@@ -54,4 +54,16 @@ export class HMREmitter {
       listener(data);
     }
   }
+}
+
+/**
+ * Returns singleton instance of EventSource across multiple clients.
+ */
+export function getHMREmitter() {
+  if (!window.__IMA_HMR?.emitter) {
+    window.__IMA_HMR = window.__IMA_HMR || {};
+    window.__IMA_HMR.emitter = new HMREmitter();
+  }
+
+  return window.__IMA_HMR.emitter;
 }
