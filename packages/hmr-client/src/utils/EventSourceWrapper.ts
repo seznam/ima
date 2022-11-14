@@ -56,7 +56,7 @@ export class EventSourceWrapper {
 
   #openHandler(): void {
     this.#lastActivity = Date.now();
-    this.#logger.info('connected');
+    this.#logger.info('check', 'Connected');
   }
 
   #messageHandler(event: MessageEvent): void {

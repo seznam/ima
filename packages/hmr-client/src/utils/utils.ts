@@ -16,6 +16,7 @@ export interface HMROptions {
   port: number;
   hostname: string;
   publicUrl: string;
+  reactRefresh: boolean;
 }
 
 /**
@@ -34,10 +35,13 @@ export function parseOptions(): HMROptions {
     name: queryEntries['name'] as HMROptions['name'],
     timeout: parseInt(queryEntries['timeout']) || 3000,
     noInfo: queryEntries['noInfo'] ? queryEntries['noInfo'] === 'true' : false,
-    reload: queryEntries['reload'] ? queryEntries['reload'] === 'true' : false,
+    reload: queryEntries['reload'] ? queryEntries['reload'] === 'true' : true,
     port: 3101,
     hostname: 'localhost',
     publicUrl: 'http://localhost:3101',
+    reactRefresh: queryEntries['reactRefresh']
+      ? queryEntries['reactRefresh'] === 'true'
+      : true,
   };
 }
 
@@ -127,20 +131,25 @@ export async function processUpdate({
     const updatedModules = await module.hot?.check();
 
     if (!updatedModules) {
-      logger.warn('Cannot find update. Need to do a full reload!');
-      logger.warn('(Probably because of restarting the webpack-dev-server)');
+      logger.warn('warn', 'Cannot find update. Need to do a full reload!');
+      logger.warn(
+        'warn',
+        '(Probably because of restarting the webpack-dev-server)'
+      );
 
       return options.reload && window.location.reload();
     }
 
     // TODO needs better solution
-    // Kill ima app before hot reloading
+    // Kill ima app before hot reloading.
     if (
-      updatedModules.some(
-        filePath => typeof filePath === 'string' && /(js|ts)$/.test(filePath)
-      )
+      !options.reactRefresh ||
+      (options.reactRefresh &&
+        updatedModules.some(
+          filePath => typeof filePath === 'string' && /(js|ts)$/.test(filePath)
+        ))
     ) {
-      logger.info('Destroying IMA app');
+      logger.info('cross', 'Destroying IMA app');
       emitter.emit('destroy');
     }
 
@@ -151,17 +160,20 @@ export async function processUpdate({
       ignoreErrored: true,
       onUnaccepted: data => {
         logger.warn(
+          'warn',
           'Ignored an update to unaccepted module ' + data.chain?.join(' -> ')
         );
       },
       onDeclined: data => {
         logger.warn(
+          'warn',
           'Ignored an update to declined module ' + data.chain?.join(' -> ')
         );
       },
       onErrored: data => {
-        logger.error(data.error);
+        logger.error('cross', data.error);
         logger.warn(
+          'warn',
           'Ignored an error while updating module ' +
             data.moduleId +
             ' (' +
@@ -178,6 +190,7 @@ export async function processUpdate({
     // Log unaccepted modules info
     if (unacceptedModules.length > 0) {
       logger.group(
+        false,
         `The following modules couldn't be hot updated: (Full reload needed)\n\nThis is usually because the modules which have changed (and their parents) do not know how to hot reload themselves. See ${HMR_DOCS_URL} for more details.`
       );
       unacceptedModules.forEach(module => console.log(module));
@@ -188,9 +201,9 @@ export async function processUpdate({
 
     // Log updated modules info
     if (!renewedModules || renewedModules.length === 0) {
-      logger.info('Nothing hot updated');
+      logger.info(false, 'Nothing hot updated');
     } else if (!options.noInfo) {
-      logger.group('Updated modules:');
+      logger.group('update', 'Updated modules:');
       renewedModules.forEach(module => console.log(module));
       console.groupEnd();
     }
@@ -204,17 +217,21 @@ export async function processUpdate({
         emitter,
       });
     } else {
-      logger.info('App is up to date');
+      logger.info('check', 'App is up to date');
     }
   } catch (error) {
     const status = module.hot?.status();
 
     if (status && FAILURE_STATUSES.includes(status)) {
-      logger.warn('Cannot check for update. Need to do a full reload!', error);
+      logger.warn(
+        'warn',
+        'Cannot check for update. Need to do a full reload!',
+        error
+      );
 
       return options.reload && window.location.reload();
     } else {
-      logger.warn('Update check failed: ', error);
+      logger.warn('warn', 'Update check failed: ', error);
     }
   }
 }

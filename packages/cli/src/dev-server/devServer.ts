@@ -6,15 +6,18 @@ import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 
+import { ImaCliArgs } from '../types';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
 async function createDevServer({
+  args,
   compiler,
   hostname,
   port,
   rootDir,
 }: {
+  args: ImaCliArgs;
   compiler: Compiler | undefined;
   hostname: string;
   port: number;
@@ -59,7 +62,9 @@ async function createDevServer({
         devMiddleware(compiler, {
           index: false,
           publicPath: '/',
-          writeToDisk: filePath => filePath.endsWith('runner.js'),
+          writeToDisk: args.writeToDisk
+            ? true
+            : filePath => filePath.endsWith('runner.js'),
           ...(isVerbose ? undefined : { stats: 'none' }),
           serverSideRender: false,
         })

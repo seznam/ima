@@ -1,3 +1,11 @@
+/**
+ * TODO
+ *
+ * - Changeset
+ * - Update hmr client readme with general HMR info
+ * - Update documentation with new CLI arguments
+ */
+
 import {
   init,
   isUpToDate,
@@ -43,7 +51,7 @@ eventSource.addListener(options.name, data => {
         !isUpToDate(data.hash) &&
         module.hot?.status() === 'idle'
       ) {
-        logger.info('Checking for updates on the server...');
+        logger.info(false, 'Checking for updates on the server...');
         processUpdate({
           hash: data.hash,
           options,

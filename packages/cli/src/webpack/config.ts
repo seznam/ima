@@ -114,7 +114,7 @@ export default async (
             react: {
               runtime: imaConfig.jsxRuntime ?? 'automatic',
               development: isDevEnv,
-              refresh: useHMR,
+              refresh: useHMR && ctx.reactRefresh,
               useBuiltins: true,
             },
           },
@@ -234,6 +234,7 @@ export default async (
                   noInfo: 'false',
                   reload: 'true',
                   timeout: '3000',
+                  reactRefresh: ctx.reactRefresh ? 'true' : 'false',
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
@@ -627,6 +628,7 @@ export default async (
             // Following plugins enable react refresh and hmr in watch mode
             useHMR && new webpack.HotModuleReplacementPlugin(),
             useHMR &&
+              ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: require.resolve('@ima/hmr-client'),

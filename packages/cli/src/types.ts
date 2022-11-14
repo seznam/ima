@@ -5,6 +5,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IMA_CLI_WATCH?: string;
+      IMA_CLI_WRITE_TO_DISK?: string;
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
     }
@@ -35,6 +36,8 @@ export interface ImaCliArgs {
   hostname?: string;
   publicUrl?: string;
   environment: 'development' | 'production' | string;
+  writeToDisk?: boolean;
+  reactRefresh?: boolean;
 }
 
 /**

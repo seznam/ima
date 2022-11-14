@@ -107,8 +107,8 @@ app
     })
   );
 
-// Proxy static files to devServer where they are served from memory in watch mode.
-if (process.env.IMA_CLI_WATCH) {
+// Proxy static files to devServer where they are served from memory.
+if (process.env.IMA_CLI_WATCH && !process.env.IMA_CLI_WRITE_TO_DISK) {
   app.use(
     environment.$Server.staticFolder,
     createProxyMiddleware('/', {
