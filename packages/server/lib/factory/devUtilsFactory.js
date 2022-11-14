@@ -8,30 +8,42 @@ module.exports = function devUtilsFactory() {
     return fs.statSync(modulePath, { throwIfNoEntry: false });
   }
 
+  function deleteCache(modulePath, force = false) {
+    if (!process.env.IMA_CLI_WATCH) {
+      return;
+    }
+
+    const stats = getFileStats(modulePath) ?? { mtimeMs: -1 };
+
+    if (!moduleCache.has(modulePath)) {
+      moduleCache.set(modulePath, stats);
+    }
+
+    if (!modulePath) {
+      return;
+    }
+
+    if (force || stats.mtimeMs > moduleCache.get(modulePath).mtimeMs) {
+      moduleCache.set(modulePath, stats);
+
+      searchCache(modulePath, function (mod) {
+        delete require.cache[mod.id];
+      });
+    }
+  }
+
   function requireUncached(module, options = {}) {
     const modulePath = path.resolve(module);
 
-    if (process.env.IMA_CLI_WATCH) {
-      const stats = getFileStats(modulePath) ?? { mtimeMs: -1 };
-      if (!moduleCache.has(modulePath)) {
-        moduleCache.set(modulePath, stats);
-      }
-
-      if (!modulePath) {
-        return;
-      }
-
-      if (stats.mtimeMs > moduleCache.get(modulePath).mtimeMs) {
-        moduleCache.set(modulePath, stats);
-
-        searchCache(modulePath, function (mod) {
-          delete require.cache[mod.id];
-        });
-      }
-    }
-
     if (options.optional && modulePath && !getFileStats(modulePath)) {
       return;
+    }
+
+    deleteCache(modulePath);
+
+    // Force delete cache on all dependencies
+    if (Array.isArray(options.dependencies)) {
+      options.dependencies.forEach(dep => deleteCache(path.resolve(dep), true));
     }
 
     return require(modulePath);

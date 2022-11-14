@@ -29,7 +29,7 @@ if (module.hot) {
   module.hot.accept((error, { module }) => {
     typeof window !== 'undefined' &&
       window.__IMA_HMR?.emitter?.emit('error', {
-        error: { ...error, params: module },
+        error,
       });
     console.error('Failed to hot replace module:', module);
   });

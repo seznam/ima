@@ -135,8 +135,12 @@ export async function processUpdate({
 
     // TODO needs better solution
     // Kill ima app before hot reloading
-    if (updatedModules.some(file => file.toString().endsWith('.js'))) {
-      console.log('destroying');
+    if (
+      updatedModules.some(
+        filePath => typeof filePath === 'string' && /(js|ts)$/.test(filePath)
+      )
+    ) {
+      logger.info('Destroying IMA app');
       emitter.emit('destroy');
     }
 
