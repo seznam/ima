@@ -11,7 +11,7 @@ import {
   isUpToDate,
   parseEventSourceError,
   processUpdate,
-} from '@/utils';
+} from './utils';
 
 if (!module.hot) {
   throw new Error(
@@ -19,7 +19,8 @@ if (!module.hot) {
   );
 }
 
-const { emitter, eventSource, indicator, options, logger } = init();
+const { emitter, eventSource, indicator, options, logger } =
+  init(__resourceQuery);
 
 eventSource.addListener(options.name, data => {
   let applyUpdate = true;

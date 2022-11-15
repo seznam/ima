@@ -22,8 +22,8 @@ export interface HMROptions {
 /**
  * Parses options provided through webpack import query with defaults.
  */
-export function parseOptions(): HMROptions {
-  const queryEntries = Object.fromEntries(new URLSearchParams(__resourceQuery));
+export function parseOptions(resourceQuery: string): HMROptions {
+  const queryEntries = Object.fromEntries(new URLSearchParams(resourceQuery));
 
   if (!queryEntries['name']) {
     throw Error(
@@ -48,8 +48,8 @@ export function parseOptions(): HMROptions {
 /**
  * Initializes EventSource, Indicator icon, ErrorOverlay and it's emitter.
  */
-export function init() {
-  const options = parseOptions();
+export function init(resourceQuery: string) {
+  const options = parseOptions(resourceQuery);
   const logger = new Logger(options);
   const overlayScriptEl = document.createElement('script');
 
@@ -203,7 +203,7 @@ export async function processUpdate({
     if (!renewedModules || renewedModules.length === 0) {
       logger.info(false, 'Nothing hot updated');
     } else if (!options.noInfo) {
-      logger.group('update', 'Updated modules:');
+      logger.group(false, 'Updated modules:');
       renewedModules.forEach(module => console.log(module));
       console.groupEnd();
     }

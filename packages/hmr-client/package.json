@@ -17,12 +17,11 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "main": "./dist/fastRefreshClient.js",
-  "module": "./dist/fastRefreshClient.mjs",
+  "main": "./dist/client.js",
   "types": "./dist/types.d.ts",
   "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch",
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "publishConfig": {

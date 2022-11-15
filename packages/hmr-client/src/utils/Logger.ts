@@ -1,6 +1,6 @@
 import { HMROptions } from './utils';
 
-export type Icon = 'check' | 'cross' | 'warn' | 'update' | false;
+export type Icon = 'check' | 'cross' | 'warn' | false;
 
 export const INFO_LEVELS = ['info', 'log'];
 
@@ -20,11 +20,11 @@ export class Logger {
     const iconStr = this.#getIcon(icon);
     const logArgs = [
       '%cHMR' + (iconStr ? `%c${iconStr.char}` : ''),
-      `background: #f03e3e; color: black; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 80%; border-radius: 3px; ${
+      `background: #f03e3e; color: white; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 80%; border-radius: 3px; ${
         iconStr ? 'margin-right: 4px' : ''
       }`,
       iconStr &&
-        `background: ${iconStr.color}; color: black; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 80%; border-radius: 3px;`,
+        `background: ${iconStr.color}; color: white; padding: 2px 4px; margin: 2px 0; font-weight: bold; font-size: 80%; border-radius: 3px;`,
       ...data,
     ].filter(Boolean);
 
@@ -42,9 +42,6 @@ export class Logger {
 
       case 'warn':
         return { char: '▲', color: '#eab308' };
-
-      case 'update':
-        return { char: '●', color: '#7c3aed' };
 
       default:
         return null;

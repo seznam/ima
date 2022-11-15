@@ -83,6 +83,7 @@ export class EventSourceWrapper {
       }
     } catch (error) {
       this.#logger.error(
+        false,
         'Unable to parse event source data',
         event.data,
         error

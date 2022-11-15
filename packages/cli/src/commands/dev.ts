@@ -174,6 +174,16 @@ export const builder: CommandBuilder = {
     type: 'boolean',
     default: false,
   },
+  writeToDisk: {
+    desc: 'Write static files to disk, instead of serving it from memory',
+    type: 'boolean',
+    default: false,
+  },
+  reactRefresh: {
+    desc: 'Enable react fast refresh for React components',
+    type: 'boolean',
+    default: true,
+  },
   port: {
     desc: 'Dev server port (overrides ima.config.js settings)',
     type: 'number',
@@ -185,16 +195,6 @@ export const builder: CommandBuilder = {
   publicUrl: {
     desc: 'Dev server publicUrl (overrides ima.config.js settings)',
     type: 'string',
-  },
-  writeToDisk: {
-    desc: 'Write static files to disk, instead of serving it from memory',
-    type: 'boolean',
-    default: false,
-  },
-  reactRefresh: {
-    desc: 'Enable react fast refresh for React components',
-    type: 'boolean',
-    default: true,
   },
   ...resolveCliPluginArgs(CMD),
 };

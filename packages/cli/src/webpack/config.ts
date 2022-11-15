@@ -229,7 +229,7 @@ export default async (
             [name]: [
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/client?${new URLSearchParams({
+                `@ima/hmr-client?${new URLSearchParams({
                   name,
                   noInfo: 'false',
                   reload: 'true',
@@ -631,7 +631,7 @@ export default async (
               ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: require.resolve('@ima/hmr-client'),
+                  entry: false,
                   sockIntegration: 'whm',
                 },
               }),
