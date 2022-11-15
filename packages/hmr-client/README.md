@@ -8,18 +8,19 @@
 
 ---
 
-Initializes buch of helpers classes on client window under `window.__IMA_HMR` object, which servers as a communication interface between `@ima/error-overlay`, `webpack-hot-middleware` and the application. It also manages the HMR indicator rendering (little IMA icon in bottom right corner).
+Apart from connecting to `webpack-hot-middleware` SSE on the dev server, it initializes `window.__IMA_HMR` object that serves as an API  for proper handling of HMR on IMA.js applications and controling `@ima/error-overlay`. It also manages rendering of the HMR Indicator icon in the lower right corner of the screen.
 
 ## Description
 
-The companion script is injected at the top of the client entry point in the webpack configuration, which then initializes the event emitter on `window.__IMA_HMR` upon application load. This client code directly replaces the ones used in `webpack-hot-middleware`, we are still using `webpack-hot-middleware` on the server, but with our custom client script.
+The companion script is injected at the top of the entry points in the webpack configuration, which then initializes the event emitter, event source and indicator singletons on the `window.__IMA_HMR` upon application load (see interface description below).
 
-Additionally the package provides custom module for `@pmmmwh/react-refresh-webpack-plugin` (available as default entry point), that noops all the refresh-plugin callback methods in order to disable the ability of the plugin to display runtime and compile error overlays. This is because we have our own handler for these in form of `@ima/error-overlay`.
+This client code directly replaces the ones used in `webpack-hot-middleware`, however we are still using `webpack-hot-middleware` on the server-side to send compilation events using SSE EventSource.
+
+In combination with `webpack-dev-middleware` (which sends `hot*` update files to the application) and events from `webpack-hot-middleware` SSE, the client is using the webpack's [Hot Module API](https://webpack.js.org/api/hot-module-replacement/#module-api) to apply new hot updates to the client's source code. Additionally, it proxies compilation errors to error overlay and manages the HMR indicator icon in the lower right corner.
 
 ## Usage
 
-### HMR client
-The HMR client entry point is injected as additional file (*ideally at the topmost position!*) to the client entry point. You can also customize the dev server configuration through webpack query params syntax.
+Use this package as an entry point in your webpack configuration (*ideally at the topmost position on every additional entry point separately!*). You can also customize some additional configuration that is passed to the client during initialization. Only `name` is required, other options have their defaults.
 
 ```javascript
 // webpack.config.js
@@ -27,10 +28,15 @@ module.exports = {
   // ...
   entry: {
     client: [
-      `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
-        port: 3101,
+      `@ima/hmr-client?${new URLSearchParams({
+        name: 'client', // required
+        noInfo: 'false',
+        reload: 'true',
+        timeout: '3000',
+        reactRefresh: 'true',
+        port: '3101',
         hostname: 'localhost',
-        publicUrl: 'http://localhost:3101'
+        publicUrl: 'http://localhost:3101',
       }).toString()}`,
       './app/main.js',
     ]
@@ -41,39 +47,48 @@ module.exports = {
 
 These options should match the actual dev server configuration since the HMR client uses them to connect to the `webpack-hot-middleware` event source.
 
-### Fast Refresh client
-To disable existing error overlay functionality of the `@pmmmwh/react-refresh-webpack-plugin` plugin, pass the `@ima/hmr-client` entry to the `module` option during initialization.:
+## `window.__IMA_HMR` interface
 
-```javascript
-// webpack.config.js
-module.exports = {
-  // ...
-  plugins: [
-    new ReactRefreshWebpackPlugin({
-      overlay: {
-        module: '@ima/hmr-client',
-        sockIntegration: 'whm',
-      },
-    }),
-  ]
-  // ...
+```typescript
+interface Window {
+  __IMA_HMR: {
+    emitter?: HMREmitter;
+    eventSource?: EventSourceWrapper;
+    indicator?: IndicatorWrapper;
+  };
 }
 ```
 
-This intercepts the plugin error handling methods and noops them. Essentially disabling the default error overlay, since there's currently no other method to do that.
+### emitter
+
+> `HMREmitter`
+
+Simple EventEmitter-like object, used to emit messages across application, error-overlay and hmr-client. It has 2 public methods:
+
+- `on(eventName: EventName, listener: Listener): void;` - use to listen on events (`'error' | 'clear' | 'close' | 'destroy'`)
+- `emit(eventName: EventName, data?: ListenerData): void;` - use to emit events, only `'error'` event is expected to pass any data in following form `{ error: {} }`.
+  - `error` - Send error object to ErrorOverlay.
+  - `clear` - Clear all currently displayed errors in ErrorOverlay.
+  - `close` - Close ErrorOverlay externally.
+  - `destroy` - Destroy IMA.js application (destroys current instance before new one is created during HMR).
 
 
-## `window.__IMA_HMR` interface
+### eventSource
 
-The interface is fairly simple providing just 2 methods to emit and start listening to certain events.
+> `EventSourceWrapper`
 
-#### `on(eventName: EventName, listener: Listener): void;`
-#### `emit(eventName: EventName, data?: ListenerData): void;`
+Singleton wrapper around `webpack-hot-middleware` SSE EventSource. You can use `addListener` public method to add custom listeners to the SSE events.
 
-There are 3 events you can listen to/emit:
-- `error` - used to emit and listen to current runtime/compile errors. The listener data format is: `{ error?: StatsError | Error; type: 'compile' | 'runtime'; }`.
-- `clear` - called to clear existing errors and close currently visible error-overlay (usually from ima side to clear resolved runtime errors).
-- `close` - called when user closes currently visible error-overlay.
+- `addListener(name: string, listener: EventSourceListener)` - where `name` corresponds to the `name` value passed in webpack.config query params. This allows support for MultiComplier webpack instances.
+
+### indicator
+
+> `IndicatorWrapper`
+
+Use to manage HMR State Indicator icon, has 2 public methods:
+
+ - `create(state: 'invalid' | 'loading' = 'loading'): void` - Adds icon to the DOM in on of the selected visual states.
+ - `destroy(): void` - Removes Icon from the DOM.
 
 ---
 
