@@ -1,7 +1,7 @@
+import { Emitter } from '@esmj/emitter';
 import { StatsError } from 'webpack';
 
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
-import { getHMREmitter, HMREmitter } from './HMREmitter';
 import { getIndicator } from './IndicatorWrapper';
 import { Logger } from './Logger';
 
@@ -17,6 +17,15 @@ export interface HMROptions {
   hostname: string;
   publicUrl: string;
   reactRefresh: boolean;
+}
+
+function getEmitter() {
+  if (!window.__IMA_HMR?.emitter) {
+    window.__IMA_HMR = window.__IMA_HMR || {};
+    window.__IMA_HMR.emitter = new Emitter();
+  }
+
+  return window.__IMA_HMR.emitter;
 }
 
 /**
@@ -58,7 +67,7 @@ export function init(resourceQuery: string) {
     options,
     eventSource: getEventSource(options, logger),
     indicator: getIndicator(),
-    emitter: getHMREmitter(),
+    emitter: getEmitter(),
     logger,
   };
 
@@ -124,7 +133,7 @@ export async function processUpdate({
   hash: HMRMessageData['hash'];
   options: HMROptions;
   logger: Logger;
-  emitter: HMREmitter;
+  emitter: Emitter;
 }) {
   try {
     // Check for updates

@@ -1,9 +1,11 @@
-import { IndicatorWrapper, EventSourceWrapper, HMREmitter } from './utils';
+import { Emitter } from '@esmj/emitter';
+
+import { IndicatorWrapper, EventSourceWrapper } from './utils';
 
 declare global {
   interface Window {
     __IMA_HMR: {
-      emitter?: HMREmitter;
+      emitter?: Emitter;
       eventSource?: EventSourceWrapper;
       indicator?: IndicatorWrapper;
     };

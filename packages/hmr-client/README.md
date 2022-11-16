@@ -50,9 +50,11 @@ These options should match the actual dev server configuration since the HMR cli
 ## `window.__IMA_HMR` interface
 
 ```typescript
+import { Emitter } from '@esmj/emitter';
+
 interface Window {
   __IMA_HMR: {
-    emitter?: HMREmitter;
+    emitter?: Emitter;
     eventSource?: EventSourceWrapper;
     indicator?: IndicatorWrapper;
   };
@@ -61,9 +63,9 @@ interface Window {
 
 ### emitter
 
-> `HMREmitter`
+> `Emitter`
 
-Simple EventEmitter-like object, used to emit messages across application, error-overlay and hmr-client. It has 2 public methods:
+@esmj/emitter used to emit messages across application, error-overlay and hmr-client. It has 2 public methods:
 
 - `on(eventName: EventName, listener: Listener): void;` - use to listen on events (`'error' | 'clear' | 'close' | 'destroy'`)
 - `emit(eventName: EventName, data?: ListenerData): void;` - use to emit events, only `'error'` event is expected to pass any data in following form `{ error: {} }`.
