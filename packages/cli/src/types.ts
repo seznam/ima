@@ -148,6 +148,13 @@ export type ImaConfig = {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]
     publicUrl?: string; // public url used to access static files [default=localhost:3101]
+
+    /**
+     * Custom filtr for files which should be always written to disk,
+     * even if we're serving static files from memory. This is used for
+     * example to always save runner.js to disk, since it's used on server-side too.
+     */
+    writeToDiskFilter?: (filePath: string) => boolean;
   };
 
   /**

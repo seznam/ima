@@ -129,6 +129,7 @@ const dev: HandlerFn = async args => {
       watchCompiler(compiler, args, imaConfig),
       createDevServer({
         args,
+        config: imaConfig,
         compiler: compiler.compilers.find(
           ({ name }) =>
             // Run dev server only for client compiler with HMR enabled

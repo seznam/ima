@@ -2,22 +2,27 @@ import path from 'path';
 
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 
-import { ImaCliArgs } from '../types';
+import { ImaCliArgs, ImaConfig } from '../types';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
-async function createDevServer({
+const WRITE_TO_DISK_WHITELIST = /(runner\.js|favicon\.ico)$/i;
+
+export async function createDevServer({
   args,
+  config,
   compiler,
   hostname,
   port,
   rootDir,
 }: {
   args: ImaCliArgs;
+  config: ImaConfig;
   compiler: Compiler | undefined;
   hostname: string;
   port: number;
@@ -43,6 +48,7 @@ async function createDevServer({
 
         next();
       })
+      // Serve brotli version primary
       .use(
         '/__error-overlay-static',
         expressStaticGzip(staticDir, {
@@ -54,6 +60,7 @@ async function createDevServer({
           },
         })
       )
+      // Non-zipped compressed version fallback
       .use(
         '/__error-overlay-static',
         express.static(path.join(staticDir), { maxAge: '14d' })
@@ -64,7 +71,10 @@ async function createDevServer({
           publicPath: '/',
           writeToDisk: args.writeToDisk
             ? true
-            : filePath => filePath.endsWith('runner.js'),
+            : filePath =>
+                (WRITE_TO_DISK_WHITELIST.test(filePath) ||
+                  config.devServer?.writeToDiskFilter?.(filePath)) ??
+                false,
           ...(isVerbose ? undefined : { stats: 'none' }),
           serverSideRender: false,
         })
@@ -98,4 +108,13 @@ async function createDevServer({
   });
 }
 
-export { createDevServer };
+export function memStaticProxyMiddleware() {
+  if (process.env.IMA_CLI_WATCH && !process.env.IMA_CLI_WRITE_TO_DISK) {
+    return createProxyMiddleware('/', {
+      logLevel: 'silent',
+      target: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
+    });
+  }
+
+  return (req: Request, res: Response, next: NextFunction) => next();
+}

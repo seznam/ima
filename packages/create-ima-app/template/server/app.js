@@ -11,7 +11,7 @@ const cache = imaServer.cache;
 require('@ima/react-page-renderer/dist/hook/server')(imaServer);
 
 const express = require('express');
-// const favicon = require('serve-favicon');
+const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
@@ -19,7 +19,7 @@ const helmet = require('helmet');
 const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
 const expressStaticGzip = require('express-static-gzip');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { memStaticProxyMiddleware } = require('@ima/cli');
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -105,26 +105,13 @@ app
     compression({
       filter: req => req.baseUrl !== environment.$Server.staticFolder,
     })
-  );
-
-// Proxy static files to devServer where they are served from memory.
-if (process.env.IMA_CLI_WATCH && !process.env.IMA_CLI_WRITE_TO_DISK) {
-  app.use(
-    environment.$Server.staticFolder,
-    createProxyMiddleware('/', {
-      logLevel: 'silent',
-      target: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
-    })
-  );
-}
-
-// TODO what to do with favicon? write to disk the same as runner?
-app
-  // .use(
-  //   favicon(
-  //     path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
-  //   )
-  // )
+  )
+  .use(
+    favicon(
+      path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
+    )
+  )
+  .use(environment.$Server.staticFolder, memStaticProxyMiddleware())
   .use(
     environment.$Server.staticFolder,
     expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
