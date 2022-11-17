@@ -95,7 +95,7 @@ class GenerateRunnerPlugin {
     compilation.deleteAsset(runtimeAsset);
 
     const generatedRunner = this.#runnerTemplate({
-      forceLegacy,
+      forceLegacy: !!forceLegacy,
       esRuntime: esRuntimeCode
         ? this.#addSlashes(esRuntimeCode)
         : '// es.runtime not generated',

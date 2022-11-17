@@ -114,8 +114,8 @@
          */
         if (
           runner.source.esScripts &&
-          runner.testSource.esScripts.every(testScript) &&
-          !<%- forceLegacy %>
+          runner.testSource.esScripts.every(testScript)
+          <% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>
         ) {
           runner.isEsVersion = true;
           runner.scripts = runner.source.esScripts;
@@ -150,7 +150,7 @@
            * since the code can contain some legacy incompatible syntax, which would
            * break the legacy (not supported) JS interpreters.
            */
-          if (runner.isEsVersion && !<%- forceLegacy %>) {
+          if (runner.isEsVersion<% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>) {
             new Function('<%- esRuntime %>')();
           } else {
             new Function('<%- runtime %>')();
