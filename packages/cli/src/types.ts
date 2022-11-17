@@ -38,6 +38,7 @@ export interface ImaCliArgs {
   environment: 'development' | 'production' | string;
   writeToDisk?: boolean;
   reactRefresh?: boolean;
+  forceLegacy?: boolean;
 }
 
 /**

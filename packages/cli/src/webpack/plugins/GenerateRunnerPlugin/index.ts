@@ -83,7 +83,7 @@ class GenerateRunnerPlugin {
       return;
     }
 
-    const { name } = this.#options.context;
+    const { name, forceLegacy } = this.#options.context;
 
     // Save runtime code into storage
     runtimeStorage[name === 'client.es' ? 'esRuntimeCode' : 'runtimeCode'] =
@@ -95,6 +95,7 @@ class GenerateRunnerPlugin {
     compilation.deleteAsset(runtimeAsset);
 
     const generatedRunner = this.#runnerTemplate({
+      forceLegacy,
       esRuntime: esRuntimeCode
         ? this.#addSlashes(esRuntimeCode)
         : '// es.runtime not generated',

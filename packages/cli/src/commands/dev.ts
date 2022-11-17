@@ -88,6 +88,11 @@ const dev: HandlerFn = async args => {
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
 
+  // Set legacy argument to true by default when we're forcing legacy
+  if (args.forceLegacy) {
+    args.legacy = true;
+  }
+
   try {
     // Do cleanup
     await cleanup(args);
@@ -167,6 +172,11 @@ export const builder: CommandBuilder = {
   },
   legacy: {
     desc: 'Runs application in legacy mode',
+    type: 'boolean',
+    default: false,
+  },
+  forceLegacy: {
+    desc: 'Forces runner.js to execute legacy client code',
     type: 'boolean',
     default: false,
   },

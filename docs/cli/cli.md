@@ -54,6 +54,7 @@ Options:
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --open            Opens browser window after server has been started  [boolean] [default: true]
   --legacy          Runs application in legacy mode  [boolean] [default: false]
+  --forceLegacy     Forces runner.js to execute legacy client code  [boolean] [default: false]
   --forceSPA        Forces application to run in SPA mode  [boolean] [default: false]
   --writeToDisk     Write static files to disk, instead of serving it from memory  [boolean] [default: false]
   --reactRefresh    Enable react fast refresh for React components  [boolean] [default: true]
@@ -149,6 +150,12 @@ Enable/disable auto opening of app URL in the browser window on startup.
 > `boolean = false`
 
 By default the CLI only builds `es` version of JS files in development mode. Use this option to enable [additional build of non es version](./compiler-features#server-and-client-bundles).
+
+### --forceLegacy
+
+> `boolean = false`
+
+Enables `legacy` mode and forces runner.js to load legacy code even if targeted browser supports the latest client es version.
 
 ### --forceSPA
 
