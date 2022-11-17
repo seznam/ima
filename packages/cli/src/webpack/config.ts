@@ -248,6 +248,7 @@ export default async (
     output: {
       path: outputDir,
       pathinfo: isDevEnv,
+      hashFunction: 'xxhash64',
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -284,8 +285,10 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      name: `${name}-${mode}-${createCacheKey(ctx, imaConfig)}`,
+      name: `${name}-${mode}-${ctx.command}-${createCacheKey(ctx, imaConfig)}`,
       store: 'pack',
+      hashAlgorithm: '',
+      memoryCacheUnaffected: true,
       buildDependencies: {
         config: [__filename],
         defaultWebpack: ['webpack/lib/'],

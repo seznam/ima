@@ -2,7 +2,6 @@ import path from 'path';
 
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
@@ -106,15 +105,4 @@ export async function createDevServer({
         reject(error);
       });
   });
-}
-
-export function memStaticProxyMiddleware() {
-  if (process.env.IMA_CLI_WATCH && !process.env.IMA_CLI_WRITE_TO_DISK) {
-    return createProxyMiddleware('/', {
-      logLevel: 'silent',
-      target: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
-    });
-  }
-
-  return (req: Request, res: Response, next: NextFunction) => next();
 }

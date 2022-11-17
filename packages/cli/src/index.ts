@@ -8,4 +8,3 @@ export {
 } from './types';
 
 export { resolveEnvironment } from './webpack/utils';
-export { memStaticProxyMiddleware } from './dev-server/devServer';

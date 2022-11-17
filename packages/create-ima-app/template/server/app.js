@@ -2,11 +2,8 @@ const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
 const imaServer = require('@ima/server')();
-const serverApp = imaServer.serverApp;
-const urlParser = imaServer.urlParser;
-const environment = imaServer.environment;
-const logger = imaServer.logger;
-const cache = imaServer.cache;
+const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
+  imaServer;
 
 require('@ima/react-page-renderer/dist/hook/server')(imaServer);
 
@@ -19,7 +16,6 @@ const helmet = require('helmet');
 const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
 const expressStaticGzip = require('express-static-gzip');
-const { memStaticProxyMiddleware } = require('@ima/cli');
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -111,9 +107,9 @@ app
       path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
     )
   )
-  .use(environment.$Server.staticFolder, memStaticProxyMiddleware())
   .use(
     environment.$Server.staticFolder,
+    memStaticProxy,
     expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
       enableBrotli: true,
       index: false,

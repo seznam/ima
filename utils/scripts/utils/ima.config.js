@@ -1,3 +1,5 @@
+const ignorePaths = /(node_modules\/(?!@ima).*)/;
+
 /**
  * This ima config makes sure that webpack watches changes
  * in node modules @ima/* directories. This is usefull during
@@ -7,13 +9,13 @@
  */
 module.exports = {
   watchOptions: {
-    ignored: /(node_modules|build|.husky|_templates|.git)\/(?!@ima).*/,
+    ignored: ignorePaths,
   },
   webpack: async (config, ctx) => {
     if (ctx.command === 'dev') {
       config.snapshot = {
         ...config.snapshot,
-        managedPaths: [/(node_modules\/(?!@ima).*)/],
+        managedPaths: [ignorePaths],
       };
     }
 

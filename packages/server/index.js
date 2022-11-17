@@ -50,6 +50,8 @@ module.exports = function createIMAServer({
     instanceRecycler,
     serverGlobal,
   });
+  const memStaticProxy =
+    require('./lib/factory/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
 
@@ -71,6 +73,7 @@ module.exports = function createIMAServer({
     logger,
     cache,
     instanceRecycler,
+    memStaticProxy,
     emitter,
     Event,
   };

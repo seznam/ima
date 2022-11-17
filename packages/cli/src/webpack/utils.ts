@@ -147,20 +147,12 @@ function createCacheKey(
   }
 
   /**
-   * Explicitly use only the context variables which somehow change
-   * how the config is generated (since not all context values
-   * are used in config generation).
+   * Use only variables that don't change webpack config in any way
+   * but require clean cache state. Variables that change webpack config
+   * are handled by webpack itself sine it caches the config file.
    */
   hash.update(
     JSON.stringify({
-      experimentsCss: imaConfig.experiments?.css,
-      command: ctx.command,
-      forceSPA: ctx.forceSPA,
-      legacy: ctx.legacy,
-      profile: ctx.profile,
-      publicPath: ctx.publicPath,
-      rootDir: ctx.rootDir,
-      environment: ctx.environment,
       ...pluginsEnv,
     })
   );
