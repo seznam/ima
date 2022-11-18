@@ -53,8 +53,11 @@ Options:
   --publicPath      Webpack public path to specify base for all assets in the app  [string]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --open            Opens browser window after server has been started  [boolean] [default: true]
-  --legacy          Runs application in legacy (es5-compatible) mode  [boolean] [default: false]
+  --legacy          Runs application in legacy mode  [boolean] [default: false]
+  --forceLegacy     Forces runner.js to execute legacy client code  [boolean] [default: false]
   --forceSPA        Forces application to run in SPA mode  [boolean] [default: false]
+  --writeToDisk     Write static files to disk, instead of serving it from memory  [boolean] [default: false]
+  --reactRefresh    Enable react fast refresh for React components  [boolean] [default: true]
   --port            Dev server port (overrides ima.config.js settings)  [number]
   --hostname        Dev server hostname (overrides ima.config.js settings)  [string]
   --publicUrl       Dev server publicUrl (overrides ima.config.js settings)  [string]
@@ -148,6 +151,12 @@ Enable/disable auto opening of app URL in the browser window on startup.
 
 By default the CLI only builds `es` version of JS files in development mode. Use this option to enable [additional build of non es version](./compiler-features#server-and-client-bundles).
 
+### --forceLegacy
+
+> `boolean = false`
+
+Enables `legacy` mode and forces runner.js to load legacy code even if targeted browser supports the latest client es version.
+
 ### --forceSPA
 
 > `boolean = false`
@@ -161,11 +170,36 @@ Forces the application to run in SPA mode.
 Disables some optimizations to allow for better debugging while also trying to be as close to the production build as possible. Currently this option disables mangling of classes and functions, which produces more readable stack traces.
 
 
+### --writeToDisk
+
+> `boolean = false`
+
+By default the app **client static files are served from memory** in dev mode. Using this option you can force webpack to write these files and serve them from the disk.
+
+:::tip
+
+This option can be usefull in some cases where you need to take a look at the compile source code, where it's easier to browse these files locally, rather than on the static server.
+
+:::
+
+
+### --reactRefresh
+
+> `boolean = true`
+
+Disables [react fast refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin) for React components.
+
+:::tip
+
+Disable this option if you are watching and editing `node_modules` files, this may result in less performant but more stable HMR experience.
+
+:::
+
 ## Dev server options
 
 Following options are used to customize the companion dev server location (only for `dev` command). These can be useful if you have some special dev environment, where you have an issue with the default configuration.
 
-:::tip
+:::note
 
 If you provide `port` and `hostname`, you don't need to define the `publicUrl`, the CLI will create it automatically, unless the `publicUrl` is completely different than the `hostname` and `port` provided.
 

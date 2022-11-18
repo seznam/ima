@@ -5,6 +5,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IMA_CLI_WATCH?: string;
+      IMA_CLI_WRITE_TO_DISK?: string;
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
     }
@@ -35,6 +36,9 @@ export interface ImaCliArgs {
   hostname?: string;
   publicUrl?: string;
   environment: 'development' | 'production' | string;
+  writeToDisk?: boolean;
+  reactRefresh?: boolean;
+  forceLegacy?: boolean;
 }
 
 /**
@@ -145,6 +149,13 @@ export type ImaConfig = {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]
     publicUrl?: string; // public url used to access static files [default=localhost:3101]
+
+    /**
+     * Custom filtr for files which should be always written to disk,
+     * even if we're serving static files from memory. This is used for
+     * example to always save runner.js to disk, since it's used on server-side too.
+     */
+    writeToDiskFilter?: (filePath: string) => boolean;
   };
 
   /**

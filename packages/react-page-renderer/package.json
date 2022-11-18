@@ -50,7 +50,6 @@
   },
   "peerDependencies": {
     "@ima/core": "^18.0.0-rc.24",
-    "@ima/dev-utils": "^18.0.0-rc.12",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

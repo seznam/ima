@@ -114,7 +114,7 @@ export default async (
             react: {
               runtime: imaConfig.jsxRuntime ?? 'automatic',
               development: isDevEnv,
-              refresh: useHMR,
+              refresh: useHMR && ctx.reactRefresh,
               useBuiltins: true,
             },
           },
@@ -227,21 +227,14 @@ export default async (
           }
         : {
             [name]: [
-              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
-              useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
-                  name,
-                  path: `${devServerConfig.publicUrl}/__webpack_hmr`,
-                  timeout: '3000',
-                  reload: 'false',
-                  overlay: 'false',
-                  overlayWarnings: 'false',
-                  noInfo: 'true',
-                  quiet: 'true',
-                }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                `@ima/hmr-client?${new URLSearchParams({
+                  name,
+                  noInfo: 'false',
+                  reload: 'true',
+                  timeout: '3000',
+                  reactRefresh: ctx.reactRefresh ? 'true' : 'false',
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
@@ -255,6 +248,7 @@ export default async (
     output: {
       path: outputDir,
       pathinfo: isDevEnv,
+      hashFunction: 'xxhash64',
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -291,8 +285,10 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      name: `${name}-${mode}-${createCacheKey(ctx, imaConfig)}`,
+      name: `${name}-${mode}-${ctx.command}-${createCacheKey(ctx, imaConfig)}`,
       store: 'pack',
+      hashAlgorithm: '',
+      memoryCacheUnaffected: true,
       buildDependencies: {
         config: [__filename],
         defaultWebpack: ['webpack/lib/'],
@@ -635,9 +631,10 @@ export default async (
             // Following plugins enable react refresh and hmr in watch mode
             useHMR && new webpack.HotModuleReplacementPlugin(),
             useHMR &&
+              ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: require.resolve('@ima/hmr-client'),
+                  entry: false,
                   sockIntegration: 'whm',
                 },
               }),

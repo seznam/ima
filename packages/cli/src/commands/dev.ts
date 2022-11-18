@@ -78,9 +78,19 @@ function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
 const dev: HandlerFn = async args => {
   process.env.IMA_CLI_WATCH = 'true';
 
+  // Set write to disk flag, so we can disable static proxy in the application
+  if (args.writeToDisk) {
+    process.env.IMA_CLI_WRITE_TO_DISK = 'true';
+  }
+
+  // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
-    // Set force SPA flag so server can react accordingly
     process.env.IMA_CLI_FORCE_SPA = 'true';
+  }
+
+  // Set legacy argument to true by default when we're forcing legacy
+  if (args.forceLegacy) {
+    args.legacy = true;
   }
 
   try {
@@ -123,6 +133,8 @@ const dev: HandlerFn = async args => {
     await Promise.all([
       watchCompiler(compiler, args, imaConfig),
       createDevServer({
+        args,
+        config: imaConfig,
         compiler: compiler.compilers.find(
           ({ name }) =>
             // Run dev server only for client compiler with HMR enabled
@@ -163,10 +175,25 @@ export const builder: CommandBuilder = {
     type: 'boolean',
     default: false,
   },
+  forceLegacy: {
+    desc: 'Forces runner.js to execute legacy client code',
+    type: 'boolean',
+    default: false,
+  },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
     default: false,
+  },
+  writeToDisk: {
+    desc: 'Write static files to disk, instead of serving it from memory',
+    type: 'boolean',
+    default: false,
+  },
+  reactRefresh: {
+    desc: 'Enable react fast refresh for React components',
+    type: 'boolean',
+    default: true,
   },
   port: {
     desc: 'Dev server port (overrides ima.config.js settings)',

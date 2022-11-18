@@ -115,7 +115,11 @@ export default class Bootstrap {
    * @param name Plugin name.
    * @param module Plugin interface (object with init functions).
    */
-  initPlugin(name: string, module: Module) {
+  initPlugin(name: string, module?: Module) {
+    if (!module) {
+      return;
+    }
+
     this._initPluginSettings(name, module);
     this._bindPluginDependencies(name, module);
     this._initPluginServices(module);

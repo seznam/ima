@@ -114,6 +114,11 @@ module.exports = function responseUtilsFactory() {
       return response?.content;
     }
 
+    // Always reload runner script in watch mode
+    if (process.env.IMA_CLI_WATCH && fs.existsSync(runnerPath)) {
+      runner = fs.readFileSync(runnerPath, 'utf8');
+    }
+
     const { settings } = bootConfig;
     const interpolateRe = /#{([\w\d\-._$]+)}/g;
     const extendedSettings = { ...settings };

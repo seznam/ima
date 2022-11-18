@@ -222,6 +222,7 @@ The `sourceMaps` option enables source maps in the production build. Use `true` 
 
 Similarly to the [CLI options](./cli#dev-server-options), you can use the `devServer` option to override defaults for our [companion dev server](./advanced-features.md#dev-server).
 
+The only thing that's configurable through the ima.config.js **only**, is the `writeToDiskFilter` function. This allows you to force the dev server to write certain files to disk, even if you're serving them from [memory in the watch mode](./cli.md#–writetodisk).
 
 ```javascript title=./ima.config.js
 /**
@@ -232,6 +233,7 @@ module.exports = {
     port: 3101;
     hostname: 'localhost';
     publicUrl: 'http://localhost:3101';
+    writeToDiskFilter: (filePath) => false;
   };
 };
 ```

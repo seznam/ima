@@ -1,4 +1,4 @@
-class ImaHMRIndicator extends HTMLElement {
+class IndicatorWebComopnent extends HTMLElement {
   private _root: HTMLDivElement | undefined;
   private _icon: HTMLImageElement | undefined;
 
@@ -122,4 +122,4 @@ class ImaHMRIndicator extends HTMLElement {
   }
 }
 
-customElements.define('ima-hmr-indicator', ImaHMRIndicator);
+customElements.define('ima-hmr-indicator', IndicatorWebComopnent);

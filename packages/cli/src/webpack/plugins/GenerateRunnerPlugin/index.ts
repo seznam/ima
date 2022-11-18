@@ -17,7 +17,7 @@ export interface GenerateRunnerPluginOptions {
 }
 
 // Stores runtime code across multiple webpack compilers.
-let runtimeStorage: {
+const runtimeStorage: {
   runtimeCode?: string;
   esRuntimeCode?: string;
 } = {};
@@ -28,22 +28,22 @@ let runtimeStorage: {
  * with the webpack runtime execution code.
  */
 class GenerateRunnerPlugin {
-  private _pluginName: string;
-  private _options: GenerateRunnerPluginOptions;
-  private _runnerTemplate: ejs.TemplateFunction;
+  #pluginName: string;
+  #options: GenerateRunnerPluginOptions;
+  #runnerTemplate: ejs.TemplateFunction;
 
   constructor(options: GenerateRunnerPluginOptions) {
-    this._pluginName = this.constructor.name;
-    this._options = options;
+    this.#pluginName = this.constructor.name;
+    this.#options = options;
 
     // Validate options
-    validate(schema as Schema, this._options, {
-      name: this._pluginName,
+    validate(schema as Schema, this.#options, {
+      name: this.#pluginName,
       baseDataPath: 'options',
     });
 
     // Pre-compile runner ejs template
-    this._runnerTemplate = ejs.compile(
+    this.#runnerTemplate = ejs.compile(
       options.runnerTemplate ??
         fs.readFileSync(
           path.resolve(
@@ -56,10 +56,10 @@ class GenerateRunnerPlugin {
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.compilation.tap(this._pluginName, compilation => {
+    compiler.hooks.compilation.tap(this.#pluginName, compilation => {
       compilation.hooks.processAssets.tapPromise(
         {
-          name: this._pluginName,
+          name: this.#pluginName,
           stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_DERIVED,
           additionalAssets: true,
         },
@@ -83,8 +83,7 @@ class GenerateRunnerPlugin {
       return;
     }
 
-    const { disableLegacyBuild } = this._options.imaConfig;
-    const { legacy, command, name } = this._options.context;
+    const { name, forceLegacy } = this.#options.context;
 
     // Save runtime code into storage
     runtimeStorage[name === 'client.es' ? 'esRuntimeCode' : 'runtimeCode'] =
@@ -95,36 +94,28 @@ class GenerateRunnerPlugin {
     // Delete runtime asset since we inline it in the IMA runner.
     compilation.deleteAsset(runtimeAsset);
 
-    // Emit the runner only when we have all available runtime codes
-    if (
-      (disableLegacyBuild && esRuntimeCode) ||
-      (command == 'build' && esRuntimeCode && runtimeCode) ||
-      (command == 'dev' && legacy && esRuntimeCode && runtimeCode) ||
-      (command == 'dev' && !legacy && esRuntimeCode)
-    ) {
-      const generatedRunner = this._runnerTemplate({
-        esRuntime: this._addSlashes(esRuntimeCode),
-        runtime: runtimeCode
-          ? this._addSlashes(runtimeCode)
-          : '// runtime not generated',
-      });
+    const generatedRunner = this.#runnerTemplate({
+      forceLegacy: !!forceLegacy,
+      esRuntime: esRuntimeCode
+        ? this.#addSlashes(esRuntimeCode)
+        : '// es.runtime not generated',
+      runtime: runtimeCode
+        ? this.#addSlashes(runtimeCode)
+        : '// runtime not generated',
+    });
 
-      // Clean storage
-      runtimeStorage = {};
-
-      // Emit compiled ima runner with embedded runtime codes
-      return compilation.emitAsset(
-        './server/runner.js',
-        new sources.RawSource(generatedRunner)
-      );
-    }
+    // Emit compiled ima runner with embedded runtime codes
+    return compilation.emitAsset(
+      './server/runner.js',
+      new sources.RawSource(generatedRunner)
+    );
   }
 
   /**
    * Add slashes to the runtime code so it can be used
    * as a string argument in the Function constructor.
    */
-  private _addSlashes(code: string) {
+  #addSlashes(code: string) {
     return code
       .replace(/\\/g, '\\\\')
       .replace(/\t/g, '\\t')

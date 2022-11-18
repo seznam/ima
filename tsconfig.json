@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "ES2022"
-    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
@@ -16,7 +13,8 @@
     "jsx": "react-jsx",
     "typeRoots": [
       "./types",
-      "./node_modules/@types"
-    ]
+      "./node_modules/@types",
+      "./node_modules/@ima"
+    ],
   }
 }

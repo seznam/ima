@@ -19,7 +19,11 @@ module.exports = function createIMAServer({
   const requireUncached = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
-    requireUncached('./build/server/vendors.js', { optional: true });
+    requireUncached('./build/server/vendors.js', {
+      optional: true,
+      dependencies: ['./build/server/app.server.js'],
+    });
+
     return requireUncached('./build/server/app.server.js');
   }
 
@@ -46,6 +50,8 @@ module.exports = function createIMAServer({
     instanceRecycler,
     serverGlobal,
   });
+  const memStaticProxy =
+    require('./lib/factory/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
 
@@ -67,6 +73,7 @@ module.exports = function createIMAServer({
     logger,
     cache,
     instanceRecycler,
+    memStaticProxy,
     emitter,
     Event,
   };
