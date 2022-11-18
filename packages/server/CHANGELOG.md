@@ -1,5 +1,18 @@
 # Change Log
 
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- 0daa7f60: not require ima app for serving only SPA
+- 468ad70d: Fixed issue with delete require.cache caching, which could resolve in problems where app.server.js file is not reloaded when vendors change.
+  Runner is now reloaded form filesystem on every refresh in watch mode, this resolves issue where you get OLD SSR version of the application during development upon refresh.
+- 38ee2e12: Added ability to force runner to load legacy code
+- 6005049f: Added memStaticProxy middleware for mem dev serving of static files
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+  - @ima/dev-utils@18.0.0-rc.13
+
 ## 18.0.0-rc.18
 
 ### Patch Changes

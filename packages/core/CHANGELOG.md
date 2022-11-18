@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 34107bac: Removed $Dispatcher from $IMA window object
+  Fixed issue where PluginLoader kept duplicating loaded plugins in watch mode
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+
 ## 18.0.0-rc.24
 
 ### Major Changes

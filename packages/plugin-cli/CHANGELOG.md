@@ -1,5 +1,16 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+  - @ima/dev-utils@18.0.0-rc.13
+
 ## 18.0.0-rc.13
 
 ### Patch Changes

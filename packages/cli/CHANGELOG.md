@@ -1,5 +1,31 @@
 # Change Log
 
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 6005049f: Improved filesystem caching
+- ab7c573f: Added new ima.config.js option -> devServer.writeToDiskFilter
+- 468ad70d: Removed custom fastRefreshEntry point in favor of disabling the overlay completely
+  Added support for serving of in-memory static files in watch mode
+  Added new CLI args `writeToDisk` and `reactRefresh` to disable in-memory serving and react refresh
+  Replaced @gatsbyjs/webpack-hot-middleware fork with latest version of webpack-hot-middleware which now supports webpack5 officially
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- 38ee2e12: Added ability to force runner to load legacy code
+- Updated dependencies [468ad70d]
+- Updated dependencies [0daa7f60]
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+- Updated dependencies [38ee2e12]
+- Updated dependencies [468ad70d]
+- Updated dependencies [e4def7f0]
+- Updated dependencies [6005049f]
+  - @ima/dev-utils@18.0.0-rc.13
+  - @ima/hmr-client@18.0.0-rc.13
+  - @ima/server@18.0.0-rc.19
+
 ## 18.0.0-rc.21
 
 ### Patch Changes
