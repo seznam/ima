@@ -341,9 +341,9 @@ export default class StaticRoute extends AbstractRoute {
    * @return RegExp pattern.
    */
   _replaceRequiredSubParametersInPath(path: string, clearedPathExpr: string) {
-    const requiredSubparamsOthers =
+    const requiredSubparamsOthers: Array<string> =
       clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.OTHERS) || [];
-    const requiredSubparamsLast =
+    const requiredSubparamsLast: Array<string> =
       clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.LAST) || [];
 
     path = requiredSubparamsOthers.reduce((pattern, paramExpr) => {
@@ -410,8 +410,10 @@ export default class StaticRoute extends AbstractRoute {
       .replace(LOOSE_SLASHES_REGEXP, '')
       .replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
-    const requiredMatches = clearedPathExpr.match(PARAMS_REGEXP_REQUIRED) || [];
-    const optionalMatches = clearedPathExpr.match(PARAMS_REGEXP_OPT) || [];
+    const requiredMatches: Array<string> =
+      clearedPathExpr.match(PARAMS_REGEXP_REQUIRED) || [];
+    const optionalMatches: Array<string> =
+      clearedPathExpr.match(PARAMS_REGEXP_OPT) || [];
 
     const optionalSubparamsLast =
       clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.LAST) || [];
