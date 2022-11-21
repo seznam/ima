@@ -8,7 +8,7 @@ import { Module } from './Bootstrap';
  * IMA.js application parts and automatically bootstrap certain settings.
  */
 class PluginLoader {
-  protected _plugins: Record<string, { name: string; module?: Module }>;
+  protected _plugins: Record<string, { name: string; module: Module }>;
   protected _bootstrap?: Bootstrap;
   /**
    * Initializes the plugin loader.
@@ -72,7 +72,7 @@ class PluginLoader {
       this._bootstrap.initPlugin(name, module);
     }
 
-    this._plugins[name] = { name, module };
+    this._plugins[name] = { name, module: module || {} };
   }
 
   /**
