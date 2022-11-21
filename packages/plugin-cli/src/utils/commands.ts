@@ -243,30 +243,45 @@ export async function watch(args: Arguments) {
       const linkedBasePath = path.resolve(
         linkedPath,
         'node_modules',
-        pkgJson.name,
-        distBaseDir
+        pkgJson.name
       );
-
-      // Clean linked folder
-      if (fs.existsSync(linkedBasePath)) {
-        await fs.promises.rm(linkedBasePath, { recursive: true });
-      }
+      const linkedDistPath = path.join(linkedBasePath, distBaseDir);
 
       chokidar
-        .watch([path.join(cwd, distBaseDir, '/**/*')], {
-          ignoreInitial: false,
-          ignored: [
-            '**/tsconfig.tsbuildinfo/**',
-            '**/node_modules/**',
-            '**/.DS_Store/**',
-          ],
-        })
+        .watch(
+          [
+            path.join(cwd, distBaseDir, '/**/*'),
+            Array.isArray(parsedArgs?.additionalWatchPaths) &&
+              parsedArgs?.additionalWatchPaths,
+            Array.isArray(config?.additionalWatchPaths) &&
+              config?.additionalWatchPaths,
+          ].filter(Boolean) as string[],
+          {
+            ignoreInitial: false,
+            ignored: [
+              '**/tsconfig.tsbuildinfo/**',
+              '**/node_modules/**',
+              '**/.DS_Store/**',
+            ],
+          }
+        )
         .on('error', errorHandler)
         .on('all', async (eventName, filePath) => {
-          const contextPath = path.relative(outputDir, filePath);
-          const linkedOutputPath = path.join(linkedBasePath, contextPath);
+          // Handler to link additional non-dist files
+          const isAdditionalFile = !filePath.startsWith(outputDir);
+          const contextPath = path.relative(
+            isAdditionalFile ? cwd : outputDir,
+            filePath
+          );
+          const linkedOutputPath = path.join(
+            isAdditionalFile ? linkedBasePath : linkedDistPath,
+            contextPath
+          );
           const linkedOutputDir = path.dirname(linkedOutputPath);
-          const outputContextPath = `./${path.join(distBaseDir, contextPath)}`;
+          const outputContextPath = `./${path.join(
+            isAdditionalFile ? '' : distBaseDir,
+            contextPath
+          )}`;
 
           const elapsed = time();
 

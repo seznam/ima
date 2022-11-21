@@ -49,6 +49,11 @@ yargs
     choices: ['classic', 'automatic'],
     default: 'classic',
   })
+  .option('additionalWatchPaths', {
+    alias: 'w',
+    desc: 'Array of additional watch paths to use when linking package.',
+    type: 'array',
+  })
   .command('build', 'Build ima plugin at current directory', {}, build)
   .command('dev', 'Watch ima plugin at current directory', {}, watch)
   .command(

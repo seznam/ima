@@ -50,6 +50,7 @@ export interface ImaPluginConfig {
   exclude?: string[];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
+  additionalWatchPaths?: string[];
 }
 
 export type Plugin = (context: Context) => void | Promise<void>;
@@ -85,4 +86,12 @@ export interface Args {
   clientServerConfig: boolean;
   nodeConfig: boolean;
   path?: string;
+
+  /**
+   * Used to define additional anypath paths, that are copied
+   * while using link command to the destination directory.
+   * This is useful if we want to watch additional files, which
+   * are not in the inputDir.
+   */
+  additionalWatchPaths?: string[];
 }

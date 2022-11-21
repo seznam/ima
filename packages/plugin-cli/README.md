@@ -36,6 +36,9 @@ The plugin works **without the need to provide custom ima-plugin.config.js**. Th
 ### jsxRuntime
 You can override used React jsxRuntime to `classic` or newer `automatic` using `jsxRuntime` config option, or `-j=automatic` or `--jsxRuntime=classic` CLI argument.
 
+### additionalWatchPaths
+Optional array type option, which can be used to add additional watch paths to link command. This is usefull if you want to watch and copy additional files outside of the `inputDir`.
+
 ### Custom `ima-plugin.config.js`
 You can always provide custom ima-plugin.config.js where you can either extend one of the provided default configurations or create completely new one:
 
@@ -87,6 +90,12 @@ module.exports = {
     '**/.DS_Store/**',
     'tsconfig.tsbuildinfo',
   ],
+  /**
+   * Optional, this adds additional glob paths to link watcher for files
+   * which are also watched for changes and copied to the linked directory.
+   * (Works only with `link` command).
+   */
+  additionalWatchPaths: ['./transform/**/*', './polyfill/**/*'],
 };
 ```
 
