@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.23
+
+### Patch Changes
+
+- 05d36962: Added support for custom publicPath for memStaticProxy
+- Updated dependencies [05d36962]
+  - @ima/server@18.0.0-rc.20
+
 ## 18.0.0-rc.22
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- 05d36962: Added support for custom publicPath for memStaticProxy
+
 ## 18.0.0-rc.19
 
 ### Patch Changes
