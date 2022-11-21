@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- 768842a4: Fixed plugin module defaults in pluginLoader
+
 ## 18.0.0-rc.25
 
 ### Patch Changes
