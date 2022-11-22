@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- d260949b: Added option to watch additional files during link command
+
 ## 18.0.0-rc.14
 
 ### Patch Changes
