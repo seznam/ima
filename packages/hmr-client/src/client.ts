@@ -1,11 +1,3 @@
-/**
- * TODO
- *
- * - Changeset
- * - Update hmr client readme with general HMR info
- * - Update documentation with new CLI arguments
- */
-
 import {
   init,
   isUpToDate,
