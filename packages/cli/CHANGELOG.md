@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.24
+
+### Patch Changes
+
+- 8f600544: Reverted changes to GenerateRuntime plugin
+
 ## 18.0.0-rc.23
 
 ### Patch Changes
