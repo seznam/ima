@@ -83,7 +83,8 @@ class GenerateRunnerPlugin {
       return;
     }
 
-    const { name, forceLegacy } = this.#options.context;
+    const { name, forceLegacy, command, legacy } = this.#options.context;
+    const { disableLegacyBuild } = this.#options.imaConfig;
 
     // Save runtime code into storage
     runtimeStorage[name === 'client.es' ? 'esRuntimeCode' : 'runtimeCode'] =
@@ -94,21 +95,28 @@ class GenerateRunnerPlugin {
     // Delete runtime asset since we inline it in the IMA runner.
     compilation.deleteAsset(runtimeAsset);
 
-    const generatedRunner = this.#runnerTemplate({
-      forceLegacy: !!forceLegacy,
-      esRuntime: esRuntimeCode
-        ? this.#addSlashes(esRuntimeCode)
-        : '// es.runtime not generated',
-      runtime: runtimeCode
-        ? this.#addSlashes(runtimeCode)
-        : '// runtime not generated',
-    });
+    if (
+      (disableLegacyBuild && esRuntimeCode) ||
+      (command == 'build' && esRuntimeCode && runtimeCode) ||
+      (command == 'dev' && legacy && esRuntimeCode && runtimeCode) ||
+      (command == 'dev' && !legacy && esRuntimeCode)
+    ) {
+      const generatedRunner = this.#runnerTemplate({
+        forceLegacy: !!forceLegacy,
+        esRuntime: esRuntimeCode
+          ? this.#addSlashes(esRuntimeCode)
+          : '// es.runtime not generated',
+        runtime: runtimeCode
+          ? this.#addSlashes(runtimeCode)
+          : '// runtime not generated',
+      });
 
-    // Emit compiled ima runner with embedded runtime codes
-    return compilation.emitAsset(
-      './server/runner.js',
-      new sources.RawSource(generatedRunner)
-    );
+      // Emit compiled ima runner with embedded runtime codes
+      return compilation.emitAsset(
+        './server/runner.js',
+        new sources.RawSource(generatedRunner)
+      );
+    }
   }
 
   /**
