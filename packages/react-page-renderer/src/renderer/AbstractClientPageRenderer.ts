@@ -1,7 +1,6 @@
 /* @if server **
 export default class AbstractClientPageRenderer {};
 /* @else */
-import type { UnknownParameters, UnknownPromiseParameters } from '@ima/core';
 import {
   Controller,
   ControllerDecorator,
@@ -11,7 +10,11 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
+import type {
+  UnknownParameters,
+  UnknownPromiseParameters,
+  RouteOptions,
+} from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 

@@ -29,6 +29,11 @@ enum Events {
    * `{message: string}`.
    */
   ERROR = '$IMA.$PageRenderer.error',
+
+  /**
+   * Fired when problem occurs during hydratation.
+   */
+  HYDRATE_ERROR = '$IMA.$PageRenderer.hydrateError',
 }
 
 export default Events;

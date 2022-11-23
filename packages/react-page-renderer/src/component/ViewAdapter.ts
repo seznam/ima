@@ -1,9 +1,16 @@
 import type { UnknownParameters } from '@ima/core';
 import memoizeOne from 'memoize-one';
-import { Component, ComponentClass, ComponentType, createElement } from 'react';
+import {
+  Component,
+  ComponentClass,
+  ComponentType,
+  createElement,
+  StrictMode,
+} from 'react';
 
 import PageContext from '../PageContext';
 import { Utils } from '../types';
+import ErrorBoundary from './ErrorBoundary';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -105,20 +112,29 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
    * @inheritDoc
    */
   render() {
-    return createElement(
-      PageContext.Provider,
-      { value: this._getContextValue(this.props, this.state) },
+    const viewElement = createElement(
+      StrictMode,
+      null,
       createElement(
-        this._managedRootView as ComponentClass,
-        Object.assign({}, this.state, {
-          pageView: this.props.pageView,
-          ref: () => {
-            if (this.props.refCallback) {
-              this.props.refCallback();
-            }
-          },
-        })
+        PageContext.Provider,
+        { value: this._getContextValue(this.props, this.state) },
+        createElement(
+          this._managedRootView as ComponentClass,
+          Object.assign({}, this.state, {
+            pageView: this.props.pageView,
+            ref: () => {
+              if (this.props.refCallback) {
+                this.props.refCallback();
+              }
+            },
+          })
+        )
       )
     );
+
+    // Wrap view with ErrorBoundary in $Debug env
+    return $Debug
+      ? createElement(ErrorBoundary, null, viewElement)
+      : viewElement;
   }
 }
