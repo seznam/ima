@@ -1,6 +1,5 @@
 import { ClassAttributes, Component, createElement } from 'react';
 
-import ErrorBoundary from './ErrorBoundary';
 import { ViewAdapterProps } from './ViewAdapter';
 
 /**
@@ -26,14 +25,9 @@ export default class BlankManagedRootView extends Component<ViewAdapterProps> {
       return null;
     }
 
-    const pageViewElement = createElement(
+    return createElement(
       pageView,
       restProps as ClassAttributes<ViewAdapterProps>
     );
-
-    // Wrap view with ErrorBoundary in $Debug env
-    return $Debug
-      ? createElement(ErrorBoundary, null, pageViewElement)
-      : pageViewElement;
   }
 }

@@ -3,8 +3,8 @@ import type {
   UnknownParameters,
   UnknownPromiseParameters,
   PageData as BasePageData,
+  RouteOptions,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
 import * as react from 'react';

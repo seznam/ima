@@ -1,9 +1,12 @@
 /* @if client **
 export default class ServerPageRenderer {};
 /* @else */
-import type { UnknownParameters, UnknownPromiseParameters } from '@ima/core';
+import type {
+  UnknownParameters,
+  UnknownPromiseParameters,
+  RouteOptions,
+} from '@ima/core';
 import { ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
