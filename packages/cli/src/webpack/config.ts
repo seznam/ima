@@ -56,7 +56,6 @@ export default async (
   const appDir = path.join(rootDir, 'app');
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
-  const mode = isDevEnv ? 'development' : 'production';
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
@@ -113,7 +112,6 @@ export default async (
           transform: {
             react: {
               runtime: imaConfig.jsxRuntime ?? 'automatic',
-              development: ctx.environment !== 'production',
               refresh: useHMR && ctx.reactRefresh,
               useBuiltins: true,
             },
@@ -216,7 +214,7 @@ export default async (
       : isEsVersion
       ? ['web', 'es2022']
       : ['web', 'es2018'],
-    mode,
+    mode: ctx.environment === 'production' ? 'production' : 'development',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
       : devtool,
@@ -285,7 +283,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      name: `${name}-${mode}-${ctx.command}-${createCacheKey(ctx, imaConfig)}`,
+      name: `${name}-${createCacheKey(ctx, imaConfig)}`,
       store: 'pack',
       hashAlgorithm: '',
       memoryCacheUnaffected: true,
