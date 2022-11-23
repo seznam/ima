@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.27
+
+### Patch Changes
+
+- 87adef2d: revert: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+
 ## 18.0.0-rc.26
 
 ### Patch Changes
