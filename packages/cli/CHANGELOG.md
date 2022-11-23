@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- bf0d327c: Fixed react versions usage
+
 ## 18.0.0-rc.25
 
 ### Patch Changes

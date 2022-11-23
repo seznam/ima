@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.23
+
+### Patch Changes
+
+- eb8a6ba7: Reverted strict mode
+
 ## 18.0.0-rc.22
 
 ### Patch Changes
