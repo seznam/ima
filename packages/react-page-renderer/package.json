@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "18.0.0-rc.21",
+  "version": "18.0.0-rc.22",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -50,7 +50,7 @@
     "to-mock": "^1.6.2"
   },
   "peerDependencies": {
-    "@ima/core": "^18.0.0-rc.25",
+    "@ima/core": "^18.0.0-rc.28",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

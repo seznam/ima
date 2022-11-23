@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 38012f0a: Added hydratation error callback
+- Updated dependencies [38012f0a]
+  - @ima/core@18.0.0-rc.28
+
 ## 18.0.0-rc.21
 
 ### Patch Changes

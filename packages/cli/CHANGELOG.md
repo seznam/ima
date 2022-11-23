@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 38012f0a: Fixed error with react version mismatch in different environments
+
 ## 18.0.0-rc.24
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.28
+
+### Patch Changes
+
+- 38012f0a: Added hydratation error callback
+
 ## 18.0.0-rc.27
 
 ### Patch Changes
