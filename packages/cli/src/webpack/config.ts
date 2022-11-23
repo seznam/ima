@@ -113,7 +113,7 @@ export default async (
           transform: {
             react: {
               runtime: imaConfig.jsxRuntime ?? 'automatic',
-              development: ctx.environment === 'production',
+              development: ctx.environment !== 'production',
               refresh: useHMR && ctx.reactRefresh,
               useBuiltins: true,
             },
