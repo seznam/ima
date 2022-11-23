@@ -1,12 +1,6 @@
 import type { UnknownParameters } from '@ima/core';
 import memoizeOne from 'memoize-one';
-import {
-  Component,
-  ComponentClass,
-  ComponentType,
-  createElement,
-  StrictMode,
-} from 'react';
+import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
 import PageContext from '../PageContext';
 import { Utils } from '../types';
@@ -113,22 +107,18 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
    */
   render() {
     const viewElement = createElement(
-      StrictMode,
-      null,
+      PageContext.Provider,
+      { value: this._getContextValue(this.props, this.state) },
       createElement(
-        PageContext.Provider,
-        { value: this._getContextValue(this.props, this.state) },
-        createElement(
-          this._managedRootView as ComponentClass,
-          Object.assign({}, this.state, {
-            pageView: this.props.pageView,
-            ref: () => {
-              if (this.props.refCallback) {
-                this.props.refCallback();
-              }
-            },
-          })
-        )
+        this._managedRootView as ComponentClass,
+        Object.assign({}, this.state, {
+          pageView: this.props.pageView,
+          ref: () => {
+            if (this.props.refCallback) {
+              this.props.refCallback();
+            }
+          },
+        })
       )
     );
 
