@@ -662,7 +662,6 @@ export default async (
 
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
-      debug: /webpack\.cache/,
       colors: true,
       appendOnly: true,
       level: ctx.verbose ? 'log' : 'error',
