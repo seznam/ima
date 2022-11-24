@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.21
+
+### Patch Changes
+
+- 4e9d899c: Added args to control lazy init of server app factory in dev mode
+
 ## 18.0.0-rc.20
 
 ### Patch Changes

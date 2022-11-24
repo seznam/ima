@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- 3e863bdf: Added support for include/exclude functions
+  Plugin doesn't ignore _Suite_ files during build
+
 ## 18.0.0-rc.15
 
 ### Patch Changes

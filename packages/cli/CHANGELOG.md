@@ -1,5 +1,14 @@
 # Change Log
 
+## 18.0.0-rc.27
+
+### Patch Changes
+
+- 3e863bdf: Fixed errors with filesystem cache
+- 4e9d899c: Added args to control lazy init of server app factory in dev mode
+- Updated dependencies [4e9d899c]
+  - @ima/server@18.0.0-rc.21
+
 ## 18.0.0-rc.26
 
 ### Patch Changes
