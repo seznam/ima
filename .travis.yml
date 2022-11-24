@@ -16,6 +16,11 @@ jobs:
       - npm run test:size
       - npm run benchmark
       # - npm audit || echo \"audit found some vulnerabilities.\"
+      # Build doc only in next and master to improve CI times
+      - |
+        if [ $TRAVIS_BRANCH == "master" || $TRAVIS_BRANCH == "next" ]; then
+          npm run build:doc
+        fi
     - if: branch =~ /^(master|next)$/
       stage: "deploy"
       script:
