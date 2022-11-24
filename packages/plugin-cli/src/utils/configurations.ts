@@ -1,7 +1,14 @@
+import anymatch from 'anymatch';
+
 import { typescriptDeclarationsPlugin } from '../plugins/typescriptDeclarationsPlugin';
 import { ImaPluginConfig } from '../types';
 
-const jsRe = /\.(jsx?|tsx?)/i;
+function jsSourceTest(filePath: string) {
+  const jsRe = /\.(jsx?|tsx?)$/i;
+  const excludeRe = /__tests__/;
+
+  return jsRe.test(filePath) && !excludeRe.test(filePath);
+}
 
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
@@ -14,20 +21,29 @@ export const defaultConfig: ImaPluginConfig = {
     {
       dir: './dist/cjs',
       format: 'commonjs',
-      include: jsRe,
+      include: jsSourceTest,
     },
   ],
   plugins: [
     typescriptDeclarationsPlugin({ additionalArgs: ['--skipLibCheck'] }),
   ],
-  exclude: [
-    '**/__tests__/**',
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/typings/**',
-    '**/.DS_Store/**',
-    'tsconfig.tsbuildinfo',
-  ],
+  exclude: (filePath: string) => {
+    // Include suite files
+    if (filePath.includes('__tests__') && !filePath.endsWith('__tests__')) {
+      return !anymatch(['**/*Suite*'], filePath);
+    }
+
+    return anymatch(
+      [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/typings/**',
+        '**/.DS_Store/**',
+        'tsconfig.tsbuildinfo',
+      ],
+      filePath
+    );
+  },
 };
 
 export const clientServerConfig: ImaPluginConfig = {
@@ -42,12 +58,12 @@ export const clientServerConfig: ImaPluginConfig = {
       dir: './dist/esm/server',
       format: 'es6',
       bundle: 'server',
-      include: jsRe,
+      include: jsSourceTest,
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
-      include: jsRe,
+      include: jsSourceTest,
     },
   ],
 };

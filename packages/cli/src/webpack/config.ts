@@ -56,6 +56,7 @@ export default async (
   const appDir = path.join(rootDir, 'app');
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
+  const mode = ctx.environment === 'production' ? 'production' : 'development';
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
@@ -214,7 +215,7 @@ export default async (
       : isEsVersion
       ? ['web', 'es2022']
       : ['web', 'es2018'],
-    mode: ctx.environment === 'production' ? 'production' : 'development',
+    mode,
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
       : devtool,
@@ -283,16 +284,20 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      name: `${name}-${createCacheKey(ctx, imaConfig)}`,
+      name: `${name}-${ctx.command}-${mode}`,
+      version: createCacheKey(ctx, imaConfig, {
+        ...devServerConfig,
+        $Debug: isDebug,
+        coreJsVersion: 'core-js',
+        devtool,
+      }),
       store: 'pack',
-      hashAlgorithm: '',
+      hashAlgorithm: 'xxhash64',
       memoryCacheUnaffected: true,
       buildDependencies: {
-        config: [__filename],
-        defaultWebpack: ['webpack/lib/'],
-        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
-          fs.existsSync(f)
-        ),
+        imaCli: ['@ima/cli/dist', '@ima/dev-utils/dist'],
+        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)],
+        defaultConfig: [__filename],
       },
     },
     optimization: {
@@ -661,7 +666,7 @@ export default async (
     infrastructureLogging: {
       colors: true,
       appendOnly: true,
-      level: ctx.verbose ? 'log' : 'none',
+      level: ctx.verbose ? 'log' : 'error',
     },
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)

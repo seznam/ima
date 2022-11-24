@@ -1,4 +1,5 @@
 import { JscTarget, ModuleConfig, ReactConfig } from '@swc/core';
+import { WatchOptions } from 'chokidar';
 
 export type Transformer = ({
   source,
@@ -40,14 +41,14 @@ export interface ImaPluginOutputConfig {
    * files inside the inputDir (except the ones excluded using global
    * exclude option).
    */
-  include?: RegExp;
+  include?: RegExp | ((filePath: string) => boolean);
 }
 
 export interface ImaPluginConfig {
   inputDir: string;
   output: ImaPluginOutputConfig[];
   target: JscTarget;
-  exclude?: string[];
+  exclude?: WatchOptions['ignored'];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
   additionalWatchPaths?: string[];
