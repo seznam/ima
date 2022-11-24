@@ -13,7 +13,6 @@ export interface PreprocessLoaderOptions {
  */
 const PreprocessLoader: LoaderDefinitionFunction<PreprocessLoaderOptions> =
   function (source) {
-    this.cacheable(true);
     const { context } = this.getOptions();
 
     return preprocess(source, context, 'js');

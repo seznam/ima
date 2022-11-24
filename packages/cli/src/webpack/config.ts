@@ -57,6 +57,7 @@ export default async (
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
   const mode = ctx.environment === 'production' ? 'production' : 'development';
+  const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
@@ -189,6 +190,9 @@ export default async (
           webpackImporter: false,
           sourceMap: useSourceMaps,
           implementation: require('less'),
+          additionalData: fs.existsSync(lessGlobalsPath)
+            ? `@import "${lessGlobalsPath}";\n\n`
+            : '',
           lessOptions: {
             plugins: [lessPluginGlob],
             paths: [
@@ -196,12 +200,6 @@ export default async (
               path.resolve(rootDir, 'node_modules'),
             ],
           },
-        },
-      },
-      useLessLoader && {
-        loader: 'extend-less-loader',
-        options: {
-          globalsPath: path.join(rootDir, 'app/less/globals.less'),
         },
       },
     ].filter(Boolean) as RuleSetUseItem[];
@@ -295,7 +293,7 @@ export default async (
       hashAlgorithm: 'xxhash64',
       memoryCacheUnaffected: true,
       buildDependencies: {
-        imaCli: ['@ima/cli/dist', '@ima/dev-utils/dist'],
+        imaCli: [require.resolve('@ima/cli')],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)],
         defaultConfig: [__filename],
       },
@@ -664,6 +662,7 @@ export default async (
 
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
+      debug: /webpack\.cache/,
       colors: true,
       appendOnly: true,
       level: ctx.verbose ? 'log' : 'error',

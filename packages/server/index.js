@@ -63,8 +63,8 @@ module.exports = function createIMAServer({
 
   serverApp.useIMADefaultHook();
 
-  // TODO IMA@18 prepare settings for lazy start
-  !environment.$Debug && appFactory();
+  // Lazy init app factory
+  process.env.IMA_CLI_LAZY_SERVER !== 'true' && appFactory();
 
   return {
     environment,
