@@ -128,7 +128,8 @@ export default message;
  */
 function createCacheKey(
   ctx: ImaConfigurationContext,
-  imaConfig: ImaConfig
+  imaConfig: ImaConfig,
+  additionalData = {}
 ): string {
   const hash = createHash('md5');
 
@@ -153,6 +154,16 @@ function createCacheKey(
    */
   hash.update(
     JSON.stringify({
+      command: ctx.command,
+      legacy: ctx.legacy,
+      forceLegacy: ctx.forceLegacy,
+      profile: ctx.profile,
+      publicPath: ctx.publicPath,
+      rootDir: ctx.rootDir,
+      environment: ctx.environment,
+      reactRefresh: ctx.reactRefresh,
+      verbose: ctx.verbose,
+      ...additionalData,
       ...pluginsEnv,
     })
   );

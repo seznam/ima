@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger, time, printTime } from '@ima/dev-utils/dist/logger';
+import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
 import globby from 'globby';
@@ -113,10 +114,19 @@ export async function build(args: Arguments) {
       await cleanOutput(config, cwd);
 
       // Get file paths at input directory
-      const files = await globby(path.join(inputDir, './**/*'), {
-        ignore: config.exclude,
+      let files = await globby(path.join(inputDir, './**/*'), {
         cwd,
       });
+
+      // Filter files using exclude settings
+      if (config?.exclude) {
+        const matcher =
+          typeof config.exclude === 'function'
+            ? config.exclude
+            : anymatch(config.exclude);
+
+        files = files.filter(filePath => !matcher(filePath));
+      }
 
       const context: Context = {
         command: 'build',
@@ -204,17 +214,8 @@ export async function watch(args: Arguments) {
             );
             break;
 
-          case 'addDir':
-            await processOutput(
-              config,
-              async outputPath => {
-                await fs.promises.mkdir(path.join(outputPath, contextPath), {
-                  recursive: true,
-                });
-              },
-              cwd
-            );
-            break;
+          default:
+            return;
         }
 
         // Prevents duplicate logging in `link` mode
@@ -300,9 +301,8 @@ export async function watch(args: Arguments) {
               await fs.promises.rm(linkedOutputPath, { recursive: true });
               break;
 
-            case 'addDir':
-              await fs.promises.mkdir(linkedOutputPath, { recursive: true });
-              break;
+            default:
+              return;
           }
 
           // Print info to output

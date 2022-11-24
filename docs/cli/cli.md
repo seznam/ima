@@ -57,7 +57,8 @@ Options:
   --forceLegacy     Forces runner.js to execute legacy client code  [boolean] [default: false]
   --forceSPA        Forces application to run in SPA mode  [boolean] [default: false]
   --writeToDisk     Write static files to disk, instead of serving it from memory  [boolean] [default: false]
-  --reactRefresh    Enable react fast refresh for React components  [boolean] [default: true]
+  --reactRefresh    Enable/disable react fast refresh for React components [boolean] [default: true]
+  --lazyServer      Enable/disable lazy init of server app factory [boolean] [default: true]
   --port            Dev server port (overrides ima.config.js settings)  [number]
   --hostname        Dev server hostname (overrides ima.config.js settings)  [string]
   --publicUrl       Dev server publicUrl (overrides ima.config.js settings)  [string]
@@ -187,13 +188,19 @@ This option can be usefull in some cases where you need to take a look at the co
 
 > `boolean = true`
 
-Disables [react fast refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin) for React components.
+Disable/enable [react fast refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin) for React components.
 
 :::tip
 
 Disable this option if you are watching and editing `node_modules` files, this may result in less performant but more stable HMR experience.
 
 :::
+
+### --lazyServer
+
+> `boolean = true`
+
+Disable/enable lazy init of server app factory.
 
 ## Dev server options
 

@@ -88,6 +88,11 @@ const dev: HandlerFn = async args => {
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
 
+  // Set lazy server flag according to CLI args
+  if (args.lazyServer) {
+    process.env.IMA_CLI_LAZY_SERVER = 'true';
+  }
+
   // Set legacy argument to true by default when we're forcing legacy
   if (args.forceLegacy) {
     args.legacy = true;
@@ -192,7 +197,12 @@ export const builder: CommandBuilder = {
     default: false,
   },
   reactRefresh: {
-    desc: 'Enable react fast refresh for React components',
+    desc: 'Enable/disable react fast refresh for React components',
+    type: 'boolean',
+    default: true,
+  },
+  lazyServer: {
+    desc: 'Enable/disable lazy init of server app factory',
     type: 'boolean',
     default: true,
   },
