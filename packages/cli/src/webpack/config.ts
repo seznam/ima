@@ -634,10 +634,17 @@ export default async (
             useHMR &&
               ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
-                overlay: {
-                  entry: false,
-                  sockIntegration: 'whm',
-                },
+                esModule: true,
+                overlay: false,
+                include: [
+                  /@ima/,
+                  appDir,
+                  ...(imaConfig.transformVendorPaths?.include ?? []),
+                ],
+                exclude: [
+                  /node_modules/,
+                  ...(imaConfig.transformVendorPaths?.exclude ?? []),
+                ],
               }),
           ]),
     ].filter(Boolean) as WebpackPluginInstance[],

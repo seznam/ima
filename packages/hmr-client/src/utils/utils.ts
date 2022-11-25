@@ -198,7 +198,7 @@ export async function processUpdate({
 
     // Log unaccepted modules info
     if (unacceptedModules.length > 0) {
-      logger.group(
+      logger.groupCollapsed(
         false,
         `The following modules couldn't be hot updated: (Full reload needed)\n\nThis is usually because the modules which have changed (and their parents) do not know how to hot reload themselves. See ${HMR_DOCS_URL} for more details.`
       );
@@ -212,7 +212,7 @@ export async function processUpdate({
     if (!renewedModules || renewedModules.length === 0) {
       logger.info(false, 'Nothing hot updated');
     } else if (!options.noInfo) {
-      logger.group(false, 'Updated modules:');
+      logger.groupCollapsed(false, 'Updated modules:');
       renewedModules.forEach(module => console.log(module));
       console.groupEnd();
     }

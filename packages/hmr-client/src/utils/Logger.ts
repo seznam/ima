@@ -63,4 +63,8 @@ export class Logger {
   group(icon: Icon, ...data: any[]) {
     this.#log(icon, 'group', ...data);
   }
+
+  groupCollapsed(icon: Icon, ...data: any[]) {
+    this.#log(icon, 'groupCollapsed', ...data);
+  }
 }
