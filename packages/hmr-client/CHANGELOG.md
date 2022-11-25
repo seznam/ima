@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 0c3c0261: Removed react-refresh error overlay
+
 ## 18.0.0-rc.13
 
 ### Major Changes
