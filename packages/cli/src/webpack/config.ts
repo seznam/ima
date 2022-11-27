@@ -56,43 +56,25 @@ export default async (
   const appDir = path.join(rootDir, 'app');
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
-  const mode = isDevEnv ? 'development' : 'production';
+  const mode = ctx.environment === 'production' ? 'production' : 'development';
+  const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
 
   // Define browserslist targets for current context
-  let targets: Record<string, string> | string[];
   const coreJsVersion = await getCurrentCoreJsVersion();
 
-  if (isEsVersion) {
-    // es2022 targets (taken from 'browserslist-generator')
-    targets = [
-      'and_chr >= 91',
-      'chrome >= 91',
-      'and_ff >= 90',
-      'android >= 103',
-      'edge >= 91',
-      'samsung >= 16.0',
-      'safari >= 15',
-      'ios_saf >= 15.1',
-      'opera >= 77',
-      'firefox >= 90',
-    ];
-  } else if (isServer) {
-    targets = { node: '18' };
-  } else {
-    // es2018 targets
-    targets = [
-      'and_chr >= 63',
-      'chrome >= 63',
-      'and_ff >= 58',
-      'android >= 103',
-      'edge >= 79',
-      'samsung >= 8.2',
-      'safari >= 11.1',
-      'ios_saf >= 11.4',
-      'opera >= 50',
-      'firefox >= 58',
-    ];
-  }
+  // es2018 targets (taken from 'browserslist-generator')
+  const targets = [
+    'and_chr >= 63',
+    'chrome >= 63',
+    'and_ff >= 58',
+    'android >= 103',
+    'edge >= 79',
+    'samsung >= 8.2',
+    'safari >= 11.1',
+    'ios_saf >= 11.4',
+    'opera >= 50',
+    'firefox >= 58',
+  ];
 
   // Set correct devtool source maps config
   const devtool = useSourceMaps
@@ -108,21 +90,21 @@ export default async (
     return imaConfig.swc(
       {
         // We use core-js only for lower ES version build
-        ...(!isServer &&
-          !isEsVersion && {
-            env: {
-              targets,
-              mode: 'usage',
-              coreJs: coreJsVersion,
-              bugfixes: true,
-              dynamicImport: true,
-            },
-          }),
+        ...(ctx.name === 'client' && {
+          env: {
+            targets,
+            mode: 'usage',
+            coreJs: coreJsVersion,
+            bugfixes: true,
+            dynamicImport: true,
+          },
+        }),
+        isModule: true,
         module: {
           type: 'es6',
         },
         jsc: {
-          target: isServer || isEsVersion ? 'es2022' : 'es2018',
+          target: ctx.name === 'client' ? 'es2018' : 'es2022',
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -132,8 +114,7 @@ export default async (
           transform: {
             react: {
               runtime: imaConfig.jsxRuntime ?? 'automatic',
-              development: isDevEnv,
-              refresh: useHMR,
+              refresh: useHMR && ctx.reactRefresh,
               useBuiltins: true,
             },
           },
@@ -209,6 +190,9 @@ export default async (
           webpackImporter: false,
           sourceMap: useSourceMaps,
           implementation: require('less'),
+          additionalData: fs.existsSync(lessGlobalsPath)
+            ? `@import "${lessGlobalsPath}";\n\n`
+            : '',
           lessOptions: {
             plugins: [lessPluginGlob],
             paths: [
@@ -216,12 +200,6 @@ export default async (
               path.resolve(rootDir, 'node_modules'),
             ],
           },
-        },
-      },
-      useLessLoader && {
-        loader: 'extend-less-loader',
-        options: {
-          globalsPath: path.join(rootDir, 'app/less/globals.less'),
         },
       },
     ].filter(Boolean) as RuleSetUseItem[];
@@ -246,21 +224,14 @@ export default async (
           }
         : {
             [name]: [
-              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
-              useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
-                  name,
-                  path: `${devServerConfig.publicUrl}/__webpack_hmr`,
-                  timeout: '3000',
-                  reload: 'true',
-                  overlay: 'false',
-                  overlayWarnings: 'false',
-                  noInfo: 'true',
-                  quiet: 'true',
-                }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                `@ima/hmr-client?${new URLSearchParams({
+                  name,
+                  noInfo: 'false',
+                  reload: 'true',
+                  timeout: '3000',
+                  reactRefresh: ctx.reactRefresh ? 'true' : 'false',
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
@@ -274,6 +245,7 @@ export default async (
     output: {
       path: outputDir,
       pathinfo: isDevEnv,
+      hashFunction: 'xxhash64',
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -310,14 +282,20 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      name: `${name}-${mode}-${createCacheKey(ctx, imaConfig)}`,
+      name: `${name}-${ctx.command}-${mode}`,
+      version: createCacheKey(ctx, imaConfig, {
+        ...devServerConfig,
+        $Debug: isDebug,
+        coreJsVersion: 'core-js',
+        devtool,
+      }),
       store: 'pack',
+      hashAlgorithm: 'xxhash64',
+      memoryCacheUnaffected: true,
       buildDependencies: {
-        config: [__filename],
-        defaultWebpack: ['webpack/lib/'],
-        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
-          fs.existsSync(f)
-        ),
+        imaCli: [require.resolve('@ima/cli')],
+        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)],
+        defaultConfig: [__filename],
       },
     },
     optimization: {
@@ -434,42 +412,6 @@ export default async (
               ],
             },
             /**
-             * Run vendor paths through swc for lower es client versions
-             */
-            !isServer &&
-              !isEsVersion && {
-                test: /\.(js|mjs|cjs)$/,
-                include: [
-                  /\b@ima\b/,
-                  ...(imaConfig.transformVendorPaths ?? []),
-                ],
-                loader: require.resolve('swc-loader'),
-                options: await imaConfig.swcVendor(
-                  {
-                    env: {
-                      targets,
-                      mode: 'usage',
-                      coreJs: coreJsVersion,
-                      bugfixes: true,
-                      dynamicImport: true,
-                    },
-                    module: {
-                      type: 'es6',
-                    },
-                    jsc: {
-                      parser: {
-                        syntax: 'ecmascript',
-                        decorators: false,
-                        dynamicImport: true,
-                      },
-                    },
-                    sourceMaps: useSourceMaps,
-                    inlineSourcesContent: useSourceMaps,
-                  },
-                  ctx
-                ),
-              },
-            /**
              * Handle app JS files
              */
             {
@@ -486,6 +428,46 @@ export default async (
               include: appDir,
               loader: require.resolve('swc-loader'),
               options: await getSwcLoader('typescript'),
+            },
+            /**
+             * Run vendor paths through swc for lower client versions
+             */
+            ctx.name === 'client' && {
+              test: /\.(js|mjs|cjs)$/,
+              include: [
+                /@ima/,
+                ...(imaConfig.transformVendorPaths?.include ?? []),
+              ],
+              exclude: [
+                appDir,
+                ...(imaConfig.transformVendorPaths?.exclude ?? []),
+              ],
+              loader: require.resolve('swc-loader'),
+              options: await imaConfig.swcVendor(
+                {
+                  env: {
+                    targets,
+                    mode: 'usage',
+                    coreJs: coreJsVersion,
+                    bugfixes: true,
+                    dynamicImport: true,
+                  },
+                  module: {
+                    type: 'es6',
+                  },
+                  jsc: {
+                    target: 'es2018',
+                    parser: {
+                      syntax: 'ecmascript',
+                      decorators: false,
+                      dynamicImport: true,
+                    },
+                  },
+                  sourceMaps: useSourceMaps,
+                  inlineSourcesContent: useSourceMaps,
+                },
+                ctx
+              ),
             },
             /**
              * CSS & LESS loaders, both have the exact same capabilities
@@ -581,7 +563,13 @@ export default async (
             // Copies essential assets to static directory
             isEsVersion &&
               new CopyPlugin({
-                patterns: [{ from: 'app/public', to: 'static/public' }],
+                patterns: [
+                  {
+                    from: 'app/public',
+                    to: 'static/public',
+                    noErrorOnMissing: true,
+                  },
+                ],
               }),
 
             /**
@@ -644,11 +632,19 @@ export default async (
             // Following plugins enable react refresh and hmr in watch mode
             useHMR && new webpack.HotModuleReplacementPlugin(),
             useHMR &&
+              ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
-                overlay: {
-                  module: require.resolve('@ima/hmr-client'),
-                  sockIntegration: 'whm',
-                },
+                esModule: true,
+                overlay: false,
+                include: [
+                  /@ima/,
+                  appDir,
+                  ...(imaConfig.transformVendorPaths?.include ?? []),
+                ],
+                exclude: [
+                  /node_modules/,
+                  ...(imaConfig.transformVendorPaths?.exclude ?? []),
+                ],
               }),
           ]),
     ].filter(Boolean) as WebpackPluginInstance[],
@@ -675,7 +671,7 @@ export default async (
     infrastructureLogging: {
       colors: true,
       appendOnly: true,
-      level: ctx.verbose ? 'log' : 'none',
+      level: ctx.verbose ? 'log' : 'error',
     },
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)

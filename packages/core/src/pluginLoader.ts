@@ -1,5 +1,5 @@
 import { Bootstrap } from '.';
-import ns from './Namespace';
+import ns, { Namespace } from './Namespace';
 import { Module } from './Bootstrap';
 
 /**
@@ -8,8 +8,8 @@ import { Module } from './Bootstrap';
  * IMA.js application parts and automatically bootstrap certain settings.
  */
 class PluginLoader {
-  protected _plugins: object[];
-  protected _bootstrap: Bootstrap | undefined;
+  protected _plugins: Record<string, { name: string; module: Module }>;
+  protected _bootstrap?: Bootstrap;
   /**
    * Initializes the plugin loader.
    *
@@ -22,7 +22,7 @@ class PluginLoader {
    * @private
    */
   constructor() {
-    this._plugins = [];
+    this._plugins = {};
   }
 
   /**
@@ -52,7 +52,7 @@ class PluginLoader {
    * @param {string} name Plugin name.
    * @param {function} registerFn Plugin initialization function.
    */
-  register(name: string, registerFn: (param: unknown) => unknown) {
+  register(name: string, registerFn: (ns?: Namespace) => Module | undefined) {
     if (typeof name !== 'string') {
       throw new Error(
         `ima.core.pluginLoader:register moduleName is not a string, '${typeof name}' was given.`
@@ -65,13 +65,14 @@ class PluginLoader {
       );
     }
 
-    const module = registerFn(ns) || {};
-    this._plugins.push({ name, module });
+    const module = registerFn(ns);
 
-    // Bootstrap plugin if imported dynamically
-    if (this._bootstrap) {
-      this._bootstrap.initPlugin(name, module as Module);
+    // Bootstrap plugin if imported dynamically (only if it's not already loaded)
+    if (this._bootstrap && !this._plugins[name]) {
+      this._bootstrap.initPlugin(name, module);
     }
+
+    this._plugins[name] = { name, module: module || {} };
   }
 
   /**
@@ -80,7 +81,7 @@ class PluginLoader {
    * @returns {Array} Array of IMA.js plugins.
    */
   getPlugins() {
-    return this._plugins;
+    return Object.values(this._plugins);
   }
 }
 

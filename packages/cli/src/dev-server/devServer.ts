@@ -1,20 +1,27 @@
 import path from 'path';
 
-import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
+import hotMiddleware from 'webpack-hot-middleware';
 
+import { ImaCliArgs, ImaConfig } from '../types';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
-async function createDevServer({
+const WRITE_TO_DISK_WHITELIST = /(runner\.js|favicon\.ico)$/i;
+
+export async function createDevServer({
+  args,
+  config,
   compiler,
   hostname,
   port,
   rootDir,
 }: {
+  args: ImaCliArgs;
+  config: ImaConfig;
   compiler: Compiler | undefined;
   hostname: string;
   port: number;
@@ -40,6 +47,7 @@ async function createDevServer({
 
         next();
       })
+      // Serve brotli version primary
       .use(
         '/__error-overlay-static',
         expressStaticGzip(staticDir, {
@@ -51,6 +59,7 @@ async function createDevServer({
           },
         })
       )
+      // Non-zipped compressed version fallback
       .use(
         '/__error-overlay-static',
         express.static(path.join(staticDir), { maxAge: '14d' })
@@ -59,14 +68,20 @@ async function createDevServer({
         devMiddleware(compiler, {
           index: false,
           publicPath: '/',
-          writeToDisk: true,
+          writeToDisk: args.writeToDisk
+            ? true
+            : filePath =>
+                (WRITE_TO_DISK_WHITELIST.test(filePath) ||
+                  config.devServer?.writeToDiskFilter?.(filePath)) ??
+                false,
           ...(isVerbose ? undefined : { stats: 'none' }),
           serverSideRender: false,
         })
       )
       .use(
         hotMiddleware(compiler, {
-          ...(isVerbose ? undefined : { quite: true, log: false }),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          ...(isVerbose ? undefined : { quiet: true, log: () => {} }),
           path: '/__webpack_hmr',
           heartbeat: 1500,
         })
@@ -79,7 +94,7 @@ async function createDevServer({
         }
 
         res.status(500).json({
-          status: 'Something happened with the @ima/cli/devServer 😢',
+          status: 'Something is wrong with the @ima/cli/devServer',
           error: err,
         });
       })
@@ -91,5 +106,3 @@ async function createDevServer({
       });
   });
 }
-
-export { createDevServer };

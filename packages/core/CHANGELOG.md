@@ -1,5 +1,55 @@
 # Change Log
 
+## 18.0.0-rc.28
+
+### Patch Changes
+
+- 38012f0a: Added hydratation error callback
+
+## 18.0.0-rc.27
+
+### Patch Changes
+
+- 87adef2d: revert: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- 768842a4: Fixed plugin module defaults in pluginLoader
+
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 34107bac: Removed $Dispatcher from $IMA window object
+  Fixed issue where PluginLoader kept duplicating loaded plugins in watch mode
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+
+## 18.0.0-rc.24
+
+### Major Changes
+
+- 94fee0c6: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+
+### Patch Changes
+
+- 4e4d79bc: Fixed constructor DI order in HttpAgentImpl
+
+## 18.0.0-rc.23
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+
 ## 18.0.0-rc.21
 
 ### Patch Changes

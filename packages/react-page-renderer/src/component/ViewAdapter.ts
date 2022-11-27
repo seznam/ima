@@ -1,8 +1,10 @@
+import type { UnknownParameters } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
 import PageContext from '../PageContext';
 import { Utils } from '../types';
+import ErrorBoundary from './ErrorBoundary';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -28,11 +30,11 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
   private _managedRootView: ComponentType;
 
   contextSelectors: Array<
-    (props: ViewAdapterProps, state: State) => { [key: string]: unknown }
+    (props: ViewAdapterProps, state: State) => UnknownParameters
   > = [];
   createContext: (
     $Utils: Utils,
-    values: { [key: string]: unknown }
+    values: UnknownParameters
   ) => { $Utils: Utils };
 
   /**
@@ -62,7 +64,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
      * The function for creating context.
      */
     this.createContext = memoizeOne(
-      ($Utils: Utils, values: { [key: string]: unknown }) => {
+      ($Utils: Utils, values: UnknownParameters) => {
         return {
           $Utils,
           ...values,
@@ -104,7 +106,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
    * @inheritDoc
    */
   render() {
-    return createElement(
+    const viewElement = createElement(
       PageContext.Provider,
       { value: this._getContextValue(this.props, this.state) },
       createElement(
@@ -119,5 +121,10 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
         })
       )
     );
+
+    // Wrap view with ErrorBoundary in $Debug env
+    return $Debug
+      ? createElement(ErrorBoundary, null, viewElement)
+      : viewElement;
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@ima/hmr-client",
-  "version": "18.0.0-rc.10",
+  "version": "18.0.0-rc.14",
   "description": "IMA.js hmr client used to connect app with error overlay.",
   "keywords": [
     "IMA.js",
@@ -17,11 +17,11 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "main": "./dist/fastRefreshClient.js",
-  "module": "./dist/fastRefreshClient.mjs",
+  "main": "./dist/client.js",
+  "types": "./dist/types.d.ts",
   "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch",
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "publishConfig": {
@@ -29,11 +29,12 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.4",
     "@types/webpack-env": "^1.16.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "18.0.0-rc.10",
     "webpack": "^5.70.0"
+  },
+  "dependencies": {
+    "@esmj/emitter": "^0.0.7"
   }
 }

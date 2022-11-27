@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger, time, printTime } from '@ima/dev-utils/dist/logger';
+import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
 import globby from 'globby';
@@ -113,10 +114,19 @@ export async function build(args: Arguments) {
       await cleanOutput(config, cwd);
 
       // Get file paths at input directory
-      const files = await globby(path.join(inputDir, './**/*'), {
-        ignore: config.exclude,
+      let files = await globby(path.join(inputDir, './**/*'), {
         cwd,
       });
+
+      // Filter files using exclude settings
+      if (config?.exclude) {
+        const matcher =
+          typeof config.exclude === 'function'
+            ? config.exclude
+            : anymatch(config.exclude);
+
+        files = files.filter(filePath => !matcher(filePath));
+      }
 
       const context: Context = {
         command: 'build',
@@ -204,17 +214,8 @@ export async function watch(args: Arguments) {
             );
             break;
 
-          case 'addDir':
-            await processOutput(
-              config,
-              async outputPath => {
-                await fs.promises.mkdir(path.join(outputPath, contextPath), {
-                  recursive: true,
-                });
-              },
-              cwd
-            );
-            break;
+          default:
+            return;
         }
 
         // Prevents duplicate logging in `link` mode
@@ -243,30 +244,45 @@ export async function watch(args: Arguments) {
       const linkedBasePath = path.resolve(
         linkedPath,
         'node_modules',
-        pkgJson.name,
-        distBaseDir
+        pkgJson.name
       );
-
-      // Clean linked folder
-      if (fs.existsSync(linkedBasePath)) {
-        await fs.promises.rm(linkedBasePath, { recursive: true });
-      }
+      const linkedDistPath = path.join(linkedBasePath, distBaseDir);
 
       chokidar
-        .watch([path.join(cwd, distBaseDir, '/**/*')], {
-          ignoreInitial: false,
-          ignored: [
-            '**/tsconfig.tsbuildinfo/**',
-            '**/node_modules/**',
-            '**/.DS_Store/**',
-          ],
-        })
+        .watch(
+          [
+            path.join(cwd, distBaseDir, '/**/*'),
+            Array.isArray(parsedArgs?.additionalWatchPaths) &&
+              parsedArgs?.additionalWatchPaths,
+            Array.isArray(config?.additionalWatchPaths) &&
+              config?.additionalWatchPaths,
+          ].filter(Boolean) as string[],
+          {
+            ignoreInitial: false,
+            ignored: [
+              '**/tsconfig.tsbuildinfo/**',
+              '**/node_modules/**',
+              '**/.DS_Store/**',
+            ],
+          }
+        )
         .on('error', errorHandler)
         .on('all', async (eventName, filePath) => {
-          const contextPath = path.relative(outputDir, filePath);
-          const linkedOutputPath = path.join(linkedBasePath, contextPath);
+          // Handler to link additional non-dist files
+          const isAdditionalFile = !filePath.startsWith(outputDir);
+          const contextPath = path.relative(
+            isAdditionalFile ? cwd : outputDir,
+            filePath
+          );
+          const linkedOutputPath = path.join(
+            isAdditionalFile ? linkedBasePath : linkedDistPath,
+            contextPath
+          );
           const linkedOutputDir = path.dirname(linkedOutputPath);
-          const outputContextPath = `./${path.join(distBaseDir, contextPath)}`;
+          const outputContextPath = `./${path.join(
+            isAdditionalFile ? '' : distBaseDir,
+            contextPath
+          )}`;
 
           const elapsed = time();
 
@@ -285,9 +301,8 @@ export async function watch(args: Arguments) {
               await fs.promises.rm(linkedOutputPath, { recursive: true });
               break;
 
-            case 'addDir':
-              await fs.promises.mkdir(linkedOutputPath, { recursive: true });
-              break;
+            default:
+              return;
           }
 
           // Print info to output

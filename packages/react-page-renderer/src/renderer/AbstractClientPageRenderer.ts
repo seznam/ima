@@ -10,7 +10,11 @@ import {
   RendererTypes,
   Window,
 } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
+import type {
+  UnknownParameters,
+  UnknownPromiseParameters,
+  RouteOptions,
+} from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
@@ -23,11 +27,12 @@ import PageRendererFactory from './PageRendererFactory';
  * server if possible.
  */
 export default abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
+  private _hydrated = false;
+  private _mounted = this._createMountedPromise();
   /**
    * Flag signalling that the page is being rendered for the first time.
    */
   private _window: Window;
-  protected _mounted = false;
   /**
    * The HTML element containing the current application view for the
    * current route.
@@ -43,7 +48,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * @param settings The application setting for the
    *        current application environment.
    * @param window Helper for manipulating the global object
-   *        ({@code window}) regardless of the client/server-side
+   *        (`window`) regardless of the client/server-side
    *        environment.
    */
   constructor(
@@ -56,7 +61,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     super(factory, helpers, dispatcher, settings);
 
     /**
-     * Helper for manipulating the global object ({@code window})
+     * Helper for manipulating the global object (`window`)
      * regardless of the client/server-side environment.
      */
     this._window = window;
@@ -100,21 +105,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       .catch((error: Error) => this._handleError(error));
   }
 
-  setState(pageState = {}) {
-    if (this._viewAdapter) {
-      this._renderViewAdapter(this._getUpdateCallback(pageState), {
-        state: pageState,
-      });
-    }
-  }
-
   /**
    * @inheritDoc
    */
   update(
     controller: ControllerDecorator,
     pageView: ComponentType,
-    resourcesUpdate: { [key: string]: unknown | Promise<unknown> }
+    resourcesUpdate: UnknownPromiseParameters
   ): Promise<void | PageData> {
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
@@ -133,6 +130,19 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         };
       })
       .catch((error: Error) => this._handleError(error));
+  }
+
+  unmount(): void {
+    this._hydrated = false;
+    this._mounted = this._createMountedPromise();
+  }
+
+  async setState(pageState = {}) {
+    await this._mounted;
+
+    this._renderViewAdapter(this._getUpdateCallback(pageState), {
+      state: pageState,
+    });
   }
 
   protected _getHydrateCallback() {
@@ -174,6 +184,12 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
   protected abstract _hydrateViewAdapter(): void;
 
+  private _createMountedPromise(): Promise<void> {
+    return new Promise(resolve => {
+      this._dispatcher.listen(RendererEvents.MOUNTED, () => resolve());
+    });
+  }
+
   /**
    * Patch promise values to controller state.
    */
@@ -190,8 +206,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         })
         .catch(error => this._handleError(error));
     }
-
-    this._startBatchTransactions(controller, patchedPromises);
   }
 
   protected _runUnmountCallback() {
@@ -200,50 +214,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       { type: RendererTypes.UNMOUNT },
       true
     );
-  }
-
-  /**
-   * Batch patch promise values to controller state.
-   */
-  private _startBatchTransactions(
-    controller: ControllerDecorator,
-    patchedPromises: { [key: string]: Promise<unknown> }
-  ) {
-    let hasResourcesLoaded = false;
-    const options = {
-      timeout: 100,
-    };
-
-    const Window = this._window.getWindow();
-    let requestIdleCallback: (
-      callback: IdleRequestCallback,
-      options?: IdleRequestOptions | undefined
-    ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
-    if (Window && Window['requestIdleCallback']) {
-      requestIdleCallback = Window.requestIdleCallback;
-    }
-    const handler = () => {
-      controller.commitStateTransaction();
-
-      if (!hasResourcesLoaded) {
-        controller.beginStateTransaction();
-        setTimeout(() => {
-          requestIdleCallback(handler, options);
-        }, 1000 / 60);
-      }
-    };
-
-    controller.beginStateTransaction();
-    requestIdleCallback(handler, options);
-
-    this._helpers
-      .allPromiseHash(patchedPromises)
-      .then(() => {
-        hasResourcesLoaded = true;
-      })
-      .catch(() => {
-        hasResourcesLoaded = true;
-      });
   }
 
   protected abstract _renderViewAdapter(
@@ -286,10 +256,10 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       return Promise.reject(new Error(errorMessage));
     }
 
-    if (!this._mounted && this._viewContainer.children.length) {
+    if (!this._hydrated && this._viewContainer.children.length) {
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         this._hydrateViewAdapter();
-        this._mounted = true;
+        this._hydrated = true;
       });
     } else {
       this._renderViewAdapter(this._getRenderCallback());
@@ -306,9 +276,9 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    * @param dataMap A map of data.
    * @return Return separated promises and other values.
    */
-  private _separatePromisesAndValues(dataMap: { [key: string]: unknown }) {
+  private _separatePromisesAndValues(dataMap: UnknownParameters) {
     const promises: { [key: string]: Promise<unknown> } = {};
-    const values: { [key: string]: unknown } = {};
+    const values: UnknownParameters = {};
 
     for (const field of Object.keys(dataMap)) {
       const value = dataMap[field];

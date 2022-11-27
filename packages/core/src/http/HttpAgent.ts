@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters } from '../CommonTypes';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 import { HttpProxyRequestParams } from './HttpProxy';
 
 /**
@@ -30,8 +30,8 @@ export type HttpAgentRequestOptions = {
   timeout: number;
   ttl: number;
   repeatRequest: number;
-  headers: { [key: string]: string };
-  fetchOptions: { [key: string]: unknown };
+  headers: StringParameters;
+  fetchOptions: UnknownParameters;
   cache: boolean;
   withCredentials: boolean;
   listeners: { progress: (event: Event) => unknown };
@@ -53,7 +53,7 @@ export type HttpAgentResponse = {
   status: number;
   body: unknown;
   params: HttpProxyRequestParams;
-  headers: { [key: string]: string };
+  headers: StringParameters;
   headersRaw?: Headers;
   cached: boolean;
 };
@@ -178,7 +178,7 @@ export default abstract class HttpAgent {
    * @return The key to use for identifying such a request in the
    *         cache.
    */
-  getCacheKey(method: string, url: string, data: { [key: string]: string }) {
+  getCacheKey(method: string, url: string, data: StringParameters) {
     return '';
   }
 

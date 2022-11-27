@@ -1,5 +1,26 @@
 # Change Log
 
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- ab7c573f: Added new ima.config.js option -> devServer.writeToDiskFilter
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+
 ## 18.0.0-rc.13
 
 ### Patch Changes

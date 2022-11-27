@@ -222,6 +222,7 @@ The `sourceMaps` option enables source maps in the production build. Use `true` 
 
 Similarly to the [CLI options](./cli#dev-server-options), you can use the `devServer` option to override defaults for our [companion dev server](./advanced-features.md#dev-server).
 
+The only thing that's configurable through the ima.config.js **only**, is the `writeToDiskFilter` function. This allows you to force the dev server to write certain files to disk, even if you're serving them from [memory in the watch mode](./cli.md#–writetodisk).
 
 ```javascript title=./ima.config.js
 /**
@@ -232,6 +233,7 @@ module.exports = {
     port: 3101;
     hostname: 'localhost';
     publicUrl: 'http://localhost:3101';
+    writeToDiskFilter: (filePath) => false;
   };
 };
 ```
@@ -315,7 +317,7 @@ This can be usefull if you're building an app, where you are able to set constra
 
 ### transformVendorPaths
 
-> `RegExp[]`
+> `{ include?: RegExp[]; exclude?: RegExp[]; }
 
 :::caution
 
@@ -323,7 +325,7 @@ This is an advanced feature.
 
 :::
 
-Array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9, ES13 and node 18 currently)*.
+Using this option you can include/exclude array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9)*. This transformation is executed only for the **legacy client bundle**.
 
 By default the CLI always matches all files under the `@ima` namespace, since we release our plugins in latest ECMA syntax and they need to be compiled down to older syntaxes with proper core-js polyfills.
 

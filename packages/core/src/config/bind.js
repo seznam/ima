@@ -179,8 +179,8 @@ export default (ns, oc, config) => {
     '$HttpAgentProxy',
     '$Cache',
     CookieStorage,
-    '$Helper',
     config.$Http,
+    '$Helper',
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);

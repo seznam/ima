@@ -26,7 +26,7 @@ module.exports = function hooksFactory({
   }
 
   function _hasToServeSPA({ req, environment }) {
-    if (environment.$Env === 'dev' && process.env.IMA_CLI_FORCE_SPA) {
+    if (process.env.IMA_CLI_FORCE_SPA) {
       return true;
     }
 
@@ -41,6 +41,14 @@ module.exports = function hooksFactory({
     );
 
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
+  }
+
+  function _hasToLoadApp({ environment }) {
+    return !(
+      (environment.$Server.serveSPA?.allow &&
+        environment.$Server.concurrency === 0) ||
+      process.env.IMA_CLI_FORCE_SPA
+    );
   }
 
   function _hasToServeStaticBadRequest({ req, res, environment }) {
@@ -102,7 +110,7 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
-    if (environment.$Debug) {
+    if (environment.$Debug && process.env.IMA_CLI_WATCH) {
       return devErrorPage(event);
     } else {
       try {
@@ -136,7 +144,7 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      _importAppMainSync(event);
+      _hasToLoadApp(event) && _importAppMainSync(event);
       _addImaToResponse(event);
     });
   }

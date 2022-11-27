@@ -24,7 +24,6 @@ import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 ## Contents
 - `compileErrorParser` - used to parse compile errors from currently used loaders.
 - `cliUtils` - utilities for CLI error formatting.
-- `ErrorOverlayEmitter` - event emitter used in HMR client, however it is located here since the TS types are used in multiple other packages.
 - `helpers` - general regexps and other helpers.
 - `sourceFragment` - utility to create source fragment object containing X number of lines of code around highlighted line from provided source.
 - `sourceMapUtils` - utils to extract source map URL from file contents.

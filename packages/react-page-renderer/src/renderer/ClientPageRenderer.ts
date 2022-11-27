@@ -1,6 +1,7 @@
 /* @if server **
 export default class ClientPageRenderer {};
 /* @else */
+import { RendererEvents } from '@ima/core';
 import { ReactElement } from 'react';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
 
@@ -16,10 +17,10 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
     if (this._reactRoot) {
       this._reactRoot.unmount();
-      this._mounted = false;
       this._reactRoot = undefined;
       this._runUnmountCallback();
     }
+    super.unmount();
   }
 
   protected _hydrateViewAdapter(): void {
@@ -27,7 +28,12 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
       this._viewContainer as Element,
       this._getViewAdapterElement({
         refCallback: this._getHydrateCallback(),
-      }) as ReactElement
+      }) as ReactElement,
+      {
+        onRecoverableError: error => {
+          this._dispatcher.fire(RendererEvents.HYDRATE_ERROR, { error }, true);
+        },
+      }
     );
   }
 

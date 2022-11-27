@@ -320,7 +320,7 @@ export default abstract class Router {
     options?: RouteOptions,
     action?: Record<string, unknown>,
     locals?: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
 
@@ -342,7 +342,7 @@ export default abstract class Router {
     params: RouteParams,
     options?: RouteOptions,
     locals?: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
 
@@ -364,7 +364,7 @@ export default abstract class Router {
     params: RouteParams,
     options?: RouteOptions,
     locals?: Record<string, unknown>
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
 

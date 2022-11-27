@@ -1,8 +1,12 @@
 /* @if client **
 export default class ServerPageRenderer {};
 /* @else */
+import type {
+  UnknownParameters,
+  UnknownPromiseParameters,
+  RouteOptions,
+} from '@ima/core';
 import { ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
-import { RouteOptions } from '@ima/core/dist/esm/client/router/Router';
 import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
@@ -42,12 +46,12 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   mount(
     controller: ControllerDecorator,
     pageView: react.ComponentType,
-    pageResources: { [key: string]: unknown | Promise<unknown> },
+    pageResources: UnknownPromiseParameters,
     routeOptions: RouteOptions
   ): Promise<void | PageData> {
     return this._helpers.allPromiseHash(pageResources).then(pageState => {
-      controller.setState(pageState as { [key: string]: unknown });
-      controller.setMetaParams(pageState as { [key: string]: unknown });
+      controller.setState(pageState as UnknownParameters);
+      controller.setMetaParams(pageState as UnknownParameters);
 
       this._prepareViewAdapter(controller, pageView, routeOptions);
 
@@ -66,7 +70,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
   }
 
   setState() {
-    return;
+    return Promise.resolve();
   }
 
   /**

@@ -1,4 +1,11 @@
-import { ModuleConfig, Options, ParserConfig, transform } from '@swc/core';
+import {
+  JscTarget,
+  ModuleConfig,
+  Options,
+  ParserConfig,
+  ReactConfig,
+  transform,
+} from '@swc/core';
 
 import { Transformer } from '../types';
 
@@ -11,12 +18,16 @@ export type SWCTransformerOptions = Options;
  */
 export function createSwcTransformer({
   type,
+  target,
   syntax,
   development,
+  jsxRuntime,
 }: {
   type: ModuleConfig['type'];
+  target: JscTarget;
   syntax?: ParserConfig['syntax'];
-  development?: boolean; // TODO
+  development?: boolean;
+  jsxRuntime: ReactConfig['runtime'];
 }) {
   return swcTransformer({
     isModule: true,
@@ -24,7 +35,7 @@ export function createSwcTransformer({
       type: type ?? 'es6',
     },
     jsc: {
-      target: 'es2022',
+      target,
       parser: {
         syntax: syntax ?? 'ecmascript',
         decorators: false,
@@ -35,6 +46,7 @@ export function createSwcTransformer({
         react: {
           useBuiltins: true,
           development: !!development,
+          runtime: jsxRuntime,
         },
       },
     },

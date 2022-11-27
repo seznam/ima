@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.4.0-rc.3
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+
 ## 0.4.0-rc.2
 
 ### Patch Changes

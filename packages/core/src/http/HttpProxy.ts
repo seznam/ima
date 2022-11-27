@@ -3,7 +3,7 @@ import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
 import UrlTransformer from './UrlTransformer';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
-import { UnknownParameters } from '../CommonTypes';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * An object representing the complete request parameters used to create and
@@ -312,7 +312,7 @@ export default class HttpProxy {
    * @return Converted headers.
    */
   _headersToPlainObject(headers: Headers) {
-    const plainHeaders: { [key: string]: string } = {};
+    const plainHeaders: StringParameters = {};
 
     for (const [key, value] of headers as unknown as Iterable<
       [string, string]
@@ -533,10 +533,7 @@ export default class HttpProxy {
    *        agent.
    * @private
    */
-  _transformRequestBody(
-    data: UnknownParameters,
-    headers: { [key: string]: string }
-  ) {
+  _transformRequestBody(data: UnknownParameters, headers: StringParameters) {
     switch (headers['Content-Type']) {
       case 'application/json':
         return JSON.stringify(data);
@@ -580,9 +577,10 @@ export default class HttpProxy {
   _convertObjectToFormData(object: UnknownParameters) {
     const window = this._window.getWindow();
 
-    if (!window || !window.FormData) {
+    if (!window || !FormData) {
       return object;
     }
+
     const formDataObject = new FormData();
     Object.keys(object).forEach(key =>
       formDataObject.append(key, object[key] as unknown as string)

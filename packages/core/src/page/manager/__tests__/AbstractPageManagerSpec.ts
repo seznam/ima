@@ -108,9 +108,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       handlerRegistry
     );
 
-    jest
-      .spyOn(controllerInstance, 'getExtensions')
-      .mockReturnValue([extensionInstance]);
+    (
+      jest.spyOn(controllerInstance, 'getExtensions') as jest.SpyInstance
+    ).mockReturnValue([extensionInstance]);
 
     route = routeFactory.createRoute(
       routeName,
@@ -282,15 +282,17 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       Object.keys(extensionState).concat(allowedStateKeys);
 
     beforeEach(() => {
-      jest
-        .spyOn(extensionInstance, 'getAllowedStateKeys')
-        .mockReturnValue(allowedStateKeys);
+      (
+        jest.spyOn(extensionInstance, 'getAllowedStateKeys') as jest.SpyInstance
+      ).mockReturnValue(allowedStateKeys);
 
       jest
         .spyOn(pageFactory, 'decoratePageStateManager')
         .mockReturnValue(pageStateManager);
 
-      jest.spyOn(extensionInstance, 'setPageStateManager').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'setPageStateManager') as jest.SpyInstance
+      ).mockImplementation();
     });
 
     it('should create restricted page state manager for extension', () => {
@@ -331,7 +333,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_initController method', () => {
     it('should set route params to controller instance', async () => {
-      jest.spyOn(controllerInstance, 'setRouteParams').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'setRouteParams') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_initController']();
 
@@ -339,7 +343,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call init function on controller instance', async () => {
-      jest.spyOn(controllerInstance, 'init').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'init') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_initController']();
 
@@ -349,7 +355,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_initExtensions method', () => {
     it('should set route params to extension instance', async () => {
-      jest.spyOn(extensionInstance, 'setRouteParams').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'setRouteParams') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -357,7 +365,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call init function on controller instance', async () => {
-      jest.spyOn(extensionInstance, 'init').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'init') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -397,7 +407,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_getLoadedControllerState method', () => {
     it('should calls controller load method', async () => {
-      jest.spyOn(controllerInstance, 'load').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'load') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_getLoadedControllerState']();
 
@@ -405,9 +417,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set pageStateManager to controller instance', async () => {
-      jest
-        .spyOn(controllerInstance, 'setPageStateManager')
-        .mockImplementation();
+      (
+        jest.spyOn(
+          controllerInstance,
+          'setPageStateManager'
+        ) as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_getLoadedControllerState']();
 
@@ -419,7 +434,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_getLoadedExtensionsState method', () => {
     it('should call extensions load method', async () => {
-      jest.spyOn(extensionInstance, 'load').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -427,7 +444,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set restricted pageStateManager to extension instance', async () => {
-      jest.spyOn(extensionInstance, 'load').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
       jest
         .spyOn(pageManager, '_setRestrictedPageStateManager')
         .mockImplementation();
@@ -441,11 +460,18 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      jest.spyOn(extensionInstance, 'setPartialState').mockImplementation();
-      jest
-        .spyOn(extensionInstance, 'switchToPartialState')
-        .mockImplementation();
-      jest.spyOn(extensionInstance, 'load').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'setPartialState') as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(
+          extensionInstance,
+          'switchToPartialState'
+        ) as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -494,14 +520,17 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
-      jest
-        .spyOn(extensionInstance, 'switchToStateManager')
-        .mockImplementation();
-      jest
-        .spyOn(extensionInstance, 'clearPartialState')
-        .mockImplementation(() => {
-          resolver();
-        });
+      (
+        jest.spyOn(
+          extensionInstance,
+          'switchToStateManager'
+        ) as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'clearPartialState') as jest.SpyInstance
+      ).mockImplementation(() => {
+        resolver();
+      });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
         extension: Promise.resolve(),
@@ -513,11 +542,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should clear partial state if resource is not loaded successfully', async () => {
-      jest
-        .spyOn(extensionInstance, 'clearPartialState')
-        .mockImplementation(() => {
-          resolver();
-        });
+      (
+        jest.spyOn(extensionInstance, 'clearPartialState') as jest.SpyInstance
+      ).mockImplementation(() => {
+        resolver();
+      });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
         extension: Promise.reject(),
@@ -561,7 +590,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_activateController method', () => {
     it('should call activate method on controller', async () => {
-      jest.spyOn(controllerInstance, 'activate').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'activate') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_activateController']();
 
@@ -571,7 +602,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_activateExtensions method', () => {
     it('should call activate method on extensions', async () => {
-      jest.spyOn(extensionInstance, 'activate').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'activate') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_activateExtensions']();
 
@@ -614,8 +647,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_getUpdatedControllerState method', () => {
     it('should calls controller update method', () => {
-      jest.spyOn(controllerInstance, 'update').mockImplementation();
-      jest.spyOn(controllerInstance, 'getRouteParams').mockReturnValue(params);
+      (
+        jest.spyOn(controllerInstance, 'update') as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'getRouteParams') as jest.SpyInstance
+      ).mockReturnValue(params);
 
       pageManager['_getUpdatedControllerState']();
 
@@ -625,8 +662,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_getUpdatedExtensionsState method', () => {
     it('should call extensions update method', async () => {
-      jest.spyOn(extensionInstance, 'getRouteParams').mockReturnValue(params);
-      jest.spyOn(extensionInstance, 'update').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'getRouteParams') as jest.SpyInstance
+      ).mockReturnValue(params);
+      (
+        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
 
       await pageManager['_getUpdatedExtensionsState']();
 
@@ -637,7 +678,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       jest
         .spyOn(pageManager, '_setRestrictedPageStateManager')
         .mockImplementation();
-      jest.spyOn(extensionInstance, 'update').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
 
       await pageManager['_getUpdatedExtensionsState']();
 
@@ -648,11 +691,18 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      jest.spyOn(extensionInstance, 'setPartialState').mockImplementation();
-      jest
-        .spyOn(extensionInstance, 'switchToPartialState')
-        .mockImplementation();
-      jest.spyOn(extensionInstance, 'update').mockReturnValue(extensionState);
+      (
+        jest.spyOn(extensionInstance, 'setPartialState') as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(
+          extensionInstance,
+          'switchToPartialState'
+        ) as jest.SpyInstance
+      ).mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
+      ).mockReturnValue(extensionState);
       jest.spyOn(pageStateManager, 'getState').mockReturnValue({ foo: 'bar' });
 
       await pageManager['_getUpdatedExtensionsState']({ foobar: 'bazfoo' });
@@ -729,7 +779,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_deactivateController method', () => {
     it('should call deactivate method on controller', async () => {
-      jest.spyOn(controllerInstance, 'deactivate').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'deactivate') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_deactivateController']();
 
@@ -739,7 +791,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_deactivateExtensions method', () => {
     it('should call deactivate method on extensions', async () => {
-      jest.spyOn(extensionInstance, 'deactivate').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'deactivate') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_deactivateExtensions']();
 
@@ -765,7 +819,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_destroyController method', () => {
     it('should call destroy on controller instance', async () => {
-      jest.spyOn(controllerInstance, 'destroy').mockImplementation();
+      (
+        jest.spyOn(controllerInstance, 'destroy') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_destroyController']();
 
@@ -773,9 +829,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should unset pageStateManager to controller', async () => {
-      jest
-        .spyOn(controllerInstance, 'setPageStateManager')
-        .mockImplementation();
+      (
+        jest.spyOn(
+          controllerInstance,
+          'setPageStateManager'
+        ) as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_destroyController']();
 
@@ -785,7 +844,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_destroyExtensions method', () => {
     it('should call destroy on extension instance', async () => {
-      jest.spyOn(extensionInstance, 'destroy').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'destroy') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_destroyExtensions']();
 
@@ -793,7 +854,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should unset pageStateManager to extension', async () => {
-      jest.spyOn(extensionInstance, 'setPageStateManager').mockImplementation();
+      (
+        jest.spyOn(extensionInstance, 'setPageStateManager') as jest.SpyInstance
+      ).mockImplementation();
 
       await pageManager['_destroyExtensions']();
 
@@ -805,7 +868,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     it('should return value from onlyUpdate function', () => {
       const newOptions = Object.assign({}, options, {
         onlyUpdate: () => true,
-      }) as { [key: string]: unknown };
+      }) as UnknownParameters;
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
       const spy = jest.spyOn(newOptions, 'onlyUpdate' as never);

@@ -19,7 +19,7 @@
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "latest",
     "@swc/jest": "^0.2.20",
-    "@cfaester/enzyme-adapter-react-18": "^0.5.1",
+    "@cfaester/enzyme-adapter-react-18": "^0.6.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^8.11.0",

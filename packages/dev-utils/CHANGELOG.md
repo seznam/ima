@@ -1,5 +1,29 @@
 # Change Log
 
+## 18.0.0-rc.13
+
+### Major Changes
+
+- 468ad70d: Moved ErrorOverlayEmitter to @ima/hrm-client
+
+### Patch Changes
+
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+
+## 18.0.0-rc.11
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+
 ## 18.0.0-rc.10
 
 ### Patch Changes

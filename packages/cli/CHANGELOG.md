@@ -1,5 +1,118 @@
 # Change Log
 
+## 18.0.0-rc.28
+
+### Patch Changes
+
+- 0c3c0261: Removed react-refresh error overlay
+
+## 18.0.0-rc.27
+
+### Patch Changes
+
+- 3e863bdf: Fixed errors with filesystem cache
+- 4e9d899c: Added args to control lazy init of server app factory in dev mode
+- Updated dependencies [4e9d899c]
+  - @ima/server@18.0.0-rc.21
+
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- bf0d327c: Fixed react versions usage
+
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 38012f0a: Fixed error with react version mismatch in different environments
+
+## 18.0.0-rc.24
+
+### Patch Changes
+
+- 8f600544: Reverted changes to GenerateRuntime plugin
+
+## 18.0.0-rc.23
+
+### Patch Changes
+
+- 05d36962: Added support for custom publicPath for memStaticProxy
+- Updated dependencies [05d36962]
+  - @ima/server@18.0.0-rc.20
+
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 6005049f: Improved filesystem caching
+- ab7c573f: Added new ima.config.js option -> devServer.writeToDiskFilter
+- 468ad70d: Removed custom fastRefreshEntry point in favor of disabling the overlay completely
+  Added support for serving of in-memory static files in watch mode
+  Added new CLI args `writeToDisk` and `reactRefresh` to disable in-memory serving and react refresh
+  Replaced @gatsbyjs/webpack-hot-middleware fork with latest version of webpack-hot-middleware which now supports webpack5 officially
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- 38ee2e12: Added ability to force runner to load legacy code
+- Updated dependencies [468ad70d]
+- Updated dependencies [0daa7f60]
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+- Updated dependencies [38ee2e12]
+- Updated dependencies [468ad70d]
+- Updated dependencies [e4def7f0]
+- Updated dependencies [6005049f]
+  - @ima/dev-utils@18.0.0-rc.13
+  - @ima/hmr-client@18.0.0-rc.13
+  - @ima/server@18.0.0-rc.19
+
+## 18.0.0-rc.21
+
+### Patch Changes
+
+- a2d9f825: Moved runner.js output to build/server directory
+- 1fc4a339: webpack build no longer requires `app/public` folder to exist
+- ba6d880e: Changed transformVendorPaths option to object, that can receive include and exclude arrays
+- f52ba908: Fixed client vendor dependencies built (wrong regexp on ima pkgs)
+- 4e4d79bc: Disabled 'reload' option on hmr client when hmr fails
+- Updated dependencies [acd9de23]
+- Updated dependencies [a2d9f825]
+- Updated dependencies [f52ba908]
+- Updated dependencies [162e08f2]
+  - @ima/server@18.0.0-rc.18
+
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+- Updated dependencies [a34b793e]
+  - @ima/server@18.0.0-rc.17
+
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- 1b77b104: Added new global env IMA_CLI_WATCH indicating dev command run
+  Server no longer deletes require cache during refresh in dev environments, rather this functionality is now connected to IMA_CLI_WATCH variable. This means that it only happens during local watch development.
+- Updated dependencies [1b77b104]
+  - @ima/server@18.0.0-rc.16
+
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+- Updated dependencies [0a2c8866]
+  - @ima/server@18.0.0-rc.15
+
+## 18.0.0-rc.17
+
+### Patch Changes
+
+- 70d78a42: Fixed cacheGroups excluding CSS which might sometimes throw away some CSS from node_modules
+
 ## 18.0.0-rc.16
 
 ### Patch Changes

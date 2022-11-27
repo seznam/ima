@@ -12,7 +12,7 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import Controller, { IController } from '../controller/Controller';
-import { StringParameters } from '../CommonTypes';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -300,7 +300,7 @@ export default abstract class AbstractRouter extends Router {
     options: RouteOptions = {},
     action = {} as { type?: string; event?: Event; url?: string },
     locals = {} as { action?: Record<string, unknown>; route?: AbstractRoute }
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     this._currentlyRoutedPath = path;
 
     let params: RouteParams = {};
@@ -312,11 +312,7 @@ export default abstract class AbstractRouter extends Router {
         { status: 404 }
       );
 
-      return this.handleNotFound(
-        params as { [key: string]: string },
-        {},
-        locals
-      );
+      return this.handleNotFound(params as StringParameters, {}, locals);
     }
 
     locals.action = action;
@@ -340,7 +336,7 @@ export default abstract class AbstractRouter extends Router {
     params: RouteParams,
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     const errorRoute = this._routeHandlers.get(
       RouteNames.ERROR
     ) as AbstractRoute;
@@ -356,9 +352,7 @@ export default abstract class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    params = this._addParamsFromOriginalRoute(
-      params as { [key: string]: string }
-    );
+    params = this._addParamsFromOriginalRoute(params as StringParameters);
 
     const action = {
       url: this.getUrl(),
@@ -387,7 +381,7 @@ export default abstract class AbstractRouter extends Router {
     params: RouteParams,
     options: RouteOptions = {},
     locals: Record<string, unknown> = {}
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     const notFoundRoute = this._routeHandlers.get(
       RouteNames.NOT_FOUND
     ) as AbstractRoute;
@@ -484,7 +478,7 @@ export default abstract class AbstractRouter extends Router {
     params: RouteParams,
     options: RouteOptions,
     action = {}
-  ): Promise<void | { [key: string]: unknown }> {
+  ): Promise<void | UnknownParameters> {
     options = Object.assign({}, route.getOptions(), options);
     const eventData: Record<string, unknown> = {
       route,

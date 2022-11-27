@@ -1,8 +1,11 @@
 import { typescriptDeclarationsPlugin } from '../plugins/typescriptDeclarationsPlugin';
 import { ImaPluginConfig } from '../types';
 
+const jsRe = /\.(jsx?|tsx?)$/i;
+
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
+  target: 'es2022',
   output: [
     {
       dir: './dist/esm',
@@ -11,13 +14,15 @@ export const defaultConfig: ImaPluginConfig = {
     {
       dir: './dist/cjs',
       format: 'commonjs',
+      include: jsRe,
     },
   ],
   plugins: [
     typescriptDeclarationsPlugin({ additionalArgs: ['--skipLibCheck'] }),
   ],
   exclude: [
-    '**/__tests__/**',
+    '**/__snapshots__/**',
+    '**/__tests__/**/*Spec*',
     '**/node_modules/**',
     '**/dist/**',
     '**/typings/**',
@@ -38,10 +43,12 @@ export const clientServerConfig: ImaPluginConfig = {
       dir: './dist/esm/server',
       format: 'es6',
       bundle: 'server',
+      include: jsRe,
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
+      include: jsRe,
     },
   ],
 };

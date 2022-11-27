@@ -4,8 +4,12 @@ import { CommandBuilder } from 'yargs';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      IMA_CLI_WATCH?: string;
+      IMA_CLI_WRITE_TO_DISK?: string;
       IMA_CLI_FORCE_SPA?: string;
+      IMA_CLI_LAZY_SERVER?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
+      IMA_CLI_PUBLIC_PATH?: string;
     }
   }
 }
@@ -34,6 +38,10 @@ export interface ImaCliArgs {
   hostname?: string;
   publicUrl?: string;
   environment: 'development' | 'production' | string;
+  writeToDisk?: boolean;
+  reactRefresh?: boolean;
+  forceLegacy?: boolean;
+  lazyServer?: boolean;
 }
 
 /**
@@ -144,6 +152,13 @@ export type ImaConfig = {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]
     publicUrl?: string; // public url used to access static files [default=localhost:3101]
+
+    /**
+     * Custom filtr for files which should be always written to disk,
+     * even if we're serving static files from memory. This is used for
+     * example to always save runner.js to disk, since it's used on server-side too.
+     */
+    writeToDiskFilter?: (filePath: string) => boolean;
   };
 
   /**
@@ -216,12 +231,15 @@ export type ImaConfig = {
   disableLegacyBuild?: boolean;
 
   /**
-   * Advanced functionality allowing you to register custom vendor paths that go through
+   * Advanced functionality allowing you to include/exclude custom vendor paths that go through
    * swc loader (configured using swcVendor function). Use this if you're using dependencies
-   * that don't meet the lowest supported ES version target (ES9 by default). It is enabled
-   * by default for all packages in @ima namespace.
+   * that don't meet the lowest supported ES version target (ES9 by default). all packages in
+   * @ima namespace are included by default.
    */
-  transformVendorPaths?: RegExp[];
+  transformVendorPaths?: {
+    include?: RegExp[];
+    exclude?: RegExp[];
+  };
 
   /**
    * Experimental configurations which can be enabled individually on specific applications.

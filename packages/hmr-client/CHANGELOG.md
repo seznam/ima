@@ -1,5 +1,41 @@
 # Change Log
 
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 0c3c0261: Removed react-refresh error overlay
+
+## 18.0.0-rc.13
+
+### Major Changes
+
+- 468ad70d: Moved ErrorOverlayEmitter to @ima/hrm-client
+- 468ad70d: Completely rewritten HMR client from the group up, completely replacing webpack-hot-middleware/client implementation
+  Removed rollup, plugin is now built using only `tsc`
+  The HMR is still not perfect but now more stable during IMA.js specific files changes (it now properly destroys old app before creating new one)
+  Refactored multiple existing components and added better HMR logging
+
+### Patch Changes
+
+- e4def7f0: Replace custom emitter with 3rd party pkg
+
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+- Updated dependencies [a34b793e]
+  - @ima/dev-utils@18.0.0-rc.12
+
+## 18.0.0-rc.11
+
+### Patch Changes
+
+- 0a2c8866: Fix render before hydration completed.
+- Updated dependencies [0a2c8866]
+  - @ima/dev-utils@18.0.0-rc.11
+
 ## 18.0.0-rc.10
 
 ### Patch Changes
