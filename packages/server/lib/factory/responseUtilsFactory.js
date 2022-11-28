@@ -3,11 +3,122 @@ const path = require('path');
 
 module.exports = function responseUtilsFactory() {
   let runner = '';
+  let manifest = '';
+  let sources = '';
 
-  const runnerPath = path.resolve('./build/server/runner.js');
-  if (fs.existsSync(runnerPath)) {
-    runner = fs.readFileSync(runnerPath, 'utf8');
+  const runnerPath = path.join(process.cwd(), './build/server/runner.js');
+  const manifestPath = path.join(process.cwd(), './build/manifest.json');
+
+  /**
+   * Prepares default $Source object structure.
+   */
+  function _prepareSources(manifest) {
+    const buildSource = (key, type, attr = {}) => {
+      if (!manifest?.[key]) {
+        return [];
+      }
+
+      const manifestValues = Object.values(manifest[key]);
+      const builtSources = manifestValues
+        .filter(({ name }) => name.endsWith(type) && !name.includes('/locale/'))
+        .map(asset => [asset.name, attr]);
+
+      // Add locale placeholder
+      if (type === 'js') {
+        const locale = manifestValues.find(({ name }) =>
+          name.includes('/locale/')
+        );
+
+        if (locale) {
+          builtSources.push([
+            locale.name.replace(/(\/)(\w+)(\.js)$/, '$1#{$Language}$3'),
+            attr,
+          ]);
+        }
+      }
+
+      return builtSources;
+    };
+
+    const sources = {};
+    const jsAttrs = { async: true, crossorigin: 'anonymous' };
+
+    sources.esScripts = buildSource('client.es', 'js', jsAttrs);
+    sources.scripts = buildSource('client', 'js', jsAttrs);
+    sources.styles = buildSource('client.es', 'css', {
+      rel: 'stylesheet',
+    });
+
+    return sources;
   }
+
+  /**
+   * Adds content hashes to filename sources.
+   */
+  function _resolveFileSources(source, manifest, language) {
+    const resourceMap = Object.values(manifest).reduce(
+      (acc, cur) => ({
+        ...acc,
+        ...cur,
+      }),
+      {}
+    );
+
+    for (const key of Object.keys(source)) {
+      const keySources = source[key];
+
+      if (!Array.isArray(keySources)) {
+        continue;
+      }
+
+      keySources.forEach(keySource => {
+        if (!Array.isArray(keySource)) {
+          keySource = resourceMap[keySource].fileName.replace(
+            '#{$Language}',
+            language
+          );
+        } else {
+          keySource[0] =
+            resourceMap[
+              keySource[0].replace('#{$Language}', language)
+            ].fileName;
+        }
+
+        // Handle SDN fallback
+        if (process.env.SDN_PUBLIC_PATH) {
+          if (!Array.isArray(keySource)) {
+            keySource = [
+              `${process.env.SDN_PUBLIC_PATH}${keySource}`,
+              { fallback: keySource },
+            ];
+          } else {
+            if (!keySource[1]?.fallback) {
+              keySource[1].fallback = keySource[0];
+            }
+
+            keySource[0] = `${process.env.SDN_PUBLIC_PATH}${keySource[0]}`;
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Load manifest, runner resources and prepare sources object.
+   */
+  function _loadResources() {
+    if (fs.existsSync(runnerPath)) {
+      runner = fs.readFileSync(runnerPath, 'utf8');
+    }
+
+    if (fs.existsSync(manifestPath)) {
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    }
+
+    sources = _prepareSources(manifest);
+  }
+
+  _loadResources();
 
   function _renderStyles(styles) {
     if (!Array.isArray(styles)) {
@@ -114,9 +225,9 @@ module.exports = function responseUtilsFactory() {
       return response?.content;
     }
 
-    // Always reload runner script in watch mode
-    if (process.env.IMA_CLI_WATCH && fs.existsSync(runnerPath)) {
-      runner = fs.readFileSync(runnerPath, 'utf8');
+    // Always reload resources in dev mode to have fresh copy
+    if (process.env.IMA_CLI_WATCH) {
+      _loadResources();
     }
 
     const { settings } = bootConfig;
@@ -127,7 +238,13 @@ module.exports = function responseUtilsFactory() {
     const revivalCache = _getRevivalCache({ response });
 
     // Preprocess source and styles
-    const { styles, ...source } = settings.$Source(response);
+    const { styles, ...source } =
+      settings?.$Source?.(response, manifest, sources) ?? sources;
+
+    // Add content hashes to placeholder filenames
+    _resolveFileSources({ styles }, manifest, extendedSettings.$Language);
+    _resolveFileSources(source, manifest, extendedSettings.$Language);
+
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
     const $RevivalSettings = _renderScript(revivalSettings).replace(
       interpolateRe,

@@ -116,11 +116,8 @@ app
       orderPreference: ['br'],
       serveStatic: {
         maxAge: '14d',
-        ...(environment.$Env !== 'prod' && {
-          setHeaders: res => {
-            res.setHeader('Cache-Control', 'no-store');
-          },
-        }),
+        cacheControl: environment.$Env === 'prod',
+        immutable: environment.$Env === 'prod',
       },
     })
   )

@@ -406,8 +406,6 @@ describe('Server App Factory', () => {
   it('handle request', async () => {
     await serverApp.requestHandlerMiddleware(REQ, RES);
 
-    //console.log('PAGE', page);
-
     expect(true).toBeTruthy();
   });
 });

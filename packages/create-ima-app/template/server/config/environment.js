@@ -106,22 +106,6 @@ module.exports = (() => {
       $Language: {
         '//*:*': 'en',
       },
-      $Source: () => ({
-        styles: ['/static/css/app.css'],
-        scripts: [
-          ['/static/js/locale/#{$Language}.js?v=#{$Version}', { async: true }],
-          ['/static/js/vendors.js?v=#{$Version}', { async: true }],
-          ['/static/js/app.client.js?v=#{$Version}', { async: true }],
-        ],
-        esScripts: [
-          [
-            '/static/js.es/locale/#{$Language}.js?v=#{$Version}',
-            { async: true },
-          ],
-          ['/static/js.es/vendors.js?v=#{$Version}', { async: true }],
-          ['/static/js.es/app.client.js?v=#{$Version}', { async: true }],
-        ],
-      }),
       $Server: {
         concurrency: 1,
         logger: {

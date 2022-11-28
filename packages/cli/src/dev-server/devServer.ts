@@ -10,7 +10,7 @@ import { ImaCliArgs, ImaConfig } from '../types';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
-const WRITE_TO_DISK_WHITELIST = /(runner\.js|favicon\.ico)$/i;
+const WRITE_TO_DISK_WHITELIST = /(runner\.js|manifest\.json|favicon\.ico)$/i;
 
 export async function createDevServer({
   args,

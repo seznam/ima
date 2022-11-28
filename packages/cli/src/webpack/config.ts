@@ -23,6 +23,7 @@ import webpack, {
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
+import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
   resolveEnvironment,
@@ -250,7 +251,9 @@ export default async (
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
         if (isServer) {
-          return `server/${chunk?.name === name ? 'app.server' : '[name]'}.js`;
+          return `server/${
+            chunk?.name === name ? 'app.server' : '[name]'
+          }.[contenthash].js`;
         }
 
         // Separate client chunks into es and non-es folders
@@ -259,6 +262,7 @@ export default async (
           chunk?.name === name && isDevEnv && 'app.client',
           chunk?.name === name && !isDevEnv && 'app.bundle',
           chunk?.name !== name && '[name]',
+          '[contenthash]',
           'js',
         ].filter(Boolean);
 
@@ -266,11 +270,15 @@ export default async (
       },
       chunkFilename: () =>
         isServer
-          ? `server/chunk.[id].js`
-          : `static/${isEsVersion ? 'js.es' : 'js'}/chunk.[id].js`,
+          ? `server/chunk.[id].[contenthash].js`
+          : `static/${
+              isEsVersion ? 'js.es' : 'js'
+            }/chunk.[id].[contenthash].js`,
       cssFilename: ({ chunk }) =>
-        `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
-      cssChunkFilename: `static/css/chunk.[id].css`,
+        `static/css/${
+          chunk?.name === name ? 'app' : '[name]'
+        }.[contenthash].css`,
+      cssChunkFilename: `static/css/chunk.[id].[contenthash].css`,
       publicPath: ctx.publicPath ?? imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
@@ -555,9 +563,11 @@ export default async (
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
-                  `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
+                    ctx.command === 'dev' ? '' : '.[contenthash]'
+                  }.css`,
                 ignoreOrder: true,
-                chunkFilename: `static/css/[id].css`,
+                chunkFilename: `static/css/[id].[contenthash].css`,
               }),
 
             // Copies essential assets to static directory
@@ -647,6 +657,9 @@ export default async (
                 ],
               }),
           ]),
+
+      // Generate assets manifest from all compilation instances
+      new ManifestPlugin({ context: ctx, imaConfig }),
     ].filter(Boolean) as WebpackPluginInstance[],
 
     // Enable node preset for externals on server
