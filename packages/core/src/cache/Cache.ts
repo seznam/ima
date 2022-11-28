@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export type SerializedData<V> = {
+export type SerializedData<V = unknown> = {
   [key: string]: { value: V; ttl: number };
 };
 
@@ -11,7 +11,7 @@ export type SerializedData<V> = {
  * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.
  */
-export default abstract class Cache<V> {
+export default abstract class Cache<V = unknown> {
   /**
    * Clears the cache by deleting all entries.
    */

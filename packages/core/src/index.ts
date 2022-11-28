@@ -192,9 +192,9 @@ function bootClientApp(
   bootConfig: Config
 ) {
   app.bootstrap.run(bootConfig);
-  const cache = app.oc.get('$Cache') as Cache<unknown>;
 
-  cache.deserialize(($IMA.Cache || {}) as SerializedData<unknown>);
+  const cache = app.oc.get('$Cache') as Cache;
+  cache.deserialize(($IMA.Cache || {}) as SerializedData);
 
   return app;
 }
