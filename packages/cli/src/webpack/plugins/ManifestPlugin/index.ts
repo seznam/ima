@@ -86,12 +86,7 @@ class ManifestPlugin {
     }
 
     Object.keys(assets)
-      .filter(
-        assetName =>
-          /\.(js|css)$/.test(assetName) &&
-          !assetName.endsWith('runner.js') &&
-          !assetName.includes('/hot/')
-      )
+      .filter(assetName => this.#filter(compilationName, assetName))
       .forEach(assetName => {
         const asset = compilation.getAsset(assetName);
 
@@ -124,6 +119,33 @@ class ManifestPlugin {
         new sources.RawSource(JSON.stringify(seed, null, 2))
       );
     }
+  }
+
+  #filter(name: ImaConfigurationContext['name'], assetName: string) {
+    let result = !assetName.endsWith('.map');
+
+    switch (name) {
+      case 'server':
+        result =
+          result &&
+          assetName.startsWith('server/') &&
+          !assetName.includes('runner.js');
+        break;
+
+      case 'client':
+        result = result && assetName.startsWith('static/js/');
+        break;
+
+      case 'client.es':
+        result = result && assetName.startsWith('static/js.es/');
+        break;
+    }
+
+    if (this.#options.context.processCss) {
+      result = result || /css\/[\w.\-_]+\.css$/.test(assetName);
+    }
+
+    return result;
   }
 }
 
