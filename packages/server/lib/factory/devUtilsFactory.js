@@ -8,13 +8,19 @@ module.exports = function devUtilsFactory() {
     );
     const assets = manifest.assetsByCompiler.server;
 
+    if (options?.optional && !assets[module]?.fileName) {
+      return;
+    }
+
     if (Array.isArray(options?.dependencies)) {
       options?.dependencies.forEach(dependency =>
         require(path.resolve(path.join('./build', assets[dependency].fileName)))
       );
     }
 
-    return require(path.resolve(path.join('./build', assets[module].fileName)));
+    return require(path.resolve(
+      path.join('./build', assets[module]?.fileName)
+    ));
   }
 
   return manifestRequire;
