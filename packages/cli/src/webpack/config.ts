@@ -279,7 +279,7 @@ export default async (
           chunk?.name === name ? 'app' : '[name]'
         }.[contenthash].css`,
       cssChunkFilename: `static/css/chunk.[id].[contenthash].css`,
-      publicPath: ctx.publicPath ?? imaConfig.publicPath,
+      publicPath: imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the build folder.

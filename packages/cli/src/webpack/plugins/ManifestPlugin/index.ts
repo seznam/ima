@@ -15,12 +15,24 @@ export interface Asset extends AssetInfo {
   name: string;
 }
 
-export type ManifestFile = Record<
-  ImaConfigurationContext['name'],
-  Record<string, Asset>
->;
+export interface ManifestFile {
+  assets: Record<string, Asset>;
+  assetsByCompiler: Record<
+    ImaConfigurationContext['name'],
+    Record<string, Asset>
+  >;
+  publicPath: string;
+}
 
-const seed: ManifestFile = {} as ManifestFile;
+// This seed is shared among instances of this plugin
+const seed: ManifestFile = {
+  assets: {},
+  assetsByCompiler: {
+    client: {},
+    'client.es': {},
+    server: {},
+  },
+} as ManifestFile;
 
 /**
  * This plugin takes care of generating application runtime script
@@ -44,6 +56,8 @@ class ManifestPlugin {
       name: this.#pluginName,
       baseDataPath: 'options',
     });
+
+    seed.publicPath = this.#options.imaConfig.publicPath;
   }
 
   apply(compiler: Compiler) {
@@ -85,21 +99,20 @@ class ManifestPlugin {
           return;
         }
 
-        if (!seed[compilationName]) {
-          seed[compilationName] = {};
-        }
-
-        const fileName = `/${asset.name}`;
-        const name = `/${assetName.replace(
+        const fileName = `${asset.name}`;
+        const name = `${assetName.replace(
           `.${asset?.info?.contenthash as string}`,
           ''
         )}`;
 
-        seed[compilationName][name] = {
+        const assetWithInfo = {
           name,
           fileName,
           ...asset?.info,
         };
+
+        seed.assetsByCompiler[compilationName][name] = assetWithInfo;
+        seed.assets[name] = assetWithInfo;
       });
 
     if (ManifestPlugin.#generated === ManifestPlugin.#instances) {

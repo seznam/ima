@@ -19,16 +19,16 @@ module.exports = function createIMAServer({
   const manifestRequire = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
-    manifestRequire('/server/vendors.js', {
+    manifestRequire('server/vendors.js', {
       optional: true,
-      dependencies: ['/server/app.server.js'],
+      dependencies: ['server/app.server.js'],
     });
 
-    return manifestRequire('/server/app.server.js');
+    return manifestRequire('server/app.server.js');
   }
 
   function languageLoader(language) {
-    return manifestRequire(`/server/locale/${language}.js`).default;
+    return manifestRequire(`server/locale/${language}.js`).default;
   }
 
   emitter = emitter || new Emitter({ logger, debug: false });
