@@ -5,7 +5,7 @@
  * type. Values in the storage are named using `string` keys. The storage
  * can be therefore thought of as a `Map<string, *>`.....
  */
-export default abstract class Storage {
+export default abstract class Storage<V> {
   /**
    * This method is used to finalize the initialization of the storage after
    * the dependencies provided through the constructor have been prepared for
@@ -16,7 +16,7 @@ export default abstract class Storage {
    *
    * @return This storage.
    */
-  init() {
+  init(): this {
     return this;
   }
 
@@ -27,7 +27,7 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return `true` if the storage entry exists.
    */
-  has(key: string) {
+  has(key: string): boolean {
     return false;
   }
 
@@ -41,8 +41,8 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return The value of the storage entry.
    */
-  get(key: string): unknown {
-    return;
+  get(key: string): V | undefined {
+    return undefined;
   }
 
   /**
@@ -53,7 +53,7 @@ export default abstract class Storage {
    * @param value The storage entry value.
    * @return This storage.
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: V): this {
     return this;
   }
 
@@ -63,7 +63,7 @@ export default abstract class Storage {
    * @param key The key identifying the storage entry.
    * @return This storage.
    */
-  delete(key: string) {
+  delete(key: string): this {
     return this;
   }
 
@@ -72,7 +72,7 @@ export default abstract class Storage {
    *
    * @return This storage.
    */
-  clear() {
+  clear(): this {
     return this;
   }
 
@@ -94,7 +94,7 @@ export default abstract class Storage {
    *
    * @return The number of entries in this storage.
    */
-  size() {
+  size(): number {
     return 0;
   }
 }

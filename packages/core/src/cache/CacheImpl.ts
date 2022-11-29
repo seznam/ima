@@ -17,12 +17,13 @@ import { UnknownParameters } from '../CommonTypes';
  *   cache.set('model.articles', articles, 60 * 60 * 1000);
  * }
  */
-export default class CacheImpl extends Cache {
-  protected _cache: Storage;
-  protected _factory: CacheFactory;
+export default class CacheImpl<V> extends Cache<V> {
+  protected _cache: Storage<CacheEntry<V>>;
+  protected _factory: CacheFactory<V>;
   protected _Helper: typeof Helpers;
   protected _ttl: number;
   protected _enabled: boolean;
+
   /**
    * Initializes the cache.
    *
@@ -32,15 +33,14 @@ export default class CacheImpl extends Cache {
    * @param config The cache configuration.
    */
   constructor(
-    cacheStorage: Storage,
-    factory: CacheFactory,
+    cacheStorage: Storage<CacheEntry<V>>,
+    factory: CacheFactory<V>,
     Helper: typeof Helpers,
     config: { ttl: number; enabled: boolean } = { ttl: 30000, enabled: false }
   ) {
     super();
 
     this._cache = cacheStorage;
-
     this._factory = factory;
 
     /**
@@ -62,19 +62,20 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  clear() {
+  clear(): void {
     this._cache.clear();
   }
 
   /**
    * @inheritDoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     if (!this._enabled || !this._cache.has(key)) {
       return false;
     }
 
-    const cacheEntry = this._cache.get(key) as CacheEntry;
+    const cacheEntry = this._cache.get!(key);
+
     if (cacheEntry && !cacheEntry.isExpired()) {
       return true;
     }
@@ -87,10 +88,10 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  get(key: string): unknown | null {
+  get(key: string): V | null {
     if (this.has(key)) {
-      const cacheEntryItem = this._cache.get(key) as CacheEntry;
-      const value = cacheEntryItem.getValue();
+      const cacheEntryItem = this._cache.get(key);
+      const value = cacheEntryItem!.getValue();
 
       return this._clone(value);
     }
@@ -101,7 +102,7 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  set(key: string, value: unknown, ttl: number | string = 0) {
+  set(key: string, value: V, ttl: number | string = 0): void {
     if (!this._enabled) {
       return;
     }
@@ -117,14 +118,14 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  delete(key: string) {
+  delete(key: string): void {
     this._cache.delete(key);
   }
 
   /**
    * @inheritDoc
    */
-  disable() {
+  disable(): void {
     this._enabled = false;
     this.clear();
   }
@@ -132,15 +133,15 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  enable() {
+  enable(): void {
     this._enabled = true;
   }
 
   /**
    * @inheritDoc
    */
-  serialize() {
-    const dataToSerialize: UnknownParameters = {};
+  serialize(): string {
+    const dataToSerialize: Record<string, SerializedCacheEntry<V>> = {};
 
     for (const key of this._cache.keys()) {
       const currentValue = this._cache.get(key);
@@ -157,7 +158,7 @@ export default class CacheImpl extends Cache {
             throw new Error(
               `ima.core.cache.CacheImpl:serialize An ` +
                 `attempt to serialize ` +
-                `${(serializeEntry.value as CacheEntry).toString()}, stored ` +
+                `${serializeEntry.toString()}, stored ` +
                 `using the key ${key}, was made, but the value ` +
                 `cannot be serialized. Remove this entry from ` +
                 `the cache or change its type so that can be ` +
@@ -176,7 +177,9 @@ export default class CacheImpl extends Cache {
   /**
    * @inheritDoc
    */
-  deserialize(serializedData: { [key: string]: SerializedCacheEntry }) {
+  deserialize(serializedData: {
+    [key: string]: SerializedCacheEntry<V>;
+  }): void {
     for (const key of Object.keys(serializedData)) {
       const cacheEntryItem = serializedData[key];
 
@@ -195,7 +198,7 @@ export default class CacheImpl extends Cache {
    * @return `true` if the provided value can be serialized into JSON,
    *         `false` otherwise.
    */
-  private _canSerializeValue(value: unknown) {
+  private _canSerializeValue(value: unknown): boolean {
     if (
       value instanceof Date ||
       value instanceof RegExp ||
@@ -249,7 +252,7 @@ export default class CacheImpl extends Cache {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  private _clone(value: unknown) {
+  private _clone(value: V): V {
     if (
       value !== null &&
       typeof value === 'object' &&

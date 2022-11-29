@@ -1,8 +1,10 @@
-import MapStorage from './MapStorage';
+import memoizeOne from 'memoize-one';
 import GenericError from '../error/GenericError';
+import { Dependencies } from '../ObjectContainer';
 import Request from '../router/Request';
 import Response from '../router/Response';
 import Window from '../window/Window';
+import Storage from './Storage';
 
 /**
  * Implementation note: This is the largest possible safe value that has been
@@ -28,7 +30,7 @@ export type Options = {
 
 export type Cookie = {
   options: Options;
-  value: string;
+  value: string | number | boolean | Date | undefined;
 };
 
 /**
@@ -36,20 +38,28 @@ export type Cookie = {
  * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
-export default class CookieStorage extends MapStorage {
+export default class CookieStorage extends Storage<Cookie['value']> {
   /**
    * The window utility used to determine whether the IMA is being run
    * at the client or at the server.
    */
   private _window: Window;
+
   /**
    * The current HTTP request. This field is used at the server side.
    */
   private _request: Request;
+
   /**
    * The current HTTP response. This field is used at the server side.
    */
   private _response: Response;
+
+  /**
+   * The internal storage of entries.
+   */
+  private _storage: Map<string, Cookie> = new Map();
+
   /**
    * The overriding cookie attribute values.
    */
@@ -62,6 +72,7 @@ export default class CookieStorage extends MapStorage {
     domain: '',
     sameSite: 'Lax',
   };
+
   /**
    * Transform encode and decode functions for cookie value.
    */
@@ -73,7 +84,12 @@ export default class CookieStorage extends MapStorage {
     decode: value => value,
   };
 
-  static get $dependencies() {
+  /**
+   * Memoized function of private parseRawCookies function
+   */
+  #memoParseRawCookies = memoizeOne(this.#parseRawCookies);
+
+  static get $dependencies(): Dependencies {
     return [Window, Request, Response];
   }
 
@@ -93,22 +109,20 @@ export default class CookieStorage extends MapStorage {
     super();
 
     this._window = window;
-
     this._request = request;
-
     this._response = response;
   }
 
   /**
    * @inheritDoc
    */
-  init(options: Options = {}, transformFunction = {}) {
+  init(options: Options = {}, transformFunction = {}): this {
     this._transformFunction = Object.assign(
       this._transformFunction,
       transformFunction
     );
     this._options = Object.assign(this._options, options);
-    this._parse();
+    this.parse();
 
     return this;
   }
@@ -116,21 +130,19 @@ export default class CookieStorage extends MapStorage {
   /**
    * @inheritDoc
    */
-  has(name: string) {
-    this._parse();
-    return super.has(name);
+  has(name: string): boolean {
+    this.parse();
+
+    return this._storage.has(name);
   }
 
   /**
    * @inheritDoc
    */
-  get(name: string) {
-    this._parse();
-    if (super.has(name)) {
-      return (super.get(name) as Cookie).value;
-    } else {
-      return undefined;
-    }
+  get(name: string): Cookie['value'] {
+    this.parse();
+
+    return this._storage.has(name) ? this._storage.get(name)!.value : undefined;
   }
 
   /**
@@ -145,26 +157,26 @@ export default class CookieStorage extends MapStorage {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value: string | undefined, options: Options = {}) {
+  set(name: string, value: Cookie['value'], options: Options = {}): this {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
       // Deletes the cookie
       options.maxAge = 0;
-      options.expires = this._getExpirationAsDate(-1);
+      options.expires = this.getExpirationAsDate(-1);
     } else {
-      this._recomputeCookieMaxAgeAndExpires(options);
+      this.recomputeCookieMaxAgeAndExpires(options);
     }
 
-    value = this._sanitizeCookieValue(value + '');
+    value = this.sanitizeCookieValue(value + '');
 
     if (this._window.isClient()) {
-      document.cookie = this._generateCookieString(name, value, options);
+      document.cookie = this.#generateCookieString(name, value, options);
     } else {
       this._response.setCookie(name, value, options);
     }
 
-    super.set(name, { value, options });
+    this._storage.set(name, { value, options });
 
     return this;
   }
@@ -179,10 +191,10 @@ export default class CookieStorage extends MapStorage {
    *        same name of the cookie.
    * @return This storage.
    */
-  delete(name: string, options: Options = {}) {
-    if (super.has(name)) {
+  delete(name: string, options: Options = {}): this {
+    if (this._storage.has(name)) {
       this.set(name, undefined, options);
-      super.delete(name);
+      this._storage.delete(name);
     }
 
     return this;
@@ -191,28 +203,32 @@ export default class CookieStorage extends MapStorage {
   /**
    * @inheritDoc
    */
-  clear() {
-    for (const cookieName of super.keys()) {
+  clear(): this {
+    for (const cookieName of this.keys()) {
       this.delete(cookieName);
     }
 
-    return super.clear();
+    this._storage.clear();
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  keys() {
-    this._parse();
-    return super.keys();
+  keys(): Iterable<string> {
+    this.parse();
+
+    return this._storage.keys();
   }
 
   /**
    * @inheritDoc
    */
-  size() {
-    this._parse();
-    return super.size();
+  size(): number {
+    this.parse();
+
+    return this._storage.size;
   }
 
   /**
@@ -222,14 +238,14 @@ export default class CookieStorage extends MapStorage {
    * @return All cookies in this storage serialized to a string
    *         compatible with the `Cookie` HTTP header.
    */
-  getCookiesStringForCookieHeader() {
+  getCookiesStringForCookieHeader(): string {
     const cookieStrings = [];
 
-    for (const cookieName of super.keys()) {
-      const cookieItem = super.get(cookieName) as Cookie;
+    for (const cookieName of this._storage.keys()) {
+      const cookieItem = this._storage.get(cookieName);
 
       cookieStrings.push(
-        this._generateCookieString(cookieName, cookieItem.value, {})
+        this.#generateCookieString(cookieName, cookieItem!.value, {})
       );
     }
 
@@ -246,8 +262,8 @@ export default class CookieStorage extends MapStorage {
    * @param setCookieHeader The value of the `Set-Cookie` HTTP
    *        header.
    */
-  parseFromSetCookieHeader(setCookieHeader: string) {
-    const cookie = this._extractCookie(setCookieHeader);
+  parseFromSetCookieHeader(setCookieHeader: string): void {
+    const cookie = this.#extractCookie(setCookieHeader);
 
     if (typeof cookie.name === 'string') {
       this.set(cookie.name, cookie.value, cookie.options);
@@ -262,199 +278,20 @@ export default class CookieStorage extends MapStorage {
    * HTTP header when used at the server side, and the `document.cookie`
    * property at the client side.
    */
-  _parse() {
-    const cookiesString = this._window.isClient()
-      ? document.cookie
-      : this._request.getCookieHeader();
-
-    const cookiesArray = cookiesString
-      ? cookiesString.split(COOKIE_SEPARATOR)
-      : [];
-
-    const cookiesNames: string[] = [];
-
-    for (let i = 0; i < cookiesArray.length; i++) {
-      const cookie = this._extractCookie(cookiesArray[i]);
-      if (typeof cookie.name === 'string') {
-        // if cookie already exists in storage get its old options
-        let oldCookieOptions = {};
-        if (super.has(cookie.name)) {
-          oldCookieOptions = (super.get(cookie.name) as Cookie).options;
-        }
-
-        cookie.options = Object.assign(
-          {},
-          this._options, // default options
-          oldCookieOptions, // old cookie options (if any)
-          cookie.options // new cookie options (if any)
-        );
-
-        cookiesNames.push(cookie.name);
-
-        // add new cookie or update existing one
-        super.set(cookie.name, {
-          value: this._sanitizeCookieValue(cookie.value),
-          options: cookie.options,
-        });
-      }
-    }
+  parse(): void {
+    const cookiesNames = this.#memoParseRawCookies(
+      this._window.isClient()
+        ? document.cookie
+        : this._request.getCookieHeader()
+    );
 
     // remove cookies from storage, which were not parsed
-    for (const storageCookieName of super.keys()) {
+    for (const storageCookieName of this._storage.keys()) {
       const index = cookiesNames.indexOf(storageCookieName);
       if (index === -1) {
-        super.delete(storageCookieName);
+        this._storage.delete(storageCookieName);
       }
     }
-  }
-
-  /**
-   * Creates a copy of the provided word (or text) that has its first
-   * character converted to lower case.
-   *
-   * @param word The word (or any text) that should have its first
-   *        character converted to lower case.
-   * @return A copy of the provided string with its first character
-   *         converted to lower case.
-   */
-  _firstLetterToLowerCase(word: string) {
-    return word.charAt(0).toLowerCase() + word.substring(1);
-  }
-
-  /**
-   * Generates a string representing the specified cookied, usable either
-   * with the `document.cookie` property or the `Set-Cookie` HTTP
-   * header.
-   *
-   * (Note that the `Cookie` HTTP header uses a slightly different
-   * syntax.)
-   *
-   * @param name The cookie name.
-   * @param value The cookie value, will be
-   *        converted to string.
-   * @param options Cookie attributes. Only the attributes listed in the
-   *        type annotation of this field are supported. For documentation
-   *        and full list of cookie attributes see
-   *        http://tools.ietf.org/html/rfc2965#page-5
-   * @return A string representing the cookie. Setting this string
-   *         to the `document.cookie` property will set the cookie to
-   *         the browser's cookie storage.
-   */
-  _generateCookieString(
-    name: string,
-    value: boolean | number | string,
-    options: Options
-  ) {
-    let cookieString =
-      name + '=' + this._transformFunction.encode(value as string);
-
-    cookieString += options.domain ? ';Domain=' + options.domain : '';
-    cookieString += options.path ? ';Path=' + options.path : '';
-    cookieString += options.expires
-      ? ';Expires=' + (options.expires as Date).toUTCString()
-      : '';
-    cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
-    cookieString += options.httpOnly ? ';HttpOnly' : '';
-    cookieString += options.secure ? ';Secure' : '';
-    cookieString += options.sameSite ? ';SameSite=' + options.sameSite : '';
-
-    return cookieString;
-  }
-
-  /**
-   * Converts the provided cookie expiration to a `Date` instance.
-   *
-   * @param expiration Cookie expiration in seconds
-   *        from now, or as a string compatible with the `Date`
-   *        constructor.
-   * @return Cookie expiration as a `Date` instance.
-   */
-  _getExpirationAsDate(expiration: number | string | Date) {
-    if (expiration instanceof Date) {
-      return expiration;
-    }
-
-    if (typeof expiration === 'number') {
-      return expiration === Infinity
-        ? MAX_EXPIRE_DATE
-        : new Date(Date.now() + expiration * 1000);
-    }
-
-    return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
-  }
-
-  /**
-   * Extract cookie name, value and options from cookie string.
-   *
-   * @param cookieString The value of the `Set-Cookie` HTTP
-   *        header.
-   */
-  _extractCookie(cookieString: string) {
-    const cookieOptions: Options = {};
-    let cookieName;
-    let cookieValue;
-
-    const cookiePairs = cookieString.split(COOKIE_SEPARATOR.trim());
-
-    cookiePairs.forEach((pair, index) => {
-      const [name, value] = this._extractNameAndValue(pair, index);
-      if (index === 0) {
-        cookieName = name;
-        cookieValue = value;
-      } else {
-        Object.assign(cookieOptions, { [name as string]: value });
-      }
-    });
-
-    return {
-      name: cookieName,
-      value: cookieValue,
-      options: cookieOptions,
-    };
-  }
-
-  /**
-   * Extract name and value for defined pair and pair index.
-   */
-  _extractNameAndValue(pair: string, pairIndex: number) {
-    const separatorIndexEqual = pair.indexOf('=');
-    let name = '';
-    let value = null;
-
-    if (pairIndex === 0 && separatorIndexEqual < 0) {
-      return [null, null];
-    }
-
-    if (separatorIndexEqual < 0) {
-      name = pair.trim();
-      value = true;
-    } else {
-      name = pair.substring(0, separatorIndexEqual).trim();
-
-      value = this._transformFunction.decode(
-        pair.substring(separatorIndexEqual + 1).trim()
-      );
-
-      // erase quoted values
-      if ('"' === value[0]) {
-        value = value.slice(1, -1);
-      }
-
-      if (name === 'Expires') {
-        value = this._getExpirationAsDate(value);
-      }
-
-      if (name === 'Max-Age') {
-        name = 'maxAge';
-        value = parseInt(value as string, 10);
-      }
-    }
-
-    if (pairIndex !== 0) {
-      name = this._firstLetterToLowerCase(name);
-    }
-
-    return [name, value];
   }
 
   /**
@@ -465,10 +302,10 @@ export default class CookieStorage extends MapStorage {
    * @param value Cookie value
    * @return Sanitized value
    */
-  _sanitizeCookieValue(value?: string) {
+  sanitizeCookieValue(value: Cookie['value']): string {
     let sanitizedValue = '';
 
-    if (!value) {
+    if (typeof value !== 'string') {
       return sanitizedValue;
     }
 
@@ -507,9 +344,9 @@ export default class CookieStorage extends MapStorage {
    *        and full list of cookie attributes see
    *        http://tools.ietf.org/html/rfc2965#page-5
    */
-  _recomputeCookieMaxAgeAndExpires(options: Options) {
+  recomputeCookieMaxAgeAndExpires(options: Options): void {
     if (options.maxAge || options.expires) {
-      options.expires = this._getExpirationAsDate(
+      options.expires = this.getExpirationAsDate(
         (options.maxAge || options.expires) as number | string | Date
       );
     }
@@ -519,5 +356,194 @@ export default class CookieStorage extends MapStorage {
         (options.expires.valueOf() - Date.now()) / 1000
       );
     }
+  }
+
+  /**
+   * Converts the provided cookie expiration to a `Date` instance.
+   *
+   * @param expiration Cookie expiration in seconds
+   *        from now, or as a string compatible with the `Date`
+   *        constructor.
+   * @return Cookie expiration as a `Date` instance.
+   */
+  getExpirationAsDate(expiration: number | string | Date): Date {
+    if (expiration instanceof Date) {
+      return expiration;
+    }
+
+    if (typeof expiration === 'number') {
+      return expiration === Infinity
+        ? MAX_EXPIRE_DATE
+        : new Date(Date.now() + expiration * 1000);
+    }
+
+    return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
+  }
+
+  #parseRawCookies(rawCookies: string | undefined): string[] {
+    const cookiesArray = rawCookies ? rawCookies.split(COOKIE_SEPARATOR) : [];
+    const cookiesNames: string[] = [];
+
+    for (let i = 0; i < cookiesArray.length; i++) {
+      const cookie = this.#extractCookie(cookiesArray[i]);
+
+      if (typeof cookie.name === 'string') {
+        // if cookie already exists in storage get its old options
+        let oldCookieOptions = {};
+
+        if (this._storage.has(cookie.name)) {
+          oldCookieOptions = this._storage.get(cookie.name)!.options;
+        }
+
+        cookie.options = Object.assign(
+          {},
+          this._options, // default options
+          oldCookieOptions, // old cookie options (if any)
+          cookie.options // new cookie options (if any)
+        );
+
+        cookiesNames.push(cookie.name);
+
+        // add new cookie or update existing one
+        this._storage.set(cookie.name, {
+          value: this.sanitizeCookieValue(cookie.value),
+          options: cookie.options,
+        });
+      }
+    }
+
+    return cookiesNames;
+  }
+
+  /**
+   * Creates a copy of the provided word (or text) that has its first
+   * character converted to lower case.
+   *
+   * @param word The word (or any text) that should have its first
+   *        character converted to lower case.
+   * @return A copy of the provided string with its first character
+   *         converted to lower case.
+   */
+  #firstLetterToLowerCase(word: string): string {
+    return word.charAt(0).toLowerCase() + word.substring(1);
+  }
+
+  /**
+   * Generates a string representing the specified cookied, usable either
+   * with the `document.cookie` property or the `Set-Cookie` HTTP
+   * header.
+   *
+   * (Note that the `Cookie` HTTP header uses a slightly different
+   * syntax.)
+   *
+   * @param name The cookie name.
+   * @param value The cookie value, will be
+   *        converted to string.
+   * @param options Cookie attributes. Only the attributes listed in the
+   *        type annotation of this field are supported. For documentation
+   *        and full list of cookie attributes see
+   *        http://tools.ietf.org/html/rfc2965#page-5
+   * @return A string representing the cookie. Setting this string
+   *         to the `document.cookie` property will set the cookie to
+   *         the browser's cookie storage.
+   */
+  #generateCookieString(
+    name: string,
+    value: Cookie['value'],
+    options: Options
+  ): string {
+    let cookieString =
+      name + '=' + this._transformFunction.encode(value as string);
+
+    cookieString += options.domain ? ';Domain=' + options.domain : '';
+    cookieString += options.path ? ';Path=' + options.path : '';
+    cookieString += options.expires
+      ? ';Expires=' + (options.expires as Date).toUTCString()
+      : '';
+    cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
+    cookieString += options.httpOnly ? ';HttpOnly' : '';
+    cookieString += options.secure ? ';Secure' : '';
+    cookieString += options.sameSite ? ';SameSite=' + options.sameSite : '';
+
+    return cookieString;
+  }
+
+  /**
+   * Extract cookie name, value and options from cookie string.
+   *
+   * @param cookieString The value of the `Set-Cookie` HTTP
+   *        header.
+   */
+  #extractCookie(cookieString: string): Cookie & { name?: string } {
+    const cookieOptions: Options = {};
+    let cookieName;
+    let cookieValue;
+
+    cookieString.split(COOKIE_SEPARATOR.trim()).forEach((pair, index) => {
+      const [name, value] = this.#extractNameAndValue(pair, index);
+
+      if (!name) {
+        return;
+      }
+
+      if (index === 0) {
+        cookieName = name;
+        cookieValue = value;
+      } else {
+        Object.assign(cookieOptions, { [name]: value });
+      }
+    });
+
+    return {
+      name: cookieName,
+      value: cookieValue,
+      options: cookieOptions,
+    };
+  }
+
+  /**
+   * Extract name and value for defined pair and pair index.
+   */
+  #extractNameAndValue(
+    pair: string,
+    pairIndex: number
+  ): [string | null, Cookie['value'] | null] {
+    const separatorIndexEqual = pair.indexOf('=');
+    let name = '';
+    let value = null;
+
+    if (pairIndex === 0 && separatorIndexEqual < 0) {
+      return [null, null];
+    }
+
+    if (separatorIndexEqual < 0) {
+      name = pair.trim();
+      value = true;
+    } else {
+      name = pair.substring(0, separatorIndexEqual).trim();
+      value = this._transformFunction.decode(
+        pair.substring(separatorIndexEqual + 1).trim()
+      );
+
+      // erase quoted values
+      if ('"' === value[0]) {
+        value = value.slice(1, -1);
+      }
+
+      if (name === 'Expires') {
+        value = this.getExpirationAsDate(value);
+      }
+
+      if (name === 'Max-Age') {
+        name = 'maxAge';
+        value = parseInt(value as string, 10);
+      }
+    }
+
+    if (pairIndex !== 0) {
+      name = this.#firstLetterToLowerCase(name);
+    }
+
+    return [name, value];
   }
 }

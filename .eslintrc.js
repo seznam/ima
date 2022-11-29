@@ -158,6 +158,7 @@ module.exports = {
       },
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
           { 'ts-expect-error': 'allow-with-description' },

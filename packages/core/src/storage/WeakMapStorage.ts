@@ -1,15 +1,20 @@
-import MapStorage from './MapStorage';
+import Storage from './Storage';
 
 /**
  * A specialization of the `link MapStorage` storage mimicking the native
  * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
-export default class WeakMapStorage extends MapStorage {
+export default class WeakMapStorage<V = object> extends Storage<V> {
   /**
    * The time-to-live of a storage entry in milliseconds.
    */
   private _entryTtl: number;
+
+  /**
+   * The internal storage of entries.
+   */
+  private _storage: Map<string, WeakRef<V>> = new Map();
 
   /**
    * Initializes the storage.
@@ -27,70 +32,79 @@ export default class WeakMapStorage extends MapStorage {
   /**
    * @inheritDoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     this._discardExpiredEntries();
 
-    return super.has(key);
+    return this._storage.has(key);
   }
 
   /**
    * @inheritDoc
    */
-  get(key: string) {
+  get(key: string): V | undefined {
     this._discardExpiredEntries();
 
-    if (!super.has(key)) {
+    if (!this._storage.has(key)) {
       return undefined;
     }
 
-    return (super.get(key) as WeakRef).target;
+    return this._storage.get(key)?.target ?? undefined;
   }
 
   /**
    * @inheritDoc
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: V): this {
     this._discardExpiredEntries();
+    this._storage.set(key, new WeakRef<V>(value, this._entryTtl));
 
-    return super.set(key, new WeakRef(value as object, this._entryTtl));
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  delete(key: string) {
+  delete(key: string): this {
     this._discardExpiredEntries();
+    this._storage.delete(key);
 
-    return super.delete(key);
+    return this;
+  }
+
+  clear(): this {
+    this._storage.clear();
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  keys() {
+  keys(): Iterable<string> {
     this._discardExpiredEntries();
 
-    return super.keys();
+    return this._storage.keys();
   }
 
   /**
    * @inheritDoc
    */
-  size() {
+  size(): number {
     this._discardExpiredEntries();
 
-    return super.size();
+    return this._storage.size;
   }
 
   /**
    * Deletes all expired entries from this storage.
    */
-  _discardExpiredEntries() {
-    for (const key of super.keys()) {
-      const targetReference = super.get(key);
-      if (!(targetReference as WeakRef).target) {
+  _discardExpiredEntries(): void {
+    for (const key of this._storage.keys()) {
+      const targetReference = this._storage.get(key);
+
+      if (!(targetReference as WeakRef<V>).target) {
         // the reference has died
-        super.delete(key);
+        this._storage.delete(key);
       }
     }
   }
@@ -102,12 +116,12 @@ export default class WeakMapStorage extends MapStorage {
  * the point of WeakMap and WeakSet if you still need to manage the keys?!) and
  * there is no native way to create a weak reference.
  */
-class WeakRef {
+class WeakRef<V = object> {
   /**
    * The actual target reference, or `null` if the reference has
    * been already discarded.
    */
-  private _reference: object | null;
+  private _reference: V | null;
   /**
    * The UNIX timestamp with millisecond precision marking the moment at
    * or after which the reference will be discarded.
@@ -123,7 +137,7 @@ class WeakRef {
    *        reference should be kept. The reference will be discarded once
    *        ACCESSED after the specified timeout.
    */
-  constructor(target: object, ttl: number) {
+  constructor(target: V, ttl: number) {
     if ($Debug) {
       if (!(target instanceof Object)) {
         throw new TypeError(
@@ -137,7 +151,6 @@ class WeakRef {
     }
 
     this._reference = target;
-
     this._expiration = Date.now() + ttl;
   }
 
@@ -148,7 +161,7 @@ class WeakRef {
    * @return The target reference, or `null` if the reference
    *         has been discarded by the garbage collector.
    */
-  get target() {
+  get target(): V | null {
     if (this._reference && Date.now() >= this._expiration) {
       this._reference = null; // let the GC do its job
     }
