@@ -1,6 +1,7 @@
 'use strict';
 
 const responseUtilsFactory = require('../responseUtilsFactory.js');
+const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('fs', () => {
   const { toMockedInstance } = jest.requireActual('to-mock');
@@ -11,7 +12,11 @@ jest.mock('fs', () => {
       existsSync() {
         return true;
       },
-      readFileSync() {
+      readFileSync(path) {
+        if (path.endsWith('manifest.json')) {
+          return JSON.stringify(manifestMock);
+        }
+
         return '---runner content---';
       },
     }),

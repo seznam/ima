@@ -48,6 +48,7 @@ module.exports = {
     ],
 
     // Jest plugin overrides
+    'jest/no-mocks-import': 'off',
     'jest/valid-title': 'off',
     'jest/no-done-callback': 'warn',
     'jest/no-disabled-tests': 'warn',

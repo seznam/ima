@@ -1,0 +1,365 @@
+{
+  "assets": {
+    "server/app.server.js": {
+      "name": "server/app.server.js",
+      "fileName": "server/app.server.c5f6d1e2f1559ee6.js",
+      "immutable": true,
+      "contenthash": "c5f6d1e2f1559ee6",
+      "javascriptModule": false
+    },
+    "server/locale/cs.js": {
+      "name": "server/locale/cs.js",
+      "fileName": "server/locale/cs.b38d748e124df2b2.js",
+      "immutable": true,
+      "contenthash": "b38d748e124df2b2",
+      "javascriptModule": false
+    },
+    "server/locale/en.js": {
+      "name": "server/locale/en.js",
+      "fileName": "server/locale/en.08a9f0cd74ac9535.js",
+      "immutable": true,
+      "contenthash": "08a9f0cd74ac9535",
+      "javascriptModule": false
+    },
+    "static/js/app.bundle.js": {
+      "name": "static/js/app.bundle.js",
+      "fileName": "static/js/app.bundle.f658c155bf6e759d.js",
+      "immutable": true,
+      "contenthash": "f658c155bf6e759d",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js/app.bundle.f658c155bf6e759d.js.br",
+        "gzipped": "static/js/app.bundle.f658c155bf6e759d.js.gz"
+      }
+    },
+    "static/js/locale/cs.js": {
+      "name": "static/js/locale/cs.js",
+      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js",
+      "immutable": true,
+      "contenthash": "9fb00c4919a10e2b",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+        "gzipped": "static/js/locale/cs.9fb00c4919a10e2b.js.gz"
+      }
+    },
+    "static/js/locale/en.js": {
+      "name": "static/js/locale/en.js",
+      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js",
+      "immutable": true,
+      "contenthash": "0b902be9a0a90b9d",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+        "gzipped": "static/js/locale/en.0b902be9a0a90b9d.js.gz"
+      }
+    },
+    "static/js/locale/en.0b902be9a0a90b9d.js.br": {
+      "name": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js/locale/cs.9fb00c4919a10e2b.js.br": {
+      "name": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js/app.bundle.f658c155bf6e759d.js.br": {
+      "name": "static/js/app.bundle.f658c155bf6e759d.js.br",
+      "fileName": "static/js/app.bundle.f658c155bf6e759d.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js/locale/cs.9fb00c4919a10e2b.js.gz": {
+      "name": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
+      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js/locale/en.0b902be9a0a90b9d.js.gz": {
+      "name": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
+      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js/app.bundle.f658c155bf6e759d.js.gz": {
+      "name": "static/js/app.bundle.f658c155bf6e759d.js.gz",
+      "fileName": "static/js/app.bundle.f658c155bf6e759d.js.gz",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/css/app.css": {
+      "name": "static/css/app.css",
+      "fileName": "static/css/app.a04da83033ffbae3.css",
+      "immutable": true,
+      "contenthash": "a04da83033ffbae3",
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/css/app.a04da83033ffbae3.css.br",
+        "gzipped": "static/css/app.a04da83033ffbae3.css.gz"
+      }
+    },
+    "static/js.es/app.bundle.js": {
+      "name": "static/js.es/app.bundle.js",
+      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js",
+      "immutable": true,
+      "contenthash": "f77b468d9b23212f",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+        "gzipped": "static/js.es/app.bundle.f77b468d9b23212f.js.gz"
+      }
+    },
+    "static/js.es/locale/cs.js": {
+      "name": "static/js.es/locale/cs.js",
+      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js",
+      "immutable": true,
+      "contenthash": "117ab38e4b685384",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+        "gzipped": "static/js.es/locale/cs.117ab38e4b685384.js.gz"
+      }
+    },
+    "static/js.es/locale/en.js": {
+      "name": "static/js.es/locale/en.js",
+      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js",
+      "immutable": true,
+      "contenthash": "9e98a374de6d5584",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "brotliCompressed": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+        "gzipped": "static/js.es/locale/en.9e98a374de6d5584.js.gz"
+      }
+    },
+    "static/js.es/locale/cs.117ab38e4b685384.js.br": {
+      "name": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js.es/locale/en.9e98a374de6d5584.js.br": {
+      "name": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js.es/app.bundle.f77b468d9b23212f.js.br": {
+      "name": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js.es/locale/cs.117ab38e4b685384.js.gz": {
+      "name": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
+      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js.es/locale/en.9e98a374de6d5584.js.gz": {
+      "name": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
+      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
+      "compressed": true,
+      "immutable": true
+    },
+    "static/js.es/app.bundle.f77b468d9b23212f.js.gz": {
+      "name": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
+      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
+      "compressed": true,
+      "immutable": true
+    }
+  },
+  "assetsByCompiler": {
+    "client": {
+      "static/js/app.bundle.js": {
+        "name": "static/js/app.bundle.js",
+        "fileName": "static/js/app.bundle.f658c155bf6e759d.js",
+        "immutable": true,
+        "contenthash": "f658c155bf6e759d",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js/app.bundle.f658c155bf6e759d.js.br",
+          "gzipped": "static/js/app.bundle.f658c155bf6e759d.js.gz"
+        }
+      },
+      "static/js/locale/cs.js": {
+        "name": "static/js/locale/cs.js",
+        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js",
+        "immutable": true,
+        "contenthash": "9fb00c4919a10e2b",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+          "gzipped": "static/js/locale/cs.9fb00c4919a10e2b.js.gz"
+        }
+      },
+      "static/js/locale/en.js": {
+        "name": "static/js/locale/en.js",
+        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js",
+        "immutable": true,
+        "contenthash": "0b902be9a0a90b9d",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+          "gzipped": "static/js/locale/en.0b902be9a0a90b9d.js.gz"
+        }
+      },
+      "static/js/locale/en.0b902be9a0a90b9d.js.br": {
+        "name": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js/locale/cs.9fb00c4919a10e2b.js.br": {
+        "name": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js/app.bundle.f658c155bf6e759d.js.br": {
+        "name": "static/js/app.bundle.f658c155bf6e759d.js.br",
+        "fileName": "static/js/app.bundle.f658c155bf6e759d.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js/locale/cs.9fb00c4919a10e2b.js.gz": {
+        "name": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
+        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js/locale/en.0b902be9a0a90b9d.js.gz": {
+        "name": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
+        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js/app.bundle.f658c155bf6e759d.js.gz": {
+        "name": "static/js/app.bundle.f658c155bf6e759d.js.gz",
+        "fileName": "static/js/app.bundle.f658c155bf6e759d.js.gz",
+        "compressed": true,
+        "immutable": true
+      }
+    },
+    "client.es": {
+      "static/css/app.css": {
+        "name": "static/css/app.css",
+        "fileName": "static/css/app.a04da83033ffbae3.css",
+        "immutable": true,
+        "contenthash": "a04da83033ffbae3",
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/css/app.a04da83033ffbae3.css.br",
+          "gzipped": "static/css/app.a04da83033ffbae3.css.gz"
+        }
+      },
+      "static/js.es/app.bundle.js": {
+        "name": "static/js.es/app.bundle.js",
+        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js",
+        "immutable": true,
+        "contenthash": "f77b468d9b23212f",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+          "gzipped": "static/js.es/app.bundle.f77b468d9b23212f.js.gz"
+        }
+      },
+      "static/js.es/locale/cs.js": {
+        "name": "static/js.es/locale/cs.js",
+        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js",
+        "immutable": true,
+        "contenthash": "117ab38e4b685384",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+          "gzipped": "static/js.es/locale/cs.117ab38e4b685384.js.gz"
+        }
+      },
+      "static/js.es/locale/en.js": {
+        "name": "static/js.es/locale/en.js",
+        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js",
+        "immutable": true,
+        "contenthash": "9e98a374de6d5584",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "brotliCompressed": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+          "gzipped": "static/js.es/locale/en.9e98a374de6d5584.js.gz"
+        }
+      },
+      "static/js.es/locale/cs.117ab38e4b685384.js.br": {
+        "name": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js.es/locale/en.9e98a374de6d5584.js.br": {
+        "name": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js.es/app.bundle.f77b468d9b23212f.js.br": {
+        "name": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js.es/locale/cs.117ab38e4b685384.js.gz": {
+        "name": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
+        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js.es/locale/en.9e98a374de6d5584.js.gz": {
+        "name": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
+        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
+        "compressed": true,
+        "immutable": true
+      },
+      "static/js.es/app.bundle.f77b468d9b23212f.js.gz": {
+        "name": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
+        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
+        "compressed": true,
+        "immutable": true
+      }
+    },
+    "server": {
+      "server/app.server.js": {
+        "name": "server/app.server.js",
+        "fileName": "server/app.server.c5f6d1e2f1559ee6.js",
+        "immutable": true,
+        "contenthash": "c5f6d1e2f1559ee6",
+        "javascriptModule": false
+      },
+      "server/locale/cs.js": {
+        "name": "server/locale/cs.js",
+        "fileName": "server/locale/cs.b38d748e124df2b2.js",
+        "immutable": true,
+        "contenthash": "b38d748e124df2b2",
+        "javascriptModule": false
+      },
+      "server/locale/en.js": {
+        "name": "server/locale/en.js",
+        "fileName": "server/locale/en.08a9f0cd74ac9535.js",
+        "immutable": true,
+        "contenthash": "08a9f0cd74ac9535",
+        "javascriptModule": false
+      }
+    }
+  },
+  "publicPath": "/"
+}

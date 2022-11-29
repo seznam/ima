@@ -122,7 +122,14 @@ class ManifestPlugin {
   }
 
   #filter(name: ImaConfigurationContext['name'], assetName: string) {
-    let result = !assetName.endsWith('.map');
+    /**
+     * Filter out source maps, dynamic chunks and runner script,
+     * these are handled in a specific way.
+     */
+    let result =
+      !assetName.endsWith('.map') &&
+      !assetName.includes('/chunk.') &&
+      !assetName.includes('runner.js');
 
     switch (name) {
       case 'server':
@@ -141,6 +148,7 @@ class ManifestPlugin {
         break;
     }
 
+    // Include CSS for given compilation
     if (this.#options.context.processCss) {
       result = result || /css\/[\w.\-_]+\.css$/.test(assetName);
     }

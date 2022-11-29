@@ -11,7 +11,7 @@ module.exports = function responseUtilsFactory() {
   function _loadResources() {
     const manifest = fs.existsSync(manifestPath)
       ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
-      : '';
+      : {};
 
     return {
       manifest,
@@ -84,7 +84,7 @@ module.exports = function responseUtilsFactory() {
           } else {
             source[0] =
               publicPath +
-              assets[source[0].replace('#{$Language}', language)].fileName;
+              assets[source[0].replace('#{$Language}', language)]?.fileName;
           }
 
           // Handle SDN fallback
