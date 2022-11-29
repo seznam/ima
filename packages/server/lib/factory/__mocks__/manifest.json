@@ -2,362 +2,322 @@
   "assets": {
     "server/app.server.js": {
       "name": "server/app.server.js",
-      "fileName": "server/app.server.c5f6d1e2f1559ee6.js",
+      "fileName": "server/app.server.6e0337810e75fd13.js",
       "immutable": true,
-      "contenthash": "c5f6d1e2f1559ee6",
-      "javascriptModule": false
+      "contenthash": "6e0337810e75fd13",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/app.server.6e0337810e75fd13.js.map"
+      }
     },
     "server/locale/cs.js": {
       "name": "server/locale/cs.js",
-      "fileName": "server/locale/cs.b38d748e124df2b2.js",
+      "fileName": "server/locale/cs.924fe4e0a21c1e61.js",
       "immutable": true,
-      "contenthash": "b38d748e124df2b2",
-      "javascriptModule": false
+      "contenthash": "924fe4e0a21c1e61",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/locale/cs.924fe4e0a21c1e61.js.map"
+      }
     },
     "server/locale/en.js": {
       "name": "server/locale/en.js",
-      "fileName": "server/locale/en.08a9f0cd74ac9535.js",
+      "fileName": "server/locale/en.10dc65d1067ddbb6.js",
       "immutable": true,
-      "contenthash": "08a9f0cd74ac9535",
-      "javascriptModule": false
+      "contenthash": "10dc65d1067ddbb6",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/locale/en.10dc65d1067ddbb6.js.map"
+      }
     },
-    "static/js/app.bundle.js": {
-      "name": "static/js/app.bundle.js",
-      "fileName": "static/js/app.bundle.f658c155bf6e759d.js",
+    "server/vendors.js": {
+      "name": "server/vendors.js",
+      "fileName": "server/vendors.aa3dff21bb6fa241.js",
       "immutable": true,
-      "contenthash": "f658c155bf6e759d",
+      "contenthash": "aa3dff21bb6fa241",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/vendors.aa3dff21bb6fa241.js.map"
+      }
+    },
+    "static/js/app.client.js": {
+      "name": "static/js/app.client.js",
+      "fileName": "static/js/app.client.8dc14fd2c9e52eef.js",
+      "immutable": true,
+      "contenthash": "8dc14fd2c9e52eef",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js/app.bundle.f658c155bf6e759d.js.br",
-        "gzipped": "static/js/app.bundle.f658c155bf6e759d.js.gz"
+        "sourceMap": "static/js/app.client.8dc14fd2c9e52eef.js.map",
+        "brotliCompressed": "static/js/app.client.8dc14fd2c9e52eef.js.br",
+        "gzipped": "static/js/app.client.8dc14fd2c9e52eef.js.gz"
       }
     },
     "static/js/locale/cs.js": {
       "name": "static/js/locale/cs.js",
-      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js",
+      "fileName": "static/js/locale/cs.2547d226f675e927.js",
       "immutable": true,
-      "contenthash": "9fb00c4919a10e2b",
+      "contenthash": "2547d226f675e927",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-        "gzipped": "static/js/locale/cs.9fb00c4919a10e2b.js.gz"
+        "sourceMap": "static/js/locale/cs.2547d226f675e927.js.map",
+        "brotliCompressed": "static/js/locale/cs.2547d226f675e927.js.br",
+        "gzipped": "static/js/locale/cs.2547d226f675e927.js.gz"
       }
     },
     "static/js/locale/en.js": {
       "name": "static/js/locale/en.js",
-      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js",
+      "fileName": "static/js/locale/en.3c6a5e7a55bb2ab4.js",
       "immutable": true,
-      "contenthash": "0b902be9a0a90b9d",
+      "contenthash": "3c6a5e7a55bb2ab4",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-        "gzipped": "static/js/locale/en.0b902be9a0a90b9d.js.gz"
+        "sourceMap": "static/js/locale/en.3c6a5e7a55bb2ab4.js.map",
+        "brotliCompressed": "static/js/locale/en.3c6a5e7a55bb2ab4.js.br",
+        "gzipped": "static/js/locale/en.3c6a5e7a55bb2ab4.js.gz"
       }
     },
-    "static/js/locale/en.0b902be9a0a90b9d.js.br": {
-      "name": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js/locale/cs.9fb00c4919a10e2b.js.br": {
-      "name": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js/app.bundle.f658c155bf6e759d.js.br": {
-      "name": "static/js/app.bundle.f658c155bf6e759d.js.br",
-      "fileName": "static/js/app.bundle.f658c155bf6e759d.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js/locale/cs.9fb00c4919a10e2b.js.gz": {
-      "name": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
-      "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js/locale/en.0b902be9a0a90b9d.js.gz": {
-      "name": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
-      "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js/app.bundle.f658c155bf6e759d.js.gz": {
-      "name": "static/js/app.bundle.f658c155bf6e759d.js.gz",
-      "fileName": "static/js/app.bundle.f658c155bf6e759d.js.gz",
-      "compressed": true,
-      "immutable": true
+    "static/js/vendors.js": {
+      "name": "static/js/vendors.js",
+      "fileName": "static/js/vendors.0e456297851f0a3a.js",
+      "immutable": true,
+      "contenthash": "0e456297851f0a3a",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js/vendors.0e456297851f0a3a.js.map",
+        "brotliCompressed": "static/js/vendors.0e456297851f0a3a.js.br",
+        "gzipped": "static/js/vendors.0e456297851f0a3a.js.gz"
+      }
     },
     "static/css/app.css": {
       "name": "static/css/app.css",
-      "fileName": "static/css/app.a04da83033ffbae3.css",
+      "fileName": "static/css/app.d0ad44d05f82db5f.css",
       "immutable": true,
-      "contenthash": "a04da83033ffbae3",
+      "contenthash": "d0ad44d05f82db5f",
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/css/app.a04da83033ffbae3.css.br",
-        "gzipped": "static/css/app.a04da83033ffbae3.css.gz"
+        "sourceMap": "static/css/app.d0ad44d05f82db5f.css.map",
+        "brotliCompressed": "static/css/app.d0ad44d05f82db5f.css.br",
+        "gzipped": "static/css/app.d0ad44d05f82db5f.css.gz"
       }
     },
-    "static/js.es/app.bundle.js": {
-      "name": "static/js.es/app.bundle.js",
-      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js",
+    "static/js.es/app.client.js": {
+      "name": "static/js.es/app.client.js",
+      "fileName": "static/js.es/app.client.2106a34c6b8bbad8.js",
       "immutable": true,
-      "contenthash": "f77b468d9b23212f",
+      "contenthash": "2106a34c6b8bbad8",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-        "gzipped": "static/js.es/app.bundle.f77b468d9b23212f.js.gz"
+        "sourceMap": "static/js.es/app.client.2106a34c6b8bbad8.js.map",
+        "brotliCompressed": "static/js.es/app.client.2106a34c6b8bbad8.js.br",
+        "gzipped": "static/js.es/app.client.2106a34c6b8bbad8.js.gz"
       }
     },
     "static/js.es/locale/cs.js": {
       "name": "static/js.es/locale/cs.js",
-      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js",
+      "fileName": "static/js.es/locale/cs.c1b3211af4424f2c.js",
       "immutable": true,
-      "contenthash": "117ab38e4b685384",
+      "contenthash": "c1b3211af4424f2c",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-        "gzipped": "static/js.es/locale/cs.117ab38e4b685384.js.gz"
+        "sourceMap": "static/js.es/locale/cs.c1b3211af4424f2c.js.map",
+        "brotliCompressed": "static/js.es/locale/cs.c1b3211af4424f2c.js.br",
+        "gzipped": "static/js.es/locale/cs.c1b3211af4424f2c.js.gz"
       }
     },
     "static/js.es/locale/en.js": {
       "name": "static/js.es/locale/en.js",
-      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js",
+      "fileName": "static/js.es/locale/en.371127fdbfbe93d2.js",
       "immutable": true,
-      "contenthash": "9e98a374de6d5584",
+      "contenthash": "371127fdbfbe93d2",
       "javascriptModule": false,
       "minimized": true,
       "related": {
-        "brotliCompressed": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-        "gzipped": "static/js.es/locale/en.9e98a374de6d5584.js.gz"
+        "sourceMap": "static/js.es/locale/en.371127fdbfbe93d2.js.map",
+        "brotliCompressed": "static/js.es/locale/en.371127fdbfbe93d2.js.br",
+        "gzipped": "static/js.es/locale/en.371127fdbfbe93d2.js.gz"
       }
     },
-    "static/js.es/locale/cs.117ab38e4b685384.js.br": {
-      "name": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js.es/locale/en.9e98a374de6d5584.js.br": {
-      "name": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js.es/app.bundle.f77b468d9b23212f.js.br": {
-      "name": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js.es/locale/cs.117ab38e4b685384.js.gz": {
-      "name": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
-      "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js.es/locale/en.9e98a374de6d5584.js.gz": {
-      "name": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
-      "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
-      "compressed": true,
-      "immutable": true
-    },
-    "static/js.es/app.bundle.f77b468d9b23212f.js.gz": {
-      "name": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
-      "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
-      "compressed": true,
-      "immutable": true
+    "static/js.es/vendors.js": {
+      "name": "static/js.es/vendors.js",
+      "fileName": "static/js.es/vendors.a873907f25297544.js",
+      "immutable": true,
+      "contenthash": "a873907f25297544",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js.es/vendors.a873907f25297544.js.map",
+        "brotliCompressed": "static/js.es/vendors.a873907f25297544.js.br",
+        "gzipped": "static/js.es/vendors.a873907f25297544.js.gz"
+      }
     }
   },
   "assetsByCompiler": {
     "client": {
-      "static/js/app.bundle.js": {
-        "name": "static/js/app.bundle.js",
-        "fileName": "static/js/app.bundle.f658c155bf6e759d.js",
+      "static/js/app.client.js": {
+        "name": "static/js/app.client.js",
+        "fileName": "static/js/app.client.8dc14fd2c9e52eef.js",
         "immutable": true,
-        "contenthash": "f658c155bf6e759d",
+        "contenthash": "8dc14fd2c9e52eef",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js/app.bundle.f658c155bf6e759d.js.br",
-          "gzipped": "static/js/app.bundle.f658c155bf6e759d.js.gz"
+          "sourceMap": "static/js/app.client.8dc14fd2c9e52eef.js.map",
+          "brotliCompressed": "static/js/app.client.8dc14fd2c9e52eef.js.br",
+          "gzipped": "static/js/app.client.8dc14fd2c9e52eef.js.gz"
         }
       },
       "static/js/locale/cs.js": {
         "name": "static/js/locale/cs.js",
-        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js",
+        "fileName": "static/js/locale/cs.2547d226f675e927.js",
         "immutable": true,
-        "contenthash": "9fb00c4919a10e2b",
+        "contenthash": "2547d226f675e927",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-          "gzipped": "static/js/locale/cs.9fb00c4919a10e2b.js.gz"
+          "sourceMap": "static/js/locale/cs.2547d226f675e927.js.map",
+          "brotliCompressed": "static/js/locale/cs.2547d226f675e927.js.br",
+          "gzipped": "static/js/locale/cs.2547d226f675e927.js.gz"
         }
       },
       "static/js/locale/en.js": {
         "name": "static/js/locale/en.js",
-        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js",
+        "fileName": "static/js/locale/en.3c6a5e7a55bb2ab4.js",
         "immutable": true,
-        "contenthash": "0b902be9a0a90b9d",
+        "contenthash": "3c6a5e7a55bb2ab4",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-          "gzipped": "static/js/locale/en.0b902be9a0a90b9d.js.gz"
+          "sourceMap": "static/js/locale/en.3c6a5e7a55bb2ab4.js.map",
+          "brotliCompressed": "static/js/locale/en.3c6a5e7a55bb2ab4.js.br",
+          "gzipped": "static/js/locale/en.3c6a5e7a55bb2ab4.js.gz"
         }
       },
-      "static/js/locale/en.0b902be9a0a90b9d.js.br": {
-        "name": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js/locale/cs.9fb00c4919a10e2b.js.br": {
-        "name": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js/app.bundle.f658c155bf6e759d.js.br": {
-        "name": "static/js/app.bundle.f658c155bf6e759d.js.br",
-        "fileName": "static/js/app.bundle.f658c155bf6e759d.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js/locale/cs.9fb00c4919a10e2b.js.gz": {
-        "name": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
-        "fileName": "static/js/locale/cs.9fb00c4919a10e2b.js.gz",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js/locale/en.0b902be9a0a90b9d.js.gz": {
-        "name": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
-        "fileName": "static/js/locale/en.0b902be9a0a90b9d.js.gz",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js/app.bundle.f658c155bf6e759d.js.gz": {
-        "name": "static/js/app.bundle.f658c155bf6e759d.js.gz",
-        "fileName": "static/js/app.bundle.f658c155bf6e759d.js.gz",
-        "compressed": true,
-        "immutable": true
+      "static/js/vendors.js": {
+        "name": "static/js/vendors.js",
+        "fileName": "static/js/vendors.0e456297851f0a3a.js",
+        "immutable": true,
+        "contenthash": "0e456297851f0a3a",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js/vendors.0e456297851f0a3a.js.map",
+          "brotliCompressed": "static/js/vendors.0e456297851f0a3a.js.br",
+          "gzipped": "static/js/vendors.0e456297851f0a3a.js.gz"
+        }
       }
     },
     "client.es": {
       "static/css/app.css": {
         "name": "static/css/app.css",
-        "fileName": "static/css/app.a04da83033ffbae3.css",
+        "fileName": "static/css/app.d0ad44d05f82db5f.css",
         "immutable": true,
-        "contenthash": "a04da83033ffbae3",
+        "contenthash": "d0ad44d05f82db5f",
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/css/app.a04da83033ffbae3.css.br",
-          "gzipped": "static/css/app.a04da83033ffbae3.css.gz"
+          "sourceMap": "static/css/app.d0ad44d05f82db5f.css.map",
+          "brotliCompressed": "static/css/app.d0ad44d05f82db5f.css.br",
+          "gzipped": "static/css/app.d0ad44d05f82db5f.css.gz"
         }
       },
-      "static/js.es/app.bundle.js": {
-        "name": "static/js.es/app.bundle.js",
-        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js",
+      "static/js.es/app.client.js": {
+        "name": "static/js.es/app.client.js",
+        "fileName": "static/js.es/app.client.2106a34c6b8bbad8.js",
         "immutable": true,
-        "contenthash": "f77b468d9b23212f",
+        "contenthash": "2106a34c6b8bbad8",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-          "gzipped": "static/js.es/app.bundle.f77b468d9b23212f.js.gz"
+          "sourceMap": "static/js.es/app.client.2106a34c6b8bbad8.js.map",
+          "brotliCompressed": "static/js.es/app.client.2106a34c6b8bbad8.js.br",
+          "gzipped": "static/js.es/app.client.2106a34c6b8bbad8.js.gz"
         }
       },
       "static/js.es/locale/cs.js": {
         "name": "static/js.es/locale/cs.js",
-        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js",
+        "fileName": "static/js.es/locale/cs.c1b3211af4424f2c.js",
         "immutable": true,
-        "contenthash": "117ab38e4b685384",
+        "contenthash": "c1b3211af4424f2c",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-          "gzipped": "static/js.es/locale/cs.117ab38e4b685384.js.gz"
+          "sourceMap": "static/js.es/locale/cs.c1b3211af4424f2c.js.map",
+          "brotliCompressed": "static/js.es/locale/cs.c1b3211af4424f2c.js.br",
+          "gzipped": "static/js.es/locale/cs.c1b3211af4424f2c.js.gz"
         }
       },
       "static/js.es/locale/en.js": {
         "name": "static/js.es/locale/en.js",
-        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js",
+        "fileName": "static/js.es/locale/en.371127fdbfbe93d2.js",
         "immutable": true,
-        "contenthash": "9e98a374de6d5584",
+        "contenthash": "371127fdbfbe93d2",
         "javascriptModule": false,
         "minimized": true,
         "related": {
-          "brotliCompressed": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-          "gzipped": "static/js.es/locale/en.9e98a374de6d5584.js.gz"
+          "sourceMap": "static/js.es/locale/en.371127fdbfbe93d2.js.map",
+          "brotliCompressed": "static/js.es/locale/en.371127fdbfbe93d2.js.br",
+          "gzipped": "static/js.es/locale/en.371127fdbfbe93d2.js.gz"
         }
       },
-      "static/js.es/locale/cs.117ab38e4b685384.js.br": {
-        "name": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js.es/locale/en.9e98a374de6d5584.js.br": {
-        "name": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js.es/app.bundle.f77b468d9b23212f.js.br": {
-        "name": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.br",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js.es/locale/cs.117ab38e4b685384.js.gz": {
-        "name": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
-        "fileName": "static/js.es/locale/cs.117ab38e4b685384.js.gz",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js.es/locale/en.9e98a374de6d5584.js.gz": {
-        "name": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
-        "fileName": "static/js.es/locale/en.9e98a374de6d5584.js.gz",
-        "compressed": true,
-        "immutable": true
-      },
-      "static/js.es/app.bundle.f77b468d9b23212f.js.gz": {
-        "name": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
-        "fileName": "static/js.es/app.bundle.f77b468d9b23212f.js.gz",
-        "compressed": true,
-        "immutable": true
+      "static/js.es/vendors.js": {
+        "name": "static/js.es/vendors.js",
+        "fileName": "static/js.es/vendors.a873907f25297544.js",
+        "immutable": true,
+        "contenthash": "a873907f25297544",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js.es/vendors.a873907f25297544.js.map",
+          "brotliCompressed": "static/js.es/vendors.a873907f25297544.js.br",
+          "gzipped": "static/js.es/vendors.a873907f25297544.js.gz"
+        }
       }
     },
     "server": {
       "server/app.server.js": {
         "name": "server/app.server.js",
-        "fileName": "server/app.server.c5f6d1e2f1559ee6.js",
+        "fileName": "server/app.server.6e0337810e75fd13.js",
         "immutable": true,
-        "contenthash": "c5f6d1e2f1559ee6",
-        "javascriptModule": false
+        "contenthash": "6e0337810e75fd13",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/app.server.6e0337810e75fd13.js.map"
+        }
       },
       "server/locale/cs.js": {
         "name": "server/locale/cs.js",
-        "fileName": "server/locale/cs.b38d748e124df2b2.js",
+        "fileName": "server/locale/cs.924fe4e0a21c1e61.js",
         "immutable": true,
-        "contenthash": "b38d748e124df2b2",
-        "javascriptModule": false
+        "contenthash": "924fe4e0a21c1e61",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/locale/cs.924fe4e0a21c1e61.js.map"
+        }
       },
       "server/locale/en.js": {
         "name": "server/locale/en.js",
-        "fileName": "server/locale/en.08a9f0cd74ac9535.js",
+        "fileName": "server/locale/en.10dc65d1067ddbb6.js",
         "immutable": true,
-        "contenthash": "08a9f0cd74ac9535",
-        "javascriptModule": false
+        "contenthash": "10dc65d1067ddbb6",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/locale/en.10dc65d1067ddbb6.js.map"
+        }
+      },
+      "server/vendors.js": {
+        "name": "server/vendors.js",
+        "fileName": "server/vendors.aa3dff21bb6fa241.js",
+        "immutable": true,
+        "contenthash": "aa3dff21bb6fa241",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/vendors.aa3dff21bb6fa241.js.map"
+        }
       }
     }
   },

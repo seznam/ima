@@ -86,7 +86,12 @@ class ManifestPlugin {
     }
 
     Object.keys(assets)
-      .filter(assetName => this.#filter(compilationName, assetName))
+      .filter(
+        assetName =>
+          !assetName.includes('/chunk.') &&
+          !assetName.includes('runner.js') &&
+          this.#filter(compilationName, assetName)
+      )
       .forEach(assetName => {
         const asset = compilation.getAsset(assetName);
 
@@ -121,22 +126,15 @@ class ManifestPlugin {
     }
   }
 
-  #filter(name: ImaConfigurationContext['name'], assetName: string) {
-    /**
-     * Filter out source maps, dynamic chunks and runner script,
-     * these are handled in a specific way.
-     */
-    let result =
-      !assetName.endsWith('.map') &&
-      !assetName.includes('/chunk.') &&
-      !assetName.includes('runner.js');
+  /**
+   * Filter for compilation specific assets
+   */
+  #filter(name: ImaConfigurationContext['name'], assetName: string): boolean {
+    let result = /\.(js)$/.test(assetName);
 
     switch (name) {
       case 'server':
-        result =
-          result &&
-          assetName.startsWith('server/') &&
-          !assetName.includes('runner.js');
+        result = result && assetName.startsWith('server/');
         break;
 
       case 'client':
@@ -148,7 +146,7 @@ class ManifestPlugin {
         break;
     }
 
-    // Include CSS for given compilation
+    // Include CSS only from the root directory
     if (this.#options.context.processCss) {
       result = result || /css\/[\w.\-_]+\.css$/.test(assetName);
     }

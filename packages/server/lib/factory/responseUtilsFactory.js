@@ -278,6 +278,8 @@ module.exports = function responseUtilsFactory() {
   return {
     processContent,
     sendResponseHeaders,
+    _resolveSources,
+    _prepareSources,
     _renderStyles,
     _prepareCookieOptionsForExpress,
   };
