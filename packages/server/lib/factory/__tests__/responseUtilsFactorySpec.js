@@ -299,6 +299,26 @@ describe('responseUtilsFactory', () => {
         }
       `);
     });
+
+    it('should work with custom sources', () => {
+      const sources = {
+        styles: ['static/css/app.css'],
+        esScripts: ['static/js.es/app.client.js'],
+      };
+
+      _resolveSources(sources, manifestMock, 'en');
+
+      expect(sources).toMatchInlineSnapshot(`
+        {
+          "esScripts": [
+            "static/js.es/app.client.js",
+          ],
+          "styles": [
+            "static/css/app.css",
+          ],
+        }
+      `);
+    });
   });
 
   describe('', () => {
