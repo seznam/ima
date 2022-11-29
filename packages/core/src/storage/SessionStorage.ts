@@ -2,18 +2,19 @@ import GenericError from '../error/GenericError';
 import ImaStorage from './Storage';
 import Window from '../window/Window';
 import ClientWindow from '../window/ClientWindow';
+import { Dependencies } from '../ObjectContainer';
 
 /**
  * Implementation of the `link Storage` interface that relies on the
  * native `sessionStorage` DOM storage for storing its entries.
  */
-export default class SessionStorage extends ImaStorage {
+export default class SessionStorage<V> extends ImaStorage<V> {
   /**
    * The DOM storage providing the actual storage of the entries.
    */
   private _storage: Storage;
 
-  static get $dependencies() {
+  static get $dependencies(): Dependencies {
     return [Window];
   }
 
@@ -29,23 +30,23 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritDoc
    */
-  init() {
+  init(): this {
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     return !!this._storage.getItem(key);
   }
 
   /**
    * @inheritDoc
    */
-  get(key: string) {
+  get(key: string): V | undefined {
     try {
-      return JSON.parse(this._storage.getItem(key) as string).value;
+      return JSON.parse(this._storage.getItem(key) as string)?.value;
     } catch (error) {
       throw new GenericError(
         'ima.storage.SessionStorage.get: Failed to parse a session ' +
@@ -58,7 +59,7 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritDoc
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: V): this {
     try {
       this._storage.setItem(
         key,
@@ -87,37 +88,39 @@ export default class SessionStorage extends ImaStorage {
   /**
    * @inheritDoc
    */
-  delete(key: string) {
+  delete(key: string): this {
     this._storage.removeItem(key);
+
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  clear() {
+  clear(): this {
     this._storage.clear();
+
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  keys() {
-    return new StorageIterator(this._storage) as Iterable<string>;
+  keys(): Iterable<string> {
+    return new StorageIterator(this._storage);
   }
 
   /**
    * @override
    */
-  size() {
+  size(): number {
     return this._storage.length;
   }
 
   /**
    * Deletes the oldest entry in this storage.
    */
-  _deleteOldestEntry() {
+  _deleteOldestEntry(): void {
     type Entry = {
       created: number;
       key?: string;
@@ -128,7 +131,8 @@ export default class SessionStorage extends ImaStorage {
     };
 
     for (const key of this.keys()) {
-      const value = JSON.parse(this._storage.getItem(key) as string);
+      const value = JSON.parse(this._storage.getItem(key) as string) as Entry;
+
       if (value.created < oldestEntry.created) {
         oldestEntry = {
           key,
@@ -149,7 +153,7 @@ export default class SessionStorage extends ImaStorage {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
-class StorageIterator {
+class StorageIterator implements Iterable<string> {
   /**
    * The DOM storage being iterated.
    */
@@ -176,19 +180,12 @@ class StorageIterator {
    *         the sequence and whether the iterator is done iterating through
    *         the values.
    */
-  next() {
-    if (this._currentKeyIndex >= this._storage.length) {
-      return {
-        done: true,
-        value: undefined,
-      };
-    }
-
-    const key = this._storage.key(this._currentKeyIndex);
-    this._currentKeyIndex++;
+  next(): IteratorResult<string> {
+    // We are sure there is always a value so it can be safely cast to string
+    const key = this._storage.key(this._currentKeyIndex) as string;
 
     return {
-      done: false,
+      done: this._currentKeyIndex++ === this._storage.length,
       value: key,
     };
   }
@@ -200,7 +197,7 @@ class StorageIterator {
    *
    * @return This iterator.
    */
-  [Symbol.iterator]() {
+  [Symbol.iterator](): this {
     return this;
   }
 }

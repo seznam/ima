@@ -17,6 +17,7 @@ describe('ima.storage.WeakMapStorage', () => {
 
   it('should reject primitive values', () => {
     expect(() => {
+      // @ts-expect-error check throw
       map.set('b', 'some string');
     }).toThrow();
   });

@@ -33,9 +33,9 @@ type EntryName =
 
 export type EntryNameWithOptions = EntryName | [EntryName, Options];
 
-type Dependencies = (
-  | EntryNameWithOptions
+export type Dependencies = (
   | InstanceType<UnknownConstructable>
+  | EntryNameWithOptions
 )[];
 
 const SPREAD_RE = /^\.../;

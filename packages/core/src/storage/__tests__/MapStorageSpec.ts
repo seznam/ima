@@ -1,7 +1,7 @@
 import MapStorage from '../MapStorage';
 
 describe('ima.storage.Map', () => {
-  let map: MapStorage;
+  let map: MapStorage<unknown>;
 
   beforeEach(() => {
     map = new MapStorage();
@@ -64,25 +64,24 @@ describe('ima.storage.Map', () => {
     map.set('item1', 1).set('item2', 'test').set('item3', false);
 
     let index = 0;
-    const iterator = map.keys();
-    let item = iterator.next();
 
-    do {
+    for (const item of map.keys()) {
       switch (index++) {
         case 0:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item1');
+          expect(item).toBe('item1');
           break;
         case 1:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item2');
+          expect(item).toBe('item2');
           break;
         default:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toBe('item3');
+          expect(item).toBe('item3');
           break;
       }
-      item = iterator.next();
-    } while (item.done !== true);
+    }
+
+    expect(index).toBe(3);
   });
 });

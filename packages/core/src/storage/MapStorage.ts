@@ -1,75 +1,79 @@
+import { Dependencies } from '../ObjectContainer';
 import Storage from './Storage';
 
 /**
  * Implementation of the `link Storage` interface that relies on the
  * native `Map` for storage.
  */
-export default class MapStorage extends Storage {
+export default class MapStorage<V> extends Storage<V> {
   /**
    * The internal storage of entries.
    */
-  private _storage: Map<string, unknown> = new Map();
+  private _storage: Map<string, V> = new Map();
 
-  static get $dependencies(): unknown[] {
+  static get $dependencies(): Dependencies {
     return [];
   }
 
   /**
    * @inheritDoc
    */
-  init() {
+  init(): this {
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  has(key: string) {
+  has(key: string): boolean {
     return this._storage.has(key);
   }
 
   /**
    * @inheritDoc
    */
-  get(key: string) {
+  get(key: string): V | undefined {
     return this._storage.get(key);
   }
 
   /**
    * @inheritDoc
    */
-  set(key: string, value: unknown) {
+  set(key: string, value: V): this {
     this._storage.set(key, value);
+
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  delete(key: string) {
+  delete(key: string): this {
     this._storage.delete(key);
+
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  clear() {
+  clear(): this {
     this._storage.clear();
+
     return this;
   }
 
   /**
    * @inheritDoc
    */
-  keys() {
+  keys(): Iterable<string> {
     return this._storage.keys();
   }
 
   /**
    * @override
    */
-  size() {
+  size(): number {
     return this._storage.size;
   }
 }
