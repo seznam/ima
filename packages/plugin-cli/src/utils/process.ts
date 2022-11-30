@@ -166,6 +166,7 @@ export async function createProcessingPipeline(ctx: Context) {
           }),
         [
           createSwcTransformer({
+            target: config.target,
             development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
@@ -174,6 +175,7 @@ export async function createProcessingPipeline(ctx: Context) {
         ],
         [
           createSwcTransformer({
+            target: config.target,
             development: isDevelopment,
             type: output.format,
             jsxRuntime: config.jsxRuntime,
@@ -198,7 +200,11 @@ export async function createProcessingPipeline(ctx: Context) {
     // Run transformers for each output and emit
     await Promise.all(
       config.output.map(async ({ dir, include }) => {
-        if (include && !include.test(filePath)) {
+        if (
+          include &&
+          ((typeof include === 'function' && !include(filePath)) ||
+            (typeof include === 'object' && !include?.test(filePath)))
+        ) {
           return;
         }
 

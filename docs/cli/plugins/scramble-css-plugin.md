@@ -115,7 +115,7 @@ export default (ns, oc, config) => {
 
 > `boolean`
 
-The scrambling is enabled by default for the `build` command. However you can explicitly enable/disable it using this CLI argument. This applies for both CLI commands.
+The scrambling is enabled by default for the `production` environment. However you can explicitly enable/disable it using this CLI argument. This applies for both CLI commands.
 
 ## Options
 

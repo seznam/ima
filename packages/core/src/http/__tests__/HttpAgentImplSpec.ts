@@ -39,7 +39,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         prefix: 'http.',
       },
     };
-    http = new HttpAgentImpl(proxy, cache, cookie, helper, httpConfig);
+    http = new HttpAgentImpl(proxy, cache, cookie, httpConfig, helper);
 
     options = {
       ttl: httpConfig.defaultRequestOptions.ttl,

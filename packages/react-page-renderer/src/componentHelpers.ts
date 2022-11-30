@@ -153,10 +153,6 @@ export function fire(
   target: EventTarget,
   data: unknown = null
 ) {
-  if (!(target instanceof EventTarget)) {
-    throw new Error('Ref must be set to a valid EventTarget element.');
-  }
-
   return component.utils.$EventBus.fire(target, eventName, data);
 }
 
@@ -178,7 +174,6 @@ export function listen(
   eventName: string,
   listener: (event: Event) => void
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$EventBus.listen(eventTarget, eventName, listener);
 }
 
@@ -199,6 +194,5 @@ export function unlisten(
   eventName: string,
   listener: (event: Event) => void
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$EventBus.unlisten(eventTarget, eventName, listener);
 }

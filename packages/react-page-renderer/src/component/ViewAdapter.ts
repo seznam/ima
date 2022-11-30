@@ -4,6 +4,7 @@ import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
 import PageContext from '../PageContext';
 import { Utils } from '../types';
+import ErrorBoundary from './ErrorBoundary';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -105,7 +106,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
    * @inheritDoc
    */
   render() {
-    return createElement(
+    const viewElement = createElement(
       PageContext.Provider,
       { value: this._getContextValue(this.props, this.state) },
       createElement(
@@ -120,5 +121,10 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
         })
       )
     );
+
+    // Wrap view with ErrorBoundary in $Debug env
+    return $Debug
+      ? createElement(ErrorBoundary, null, viewElement)
+      : viewElement;
   }
 }

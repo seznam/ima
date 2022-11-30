@@ -14,4 +14,5 @@ module.exports = {
       additionalArgs: ['--skipLibCheck', '--project', 'tsconfig.build.json'],
     }),
   ],
+  additionalWatchPaths: ['./transform/**/*', './polyfill/**/*'],
 };

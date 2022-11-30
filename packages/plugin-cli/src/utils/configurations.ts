@@ -1,10 +1,11 @@
 import { typescriptDeclarationsPlugin } from '../plugins/typescriptDeclarationsPlugin';
 import { ImaPluginConfig } from '../types';
 
-const jsRe = /\.(jsx?|tsx?)/i;
+const jsRe = /\.(jsx?|tsx?)$/i;
 
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
+  target: 'es2022',
   output: [
     {
       dir: './dist/esm',
@@ -20,7 +21,8 @@ export const defaultConfig: ImaPluginConfig = {
     typescriptDeclarationsPlugin({ additionalArgs: ['--skipLibCheck'] }),
   ],
   exclude: [
-    '**/__tests__/**',
+    '**/__snapshots__/**',
+    '**/__tests__/**/*Spec*',
     '**/node_modules/**',
     '**/dist/**',
     '**/typings/**',

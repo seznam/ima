@@ -20,13 +20,19 @@ module.exports = function environmentFactory({ applicationFolder }) {
   ));
 
   let currentEnvironment = environmentConfig[env];
-  let $Language = Object.assign({}, currentEnvironment.$Language);
+  let $Language =
+    currentEnvironment.$Language &&
+    Object.assign({}, currentEnvironment.$Language);
 
   currentEnvironment = helpers.resolveEnvironmentSetting(
     environmentConfig,
     env
   );
-  currentEnvironment.$Language = $Language;
+
+  if ($Language) {
+    currentEnvironment.$Language = $Language;
+  }
+
   currentEnvironment['$Env'] = env;
 
   return currentEnvironment;

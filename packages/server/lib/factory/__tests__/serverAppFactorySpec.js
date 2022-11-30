@@ -73,6 +73,7 @@ describe('Server App Factory', () => {
         ],
       }),
       $Server: {
+        concurrency: 1,
         badRequestConcurrency: 1,
         cache: {
           enabled: true,
@@ -243,6 +244,21 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
+    it('should render SPA page without creating IMA app ', async () => {
+      environment.$Server.concurrency = 0;
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+      expect(appFactory).not.toHaveBeenCalled();
+    });
+
     // TODO IMA@18 need performance test for usefulness
     // it('should render SPA page with cache', async () => {
     //   jest
@@ -264,7 +280,7 @@ describe('Server App Factory', () => {
 
       expect(response.SPA).toBeFalsy();
       expect(response.status).toBe(503);
-      expect(response.status).toBeTruthy();
+      expect(response.static).toBeTruthy();
       expect(response.cache).toBeFalsy();
     });
 
@@ -344,9 +360,11 @@ describe('Server App Factory', () => {
   describe('errorHandlerMiddleware method', () => {
     it('should render dev error page for $Debug mode', async () => {
       environment.$Debug = true;
+      process.env.IMA_CLI_WATCH = 'true';
       const error = new Error('Custom');
 
       const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
+      delete process.env.IMA_CLI_WATCH;
 
       expect(response.SPA).toBeFalsy();
       expect(response.status).toBe(500);

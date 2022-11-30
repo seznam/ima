@@ -128,9 +128,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       viewInstance
     );
 
-    jest
-      .spyOn(controllerInstance, 'getExtensions')
-      .mockReturnValue([extensionInstance]);
+    (
+      jest.spyOn(controllerInstance, 'getExtensions') as jest.SpyInstance
+    ).mockReturnValue([extensionInstance]);
   });
 
   it('should be listening for all custom events', () => {

@@ -50,13 +50,15 @@ export default class Request {
    * Returns uploaded file to server and meta information.
    */
   getFile() {
+    // @ts-expect-error missing type fore 'file'
     return this._request ? this._request.file : null;
   }
 
   /**
-   * Returns upaloaded files to server with their meta information.
+   * Returns uploaded files to server with their meta information.
    */
   getFiles() {
+    // @ts-expect-error missing type fore 'files'
     return this._request ? this._request.files : null;
   }
 

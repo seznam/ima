@@ -14,3 +14,4 @@ packages/*/.turbo
 website/.turbo
 *.tgz
 .vscode
+yarn.lock

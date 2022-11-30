@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "18.0.0-rc.17",
+  "version": "18.0.0-rc.23",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest -c jest.config.js",
@@ -40,8 +41,8 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@cfaester/enzyme-adapter-react-18": "^0.5.1",
-    "@esmj/emitter": "^0.0.6",
+    "@cfaester/enzyme-adapter-react-18": "^0.6.0",
+    "@esmj/emitter": "^0.0.7",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -49,8 +50,7 @@
     "to-mock": "^1.6.2"
   },
   "peerDependencies": {
-    "@ima/core": "^18.0.0-rc.22",
-    "@ima/dev-utils": "^18.0.0-rc.11",
+    "@ima/core": "^18.0.0-rc.28",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

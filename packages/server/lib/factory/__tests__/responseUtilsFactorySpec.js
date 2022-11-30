@@ -62,7 +62,7 @@ describe('responseUtilsFactory', () => {
           ],
         ])
       ).toBe(
-        '<link href="/static/app.css" type="text/css" rel="preload" as="style" />'
+        '<link href="/static/app.css" rel="preload" type="text/css" as="style" />'
       );
     });
 
@@ -75,7 +75,7 @@ describe('responseUtilsFactory', () => {
           ],
         ])
       ).toBe(
-        `<link href="/static/app.css" onerror="this.onerror=null;this.href='/static/fallback.css';" rel="stylesheet" />`
+        `<link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />`
       );
     });
   });

@@ -59,15 +59,13 @@ module.exports = {
         ignore: ['describe'],
       },
     ],
-    // Remove when migrated to jest >=27
-    'jest/no-jasmine-globals': 'off',
 
     // React plugin overrides
     'react/prop-types': 'off',
   },
   settings: {
     react: {
-      version: '17',
+      version: '18',
     },
   },
   parser: '@babel/eslint-parser',
@@ -86,9 +84,6 @@ module.exports = {
   globals: {
     $Debug: true,
     $IMA: true,
-    using: true,
-    extend: true,
-    spyOn: true,
   },
   overrides: [
     // TODO IMA@18 Enable repo-wide when merged to master
@@ -163,6 +158,7 @@ module.exports = {
       },
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
           { 'ts-expect-error': 'allow-with-description' },
@@ -195,6 +191,7 @@ module.exports = {
       files: [
         'website/scripts/**',
         'packages/cli/**',
+        'packages/hmr-client/**',
         'packages/plugin-cli/**',
         'packages/dev-utils/**',
         'packages/create-ima-app/**',

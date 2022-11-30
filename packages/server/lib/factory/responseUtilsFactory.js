@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = function responseUtilsFactory() {
   let runner = '';
 
-  const runnerPath = path.resolve('./build/static/public/runner.js');
+  const runnerPath = path.resolve('./build/server/runner.js');
   if (fs.existsSync(runnerPath)) {
     runner = fs.readFileSync(runnerPath, 'utf8');
   }
@@ -53,8 +53,9 @@ module.exports = function responseUtilsFactory() {
           return `<link rel="stylesheet" href="${style}" />`;
         }
 
-        const [href, { fallback = null, ...options }] = style;
-        const linkTagParts = [`<link href="${href}"`];
+        const [href, { fallback = null, rel = 'stylesheet', ...options }] =
+          style;
+        const linkTagParts = [`<link href="${href}" rel="${rel}"`];
 
         // Generate fallback handler
         if (fallback) {
@@ -144,6 +145,11 @@ module.exports = function responseUtilsFactory() {
   function processContent({ response, bootConfig, app }) {
     if (!response?.content || !bootConfig) {
       return response?.content;
+    }
+
+    // Always reload runner script in watch mode
+    if (process.env.IMA_CLI_WATCH && fs.existsSync(runnerPath)) {
+      runner = fs.readFileSync(runnerPath, 'utf8');
     }
 
     const { settings } = bootConfig;

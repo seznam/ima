@@ -1,4 +1,4 @@
-import Bootstrap, { Config } from '../Bootstrap';
+import Bootstrap, { Config, Module } from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import { PluginLoader } from '../pluginLoader';
 import namespace from '../Namespace';
@@ -25,7 +25,7 @@ describe('pluginLoader', () => {
       pluginLoader.register('plugin-2', jest.fn());
       pluginLoader.register('plugin-3', jest.fn());
 
-      expect(pluginLoader['_plugins']).toHaveLength(3);
+      expect(Object.values(pluginLoader['_plugins'])).toHaveLength(3);
     });
 
     it('should call register function on plugins', () => {
@@ -39,7 +39,7 @@ describe('pluginLoader', () => {
     });
 
     it('should dynamically load plugins if the app is already bootstrapped', () => {
-      const pluginInterface = {};
+      const pluginInterface = {} as Module;
       const registerFunction = jest.fn(() => pluginInterface);
 
       pluginLoader.init(bootstrap);

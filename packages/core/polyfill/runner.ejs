@@ -115,6 +115,7 @@
         if (
           runner.source.esScripts &&
           runner.testSource.esScripts.every(testScript)
+          <% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>
         ) {
           runner.isEsVersion = true;
           runner.scripts = runner.source.esScripts;
@@ -149,7 +150,7 @@
            * since the code can contain some legacy incompatible syntax, which would
            * break the legacy (not supported) JS interpreters.
            */
-          if (runner.isEsVersion) {
+          if (runner.isEsVersion<% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>) {
             new Function('<%- esRuntime %>')();
           } else {
             new Function('<%- runtime %>')();
@@ -184,8 +185,8 @@
         console.error('IMA Runner ERROR:', error);
 
         // Show compile errors in error-overlay in $Debug
-        if (window.__IMA_HMR && window.$Debug) {
-          window.__IMA_HMR.emit('error', { error: error });
+        if (window.__IMA_HMR && window.__IMA_HMR.emitter && window.$Debug) {
+          window.__IMA_HMR.emitter.emit('error', { error: error });
         }
       },
 

@@ -1,4 +1,5 @@
 import * as helpers from '@ima/helpers';
+import { Module } from 'module';
 import { UnknownParameters } from './CommonTypes';
 import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';
@@ -7,20 +8,20 @@ import Router from './router/Router';
 ns.namespace('ima.core');
 
 export type Module = {
-  initServices: (
+  initServices?: (
     ns: Namespace,
     oc: ObjectContainer,
     settings: Config['settings'],
     isDynamicallyLoaded: boolean
   ) => Config['settings'];
-  initBind: (
+  initBind?: (
     ns: Namespace,
     oc: ObjectContainer,
     settings: Config['bind'],
     isDynamicallyLoaded: boolean,
     name?: string
   ) => void;
-  initSettings: (
+  initSettings?: (
     ns: Namespace,
     oc: ObjectContainer,
     settings: Config['services'],
@@ -115,7 +116,11 @@ export default class Bootstrap {
    * @param name Plugin name.
    * @param module Plugin interface (object with init functions).
    */
-  initPlugin(name: string, module: Module) {
+  initPlugin(name: string, module?: Module) {
+    if (!module) {
+      return;
+    }
+
     this._initPluginSettings(name, module);
     this._bindPluginDependencies(name, module);
     this._initPluginServices(module);
@@ -140,7 +145,7 @@ export default class Bootstrap {
     plugins
       .filter(({ module }) => typeof module.initSettings === 'function')
       .forEach(({ name, module }) => {
-        const allPluginSettings = module.initSettings(
+        const allPluginSettings = module.initSettings!(
           ns,
           this._oc,
           this._config.settings,
@@ -218,7 +223,7 @@ export default class Bootstrap {
       .filter(({ module }) => typeof module.initBind === 'function')
       .forEach(({ name, module }) => {
         this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
-        module.initBind(ns, this._oc, this._config.bind, false);
+        module.initBind!(ns, this._oc, this._config.bind, false);
       });
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
@@ -266,7 +271,7 @@ export default class Bootstrap {
     this._config.plugins
       .filter(({ module }) => typeof module.initServices === 'function')
       .forEach(({ module }) => {
-        module.initServices(ns, this._oc, this._config.services, false);
+        module.initServices!(ns, this._oc, this._config.services, false);
       });
 
     this._config.initServicesApp(ns, this._oc, this._config.services);

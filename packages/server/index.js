@@ -16,12 +16,14 @@ module.exports = function createIMAServer({
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
-  const requireUncached = require('./lib/factory/devUtilsFactory.js')({
-    environment,
-  });
+  const requireUncached = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
-    requireUncached('./build/server/vendors.js', { optional: true });
+    requireUncached('./build/server/vendors.js', {
+      optional: true,
+      dependencies: ['./build/server/app.server.js'],
+    });
+
     return requireUncached('./build/server/app.server.js');
   }
 
@@ -48,6 +50,8 @@ module.exports = function createIMAServer({
     instanceRecycler,
     serverGlobal,
   });
+  const memStaticProxy =
+    require('./lib/factory/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
 
@@ -59,8 +63,8 @@ module.exports = function createIMAServer({
 
   serverApp.useIMADefaultHook();
 
-  // TODO IMA@18 prepare settings for lazy start
-  !environment.$Debug && appFactory();
+  // Lazy init app factory
+  process.env.IMA_CLI_LAZY_SERVER !== 'true' && appFactory();
 
   return {
     environment,
@@ -69,6 +73,7 @@ module.exports = function createIMAServer({
     logger,
     cache,
     instanceRecycler,
+    memStaticProxy,
     emitter,
     Event,
   };

@@ -1,4 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const { createWebpackConfig } = require('../../createWebpackConfig');
 
@@ -7,6 +8,7 @@ module.exports = createWebpackConfig(baseConfig => {
     ...baseConfig,
     entry: { overlay: './src/index.tsx' },
     plugins: [
+      new ForkTsCheckerWebpackPlugin(),
       new CompressionPlugin({
         algorithm: 'brotliCompress',
         filename: `[path][base].br`,

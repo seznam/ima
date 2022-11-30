@@ -1,5 +1,4 @@
-const fs = require('fs');
-const path = require('path');
+const ignorePaths = /(node_modules\/(?!@ima).*)/;
 
 /**
  * This ima config makes sure that webpack watches changes
@@ -10,19 +9,13 @@ const path = require('path');
  */
 module.exports = {
   watchOptions: {
-    ignored: /(node_modules|build|.husky|_templates|.git)\/(?!@ima).*/,
+    ignored: ignorePaths,
   },
   webpack: async (config, ctx) => {
     if (ctx.command === 'dev') {
       config.snapshot = {
         ...config.snapshot,
-        managedPaths: await fs.promises
-          .readdir(path.join(ctx.rootDir, 'node_modules'))
-          .then(directories =>
-            directories
-              .filter(dir => !['@ima'].includes(dir))
-              .map(dir => path.resolve(ctx.rootDir, 'node_modules', dir))
-          ),
+        managedPaths: [ignorePaths],
       };
     }
 

@@ -1,5 +1,47 @@
 # Change Log
 
+## 18.0.0-rc.17
+
+### Patch Changes
+
+- 28a104fa: Minor tweaks to excludes in default configurations
+
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- 3e863bdf: Added support for include/exclude functions
+  Plugin doesn't ignore _Suite_ files during build
+
+## 18.0.0-rc.15
+
+### Patch Changes
+
+- d260949b: Added option to watch additional files during link command
+
+## 18.0.0-rc.14
+
+### Patch Changes
+
+- 468ad70d: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+  - @ima/dev-utils@18.0.0-rc.13
+
+## 18.0.0-rc.13
+
+### Patch Changes
+
+- 976c4394: Added option to override default JS target
+
+## 18.0.0-rc.12
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+
 ## 18.0.0-rc.11
 
 ### Patch Changes

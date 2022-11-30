@@ -1,5 +1,55 @@
 # Change Log
 
+## 18.0.0-rc.21
+
+### Patch Changes
+
+- 4e9d899c: Added args to control lazy init of server app factory in dev mode
+
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- 05d36962: Added support for custom publicPath for memStaticProxy
+
+## 18.0.0-rc.19
+
+### Patch Changes
+
+- 0daa7f60: not require ima app for serving only SPA
+- 468ad70d: Fixed issue with delete require.cache caching, which could resolve in problems where app.server.js file is not reloaded when vendors change.
+  Runner is now reloaded form filesystem on every refresh in watch mode, this resolves issue where you get OLD SSR version of the application during development upon refresh.
+- 38ee2e12: Added ability to force runner to load legacy code
+- 6005049f: Added memStaticProxy middleware for mem dev serving of static files
+- Updated dependencies [468ad70d]
+- Updated dependencies [468ad70d]
+  - @ima/dev-utils@18.0.0-rc.13
+
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- acd9de23: Fix not set \$Language for dev environment
+- a2d9f825: Moved runner.js output to build/server directory
+- f52ba908: Show ErrorOverlay devServerError only in watch mode
+- 162e08f2: clear require.cache only for changed files
+
+## 18.0.0-rc.17
+
+### Patch Changes
+
+- a34b793e: Dependency bump and cleanup
+- Updated dependencies [a34b793e]
+  - @ima/dev-utils@18.0.0-rc.12
+  - @ima/helpers@18.0.0-rc.7
+
+## 18.0.0-rc.16
+
+### Patch Changes
+
+- 1b77b104: Added new global env IMA_CLI_WATCH indicating dev command run
+  Server no longer deletes require cache during refresh in dev environments, rather this functionality is now connected to IMA_CLI_WATCH variable. This means that it only happens during local watch development.
+
 ## 18.0.0-rc.15
 
 ### Patch Changes

@@ -1,17 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ES2018",
+    "module": "ES2015",
     "lib": [
+      "ES2022",
       "DOM",
+      "DOM.Iterable",
     ],
     "outDir": "dist",
-    "declaration": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
+    "declaration": true,
+    "types": ["webpack", "webpack-env"]
   },
   "include": [
     "src"

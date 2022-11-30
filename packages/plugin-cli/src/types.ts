@@ -1,4 +1,5 @@
-import { ModuleConfig, ReactConfig } from '@swc/core';
+import { JscTarget, ModuleConfig, ReactConfig } from '@swc/core';
+import { WatchOptions } from 'chokidar';
 
 export type Transformer = ({
   source,
@@ -40,15 +41,17 @@ export interface ImaPluginOutputConfig {
    * files inside the inputDir (except the ones excluded using global
    * exclude option).
    */
-  include?: RegExp;
+  include?: RegExp | ((filePath: string) => boolean);
 }
 
 export interface ImaPluginConfig {
   inputDir: string;
   output: ImaPluginOutputConfig[];
-  exclude?: string[];
+  target: JscTarget;
+  exclude?: WatchOptions['ignored'];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
+  additionalWatchPaths?: string[];
 }
 
 export type Plugin = (context: Context) => void | Promise<void>;
@@ -84,4 +87,12 @@ export interface Args {
   clientServerConfig: boolean;
   nodeConfig: boolean;
   path?: string;
+
+  /**
+   * Used to define additional anypath paths, that are copied
+   * while using link command to the destination directory.
+   * This is useful if we want to watch additional files, which
+   * are not in the inputDir.
+   */
+  additionalWatchPaths?: string[];
 }
