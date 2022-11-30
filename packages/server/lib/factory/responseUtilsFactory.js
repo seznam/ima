@@ -88,17 +88,17 @@ module.exports = function responseUtilsFactory() {
           }
 
           // Handle SDN fallback
-          if (process.env.SDN_PUBLIC_PATH) {
+          if (process.env.SDN_STATIC_ROOT_URL) {
             if (!Array.isArray(source)) {
               source = [
-                `${process.env.SDN_PUBLIC_PATH}${source}`,
+                `${process.env.SDN_STATIC_ROOT_URL}${source}`,
                 { fallback: source },
               ];
             } else {
               if (!source[1]?.fallback) {
                 source[1].fallback = source[0];
               }
-              source[0] = `${process.env.SDN_PUBLIC_PATH}${source[0]}`;
+              source[0] = `${process.env.SDN_STATIC_ROOT_URL}${source[0]}`;
             }
           }
         });
