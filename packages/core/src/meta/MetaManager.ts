@@ -151,4 +151,11 @@ export default abstract class MetaManager {
   getLinks(): string[] {
     return [];
   }
+
+  /**
+   * Resets the stored meta names, properties and links.
+   */
+  clearMetaAttributes() {
+    return;
+  }
 }
