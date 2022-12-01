@@ -87,18 +87,18 @@ module.exports = function responseUtilsFactory() {
               assets[source[0].replace('#{$Language}', language)]?.fileName;
           }
 
-          // Handle SDN fallback
-          if (process.env.SDN_STATIC_ROOT_URL) {
+          // Handle CDN fallback
+          if (process.env.CDN_STATIC_ROOT_URL) {
             if (!Array.isArray(source)) {
               source = [
-                `${process.env.SDN_STATIC_ROOT_URL}${source}`,
+                `${process.env.CDN_STATIC_ROOT_URL}${source}`,
                 { fallback: source },
               ];
             } else {
               if (!source[1]?.fallback) {
                 source[1].fallback = source[0];
               }
-              source[0] = `${process.env.SDN_STATIC_ROOT_URL}${source[0]}`;
+              source[0] = `${process.env.CDN_STATIC_ROOT_URL}${source[0]}`;
             }
           }
         });
