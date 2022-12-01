@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.24
+
+### Patch Changes
+
+- ffe933ab: Fixed an issue where AFTER_HANDLE_ROUTE is called before app is mounted
+
 ## 18.0.0-rc.23
 
 ### Patch Changes
