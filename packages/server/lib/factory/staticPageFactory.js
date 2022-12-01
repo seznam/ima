@@ -84,6 +84,7 @@ module.exports = function staticTemplateFactory({
       status,
       SPA: true,
       static: true,
+      metaManager: null,
     };
   }
 

@@ -81,6 +81,7 @@ module.exports = function serverAppFactory({
       cache: null,
       cookie: new Map(),
       headers: {},
+      metaManager: null,
     },
     cache: false,
   };

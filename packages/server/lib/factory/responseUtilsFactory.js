@@ -142,7 +142,7 @@ module.exports = function responseUtilsFactory() {
   }
 
   // TODO IMA@18 add tests
-  function processContent({ response, bootConfig, app }) {
+  function processContent({ response, bootConfig, app: _app }) {
     if (!response?.content || !bootConfig) {
       return response?.content;
     }
@@ -170,7 +170,7 @@ module.exports = function responseUtilsFactory() {
       interpolateRe,
       interpolate
     );
-    const $MetaTags = _getConcattedMetaTags(app.oc.get('$MetaManager'));
+    const $MetaTags = _getConcattedMetaTags(response.page.metaManager);
     const $Source = JSON.stringify(source)
       .replace(interpolateRe, interpolate)
       .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.

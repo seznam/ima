@@ -200,13 +200,14 @@ module.exports = function hooksFactory({
       if (isAppExists) {
         const state = context.app.oc.get('$PageStateManager').getState();
         const cache = context.app.oc.get('$Cache').serialize();
+        const metaManager = context.app.oc.get('$MetaManager');
         const { headers, cookie } = context.app.oc
           .get('$Response')
           .getResponseParams();
 
         context.response.page = {
           ...context.response.page,
-          ...{ state, cache, headers, cookie },
+          ...{ state, cache, headers, cookie, metaManager },
         };
       }
       context.response.content = processContent({
