@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 4215623d: Fixed broken release
+
 ## 18.0.0-rc.24
 
 ### Patch Changes
