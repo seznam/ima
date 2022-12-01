@@ -275,6 +275,7 @@ describe('ClientPageRenderer', () => {
         .mockImplementation();
 
       viewContainer.replaceChildren();
+      pageRenderer['_mounted'] = Promise.resolve();
       await pageRenderer['_renderPageViewToDOM'](
         controller,
         () => null,
