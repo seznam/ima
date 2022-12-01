@@ -18,7 +18,7 @@ class). You can read more about components and views in the [documentation](../b
 Now let's replace the contents of the file with a blank view:
 
 ```jsx
-import { PageContext, AbstractComponent } from '@ima/core';
+import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class HomeView extends AbstractComponent {

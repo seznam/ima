@@ -183,7 +183,7 @@ Optional parameters can be **placed only after the last slash**. Doing otherwise
 URLs to routes can be generated via the `Router.link()` public method. These can be then used in ordinary anchor tags and IMA.js makes sure, **to handle the site routing in SPA mode**, rather than doing redirect/reload of the whole page.
 
 ```jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 
 class OrderView extends AbstractComponent {
   render() {

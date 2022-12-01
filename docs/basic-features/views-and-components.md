@@ -131,7 +131,7 @@ Finally, what'd be the point to register these classes if we were not to use the
 
 ```javascript
 // app/component/gallery/Gallery.jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 
 export default class Gallery extends AbstractComponent {
 
