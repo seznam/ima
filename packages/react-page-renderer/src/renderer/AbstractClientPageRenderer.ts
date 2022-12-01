@@ -260,11 +260,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         this._hydrateViewAdapter();
         this._hydrated = true;
+
+        return this._mounted;
       });
     } else {
       this._renderViewAdapter(this._getRenderCallback());
 
-      return Promise.resolve();
+      return this._mounted;
     }
   }
 
