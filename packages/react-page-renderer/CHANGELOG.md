@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- 5d622ae1: Change order for renderer - setMetaParams before viewToDom
+- 84f819e0: Fixed tests
+
 ## 18.0.0-rc.25
 
 ### Patch Changes
