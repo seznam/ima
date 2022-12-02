@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.30
+
+### Patch Changes
+
+- 0a390c83: getController and getView will correctly return non-promise value when there is no async operation
+
 ## 18.0.0-rc.29
 
 ### Patch Changes
