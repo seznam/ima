@@ -90,12 +90,16 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       .then(async (fetchedResources: unknown) => {
         const pageState = Object.assign({}, defaultPageState, fetchedResources);
 
-        if (!this._viewContainer || !this._viewContainer.children.length) {
-          controller.setState(pageState);
-          await this._renderPageViewToDOM(controller, pageView, routeOptions);
-        }
+        const isViewContainerEmpty =
+          !this._viewContainer || !this._viewContainer.children.length;
+
+        isViewContainerEmpty && controller.setState(pageState);
 
         controller.setMetaParams(pageState);
+
+        isViewContainerEmpty &&
+          (await this._renderPageViewToDOM(controller, pageView, routeOptions));
+
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
