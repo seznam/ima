@@ -57,14 +57,14 @@ describe('ima.core.router.AbstractRoute', function () {
     expect(route.getOptions()).toStrictEqual(options);
   });
 
-  it('should return route controller', async () => {
-    const result = await route.getController();
+  it('should return route controller', () => {
+    const result = route.getController();
 
     expect(result).toStrictEqual(controller);
   });
 
-  it('should return route view', async () => {
-    const result = await route.getView();
+  it('should return route view', () => {
+    const result = route.getView();
 
     expect(result).toStrictEqual(view);
   });
@@ -209,10 +209,8 @@ describe('ima.core.router.AbstractRoute', function () {
       ).resolves.toStrictEqual(controller);
     });
 
-    it('should return promise resolving to constructor', async () => {
-      await expect(route._getAsyncModule(controller)).resolves.toStrictEqual(
-        controller
-      );
+    it('should return constructor', () => {
+      expect(route._getAsyncModule(controller)).toStrictEqual(controller);
     });
   });
 });
