@@ -32,7 +32,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16',
+      version: 'detect',
     },
   },
   parser: '@babel/eslint-parser',
