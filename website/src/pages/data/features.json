@@ -33,6 +33,6 @@
   },
   {
     "title": "Multiple running modes",
-    "description": "Application can be switched between IMA, SPA and MPA modes or combination of all of them."
+    "description": "Application can be switched between <strong>IMA</strong>, <strong>SPA</strong> and <strong>MPA</strong> modes or combination of all of them."
   }
 ]

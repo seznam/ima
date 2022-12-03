@@ -76,6 +76,12 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        blog: {
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
+          blogDescription:
+            'Blog that aims to inform users about tips and tricks, new features and other news around IMA.js framework.',
+        },
         sitemap: {
           changefreq: 'weekly',
           priority: 0.5,
@@ -118,6 +124,7 @@ const config = {
           position: 'right',
           label: 'API',
         },
+        { to: 'blog', label: 'Blog', position: 'right' },
         {
           type: 'search',
           position: 'right',
