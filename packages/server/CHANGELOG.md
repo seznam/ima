@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.22
+
+### Patch Changes
+
+- 80d5a701: Injected <script> tags are now identified by unique ids
+
 ## 18.0.0-rc.21
 
 ### Patch Changes

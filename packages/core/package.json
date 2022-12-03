@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.30",
+  "version": "18.0.0-rc.31",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",

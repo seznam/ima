@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.31
+
+### Patch Changes
+
+- 1a132f19: Fix runner for string source, extendable scripts array
+
 ## 18.0.0-rc.30
 
 ### Patch Changes
