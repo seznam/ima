@@ -72,16 +72,8 @@ module.exports = function responseUtilsFactory() {
     `;
   }
 
-  function _renderScripts(scripts) {
-    if (!Array.isArray(scripts)) {
-      return '';
-    }
-
-    return scripts.map(_renderScript).join('');
-  }
-
-  function _renderScript(script) {
-    return `<script>${script}</script>`;
+  function _renderScript(name, script) {
+    return `<script id="ima-${name}">${script}</script>`;
   }
 
   function _setCookieHeaders({ res, context }) {
@@ -129,11 +121,11 @@ module.exports = function responseUtilsFactory() {
     // Preprocess source and styles
     const { styles, ...source } = settings.$Source(response);
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
-    const $RevivalSettings = _renderScript(revivalSettings).replace(
-      interpolateRe,
-      interpolate
-    );
-    const $RevivalCache = _renderScript(revivalCache).replace(
+    const $RevivalSettings = _renderScript(
+      'revival-settings',
+      revivalSettings
+    ).replace(interpolateRe, interpolate);
+    const $RevivalCache = _renderScript('revival-cache', revivalCache).replace(
       interpolateRe,
       interpolate
     );
@@ -148,15 +140,15 @@ module.exports = function responseUtilsFactory() {
     extendedSettings.$RevivalCache = $RevivalCache;
 
     // Preprocess $Runner (with $Source already processed)
-    const $Runner = _renderScript(runner).replace(interpolateRe, interpolate);
-    extendedSettings.$Runner = $Runner;
+    const $Runner = _renderScript('runner', runner).replace(
+      interpolateRe,
+      interpolate
+    );
 
-    const $Scripts = _renderScripts([
-      revivalSettings,
-      runner,
-      revivalCache,
-    ]).replace(interpolateRe, interpolate);
-    extendedSettings.$Scripts = $Scripts;
+    extendedSettings.$Runner = $Runner;
+    extendedSettings.$Scripts = [$RevivalSettings, $Runner, $RevivalCache].join(
+      ''
+    );
 
     // Interpolate values in content
     return response.content.replace(interpolateRe, interpolate);
