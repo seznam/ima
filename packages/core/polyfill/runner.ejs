@@ -98,11 +98,11 @@
                 scriptEl.setAttribute(attr, options[attr]);
               }
             });
-
-            scriptEl.onload = function () {
-              runner.onLoad(source);
-            };
           }
+
+          scriptEl.onload = function () {
+            runner.onLoad(source);
+          };
 
           scriptsRoot.appendChild(scriptEl);
         }
@@ -118,12 +118,12 @@
           <% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>
         ) {
           runner.isEsVersion = true;
-          runner.scripts = runner.source.esScripts;
+          Array.prototype.push.apply(runner.scripts, runner.source.esScripts);
         } else if (
           runner.source.scripts &&
           runner.testSource.scripts.every(testScript)
         ) {
-          runner.scripts = runner.source.scripts;
+          Array.prototype.push.apply(runner.scripts, runner.source.scripts);
         } else {
           // Don't create scripts and execute runtime on unsupported environments.
           return runner.onUnsupported();
