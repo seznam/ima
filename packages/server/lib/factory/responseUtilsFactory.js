@@ -2,11 +2,115 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function responseUtilsFactory() {
-  let runner = '';
-
   const runnerPath = path.resolve('./build/server/runner.js');
-  if (fs.existsSync(runnerPath)) {
-    runner = fs.readFileSync(runnerPath, 'utf8');
+  const manifestPath = path.resolve('./build/manifest.json');
+
+  /**
+   * Load manifest, runner resources and prepare sources object.
+   */
+  function _loadResources() {
+    const manifest = fs.existsSync(manifestPath)
+      ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+      : {};
+
+    return {
+      manifest,
+      sources: _prepareSources(manifest),
+      runner: fs.existsSync(runnerPath)
+        ? fs.readFileSync(runnerPath, 'utf8')
+        : '',
+    };
+  }
+
+  /**
+   * Prepares default sources object structure assembled
+   * from the built manifest.json file.
+   */
+  function _prepareSources({ assetsByCompiler: assets }) {
+    const buildSource = (name, type, attr = {}) => {
+      if (!assets?.[name]) {
+        return [];
+      }
+
+      // Filter unwanted assets
+      const assetsData = Object.values(assets[name]);
+      const filteredAssets = assetsData.filter(
+        ({ name }) => name.endsWith(type) && !name.includes('/locale/')
+      );
+
+      // Add locale placeholder
+      if (type === 'js') {
+        const locale = assetsData.find(({ name }) => name.includes('/locale/'));
+
+        if (locale) {
+          filteredAssets.push({
+            name: locale.name.replace(/(\/)(\w+)(\.js)$/, '$1#{$Language}$3'),
+          });
+        }
+      }
+
+      return filteredAssets.map(asset => [asset.name, attr]);
+    };
+
+    return {
+      styles: buildSource('client.es', 'css', {
+        rel: 'stylesheet',
+      }),
+      scripts: buildSource('client', 'js', {
+        async: true,
+        crossorigin: 'anonymous',
+      }),
+      esScripts: buildSource('client.es', 'js', {
+        async: true,
+        crossorigin: 'anonymous',
+      }),
+    };
+  }
+
+  /**
+   * Resolve sources placeholders with real paths and hashes.
+   */
+  function _resolveSources(sourceDefinition, { assets, publicPath }, language) {
+    // Helper to resolve single sources object entry
+    const resolveSourceEntry = sources =>
+      sources
+        .map(source => {
+          const resolvedSource = Array.isArray(source)
+            ? [...source]
+            : [source, {}];
+          const resolvedSrc = resolvedSource[0].replace(
+            '#{$Language}',
+            language
+          );
+
+          if (!assets[resolvedSrc]?.fileName) {
+            return;
+          }
+
+          resolvedSource[0] = publicPath + assets[resolvedSrc].fileName;
+
+          // Handle CDN fallback
+          if (process.env.CDN_STATIC_ROOT_URL) {
+            if (!resolvedSource[1]?.fallback) {
+              resolvedSource[1].fallback = resolvedSource[0];
+            }
+
+            resolvedSource[0] = `${process.env.CDN_STATIC_ROOT_URL}${resolvedSource[0]}`;
+          }
+
+          return resolvedSource;
+        })
+        .filter(Boolean);
+
+    return Object.keys(sourceDefinition).reduce((acc, cur) => {
+      if (!sourceDefinition[cur].length) {
+        return acc;
+      }
+
+      acc[cur] = resolveSourceEntry(sourceDefinition[cur]);
+
+      return acc;
+    }, {});
   }
 
   function _renderStyles(styles) {
@@ -100,15 +204,17 @@ module.exports = function responseUtilsFactory() {
     res.set(context?.page?.headers ?? {});
   }
 
-  // TODO IMA@18 add tests
+  // Preload resources
+  let resources = _loadResources();
+
   function processContent({ response, bootConfig }) {
     if (!response?.content || !bootConfig) {
       return response?.content;
     }
 
-    // Always reload runner script in watch mode
-    if (process.env.IMA_CLI_WATCH && fs.existsSync(runnerPath)) {
-      runner = fs.readFileSync(runnerPath, 'utf8');
+    // Always reload resources in dev mode to have fresh copy
+    if (process.env.IMA_CLI_WATCH) {
+      resources = _loadResources();
     }
 
     const { settings } = bootConfig;
@@ -118,8 +224,19 @@ module.exports = function responseUtilsFactory() {
     const revivalSettings = _getRevivalSettings({ response, bootConfig });
     const revivalCache = _getRevivalCache({ response });
 
+    // Get current file sources to load
+    const sourcesDefinition =
+      settings?.$Source?.(response, resources.manifest, resources.sources) ??
+      resources.sources;
+
+    // Resolve real files using manifest
+    const { styles, ...source } = _resolveSources(
+      sourcesDefinition,
+      resources.manifest,
+      extendedSettings.$Language
+    );
+
     // Preprocess source and styles
-    const { styles, ...source } = settings.$Source(response);
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
     const $RevivalSettings = _renderScript(
       'revival-settings',
@@ -139,8 +256,8 @@ module.exports = function responseUtilsFactory() {
     extendedSettings.$RevivalSettings = $RevivalSettings;
     extendedSettings.$RevivalCache = $RevivalCache;
 
-    // Preprocess $Runner (with $Source already processed)
-    const $Runner = _renderScript('runner', runner).replace(
+    // Preprocess $Runner (with $Source resolved)
+    const $Runner = _renderScript('runner', resources.runner).replace(
       interpolateRe,
       interpolate
     );
@@ -157,6 +274,8 @@ module.exports = function responseUtilsFactory() {
   return {
     processContent,
     sendResponseHeaders,
+    _resolveSources,
+    _prepareSources,
     _renderStyles,
     _prepareCookieOptionsForExpress,
   };

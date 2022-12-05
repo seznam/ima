@@ -76,7 +76,7 @@ class GenerateRunnerPlugin {
     compilation: Compilation
   ): Promise<void> {
     const runtimeAsset = Object.keys(assets).find(assetName =>
-      assetName.endsWith('runtime.js')
+      /runtime\.(.+)\.js$/.test(assetName)
     );
 
     if (!runtimeAsset) {

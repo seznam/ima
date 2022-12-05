@@ -157,14 +157,6 @@ ima build
 Build an application for production
 
 Options:
-  --version           Show version number  [boolean]
-  --help              Show help  [boolean]
-  --clean             Clean build folder before building the application  [boolean] [default: true]
-  --clearCache        Deletes node_modules/.cache directory to invalidate loaders cache  [boolean]
-  --verbose           Use default webpack CLI output instead of custom one  [boolean]
-  --publicPath        Webpack public path to specify base for all assets in the app  [string]
-  --ignoreWarnings    Webpack will no longer print warnings during compilation  [boolean]
-  --profile           Turn on profiling support in production  [boolean] [default: false]
 // highlight-next-line
   --manifestBasePath  Overwrite basePath default value  [string]
 ```

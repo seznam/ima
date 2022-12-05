@@ -158,7 +158,6 @@ function createCacheKey(
       legacy: ctx.legacy,
       forceLegacy: ctx.forceLegacy,
       profile: ctx.profile,
-      publicPath: ctx.publicPath,
       rootDir: ctx.rootDir,
       environment: ctx.environment,
       reactRefresh: ctx.reactRefresh,
@@ -235,6 +234,10 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
 
     logger.write(pluginNames.join(', '));
   }
+
+  // Normalize publicPath
+  imaConfigWithDefaults.publicPath +=
+    !imaConfigWithDefaults.publicPath.endsWith('/') ? '/' : '';
 
   return imaConfigWithDefaults;
 }

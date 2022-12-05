@@ -5,9 +5,6 @@ module.exports = function memStaticProxyMiddlewareFactory() {
     return createProxyMiddleware(pathname => !pathname.includes('static/js/'), {
       logLevel: 'silent',
       target: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
-      ...(process.env.IMA_CLI_PUBLIC_PATH
-        ? { pathRewrite: { [`^${process.env.IMA_CLI_PUBLIC_PATH}`]: '/' } }
-        : {}),
     });
   }
 

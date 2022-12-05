@@ -16,19 +16,19 @@ module.exports = function createIMAServer({
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
-  const requireUncached = require('./lib/factory/devUtilsFactory.js')();
+  const manifestRequire = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
-    requireUncached('./build/server/vendors.js', {
+    manifestRequire('server/vendors.js', {
       optional: true,
-      dependencies: ['./build/server/app.server.js'],
+      dependencies: ['server/app.server.js'],
     });
 
-    return requireUncached('./build/server/app.server.js');
+    return manifestRequire('server/app.server.js');
   }
 
   function languageLoader(language) {
-    return requireUncached(`./build/server/locale/${language}.js`).default;
+    return manifestRequire(`server/locale/${language}.js`).default;
   }
 
   emitter = emitter || new Emitter({ logger, debug: false });

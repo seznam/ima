@@ -2,6 +2,7 @@ const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter, Event } = require('../../emitter.js');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
+const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('fs', () => {
   const { toMockedInstance } = jest.requireActual('to-mock');
@@ -12,7 +13,11 @@ jest.mock('fs', () => {
       existsSync() {
         return true;
       },
-      readFileSync() {
+      readFileSync(path) {
+        if (path.endsWith('manifest.json')) {
+          return JSON.stringify(manifestMock);
+        }
+
         return 'read file content';
       },
     }),
@@ -59,19 +64,6 @@ describe('Server App Factory', () => {
     logger = console;
     environment = {
       $Debug: true,
-      $Source: () => ({
-        styles: ['/static/css/app.css'],
-        scripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
-          ['/static/js/vendors.js?v=#{$Version}', { async: true }],
-          ['/static/js/app.client.js?v=#{$Version}', { async: true }],
-        ],
-        esScripts: [
-          ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
-          ['/static/js.es/vendors.js?v=#{$Version}', { async: true }],
-          ['/static/js.es/app.client.js?v=#{$Version}', { async: true }],
-        ],
-      }),
       $Server: {
         concurrency: 1,
         badRequestConcurrency: 1,
@@ -405,8 +397,6 @@ describe('Server App Factory', () => {
 
   it('handle request', async () => {
     await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    //console.log('PAGE', page);
 
     expect(true).toBeTruthy();
   });

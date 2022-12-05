@@ -28,7 +28,6 @@ export interface ImaCliArgs {
   clean: boolean;
   clearCache?: boolean;
   verbose?: boolean;
-  publicPath?: string;
   ignoreWarnings?: boolean;
   open?: boolean;
   legacy?: boolean;

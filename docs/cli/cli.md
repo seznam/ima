@@ -50,7 +50,6 @@ Options:
   --clean           Clean build folder before building the application  [boolean] [default: true]
   --clearCache      Deletes node_modules/.cache directory to invalidate loaders cache  [boolean]
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
-  --publicPath      Webpack public path to specify base for all assets in the app  [string]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --open            Opens browser window after server has been started  [boolean] [default: true]
   --legacy          Runs application in legacy mode  [boolean] [default: false]
@@ -85,7 +84,6 @@ Options:
   --clean           Clean build folder before building the application  [boolean] [default: true]
   --clearCache      Deletes node_modules/.cache directory to invalidate loaders cache  [boolean]
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
-  --publicPath      Webpack public path to specify base for all assets in the app  [string]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --profile         Turn on profiling support in production  [boolean] [default: false]
 ```
@@ -127,12 +125,6 @@ Clears `./node_modules/.cache` folder. This is used to store webpack filesystem 
 > `boolean = false`
 
 Disables custom CLI logging style in favor of default webpack CLI verbose. This can be usefull for debugging.
-
-### --publicPath
-
-> `string`
-
-Overwrite the webpack `publicPath` config option (this also overwrites custom definition in [ima.config.js](./ima.config.js#publicpath).
 
 ### --ignoreWarnings
 
