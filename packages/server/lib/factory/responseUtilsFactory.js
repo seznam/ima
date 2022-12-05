@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const memoizeOne = require('memoize-one');
 
 module.exports = function responseUtilsFactory() {
   const runnerPath = path.resolve('./build/server/runner.js');
@@ -15,7 +16,6 @@ module.exports = function responseUtilsFactory() {
 
     return {
       manifest,
-      sources: _prepareSources(manifest),
       runner: fs.existsSync(runnerPath)
         ? fs.readFileSync(runnerPath, 'utf8')
         : '',
@@ -23,94 +23,57 @@ module.exports = function responseUtilsFactory() {
   }
 
   /**
-   * Prepares default sources object structure assembled
+   * Prepares default $Source object structure assembled
    * from the built manifest.json file.
    */
-  function _prepareSources({ assetsByCompiler: assets }) {
-    const buildSource = (name, type, attr = {}) => {
-      if (!assets?.[name]) {
+  function _prepareSource({ assetsByCompiler, assets, publicPath }, language) {
+    const buildSource = (name, sourceFilter, attr = {}) => {
+      if (!assetsByCompiler?.[name]) {
         return [];
       }
 
-      // Filter unwanted assets
-      const assetsData = Object.values(assets[name]);
-      const filteredAssets = assetsData.filter(
-        ({ name }) => name.endsWith(type) && !name.includes('/locale/')
-      );
+      // Filter unwanted assets and use only current language
+      const assetsData = Object.values(assetsByCompiler[name]);
+      const filteredAssets = assetsData.filter(sourceFilter);
 
-      // Add locale placeholder
-      if (type === 'js') {
-        const locale = assetsData.find(({ name }) => name.includes('/locale/'));
+      // Resolve asset names to actual filenames
+      return filteredAssets.map(asset => {
+        const assetFile = assets[asset.name]?.fileName;
 
-        if (locale) {
-          filteredAssets.push({
-            name: locale.name.replace(/(\/)(\w+)(\.js)$/, '$1#{$Language}$3'),
-          });
+        if (!process.env.CDN_STATIC_ROOT_URL) {
+          return [publicPath + assetFile, attr];
         }
-      }
 
-      return filteredAssets.map(asset => [asset.name, attr]);
+        // Add CDN as primary source with static file asn fallback
+        return [
+          `${process.env.CDN_STATIC_ROOT_URL}${assetFile}`,
+          {
+            ...attr,
+            fallback: publicPath + assetFile,
+          },
+        ];
+      });
     };
+
+    // Filter out specific assets for each source entry
+    const cssFilter = ({ name }) => name.endsWith('.css');
+    const jsFilter = ({ name }) =>
+      (name.endsWith('.js') && !name.includes('/locale/')) ||
+      name.includes(`locale/${language}.js`);
 
     return {
-      styles: buildSource('client.es', 'css', {
+      styles: buildSource('client.es', cssFilter, {
         rel: 'stylesheet',
       }),
-      scripts: buildSource('client', 'js', {
+      scripts: buildSource('client', jsFilter, {
         async: true,
         crossorigin: 'anonymous',
       }),
-      esScripts: buildSource('client.es', 'js', {
+      esScripts: buildSource('client.es', jsFilter, {
         async: true,
         crossorigin: 'anonymous',
       }),
     };
-  }
-
-  /**
-   * Resolve sources placeholders with real paths and hashes.
-   */
-  function _resolveSources(sourceDefinition, { assets, publicPath }, language) {
-    // Helper to resolve single sources object entry
-    const resolveSourceEntry = sources =>
-      sources
-        .map(source => {
-          const resolvedSource = Array.isArray(source)
-            ? [...source]
-            : [source, {}];
-          const resolvedSrc = resolvedSource[0].replace(
-            '#{$Language}',
-            language
-          );
-
-          if (!assets[resolvedSrc]?.fileName) {
-            return;
-          }
-
-          resolvedSource[0] = publicPath + assets[resolvedSrc].fileName;
-
-          // Handle CDN fallback
-          if (process.env.CDN_STATIC_ROOT_URL) {
-            if (!resolvedSource[1]?.fallback) {
-              resolvedSource[1].fallback = resolvedSource[0];
-            }
-
-            resolvedSource[0] = `${process.env.CDN_STATIC_ROOT_URL}${resolvedSource[0]}`;
-          }
-
-          return resolvedSource;
-        })
-        .filter(Boolean);
-
-    return Object.keys(sourceDefinition).reduce((acc, cur) => {
-      if (!sourceDefinition[cur].length) {
-        return acc;
-      }
-
-      acc[cur] = resolveSourceEntry(sourceDefinition[cur]);
-
-      return acc;
-    }, {});
   }
 
   function _renderStyles(styles) {
@@ -118,33 +81,30 @@ module.exports = function responseUtilsFactory() {
       return '';
     }
 
-    return styles
-      .map(style => {
-        if (typeof style === 'string') {
-          return `<link rel="stylesheet" href="${style}" />`;
-        }
+    return styles.reduce((acc, cur) => {
+      if (typeof cur === 'string') {
+        acc += `<link rel="stylesheet" href="${cur}" />`;
 
-        const [href, { fallback = null, rel = 'stylesheet', ...options }] =
-          style;
-        const linkTagParts = [`<link href="${href}" rel="${rel}"`];
+        return acc;
+      }
 
-        // Generate fallback handler
-        if (fallback) {
-          linkTagParts.push(
-            `onerror="this.onerror=null;this.href='${fallback}';"`
-          );
-        }
+      const [href, { fallback = null, rel = 'stylesheet', ...options }] = cur;
+      let link = `<link href="${href}" rel="${rel}"`;
 
-        // Generate other attributes
-        for (const [attr, value] of Object.entries(options)) {
-          linkTagParts.push(`${attr}="${value}"`);
-        }
+      // Generate fallback handler
+      if (fallback) {
+        link += ` onerror="this.onerror=null;this.href='${fallback}';"`;
+      }
 
-        linkTagParts.push('/>');
+      // Generate other attributes
+      for (const [attr, value] of Object.entries(options)) {
+        link += ` ${attr}="${value}"`;
+      }
 
-        return linkTagParts.join(' ');
-      })
-      .join('');
+      acc += link + ' />';
+
+      return acc;
+    }, '');
   }
 
   function _getRevivalSettings({ bootConfig, response }) {
@@ -206,6 +166,9 @@ module.exports = function responseUtilsFactory() {
 
   // Preload resources
   let resources = _loadResources();
+  const memoPrepareSources = memoizeOne((manifest, language) =>
+    _prepareSource(manifest, language)
+  );
 
   function processContent({ response, bootConfig }) {
     if (!response?.content || !bootConfig) {
@@ -220,21 +183,20 @@ module.exports = function responseUtilsFactory() {
     const { settings } = bootConfig;
     const interpolateRe = /#{([\w\d\-._$]+)}/g;
     const extendedSettings = { ...settings };
-    const interpolate = (match, envKey) => extendedSettings[envKey];
+    const interpolate = (_, envKey) => extendedSettings[envKey];
     const revivalSettings = _getRevivalSettings({ response, bootConfig });
     const revivalCache = _getRevivalCache({ response });
 
-    // Get current file sources to load
-    const sourcesDefinition =
-      settings?.$Source?.(response, resources.manifest, resources.sources) ??
-      resources.sources;
-
-    // Resolve real files using manifest
-    const { styles, ...source } = _resolveSources(
-      sourcesDefinition,
+    // Generate default $Source structure
+    const defaltSource = memoPrepareSources(
       resources.manifest,
-      extendedSettings.$Language
+      settings.$Language
     );
+
+    // Get current file sources to load
+    const { styles, ...source } =
+      settings?.$Source?.(response, resources.manifest, defaltSource) ??
+      defaltSource;
 
     // Preprocess source and styles
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
@@ -274,8 +236,7 @@ module.exports = function responseUtilsFactory() {
   return {
     processContent,
     sendResponseHeaders,
-    _resolveSources,
-    _prepareSources,
+    _prepareSource,
     _renderStyles,
     _prepareCookieOptionsForExpress,
   };
