@@ -27,6 +27,7 @@ describe('responseUtilsFactory', () => {
   const {
     processContent,
     _renderStyles,
+    _renderStylesPreload,
     _prepareCookieOptionsForExpress,
     _prepareSource,
   } = responseUtilsFactory();
@@ -86,6 +87,48 @@ describe('responseUtilsFactory', () => {
       ).toBe(
         `<link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />`
       );
+    });
+  });
+
+  describe('_renderStylesPreload', () => {
+    it('should return empty string for invalid input', () => {
+      expect(_renderStylesPreload()).toBe('');
+      expect(_renderStylesPreload([])).toBe('');
+      expect(_renderStylesPreload({})).toBe('');
+      expect(_renderStylesPreload(null)).toBe('');
+      expect(_renderStylesPreload('/static/app.css')).toBe('');
+    });
+
+    it('should generate preload rel link when enabled', () => {
+      expect(
+        _renderStylesPreload([
+          [
+            '/static/app.css',
+            {
+              rel: 'stylesheet',
+              fallback: '/static/fallback.css',
+              preload: true,
+            },
+          ],
+        ])
+      ).toBe(
+        `<link as="style" href="/static/app.css" rel="preload" type="text/css" />`
+      );
+    });
+
+    it('should not generate preload rel link when disabled', () => {
+      expect(
+        _renderStylesPreload([
+          [
+            '/static/app.css',
+            {
+              rel: 'stylesheet',
+              fallback: '/static/fallback.css',
+              preload: false,
+            },
+          ],
+        ])
+      ).toBe('');
     });
   });
 

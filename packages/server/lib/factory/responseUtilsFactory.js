@@ -64,6 +64,7 @@ module.exports = function responseUtilsFactory() {
     return {
       styles: buildSource('client.es', cssFilter, {
         rel: 'stylesheet',
+        preload: true,
       }),
       scripts: buildSource('client', jsFilter, {
         async: true,
@@ -88,7 +89,10 @@ module.exports = function responseUtilsFactory() {
         return acc;
       }
 
-      const [href, { fallback = null, rel = 'stylesheet', ...options }] = cur;
+      const [
+        href,
+        { fallback = null, preload, rel = 'stylesheet', ...options },
+      ] = cur;
       let link = `<link href="${href}" rel="${rel}"`;
 
       // Generate fallback handler
@@ -102,6 +106,22 @@ module.exports = function responseUtilsFactory() {
       }
 
       acc += link + ' />';
+
+      return acc;
+    }, '');
+  }
+
+  function _renderStylesPreload(styles) {
+    if (!Array.isArray(styles)) {
+      return '';
+    }
+
+    return styles.reduce((acc, cur) => {
+      if (!cur[1]?.preload) {
+        return acc;
+      }
+
+      acc += `<link as="style" href="${cur[0]}" rel="preload" type="text/css" />`;
 
       return acc;
     }, '');
@@ -200,6 +220,10 @@ module.exports = function responseUtilsFactory() {
 
     // Preprocess source and styles
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
+    const $StylesPreload = _renderStylesPreload(styles).replace(
+      interpolateRe,
+      interpolate
+    );
     const $RevivalSettings = _renderScript(
       'revival-settings',
       revivalSettings
@@ -215,6 +239,7 @@ module.exports = function responseUtilsFactory() {
     // Extends settings with source and styles
     extendedSettings.$Source = $Source;
     extendedSettings.$Styles = $Styles;
+    extendedSettings.$StylesPreload = $StylesPreload;
     extendedSettings.$RevivalSettings = $RevivalSettings;
     extendedSettings.$RevivalCache = $RevivalCache;
 
@@ -238,6 +263,7 @@ module.exports = function responseUtilsFactory() {
     sendResponseHeaders,
     _prepareSource,
     _renderStyles,
+    _renderStylesPreload,
     _prepareCookieOptionsForExpress,
   };
 };
