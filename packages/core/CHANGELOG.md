@@ -1,5 +1,24 @@
 # Change Log
 
+## 18.0.0-rc.31
+
+### Patch Changes
+
+- 1a132f19: Fix runner for string source, extendable scripts array
+
+## 18.0.0-rc.30
+
+### Patch Changes
+
+- 0a390c83: getController and getView will correctly return non-promise value when there is no async operation
+
+## 18.0.0-rc.29
+
+### Patch Changes
+
+- 149f99f3: Updated Storage and Core type definitions
+- 0bd8b197: Memoized parse function inside of the CookieStorage class
+
 ## 18.0.0-rc.28
 
 ### Patch Changes

@@ -356,10 +356,10 @@ export default abstract class AbstractRoute {
    * async functions in order to support dynamic async routing.
    *
    * @param module The module class/alias/constant.
-   * @return Promise resolving to the actual view or controller
+   * @return Module, or promise resolving to the actual view or controller
    *  constructor function/class.
    */
-  async _getAsyncModule(module: string | unknown | (() => unknown)) {
+  _getAsyncModule(module: string | unknown | (() => unknown)) {
     return module?.constructor.name === 'AsyncFunction'
       ? (module as () => Promise<Record<string, unknown>>)().then(
           module => module.default ?? module

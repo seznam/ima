@@ -31,6 +31,10 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
       }) as ReactElement,
       {
         onRecoverableError: error => {
+          if ($Debug) {
+            console.error('onRecoverableError', error);
+          }
+
           this._dispatcher.fire(RendererEvents.HYDRATE_ERROR, { error }, true);
         },
       }

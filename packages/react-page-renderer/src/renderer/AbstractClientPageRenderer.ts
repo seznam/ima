@@ -90,12 +90,16 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       .then(async (fetchedResources: unknown) => {
         const pageState = Object.assign({}, defaultPageState, fetchedResources);
 
-        if (!this._viewContainer || !this._viewContainer.children.length) {
-          controller.setState(pageState);
-          await this._renderPageViewToDOM(controller, pageView, routeOptions);
-        }
+        const isViewContainerEmpty =
+          !this._viewContainer || !this._viewContainer.children.length;
+
+        isViewContainerEmpty && controller.setState(pageState);
 
         controller.setMetaParams(pageState);
+
+        isViewContainerEmpty &&
+          (await this._renderPageViewToDOM(controller, pageView, routeOptions));
+
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
@@ -260,11 +264,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
         this._hydrateViewAdapter();
         this._hydrated = true;
+
+        return this._mounted;
       });
     } else {
       this._renderViewAdapter(this._getRenderCallback());
 
-      return Promise.resolve();
+      return this._mounted;
     }
   }
 

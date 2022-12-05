@@ -176,16 +176,8 @@ module.exports = function responseUtilsFactory() {
     `;
   }
 
-  function _renderScripts(scripts) {
-    if (!Array.isArray(scripts)) {
-      return '';
-    }
-
-    return scripts.map(_renderScript).join('');
-  }
-
-  function _renderScript(script) {
-    return `<script>${script}</script>`;
+  function _renderScript(name, script) {
+    return `<script id="ima-${name}">${script}</script>`;
   }
 
   function _setCookieHeaders({ res, context }) {
@@ -244,12 +236,13 @@ module.exports = function responseUtilsFactory() {
       extendedSettings.$Language
     );
 
+    // Preprocess source and styles
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
-    const $RevivalSettings = _renderScript(revivalSettings).replace(
-      interpolateRe,
-      interpolate
-    );
-    const $RevivalCache = _renderScript(revivalCache).replace(
+    const $RevivalSettings = _renderScript(
+      'revival-settings',
+      revivalSettings
+    ).replace(interpolateRe, interpolate);
+    const $RevivalCache = _renderScript('revival-cache', revivalCache).replace(
       interpolateRe,
       interpolate
     );
@@ -263,19 +256,16 @@ module.exports = function responseUtilsFactory() {
     extendedSettings.$RevivalSettings = $RevivalSettings;
     extendedSettings.$RevivalCache = $RevivalCache;
 
-    // Preprocess $Runner (with $Source already processed)
-    const $Runner = _renderScript(resources.runner).replace(
+    // Preprocess $Runner (with $Source resolved)
+    const $Runner = _renderScript('runner', resources.runner).replace(
       interpolateRe,
       interpolate
     );
-    extendedSettings.$Runner = $Runner;
 
-    const $Scripts = _renderScripts([
-      revivalSettings,
-      resources.runner,
-      revivalCache,
-    ]).replace(interpolateRe, interpolate);
-    extendedSettings.$Scripts = $Scripts;
+    extendedSettings.$Runner = $Runner;
+    extendedSettings.$Scripts = [$RevivalSettings, $Runner, $RevivalCache].join(
+      ''
+    );
 
     // Interpolate values in content
     return response.content.replace(interpolateRe, interpolate);

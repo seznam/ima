@@ -66,7 +66,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '18',
+      version: 'detect',
     },
   },
   parser: '@babel/eslint-parser',

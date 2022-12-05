@@ -241,7 +241,7 @@ and `app/component/post/post.less` files.
 Put the following code into the `Post.jsx` file:
 
 ```jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class Post extends AbstractComponent {
@@ -302,7 +302,7 @@ directory and the `app/component/postingForm/PostingForm.jsx` file. Then, put th
 following code into the `app/component/postingForm/PostingForm.jsx` file:
 
 ```jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class PostingForm extends AbstractComponent {

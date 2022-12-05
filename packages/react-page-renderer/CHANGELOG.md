@@ -1,5 +1,24 @@
 # Change Log
 
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- 5d622ae1: Change order for renderer - setMetaParams before viewToDom
+- 84f819e0: Fixed tests
+
+## 18.0.0-rc.25
+
+### Patch Changes
+
+- 4215623d: Fixed broken release
+
+## 18.0.0-rc.24
+
+### Patch Changes
+
+- ffe933ab: Fixed an issue where AFTER_HANDLE_ROUTE is called before app is mounted
+
 ## 18.0.0-rc.23
 
 ### Patch Changes
