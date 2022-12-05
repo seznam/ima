@@ -17,7 +17,7 @@ if (!$IMA.Test) {
       ima.reviveClientApp(getInitialAppConfigFunctions());
     })
     .catch(error => {
-      if ($Debug && typeof window !== 'undefined' && window?.__IMA_HMR?.emit) {
+      if ($Debug && typeof window !== 'undefined') {
         window.__IMA_HMR?.emitter?.emit('error', { error });
         console.error(error);
       }

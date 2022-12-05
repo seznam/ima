@@ -116,7 +116,7 @@ app
       orderPreference: ['br'],
       serveStatic: {
         maxAge: '14d',
-        cacheControl: environment.$Env === 'prod'
+        cacheControl: environment.$Env === 'prod',
       },
     })
   )
