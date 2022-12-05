@@ -71,38 +71,46 @@ module.exports = function responseUtilsFactory() {
    * Resolve sources placeholders with real paths and hashes.
    */
   function _resolveSources(sourceDefinition, { assets, publicPath }, language) {
-    Object.keys(sourceDefinition)
-      .filter(key => sourceDefinition[key].length)
-      .forEach(key => {
-        const sources = sourceDefinition[key];
+    // Helper to resolve single sources object entry
+    const resolveSourceEntry = sources =>
+      sources
+        .map(source => {
+          const resolvedSource = Array.isArray(source)
+            ? [...source]
+            : [source, {}];
+          const resolvedSrc = resolvedSource[0].replace(
+            '#{$Language}',
+            language
+          );
 
-        sources.forEach(source => {
-          if (!Array.isArray(source)) {
-            source =
-              publicPath +
-              assets[source].fileName.replace('#{$Language}', language);
-          } else {
-            source[0] =
-              publicPath +
-              assets[source[0].replace('#{$Language}', language)]?.fileName;
+          if (!assets[resolvedSrc]?.fileName) {
+            return;
           }
+
+          resolvedSource[0] = publicPath + assets[resolvedSrc].fileName;
 
           // Handle CDN fallback
           if (process.env.CDN_STATIC_ROOT_URL) {
-            if (!Array.isArray(source)) {
-              source = [
-                `${process.env.CDN_STATIC_ROOT_URL}${source}`,
-                { fallback: source },
-              ];
-            } else {
-              if (!source[1]?.fallback) {
-                source[1].fallback = source[0];
-              }
-              source[0] = `${process.env.CDN_STATIC_ROOT_URL}${source[0]}`;
+            if (!resolvedSource[1]?.fallback) {
+              resolvedSource[1].fallback = resolvedSource[0];
             }
+
+            resolvedSource[0] = `${process.env.CDN_STATIC_ROOT_URL}${resolvedSource[0]}`;
           }
-        });
-      });
+
+          return resolvedSource;
+        })
+        .filter(Boolean);
+
+    return Object.keys(sourceDefinition).reduce((acc, cur) => {
+      if (!sourceDefinition[cur].length) {
+        return acc;
+      }
+
+      acc[cur] = resolveSourceEntry(sourceDefinition[cur]);
+
+      return acc;
+    }, {});
   }
 
   function _renderStyles(styles) {
@@ -207,7 +215,6 @@ module.exports = function responseUtilsFactory() {
   // Preload resources
   let resources = _loadResources();
 
-  // TODO IMA@18 add tests
   function processContent({ response, bootConfig }) {
     if (!response?.content || !bootConfig) {
       return response?.content;
@@ -231,13 +238,12 @@ module.exports = function responseUtilsFactory() {
       resources.sources;
 
     // Resolve real files using manifest
-    _resolveSources(
+    const { styles, ...source } = _resolveSources(
       sourcesDefinition,
       resources.manifest,
       extendedSettings.$Language
     );
 
-    const { styles, ...source } = sourcesDefinition;
     const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
     const $RevivalSettings = _renderScript(revivalSettings).replace(
       interpolateRe,

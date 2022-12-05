@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`responseUtilsFactory processContent should allow overrides through custom $Source definition 1`] = `
+"
+<html>
+<script>(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$Language = "en";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script><script>runner{\\"esScripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}</script><script>(function (root) {
+      root.$IMA = root.$IMA || {};
+      $IMA.Cache = {};
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script>
+</html>"
+`;
+
+exports[`responseUtilsFactory processContent should interpolate revival scripts into page content 1`] = `
+"
+<html>
+<link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />
+<script>(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$Language = "undefined";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script>
+<script>runner{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}</script>
+</html>"
+`;

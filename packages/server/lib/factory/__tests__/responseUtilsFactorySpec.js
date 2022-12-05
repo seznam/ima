@@ -17,7 +17,7 @@ jest.mock('fs', () => {
           return JSON.stringify(manifestMock);
         }
 
-        return '---runner content---';
+        return 'runner#{$Source}';
       },
     }),
   };
@@ -25,13 +25,14 @@ jest.mock('fs', () => {
 
 describe('responseUtilsFactory', () => {
   const {
+    processContent,
     _renderStyles,
     _prepareCookieOptionsForExpress,
     _prepareSources,
     _resolveSources,
   } = responseUtilsFactory();
 
-  afterAll(() => {
+  afterEach(() => {
     jest.resetAllMocks();
   });
 
@@ -238,9 +239,9 @@ describe('responseUtilsFactory', () => {
   describe('_resolveSources', () => {
     it('should resolve source placeholders to real files', () => {
       const sources = _prepareSources(manifestMock);
-      _resolveSources(sources, manifestMock, 'en');
 
-      expect(sources).toMatchInlineSnapshot(`
+      expect(_resolveSources(sources, manifestMock, 'en'))
+        .toMatchInlineSnapshot(`
         {
           "esScripts": [
             [
@@ -303,25 +304,25 @@ describe('responseUtilsFactory', () => {
     it('should work with custom sources', () => {
       const sources = {
         styles: ['static/css/app.css'],
-        esScripts: ['static/js.es/app.client.js'],
+        esScripts: ['static/js.es/locale/#{$Language}'],
       };
 
-      _resolveSources(sources, manifestMock, 'en');
-
-      expect(sources).toMatchInlineSnapshot(`
+      expect(_resolveSources(sources, manifestMock, 'en'))
+        .toMatchInlineSnapshot(`
         {
-          "esScripts": [
-            "static/js.es/app.client.js",
-          ],
+          "esScripts": [],
           "styles": [
-            "static/css/app.css",
+            [
+              "/static/css/app.d0ad44d05f82db5f.css",
+              {},
+            ],
           ],
         }
       `);
     });
   });
 
-  describe('', () => {
+  describe('_prepareCookieOptionsForExpress', () => {
     it('should convert cookie maxAge to ms for Express', () => {
       let options = { maxAge: 1 };
       let expressOptions = _prepareCookieOptionsForExpress(options);
@@ -335,6 +336,59 @@ describe('responseUtilsFactory', () => {
       let expressOptions = _prepareCookieOptionsForExpress(options);
       expect(options.maxAge).toBeNull();
       expect(expressOptions.maxAge).toBeUndefined();
+    });
+  });
+
+  describe('processContent', () => {
+    it('should return original content without any boot config', () => {
+      expect(processContent({ response: { content: 'content' } })).toBe(
+        'content'
+      );
+    });
+
+    it('should interpolate revival scripts into page content', () => {
+      const response = {
+        content: `
+<html>
+#{$Styles}
+#{$RevivalSettings}
+#{$Runner}
+</html>`,
+      };
+      const bootConfig = {
+        settings: {
+          $Debug: true,
+        },
+      };
+      const contextMock = { response, bootConfig };
+
+      const content = processContent(contextMock);
+      expect(content).toMatchSnapshot();
+    });
+
+    it('should allow overrides through custom $Source definition', () => {
+      const response = {
+        content: `
+<html>
+#{$Scripts}
+</html>`,
+      };
+      const bootConfig = {
+        settings: {
+          $Language: 'en',
+          $Debug: true,
+          $Source: (context, manifest, sources) => {
+            return {
+              styles: [],
+              esScripts: sources.scripts,
+            };
+          },
+        },
+      };
+      const contextMock = { response, bootConfig };
+
+      const content = processContent(contextMock);
+      expect(content).toMatchSnapshot();
     });
   });
 });
