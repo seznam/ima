@@ -27,9 +27,9 @@ describe('responseUtilsFactory', () => {
   const {
     processContent,
     _renderStyles,
+    _renderStylesPreload,
     _prepareCookieOptionsForExpress,
-    _prepareSources,
-    _resolveSources,
+    _prepareSource,
   } = responseUtilsFactory();
 
   afterEach(() => {
@@ -90,235 +90,73 @@ describe('responseUtilsFactory', () => {
     });
   });
 
-  describe('_prepareSources', () => {
-    it('should prepare default sources structure from provided manifest file', () => {
-      expect(_prepareSources(manifestMock)).toMatchInlineSnapshot(`
-        {
-          "esScripts": [
-            [
-              "static/js.es/app.client.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js.es/vendors.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js.es/locale/#{$Language}.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-          ],
-          "scripts": [
-            [
-              "static/js/app.client.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js/vendors.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js/locale/#{$Language}.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-          ],
-          "styles": [
-            [
-              "static/css/app.css",
-              {
-                "rel": "stylesheet",
-              },
-            ],
-          ],
-        }
-      `);
+  describe('_renderStylesPreload', () => {
+    it('should return empty string for invalid input', () => {
+      expect(_renderStylesPreload()).toBe('');
+      expect(_renderStylesPreload([])).toBe('');
+      expect(_renderStylesPreload({})).toBe('');
+      expect(_renderStylesPreload(null)).toBe('');
+      expect(_renderStylesPreload('/static/app.css')).toBe('');
     });
 
-    it('should replace language files with placeholder source', () => {
-      const sources = _prepareSources(manifestMock);
-
-      // Validate inputs
+    it('should generate preload rel link when enabled', () => {
       expect(
-        Object.values(manifestMock.assetsByCompiler['client.es']).filter(
-          ({ name }) => name.includes('/locale/')
-        )
-      ).toHaveLength(2);
-      expect(
-        Object.values(manifestMock.assetsByCompiler['client']).filter(
-          ({ name }) => name.includes('/locale/')
-        )
-      ).toHaveLength(2);
-      expect(
-        Object.values(manifestMock.assetsByCompiler['server']).filter(
-          ({ name }) => name.includes('/locale/')
-        )
-      ).toHaveLength(2);
-
-      // Validate outputs
-      expect(
-        sources.styles.filter(([sourceName]) => sourceName.includes('/locale/'))
-      ).toHaveLength(0);
-      expect(
-        sources.scripts.filter(([sourceName]) =>
-          sourceName.includes('/locale/')
-        )
-      ).toHaveLength(1);
-      expect(
-        sources.esScripts.filter(([sourceName]) =>
-          sourceName.includes('/locale/')
-        )
-      ).toHaveLength(1);
+        _renderStylesPreload([
+          [
+            '/static/app.css',
+            {
+              rel: 'stylesheet',
+              fallback: '/static/fallback.css',
+              preload: true,
+            },
+          ],
+        ])
+      ).toBe(
+        `<link as="style" href="/static/app.css" rel="preload" type="text/css" />`
+      );
     });
 
-    it('should skip compilations without assets', () => {
-      const sources = _prepareSources({
-        ...manifestMock,
-        assetsByCompiler: {
-          ...manifestMock.assetsByCompiler,
-          client: {},
-        },
-      });
-
-      expect(sources).toMatchInlineSnapshot(`
-        {
-          "esScripts": [
-            [
-              "static/js.es/app.client.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js.es/vendors.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "static/js.es/locale/#{$Language}.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
+    it('should not generate preload rel link when disabled', () => {
+      expect(
+        _renderStylesPreload([
+          [
+            '/static/app.css',
+            {
+              rel: 'stylesheet',
+              fallback: '/static/fallback.css',
+              preload: false,
+            },
           ],
-          "scripts": [],
-          "styles": [
-            [
-              "static/css/app.css",
-              {
-                "rel": "stylesheet",
-              },
-            ],
-          ],
-        }
-      `);
+        ])
+      ).toBe('');
     });
   });
 
-  describe('_resolveSources', () => {
-    it('should resolve source placeholders to real files', () => {
-      const sources = _prepareSources(manifestMock);
-
-      expect(_resolveSources(sources, manifestMock, 'en'))
-        .toMatchInlineSnapshot(`
-        {
-          "esScripts": [
-            [
-              "/static/js.es/app.client.2106a34c6b8bbad8.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "/static/js.es/vendors.a873907f25297544.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "/static/js.es/locale/en.371127fdbfbe93d2.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-          ],
-          "scripts": [
-            [
-              "/static/js/app.client.8dc14fd2c9e52eef.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "/static/js/vendors.0e456297851f0a3a.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-            [
-              "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
-              {
-                "async": true,
-                "crossorigin": "anonymous",
-              },
-            ],
-          ],
-          "styles": [
-            [
-              "/static/css/app.d0ad44d05f82db5f.css",
-              {
-                "rel": "stylesheet",
-              },
-            ],
-          ],
-        }
-      `);
+  describe('_prepareSource', () => {
+    it('should prepare default sources structure from provided manifest file', () => {
+      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
     });
 
-    it('should work with custom sources', () => {
-      const sources = {
-        styles: ['static/css/app.css'],
-        esScripts: ['static/js.es/locale/#{$Language}'],
-      };
+    it('should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
+      process.env.CDN_STATIC_ROOT_URL = 'cdn://';
 
-      expect(_resolveSources(sources, manifestMock, 'en'))
-        .toMatchInlineSnapshot(`
+      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
+      process.env.CDN_STATIC_ROOT_URL = '';
+    });
+
+    it('should skip compilations without assets', () => {
+      const sources = _prepareSource(
         {
-          "esScripts": [],
-          "styles": [
-            [
-              "/static/css/app.d0ad44d05f82db5f.css",
-              {},
-            ],
-          ],
-        }
-      `);
+          ...manifestMock,
+          assetsByCompiler: {
+            ...manifestMock.assetsByCompiler,
+            client: {},
+          },
+        },
+        'en'
+      );
+
+      expect(sources).toMatchSnapshot();
     });
   });
 
@@ -348,15 +186,11 @@ describe('responseUtilsFactory', () => {
 
     it('should interpolate revival scripts into page content', () => {
       const response = {
-        content: `
-<html>
-#{$Styles}
-#{$RevivalSettings}
-#{$Runner}
-</html>`,
+        content: '<html>#{$Styles}#{$RevivalSettings}#{$Runner}</html>',
       };
       const bootConfig = {
         settings: {
+          $Language: 'en',
           $Debug: true,
         },
       };
@@ -368,10 +202,7 @@ describe('responseUtilsFactory', () => {
 
     it('should allow overrides through custom $Source definition', () => {
       const response = {
-        content: `
-<html>
-#{$Scripts}
-</html>`,
+        content: '<html>#{$Scripts}</html>',
       };
       const bootConfig = {
         settings: {
@@ -380,7 +211,7 @@ describe('responseUtilsFactory', () => {
           $Source: (context, manifest, sources) => {
             return {
               styles: [],
-              esScripts: sources.scripts,
+              esScripts: [...sources.scripts, 'custom-script-src'],
             };
           },
         },
