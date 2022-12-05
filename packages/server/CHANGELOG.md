@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.24
+
+### Patch Changes
+
+- d43ffa4a: Menifest resource processing overhaul
+
 ## 18.0.0-rc.23
 
 ### Patch Changes

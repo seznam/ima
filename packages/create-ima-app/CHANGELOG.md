@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- 019a9ec7: Added StylesPreload interpolate variable
+
 ## 18.0.0-rc.17
 
 ### Patch Changes
