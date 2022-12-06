@@ -103,6 +103,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
+          pageState,
           status: controller.getHttpStatus(),
         };
       })

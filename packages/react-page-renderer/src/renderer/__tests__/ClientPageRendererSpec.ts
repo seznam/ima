@@ -192,6 +192,10 @@ describe('ClientPageRenderer', () => {
       );
 
       expect(response).toStrictEqual({
+        pageState: {
+          param1: 'param1',
+          param2: 'param2',
+        },
         status: 200,
       });
     });
