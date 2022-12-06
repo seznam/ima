@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.27
+
+### Patch Changes
+
+- 7be00b16: Reverted removal of pageState return from client mount method
+
 ## 18.0.0-rc.26
 
 ### Patch Changes
