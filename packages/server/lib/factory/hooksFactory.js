@@ -235,7 +235,7 @@ module.exports = function hooksFactory({
     });
 
     emitter.on(Event.AfterResponse, async ({ context }) => {
-      if (context.app && typeof context.app !== 'function') {
+      if (context.app) {
         instanceRecycler.clearInstance(context.app);
         context.app = null;
       }
