@@ -21,6 +21,10 @@ export default class ErrorBoundary extends PureComponent<Props, State> {
     };
   }
 
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
   componentDidMount() {
     // Clear reported errors
     if (typeof window !== 'undefined' && window?.__IMA_HMR?.emitter) {
@@ -32,7 +36,6 @@ export default class ErrorBoundary extends PureComponent<Props, State> {
     // Report errors to overlay
     if (typeof window !== 'undefined' && window?.__IMA_HMR?.emitter) {
       window.__IMA_HMR.emitter.emit('error', { error });
-      this.setState({ hasError: true });
     }
   }
 
