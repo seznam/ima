@@ -87,7 +87,7 @@ module.exports = function staticTemplateFactory({
     };
   }
 
-  async function renderOverloadedPage(event) {
+  function renderOverloadedPage(event) {
     const requests = instanceRecycler.getConcurrentRequests() + 2;
     const error = new Error(
       `The server is overloaded with ${requests} concurrency requests.`

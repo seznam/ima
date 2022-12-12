@@ -213,9 +213,9 @@ module.exports = function IMAInternalFactory({
 
     event = emitter.emit(Event.CreateBootConfig, event);
 
-    if (event.$result) {
-      event.$result = { ...event.context.bootConfig, ...event.$result };
-      event.context.bootConfig = event.$result;
+    if (event.result) {
+      event.result = { ...event.context.bootConfig, ...event.result };
+      event.context.bootConfig = event.result;
     }
 
     return event.context.bootConfig;
