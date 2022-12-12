@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.26
+
+### Patch Changes
+
+- c9be9139: catching error thrown during handling error from IMA app which will lead to rendering static error page
+
 ## 18.0.0-rc.25
 
 ### Patch Changes
