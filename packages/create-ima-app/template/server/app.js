@@ -88,10 +88,6 @@ function renderApp(req, res, next) {
     });
 }
 
-function staticErrorPage(error, req, res) {
-  serverApp.renderStaticServerErrorPage({ error, req, res });
-}
-
 const app = express();
 
 app
@@ -129,8 +125,7 @@ app
   )
   .use(urlParser)
   .use(renderApp)
-  .use(serverApp.errorHandlerMiddleware)
-  .use(staticErrorPage);
+  .use(serverApp.errorHandlerMiddleware);
 
 module.exports = {
   imaServer,

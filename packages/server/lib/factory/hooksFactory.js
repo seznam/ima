@@ -183,7 +183,6 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
-  // TODO IMA@18 check redirection router.redirect
   function useResponseHook() {
     emitter.on(Event.BeforeResponse, async ({ res, context }) => {
       const isRedirectResponse =

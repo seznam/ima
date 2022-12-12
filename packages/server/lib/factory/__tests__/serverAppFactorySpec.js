@@ -90,7 +90,15 @@ describe('Server App Factory', () => {
     languageLoader = jest.fn();
     applicationFolder = '';
 
+    // TODO IMA@18+ rewrite with toMockInstance
     router = {
+      isClientError: () => false,
+      isRedirection: () => false,
+      handleError: () =>
+        Promise.resolve({
+          status: 500,
+          content: '500 app html',
+        }),
       init: jest.fn(),
       route: jest.fn(),
       getPath: jest.fn(),
@@ -109,6 +117,7 @@ describe('Server App Factory', () => {
       serialize: jest
         .fn()
         .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
+      clear: jest.fn(),
     };
 
     pageStateManager = {
@@ -222,6 +231,33 @@ describe('Server App Factory', () => {
       await serverApp.requestHandlerMiddleware(REQ, RES);
 
       expect(appFactory.mock.calls).toHaveLength(1);
+    });
+
+    it('should render 200 ima app page', async () => {
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('app html');
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 500 ima app page', async () => {
+      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.status).toBe(500);
+      expect(response.content).toBe('500 app html');
+      expect(response.cache).toBeFalsy();
     });
 
     it('should render SPA page without cache', async () => {

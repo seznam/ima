@@ -101,14 +101,14 @@ module.exports = function serverAppFactory({
   // );
 
   async function requestHandler(req, res) {
-    let event = {};
+    let event = {
+      req,
+      res,
+      environment,
+    };
 
     try {
-      event = await emitter.emit(Event.BeforeRequest, {
-        req,
-        res,
-        environment,
-      });
+      event = await emitter.emit(Event.BeforeRequest, event);
 
       if (!event.defaultPrevented) {
         event = await emitter.emit(Event.Request, event);
@@ -155,17 +155,39 @@ module.exports = function serverAppFactory({
       };
 
       event = await emitter.emit(Event.AfterError, event);
-
-      event = await responseHandler(event);
-
-      return event.context.response;
     } catch (error) {
-      return renderStaticServerErrorPage({
+      event.context.response = renderStaticServerErrorPage({
         ...event,
         error: error,
         cause: event.error,
       });
     }
+
+    try {
+      event = await responseHandler(event);
+    } catch (error) {
+      const { res, context } = event;
+
+      if (context.app) {
+        instanceRecycler.clearInstance(context.app);
+        context.app = null;
+      }
+
+      if (res.headersSent) {
+        return context.response;
+      }
+
+      context.response = renderStaticServerErrorPage({
+        ...event,
+        error: error,
+        cause: event.error,
+      });
+
+      res.status(context.response.status);
+      res.send(context.response.content);
+    }
+
+    return event.context.response;
   }
 
   // eslint-disable-next-line no-unused-vars
