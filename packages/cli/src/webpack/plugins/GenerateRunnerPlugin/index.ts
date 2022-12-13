@@ -61,7 +61,6 @@ class GenerateRunnerPlugin {
         {
           name: this.#pluginName,
           stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_DERIVED,
-          additionalAssets: true,
         },
         (assets: Compilation['assets']) => this.generate(assets, compilation)
       );
