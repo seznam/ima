@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.28
+
+### Patch Changes
+
+- 464215fc: Added getDerivedStateFromError handler to ErrorBoundary
+
 ## 18.0.0-rc.27
 
 ### Patch Changes

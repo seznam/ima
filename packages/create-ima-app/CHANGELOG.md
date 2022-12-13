@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.20
+
+### Patch Changes
+
+- 2e3585cd: Error cause is propagated to response.
+
 ## 18.0.0-rc.19
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 18.0.0-rc.30
+
+### Patch Changes
+
+- f274a122: Removed additionalAssets support in runtime plugin
+- Updated dependencies [2e3585cd]
+  - @ima/server@18.0.0-rc.27
+
 ## 18.0.0-rc.29
 
 ### Patch Changes
