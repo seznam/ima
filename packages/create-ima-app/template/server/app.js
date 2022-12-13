@@ -88,6 +88,15 @@ function renderApp(req, res, next) {
     });
 }
 
+function renderError(error, req, res, next) {
+  serverApp
+    .errorHandlerMiddleware(error, req, res, next)
+    .then(response => {
+      logger.error(response.error);
+    })
+    .catch(next);
+}
+
 const app = express();
 
 app
@@ -125,7 +134,7 @@ app
   )
   .use(urlParser)
   .use(renderApp)
-  .use(serverApp.errorHandlerMiddleware);
+  .use(renderError);
 
 module.exports = {
   imaServer,
