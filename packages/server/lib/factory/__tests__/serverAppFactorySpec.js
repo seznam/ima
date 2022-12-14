@@ -1,5 +1,6 @@
 const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter, Event } = require('../../emitter.js');
+const { createMonitoring } = require('@esmj/monitor');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
 const manifestMock = require('../__mocks__/manifest.json');
@@ -59,6 +60,7 @@ describe('Server App Factory', () => {
   let cache = null;
   let pageStateManager = null;
   let emitter = new Emitter();
+  let performance = createMonitoring();
 
   beforeEach(() => {
     logger = console;
@@ -66,7 +68,7 @@ describe('Server App Factory', () => {
       $Debug: true,
       $Server: {
         concurrency: 1,
-        badRequestConcurrency: 1,
+        staticConcurrency: 100,
         cache: {
           enabled: true,
         },
@@ -200,6 +202,7 @@ describe('Server App Factory', () => {
       applicationFolder,
       appFactory,
       emitter,
+      performance,
       instanceRecycler,
       serverGlobal,
     });
@@ -260,6 +263,19 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
+    it('should render 500 static page', async () => {
+      environment.$Server.staticConcurrency = 1;
+      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(500);
+      expect(response.content).toBe('read file content');
+      expect(response.cache).toBeFalsy();
+    });
+
     it('should render SPA page without cache', async () => {
       jest
         .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
@@ -312,8 +328,8 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
-    it('should render 404 static page for exceed badRequestConcurrency', async () => {
-      environment.$Server.badRequestConcurrency = 0;
+    it('should render 404 static page for exceed staticConcurrency', async () => {
+      environment.$Server.staticConcurrency = 0;
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -323,12 +339,12 @@ describe('Server App Factory', () => {
       expect(response.static).toBeTruthy();
     });
 
-    it('should render 404 app page for not exceed badRequestConcurrency', async () => {
+    it('should render 404 app page for not exceed staticConcurrency', async () => {
       jest.spyOn(router, 'route').mockReturnValue({
         status: 404,
         content: '404 page',
       });
-      environment.$Server.badRequestConcurrency = 100;
+      environment.$Server.staticConcurrency = 100;
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 

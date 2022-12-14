@@ -34,6 +34,9 @@ module.exports = (() => {
         concurrency: 100, // The number of application instances (not
         // threads) used to handle concurrent
         // connections within a single thread
+        staticConcurrency: 100, // When the number of concurrent
+        // connection exceeds the staticConcurrency, the
+        // server response with static files for 4xx and 5xx.
         overloadConcurrency: 100, // When the number of concurrent
         // connection exceeds the overloadConcurrency, the
         // server response with 503 status code.

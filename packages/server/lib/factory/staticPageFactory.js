@@ -11,16 +11,26 @@ module.exports = function staticTemplateFactory({
   applicationFolder,
   instanceRecycler,
   createBootConfig,
+  environment,
 }) {
   // TODO IMA@18 doc, example
   const templateSPA = ejs.compile(
-    loadTemplateFile(path.join(applicationFolder, './server/template/spa.ejs'))
+    loadTemplateFile(
+      environment?.$Server?.template?.spa ??
+        path.join(applicationFolder, './server/template/spa.ejs')
+    )
   );
   const template500 = ejs.compile(
-    loadTemplateFile(path.join(applicationFolder, './server/template/500.ejs'))
+    loadTemplateFile(
+      environment?.$Server?.template?.['500'] ??
+        path.join(applicationFolder, './server/template/500.ejs')
+    )
   );
   const template400 = ejs.compile(
-    loadTemplateFile(path.join(applicationFolder, './server/template/400.ejs'))
+    loadTemplateFile(
+      environment?.$Server?.template?.['400'] ??
+        path.join(applicationFolder, './server/template/400.ejs')
+    )
   );
 
   function renderStaticServerErrorPage(event) {
