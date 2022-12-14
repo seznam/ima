@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.28
+
+### Patch Changes
+
+- f0adad35: Allow configuration path for SPA, 400 and 500 static files. Add new performance monitoring with degradation settings.
+
 ## 18.0.0-rc.27
 
 ### Patch Changes
