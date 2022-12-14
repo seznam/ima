@@ -17,7 +17,12 @@ module.exports = function hooksFactory({
   devErrorPage,
   environment,
 }) {
-  function _isServerOverloaded({ environment }) {
+  function _isServerOverloaded(event) {
+    const { environment } = event;
+    if (environment.$Server.degradation) {
+      return environment.$Server.degradation?.isOverloaded(event) ?? false;
+    }
+
     return (
       environment.$Server.overloadConcurrency !== undefined &&
       instanceRecycler.getConcurrentRequests() + 1 >
@@ -25,25 +30,33 @@ module.exports = function hooksFactory({
     );
   }
 
-  function _hasToServeSPA({ req, environment }) {
+  function _hasToServeSPA(event) {
     if (process.env.IMA_CLI_FORCE_SPA) {
       return true;
     }
+    const { req, environment } = event;
 
     const userAgent = req.headers['user-agent'] || '';
     const spaConfig = environment.$Server.serveSPA;
     const isAllowedServeSPA = spaConfig.allow;
-    const isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
+    let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
     const isAllowedUserAgent = !(
       spaConfig.blackList &&
       typeof spaConfig.blackList === 'function' &&
       spaConfig.blackList(userAgent)
     );
 
+    if (environment.$Server.degradation) {
+      isServerBusy =
+        environment.$Server.degradation?.isSPA(event) ?? isServerBusy;
+    }
+
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
   }
 
-  function _hasToLoadApp({ environment }) {
+  function _hasToLoadApp(event) {
+    const { environment } = event;
+
     return !(
       (environment.$Server.serveSPA?.allow &&
         environment.$Server.concurrency === 0) ||
@@ -51,7 +64,22 @@ module.exports = function hooksFactory({
     );
   }
 
-  function _hasToServeStaticBadRequest({ req, res, environment }) {
+  function _hasToServeStatic(event) {
+    const { environment } = event;
+
+    if (environment.$Server.degradation) {
+      return environment.$Server.degradation?.isStatic(event) ?? false;
+    }
+
+    return (
+      environment.$Server.staticConcurrency !== undefined &&
+      instanceRecycler.getConcurrentRequests() + 1 >
+        environment.$Server.staticConcurrency
+    );
+  }
+
+  function _hasToServeStaticBadRequest(event) {
+    const { req, res } = event;
     const routeInfo = _getRouteInfo({ req, res });
 
     // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
@@ -59,12 +87,7 @@ module.exports = function hooksFactory({
 
     // TODO IMA@18 documentation badRequestConcurrency
     //TODO IMA@18 update for better performance check
-    return (
-      isBadRequest &&
-      environment.$Server.badRequestConcurrency !== undefined &&
-      instanceRecycler.getConcurrentRequests() + 1 >
-        environment.$Server.badRequestConcurrency
-    );
+    return isBadRequest && _hasToServeStatic(event);
   }
 
   async function _applyError(event) {
@@ -115,8 +138,8 @@ module.exports = function hooksFactory({
     } else {
       try {
         const { context } = event;
-        //TODO IMA@18 update for better performance check
-        if (!context?.app || _isServerOverloaded(event)) {
+
+        if (!context?.app || _hasToServeStatic(event)) {
           return renderStaticServerErrorPage(event);
         }
 

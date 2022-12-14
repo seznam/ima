@@ -3,11 +3,13 @@
 const path = require('path');
 const applicationFolder = path.resolve('.');
 const { Emitter, Event } = require('./lib/emitter.js');
+const { createMonitoring } = require('@esmj/monitor');
 
 module.exports = function createIMAServer({
   environment,
   logger,
   emitter,
+  performance,
 } = {}) {
   environment =
     environment ||
@@ -31,6 +33,9 @@ module.exports = function createIMAServer({
     return manifestRequire(`server/locale/${language}.js`).default;
   }
 
+  performance = performance || createMonitoring();
+  performance.monitor.start();
+
   emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
@@ -47,6 +52,7 @@ module.exports = function createIMAServer({
     languageLoader,
     appFactory,
     emitter,
+    performance,
     instanceRecycler,
     serverGlobal,
   });
@@ -54,12 +60,6 @@ module.exports = function createIMAServer({
     require('./lib/factory/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
-
-  // TODO IMA@18 new performance utilization instead of concurrent requests
-  // const performanceUtilization =
-  //   require('./lib/factory/performanceUtilizationFactory.js')({ environment });
-
-  // performanceUtilization.init();
 
   serverApp.useIMADefaultHook();
 
@@ -75,6 +75,7 @@ module.exports = function createIMAServer({
     instanceRecycler,
     memStaticProxy,
     emitter,
+    performance,
     Event,
   };
 };

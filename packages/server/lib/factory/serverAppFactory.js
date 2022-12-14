@@ -14,6 +14,7 @@ module.exports = function serverAppFactory({
   applicationFolder,
   appFactory,
   emitter,
+  performance,
   instanceRecycler,
   serverGlobal,
   logger,
@@ -43,6 +44,7 @@ module.exports = function serverAppFactory({
     applicationFolder,
     instanceRecycler,
     createBootConfig,
+    environment,
   });
 
   const {
@@ -105,6 +107,7 @@ module.exports = function serverAppFactory({
       req,
       res,
       environment,
+      performance,
     };
 
     try {
@@ -197,6 +200,7 @@ module.exports = function serverAppFactory({
       req,
       res,
       environment,
+      performance,
     };
 
     return errorHandler(error, event);
