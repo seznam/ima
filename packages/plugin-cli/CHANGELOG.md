@@ -1,5 +1,54 @@
 # Change Log
 
+## 18.0.0
+
+### Major Changes
+
+- 91c4c409: Renamed `BuildConfig` type to `ImaPluginConfig`
+  Better output for build command
+  Added new optional `name` argument to `ImaPluginConfig` (default preset configuration set this to output module type but can be anything you want). This is used only in the output commands.
+- 91c4c409: Plugin config now has completely different configuration definition
+  Link, dev and build commands are now more efficient and use less watchers for multiple bundle options
+  Transformers option is now deprecated (they are part of the core replaced with type and bundle option)
+  New CLI argument --clientServerConfig
+
+### Patch Changes
+
+- 91c4c409: Dependency bump and cleanup
+- 91c4c409: Fixed issue where swcTransformer didn't transform jsx filenames to js extensions
+- 91c4c409: Added option to define custom jsxRuntime config
+  Added option to exclude/include certain files in each output config. This fixes an issue where less and json files are distributed in all dist folders (instead of only one of those).
+- 91c4c409: Fix render before hydration completed.
+- 91c4c409: Added node, serverClient and config presets
+- 91c4c409: Added support for pure esm modules
+- 91c4c409: Added option to define custom jsxRuntime config
+  Added option to exclude/include certain files in each output config. This fixes an issue where less and json files are distributed in all dist folders (instead of only one of those).
+- 91c4c409: Added support for include/exclude functions
+  Plugin doesn't ignore _Suite_ files during build
+- 91c4c409: Added option to override default JS target
+- 91c4c409: Changes the way link is handled which should be more performant and fix some issues with certain monorepositories.
+- 91c4c409: Added option to watch additional files during link command
+- 91c4c409: jsxRutime is now set to 'automatic' by default
+- 91c4c409: Added new package @ima/plugin-cli
+- 91c4c409: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- 91c4c409: Moved logger and time utility functions to @ima/dev-utils pkg
+- 91c4c409: Minor tweaks to excludes in default configurations
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+  - @ima/dev-utils@18.0.0
+
 ## 18.0.0-rc.18
 
 ### Patch Changes

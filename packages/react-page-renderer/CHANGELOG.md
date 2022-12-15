@@ -1,5 +1,74 @@
 # Change Log
 
+## 18.0.0
+
+### Major Changes
+
+- 91c4c409: New package react-page-renderer.
+
+### Patch Changes
+
+- 91c4c409: Dependency bump and cleanup
+- 91c4c409: The status, send, setPageState and isResponseSent methods removed from $Response class. The $Router.redirect method throw internal redirect errors. Returns value from server.requestHandlerMiddleware has new page property with state, cache, cookie and headers.
+- 91c4c409: Reverted strict mode
+- 91c4c409: Fixed broken release
+- 91c4c409: Fix render before hydration completed.
+- 91c4c409: Fixed an issue where AFTER_HANDLE_ROUTE is called before app is mounted
+- 91c4c409: Change order for renderer - setMetaParams before viewToDom
+- 91c4c409: Added hydratation error callback
+- 91c4c409: Fixed unintentional hydrate on SPA routing
+- 91c4c409: Multiple fixes after TS core and react-page-renderer merge
+- 91c4c409: Reverted removal of pageState return from client mount method
+- 91c4c409: componentHelper fire - remove specific target condition
+- 91c4c409: `ClientPageRenderer` method `mount` will no longer batch the state transactions
+- 91c4c409: Added getDerivedStateFromError handler to ErrorBoundary
+- 91c4c409: Changed peer dependencies for react&react-dom.
+- 91c4c409: Changed fire syntax to use EventTarget
+- 91c4c409: Fixed certain dependencies
+  Updated tsconfig.json to reflect type globals defined in this monorepo
+  Updated API to new version of @ima/hmr-client
+- 91c4c409: Fixed error reporting on non-existing view container
+- 91c4c409: Fixed tests
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+- Updated dependencies [91c4c409]
+  - @ima/core@18.0.0
+  - @ima/helpers@18.0.0
+
 ## 18.0.0-rc.28
 
 ### Patch Changes
