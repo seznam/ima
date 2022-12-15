@@ -47,7 +47,7 @@ yargs
     desc: 'Override JSX runtime option',
     type: 'string',
     choices: ['classic', 'automatic'],
-    default: 'classic',
+    default: 'automatic',
   })
   .option('additionalWatchPaths', {
     alias: 'w',

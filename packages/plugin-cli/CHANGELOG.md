@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.18
+
+### Patch Changes
+
+- 3ab407a3: jsxRutime is now set to 'automatic' by default
+
 ## 18.0.0-rc.17
 
 ### Patch Changes

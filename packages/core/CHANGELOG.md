@@ -486,6 +486,51 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - 🧨 yes
 - 🧨 yes
 
+## [17.15.2](https://github.com/seznam/ima/compare/v17.15.1...v17.15.2) (2022-08-10)
+
+**Note:** Version bump only for package @ima/core
+
+
+
+
+
+## [17.15.1](https://github.com/seznam/ima/compare/v17.15.0...v17.15.1) (2022-05-26)
+
+**Note:** Version bump only for package @ima/core
+
+
+
+
+
+# [17.15.0](https://github.com/seznam/ima/compare/v17.14.0...v17.15.0) (2022-05-20)
+
+
+### Features
+
+* scoped client window listeners ([#199](https://github.com/seznam/ima/issues/199)) ([acef240](https://github.com/seznam/ima/commit/acef24026116fff6e11999cc36c914c39b501f73))
+
+
+
+
+
+# [17.14.0](https://github.com/seznam/ima/compare/v17.13.0...v17.14.0) (2022-04-20)
+
+
+### Features
+
+* 🎸 Changed regex in Dictionary has() function + added test ([3014c82](https://github.com/seznam/ima/commit/3014c827b0b63a5e201b34b1c7688d27214f123c))
+
+
+
+
+
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+
+### Features
+
+* 🎸 new Router method getRouteHandlers ([d5312f4](https://github.com/seznam/ima/commit/d5312f4d94ca1d34d77cc0ae9d62628369484bfc))
+
 ## [17.12.3](https://github.com/seznam/ima/compare/v17.12.2...v17.12.3) (2022-03-10)
 
 ### Bug Fixes

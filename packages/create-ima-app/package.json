@@ -1,6 +1,6 @@
 {
   "name": "create-ima-app",
-  "version": "18.0.0-rc.20",
+  "version": "18.0.0-rc.21",
   "description": "Create a IMA.js App easily.",
   "type": "module",
   "keywords": [
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "chalk": "^5.0.1",
-    "fs-extra": "^10.1.0"
+    "fs-extra": "^11.1.0"
   },
   "publishConfig": {
     "access": "public",

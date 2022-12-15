@@ -259,6 +259,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - 🐛 updated packagelocks ([c3d6ce1](https://github.com/seznam/ima/commit/c3d6ce1f8b4d224673793261f60469f3c840b096))
 
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+### Bug Fixes
+
+* 🐛 Added devtools-scripts missing clone helper destructing ([06b0f9a](https://github.com/seznam/ima/commit/06b0f9a7022807be51d352d19b620fd698a3baf8))
+
+
 ## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
 
 **Note:** Version bump only for package @ima/devtools-scripts

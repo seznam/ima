@@ -108,7 +108,7 @@ export default class MessageFormatDictionary extends Dictionary {
    *                   localization phrase, otherwise `false`.
    */
   has(key: string) {
-    if (!/^[^.]+\.[^.]+$/.test(key)) {
+    if (!/^[^.]+(\.[^.]+)+$/.test(key)) {
       throw new Error(
         `The provided key (${key}) is not a valid localization ` +
           `phrase key, expecting a "file_name.identifier" notation`
