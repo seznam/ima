@@ -276,6 +276,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - 🎸 Added new pluginLoader utility class ([636651d](https://github.com/seznam/ima/commit/636651debd3cf936fb286a4f76a070f1cfcd2c5b))
 
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+**Note:** Version bump only for package @ima/helpers
+
 ## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
 
 **Note:** Version bump only for package @ima/helpers

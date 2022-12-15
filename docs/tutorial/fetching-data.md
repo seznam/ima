@@ -11,7 +11,7 @@ mock the data fetching from server and learn more about IMA.js object container.
 
 We won't go into building a REST API server with an actual database storing the
 guestbook posts - that is beyond this tutorial and IMA.js. To give you the idea
-of fetching data from the server, we'll create a more simple alternative.
+of fetching data from the server, we'll create a simpler alternative.
 
 We'll start by creating the `app/assets/static/api` directory and the
 `app/assets/static/api/posts.json` file with the following content (**copied from
@@ -195,7 +195,7 @@ you are working with as required.
 
 So how do we actually start using our post service? First we need to wire
 everything up, well we actually already did that. You may have noticed that in most of the
-classed we used some weird static getter called `$dependencies`, that's how IMA.js built
+classes we used some weird static getter called `$dependencies`, that's how IMA.js built
 in dependency injection works.
 
 IMA.js uses internally the Object Container class to handle all dependencies (you can

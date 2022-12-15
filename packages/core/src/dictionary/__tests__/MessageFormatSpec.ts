@@ -8,6 +8,9 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
       home: {
         title: () => 'title',
         message: () => 'message',
+        message2: {
+          title: () => 'title',
+        },
       },
     },
   };
@@ -40,10 +43,12 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
     it('should be return true', () => {
       expect(dictionary.has('home.title')).toBe(true);
       expect(dictionary.has('home.message')).toBe(true);
+      expect(dictionary.has('home.message2.title')).toBe(true);
     });
 
     it('should be return false for non existing keys', () => {
       expect(dictionary.has('home.non-exists-phrase')).toBe(false);
+      expect(dictionary.has('home.message2.non-exist-phrase')).toBe(false);
     });
 
     it('should be throw Error for key not referring to a localization phrase', () => {
