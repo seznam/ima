@@ -107,12 +107,15 @@ module.exports = function hooksFactory({
   async function _applyNotFound(event) {
     try {
       const { error, context } = event;
-      return context.app.oc
-        .get('$Router')
-        .handleNotFound({ error })
-        .catch(e => {
-          return _applyError({ ...event, error: e });
-        });
+      const router = context.app.oc.get('$Router');
+
+      return router.handleNotFound({ error }).catch(e => {
+        if (router.isRedirection(e)) {
+          return _applyRedirect({ ...event, error: e });
+        }
+
+        return _applyError({ ...event, error: e });
+      });
     } catch (e) {
       return _applyError({ ...event, error: e });
     }
