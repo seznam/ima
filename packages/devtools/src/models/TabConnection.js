@@ -1,10 +1,9 @@
-import Actions from 'constants/actions';
-import { setIcon } from 'services/utils';
-import State from 'constants/state';
+import { Actions, State } from '@/constants';
+import { setIcon } from '@/utils';
 
-export const CACHE_SIZE = 2048;
+const CACHE_SIZE = 2048;
 
-export default class TabConnection {
+class TabConnection {
   constructor(tabId) {
     // Init tab ports defaults
     this.ports = {
@@ -349,3 +348,5 @@ export default class TabConnection {
     this.cache.push(msg);
   }
 }
+
+export { TabConnection, CACHE_SIZE };

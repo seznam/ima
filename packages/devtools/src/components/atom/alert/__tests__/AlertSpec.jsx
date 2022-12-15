@@ -1,14 +1,9 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import Alert from '../Alert';
 
 describe('Alert atom', () => {
   let wrapper = shallow(<Alert />);
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-    expect(wrapper.instance().props.type).toBe('default');
-  });
 
   it('should render without title if type is default', () => {
     wrapper.setProps({ type: 'default' });
@@ -23,7 +18,6 @@ describe('Alert atom', () => {
     wrapper.setProps({ type: type, title: null });
     const strongTag = wrapper.find('strong');
 
-    expect(wrapper.instance().props.type).toBe(type);
     expect(strongTag).toHaveLength(1);
     expect(strongTag.text()).toBe(title);
   });

@@ -1,6 +1,6 @@
 ---
-title: "Tutorial - 3. Adding some state"
-layout: "tutorial"
+title: Adding Some State
+description: Tutorial > Adding Some State
 ---
 
 In [previous section](/tutorial/static-view) of the tutorial, we prepared basic markup and custom styling
@@ -18,7 +18,7 @@ controller. Open the `app/page/home/HomeController.js` file and you'll see a cla
 
 You can notice that by default, our bootstrapped application includes some pre-defined
 methods along with very long JSDoc comments. Feel free to read through these comments
-but to make this tutorial simpler, we're going to replace contents of this file with following code: 
+but to make this tutorial simpler, we're going to replace contents of this file with following code:
 
 ```javascript
 import { AbstractController } from '@ima/core';
@@ -43,12 +43,12 @@ export default class HomeController extends AbstractController {
 ```
 
 The `AbstractController` class defines some methods which are executed
-in different parts of it's lifecycle, you can [read more about this in the documentation](/docs/controller-lifecycle) 
+in different parts of it's lifecycle, you can [read more about this in the documentation](../basic-features/controller-lifecycle.md)
 One of the main methods you're going to use frequently is the `load()` method.
 
 The `load()` method is called automatically
 by IMA.js when the controller is being initialized. It returns a hash object - a plain
-JavaScript object representing a map of keys and values - representing the initial 
+JavaScript object representing a map of keys and values - representing the initial
 state of the page. The values in the returned object may be
 [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) or scalar values.
 The IMA.js will wait for all promises to resolve before rendering the page,
@@ -72,7 +72,7 @@ load() {
       // rejected by GenericError in case an error occurs, so we would not
       // have to do this in our every controller using a function like
       // this one.
-  
+
       if (error.name === 'NotFoundError') {
         throw new GenericError('No such records exist', {
           cause: error,
@@ -118,12 +118,12 @@ return {
       author: 'Henry Ford'
     },
     {
-      content: 
+      content:
         'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',
       author: 'Aristotle'
     },
     {
-      content: 
+      content:
         'Reality is merely an illusion, albeit a very persistent one.',
       author: 'Albert Einstein'
     }
@@ -241,7 +241,7 @@ and `app/component/post/post.less` files.
 Put the following code into the `Post.jsx` file:
 
 ```jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class Post extends AbstractComponent {
@@ -302,7 +302,7 @@ directory and the `app/component/postingForm/PostingForm.jsx` file. Then, put th
 following code into the `app/component/postingForm/PostingForm.jsx` file:
 
 ```jsx
-import { AbstractComponent } from '@ima/core';
+import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class PostingForm extends AbstractComponent {
@@ -466,9 +466,4 @@ specific use-cases, so the Dispatcher logs a warning to the console if there
 are no listeners registered for the fired event in order to notify you of
 possible typos in event names.
 
-As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events)
-
-<hr class="bottom-doc-separator">
-
-That is all for this part of the tutorial, you will find more in the
-[4th part](/tutorial/fetching-the-data-from-the-server) of this series.
+As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](../basic-features/events.md)

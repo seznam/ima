@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-export const entriesInitialState = {
+const entriesInitialState = {
   entryIdsByQuery: [],
   entries: {},
   searchQuery: '',
@@ -175,13 +175,18 @@ const entries = createSlice({
   },
 });
 
-const selectors = {
+const entriesSelectors = {
   getEntriesLength: createSelector(
     state => state.entries.entries,
     entries => entries && Object.keys(entries).length
   ),
 };
 
-const { reducer, actions } = entries;
+const { reducer: entriesReducer, actions: entriesActions } = entries;
 
-export { reducer, actions, selectors };
+export {
+  entriesInitialState,
+  entriesReducer,
+  entriesActions,
+  entriesSelectors,
+};

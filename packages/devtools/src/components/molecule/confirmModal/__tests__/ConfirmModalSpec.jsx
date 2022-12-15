@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import ConfirmModal from '../ConfirmModal';
 
 describe('ConfirmModal molecule', () => {
@@ -24,10 +24,6 @@ describe('ConfirmModal molecule', () => {
     props.hideConfirmModal.mockClear();
     props.accept.mockClear();
     props.cancel.mockClear();
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should call onConfirm  after clicking confirm btn', () => {

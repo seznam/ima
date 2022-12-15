@@ -1,9 +1,9 @@
 ---
-title: "Tutorial - 2. Static view"
-layout: "tutorial"
+title: Static View
+description: Tutorial > Static View
 ---
 
-In the [first part](/tutorial/introduction) we went through introduction to IMA.js and initialized our first
+In the [first part](./introduction) we went through introduction to IMA.js and initialized our first
 application using `create-ima-app` command. In the second part of the tutorial
 we'll actually do some coding and prepare basic Views for our guest book application.
 
@@ -13,12 +13,12 @@ Open up the `app/page/home/HomeView.jsx` file in your code editor. You will see 
 single ES2015 class named `HomeView`, extending the `AbstractComponent` class
 (which in turn extends the
 [`React.Component`](https://facebook.github.io/react/docs/component-api.html)
-class). You can read more about components and views in the [documentation](/docs/views-and-components).
+class). You can read more about components and views in the [documentation](../basic-features/views-and-components.md).
 
 Now let's replace the contents of the file with a blank view:
 
 ```jsx
-import { PageContext, AbstractComponent } from '@ima/core';
+import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class HomeView extends AbstractComponent {
@@ -51,7 +51,7 @@ There's also static getter `contextType()` which returns `PageContext`, that
 by default provides the component access to global `$Utils` object in the component context.
 This object is very useful as we can bind custom helper methods to it in the
 `bind.js`file with the help of Object Container. But we'll talk about this a bit more
-[later in this tutorial](/tutorial/fetching-the-data-from-the-server#dependency-injection).
+[later in this tutorial](./fetching-data.md#dependency-injection)
 
 The `render()` method creates and returns a React element that represents the
 view in the UI. Our `render()` method returns `null` because our component does
@@ -83,9 +83,7 @@ manage to make would likely be lost with the next update of the page's UI.
 
 If everything went well you should see the following page when you refresh your browser:
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/static-view-null.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/img/tutorial/static-view-null.png)
 
 ### Guestbook form & SMACSS
 
@@ -252,9 +250,7 @@ by hitting `Ctrl+C` and then re-running the `npm run dev` command if your
 browser cannot access the newly installed resources). In the end of this section
 you should see something like this when you refresh your page.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/static-view-styling-our-form.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/img/tutorial/static-view-styling-our-form.png)
 
 ### Rendering the whole document
 
@@ -276,7 +272,7 @@ Finally, the document component must render three elements, `<div id="page">`,
  - `#revivalSettings` - contains JavaScript code used to initialize the environment for your application at the client side.
  - `#scripts` - contains the JavaScript logic of your application.
 
-The order is important as this will allow your users 
+The order is important as this will allow your users
 to see the whole of the page content before the application is fully loaded in
 the browser (remember, the content is first rendered at the server side).
 
@@ -289,10 +285,10 @@ Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
 will not be covered by this tutorial, but you can learn more about its interface
-in the API [/api/meta/meta-meta-manager](/api/meta/meta-meta-manager)).
+in the API [/api/meta/meta-meta-manager](../api/classes/ima_core.MetaManager.md)).
 
 For more information about `DocumentView` and whole rendering process of IMA.js
-application, [take a look at the documentation](/docs/rendering-process).
+application, [take a look at the documentation](../basic-features/rendering-process.md).
 
 ### Notes on ES2015 modules and IMA.js namespaces
 
@@ -324,8 +320,3 @@ constant or value created in the file to the namespace.
 **If you're using version 15 and above** you can safely remove deprecated namespaces
 and replace them with ES2015 [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
-
-<hr class="bottom-doc-separator">
-
-That's it for this part of the tutorial,
-[so head over to the part 3](/tutorial/adding-some-state) to learn about application state.

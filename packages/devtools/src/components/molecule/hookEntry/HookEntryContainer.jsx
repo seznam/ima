@@ -1,11 +1,16 @@
 import { connect } from 'react-redux';
-import { actions as presetsActions, selectors } from 'slices/presets';
-import { actions as confirmModalActions } from 'slices/confirmModal';
-import { actions as alertsActions } from 'slices/alerts';
+
+import {
+  alertsActions,
+  confirmModalActions,
+  presetsActions,
+  presetsSelectors,
+} from '@/slices';
+
 import HookEntry from './HookEntry';
 
 const mapStateToProps = (state, { id }) => ({
-  hook: selectors.getActiveHooks(state)[id],
+  hook: presetsSelectors.getActiveHooks(state)[id],
 });
 
 export default connect(mapStateToProps, {

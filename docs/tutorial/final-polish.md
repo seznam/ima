@@ -1,13 +1,13 @@
 ---
-title: "Tutorial - 6. Final polish"
-layout: "tutorial"
+title: Final Polish
+description: Tutorial > Final Polish
 ---
 
 In the [5th part of the tutorial](/tutorial/writing-posts) we updated our application to be able to process
 input from user, learned something about ways different components can communicate with each other in IMA.js application
-and updated our guestbook API. 
+and updated our guestbook API.
 
-In this last part of the tutorial we're going to polish few things up and 
+In this last part of the tutorial we're going to polish few things up and
 finally finish our guestbook application.
 
 ## Improving user experience (UX)
@@ -35,7 +35,7 @@ constructor(props, context) {
 }
 ```
 
-Next we need to update our form elements to visually correspond to the validity of the input 
+Next we need to update our form elements to visually correspond to the validity of the input
 by updating their CSS classes. To achieve this we're going to use `is-invalid` class which is
 taken from the Bootstrap CSS library we're using and will apply red shadow to the input if it's invalid:
 
@@ -95,7 +95,7 @@ _validate(inputName, value) {
 
   return isValid;
 }
-``` 
+```
 
 Through the use of **ES2015 dynamic properties**, we're able to handle validation for
 both inputs in one method.
@@ -118,7 +118,7 @@ inputs are invalid. To do that, update the `onSubmit(event)` method's content:
 ```javascript
 _onSubmit(event) {
   event.preventDefault();
-  
+
   // Validate on submit to also cover the initial submission
   const { author, content } = this.state;
   if (
@@ -127,12 +127,12 @@ _onSubmit(event) {
   ) {
     return;
   }
-  
+
   this.fire('postSubmitted', {
     author: this.state.author,
     content: this.state.content
   });
-  
+
   // Reset the state after submitting
   this.setState({
     author: '',
@@ -141,13 +141,11 @@ _onSubmit(event) {
 }
 ```
 
-With this, the form validation is complete. Feel free to check this in your own application 
+With this, the form validation is complete. Feel free to check this in your own application
 and you should see red input fields if the inputs are empty, while the submit button should prevent
 you from submitting an empty content.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/final-polish-form-validation.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/img/tutorial/final-polish-form-validation.png)
 
 So now let's make the posting experience a little bit better.
 
@@ -361,8 +359,7 @@ following the content:
 However, should you try to quickly add several posts, you may notice a weird
 behavior - there is only a single pending post shown, the last one. This is
 caused by the fact that all our pending posts have their IDs set to `null`, so
-React considers them to be the same post ([remember how we use the post ID to
-identify the post in the DOM?](/tutorial/fetching-the-data-from-the-server#using-postservices-in-homecontroller)).
+React considers them to be the same post ([remember how we use the post ID to identify the post in the DOM?](./fetching-data.md#using-postservices-in-homecontroller)).
 
 To fix that we introduce a new field to our home page controller
 (`app/page/home/HomeController.js`) in the constructor:
@@ -422,8 +419,8 @@ const REFRESH_DELAY = 2000; // milliseconds
 
 To initialize our refresh cycle, we'll use one of the **lifecycle methods** that
 each IMA.js Controller has, an `activate()` method. To learn more about the
-lifecycle of Controller and it's methods, 
-[take a look at the documentation](/docs/controller-lifecycle). In our case
+lifecycle of Controller and it's methods,
+[take a look at the documentation](../basic-features/controller-lifecycle.md). In our case
 the activate method will look like this:
 
 ```javascript
@@ -1042,10 +1039,10 @@ obtained from [https://tobiasahlin.com/spinkit/](https://tobiasahlin.com/spinkit
   }
 
   @keyframes bouncedelay {
-    0%, 80%, 100% { 
+    0%, 80%, 100% {
       transform: scale(0.0);
     }
-    40% { 
+    40% {
       transform: scale(1.0);
     }
   }
@@ -1064,17 +1061,15 @@ And finally add the following snippet at the end of the file:
 lower left corner. If you followed the tutorial from start,
 the final application should look something like the picture below.
 
-<div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/final-polish-final.png?v=' | append: site.github.build_revision | relative_url }}" />
-</div>
+![](/img/tutorial/final-polish-final.png)
 
 ## Conclusion
 
 If all went well, you are currently in front of a finished application. I hope
 you liked the journey and are happy with what you've learned here.
 
-From now I suggest to take a look at our [documentation](/docs/getting-started) which goes into greater
-detail in describing each component of IMA.js development stack or take a direct look at the [API](/api/).
+From now I suggest to take a look at our [documentation](../introduction/getting-started.md) which goes into greater
+detail in describing each component of IMA.js development stack or take a direct look at the [API](../api/classes/ima_core.Bootstrap.md).
 
 If you see any improvements that could be made to this tutorial, or have found
 any mistakes, please let us know by [creating issue](https://github.com/seznam/ima/issues) in our IMA.js monorepo,

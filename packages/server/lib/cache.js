@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Server-side cache implementation for the rendered page being the responses
  * of HTTP GET requests.
@@ -22,7 +20,7 @@ class Cache {
     /**
      * Whether or not the cache or enabled. If set to a function, the
      * function can enable this cache for only the requests for which the
-     * function returns {@code true}.
+     * function returns `true`.
      *
      * @type {(boolean|function(Express.Request): boolean)}
      */
@@ -56,21 +54,26 @@ class Cache {
    * Retrieves the rendered page for requests matching the provided one. The
    * request equality is determined by the current key generator.
    *
-   * The method returns {@code null} if no page for such request is currently
+   * The method returns `null` if no page for such request is currently
    * cached.
    *
    * @param {Express.Request} request The current express.js HTTP request.
-   * @return {?string} The cached rendered page content, or {@code null}.
+   * @return {?string} The cached rendered page content, or `null`.
    */
   get(request) {
-    this._runGarbageCollector();
-
     let key = this._keyGenerator(request);
-    if (this._cache.has(key)) {
-      return this._cache.get(key).value;
+
+    if (!this._cache.has(key)) {
+      return null;
     }
 
-    return null;
+    let entry = this._cache.get(key);
+
+    if (entry.shouldBeDiscarded) {
+      return null;
+    }
+
+    return entry.value;
   }
 
   /**
@@ -172,10 +175,10 @@ class Entry {
   }
 
   /**
-   * Returns {@code true} if this entry has either expired or has not been
+   * Returns `true` if this entry has either expired or has not been
    * used for a long time.
    *
-   * @return {boolean} {@code true} if this entry should be discarded.
+   * @return {boolean} `true` if this entry should be discarded.
    */
   get shouldBeDiscarded() {
     let now = Date.now();
@@ -212,5 +215,5 @@ function defaultKeyGenerator(request) {
   return protocol + ':' + host + url;
 }
 
-module.exports = environment => new Cache(environment.$Server.cache);
+module.exports = ({ environment }) => new Cache(environment.$Server.cache);
 module.exports.Cache = Cache;

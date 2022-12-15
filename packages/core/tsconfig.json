@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": ["hmr-client", "ima__helpers", "express", "jest", "to-mock"]
+  },
+  "include": [
+    "src"
+  ]
+}

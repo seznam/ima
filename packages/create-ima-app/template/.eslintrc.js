@@ -1,13 +1,12 @@
 module.exports = {
-  root: true,
+  ignorePatterns: ['node_modules', 'build'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:prettier/recommended',
   ],
   rules: {
-    // Eslint overrides
-    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -21,7 +20,7 @@ module.exports = {
       {
         singleQuote: true,
         semi: true,
-        trailingComma: 'none',
+        trailingComma: 'es5',
         jsxSingleQuote: true,
         bracketSameLine: false,
         arrowParens: 'avoid',
@@ -29,21 +28,16 @@ module.exports = {
     ],
 
     // React plugin overrides
-    'react/prop-types': 0,
-    'react/wrap-multilines': 0,
-    'react/no-deprecated': 0,
-    'react/jsx-uses-react': 0,
-    'react/react-in-jsx-scope': 0,
+    'react/prop-types': 'off',
   },
   settings: {
     react: {
-      version: '16',
+      version: 'detect',
     },
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 6,
     requireConfigFile: false,
     babelOptions: {
       presets: ['@babel/preset-react'],
@@ -52,7 +46,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es2022: true,
   },
   globals: {
     $Debug: true,

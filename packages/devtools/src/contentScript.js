@@ -1,16 +1,17 @@
-import { getSettings } from 'services/settings';
+// Injection scripts
+
+import imaDevtoolsCode from '@ima/devtools-scripts/dist/index.string.js';
+
+import { Actions } from '@/constants';
+import { detectImaAppCode, runImaAppCode } from '@/inject';
 import {
+  InjectType,
+  injectCode,
+  getSettings,
   createEntry,
   SENTINEL_TO_EXTENSION,
   SENTINEL_TO_WEB,
-} from 'services/stream';
-import { InjectType, injectCode } from 'services/inject';
-import Actions from 'constants/actions';
-
-// Injection scripts
-import imaDevtoolsCode from '@ima/devtools-scripts';
-import detectImaAppCode from 'inject/detectImaAppCode';
-import runImaAppCode from 'inject/runImaAppCode';
+} from '@/utils';
 
 let port = null;
 

@@ -1,0 +1,325 @@
+{
+  "assets": {
+    "server/app.server.js": {
+      "name": "server/app.server.js",
+      "fileName": "server/app.server.6e0337810e75fd13.js",
+      "immutable": true,
+      "contenthash": "6e0337810e75fd13",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/app.server.6e0337810e75fd13.js.map"
+      }
+    },
+    "server/locale/cs.js": {
+      "name": "server/locale/cs.js",
+      "fileName": "server/locale/cs.924fe4e0a21c1e61.js",
+      "immutable": true,
+      "contenthash": "924fe4e0a21c1e61",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/locale/cs.924fe4e0a21c1e61.js.map"
+      }
+    },
+    "server/locale/en.js": {
+      "name": "server/locale/en.js",
+      "fileName": "server/locale/en.10dc65d1067ddbb6.js",
+      "immutable": true,
+      "contenthash": "10dc65d1067ddbb6",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/locale/en.10dc65d1067ddbb6.js.map"
+      }
+    },
+    "server/vendors.js": {
+      "name": "server/vendors.js",
+      "fileName": "server/vendors.aa3dff21bb6fa241.js",
+      "immutable": true,
+      "contenthash": "aa3dff21bb6fa241",
+      "javascriptModule": false,
+      "related": {
+        "sourceMap": "server/vendors.aa3dff21bb6fa241.js.map"
+      }
+    },
+    "static/js/app.client.js": {
+      "name": "static/js/app.client.js",
+      "fileName": "static/js/app.client.8dc14fd2c9e52eef.js",
+      "immutable": true,
+      "contenthash": "8dc14fd2c9e52eef",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js/app.client.8dc14fd2c9e52eef.js.map",
+        "brotliCompressed": "static/js/app.client.8dc14fd2c9e52eef.js.br",
+        "gzipped": "static/js/app.client.8dc14fd2c9e52eef.js.gz"
+      }
+    },
+    "static/js/locale/cs.js": {
+      "name": "static/js/locale/cs.js",
+      "fileName": "static/js/locale/cs.2547d226f675e927.js",
+      "immutable": true,
+      "contenthash": "2547d226f675e927",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js/locale/cs.2547d226f675e927.js.map",
+        "brotliCompressed": "static/js/locale/cs.2547d226f675e927.js.br",
+        "gzipped": "static/js/locale/cs.2547d226f675e927.js.gz"
+      }
+    },
+    "static/js/locale/en.js": {
+      "name": "static/js/locale/en.js",
+      "fileName": "static/js/locale/en.3c6a5e7a55bb2ab4.js",
+      "immutable": true,
+      "contenthash": "3c6a5e7a55bb2ab4",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js/locale/en.3c6a5e7a55bb2ab4.js.map",
+        "brotliCompressed": "static/js/locale/en.3c6a5e7a55bb2ab4.js.br",
+        "gzipped": "static/js/locale/en.3c6a5e7a55bb2ab4.js.gz"
+      }
+    },
+    "static/js/vendors.js": {
+      "name": "static/js/vendors.js",
+      "fileName": "static/js/vendors.0e456297851f0a3a.js",
+      "immutable": true,
+      "contenthash": "0e456297851f0a3a",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js/vendors.0e456297851f0a3a.js.map",
+        "brotliCompressed": "static/js/vendors.0e456297851f0a3a.js.br",
+        "gzipped": "static/js/vendors.0e456297851f0a3a.js.gz"
+      }
+    },
+    "static/css/app.css": {
+      "name": "static/css/app.css",
+      "fileName": "static/css/app.d0ad44d05f82db5f.css",
+      "immutable": true,
+      "contenthash": "d0ad44d05f82db5f",
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/css/app.d0ad44d05f82db5f.css.map",
+        "brotliCompressed": "static/css/app.d0ad44d05f82db5f.css.br",
+        "gzipped": "static/css/app.d0ad44d05f82db5f.css.gz"
+      }
+    },
+    "static/js.es/app.client.js": {
+      "name": "static/js.es/app.client.js",
+      "fileName": "static/js.es/app.client.2106a34c6b8bbad8.js",
+      "immutable": true,
+      "contenthash": "2106a34c6b8bbad8",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js.es/app.client.2106a34c6b8bbad8.js.map",
+        "brotliCompressed": "static/js.es/app.client.2106a34c6b8bbad8.js.br",
+        "gzipped": "static/js.es/app.client.2106a34c6b8bbad8.js.gz"
+      }
+    },
+    "static/js.es/locale/cs.js": {
+      "name": "static/js.es/locale/cs.js",
+      "fileName": "static/js.es/locale/cs.c1b3211af4424f2c.js",
+      "immutable": true,
+      "contenthash": "c1b3211af4424f2c",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js.es/locale/cs.c1b3211af4424f2c.js.map",
+        "brotliCompressed": "static/js.es/locale/cs.c1b3211af4424f2c.js.br",
+        "gzipped": "static/js.es/locale/cs.c1b3211af4424f2c.js.gz"
+      }
+    },
+    "static/js.es/locale/en.js": {
+      "name": "static/js.es/locale/en.js",
+      "fileName": "static/js.es/locale/en.371127fdbfbe93d2.js",
+      "immutable": true,
+      "contenthash": "371127fdbfbe93d2",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js.es/locale/en.371127fdbfbe93d2.js.map",
+        "brotliCompressed": "static/js.es/locale/en.371127fdbfbe93d2.js.br",
+        "gzipped": "static/js.es/locale/en.371127fdbfbe93d2.js.gz"
+      }
+    },
+    "static/js.es/vendors.js": {
+      "name": "static/js.es/vendors.js",
+      "fileName": "static/js.es/vendors.a873907f25297544.js",
+      "immutable": true,
+      "contenthash": "a873907f25297544",
+      "javascriptModule": false,
+      "minimized": true,
+      "related": {
+        "sourceMap": "static/js.es/vendors.a873907f25297544.js.map",
+        "brotliCompressed": "static/js.es/vendors.a873907f25297544.js.br",
+        "gzipped": "static/js.es/vendors.a873907f25297544.js.gz"
+      }
+    }
+  },
+  "assetsByCompiler": {
+    "client": {
+      "static/js/app.client.js": {
+        "name": "static/js/app.client.js",
+        "fileName": "static/js/app.client.8dc14fd2c9e52eef.js",
+        "immutable": true,
+        "contenthash": "8dc14fd2c9e52eef",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js/app.client.8dc14fd2c9e52eef.js.map",
+          "brotliCompressed": "static/js/app.client.8dc14fd2c9e52eef.js.br",
+          "gzipped": "static/js/app.client.8dc14fd2c9e52eef.js.gz"
+        }
+      },
+      "static/js/locale/cs.js": {
+        "name": "static/js/locale/cs.js",
+        "fileName": "static/js/locale/cs.2547d226f675e927.js",
+        "immutable": true,
+        "contenthash": "2547d226f675e927",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js/locale/cs.2547d226f675e927.js.map",
+          "brotliCompressed": "static/js/locale/cs.2547d226f675e927.js.br",
+          "gzipped": "static/js/locale/cs.2547d226f675e927.js.gz"
+        }
+      },
+      "static/js/locale/en.js": {
+        "name": "static/js/locale/en.js",
+        "fileName": "static/js/locale/en.3c6a5e7a55bb2ab4.js",
+        "immutable": true,
+        "contenthash": "3c6a5e7a55bb2ab4",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js/locale/en.3c6a5e7a55bb2ab4.js.map",
+          "brotliCompressed": "static/js/locale/en.3c6a5e7a55bb2ab4.js.br",
+          "gzipped": "static/js/locale/en.3c6a5e7a55bb2ab4.js.gz"
+        }
+      },
+      "static/js/vendors.js": {
+        "name": "static/js/vendors.js",
+        "fileName": "static/js/vendors.0e456297851f0a3a.js",
+        "immutable": true,
+        "contenthash": "0e456297851f0a3a",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js/vendors.0e456297851f0a3a.js.map",
+          "brotliCompressed": "static/js/vendors.0e456297851f0a3a.js.br",
+          "gzipped": "static/js/vendors.0e456297851f0a3a.js.gz"
+        }
+      }
+    },
+    "client.es": {
+      "static/css/app.css": {
+        "name": "static/css/app.css",
+        "fileName": "static/css/app.d0ad44d05f82db5f.css",
+        "immutable": true,
+        "contenthash": "d0ad44d05f82db5f",
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/css/app.d0ad44d05f82db5f.css.map",
+          "brotliCompressed": "static/css/app.d0ad44d05f82db5f.css.br",
+          "gzipped": "static/css/app.d0ad44d05f82db5f.css.gz"
+        }
+      },
+      "static/js.es/app.client.js": {
+        "name": "static/js.es/app.client.js",
+        "fileName": "static/js.es/app.client.2106a34c6b8bbad8.js",
+        "immutable": true,
+        "contenthash": "2106a34c6b8bbad8",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js.es/app.client.2106a34c6b8bbad8.js.map",
+          "brotliCompressed": "static/js.es/app.client.2106a34c6b8bbad8.js.br",
+          "gzipped": "static/js.es/app.client.2106a34c6b8bbad8.js.gz"
+        }
+      },
+      "static/js.es/locale/cs.js": {
+        "name": "static/js.es/locale/cs.js",
+        "fileName": "static/js.es/locale/cs.c1b3211af4424f2c.js",
+        "immutable": true,
+        "contenthash": "c1b3211af4424f2c",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js.es/locale/cs.c1b3211af4424f2c.js.map",
+          "brotliCompressed": "static/js.es/locale/cs.c1b3211af4424f2c.js.br",
+          "gzipped": "static/js.es/locale/cs.c1b3211af4424f2c.js.gz"
+        }
+      },
+      "static/js.es/locale/en.js": {
+        "name": "static/js.es/locale/en.js",
+        "fileName": "static/js.es/locale/en.371127fdbfbe93d2.js",
+        "immutable": true,
+        "contenthash": "371127fdbfbe93d2",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js.es/locale/en.371127fdbfbe93d2.js.map",
+          "brotliCompressed": "static/js.es/locale/en.371127fdbfbe93d2.js.br",
+          "gzipped": "static/js.es/locale/en.371127fdbfbe93d2.js.gz"
+        }
+      },
+      "static/js.es/vendors.js": {
+        "name": "static/js.es/vendors.js",
+        "fileName": "static/js.es/vendors.a873907f25297544.js",
+        "immutable": true,
+        "contenthash": "a873907f25297544",
+        "javascriptModule": false,
+        "minimized": true,
+        "related": {
+          "sourceMap": "static/js.es/vendors.a873907f25297544.js.map",
+          "brotliCompressed": "static/js.es/vendors.a873907f25297544.js.br",
+          "gzipped": "static/js.es/vendors.a873907f25297544.js.gz"
+        }
+      }
+    },
+    "server": {
+      "server/app.server.js": {
+        "name": "server/app.server.js",
+        "fileName": "server/app.server.6e0337810e75fd13.js",
+        "immutable": true,
+        "contenthash": "6e0337810e75fd13",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/app.server.6e0337810e75fd13.js.map"
+        }
+      },
+      "server/locale/cs.js": {
+        "name": "server/locale/cs.js",
+        "fileName": "server/locale/cs.924fe4e0a21c1e61.js",
+        "immutable": true,
+        "contenthash": "924fe4e0a21c1e61",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/locale/cs.924fe4e0a21c1e61.js.map"
+        }
+      },
+      "server/locale/en.js": {
+        "name": "server/locale/en.js",
+        "fileName": "server/locale/en.10dc65d1067ddbb6.js",
+        "immutable": true,
+        "contenthash": "10dc65d1067ddbb6",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/locale/en.10dc65d1067ddbb6.js.map"
+        }
+      },
+      "server/vendors.js": {
+        "name": "server/vendors.js",
+        "fileName": "server/vendors.aa3dff21bb6fa241.js",
+        "immutable": true,
+        "contenthash": "aa3dff21bb6fa241",
+        "javascriptModule": false,
+        "related": {
+          "sourceMap": "server/vendors.aa3dff21bb6fa241.js.map"
+        }
+      }
+    }
+  },
+  "publicPath": "/"
+}

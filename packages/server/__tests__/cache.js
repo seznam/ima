@@ -1,5 +1,3 @@
-'use strict';
-
 const CacheFactory = require('../lib/cache.js');
 
 describe('cache', () => {
@@ -22,7 +20,7 @@ describe('cache', () => {
         },
       });
 
-      spyOn(cache, '_keyGenerator').and.returnValue('key');
+      jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
     it('should be set page to cache', () => {

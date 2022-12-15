@@ -1,26 +1,23 @@
 {
   "name": "@ima/core",
-  "version": "17.15.2",
+  "version": "18.0.0-rc.31",
   "description": "IMA.js framework for isomorphic javascript application",
-  "browser": "client.cjs.js",
-  "main": "server.cjs.js",
-  "module": "server.esm.js",
-  "scripts": {
-    "test": "npm run test:jest && npm run test:es && npm run test:size",
-    "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
-    "test:es": "es-check es5 './polyfill/*.js'",
-    "test:size": "size-limit",
-    "preversion": "npm test",
-    "clean": "rm -rf dist",
-    "build": "rollup --config",
-    "prepare": "npm run build"
-  },
   "keywords": [
     "IMA",
     "IMA.js",
     "Isomorphic",
     "Javascript"
   ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/core"
+  },
+  "sideEffects": false,
+  "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
     {
@@ -36,59 +33,35 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/ima.git"
-  },
-  "bugs": {
-    "url": "https://github.com/seznam/ima/issues"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
-    "@size-limit/preset-big-lib": "^2.2.1",
-    "enzyme": "^3.10.0",
-    "es-check": "^5.1.0",
-    "jscodeshift": "^0.6.4",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
-    "rollup": "^1.27.8",
-    "rollup-plugin-jscc": "^1.0.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-replace": "^2.2.0"
+  "typedocMain": "./src/index.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/server/index.js",
+  "browser": "./dist/esm/client/index.js",
+  "types": "./dist/esm/client/index.d.ts",
+  "scripts": {
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "npm run test:jest && npm run test:size",
+    "test:jest": "jest -c jest.config.js",
+    "test:size": "size-limit",
+    "preversion": "npm test"
   },
   "dependencies": {
-    "@ima/helpers": "^17.13.0",
-    "classnames": "^2.2.6",
-    "memoize-one": "^5.1.1",
-    "node-fetch": "^2.6.0"
+    "@ima/helpers": "^18.0.0-rc.7",
+    "classnames": "^2.3.1",
+    "memoize-one": "^6.0.0"
   },
-  "peerDependencies": {
-    "react": "16.x",
-    "react-dom": "16.x"
+  "devDependencies": {
+    "@ima/plugin-cli": "^18.0.0-rc.7",
+    "@types/express": "^4.17.14",
+    "@types/jest": "^29.2.2",
+    "@types/multer": "^1.4.7",
+    "jscodeshift": "^0.14.0"
   },
-  "browserify": {
-    "transform": [
-      "ima-clientify",
-      "loose-envify",
-      "babelify"
-    ]
-  },
-  "size-limit": [
-    {
-      "limit": "31 KB",
-      "path": "dist/ima.client.cjs.js",
-      "running": false
-    },
-    {
-      "limit": "31 KB",
-      "path": "dist/ima.client.esm.js",
-      "running": false
-    }
-  ]
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

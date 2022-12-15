@@ -1,49 +1,81 @@
 'use strict';
 
-let path = require('path');
-let applicationFolder = path.resolve('.');
+const path = require('path');
+const applicationFolder = path.resolve('.');
+const { Emitter, Event } = require('./lib/emitter.js');
+const { createMonitoring } = require('@esmj/monitor');
 
-let environmentConfig = require(path.resolve(
-  applicationFolder,
-  './build/ima/config/environment.js'
-));
-let environment = require('./lib/environment.js')(environmentConfig);
+module.exports = function createIMAServer({
+  environment,
+  logger,
+  emitter,
+  performance,
+} = {}) {
+  environment =
+    environment ||
+    require('./lib/factory/environmentFactory.js')({ applicationFolder });
 
-global.$Debug = environment.$Debug;
-global.$IMA = global.$IMA || {};
+  global.$Debug = environment.$Debug;
+  global.$IMA = global.$IMA || {};
 
-require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
-require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
+  const manifestRequire = require('./lib/factory/devUtilsFactory.js')();
 
-function appFactory() {
-  delete require.cache[
-    path.resolve(applicationFolder, './build/ima/app.server.js')
-  ];
+  function appFactory() {
+    manifestRequire('server/vendors.js', {
+      optional: true,
+      dependencies: ['server/app.server.js'],
+    });
 
-  require(path.resolve(applicationFolder, './build/ima/app.server.js'))();
-}
+    return manifestRequire('server/app.server.js');
+  }
 
-function languageLoader(language) {
-  return require(path.resolve(
+  function languageLoader(language) {
+    return manifestRequire(`server/locale/${language}.js`).default;
+  }
+
+  performance = performance || createMonitoring();
+  performance.monitor.start();
+
+  emitter = emitter || new Emitter({ logger, debug: false });
+  const instanceRecycler = require('./lib/instanceRecycler.js');
+  const serverGlobal = require('./lib/serverGlobal.js');
+  logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
+
+  const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
+    environment,
     applicationFolder,
-    `./build/ima/locale/${language}.js`
-  ));
-}
+  });
+  const serverApp = require('./lib/factory/serverAppFactory.js')({
+    environment,
+    logger,
+    applicationFolder,
+    languageLoader,
+    appFactory,
+    emitter,
+    performance,
+    instanceRecycler,
+    serverGlobal,
+  });
+  const memStaticProxy =
+    require('./lib/factory/memStaticProxyMiddlewareFactory')();
 
-let logger = require('./lib/logger.js')(environment);
-let urlParser = require('./lib/urlParser.js')(environment);
-let clientApp = require('./lib/clientApp.js')(
-  environment,
-  logger,
-  languageLoader,
-  appFactory
-);
-let cache = require('./lib/cache.js')(environment);
+  const cache = require('./lib/cache.js')({ environment });
 
-module.exports = {
-  environment,
-  clientApp,
-  urlParser,
-  logger,
-  cache,
+  serverApp.useIMADefaultHook();
+
+  // Lazy init app factory
+  process.env.IMA_CLI_LAZY_SERVER !== 'true' && appFactory();
+
+  return {
+    environment,
+    serverApp,
+    urlParser,
+    logger,
+    cache,
+    instanceRecycler,
+    memStaticProxy,
+    emitter,
+    performance,
+    Event,
+  };
 };

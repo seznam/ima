@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { actions } from 'slices/entries';
+
+import { entriesActions } from '@/slices';
+
 import Panel from './Panel';
 
 const mapStateToProps = state => ({
@@ -9,12 +11,12 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  alive: actions.alive,
-  dead: actions.dead,
-  reload: actions.reload,
-  unsupported: actions.unsupported,
-  clearEntries: actions.clearEntries,
-  addEntries: actions.addEntries,
-  selectNext: actions.selectNext,
-  selectPrevious: actions.selectPrevious,
+  alive: entriesActions.alive,
+  dead: entriesActions.dead,
+  reload: entriesActions.reload,
+  unsupported: entriesActions.unsupported,
+  clearEntries: entriesActions.clearEntries,
+  addEntries: entriesActions.addEntries,
+  selectNext: entriesActions.selectNext,
+  selectPrevious: entriesActions.selectPrevious,
 })(Panel);

@@ -1,14 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { reducer as confirmModalReducer } from 'slices/confirmModal';
-import { reducer as presetsReducer } from 'slices/presets';
-import { reducer as alertsReducer } from 'slices/alerts';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import Options from 'components/template/options/OptionsContainer';
-import Alerts from 'components/molecule/alerts/AlertsContainer';
-import ConfirmModal from 'components/molecule/confirmModal/ConfirmModalContainer';
+import { AlertsContainer, ConfirmModalContainer } from '@/components/molecule';
+import { OptionsContainer } from '@/components/template';
+import { alertsReducer, confirmModalReducer, presetsReducer } from '@/slices';
 
 const root = document.getElementById('root');
 
@@ -29,9 +25,9 @@ if (root) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <ConfirmModal />
-      <Alerts />
-      <Options />
+      <ConfirmModalContainer />
+      <AlertsContainer />
+      <OptionsContainer />
     </Provider>,
     document.getElementById('root')
   );

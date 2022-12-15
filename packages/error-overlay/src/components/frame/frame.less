@@ -1,0 +1,71 @@
+.ima-frame {
+  border-radius: 5px;
+  overflow: hidden;
+
+  color: #f8fafc;
+
+  background-color: #334155;
+
+  box-shadow: rgba(51, 65, 85, 0.5) 0 10px 15px -3px, rgba(51, 65, 85, 0.5) 0 4px 6px -4px;
+
+  &__ {
+    &code {
+      overflow-y: auto;
+
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    &line {
+      display: flex;
+
+      border-left: 4px solid transparent;
+
+      align-items: center;
+
+      font-family: var(--ima-font-mono);
+
+      &-- {
+        &highlight {
+          border-color: #f43f5e;
+
+          background-color: rgba(244, 63, 94, 0.2);
+        }
+      }
+    }
+
+    &line-number {
+      margin-right: 12px;
+      border-right: 2px solid rgba(71, 85, 105, 0.75);
+
+      padding: 0 12px;
+
+      color: #94a3b8;
+    }
+
+    &error {
+      display: flex;
+
+      padding: 24px 12px;
+
+      justify-content: center;
+
+      align-items: center;
+
+      font-family: var(--ima-font-mono);
+
+      font-size: 12px;
+      line-height: 16px;
+
+      text-align: center;
+
+      color: #94a3b8;
+    }
+
+    &error-icon {
+      margin-right: 8px;
+
+      color: #fb7185;
+    }
+  }
+}

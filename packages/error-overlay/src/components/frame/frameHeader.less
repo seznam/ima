@@ -1,0 +1,119 @@
+.ima-frame-header {
+  display: flex;
+
+  border-bottom: 1px solid #475569;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  font-family: var(--ima-font-mono);
+
+  box-shadow: rgba(30, 41, 59, 0.25) 0 8px 12px;
+
+  &__ {
+    &tab {
+      display: flex;
+
+      border-right: 1px solid #475569;
+
+      border-bottom: 2px solid #06b6d4;
+
+      padding: 10px 16px;
+    }
+
+    &file-info {
+      display: flex;
+
+      flex-grow: 0;
+
+      flex-direction: column;
+
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    &method-name {
+      display: inline-flex;
+
+      align-items: center;
+
+      font-size: 14px;
+      line-height: 22px;
+      white-space: nowrap;
+    }
+
+    &file-uri {
+      font-size: 12px;
+      line-height: 16px;
+      color: #94a3b8;
+
+      white-space: nowrap;
+    }
+
+    &actions {
+      display: flex;
+
+      margin: 0 12px;
+
+      justify-content: center;
+
+      align-items: center;
+    }
+
+    &button {
+      display: flex;
+
+      margin: 0;
+
+      margin-left: 4px;
+      border: none;
+      padding: 10px;
+
+      justify-content: center;
+      align-items: center;
+
+      color: #64748b;
+
+      background: none;
+
+      transition: all 0.15s ease-in-out;
+
+      cursor: pointer;
+
+      @keyframes pulse {
+        from { transform: scale(0.9); }
+        to { transform: scale(1.1); }
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      &:hover:not(&:disabled) {
+        color: #cbd5e1;
+      }
+
+      &:active:not(&:disabled) {
+        transform: scale(0.9);
+      }
+
+      &-- {
+        &green {
+          color: #10b981;
+        }
+
+        &pulse {
+          animation: pulse 0.5s infinite ease-in-out alternate;
+        }
+      }
+    }
+
+    &error-icon {
+      margin-right: 4px;
+
+      color: #fb7185;
+    }
+  }
+}

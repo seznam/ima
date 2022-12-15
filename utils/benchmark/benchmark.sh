@@ -10,8 +10,8 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
 CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
-PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core server gulp-task-loader gulp-tasks helpers"
+PACKAGE_VERSION="0.0.0-next"
+PACKAGES="cli core dev-utils error-overlay helpers hmr-client server react-page-renderer"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
@@ -43,15 +43,17 @@ node utils/version/create-ima-app-versions.js
 cd "$CREATE_IMA_APP_DIR"
 npm link
 
-# Setup app from example feed
+# Setup app from example hello
 cd "$ROOT_DIR"
-npx create-ima-app --example feed ima-app
-cd ima-app
+npx create-ima-app ima-app
+
+cd ./ima-app
+
 npm run build
 # Add customized environment configuration
-mv build/ima/config/environment.js build/ima/config/environment.orig.js
-mv "$ROOT_DIR/utils/benchmark/app/environment.js" build/ima/config/environment.js
-NODE_ENV=prod node build/server.js &
+mv server/config/environment.js server/config/environment.orig.js
+cp "$ROOT_DIR/utils/benchmark/app/environment.js" server/config/environment.js
+NODE_ENV=prod node server/server.js &
 IMA_SKELETON_SERVER_PID=$!
 
 sleep 7

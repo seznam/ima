@@ -1,40 +1,35 @@
 {
   "name": "@ima/helpers",
-  "version": "17.13.0",
+  "version": "18.0.0-rc.7",
   "description": "Various helpers for the IMA.js framework.",
-  "main": "index.js",
-  "scripts": {
-    "preversion": "npm test",
-    "test": "../../node_modules/.bin/jest -c jest.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seznam/ima.git"
-  },
   "keywords": [
     "ima",
     "IMA.js"
   ],
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
-  "homepage": "https://github.com/seznam/ima#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seznam/ima.git",
+    "directory": "packages/helpers"
+  },
+  "license": "MIT",
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link"
   },
   "dependencies": {
     "clone": "^2.1.2"
   },
-  "engines": {
-    "node": ">=10",
-    "npm": ">=6"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

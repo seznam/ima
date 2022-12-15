@@ -1,0 +1,52 @@
+.page-home {
+  margin: 2rem auto 0;
+
+  padding: 1.25rem;
+  max-width: 800px;
+  height: 100%;
+
+  text-align: center;
+
+  .content {
+    vertical-align: middle;
+
+    h1 {
+      margin-top: 1rem;
+
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+
+      @media only screen and (min-width: 680px) {
+        margin-top: 5rem;
+      }
+
+      a {
+        border-bottom-width: 3px;
+
+        color: @color-red;
+      }
+    }
+  }
+
+  .hero {
+    margin-bottom: 2rem;
+
+    font-size: 1.25rem;
+  }
+
+  .cards {
+    display: flex;
+
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .mounted {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+
+    font-size: 2rem;
+  }
+}

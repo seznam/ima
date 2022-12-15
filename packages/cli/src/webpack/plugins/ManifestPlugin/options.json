@@ -1,0 +1,15 @@
+{
+  "title": "GenerateRunnerPlugin",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "description": "IMA CLI configuration context."
+    },
+    "imaConfig": {
+      "type": "object",
+      "description": "Loaded ima.config.js file."
+    }
+  }
+}

@@ -1,9 +1,10 @@
-import styles from './jsonView.less';
-import React from 'react';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 import ReactJson from 'react-json-view';
 
-export const THEME = Object.freeze({
+import styles from './jsonView.module.less';
+
+const THEME = Object.freeze({
   base00: 'rgba(0, 0, 0, 0)',
   base01: 'rgb(245, 245, 245)',
   base02: 'rgb(240, 240, 240)',
@@ -22,50 +23,35 @@ export const THEME = Object.freeze({
   base0F: 'var(--oc-blue-5)',
 });
 
-export const STYLE_OVERRIDES = {
-  fontFamily: 'var(--font-family-monospace)',
-  fontSize: '11px',
+function JsonView({ src, style = {}, collapse = 2 }) {
+  if (!src) {
+    return null;
+  }
+
+  return (
+    <div className={styles.jsonView}>
+      <ReactJson
+        name={null}
+        collapsed={collapse}
+        enableClipboard={true}
+        displayDataTypes={false}
+        src={src}
+        style={{
+          fontFamily: 'var(--font-family-monospace)',
+          fontSize: '11px',
+          ...style,
+        }}
+        theme={THEME}
+      />
+    </div>
+  );
+}
+
+JsonView.propTypes = {
+  src: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  collapse: PropTypes.number,
+  style: PropTypes.object,
 };
 
-export default class JsonView extends React.PureComponent {
-  static get propTypes() {
-    return {
-      src: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-      collapse: PropTypes.number,
-      style: PropTypes.object,
-    };
-  }
-
-  static get defaultProps() {
-    return {
-      src: null,
-      collapse: 2,
-      style: {},
-    };
-  }
-
-  render() {
-    const { src, style, collapse } = this.props;
-
-    if (!src) {
-      return null;
-    }
-
-    return (
-      <div className={styles.jsonView}>
-        <ReactJson
-          name={null}
-          collapsed={collapse}
-          enableClipboard={true}
-          displayDataTypes={false}
-          src={src}
-          style={{
-            ...STYLE_OVERRIDES,
-            style,
-          }}
-          theme={THEME}
-        />
-      </div>
-    );
-  }
-}
+export { THEME, JsonView };
+export default memo(JsonView);

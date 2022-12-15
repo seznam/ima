@@ -1,0 +1,133 @@
+@import url("nanoreset");
+@import url("../../../assets/less/config.module.less");
+@import url("../../../assets/less/tooltip.module.less");
+
+:global {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: var(--font-smoothing);
+  }
+
+  body,
+  input {
+    font: 14px/1.4 var(--font-family-sans);
+    color: var(--color-text-primary);
+  }
+
+  input {
+    display: block;
+
+    border: 1px solid var(--oc-gray-4);
+    border-radius: 3px;
+    padding: 8px 10px;
+    width: 100%;
+
+    &:focus {
+      border-color: var(--oc-gray-5);
+
+      outline: none;
+    }
+  }
+}
+
+.container {
+  position: relative;
+}
+
+.form {
+  margin: auto;
+  padding: 20px;
+  max-width: 960px;
+}
+
+.header {
+  display: flex;
+
+  margin-bottom: 10px;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 8px 0;
+
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  a {
+    color: var(--color-primary);
+  }
+}
+
+.footer {
+  display: flex;
+
+  margin-top: 10px;
+
+  justify-content: space-between;
+  align-items: center;
+
+  text-align: right;
+}
+
+.hooksWrapper {
+  padding: 12px;
+
+  & > div {
+    border-top: 1px solid var(--color-border);
+
+    &:last-child {
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
+}
+
+.actionsWrapper {
+  display: flex;
+
+  margin-top: 10px;
+
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.loadPresetsWrapper {
+  display: flex;
+
+  margin-left: auto;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    margin-right: 15px;
+  }
+}
+
+.presetsLabel {
+  font-weight: 600;
+}
+
+.notEditable {
+  font-weight: 600;
+  color: var(--oc-red-7);
+}
+
+.saveBtn {
+  margin-left: auto;
+}

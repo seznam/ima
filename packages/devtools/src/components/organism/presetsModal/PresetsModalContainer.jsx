@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
-import { actions as presetsActions } from 'slices/presets';
-import { actions as alertsActions } from 'slices/alerts';
+
+import { alertsActions, presetsActions } from '@/slices';
+
 import PresetsModal from './PresetsModal';
 
 const mapStateToProps = state => ({
