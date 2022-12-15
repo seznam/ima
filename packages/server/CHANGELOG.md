@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.0-rc.29
+
+### Patch Changes
+
+- 1108d491: NotFound Controller can throw redirection error on server.
+
 ## 18.0.0-rc.28
 
 ### Patch Changes
