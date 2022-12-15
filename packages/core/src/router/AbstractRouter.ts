@@ -252,7 +252,7 @@ export default abstract class AbstractRouter extends Router {
   }
 
   /**
-   * @inheritdoc
+   * @inheritDoc
    * @abstract
    */
   listen(): this {
