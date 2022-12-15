@@ -61,6 +61,10 @@ describe('ima.core.router.AbstractRouter', () => {
   const View = function View() {
     return {};
   };
+  const redirectAction = {
+    type: ActionTypes.ERROR,
+    url: 'http://www.domain.com/root/user/2345',
+  };
 
   beforeEach(() => {
     routeFactory = new RouteFactory();
@@ -429,7 +433,7 @@ describe('ima.core.router.AbstractRouter', () => {
               userId: '2345',
             }),
             options,
-            errorAction
+            redirectAction
           );
           // @ts-ignore
           expect(response.error instanceof GenericError).toBeTruthy();
@@ -442,7 +446,7 @@ describe('ima.core.router.AbstractRouter', () => {
               ...params,
               userId: '2345',
             }),
-            { route, action: errorAction }
+            { route, action: redirectAction }
           );
         })
         .catch(error => {

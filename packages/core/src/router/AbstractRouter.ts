@@ -247,6 +247,14 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
+  getRouteHandlers() {
+    return this._routeHandlers;
+  }
+
+  /**
+   * @inheritdoc
+   * @abstract
+   */
   listen(): this {
     throw new GenericError(
       'The listen() method is abstract and must be overridden.'
@@ -401,7 +409,7 @@ export default abstract class AbstractRouter extends Router {
     params = this._addParamsFromOriginalRoute(params);
 
     const action = {
-      url: this.getUrl(),
+      url: this.getBaseUrl() + this._getCurrentlyRoutedPath(),
       type: ActionTypes.ERROR,
     };
 

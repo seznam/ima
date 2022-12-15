@@ -410,6 +410,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - 🎸 Updated Hello(empty) template ([32eb318](https://github.com/seznam/ima/commit/32eb3185ab9c65d110f0388cf32a82fa3f510c8d))
 - 🎸 WebpackManifestPlugin, es5 hot reload ([d8e1f85](https://github.com/seznam/ima/commit/d8e1f853fc666867c82676ff72497cc84fffa666))
 
+## [17.15.2](https://github.com/seznam/ima/compare/v17.15.1...v17.15.2) (2022-08-10)
+
+**Note:** Version bump only for package create-ima-app
+
+## [17.15.1](https://github.com/seznam/ima/compare/v17.15.0...v17.15.1) (2022-05-26)
+
+**Note:** Version bump only for package create-ima-app
+
+# [17.15.0](https://github.com/seznam/ima/compare/v17.14.0...v17.15.0) (2022-05-20)
+
+**Note:** Version bump only for package create-ima-app
+
+# [17.14.0](https://github.com/seznam/ima/compare/v17.13.0...v17.14.0) (2022-04-20)
+
+**Note:** Version bump only for package create-ima-app
+
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+**Note:** Version bump only for package create-ima-app
+
 ## [17.12.3](https://github.com/seznam/ima/compare/v17.12.2...v17.12.3) (2022-03-10)
 
 **Note:** Version bump only for package create-ima-app
