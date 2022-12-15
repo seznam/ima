@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.1
+
+### Patch Changes
+
+- 8b84abce: Fixed freezed peerDependencies
+
 ## 18.0.0
 
 ### Major Changes
