@@ -1,11 +1,5 @@
 module.exports = {
   ignorePatterns: ['node_modules', 'build'],
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:prettier/recommended',
-  ],
   rules: {
     'no-console': [
       'error',

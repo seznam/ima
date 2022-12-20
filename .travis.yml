@@ -15,7 +15,7 @@ jobs:
       - npm run test:all
       - npm run test:size
       - npm run benchmark
-      - npm run ima-app:test
+      - npm run ima-app:test:all
       # - npm audit || echo \"audit found some vulnerabilities.\"
     - if: branch =~ /^(master|next)$/
       stage: "deploy"
