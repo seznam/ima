@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
+    "ima-app:test": "utils/imaApp/test.sh",
     "dev": "node ./utils/scripts/dev.js",
     "build": "npm run build --workspaces --if-present",
     "commit": "echo 'This command has been replaced with \"npm run changeset\"'",
