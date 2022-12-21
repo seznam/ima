@@ -9,15 +9,6 @@ describe('Card', () => {
 
     const wrapper = shallow(Card({ children, title, href }));
 
-    expect(wrapper.hasClass('card')).toBe(true);
-
-    const cardTitle = wrapper.find('a');
-    const cardContent = wrapper.find('p');
-
-    expect(cardTitle.props().href).toEqual(href);
-    expect(cardTitle.find('h3').text()).toContain(title);
-    expect(cardContent.props().dangerouslySetInnerHTML.__html).toEqual(
-      children
-    );
+    expect(wrapper).toMatchSnapshot();
   });
 });
