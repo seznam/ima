@@ -103,7 +103,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          pageState,
+          pageState: controller.getState(),
           status: controller.getHttpStatus(),
         };
       })
@@ -126,13 +126,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
     return this._helpers
       .allPromiseHash(updatedPromises)
-      .then(fetchedResources => {
+      .then(() => {
         controller.setMetaParams(controller.getState());
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
+          pageState: controller.getState(),
           status: controller.getHttpStatus(),
-          pageState: Object.assign({}, defaultPageState, fetchedResources),
         };
       })
       .catch((error: Error) => this._handleError(error));
