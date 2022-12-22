@@ -183,6 +183,7 @@ describe('ClientPageRenderer', () => {
 
     it('should return resolved promise with object of property status and pageState', async () => {
       jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
+      jest.spyOn(controller, 'getState').mockReturnValue(params);
 
       const response = await pageRenderer.mount(
         controller,
@@ -192,10 +193,7 @@ describe('ClientPageRenderer', () => {
       );
 
       expect(response).toStrictEqual({
-        pageState: {
-          param1: 'param1',
-          param2: 'param2',
-        },
+        pageState: params,
         status: 200,
       });
     });
@@ -259,6 +257,7 @@ describe('ClientPageRenderer', () => {
 
     it('should return resolved promise with object of property status and pageState', async () => {
       jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
+      jest.spyOn(controller, 'getState').mockReturnValue(params);
 
       const response = await pageRenderer.update(
         controller,
@@ -267,10 +266,7 @@ describe('ClientPageRenderer', () => {
       );
 
       expect(response).toStrictEqual({
-        pageState: {
-          param1: 'param1',
-          param2: 'param2',
-        },
+        pageState: params,
         status: 200,
       });
     });
