@@ -24,7 +24,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@esmj/emitter": "^0.1.0",
+    "@esmj/emitter": "^0.2.0",
     "@esmj/monitor": "^0.2.0",
     "ejs": "^3.1.6",
     "http-proxy-middleware": "^2.0.6",
