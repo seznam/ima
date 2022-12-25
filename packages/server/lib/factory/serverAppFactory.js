@@ -20,7 +20,8 @@ module.exports = function serverAppFactory({
   logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
-  const { processContent, sendResponseHeaders } = responseUtilsFactory();
+  const { processContent, sendResponseHeaders, prepareContentVariables } =
+    responseUtilsFactory();
   const {
     _initApp,
     createBootConfig,
@@ -60,6 +61,7 @@ module.exports = function serverAppFactory({
     renderStaticSPAPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
+    prepareContentVariables,
     _initApp,
     _importAppMainSync,
     _addImaToResponse,
@@ -78,6 +80,7 @@ module.exports = function serverAppFactory({
     static: false,
     status: 204,
     content: null,
+    contentVariables: {},
     page: {
       state: {},
       cache: null,

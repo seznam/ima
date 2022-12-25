@@ -12,6 +12,7 @@ module.exports = function hooksFactory({
   _generateAppResponse,
   processContent,
   sendResponseHeaders,
+  prepareContentVariables,
   emitter,
   instanceRecycler,
   devErrorPage,
@@ -235,7 +236,7 @@ module.exports = function hooksFactory({
         };
       }
 
-      context.response.content = processContent({
+      context.response.contentVariables = prepareContentVariables({
         ...context,
       });
     });
@@ -244,6 +245,11 @@ module.exports = function hooksFactory({
       if (res.headersSent || !context.response) {
         return;
       }
+
+      // Interpolate content variables
+      context.response.content = processContent({
+        ...context,
+      });
 
       sendResponseHeaders({ res, context });
 
