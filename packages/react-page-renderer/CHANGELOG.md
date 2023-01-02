@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.0.1
+
+### Patch Changes
+
+- b71bb4a2: update esmj/emitter to 0.2.0
+- 557ea21f: Revert pageState for renderer update
+
 ## 18.0.0
 
 ### Major Changes
