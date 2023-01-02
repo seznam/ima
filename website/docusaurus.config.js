@@ -90,9 +90,9 @@ const config = {
    */
   themeConfig: {
     algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'YOUR_INDEX_NAME',
+      appId: 'H3HJGI4FWU',
+      apiKey: '9afc43748aad4ed8acb6968a0b5473d0',
+      indexName: 'imajs',
     },
     navbar: {
       title: 'IMA.js',
