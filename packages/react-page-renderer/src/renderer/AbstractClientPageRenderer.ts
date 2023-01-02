@@ -103,7 +103,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
-          pageState,
+          pageState: controller.getState(),
           status: controller.getHttpStatus(),
         };
       })
@@ -131,6 +131,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         this._updateMetaAttributes(controller.getMetaManager());
 
         return {
+          pageState: controller.getState(),
           status: controller.getHttpStatus(),
         };
       })
