@@ -83,7 +83,7 @@ module.exports = function hooksFactory({
     const routeInfo = _getRouteInfo({ req, res });
 
     // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
-    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notfound';
+    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
 
     // TODO IMA@18 documentation badRequestConcurrency
     //TODO IMA@18 update for better performance check
