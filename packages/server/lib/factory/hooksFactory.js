@@ -20,7 +20,7 @@ module.exports = function hooksFactory({
   function _isServerOverloaded(event) {
     const { environment } = event;
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isOverloaded(event) ?? false;
+      return environment.$Server.degradation?.isOverloaded?.(event) ?? false;
     }
 
     return (
@@ -48,7 +48,7 @@ module.exports = function hooksFactory({
 
     if (environment.$Server.degradation) {
       isServerBusy =
-        environment.$Server.degradation?.isSPA(event) ?? isServerBusy;
+        environment.$Server.degradation?.isSPA?.(event) ?? isServerBusy;
     }
 
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
@@ -68,7 +68,7 @@ module.exports = function hooksFactory({
     const { environment } = event;
 
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isStatic(event) ?? false;
+      return environment.$Server.degradation?.isStatic?.(event) ?? false;
     }
 
     return (
