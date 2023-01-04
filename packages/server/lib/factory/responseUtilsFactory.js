@@ -240,13 +240,14 @@ module.exports = function responseUtilsFactory() {
     const extendedSettings = { ...settings, ...response.contentVariables };
     const interpolate = (_, envKey) => extendedSettings[envKey] ?? '';
 
-    /**
-     * Double call adds support for interpolation inside content variables
-     * (for example #{source} template variable inside runner)
-     */
-    return response.content
-      .replace(contentInterpolationRe, interpolate)
-      .replace(contentInterpolationRe, interpolate);
+    while (response.content.match(contentInterpolationRe)) {
+      response.content = response.content.replace(
+        contentInterpolationRe,
+        interpolate
+      );
+    }
+
+    return response.content;
   }
 
   return {
