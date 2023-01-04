@@ -20,7 +20,7 @@ module.exports = function hooksFactory({
   function _isServerOverloaded(event) {
     const { environment } = event;
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isOverloaded(event) ?? false;
+      return environment.$Server.degradation?.isOverloaded?.(event) ?? false;
     }
 
     return (
@@ -48,7 +48,7 @@ module.exports = function hooksFactory({
 
     if (environment.$Server.degradation) {
       isServerBusy =
-        environment.$Server.degradation?.isSPA(event) ?? isServerBusy;
+        environment.$Server.degradation?.isSPA?.(event) ?? isServerBusy;
     }
 
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
@@ -68,7 +68,7 @@ module.exports = function hooksFactory({
     const { environment } = event;
 
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isStatic(event) ?? false;
+      return environment.$Server.degradation?.isStatic?.(event) ?? false;
     }
 
     return (
@@ -83,7 +83,7 @@ module.exports = function hooksFactory({
     const routeInfo = _getRouteInfo({ req, res });
 
     // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
-    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notfound';
+    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
 
     // TODO IMA@18 documentation badRequestConcurrency
     //TODO IMA@18 update for better performance check
