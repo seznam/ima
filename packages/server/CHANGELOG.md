@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.3
+
+### Patch Changes
+
+- acabceef: Server degradation functions are optional.
+
 ## 18.0.2
 
 ### Patch Changes
