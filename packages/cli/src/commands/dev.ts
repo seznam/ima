@@ -50,7 +50,11 @@ function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
         }...`
       );
 
-      if (args.open && !serverHasStarted) {
+      if (
+        process.env.IMA_CLI_OPEN !== 'false' &&
+        args.open &&
+        !serverHasStarted
+      ) {
         const port = environment.$Server.port;
         serverHasStarted = true;
 
