@@ -108,7 +108,7 @@ describe('Server App Factory', () => {
         return {
           route: {
             getName() {
-              return 'notfound';
+              return 'notFound';
             },
           },
         };
