@@ -79,8 +79,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
     jest.clearAllMocks();
   });
 
-  ['get', 'post', 'put', 'patch', 'delete'].forEach(method => {
-    describe(method + ' method', () => {
+  describe.each([['get', 'post', 'put', 'patch', 'delete']])(
+    '%s method',
+    method => {
       beforeEach(() => {
         data.params.method = method;
       });
@@ -135,6 +136,33 @@ describe('ima.core.http.HttpAgentImpl', () => {
           error => {
             expect(error instanceof GenericError).toBe(true);
             expect(proxy.request.mock.calls).toHaveLength(2);
+          }
+        );
+      });
+
+      it('should not repeat request when aborted', async () => {
+        data.params.options.repeatRequest = 10;
+        data.params.options.abortController = new AbortController();
+
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
+          data.params.options.abortController.abort();
+
+          return Promise.reject(new GenericError('', data.params));
+        });
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then(
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          () => {},
+          // @ts-ignore
+          error => {
+            expect(error instanceof GenericError).toBe(true);
+            expect(proxy.request).toHaveBeenCalledTimes(1);
           }
         );
       });
@@ -220,6 +248,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
       /* eslint-enable jest/no-done-callback */
-    });
-  });
+    }
+  );
 });
