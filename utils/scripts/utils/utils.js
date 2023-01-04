@@ -257,7 +257,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
       const packFilePath = path.join(pkgDir, packFileName);
 
-      shell(`npm install ${packFilePath}`, destDir);
+      shell(`npm install ${packFilePath} --force`, destDir);
       packFiles.push(packFilePath);
     });
 

@@ -11,6 +11,7 @@ module.exports = function hooksFactory({
   _getRouteInfo,
   _generateAppResponse,
   processContent,
+  prepareContentVariables,
   sendResponseHeaders,
   emitter,
   instanceRecycler,
@@ -209,6 +210,24 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
+  function useContentVariablesHook() {
+    emitter.on(Event.ContentVariables, async ({ res, context }) => {
+      // TODO extract to function
+      const isRedirectResponse =
+        context.response.status >= 300 &&
+        context.response.status < 400 &&
+        context.response.url;
+
+      if (res.headersSent || isRedirectResponse || !context.response) {
+        return;
+      }
+
+      context.response.contentVariables = prepareContentVariables({
+        ...context,
+      });
+    });
+  }
+
   function useResponseHook() {
     emitter.on(Event.BeforeResponse, async ({ res, context }) => {
       const isRedirectResponse =
@@ -268,6 +287,7 @@ module.exports = function hooksFactory({
   }
 
   function useIMADefaultHook() {
+    useContentVariablesHook();
     userErrorHook();
     useRequestHook();
     useResponseHook();

@@ -3,11 +3,12 @@ const path = require('path');
 const memoizeOne = require('memoize-one');
 
 module.exports = function responseUtilsFactory() {
+  const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve('./build/server/runner.js');
   const manifestPath = path.resolve('./build/manifest.json');
 
   /**
-   * Load manifest, runner resources and prepare sources object.
+   * Load manifest, runner resources an d prepare sources object.
    */
   function _loadResources() {
     const manifest = fs.existsSync(manifestPath)
@@ -111,22 +112,6 @@ module.exports = function responseUtilsFactory() {
     }, '');
   }
 
-  function _renderStylesPreload(styles) {
-    if (!Array.isArray(styles)) {
-      return '';
-    }
-
-    return styles.reduce((acc, cur) => {
-      if (!cur[1]?.preload) {
-        return acc;
-      }
-
-      acc += `<link as="style" href="${cur[0]}" rel="preload" type="text/css" />`;
-
-      return acc;
-    }, '');
-  }
-
   function _getRevivalSettings({ bootConfig, response }) {
     const { settings } = bootConfig;
 
@@ -190,80 +175,81 @@ module.exports = function responseUtilsFactory() {
     _prepareSource(manifest, language)
   );
 
-  function processContent({ response, bootConfig }) {
-    if (!response?.content || !bootConfig) {
-      return response?.content;
-    }
+  function prepareContentVariables({ response, bootConfig }) {
+    const { settings } = bootConfig;
 
     // Always reload resources in dev mode to have fresh copy
     if (process.env.IMA_CLI_WATCH) {
       resources = _loadResources();
     }
 
-    const { settings } = bootConfig;
-    const interpolateRe = /#{([\w\d\-._$]+)}/g;
-    const extendedSettings = { ...settings };
-    const interpolate = (_, envKey) => extendedSettings[envKey];
-    const revivalSettings = _getRevivalSettings({ response, bootConfig });
-    const revivalCache = _getRevivalCache({ response });
-
     // Generate default $Source structure
-    const defaltSource = memoPrepareSources(
+    const defaultSource = memoPrepareSources(
       resources.manifest,
       settings.$Language
     );
 
     // Get current file sources to load
-    const { styles, ...source } =
-      settings?.$Source?.(response, resources.manifest, defaltSource) ??
-      defaltSource;
+    const { styles: sourceStyles, ...sourceScripts } =
+      settings?.$Source?.(response, resources.manifest, defaultSource) ??
+      defaultSource;
 
-    // Preprocess source and styles
-    const $Styles = _renderStyles(styles).replace(interpolateRe, interpolate);
-    const $StylesPreload = _renderStylesPreload(styles).replace(
-      interpolateRe,
-      interpolate
-    );
-    const $RevivalSettings = _renderScript(
+    const revivalSettings = _renderScript(
       'revival-settings',
-      revivalSettings
-    ).replace(interpolateRe, interpolate);
-    const $RevivalCache = _renderScript('revival-cache', revivalCache).replace(
-      interpolateRe,
-      interpolate
+      _getRevivalSettings({ response, bootConfig })
     );
-    const $Source = JSON.stringify(source)
-      .replace(interpolateRe, interpolate)
-      .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
-
-    // Extends settings with source and styles
-    extendedSettings.$Source = $Source;
-    extendedSettings.$Styles = $Styles;
-    extendedSettings.$StylesPreload = $StylesPreload;
-    extendedSettings.$RevivalSettings = $RevivalSettings;
-    extendedSettings.$RevivalCache = $RevivalCache;
-
-    // Preprocess $Runner (with $Source resolved)
-    const $Runner = _renderScript('runner', resources.runner).replace(
-      interpolateRe,
-      interpolate
+    const revivalCache = _renderScript(
+      'revival-cache',
+      _getRevivalCache({ response })
     );
+    const runner = _renderScript('runner', resources.runner);
+    const styles = _renderStyles(sourceStyles);
 
-    extendedSettings.$Runner = $Runner;
-    extendedSettings.$Scripts = [$RevivalSettings, $Runner, $RevivalCache].join(
-      ''
-    );
+    return {
+      ...response.contentVariables,
+      _: {
+        manifest: resources.manifest,
+        sourceStyles,
+        sourceScripts,
+      },
+      source: JSON.stringify(sourceScripts),
+      revivalSettings,
+      revivalCache,
+      runner,
+      styles,
 
-    // Interpolate values in content
-    return response.content.replace(interpolateRe, interpolate);
+      // Backwards compatibility, remove in IMA@19
+      $RevivalSettings: revivalSettings,
+      $RevivalCache: revivalCache,
+      $Runner: runner,
+      $Styles: styles,
+    };
+  }
+
+  function processContent({ response, bootConfig }) {
+    if (!response?.content || !bootConfig) {
+      return response?.content;
+    }
+
+    const { settings } = bootConfig;
+    const extendedSettings = { ...settings, ...response.contentVariables };
+    const interpolate = (_, envKey) => extendedSettings[envKey] ?? '';
+
+    /**
+     * Double call adds support for interpolation inside content variables
+     * (for example #{source} template variable inside runner)
+     */
+    return response.content
+      .replace(contentInterpolationRe, interpolate)
+      .replace(contentInterpolationRe, interpolate);
   }
 
   return {
+    prepareContentVariables,
     processContent,
     sendResponseHeaders,
     _prepareSource,
     _renderStyles,
-    _renderStylesPreload,
     _prepareCookieOptionsForExpress,
   };
 };
