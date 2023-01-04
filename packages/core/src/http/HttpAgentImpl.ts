@@ -379,8 +379,11 @@ export default class HttpAgentImpl extends HttpAgent {
       [key: string]: string | number | boolean;
     };
     const options = errorParams.options as HttpAgentRequestOptions;
+    const isAborted =
+      options.fetchOptions?.signal?.aborted ||
+      options.abortController?.signal.aborted;
 
-    if (options.repeatRequest > 0) {
+    if (!isAborted && options.repeatRequest > 0) {
       options.repeatRequest--;
 
       return this._request(method, url, data, options);

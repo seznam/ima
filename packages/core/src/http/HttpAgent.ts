@@ -31,7 +31,7 @@ export type HttpAgentRequestOptions = {
   ttl: number;
   repeatRequest: number;
   headers: StringParameters;
-  fetchOptions: UnknownParameters;
+  fetchOptions: Omit<RequestInit, 'body'>;
   cache: boolean;
   withCredentials: boolean;
   listeners: { progress: (event: Event) => unknown };
