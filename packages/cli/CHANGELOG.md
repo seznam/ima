@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.1
+
+### Patch Changes
+
+- caa83685: Added IMA_CLI_OPEN env variable to easily disable browser opening when running dev command environment-wide
+
 ## 18.0.0
 
 ### Major Changes
