@@ -223,6 +223,7 @@ module.exports = function responseUtilsFactory() {
       $RevivalCache: revivalCache,
       $Runner: runner,
       $Styles: styles,
+      $Scripts: [revivalSettings, runner, revivalCache].join(''),
     };
   }
 
