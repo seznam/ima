@@ -11,7 +11,7 @@ module.exports = function hooksFactory({
   _getRouteInfo,
   _generateAppResponse,
   processContent,
-  prepareContentVariables,
+  createContentVariables,
   sendResponseHeaders,
   emitter,
   instanceRecycler,
@@ -222,7 +222,7 @@ module.exports = function hooksFactory({
         return;
       }
 
-      context.response.contentVariables = prepareContentVariables({
+      context.response.contentVariables = createContentVariables({
         ...context,
       });
     });

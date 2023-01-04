@@ -175,7 +175,11 @@ module.exports = function responseUtilsFactory() {
     _prepareSource(manifest, language)
   );
 
-  function prepareContentVariables({ response, bootConfig }) {
+  function createContentVariables({ response, bootConfig }) {
+    if (!bootConfig) {
+      return {};
+    }
+
     const { settings } = bootConfig;
 
     // Always reload resources in dev mode to have fresh copy
@@ -246,7 +250,7 @@ module.exports = function responseUtilsFactory() {
   }
 
   return {
-    prepareContentVariables,
+    createContentVariables,
     processContent,
     sendResponseHeaders,
     _prepareSource,

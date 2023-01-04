@@ -20,7 +20,7 @@ module.exports = function serverAppFactory({
   logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
-  const { processContent, prepareContentVariables, sendResponseHeaders } =
+  const { processContent, createContentVariables, sendResponseHeaders } =
     responseUtilsFactory();
   const {
     _initApp,
@@ -67,7 +67,7 @@ module.exports = function serverAppFactory({
     _getRouteInfo,
     _generateAppResponse,
     processContent,
-    prepareContentVariables,
+    createContentVariables,
     sendResponseHeaders,
     emitter,
     instanceRecycler,
