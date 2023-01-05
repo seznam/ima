@@ -147,7 +147,7 @@ describe('responseUtilsFactory', () => {
 
     it('should generate base set of content variables', () => {
       const response = {
-        content: '<html>#{$Styles}#{$RevivalSettings}#{$Runner}</html>',
+        content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
       };
       const bootConfig = {
         settings: {
@@ -232,6 +232,26 @@ describe('responseUtilsFactory', () => {
       const content = processContent(contextMock);
 
       expect(content).toBe('<html>final v7 content</html>');
+    });
+
+    it('should allow interpolation of settings variables from bootConfig', () => {
+      const bootConfig = {
+        settings: {
+          $Language: 'en',
+          $Version: '1.0.0',
+          $Debug: true,
+        },
+      };
+      const response = {
+        content: '<html>#{c1}: #{$Version}</html>',
+        contentVariables: {
+          c1: 'content-variable',
+        },
+      };
+      const contextMock = { response, bootConfig };
+      const content = processContent(contextMock);
+
+      expect(content).toBe('<html>content-variable: 1.0.0</html>');
     });
   });
 });
