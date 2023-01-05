@@ -31,6 +31,20 @@ module.exports = function hooksFactory({
     );
   }
 
+  function _isResponseWithContent(event) {
+    const { res, context } = event;
+    const isRedirectResponse =
+      context.response.status >= 300 &&
+      context.response.status < 400 &&
+      context.response.url;
+
+    if (res.headersSent || isRedirectResponse || !context.response) {
+      return false;
+    }
+
+    return true;
+  }
+
   function _hasToServeSPA(event) {
     if (process.env.IMA_CLI_FORCE_SPA) {
       return true;
@@ -211,14 +225,10 @@ module.exports = function hooksFactory({
   }
 
   function useContentVariablesHook() {
-    emitter.on(Event.ContentVariables, async ({ res, context }) => {
-      // TODO extract to function
-      const isRedirectResponse =
-        context.response.status >= 300 &&
-        context.response.status < 400 &&
-        context.response.url;
+    emitter.on(Event.ContentVariables, async event => {
+      const { context } = event;
 
-      if (res.headersSent || isRedirectResponse || !context.response) {
+      if (!_isResponseWithContent(event)) {
         return;
       }
 
@@ -229,13 +239,10 @@ module.exports = function hooksFactory({
   }
 
   function useResponseHook() {
-    emitter.on(Event.BeforeResponse, async ({ res, context }) => {
-      const isRedirectResponse =
-        context.response.status >= 300 &&
-        context.response.status < 400 &&
-        context.response.url;
+    emitter.on(Event.BeforeResponse, async event => {
+      const { context } = event;
 
-      if (res.headersSent || isRedirectResponse || !context.response) {
+      if (!_isResponseWithContent(event)) {
         return;
       }
 

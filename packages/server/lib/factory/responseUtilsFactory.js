@@ -8,7 +8,7 @@ module.exports = function responseUtilsFactory() {
   const manifestPath = path.resolve('./build/manifest.json');
 
   /**
-   * Load manifest, runner resources an d prepare sources object.
+   * Load manifest, runner resources and prepare sources object.
    */
   function _loadResources() {
     const manifest = fs.existsSync(manifestPath)
@@ -112,9 +112,7 @@ module.exports = function responseUtilsFactory() {
     }, '');
   }
 
-  function _getRevivalSettings({ bootConfig, response }) {
-    const { settings } = bootConfig;
-
+  function _getRevivalSettings({ settings, response }) {
     return `(function (root) {
       root.$Debug = ${settings.$Debug};
       root.$IMA = root.$IMA || {};
@@ -176,7 +174,7 @@ module.exports = function responseUtilsFactory() {
   );
 
   function createContentVariables({ response, bootConfig }) {
-    if (!bootConfig) {
+    if (!bootConfig?.settings) {
       return {};
     }
 
@@ -200,7 +198,7 @@ module.exports = function responseUtilsFactory() {
 
     const revivalSettings = _renderScript(
       'revival-settings',
-      _getRevivalSettings({ response, bootConfig })
+      _getRevivalSettings({ response, settings })
     );
     const revivalCache = _renderScript(
       'revival-cache',

@@ -17,7 +17,7 @@ jest.mock('fs', () => {
           return JSON.stringify(manifestMock);
         }
 
-        return 'runner#{$Source}';
+        return 'runner#{source}';
       },
     }),
   };
@@ -26,6 +26,7 @@ jest.mock('fs', () => {
 describe('responseUtilsFactory', () => {
   const {
     processContent,
+    createContentVariables,
     _renderStyles,
     _prepareCookieOptionsForExpress,
     _prepareSource,
@@ -134,14 +135,17 @@ describe('responseUtilsFactory', () => {
     });
   });
 
-  describe('processContent', () => {
-    it('should return original content without any boot config', () => {
-      expect(processContent({ response: { content: 'content' } })).toBe(
-        'content'
-      );
+  describe('createContentVariables', () => {
+    it('should return empty object if there is no valid bootConfig', () => {
+      expect(createContentVariables({})).toStrictEqual({});
+      expect(createContentVariables({ bootConfig: null })).toStrictEqual({});
+      expect(createContentVariables({ bootConfig: {} })).toStrictEqual({});
+      expect(
+        createContentVariables({ bootConfig: { settings: null } })
+      ).toStrictEqual({});
     });
 
-    it('should interpolate revival scripts into page content', () => {
+    it('should generate base set of content variables', () => {
       const response = {
         content: '<html>#{$Styles}#{$RevivalSettings}#{$Runner}</html>',
       };
@@ -151,6 +155,31 @@ describe('responseUtilsFactory', () => {
           $Debug: true,
         },
       };
+
+      expect(
+        createContentVariables({ bootConfig, response })
+      ).toMatchSnapshot();
+    });
+  });
+
+  describe('processContent', () => {
+    it('should return original content without any boot config', () => {
+      expect(processContent({ response: { content: 'content' } })).toBe(
+        'content'
+      );
+    });
+
+    it('should interpolate revival scripts into page content', () => {
+      const bootConfig = {
+        settings: {
+          $Language: 'en',
+          $Debug: true,
+        },
+      };
+      const response = {
+        content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
+        contentVariables: createContentVariables({ bootConfig, response: {} }),
+      };
       const contextMock = { response, bootConfig };
 
       const content = processContent(contextMock);
@@ -158,9 +187,6 @@ describe('responseUtilsFactory', () => {
     });
 
     it('should allow overrides through custom $Source definition', () => {
-      const response = {
-        content: '<html>#{$Scripts}</html>',
-      };
       const bootConfig = {
         settings: {
           $Language: 'en',
@@ -173,10 +199,39 @@ describe('responseUtilsFactory', () => {
           },
         },
       };
+      const response = {
+        content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
+        contentVariables: createContentVariables({ bootConfig, response: {} }),
+      };
       const contextMock = { response, bootConfig };
-
       const content = processContent(contextMock);
+
       expect(content).toMatchSnapshot();
+    });
+
+    it('should interpolate deep embedded variables', () => {
+      const bootConfig = {
+        settings: {
+          $Language: 'en',
+          $Debug: true,
+        },
+      };
+      const response = {
+        content: '<html>#{v1}</html>',
+        contentVariables: {
+          v1: '#{v2}',
+          v2: '#{v3}',
+          v3: '#{v4}',
+          v4: '#{v5}',
+          v5: '#{v6}',
+          v6: '#{v7}',
+          v7: 'final v7 content',
+        },
+      };
+      const contextMock = { response, bootConfig };
+      const content = processContent(contextMock);
+
+      expect(content).toBe('<html>final v7 content</html>');
     });
   });
 });
