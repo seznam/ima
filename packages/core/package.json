@@ -60,6 +60,9 @@
     "@types/multer": "^1.4.7",
     "jscodeshift": "^0.14.0"
   },
+  "peerDependencies": {
+    "@ima/server": ">=18.1.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
