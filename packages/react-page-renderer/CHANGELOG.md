@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.0
+
+### Minor Changes
+
+- 1a53809e: Added server and client nodes to hydration error
+
 ## 18.0.1
 
 ### Patch Changes
