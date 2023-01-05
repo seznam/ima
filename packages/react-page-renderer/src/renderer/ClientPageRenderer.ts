@@ -24,6 +24,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   }
 
   protected _hydrateViewAdapter(): void {
+    const serverHtml = this._viewContainer?.cloneNode(true);
     this._reactRoot = hydrateRoot(
       this._viewContainer as Element,
       this._getViewAdapterElement({
@@ -35,7 +36,15 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
             console.error('onRecoverableError', error);
           }
 
-          this._dispatcher.fire(RendererEvents.HYDRATE_ERROR, { error }, true);
+          this._dispatcher.fire(
+            RendererEvents.HYDRATE_ERROR,
+            {
+              error,
+              serverHtml,
+              clientHtml: this._viewContainer?.cloneNode(true),
+            },
+            true
+          );
         },
       }
     );
