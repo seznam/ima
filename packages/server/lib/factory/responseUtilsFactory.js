@@ -196,6 +196,7 @@ module.exports = function responseUtilsFactory() {
       settings?.$Source?.(response, resources.manifest, defaultSource) ??
       defaultSource;
 
+    const source = JSON.stringify(sourceScripts);
     const revivalSettings = _renderScript(
       'revival-settings',
       _getRevivalSettings({ response, settings })
@@ -214,13 +215,14 @@ module.exports = function responseUtilsFactory() {
         sourceStyles,
         sourceScripts,
       },
-      source: JSON.stringify(sourceScripts),
+      source,
       revivalSettings,
       revivalCache,
       runner,
       styles,
 
       // Backwards compatibility, remove in IMA@19
+      $Source: source,
       $RevivalSettings: revivalSettings,
       $RevivalCache: revivalCache,
       $Runner: runner,
