@@ -1,6 +1,5 @@
 ---
 "@ima/server": minor
-"@ima/core": minor
 "create-ima-app": minor
 ---
 
