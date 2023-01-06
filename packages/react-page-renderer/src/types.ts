@@ -14,6 +14,7 @@ export type Settings = {
   $Path: unknown;
   $Page: {
     $Render: {
+      batchResolve: boolean;
       documentView?: ComponentType;
       managedRootView?: ComponentType;
       masterElementId?: string;
