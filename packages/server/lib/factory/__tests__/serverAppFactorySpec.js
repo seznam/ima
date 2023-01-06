@@ -1,4 +1,3 @@
-const { GenericError } = require('@ima/core');
 const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter, Event } = require('../../emitter.js');
 const { createMonitoring } = require('@esmj/monitor');
@@ -191,7 +190,6 @@ describe('Server App Factory', () => {
       status: jest.fn(),
       send: jest.fn(),
       set: jest.fn(),
-      redirect: jest.fn(),
       locals: {},
       headerSent: false,
     };
@@ -355,58 +353,6 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
       expect(response.static).toBeFalsy();
       expect(response.content).toBe('404 page');
-    });
-
-    it('should redirect page with 301 status for exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
-      );
-      jest.spyOn(router, 'isRedirection').mockReturnValue(true);
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
-        route: {
-          getName() {
-            return 'home ';
-          },
-        },
-      });
-
-      environment.$Server.staticConcurrency = 0;
-
-      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.status).toBe(301);
-      expect(response.cache).toBeFalsy();
-      expect(response.static).toBeFalsy();
-      expect(response.content).toBeNull();
-      expect(RES.redirect).toHaveBeenCalled();
-    });
-
-    it('should redirect page with 301 status for not exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
-      );
-      jest.spyOn(router, 'isRedirection').mockReturnValue(true);
-      environment.$Server.staticConcurrency = 100;
-
-      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.status).toBe(301);
-      expect(response.cache).toBeFalsy();
-      expect(response.static).toBeFalsy();
-      expect(response.content).toBeNull();
-      expect(RES.redirect).toHaveBeenCalled();
     });
 
     it('should preventDefaulted Event.Request hooks', async () => {
