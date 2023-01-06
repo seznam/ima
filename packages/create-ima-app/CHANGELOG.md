@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.0
+
+### Minor Changes
+
+- 06fee90c2: Aded new ContentVariable server event. This allows customization of variables that are injected to content using #{...} interpolation
+
 ## 18.0.0
 
 ### Major Changes

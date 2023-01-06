@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.1
+
+### Patch Changes
+
+- 9bd34c753: Fix trigger refCallback in ViewAdapter
+
 ## 18.1.0
 
 ### Minor Changes

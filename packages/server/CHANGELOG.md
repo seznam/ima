@@ -1,5 +1,17 @@
 # Change Log
 
+## 18.1.0
+
+### Minor Changes
+
+- 06fee90c2: Aded new ContentVariable server event. This allows customization of variables that are injected to content using #{...} interpolation
+
+### Patch Changes
+
+- 4952b4bad: Dictionary is loaded only for defined language. Language can be missing for errors before urlParser middleware.
+- 27f7a1204: redirect error is not degradated to static error page
+- 58d31d0bf: Client errors render static client error page for exceeded concurrency
+
 ## 18.0.3
 
 ### Patch Changes
