@@ -20,7 +20,8 @@ module.exports = function serverAppFactory({
   logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
-  const { processContent, sendResponseHeaders } = responseUtilsFactory();
+  const { processContent, createContentVariables, sendResponseHeaders } =
+    responseUtilsFactory();
   const {
     _initApp,
     createBootConfig,
@@ -66,6 +67,7 @@ module.exports = function serverAppFactory({
     _getRouteInfo,
     _generateAppResponse,
     processContent,
+    createContentVariables,
     sendResponseHeaders,
     emitter,
     instanceRecycler,
@@ -133,6 +135,7 @@ module.exports = function serverAppFactory({
   }
 
   async function responseHandler(event) {
+    event = await emitter.emit(Event.CreateContentVariables, event);
     event = await emitter.emit(Event.BeforeResponse, event);
 
     if (!event.defaultPrevented) {

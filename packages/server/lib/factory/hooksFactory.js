@@ -11,6 +11,7 @@ module.exports = function hooksFactory({
   _getRouteInfo,
   _generateAppResponse,
   processContent,
+  createContentVariables,
   sendResponseHeaders,
   emitter,
   instanceRecycler,
@@ -28,6 +29,20 @@ module.exports = function hooksFactory({
       instanceRecycler.getConcurrentRequests() + 1 >
         environment.$Server.overloadConcurrency
     );
+  }
+
+  function _isResponseWithContent(event) {
+    const { res, context } = event;
+    const isRedirectResponse =
+      context.response.status >= 300 &&
+      context.response.status < 400 &&
+      context.response.url;
+
+    if (res.headersSent || isRedirectResponse || !context.response) {
+      return false;
+    }
+
+    return true;
   }
 
   function _hasToServeSPA(event) {
@@ -217,14 +232,25 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
-  function useResponseHook() {
-    emitter.on(Event.BeforeResponse, async ({ res, context }) => {
-      const isRedirectResponse =
-        context.response.status >= 300 &&
-        context.response.status < 400 &&
-        context.response.url;
+  function useCreateContentVariablesHook() {
+    emitter.on(Event.CreateContentVariables, async event => {
+      const { context } = event;
 
-      if (res.headersSent || isRedirectResponse || !context.response) {
+      if (!_isResponseWithContent(event)) {
+        return;
+      }
+
+      context.response.contentVariables = createContentVariables({
+        ...context,
+      });
+    });
+  }
+
+  function useResponseHook() {
+    emitter.on(Event.BeforeResponse, async event => {
+      const { context } = event;
+
+      if (!_isResponseWithContent(event)) {
         return;
       }
 
@@ -276,6 +302,7 @@ module.exports = function hooksFactory({
   }
 
   function useIMADefaultHook() {
+    useCreateContentVariablesHook();
     userErrorHook();
     useRequestHook();
     useResponseHook();
