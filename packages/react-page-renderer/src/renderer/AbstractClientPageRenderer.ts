@@ -233,7 +233,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
    */
   private _startBatchTransactions(
     controller: ControllerDecorator,
-    patchedPromises: { [key: string]: Promise<unknown> }
+    patchedPromises: UnknownPromiseParameters
   ) {
     let hasResourcesLoaded = false;
     const options = {
