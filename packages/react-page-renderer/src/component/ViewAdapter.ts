@@ -113,8 +113,8 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
         this._managedRootView as ComponentClass,
         Object.assign({}, this.state, {
           pageView: this.props.pageView,
-          ref: () => {
-            if (this.props.refCallback) {
+          ref: (element: any) => {
+            if (element && this.props.refCallback) {
               this.props.refCallback();
             }
           },
