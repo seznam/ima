@@ -1,4 +1,10 @@
-const { GenericError } = require('@ima/core');
+const {
+  GenericError,
+  ServerRouter,
+  Cache,
+  PageStateManager,
+} = require('@ima/core');
+const { toMockedInstance } = require('to-mock');
 const serverAppFactory = require('../serverAppFactory.js');
 const { Emitter, Event } = require('../../emitter.js');
 const { createMonitoring } = require('@esmj/monitor');
@@ -93,8 +99,7 @@ describe('Server App Factory', () => {
     languageLoader = jest.fn();
     applicationFolder = '';
 
-    // TODO IMA@18+ rewrite with toMockInstance
-    router = {
+    router = toMockedInstance(ServerRouter, {
       isClientError: () => false,
       isRedirection: () => false,
       handleError: () =>
@@ -102,9 +107,6 @@ describe('Server App Factory', () => {
           status: 500,
           content: '500 app html',
         }),
-      init: jest.fn(),
-      route: jest.fn(),
-      getPath: jest.fn(),
       getCurrentRouteInfo: jest.fn(() => {
         return {
           route: {
@@ -114,18 +116,17 @@ describe('Server App Factory', () => {
           },
         };
       }),
-    };
+    });
 
-    cache = {
+    cache = toMockedInstance(Cache, {
       serialize: jest
         .fn()
         .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
-      clear: jest.fn(),
-    };
+    });
 
-    pageStateManager = {
+    pageStateManager = toMockedInstance(PageStateManager, {
       getState: jest.fn().mockReturnValue({ page: 'state' }),
-    };
+    });
 
     appFactory = jest.fn(() => {
       return {
@@ -304,20 +305,6 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
       expect(appFactory).not.toHaveBeenCalled();
     });
-
-    // TODO IMA@18 need performance test for usefulness
-    // it('should render SPA page with cache', async () => {
-    //   jest
-    //     .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-    //     .mockReturnValue(true);
-
-    //   await serverApp.requestHandlerMiddleware(REQ, RES);
-    //   const page = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-    //   expect(page.SPA).toBeTruthy();
-    //   expect(page.status).toEqual(200);
-    //   expect(page.cache).toBeTruthy();
-    // });
 
     it('should render overloaded message', async () => {
       environment.$Server.overloadConcurrency = 0;
