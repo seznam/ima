@@ -110,7 +110,7 @@ module.exports = function hooksFactory({
 
   async function _applyNotFound(event) {
     if (_hasToServeStatic(event)) {
-      return renderStaticServerErrorPage(event);
+      return renderStaticClientErrorPage(event);
     }
 
     try {
