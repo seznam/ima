@@ -83,6 +83,14 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       controller.setState(defaultPageState);
       await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
+      if (
+        this._settings &&
+        this._settings.$Page &&
+        this._settings.$Page.$Render &&
+        this._settings.$Page.$Render.batchResolve
+      ) {
+        this._startBatchTransactions(controller, loadedPromises);
+      }
     }
 
     return this._helpers
@@ -123,6 +131,14 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
     controller.setState(defaultPageState);
     this._patchPromisesToState(controller, updatedPromises);
+    if (
+      this._settings &&
+      this._settings.$Page &&
+      this._settings.$Page.$Render &&
+      this._settings.$Page.$Render.batchResolve
+    ) {
+      this._startBatchTransactions(controller, updatedPromises);
+    }
 
     return this._helpers
       .allPromiseHash(updatedPromises)
@@ -220,6 +236,50 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       { type: RendererTypes.UNMOUNT },
       true
     );
+  }
+
+  /**
+   * Batch patch promise values to controller state.
+   */
+  private _startBatchTransactions(
+    controller: ControllerDecorator,
+    patchedPromises: { [key: string]: Promise<unknown> }
+  ) {
+    let hasResourcesLoaded = false;
+    const options = {
+      timeout: 100,
+    };
+
+    const Window = this._window.getWindow();
+    let requestIdleCallback: (
+      callback: IdleRequestCallback,
+      options?: IdleRequestOptions | undefined
+    ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
+    if (Window && Window['requestIdleCallback']) {
+      requestIdleCallback = Window.requestIdleCallback;
+    }
+    const handler = () => {
+      controller.commitStateTransaction();
+
+      if (!hasResourcesLoaded) {
+        controller.beginStateTransaction();
+        setTimeout(() => {
+          requestIdleCallback(handler, options);
+        }, 1000 / 60);
+      }
+    };
+
+    controller.beginStateTransaction();
+    requestIdleCallback(handler, options);
+
+    this._helpers
+      .allPromiseHash(patchedPromises)
+      .then(() => {
+        hasResourcesLoaded = true;
+      })
+      .catch(() => {
+        hasResourcesLoaded = true;
+      });
   }
 
   protected abstract _renderViewAdapter(
