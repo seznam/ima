@@ -91,10 +91,6 @@ module.exports = function hooksFactory({
   }
 
   async function _applyError(event) {
-    if (_hasToServeStatic(event)) {
-      return renderStaticServerErrorPage(event);
-    }
-
     try {
       const { error, context } = event;
       return context.app.oc
@@ -109,10 +105,6 @@ module.exports = function hooksFactory({
   }
 
   async function _applyNotFound(event) {
-    if (_hasToServeStatic(event)) {
-      return renderStaticServerErrorPage(event);
-    }
-
     try {
       const { error, context } = event;
       const router = context.app.oc.get('$Router');
@@ -150,7 +142,7 @@ module.exports = function hooksFactory({
       try {
         const { context } = event;
 
-        if (!context?.app) {
+        if (!context?.app || _hasToServeStatic(event)) {
           return renderStaticServerErrorPage(event);
         }
 
