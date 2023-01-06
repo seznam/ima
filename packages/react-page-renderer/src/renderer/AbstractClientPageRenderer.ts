@@ -83,12 +83,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       controller.setState(defaultPageState);
       await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
-      if (
-        this._settings &&
-        this._settings.$Page &&
-        this._settings.$Page.$Render &&
-        this._settings.$Page.$Render.batchResolve
-      ) {
+      if (this._settings?.$Page?.$Render?.batchResolve) {
         this._startBatchTransactions(controller, loadedPromises);
       }
     }
@@ -131,12 +126,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
     controller.setState(defaultPageState);
     this._patchPromisesToState(controller, updatedPromises);
-    if (
-      this._settings &&
-      this._settings.$Page &&
-      this._settings.$Page.$Render &&
-      this._settings.$Page.$Render.batchResolve
-    ) {
+    if (this._settings?.$Page?.$Render?.batchResolve) {
       this._startBatchTransactions(controller, updatedPromises);
     }
 
