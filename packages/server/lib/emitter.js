@@ -5,7 +5,7 @@ const Event = {
   Error: 'ima.server.error',
   AfterError: 'ima.server.afterError',
 
-  ContentVariables: 'ima.server.contentVariables',
+  CreateContentVariables: 'ima.server.createContentVariables',
 
   BeforeRequest: 'ima.server.beforeRequest',
   Request: 'ima.server.request',

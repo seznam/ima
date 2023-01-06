@@ -135,7 +135,7 @@ module.exports = function serverAppFactory({
   }
 
   async function responseHandler(event) {
-    event = await emitter.emit(Event.ContentVariables, event);
+    event = await emitter.emit(Event.CreateContentVariables, event);
     event = await emitter.emit(Event.BeforeResponse, event);
 
     if (!event.defaultPrevented) {

@@ -224,8 +224,8 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
-  function useContentVariablesHook() {
-    emitter.on(Event.ContentVariables, async event => {
+  function useCreateContentVariablesHook() {
+    emitter.on(Event.CreateContentVariables, async event => {
       const { context } = event;
 
       if (!_isResponseWithContent(event)) {
@@ -294,7 +294,7 @@ module.exports = function hooksFactory({
   }
 
   function useIMADefaultHook() {
-    useContentVariablesHook();
+    useCreateContentVariablesHook();
     userErrorHook();
     useRequestHook();
     useResponseHook();

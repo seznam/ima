@@ -8,7 +8,7 @@ export default class DocumentView extends AbstractPureComponent {
      * #{...} Represents variables that are injected before sending the response
      * to client from server. These are defined in event.response.content.contentVariables.
      *
-     * You can use Event.ContentVariables server hook to customize/extend set of these variables.
+     * You can use Event.CreateContentVariables server hook to customize/extend set of these variables.
      */
 
     return (
