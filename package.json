@@ -25,12 +25,11 @@
     "./website"
   ],
   "scripts": {
-    "benchmark": "utils/benchmark/benchmark.sh",
+    "benchmark": "utils/benchmark/setupForTests.sh",
     "dev": "node ./utils/scripts/dev.js",
     "build": "npm run build --workspaces --if-present",
     "commit": "echo 'This command has been replaced with \"npm run changeset\"'",
     "changeset": "changeset add",
-    "ima-app:test:all": "utils/imaApp/tests.sh",
     "postinstall": "npm run build",
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky install",

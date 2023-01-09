@@ -58,9 +58,8 @@ IMA_SKELETON_SERVER_PID=$!
 
 sleep 7
 
-# Run test
-cd "$ROOT_DIR"
-node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS --no-progress "$TARGET_WEB_URL"
+# Run tests
+source createImaAppTests.sh
 
 # Cleanup
 npm config delete @ima:registry
