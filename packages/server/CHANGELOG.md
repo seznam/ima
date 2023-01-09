@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.2
+
+### Patch Changes
+
+- 897457cba: Fix for empty revival-cache returned in contentVariables
+
 ## 18.1.1
 
 ### Patch Changes
