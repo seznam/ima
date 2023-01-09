@@ -6,7 +6,7 @@ node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS --no-progress "$TARGE
 
 cd ./ima-app
 
-echo "Run lint test for create-ima-app"
+echo "Run lint for create-ima-app"
 npm run lint
 
 echo "Test unit and integration tests for create-ima-app"
