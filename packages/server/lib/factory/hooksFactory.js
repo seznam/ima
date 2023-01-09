@@ -280,7 +280,7 @@ module.exports = function hooksFactory({
         // Add revivalCache to contentVariables
         const revivalCache = _renderScript(
           'revival-cache',
-          _getRevivalCache(event)
+          _getRevivalCache(context)
         );
 
         context.response.contentVariables = {
