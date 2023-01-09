@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.1
+
+### Patch Changes
+
+- 9ab1b2ddf: Fixed issue where minified builds failed to execute on client"
+
 ## 18.1.0
 
 ### Minor Changes
