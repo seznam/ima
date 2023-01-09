@@ -31,7 +31,7 @@ module.exports = function hooksFactory({
     );
   }
 
-  function _isResponseWithContent(event) {
+  function _isValidResponse(event) {
     const { res, context } = event;
     const isRedirectResponse =
       context.response.status >= 300 &&
@@ -234,29 +234,21 @@ module.exports = function hooksFactory({
 
   function useCreateContentVariablesHook() {
     emitter.on(Event.CreateContentVariables, async event => {
-      const { context } = event;
-
-      if (!_isResponseWithContent(event)) {
-        return;
+      if (_isValidResponse(event)) {
+        event.context.response.contentVariables = createContentVariables({
+          ...event.context,
+        });
       }
-
-      context.response.contentVariables = createContentVariables({
-        ...context,
-      });
     });
   }
 
   function useResponseHook() {
     emitter.on(Event.BeforeResponse, async event => {
-      const { context } = event;
-
-      if (!_isResponseWithContent(event)) {
-        return;
+      if (_isValidResponse(event)) {
+        event.context.response.content = processContent({
+          ...event.context,
+        });
       }
-
-      context.response.content = processContent({
-        ...context,
-      });
     });
 
     emitter.on(Event.Response, async ({ res, context }) => {

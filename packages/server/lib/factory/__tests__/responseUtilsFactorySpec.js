@@ -186,6 +186,40 @@ describe('responseUtilsFactory', () => {
       expect(content).toMatchSnapshot();
     });
 
+    it('should interpolate revival cache into page content', () => {
+      const bootConfig = {
+        settings: {
+          $Language: 'en',
+          $Debug: true,
+        },
+      };
+      const app = {
+        oc: {
+          get: () => ({
+            getState: () => 'PageStateManager',
+            serialize: () => 'Cache',
+            getResponseParams: () => ({
+              headers: {},
+              cookie: {},
+            }),
+          }),
+        },
+      };
+      const response = {
+        content:
+          '<html>#{styles}#{revivalCache}#{revivalSettings}#{runner}</html>',
+        contentVariables: createContentVariables({
+          bootConfig,
+          response: {},
+          app,
+        }),
+      };
+      const contextMock = { response, bootConfig, app };
+
+      const content = processContent(contextMock);
+      expect(content).toMatchSnapshot();
+    });
+
     it('should allow overrides through custom $Source definition', () => {
       const bootConfig = {
         settings: {

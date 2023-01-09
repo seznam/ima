@@ -167,7 +167,7 @@ exports[`responseUtilsFactory _prepareSource should skip compilations without as
 
 exports[`responseUtilsFactory createContentVariables should generate base set of content variables 1`] = `
 {
-  "$RevivalCache": "<script id="ima-revival-cache"></script>",
+  "$RevivalCache": "",
   "$RevivalSettings": "<script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};
@@ -200,7 +200,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       $IMA.$Root = "undefined";
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
-    </script><script id="ima-runner">runner#{source}</script><script id="ima-revival-cache"></script>",
+    </script><script id="ima-runner">runner#{source}</script>",
   "$Source": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
   "$Styles": "<link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
   "_": {
@@ -587,7 +587,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       ],
     ],
   },
-  "revivalCache": "<script id="ima-revival-cache"></script>",
+  "revivalCache": "",
   "revivalSettings": "<script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};
@@ -627,6 +627,29 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
     </script><script id="ima-runner">runner{\\"esScripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],\\"custom-script-src\\"]}</script></html>"
+`;
+
+exports[`responseUtilsFactory processContent should interpolate revival cache into page content 1`] = `
+"<html><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-cache">(function (root) {
+      root.$IMA = root.$IMA || {};
+      $IMA.Cache = Cache;
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script><script id="ima-revival-settings">(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$Language = "en";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script><script id="ima-runner">runner{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}</script></html>"
 `;
 
 exports[`responseUtilsFactory processContent should interpolate revival scripts into page content 1`] = `

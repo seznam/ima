@@ -153,6 +153,10 @@ module.exports = function responseUtilsFactory() {
   }
 
   function _renderScript(name, script) {
+    if (!script) {
+      return '';
+    }
+
     return `<script id="ima-${name}">${script}</script>`;
   }
 
