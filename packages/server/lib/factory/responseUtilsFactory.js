@@ -196,7 +196,8 @@ module.exports = function responseUtilsFactory() {
       settings?.$Source?.(response, resources.manifest, defaultSource) ??
       defaultSource;
 
-    const source = JSON.stringify(sourceScripts);
+    // Add slashes to "" to fix terser run on runner code.
+    const source = JSON.stringify(sourceScripts).replace(/"/g, '\\"');
     const revivalSettings = _renderScript(
       'revival-settings',
       _getRevivalSettings({ response, settings })
