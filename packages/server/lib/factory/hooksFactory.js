@@ -10,7 +10,6 @@ module.exports = function hooksFactory({
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
-  _renderScript,
   processContent,
   createContentVariables,
   sendResponseHeaders,
@@ -19,14 +18,6 @@ module.exports = function hooksFactory({
   devErrorPage,
   environment,
 }) {
-  function _getRevivalCache({ response }) {
-    return `(function (root) {
-      root.$IMA = root.$IMA || {};
-      $IMA.Cache = ${response?.page?.cache ?? JSON.stringify({})};
-    })(typeof window !== 'undefined' && window !== null ? window : global);
-    `;
-  }
-
   function _isServerOverloaded(event) {
     const { environment } = event;
     if (environment.$Server.degradation) {
@@ -261,40 +252,6 @@ module.exports = function hooksFactory({
 
       if (!_isResponseWithContent(event)) {
         return;
-      }
-
-      const isAppExists = context.app && typeof context.app !== 'function';
-
-      if (isAppExists) {
-        const state = context.app.oc.get('$PageStateManager').getState();
-        const cache = context.app.oc.get('$Cache').serialize();
-        const { headers, cookie } = context.app.oc
-          .get('$Response')
-          .getResponseParams();
-
-        context.response.page = {
-          ...context.response.page,
-          ...{ state, cache, headers, cookie },
-        };
-
-        // Add revivalCache to contentVariables
-        const revivalCache = _renderScript(
-          'revival-cache',
-          _getRevivalCache(context)
-        );
-
-        context.response.contentVariables = {
-          ...context.response.contentVariables,
-          revivalCache,
-
-          // Backwards compatibility, remove in IMA@19
-          $RevivalCache: revivalCache,
-          $Scripts: [
-            context.response.contentVariables.revivalSettings,
-            context.response.contentVariables.runner,
-            revivalCache,
-          ].join(''),
-        };
       }
 
       context.response.content = processContent({

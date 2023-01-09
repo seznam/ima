@@ -131,6 +131,27 @@ module.exports = function responseUtilsFactory() {
     `;
   }
 
+  function _getRevivalCache({ response, app }) {
+    if (!app || typeof app === 'function') {
+      return '';
+    }
+
+    const state = app.oc.get('$PageStateManager').getState();
+    const cache = app.oc.get('$Cache').serialize();
+    const { headers, cookie } = app.oc.get('$Response').getResponseParams();
+
+    response.page = {
+      ...response.page,
+      ...{ state, cache, headers, cookie },
+    };
+
+    return `(function (root) {
+      root.$IMA = root.$IMA || {};
+      $IMA.Cache = ${response?.page?.cache ?? JSON.stringify({})};
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    `;
+  }
+
   function _renderScript(name, script) {
     return `<script id="ima-${name}">${script}</script>`;
   }
@@ -165,7 +186,7 @@ module.exports = function responseUtilsFactory() {
     _prepareSource(manifest, language)
   );
 
-  function createContentVariables({ response, bootConfig }) {
+  function createContentVariables({ response, app, bootConfig }) {
     if (!bootConfig?.settings) {
       return {};
     }
@@ -194,6 +215,10 @@ module.exports = function responseUtilsFactory() {
       'revival-settings',
       _getRevivalSettings({ response, settings })
     );
+    const revivalCache = _renderScript(
+      'revival-cache',
+      _getRevivalCache({ response, app })
+    );
     const runner = _renderScript('runner', resources.runner);
     const styles = _renderStyles(sourceStyles);
 
@@ -206,14 +231,17 @@ module.exports = function responseUtilsFactory() {
       },
       source,
       revivalSettings,
+      revivalCache,
       runner,
       styles,
 
       // Backwards compatibility, remove in IMA@19
       $Source: source,
       $RevivalSettings: revivalSettings,
+      $RevivalCache: revivalCache,
       $Runner: runner,
       $Styles: styles,
+      $Scripts: [revivalSettings, runner, revivalCache].join(''),
     };
   }
 
@@ -240,7 +268,6 @@ module.exports = function responseUtilsFactory() {
     createContentVariables,
     processContent,
     sendResponseHeaders,
-    _renderScript,
     _prepareSource,
     _renderStyles,
     _prepareCookieOptionsForExpress,
