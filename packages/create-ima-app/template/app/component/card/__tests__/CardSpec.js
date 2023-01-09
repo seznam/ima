@@ -3,11 +3,13 @@ import { shallow } from 'enzyme';
 
 describe('Card', () => {
   it('can render', () => {
-    const title = 'Test card';
-    const href = 'https://www.seznam.cz';
-    const children = 'Some content of the card.';
+    const props = {
+      title: 'Test card',
+      href: 'https://www.seznam.cz',
+      children: 'Some content of the card.',
+    };
 
-    const wrapper = shallow(Card({ children, title, href }));
+    const wrapper = shallow(<Card {...props} />);
 
     expect(wrapper).toMatchSnapshot();
   });
