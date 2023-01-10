@@ -80,7 +80,7 @@ IMA_SKELETON_SERVER_PID=$!
 sleep 7
 
 # Run tests
-source createImaAppTests.sh
+source "$ROOT_DIR_IMA/utils/benchmark/createImaAppTests.sh"
 
 # Cleanup
 npm config delete @ima:registry
