@@ -131,20 +131,7 @@ module.exports = function responseUtilsFactory() {
     `;
   }
 
-  function _getRevivalCache({ response, app }) {
-    if (!app || typeof app === 'function') {
-      return '';
-    }
-
-    const state = app.oc.get('$PageStateManager').getState();
-    const cache = app.oc.get('$Cache').serialize();
-    const { headers, cookie } = app.oc.get('$Response').getResponseParams();
-
-    response.page = {
-      ...response.page,
-      ...{ state, cache, headers, cookie },
-    };
-
+  function _getRevivalCache({ response }) {
     return `(function (root) {
       root.$IMA = root.$IMA || {};
       $IMA.Cache = ${response?.page?.cache ?? JSON.stringify({})};
@@ -190,7 +177,7 @@ module.exports = function responseUtilsFactory() {
     _prepareSource(manifest, language)
   );
 
-  function createContentVariables({ response, app, bootConfig }) {
+  function createContentVariables({ response, bootConfig }) {
     if (!bootConfig?.settings) {
       return {};
     }
@@ -221,7 +208,7 @@ module.exports = function responseUtilsFactory() {
     );
     const revivalCache = _renderScript(
       'revival-cache',
-      _getRevivalCache({ response, app })
+      _getRevivalCache({ response })
     );
     const runner = _renderScript('runner', resources.runner);
     const styles = _renderStyles(sourceStyles);
