@@ -9,16 +9,12 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 cd ..
-echo '=============pwd============'
-echo `pwd`
 
 ROOT_DIR=`pwd`
 ROOT_DIR_IMA="$ROOT_DIR/ima"
 ROOT_DIR_IMA_APP="$ROOT_DIR/ima-app"
 
 cd "$ROOT_DIR_IMA"
-echo '=============pwd============'
-echo `pwd`
 
 CREATE_IMA_APP_DIR="$ROOT_DIR_IMA/packages/create-ima-app"
 PACKAGE_VERSION="18.0.0-next"
@@ -49,26 +45,18 @@ npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 
 # Update create-ima-app versions
 cd "$ROOT_DIR_IMA"
-echo '=============pwd============'
-echo `pwd`
 node utils/version/create-ima-app-versions.js
 # Link current create-ima-app version to global scope
 cd "$CREATE_IMA_APP_DIR"
-echo '=============pwd============'
-echo `pwd`
 npm link
 
 # Setup app from example hello
 cd "$ROOT_DIR_IMA"
-echo '=============pwd============'
-echo `pwd`
 npx create-ima-app ima-app
 
 mv "$ROOT_DIR_IMA/ima-app" "$ROOT_DIR"
 
 cd "$ROOT_DIR_IMA_APP"
-echo '=============pwd=========='
-echo `pwd`
 
 npm run build
 # Add customized environment configuration
