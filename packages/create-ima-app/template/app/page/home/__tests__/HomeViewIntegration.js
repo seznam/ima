@@ -1,24 +1,24 @@
 import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
 import cards from '../../../public/cards.json';
 
-let headers = new Map();
-headers.set('content-type', 'application/json');
-
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () => Promise.resolve(cards),
-    status: 200,
-    headers,
-    ok: true,
-    text: () => Promise.resolve(JSON.stringify(cards)),
-  })
-);
-
 describe('Home page', () => {
+  const response = {
+    body: cards,
+  };
   let app;
+  let http;
 
   beforeEach(async () => {
-    app = await initImaApp();
+    app = await initImaApp({
+      initBindApp: (ns, oc) => {
+        http = oc.get('$Http');
+
+        // Mock http.get method so the application
+        // wont make any external requests
+        // and return mocked response
+        http.get = jest.fn().mockReturnValue(Promise.resolve(response));
+      },
+    });
 
     await app.oc.get('$Router').route('/');
   });
