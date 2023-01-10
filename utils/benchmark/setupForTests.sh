@@ -9,6 +9,12 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
+echo "$ROOT_DIR"
+cd ..
+echo `pwd`
+cd "$ROOT_DIR"
+echo `pwd`
+
 CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
 PACKAGE_VERSION="18.0.0-next"
 PACKAGES="cli core dev-utils error-overlay helpers hmr-client server react-page-renderer"
