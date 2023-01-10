@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "@ima/core": "^18.0.0",
-    "@ima/plugin-testing-integration": "^3.0.0",
     "@ima/react-page-renderer": "^18.0.0",
     "@ima/server": "^18.0.0",
     "body-parser": "^1.19.2",
