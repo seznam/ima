@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.1
+
+### Patch Changes
+
+- 73a14b7d9: Added missing <!DOCTYPE html> to spa.ejs
+
 ## 18.1.0
 
 ### Minor Changes
