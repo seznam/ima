@@ -67,7 +67,7 @@ npx create-ima-app ima-app
 mv "$ROOT_DIR_IMA/ima-app" "$ROOT_DIR"
 
 cd "$ROOT_DIR_IMA_APP"
-echo '=============pwd============'
+echo '=============pwd=========='
 echo pwd
 
 npm run build
