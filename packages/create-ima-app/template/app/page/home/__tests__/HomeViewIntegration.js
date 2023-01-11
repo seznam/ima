@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
 import cards from '../../../public/cards.json';
 
@@ -27,8 +28,19 @@ describe('Home page', () => {
     clearImaApp(app);
   });
 
-  it('can load homepage', async () => {
+  it('can render component', async () => {
     expect(document.querySelectorAll('.cards')).toHaveLength(1);
-    expect(document.querySelectorAll('.card')).toHaveLength(4);
+    expect(document.querySelectorAll('.card')).toHaveLength(cards.length);
+
+    for (let i = 0; i < cards.length; i++) {
+      let paragraphText = document
+        .querySelectorAll('.card p')
+        [i].innerHTML.replace(/href=\".*\"/, 'href="{link}"');
+
+      expect(document.querySelectorAll('.card h3')[i].textContent).toContain(
+        cards[i].title
+      );
+      expect(paragraphText).toContain(cards[i].content);
+    }
   });
 });

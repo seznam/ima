@@ -8,6 +8,6 @@ IMA_SKELETON_SERVER_PID=$!
 
 sleep 7
 
-echo "Run test benchmark on create-ima-app"
+echo "Run benchmark test on create-ima-app"
 cd "$ROOT_DIR_IMA"
 node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS --no-progress "$TARGET_WEB_URL"
