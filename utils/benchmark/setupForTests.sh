@@ -42,6 +42,7 @@ done
 
 # Install @ima scoped packages from local registry
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
+npm config set legacy-peer-deps true
 
 # Update create-ima-app versions
 cd "$ROOT_DIR_IMA"
@@ -50,27 +51,18 @@ node utils/version/create-ima-app-versions.js
 cd "$CREATE_IMA_APP_DIR"
 npm link
 
-echo 'd'
 # Setup app from example hello
 cd "$ROOT_DIR_IMA"
-npm config set legacy-peer-deps true
 npx create-ima-app ima-app
 
 mv "$ROOT_DIR_IMA/ima-app" "$ROOT_DIR"
 
 cd "$ROOT_DIR_IMA_APP"
 
-echo 'e'
 npm run build
-# Add customized environment configuration
-mv server/config/environment.js server/config/environment.orig.js
-cp "$ROOT_DIR_IMA/utils/benchmark/app/environment.js" server/config/environment.js
-NODE_ENV=prod node server/server.js &
-IMA_SKELETON_SERVER_PID=$!
-
-sleep 7
 
 # Run tests
+source "$ROOT_DIR_IMA/utils/benchmark/benchmarkTest.sh"
 source "$ROOT_DIR_IMA/utils/benchmark/createImaAppTests.sh"
 
 # Cleanup
