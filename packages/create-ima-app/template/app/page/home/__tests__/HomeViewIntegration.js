@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
 import cards from '../../../public/cards.json';
 
@@ -35,7 +34,7 @@ describe('Home page', () => {
     for (let i = 0; i < cards.length; i++) {
       let paragraphText = document
         .querySelectorAll('.card p')
-        [i].innerHTML.replace(/href=\".*\"/, 'href="{link}"');
+        [i].innerHTML.replace(/href=".*"/, 'href="{link}"');
 
       expect(document.querySelectorAll('.card h3')[i].textContent).toContain(
         cards[i].title
