@@ -6,8 +6,6 @@ description: Plugins > Plugins API
 IMA.js development stack offers **built-in support for plugins**. Writing plugins for IMA.js is really
 simple. It basically comes to creating an ordinary npm package and using `pluginLoader.register` method to hook into IMA.js application environment using certain functions.
 
-
-
 :::info
 
 In situations where you don't need to hook into IMA.js app environment from within your plugin (you're for example just exporting some interface), you don't need call this registration method as it servers no purpose.
@@ -47,19 +45,19 @@ pluginLoader.register('my-ima-plugin', ns => {
 
 #### initBind
 
-> `initBind(ns: Namespace, oc: ObjectContainer, config: Config['bind'])`
+> `initBind(ns: Namespace, oc: ObjectContainer, config: Config['bind'], isDynamicallyLoaded = false)`
 
 This function has the same interface as a function exported in `bind.js` of your IMA.js application and also serves the same purpose. This is the place where you would want to initialize your custom constants and bindings and assign them to the [`ObjectContainer`](../basic-features/object-container.md).
 
 #### initServices
 
-> `initServices(ns: Namespace, oc: ObjectContainer, config: Config['services'])`
+> `initServices(ns: Namespace, oc: ObjectContainer, config: Config['services'], isDynamicallyLoaded = false)`
 
 Similarly to `initBind`, this is equivalent to a function exported by `services.js` file in your application.
 
 #### initSettings
 
-> `initSettings(ns: Namespace, oc: ObjectContainer, config: Config['settings'])`
+> `initSettings(ns: Namespace, oc: ObjectContainer, config: Config['settings'], isDynamicallyLoaded = false)`
 
 You can probably already see the pattern here. This function should return an object with settings, with the same structure as function in `settings.js` file does.
 
@@ -95,6 +93,49 @@ pluginLoader.register('@ima/plugin-useragent', () => {
 
 export { ClientUserAgent, ServerUserAgent, UserAgent, PlatformJS };
 ```
+
+## Dynamically imported plugins and tree shaking
+
+When the plugin is imported dynamically and intialized lazily, you receive `isDynamicallyLoaded = true` as the last argument in the registration bootstrap functions. This can help you in certain situations where you need to know when the plugin was initialized.
+
+The bootstrap process works the same way as with plugins initialized upon application startup, meaning all plugin settings are still overwritten with possible overrides in the application settings. There's however one caveat with the `ObjectContainer` that you need to pay attention to.
+
+:::warning
+
+When using **string syntax** to get certain settings in the `$dependencies` field:
+
+```javascript
+static get $dependencies() {
+  return ['$Settings.myPlugin.repeatCount'];
+};
+
+constructor(repeatCount) {
+  this.repeatCount = repeatCount;
+}
+
+fn() {
+  this.repeatXTimes(this.repeatCount);
+}
+```
+
+This w**on't be updated** with possible plugin defaults when it get's loaded. In order to prevent this issue, you need to access whole settings object which will get updated values:
+
+
+```javascript
+static get $dependencies() {
+  return ['$Settings'];
+};
+
+myFUnction(settings) {
+  this.settings = settings;
+}
+
+fn() {
+  this.repeatXTimes(settings?.myPlugin?.repeatCount);
+}
+```
+
+:::
 
 ## Conclusion
 

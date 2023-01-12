@@ -1,5 +1,5 @@
 ---
-title: 'Plugins API'
+title: 'CLI Plugins API'
 description: 'CLI > CLI Plugins and their API'
 ---
 
@@ -7,7 +7,7 @@ The CLI comes with built-in support for plugins. Plugins are used to **extend** 
 
 The CLI plugin is usually a class or an object implementing `ImaCliPlugin` interface. This instance is then added to the [plugins](./ima.config.js.md#plugins) array field in the `ima.config.js`, which registers the plugin to the build process. Additionally to extending the webpack config, you have ability to provide additional custom CLI arguments.
 
-## Plugins API
+## CLI Plugins API
 
 Each plugin has to comply with the [following interface](https://github.com/seznam/ima/blob/next/packages/cli/src/types.ts#L56). Even though almost v everything method is not required and marked as optional, your plugin should implement at least one of the following methods in order to be of any use. Otherwise it would still work but the plugin would not do anything.
 
@@ -50,7 +50,7 @@ export interface ImaCliPlugin {
 }
 ```
 
-## Creating a plugin
+## Creating a CLI plugin
 
 In this section we're going to create custom plugin, which generates assets manifest json file. To achieve this we'll use [WebpackManifestPlugin](https://webpack.js.org/plugins/webpack-manifest-plugin/) and extend our webpack config. We'll also define some additional CLI arguments that will enable us to overwrite certain settings on demand.
 

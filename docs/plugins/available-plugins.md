@@ -3,7 +3,7 @@ title: Existing plugins
 description: Plugins > List of existing plugins
 ---
 
-We've already described a way to [create your own IMA.js plugins](./plugin-interface.md#plugin-registration)
+We've already described a way to [create your own IMA.js plugins](./plugin-api.md#plugin-registration)
 through a very simple interface. Now we would like to talk about [IMA.js-plugins](https://github.com/seznam/IMA.js-plugins) monorepo that already **contains variety of plugins** that covers many of the common use cases.
 
 ## IMA.js-plugins

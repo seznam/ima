@@ -76,7 +76,7 @@ const sidebars = {
         'cli/compiler-features',
         'cli/ima.config.js',
         'cli/additional-features',
-        'cli/plugins-api',
+        'cli/cli-plugins-api',
         {
           'CLI Plugins': [
             'cli/plugins/analyze-plugin',
@@ -90,7 +90,7 @@ const sidebars = {
       type: 'category',
       label: 'Plugins',
       collapsed: false,
-      items: ['plugins/plugin-interface', 'plugins/available-plugins'],
+      items: ['plugins/plugin-api', 'plugins/available-plugins'],
     },
     {
       type: 'category',
