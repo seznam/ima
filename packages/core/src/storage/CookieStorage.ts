@@ -279,11 +279,21 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * property at the client side.
    */
   parse(): void {
-    const cookiesNames = this.#memoParseRawCookies(
+    const cookies = this.#memoParseRawCookies(
       this._window.isClient()
         ? document.cookie
         : this._request.getCookieHeader()
     );
+
+    const cookiesNames: string[] = [];
+    cookies.forEach(cookie => {
+      cookiesNames.push(cookie.name);
+      // add new cookie or update existing one
+      this._storage.set(cookie.name, {
+        value: this.sanitizeCookieValue(cookie.value),
+        options: cookie.options,
+      });
+    });
 
     // remove cookies from storage, which were not parsed
     for (const storageCookieName of this._storage.keys()) {
@@ -380,9 +390,11 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
   }
 
-  #parseRawCookies(rawCookies: string | undefined): string[] {
+  #parseRawCookies(
+    rawCookies: string | undefined
+  ): (Cookie & { name: string })[] {
     const cookiesArray = rawCookies ? rawCookies.split(COOKIE_SEPARATOR) : [];
-    const cookiesNames: string[] = [];
+    const cookies: (Cookie & { name: string })[] = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
       const cookie = this.#extractCookie(cookiesArray[i]);
@@ -395,24 +407,22 @@ export default class CookieStorage extends Storage<Cookie['value']> {
           oldCookieOptions = this._storage.get(cookie.name)!.options;
         }
 
-        cookie.options = Object.assign(
-          {},
-          this._options, // default options
-          oldCookieOptions, // old cookie options (if any)
-          cookie.options // new cookie options (if any)
-        );
-
-        cookiesNames.push(cookie.name);
-
-        // add new cookie or update existing one
-        this._storage.set(cookie.name, {
+        const cookieWithName: Cookie & { name: string } = {
+          name: cookie.name,
+          options: Object.assign(
+            {},
+            this._options, // default options
+            oldCookieOptions, // old cookie options (if any)
+            cookie.options // new cookie options (if any)
+          ),
           value: this.sanitizeCookieValue(cookie.value),
-          options: cookie.options,
-        });
+        };
+
+        cookies.push(cookieWithName);
       }
     }
 
-    return cookiesNames;
+    return cookies;
   }
 
   /**
