@@ -31,14 +31,16 @@ describe('Home page', () => {
     expect(document.querySelectorAll('.cards')).toHaveLength(1);
     expect(document.querySelectorAll('.card')).toHaveLength(cards.length);
 
-    for (let i = 0; i < cards.length; i++) {
-      let paragraphText = document
-        .querySelectorAll('.card p')
-        [i].innerHTML.replace(/href=".*"/, 'href="{link}"');
+    const paragraphElements = document.querySelectorAll('.card p');
+    const titleElements = document.querySelectorAll('.card h3');
 
-      expect(document.querySelectorAll('.card h3')[i].textContent).toContain(
-        cards[i].title
+    for (let i = 0; i < cards.length; i++) {
+      let paragraphText = paragraphElements[i].innerHTML.replace(
+        /href=".*"/,
+        'href="{link}"'
       );
+
+      expect(titleElements[i].textContent).toContain(cards[i].title);
       expect(paragraphText).toContain(cards[i].content);
     }
   });

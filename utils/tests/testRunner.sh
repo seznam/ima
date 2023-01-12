@@ -7,11 +7,11 @@ PARALLEL_TEST_CONNECTIONS=300
 SKELETON_URL="https://github.com/seznam/IMA.js-skeleton.git"
 NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
+ROOT_DIR_IMA=`pwd`
 
 cd ..
 
 ROOT_DIR=`pwd`
-ROOT_DIR_IMA="$ROOT_DIR/ima"
 ROOT_DIR_IMA_APP="$ROOT_DIR/ima-app"
 
 cd "$ROOT_DIR_IMA"
@@ -21,7 +21,7 @@ PACKAGE_VERSION="18.0.0-next"
 PACKAGES="cli core dev-utils error-overlay helpers hmr-client server react-page-renderer"
 
 # Setup local registry
-node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
+node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/tests/verdaccio_config.yml >/dev/null &
 NPM_LOCAL_REGISTRY_PID=$!
 
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
@@ -52,18 +52,15 @@ cd "$CREATE_IMA_APP_DIR"
 npm link
 
 # Setup app from example hello
-cd "$ROOT_DIR_IMA"
+cd "$ROOT_DIR"
 npx create-ima-app ima-app
-
-mv "$ROOT_DIR_IMA/ima-app" "$ROOT_DIR"
 
 cd "$ROOT_DIR_IMA_APP"
 
 npm run build
 
 # Run tests
-source "$ROOT_DIR_IMA/utils/benchmark/benchmarkTest.sh"
-source "$ROOT_DIR_IMA/utils/benchmark/createImaAppTests.sh"
+source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"
 
 # Cleanup
 npm config delete @ima:registry

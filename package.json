@@ -42,7 +42,7 @@
     "stylelint": "stylelint --cache --cache-location=node_modules/.cache/ './**/*.{css,less}'",
     "test": "jest --changedSince `test -f '.changeset/pre.json' && echo 'next' || echo 'master'`",
     "test:all": "jest --colors",
-    "test:create-ima-app": "utils/benchmark/setupForTests.sh",
+    "test:create-ima-app": "utils/tests/testRunner.sh",
     "test:size": "npm run test:size --workspaces --if-present",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
   },
