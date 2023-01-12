@@ -67,8 +67,8 @@ of the `load()` method is show below:
 ```javascript
 load() {
   return {
-    ourPageData: fetchUsefullData(params).catch((error) => {
-      // Note: the fetchUsefullData() should already return a promise
+    ourPageData: fetchUsefulData(params).catch((error) => {
+      // Note: the fetchUsefulData() should already return a promise
       // rejected by GenericError in case an error occurs, so we would not
       // have to do this in our every controller using a function like
       // this one.

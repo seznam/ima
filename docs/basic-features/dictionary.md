@@ -3,7 +3,7 @@ title: Dictionary
 description: Basic features > Dictionary and language features
 ---
 
-Dictionary in IMA.js app serves many purposes. Simplest of them is keeping text strings out of component markup. More advanced one would be internationalisation and in-text replacements.
+Dictionary in IMA.js app serves many purposes. Simplest of them is keeping text strings out of component markup. More advanced one would be internationalization and in-text replacements.
 
 ## Configuration
 
@@ -58,7 +58,7 @@ module.exports = (() => {
 
 Every component and view extending **AbstractComponent** has access to method `localize` from within its instance. This method is alias to a `get` method from the Dictionary instance and takes 2 arguments:
  - **key** - namespace and name of the localization string. If you have `submitAnswer` string in file `pollVoteEN.json` the key to this string would be `pollVote.submitAnswer`.
- - **paramaters** - Optional object with replacements and parameters for **format-message** syntax. For more info about the syntax check out [ICU guide](http://userguide.icu-project.org/formatparse/messages).
+ - **parameters** - Optional object with replacements and parameters for **format-message** syntax. For more info about the syntax check out [ICU guide](http://userguide.icu-project.org/formatparse/messages).
 
 ```javascript
 // app/component/poll/PollVote.jsx

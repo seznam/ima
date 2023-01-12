@@ -10,7 +10,7 @@ IMA.js **AbstractController** provides a few methods you can implement in order 
 
 ## `init()` *@server/client*
 
-This is the first method that gets called in the lifecycle chain. Init method is substituion for native `contructor()` method. Route paramaters are already set when this method is called.
+This is the first method that gets called in the lifecycle chain. Init method is substitution for native `constructor()` method. Route parameters are already set when this method is called.
 
 ## `load()` *@server/client*
 

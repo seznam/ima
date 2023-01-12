@@ -215,7 +215,7 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Check cache and if data isnt available then make real request.
+   * Check cache and if data isn’t available then make real request.
    *
    * @param method The HTTP method to use.
    * @param url The URL to which the request should be sent.
@@ -400,7 +400,7 @@ export default class HttpAgentImpl extends HttpAgent {
 
   /**
    * Prepares the provided request options object by filling in missing
-   * options with default values and addding extra options used internally.
+   * options with default values and adding extra options used internally.
    *
    * @param options Optional request options.
    * @return Request options with set filled-in

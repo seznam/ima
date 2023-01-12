@@ -14,7 +14,7 @@ This plugin provides easy way to **analyze webpack bundle**. Apart from pre-conf
 
 :::note
 
-The plugin also prints these links directly into the console when the build finishes, for easier acces.
+The plugin also prints these links directly into the console when the build finishes, for easier access.
 
 :::
 

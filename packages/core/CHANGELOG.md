@@ -233,7 +233,7 @@
 - 91c4c409: New package react-page-renderer.
 - 91c4c409: Adds the possibility to use \$extensions getter in the Controllers to register extensions.
 - 91c4c409: Add SPA template to `create-ima-app` and update `DocumentView`. Add support for new inject aliases `#{$Scripts}`, `#{$RevivalSettings}`, `#{$Runner}` and `#{$RevivalCache}` to template.
-- 91c4c409: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+- 91c4c409: Changed re-bind behavior - not change dependencies for classConstructorEntry
 - 91c4c409: Added optional and spread dependencies in ObjectContainer
 
 ### Minor Changes
@@ -260,7 +260,7 @@
 - 91c4c409: Multiple fixes after TS core and react-page-renderer merge
 - 91c4c409: Changed core type to module
 - 91c4c409: Added additional cjs build output
-- 91c4c409: revert: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+- 91c4c409: revert: Changed re-bind behavior - not change dependencies for classConstructorEntry
 - 91c4c409: Broken release
 - 91c4c409: Fixed preprocessor exports for client/server bundles (now exports empty class instead of undefined)
 - 91c4c409: Removed ima-plugin.config.js in favor of CLI arg
@@ -319,7 +319,7 @@
 
 ### Patch Changes
 
-- 87adef2d: revert: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+- 87adef2d: revert: Changed re-bind behavior - not change dependencies for classConstructorEntry
 
 ## 18.0.0-rc.26
 
@@ -341,7 +341,7 @@
 
 ### Major Changes
 
-- 94fee0c6: Changed re-bind behaviour - not change dependencies for classConstructorEntry
+- 94fee0c6: Changed re-bind behavior - not change dependencies for classConstructorEntry
 
 ### Patch Changes
 

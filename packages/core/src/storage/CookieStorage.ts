@@ -429,7 +429,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
   }
 
   /**
-   * Generates a string representing the specified cookied, usable either
+   * Generates a string representing the specified cookie, usable either
    * with the `document.cookie` property or the `Set-Cookie` HTTP
    * header.
    *

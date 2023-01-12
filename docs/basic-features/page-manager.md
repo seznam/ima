@@ -18,8 +18,8 @@ Same process follows with [`destroy` method](./controller-lifecycle#destroy-clie
 
 2. **Clear state and unmount view** - After unloading controller and extensions the page state is cleared and view (starting from [ManagedRootView](./rendering-process#managedrootview)) is unmounted. However if the [DocumentView](./rendering-process#documentview), [ViewAdapter](./rendering-process#viewadapter) and [ManagedRootView](./rendering-process#managedrootview) are the same for the new route the view is cleared rather then unmounted. This way you can achieve component persistency.
 
-3. **Loading new controller and extensions** - After the manager is done with clearing previous resource it initialises the new ones. First the [`init` method](./controller-lifecycle#init-serverclient) is called on controller then on every extension (Extensions may [be initialised](./extensions#how-to-use-extensions) during the controllers `init` method call).
-When the initialisation is complete manager starts loading resources via `load` method of the controller and extensions. For detailed explanation see the [`load` method documentation](./controller-lifecycle#load-serverclient).
+3. **Loading new controller and extensions** - After the manager is done with clearing previous resource it initializes the new ones. First the [`init` method](./controller-lifecycle#init-serverclient) is called on controller then on every extension (Extensions may [be initialized](./extensions#how-to-use-extensions) during the controllers `init` method call).
+When the initialization is complete manager starts loading resources via `load` method of the controller and extensions. For detailed explanation see the [`load` method documentation](./controller-lifecycle#load-serverclient).
 
 4. **Rendering new view** - After the `load` method has been called a view for the controller is rendered. It doesn't matter if all promises returned by the `load` method have been resolved. The process of handling promises is described in the [`load` method documentation](./controller-lifecycle#load-serverclient).  Following rendering process is described on a page [Rendering process](./rendering-process) and [View & Components](./views-and-components).
 
@@ -32,7 +32,7 @@ It's possible for you to intervene into the process before it starts and after i
 PageManagerHandler is a simple class that extends `ima/page/handler/PageHandler`. It can obtain dependencies through [dependency injection](./object-container#1-dependency-injection). Each handler should contain 4 methods:
 
 #### 1. `init()` method
-For purpose of initialising.
+For purpose of initializing.
 
 #### 2. `handlePreManagedState()` method
 This method is called before the page manager start taking any action. It receives 3 arguments `managedPage`, `nextManagedPage` and `action`. `managedPage` holds information about current page, `nextManagedPage` about following page. Each of the "managed page" arguments has following shape:

@@ -76,7 +76,7 @@ export default abstract class PageStateManager {
   }
 
   /**
-   * Cancels ongoing transaction. Uncommited state changes are lost.
+   * Cancels ongoing transaction. Uncommitted state changes are lost.
    */
   cancelTransaction() {
     return;

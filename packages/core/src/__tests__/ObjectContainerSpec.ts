@@ -182,7 +182,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.clear();
     });
 
-    it('should be throw Error if classContructor param is not type of function', () => {
+    it('should be throw Error if classconstructor param is not type of function', () => {
       expect(() => {
         // @ts-ignore
         oc.bind(alias, {}, dependencies);

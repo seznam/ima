@@ -17,7 +17,7 @@ In order to **not** reinvent the wheel on every project and to address all of th
 
 - [X] **Isomorphic** - application logic is first executed at the server-side, generates the page markup, and when the application logic is executed at the client-side it automatically binds to the server-generated markup and acts like a single-page application (or a multi-page application if the client does not support JavaScript). This allows for fast load times, out-of-the-box support for web crawlers and greater overall user experience (or UX for short).
 - [X] **React compatible** - IMA.js Views extend the React Component and are in tight cooperation with our Controllers. That means you can use the full magic of React v16 without loosing anything.
-- [X] **Production ready** - there's no need for additional setup or configuration. IMA.js uses evironment-specific configurations from the start.
+- [X] **Production ready** - there's no need for additional setup or configuration. IMA.js uses environment-specific configurations from the start.
 - [X] **Battle tested** - IMA.js is used on various projects across Seznam.cz. Some of them pushing the limits of what a frontend application can do.
 
 ## Documentation
@@ -32,7 +32,7 @@ For a more in-depth information about the IMA.js see a [full documentation](http
 ## Main IMA.js parts
 - **core** - it contains base classes and common classes for every day work which allows you server side rendering and hydrating application in browser.
 - **server** - it contains methods which allow you  to connect IMA application with the express framework.
-- **gulp-tasks** - IMA.js usees gulp for bundling and automatization. There are prepared common tasks and a base configuration.
+- **gulp-tasks** - IMA.js uses gulp for bundling and automatization. There are prepared common tasks and a base configuration.
 
 ## Plugins
 See the [ima-plugins](https://github.com/seznam/IMA.js-plugins) repository for available IMA.js plugins.

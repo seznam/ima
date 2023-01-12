@@ -11,7 +11,7 @@ Routing is an essential part of every application that displays multiple pages. 
 
 All routes in IMA.js are registered inside the `init` function in `app/config/routes.js`. Same `init` function can be found in `app/config/bind.js`. See [Object Container](../object-container.md) documentation for more information about the `oc.get()` function.
 
-Usually you should be oke with simple string defined [StaticRoutes](../../api/classes/ima_core.StaticRoute.md) (the ones defined below), but the router also has support for more advanced and powerfull [DynamicRoutes](../../api/classes/ima_core.DynamicRoute.md). For more information about these see the [next section](./dynamic-routes.md).
+Usually you should be oke with simple string defined [StaticRoutes](../../api/classes/ima_core.StaticRoute.md) (the ones defined below), but the router also has support for more advanced and powerful [DynamicRoutes](../../api/classes/ima_core.DynamicRoute.md). For more information about these see the [next section](./dynamic-routes.md).
 
 ```javascript title=./app/config/routes.js
 import { RouteNames } from '@ima/core';
@@ -52,13 +52,13 @@ This can be either `object` for [dynamic routes](./dynamic-routes.md) or `string
 
 > `string | function`
 
-Route assigned **[Controller](../controller-lifecycle.md)** class (can be a string alias, refering to the controller registered in the [Object Container](../object-container.md)). It goes through its full [lifecycle](../controller-lifecycle.md) and renders the [View](../views-and-components.md).
+Route assigned **[Controller](../controller-lifecycle.md)** class (can be a string alias, referring to the controller registered in the [Object Container](../object-container.md)). It goes through its full [lifecycle](../controller-lifecycle.md) and renders the [View](../views-and-components.md).
 
 ### view
 
 > `string | function`
 
-Route assigned **[View](../views-and-components.md)** class (also can be a string alias, refering to the view registered in the [Object Container](../object-container.md)). Rendered by the route controller.
+Route assigned **[View](../views-and-components.md)** class (also can be a string alias, referring to the view registered in the [Object Container](../object-container.md)). Rendered by the route controller.
 
 ### options
 
@@ -273,7 +273,7 @@ export let init = (ns, oc, config) => {
 
 ## Redirects
 
-In addition to the `link` method mentioned above (which handles URL generation for given routes), you can use `Router.redirect()` method to **redirect directly to the targetted URL**.
+In addition to the `link` method mentioned above (which handles URL generation for given routes), you can use `Router.redirect()` method to **redirect directly to the targeted URL**.
 
 This URL can be either existing app route or external URL. As with links, in this case you also get SPA routing, in case of redirection to different IMA.js app route.
 

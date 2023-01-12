@@ -26,7 +26,7 @@ onVisibilityToggle() {
 ```
 
 ## Initial page state
-First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](./controller-lifecycle#load-serverclient).
+First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behavior is described in Controller's [`load` method documentation](./controller-lifecycle#load-serverclient).
 
 ## Partial state
 Since Extensions also have a word in loading resources it may be necessary to share resources between Controller and Extensions. Here comes partial state into play. It allows you to call `getState` method in `load` method of an Extension. Received state consists of states collected from loaded Controller and Extensions loaded prior to the current Extension. Extensions are loaded in the same order as they were registered in a Controller.
@@ -87,7 +87,7 @@ Therefore your application will re-render only once and you'll also receive [sta
 
 Another way to finish the transaction is to cancel it via `cancelStateTransaction()` method.
 
-> **Note**: Call to `getState` method after the transaction has begun will return state as it was before the transaction eg. the returned state doesn't include changes from the transaction period until the transaction is commited.
+> **Note**: Call to `getState` method after the transaction has begun will return state as it was before the transaction eg. the returned state doesn't include changes from the transaction period until the transaction is committed.
 
 ```javascript
 async onFormSubmit({ content, deleteRevisions = false }) {
@@ -98,14 +98,14 @@ async onFormSubmit({ content, deleteRevisions = false }) {
   const result = await this._http.put(/* ... */);
 
   if (deleteRevisions) {
-    await this.deleteArtiacleRevisions();
+    await this.deleteArticleRevisions();
   }
 
   this.setState({ article: Object.assign({}, article, { content }) });
   this.commitStateTransaction();
 }
 
-async deleteArtiacleRevisions() {
+async deleteArticleRevisions() {
   const { article, revisions } = this.getState();
 
   await this._http.delete(/* ... */);

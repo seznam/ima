@@ -139,7 +139,7 @@ export default class ObjectContainer {
   /**
    * Binds the specified class or factory function and dependencies to the
    * specified alias. Binding a class or factory function to an alias allows
-   * the class or function to be specied as a dependency by specifying the
+   * the class or function to be specified as a dependency by specifying the
    * alias and creating new instances by referring to the class or function
    * by the alias.
    *
@@ -750,7 +750,7 @@ export default class ObjectContainer {
    * Retrieves the class denoted by the provided fully qualified name within
    * the application namespace.
    *
-   * The method then checks whether there are dependecies configured for the
+   * The method then checks whether there are dependencies configured for the
    * class, no matter whether the class is an implementation class or an
    * "interface" class.
    *

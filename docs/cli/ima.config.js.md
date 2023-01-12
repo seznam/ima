@@ -71,7 +71,7 @@ This is the most advanced and versatile configuration option, allowing you to ch
 
 The function receives **3 arguments** and has to always return (mutated) config object:
  - `config` - webpack configuration object (just like the one you usually define in webpack.config.js).
- - `ctx` - current configuration context. As we mentioned in the [compiler features](./compiler-features#server-and-client-bundles), the app builds 3 different bundles. Using `ctx.name` you can find out which configuration you are currently editting. There are many additional values that help you identify current build state. You can use these to further customize the config only in some cases or for certain bundles. For more information take a look at the [argument type](https://github.com/seznam/ima/blob/packages/cli/src/types.ts#L47).
+ - `ctx` - current configuration context. As we mentioned in the [compiler features](./compiler-features#server-and-client-bundles), the app builds 3 different bundles. Using `ctx.name` you can find out which configuration you are currently editing. There are many additional values that help you identify current build state. You can use these to further customize the config only in some cases or for certain bundles. For more information take a look at the [argument type](https://github.com/seznam/ima/blob/packages/cli/src/types.ts#L47).
  - `imaConfig` - loaded `ima.config.js` file, with defaults.
 
 The following example turns on minification for server bundle for build command:
@@ -255,7 +255,7 @@ The `publicPath` option is used to specify base path for all asses within the ap
 
 Use this option for example in cases of asset upload to CDN, when the CDN URL is known beforehand (the public path can't be changed after the app is already built).
 
-If you want to serve your static files on different route (default is `/static`), customize the `staticFolder` option in `./server/config/environment.js` file and change `publicPath` option accordinly:
+If you want to serve your static files on different route (default is `/static`), customize the `staticFolder` option in `./server/config/environment.js` file and change `publicPath` option accordingly:
 
 ```javascript title=./server/config/environment.js
 module.exports = (() => {
@@ -312,7 +312,7 @@ Set to true to disable building of the `client` bundle (older ECMAScript target)
 
 The application will now only execute the modern version of the client bundle (`client.es`), meaning that the it will only work on the latest versions of modern browsers.
 
-This can be usefull if you're building an app, where you are able to set constrains for the supported browsers (e.g. internal admin page).
+This can be useful if you're building an app, where you are able to set constrains for the supported browsers (e.g. internal admin page).
 
 :::
 
@@ -326,7 +326,7 @@ This is an advanced feature.
 
 :::
 
-Using this option you can include/exclude array of regular expressions that are matched agains file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9)*. This transformation is executed only for the **legacy client bundle**.
+Using this option you can include/exclude array of regular expressions that are matched against file paths of processed vendor files *(= imported files from node_modules)*. These files are then processed through [`swc-loader`](./ima.config.js.md#swcvendor) that makes sure to compile their syntax to currently supported target *(ES9)*. This transformation is executed only for the **legacy client bundle**.
 
 By default the CLI always matches all files under the `@ima` namespace, since we release our plugins in latest ECMA syntax and they need to be compiled down to older syntaxes with proper core-js polyfills.
 

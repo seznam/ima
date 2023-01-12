@@ -27,7 +27,7 @@ controller.abort();
 
 :::info
 
-If you don't provie custom instance of `AbortController` the agent uses it's own instance internally to cancel running timeout requests.
+If you don't provide custom instance of `AbortController` the agent uses it's own instance internally to cancel running timeout requests.
 
 :::
 

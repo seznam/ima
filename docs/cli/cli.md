@@ -124,7 +124,7 @@ Clears `./node_modules/.cache` folder. This is used to store webpack filesystem 
 
 > `boolean = false`
 
-Disables custom CLI logging style in favor of default webpack CLI verbose. This can be usefull for debugging.
+Disables custom CLI logging style in favor of default webpack CLI verbose. This can be useful for debugging.
 
 ### --ignoreWarnings
 
@@ -140,7 +140,7 @@ Enable/disable auto opening of app URL in the browser window on startup.
 
 :::tip
 
-If you find this option annoying, you can completely **disable this feature accross all IMA.js applications** by putting `IMA_CLI_OPEN=false` in your environment.
+If you find this option annoying, you can completely **disable this feature across all IMA.js applications** by putting `IMA_CLI_OPEN=false` in your environment.
 
 :::
 
@@ -177,7 +177,7 @@ By default the app **client static files are served from memory** in dev mode. U
 
 :::tip
 
-This option can be usefull in some cases where you need to take a look at the compile source code, where it's easier to browse these files locally, rather than on the static server.
+This option can be useful in some cases where you need to take a look at the compile source code, where it's easier to browse these files locally, rather than on the static server.
 
 :::
 

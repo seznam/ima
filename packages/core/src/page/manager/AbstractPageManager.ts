@@ -559,7 +559,7 @@ export default abstract class AbstractPageManager extends PageManager {
   }
 
   /**
-   * The method clear state on current renderred component to DOM.
+   * The method clear state on current rendered component to DOM.
    *
    * @param options The current route options.
    */

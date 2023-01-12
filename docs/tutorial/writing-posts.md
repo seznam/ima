@@ -142,7 +142,7 @@ onPostSubmitted(eventData) {
 ```
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
-bus event occurs. For details on how this mechanism works, please reffer to the
+bus event occurs. For details on how this mechanism works, please refer to the
 [Emitting events using the EventBus](./adding-some-state.md#emitting-events-using-the-eventbus)
 section of the third chapter of this tutorial.
 
