@@ -318,7 +318,7 @@ This can be usefull if you're building an app, where you are able to set constra
 
 ### transformVendorPaths
 
-> `{ include?: RegExp[]; exclude?: RegExp[]; }
+> `{ include?: RegExp[]; exclude?: RegExp[]; }`
 
 :::caution
 
