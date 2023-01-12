@@ -234,21 +234,43 @@ module.exports = function hooksFactory({
 
   function useCreateContentVariablesHook() {
     emitter.on(Event.CreateContentVariables, async event => {
-      if (_isValidResponse(event)) {
-        event.context.response.contentVariables = createContentVariables({
-          ...event.context,
-        });
+      if (!_isValidResponse(event)) {
+        return;
       }
+
+      event.context.response.contentVariables = createContentVariables({
+        ...event.context,
+      });
     });
   }
 
   function useResponseHook() {
     emitter.on(Event.BeforeResponse, async event => {
-      if (_isValidResponse(event)) {
-        event.context.response.content = processContent({
-          ...event.context,
-        });
+      if (!_isValidResponse(event)) {
+        return;
       }
+
+      const { context } = event;
+      const isAppExists = context.app && typeof context.app !== 'function';
+
+      if (isAppExists) {
+        const state = context.app.oc.get('$PageStateManager').getState();
+        const cache = context.app.oc.get('$Cache').serialize();
+        const { headers, cookie } = context.app.oc
+          .get('$Response')
+          .getResponseParams();
+
+        context.response.page = {
+          ...context.response.page,
+          ...{ state, cache, headers, cookie },
+        };
+      }
+
+      event = await emitter.emit(Event.CreateContentVariables, event);
+
+      event.context.response.content = processContent({
+        ...event.context,
+      });
     });
 
     emitter.on(Event.Response, async ({ res, context }) => {
@@ -266,6 +288,7 @@ module.exports = function hooksFactory({
         res.redirect(context.response.status, context.response.url);
         return;
       }
+
       res.status(context.response.status);
       res.send(context.response.content);
     });
