@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "18.0.0",
+  "version": "18.1.2",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -17,9 +17,24 @@
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
   "typedocMain": "./src/index.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/server/index.js",
-  "browser": "./dist/esm/client/index.js",
+  "exports": {
+    ".": {
+      "node": {
+        "import": "./dist/esm/server/index.js",
+        "require": "./dist/cjs/index.js"
+      },
+      "default": "./dist/esm/client/index.js"
+    },
+    "./renderer/*": {
+      "node": {
+        "import": "./dist/esm/server/renderer/*.js",
+        "require": "./dist/cjs/renderer/*.js"
+      },
+      "default": "./dist/esm/client/renderer/*.js"
+    },
+    "./hook/*": "./dist/hook/*.js",
+    "./*": "./*.js"
+  },
   "types": "./dist/esm/client/index.js",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
@@ -42,7 +57,7 @@
   },
   "devDependencies": {
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
-    "@esmj/emitter": "^0.1.0",
+    "@esmj/emitter": "^0.2.0",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",

@@ -115,21 +115,29 @@ export default class HttpProxy {
       options
     );
 
+    // Track request timeout status
+    let requestTimeoutId: number | NodeJS.Timeout | null = null;
+    let isTimeoutAbortDefined = false;
+
     if (
       options.timeout &&
       !options.abortController &&
       !options.fetchOptions?.signal
     ) {
+      isTimeoutAbortDefined = true;
       options.abortController = new AbortController();
     }
-
-    // Track request timeout status
-    let requestTimeoutId: number | NodeJS.Timeout | null = null;
 
     return new Promise((resolve, reject) => {
       if (options.timeout) {
         requestTimeoutId = setTimeout(() => {
           options.abortController?.abort();
+
+          // Reset timeout abort controller for another attempt
+          if (isTimeoutAbortDefined && options.repeatRequest > 0) {
+            options.abortController = new AbortController();
+            options.fetchOptions.signal = options.abortController.signal;
+          }
 
           return reject(
             new GenericError('The HTTP request timed out', {

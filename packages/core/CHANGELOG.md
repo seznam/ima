@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.1
+
+### Patch Changes
+
+- 987e0e70: Fixed issue where repeated requets return 500 on timeout
+
 ## 18.0.0
 
 ### Major Changes

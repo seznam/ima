@@ -11,6 +11,7 @@ module.exports = function hooksFactory({
   _getRouteInfo,
   _generateAppResponse,
   processContent,
+  createContentVariables,
   sendResponseHeaders,
   emitter,
   instanceRecycler,
@@ -20,7 +21,7 @@ module.exports = function hooksFactory({
   function _isServerOverloaded(event) {
     const { environment } = event;
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isOverloaded(event) ?? false;
+      return environment.$Server.degradation?.isOverloaded?.(event) ?? false;
     }
 
     return (
@@ -28,6 +29,20 @@ module.exports = function hooksFactory({
       instanceRecycler.getConcurrentRequests() + 1 >
         environment.$Server.overloadConcurrency
     );
+  }
+
+  function _isValidResponse(event) {
+    const { res, context } = event;
+    const isRedirectResponse =
+      context.response.status >= 300 &&
+      context.response.status < 400 &&
+      context.response.url;
+
+    if (res.headersSent || isRedirectResponse || !context.response) {
+      return false;
+    }
+
+    return true;
   }
 
   function _hasToServeSPA(event) {
@@ -48,7 +63,7 @@ module.exports = function hooksFactory({
 
     if (environment.$Server.degradation) {
       isServerBusy =
-        environment.$Server.degradation?.isSPA(event) ?? isServerBusy;
+        environment.$Server.degradation?.isSPA?.(event) ?? isServerBusy;
     }
 
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
@@ -68,7 +83,7 @@ module.exports = function hooksFactory({
     const { environment } = event;
 
     if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isStatic(event) ?? false;
+      return environment.$Server.degradation?.isStatic?.(event) ?? false;
     }
 
     return (
@@ -83,7 +98,7 @@ module.exports = function hooksFactory({
     const routeInfo = _getRouteInfo({ req, res });
 
     // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
-    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notfound';
+    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
 
     // TODO IMA@18 documentation badRequestConcurrency
     //TODO IMA@18 update for better performance check
@@ -91,6 +106,10 @@ module.exports = function hooksFactory({
   }
 
   async function _applyError(event) {
+    if (_hasToServeStatic(event)) {
+      return renderStaticServerErrorPage(event);
+    }
+
     try {
       const { error, context } = event;
       return context.app.oc
@@ -105,6 +124,10 @@ module.exports = function hooksFactory({
   }
 
   async function _applyNotFound(event) {
+    if (_hasToServeStatic(event)) {
+      return renderStaticClientErrorPage(event);
+    }
+
     try {
       const { error, context } = event;
       const router = context.app.oc.get('$Router');
@@ -142,7 +165,7 @@ module.exports = function hooksFactory({
       try {
         const { context } = event;
 
-        if (!context?.app || _hasToServeStatic(event)) {
+        if (!context?.app) {
           return renderStaticServerErrorPage(event);
         }
 
@@ -209,17 +232,25 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
-  function useResponseHook() {
-    emitter.on(Event.BeforeResponse, async ({ res, context }) => {
-      const isRedirectResponse =
-        context.response.status >= 300 &&
-        context.response.status < 400 &&
-        context.response.url;
-
-      if (res.headersSent || isRedirectResponse || !context.response) {
+  function useCreateContentVariablesHook() {
+    emitter.on(Event.CreateContentVariables, async event => {
+      if (!_isValidResponse(event)) {
         return;
       }
 
+      event.context.response.contentVariables = createContentVariables({
+        ...event.context,
+      });
+    });
+  }
+
+  function useResponseHook() {
+    emitter.on(Event.BeforeResponse, async event => {
+      if (!_isValidResponse(event)) {
+        return;
+      }
+
+      const { context } = event;
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (isAppExists) {
@@ -235,8 +266,10 @@ module.exports = function hooksFactory({
         };
       }
 
-      context.response.content = processContent({
-        ...context,
+      event = await emitter.emit(Event.CreateContentVariables, event);
+
+      event.context.response.content = processContent({
+        ...event.context,
       });
     });
 
@@ -255,6 +288,7 @@ module.exports = function hooksFactory({
         res.redirect(context.response.status, context.response.url);
         return;
       }
+
       res.status(context.response.status);
       res.send(context.response.content);
     });
@@ -268,6 +302,7 @@ module.exports = function hooksFactory({
   }
 
   function useIMADefaultHook() {
+    useCreateContentVariablesHook();
     userErrorHook();
     useRequestHook();
     useResponseHook();

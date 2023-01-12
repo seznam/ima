@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jest/no-conditional-expect */
 import HttpProxy from '../HttpProxy';
@@ -13,13 +17,6 @@ describe('ima.core.http.HttpProxy', () => {
   jest.useFakeTimers();
 
   const API_URL = 'http://localhost:3001/api/';
-  const OPTIONS = {
-    ttl: 3600000,
-    timeout: 2000,
-    repeatRequest: 1,
-    headers: {},
-    withCredentials: true,
-  } as HttpAgentRequestOptions;
   const DATA = {
     something: 'query',
   };
@@ -33,11 +30,16 @@ describe('ima.core.http.HttpProxy', () => {
     status: StatusCode.TIMEOUT,
   });
 
+  let defaultOptions: HttpAgentRequestOptions;
   let proxy: HttpProxy;
   let response: Response;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let fetchResult: Promise<Response>;
   let requestInit: RequestInit;
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   beforeEach(() => {
     proxy = new HttpProxy(mockedUrlTransformer, mockedWindowHelper);
@@ -65,14 +67,23 @@ describe('ima.core.http.HttpProxy', () => {
 
       return Promise.resolve(fetchResult);
     });
+
+    defaultOptions = {
+      ttl: 3600000,
+      timeout: 2000,
+      repeatRequest: 0,
+      headers: {},
+      withCredentials: true,
+    } as HttpAgentRequestOptions;
   });
 
-  ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
-    describe(`method ${method}`, () => {
+  describe.each(['get', 'head', 'post', 'put', 'delete', 'patch'])(
+    'method ${method}',
+    method => {
       it('should return promise with response body', async () => {
         try {
           await expect(
-            proxy.request(method, API_URL, DATA, OPTIONS)
+            proxy.request(method, API_URL, DATA, defaultOptions)
           ).resolves.toBeDefined();
         } catch (error) {
           expect((error as GenericError).getParams().body).toBeDefined();
@@ -87,7 +98,7 @@ describe('ima.core.http.HttpProxy', () => {
         );
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().body).toBeDefined();
@@ -102,7 +113,7 @@ describe('ima.core.http.HttpProxy', () => {
         );
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
@@ -115,7 +126,7 @@ describe('ima.core.http.HttpProxy', () => {
         try {
           jest.useFakeTimers();
 
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
             StatusCode.TIMEOUT
@@ -130,7 +141,7 @@ describe('ima.core.http.HttpProxy', () => {
         });
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
@@ -146,7 +157,7 @@ describe('ima.core.http.HttpProxy', () => {
         });
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
@@ -162,7 +173,7 @@ describe('ima.core.http.HttpProxy', () => {
         });
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
@@ -178,7 +189,7 @@ describe('ima.core.http.HttpProxy', () => {
         });
 
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          await proxy.request(method, API_URL, DATA, defaultOptions);
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
@@ -188,17 +199,17 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should set credentials to a request', async () => {
-        await proxy.request(method, API_URL, DATA, OPTIONS);
+        await proxy.request(method, API_URL, DATA, defaultOptions);
         expect(requestInit.credentials).toBe('include');
       });
 
       it('should set an upper case method to a request', async () => {
-        await proxy.request(method, API_URL, DATA, OPTIONS);
+        await proxy.request(method, API_URL, DATA, defaultOptions);
         expect(requestInit.method).toBe(method.toUpperCase());
       });
 
       it('should not set any body to a GET/HEAD request', async () => {
-        await proxy.request(method, API_URL, DATA, OPTIONS);
+        await proxy.request(method, API_URL, DATA, defaultOptions);
 
         // eslint-disable-next-line jest/no-if
         if (['get', 'head'].includes(method) === true) {
@@ -210,14 +221,14 @@ describe('ima.core.http.HttpProxy', () => {
 
       if (['get', 'head'].includes(method) === false) {
         it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
-          await proxy.request(method, API_URL, {}, OPTIONS);
+          await proxy.request(method, API_URL, {}, defaultOptions);
 
           expect(requestInit.body).toBeDefined();
           // expect(requestInit.headers['Content-Type']).toBe('application/json');
         });
 
         it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
-          const options = Object.assign({}, OPTIONS, {
+          const options = Object.assign({}, defaultOptions, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
@@ -236,7 +247,7 @@ describe('ima.core.http.HttpProxy', () => {
         });
 
         it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
-          const options = Object.assign({}, OPTIONS, {
+          const options = Object.assign({}, defaultOptions, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -261,7 +272,7 @@ describe('ima.core.http.HttpProxy', () => {
           method,
           API_URL,
           DATA,
-          OPTIONS
+          defaultOptions
         )) as UnknownParameters;
         expect(result.body).toBeNull();
       });
@@ -271,7 +282,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         const abortController = new AbortController();
         const abortControllerSpy = jest.spyOn(abortController, 'abort');
-        const options = { ...OPTIONS, timeout: 1, abortController };
+        const options = { ...defaultOptions, timeout: 1, abortController };
 
         fetchResult = new Promise(resolve =>
           setTimeout(() => resolve(response), 100000)
@@ -295,7 +306,7 @@ describe('ima.core.http.HttpProxy', () => {
 
       it('should create AbortController when not provided and abort it on timeout', async () => {
         jest.useFakeTimers();
-        const options = { ...OPTIONS, timeout: 1 };
+        const options = { ...defaultOptions, timeout: 1 };
 
         fetchResult = new Promise(resolve =>
           setTimeout(() => resolve(response), 100000)
@@ -318,11 +329,55 @@ describe('ima.core.http.HttpProxy', () => {
         expect(options.abortController.signal.aborted).toBeTruthy();
       });
 
+      it('should redefine abort controller if repeatRequest is > 0', async () => {
+        jest.useFakeTimers();
+        const options = { ...defaultOptions, timeout: 1, repeatRequest: 1 };
+
+        fetchResult = new Promise(resolve =>
+          setTimeout(() => resolve(response), 100000)
+        );
+
+        await expect(async () => {
+          const result = proxy.request(
+            method,
+            API_URL,
+            DATA,
+            options as HttpAgentRequestOptions
+          );
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
+        }).rejects.toThrow(TIMEOUT_ERROR);
+
+        expect(options.abortController).toBeInstanceOf(AbortController);
+        expect(options.abortController.signal.aborted).toBeFalsy();
+        options.repeatRequest--;
+
+        // expect(options.repeatRequest).toBe(0);
+
+        // repeat request
+        await expect(async () => {
+          const result = proxy.request(
+            method,
+            API_URL,
+            DATA,
+            options as HttpAgentRequestOptions
+          );
+          jest.advanceTimersByTime(1000);
+          jest.runOnlyPendingTimers();
+          await result;
+        }).rejects.toThrow(TIMEOUT_ERROR);
+
+        // This time it should abort
+        expect(options.repeatRequest).toBe(0);
+        expect(options.abortController.signal.aborted).toBeTruthy();
+      });
+
       it('should throw Abort error when aborted externally; with other reason', async () => {
         jest.useFakeTimers();
         const abortController = new AbortController();
         const options = {
-          ...OPTIONS,
+          ...defaultOptions,
           fetchOptions: { signal: abortController.signal },
         };
 
@@ -345,8 +400,8 @@ describe('ima.core.http.HttpProxy', () => {
         expect(abortController.signal.reason).toBe('Aborted');
         expect(abortController.signal.aborted).toBeTruthy();
       });
-    });
-  });
+    }
+  );
 
   describe('_convertObjectToQueryString', () => {
     it('should create query string representation of given object', () => {

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import Dispatcher from '../../event/Dispatcher';
 import PageManager from '../../page/manager/PageManager';
 import ActionTypes from '../ActionTypes';

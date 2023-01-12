@@ -4,12 +4,16 @@ export default class DocumentView extends AbstractPureComponent {
   render() {
     const { metaManager } = this.props;
 
+    /**
+     * #{...} Represents variables that are injected before sending the response
+     * to client from server. These are defined in event.response.content.contentVariables.
+     *
+     * You can use Event.CreateContentVariables server hook to customize/extend set of these variables.
+     */
+
     return (
       <html>
         <head>
-          {/* Preload styles */}
-          {'#{$StylesPreload}'}
-
           <meta charSet='utf-8' />
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -34,11 +38,11 @@ export default class DocumentView extends AbstractPureComponent {
             <link key={rel} href={metaManager.getLink(rel)} rel={rel} />
           ))}
 
-          {/* Inject styles from $Source.styles */}
-          {'#{$Styles}'}
-          {/* Inject scripts from $Source.scripts */}
-          {'#{$RevivalSettings}'}
-          {'#{$Runner}'}
+          {/* Inject styles from $Source.styles from */}
+          {'#{styles}'}
+          {/* Inject scripts from $Source.scripts from */}
+          {'#{revivalSettings}'}
+          {'#{runner}'}
 
           <title>{this.props.metaManager.getTitle()}</title>
         </head>
@@ -47,8 +51,8 @@ export default class DocumentView extends AbstractPureComponent {
             id={this.utils.$Settings.$Page.$Render.masterElementId}
             dangerouslySetInnerHTML={{ __html: this.props.page }}
           />
-          {/* Inject http cache */}
-          {'#{$RevivalCache}'}
+          {/* Inject http cache from */}
+          {'#{revivalCache}'}
         </body>
       </html>
     );

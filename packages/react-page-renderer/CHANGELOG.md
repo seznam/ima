@@ -1,5 +1,30 @@
 # Change Log
 
+## 18.1.2
+
+### Patch Changes
+
+- 09c61ff3f: Added possibility to import from dist folder without specifying the bundle (cjs/esm/client/server). For example, you can change `import Renderer from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer'` to `import Renderer from '@ima/react-page-renderer/renderer/ClientPageRenderer'`.
+
+## 18.1.1
+
+### Patch Changes
+
+- 9bd34c753: Fix trigger refCallback in ViewAdapter
+
+## 18.1.0
+
+### Minor Changes
+
+- 1a53809e: Added server and client nodes to hydration error
+
+## 18.0.1
+
+### Patch Changes
+
+- b71bb4a2: update esmj/emitter to 0.2.0
+- 557ea21f: Revert pageState for renderer update
+
 ## 18.0.0
 
 ### Major Changes

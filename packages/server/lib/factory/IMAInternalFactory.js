@@ -177,7 +177,7 @@ module.exports = function IMAInternalFactory({
     let urlPath = res.locals.path;
     let protocol = res.locals.protocol;
 
-    let dictionary = languageLoader(language);
+    let dictionary = language ? languageLoader(language) : {};
 
     event.context.bootConfig = {
       services: {

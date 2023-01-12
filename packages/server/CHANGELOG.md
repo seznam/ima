@@ -1,5 +1,47 @@
 # Change Log
 
+## 18.1.3
+
+### Patch Changes
+
+- b90048405: Moved CreateContentVariables event trigger to beforeResponse event
+
+## 18.1.2
+
+### Patch Changes
+
+- 897457cba: Fix for empty revival-cache returned in contentVariables
+
+## 18.1.1
+
+### Patch Changes
+
+- 9ab1b2ddf: Fixed issue where minified builds failed to execute on client"
+
+## 18.1.0
+
+### Minor Changes
+
+- 06fee90c2: Aded new ContentVariable server event. This allows customization of variables that are injected to content using #{...} interpolation
+
+### Patch Changes
+
+- 4952b4bad: Dictionary is loaded only for defined language. Language can be missing for errors before urlParser middleware.
+- 27f7a1204: redirect error is not degradated to static error page
+- 58d31d0bf: Client errors render static client error page for exceeded concurrency
+
+## 18.0.3
+
+### Patch Changes
+
+- acabceef: Server degradation functions are optional.
+
+## 18.0.2
+
+### Patch Changes
+
+- b71bb4a2: update esmj/emitter to 0.2.0
+
 ## 18.0.1
 
 ### Patch Changes

@@ -138,6 +138,12 @@ Ignore reporting of webpack warning messages. The CLI automatically caches all e
 
 Enable/disable auto opening of app URL in the browser window on startup.
 
+:::tip
+
+If you find this option annoying, you can completely **disable this feature accross all IMA.js applications** by putting `IMA_CLI_OPEN=false` in your environment.
+
+:::
+
 ### --legacy
 
 > `boolean = false`

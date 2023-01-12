@@ -1,5 +1,23 @@
 # Change Log
 
+## 18.1.2
+
+### Patch Changes
+
+- 09c61ff3f: Added possibility to import from dist folder without specifying the bundle (cjs/esm/client/server). For example, you can change `import Renderer from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer'` to `import Renderer from '@ima/react-page-renderer/renderer/ClientPageRenderer'`.
+
+## 18.1.1
+
+### Patch Changes
+
+- 73a14b7d9: Added missing <!DOCTYPE html> to spa.ejs
+
+## 18.1.0
+
+### Minor Changes
+
+- 06fee90c2: Aded new ContentVariable server event. This allows customization of variables that are injected to content using #{...} interpolation
+
 ## 18.0.0
 
 ### Major Changes

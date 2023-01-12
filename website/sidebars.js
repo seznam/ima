@@ -90,7 +90,7 @@ const sidebars = {
       type: 'category',
       label: 'Plugins',
       collapsed: false,
-      items: ['plugins/available-plugins', 'plugins/plugin-interface'],
+      items: ['plugins/plugin-interface', 'plugins/available-plugins'],
     },
     {
       type: 'category',
