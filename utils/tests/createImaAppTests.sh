@@ -20,3 +20,5 @@ npm run lint
 
 echo "Test unit and integration tests for create-ima-app"
 npm run test
+
+kill $IMA_SKELETON_SERVER_PID

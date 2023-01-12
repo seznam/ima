@@ -65,4 +65,3 @@ source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"
 # Cleanup
 npm config delete @ima:registry
 kill $NPM_LOCAL_REGISTRY_PID
-kill $IMA_SKELETON_SERVER_PID
