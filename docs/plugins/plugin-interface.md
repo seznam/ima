@@ -4,92 +4,96 @@ description: Plugins > Plugins API
 ---
 
 IMA.js development stack offers **built-in support for plugins**. Writing plugins for IMA.js is really
-simple. It basically comes to creating an ordinary npm package, which exports few special functions, that
-allows it to hook into IMA.js application environment.
+simple. It basically comes to creating an ordinary npm package and using `pluginLoader.register` method to hook into IMA.js application environment using certain functions.
 
-## Interface functions
 
-There are total of **4 functions** that a plugin can export in its main file:
-- [`$registerImaPlugin(ns)`](https://github.com/seznam/ima/blob/master/packages/core/src/vendorLinker.js#L38)
-**{namespace}** - main purpose of this function is to let IMA.js `VendorLinker`
-know, that this is a plugin. Most of the time this function **will be empty**. Optionally as a first and the only argument
-you get access to `namespace`, which let's you specify to which namespace this plugin should be bound.
-- [`initBind(ns, oc, config)`](https://github.com/seznam/ima/blob/master/packages/core/src/Bootstrap.js#L144)
-**{namespace, ObjectContainer, config.bind)** - This function has same interface as a function exported
-in `bind.js` of your IMA.js application and also serves the same purpose. This is the place where you would want to initialize
-your custom constants and bindings and assign them to the `ObjectContainer`.
-- [`initServices(ns, oc, config)`](https://github.com/seznam/ima/blob/master/packages/core/src/Bootstrap.js#L171) -
-**{namespace, ObjectContainer, config.services)** - Similarly to `initBind`, this function is equivalent to a
-function exported by `services.js` file in your application.
-- [`initSettings(ns, oc, config)`](https://github.com/seznam/ima/blob/master/packages/core/src/Bootstrap.js#L82) -
-**{namespace, ObjectContainer, config.settings)** - You can probably already see the pattern here. This function should
-return an object with settings, with the same structure as function in `settings.js` file does. These settings are
-then **merged with your application settings** a possible conflicts are overridden with the application settings.
-This allows you to **define defaults for your plugin**, which can be easily overridden in your application.
 
-Putting it all together, your main file in your npm package could look something like this (borrowing contents `main.js`
-from our [ima-plugin-useragent](https://github.com/seznam/IMA.js-plugins/blob/master/packages/plugin-useragent/README.md):
+:::info
+
+In situations where you don't need to hook into IMA.js app environment from within your plugin (you're for example just exporting some interface), you don't need call this registration method as it servers no purpose.
+
+:::
+
+## Plugin registration
+
+As mentioned above, the plugin registration is done from within your **npm package entry point** using `pluginLoader.register` method:
 
 ```javascript
+import { pluginLoader } from '@ima/core';
+import Service from './service';
+
+pluginLoader.register('my-ima-plugin', ns => {
+  ns.set('my.ima.plugin.Service', Service);
+});
+```
+
+The `register` method expects 2 arguments, first is **name of your plugin** (this is used strictly for debugging purposes, however it is required) and **callback registration function** which receives [`Namespace`](../api/modules/ima_core.md#ns) as one and only argument, that you can use to specify to which namespace this plugin should be bound.
+
+### Plugin bootstrap functions
+
+The registration function can additionally **return an object with additional callback functions**. These allow you to further bootstrap your plugin. All are however optional, meaning you can define any combination of these or don't return anything.
+
+```javascript
+import { pluginLoader } from '@ima/core';
+
+pluginLoader.register('my-ima-plugin', ns => {
+  return {
+    initBind: (ns, oc, config) => {}
+    initServices: (ns, oc, config) => {}
+    initSettings: (ns, oc, config) => {}
+  }
+});
+```
+
+#### initBind
+
+> `initBind(ns: Namespace, oc: ObjectContainer, config: Config['bind'])`
+
+This function has the same interface as a function exported in `bind.js` of your IMA.js application and also serves the same purpose. This is the place where you would want to initialize your custom constants and bindings and assign them to the [`ObjectContainer`](../basic-features/object-container.md).
+
+#### initServices
+
+> `initServices(ns: Namespace, oc: ObjectContainer, config: Config['services'])`
+
+Similarly to `initBind`, this is equivalent to a function exported by `services.js` file in your application.
+
+#### initSettings
+
+> `initSettings(ns: Namespace, oc: ObjectContainer, config: Config['settings'])`
+
+You can probably already see the pattern here. This function should return an object with settings, with the same structure as function in `settings.js` file does.
+
+These settings are then **merged with your application settings** a possible conflicts are overridden with the application settings. This allows you to **define defaults for your plugin**, which can be easily overridden in your application.
+
+
+### Examples
+
+Putting it all together, your main file in your npm package could look something like this (borrowing contents of `main.js` from our [@ima/plugin-useragent](https://github.com/seznam/IMA.js-plugins/blob/master/packages/plugin-useragent/README.md):
+
+```javascript
+import { pluginLoader } from '@ima/core';
+import PlatformJS from 'platform';
+
 import UserAgent from './AbstractUserAgent.js';
 import ClientUserAgent from './ClientUserAgent.js';
 import ServerUserAgent from './ServerUserAgent.js';
-import PlatformJS from 'platform';
 
-var $registerImaPlugin = () => {};
-
-let initBind = (ns, oc) => {
-  if (oc.get('$Window').isClient()) {
-    oc.provide(UserAgent, ClientUserAgent, [PlatformJS, '$Window']);
-  } else {
-    oc.provide(UserAgent, ServerUserAgent, [PlatformJS, '$Request']);
-  }
-};
-
-let initServices = (ns, oc) => {
-  oc.get(UserAgent).init();
-};
-
-let initSettings = () => {
+pluginLoader.register('@ima/plugin-useragent', () => {
   return {
-    prod: {
-      plugin: {
-        userAgent: {
-          legacyUserAgents: [
-            'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko'
-          ]
-        }
+    initBind: (ns, oc) => {
+      if (oc.get('$Window').isClient()) {
+        oc.provide(UserAgent, ClientUserAgent, [PlatformJS, '$Window']);
+      } else {
+        oc.provide(UserAgent, ServerUserAgent, [PlatformJS, '$Request']);
       }
-    }
+    },
+    initServices: (ns, oc) => {
+      oc.get(UserAgent).init();
+    },
   };
-};
+});
 
-export {
-  ClientUserAgent,
-  ServerUserAgent,
-  UserAgent,
-  PlatformJS,
-  $registerImaPlugin,
-  initBind,
-  initServices
-};
-```
-
-### Automatic registration with Object Container
-
-Every class that is exported in `main.js` and has a static property `$dependencies` that contains an array is automatically registered into `oc`. Otherwise, you may [register classes manually](https://imajs.io/docs/object-container#manually-registering-dependencies).
-
-### Updating build.js
-
-One last thing when using a ima-plugin, or any other vendor library, is that you have to update your
-`build.js` file with the new dependency, otherwise it won't get built properly:
-
-```javascript
-var vendors = {
-    common: [
-        'ima-plugin-useragent'
-    ]
-};
+export { ClientUserAgent, ServerUserAgent, UserAgent, PlatformJS };
 ```
 
 ## Conclusion

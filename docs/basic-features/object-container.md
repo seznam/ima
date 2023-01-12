@@ -3,8 +3,7 @@ title: Object Container
 description: Basic features > Object Container and IMA.js dependency injection
 ---
 
-The **Object Container (OC)** is an enhanced dependency injector with support
-for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters. For example it registers only **Controllers** and **Views** that you use in `app/config/routes.js`, or [all classes with declared dependencies](https://imajs.io/docs/plugin-interface#automatic-registration-with-object-container) exported by plugins.
+The **Object Container (OC)** is an enhanced dependency injector with support for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters.
 
 By registering controllers and views the OC can simply follow your dependency tree and register everything you might possibly need. Below is a diagram of simple dependency tree.
 
@@ -27,6 +26,10 @@ app/config/routes.js
   ├─ ...
   └─ ...
 ```
+
+## Automatic registration with Object Container
+
+Every class that defines static property `$dependencies` which exports array of dependencies is automatically registered to `oc` and instanced when it is used (this can happen lazily upon first usage).
 
 ## Manually registering dependencies
 

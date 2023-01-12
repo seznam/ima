@@ -1,6 +1,7 @@
 ---
 title: 'ima.config.js'
 description: 'CLI > Customizing the build through ima.config.js'
+slug: ima-config-js
 ---
 
 To additionally customize the build configuration of IMA.js, you can create a `ima.config.js` file in the root of your project (next to package.json).

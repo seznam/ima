@@ -11,7 +11,7 @@ export type Module = {
   initServices?: (
     ns: Namespace,
     oc: ObjectContainer,
-    settings: Config['settings'],
+    settings: Config['services'],
     isDynamicallyLoaded: boolean
   ) => Config['settings'];
   initBind?: (
@@ -24,7 +24,7 @@ export type Module = {
   initSettings?: (
     ns: Namespace,
     oc: ObjectContainer,
-    settings: Config['services'],
+    settings: Config['settings'],
     isDynamicallyLoaded: boolean
   ) => void;
 };
