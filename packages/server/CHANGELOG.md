@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.3
+
+### Patch Changes
+
+- b90048405: Moved CreateContentVariables event trigger to beforeResponse event
+
 ## 18.1.2
 
 ### Patch Changes

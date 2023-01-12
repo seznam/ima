@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.2
+
+### Patch Changes
+
+- 09c61ff3f: Added possibility to import from dist folder without specifying the bundle (cjs/esm/client/server). For example, you can change `import Renderer from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer'` to `import Renderer from '@ima/react-page-renderer/renderer/ClientPageRenderer'`.
+
 ## 18.1.1
 
 ### Patch Changes
