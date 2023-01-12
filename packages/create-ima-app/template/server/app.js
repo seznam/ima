@@ -5,7 +5,7 @@ const imaServer = require('@ima/server')();
 const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
   imaServer;
 
-require('@ima/react-page-renderer/dist/hook/server')(imaServer);
+require('@ima/react-page-renderer/hook/server')(imaServer);
 
 const express = require('express');
 const favicon = require('serve-favicon');

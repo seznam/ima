@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import PageNavigationHandler from '../PageNavigationHandler';
