@@ -326,4 +326,19 @@ describe('ima.storage.CookieStorage', () => {
       expect(options.expires).toStrictEqual(expect.any(Date));
     });
   });
+
+  describe('parse method after clear', () => {
+    it('should return fill storage', () => {
+      const cookieStringWithNoOptions = 'cok1=hello3; cok2=hello4;';
+
+      requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNoOptions);
+
+      cookie.parse();
+      expect(cookie['_storage'].size).toBe(2);
+      cookie.clear();
+      expect(cookie['_storage'].size).toBe(0);
+      cookie.parse();
+      expect(cookie['_storage'].size).toBe(2);
+    });
+  });
 });
