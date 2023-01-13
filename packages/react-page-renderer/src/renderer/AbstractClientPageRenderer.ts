@@ -79,38 +79,49 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     const { values: defaultPageState, promises: loadedPromises } =
       this._separatePromisesAndValues(pageResources);
 
+    let batchPromise: Promise<unknown> = Promise.resolve();
     if (this._viewContainer && this._viewContainer.children.length) {
       controller.setState(defaultPageState);
       await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
       if (this._settings?.$Page?.$Render?.batchResolve) {
-        this._startBatchTransactions(controller, loadedPromises);
+        batchPromise = this._startBatchTransactions(controller, loadedPromises);
       }
     }
 
-    return this._helpers
-      .allPromiseHash(loadedPromises)
-      .then(async (fetchedResources: unknown) => {
-        const pageState = Object.assign({}, defaultPageState, fetchedResources);
+    return batchPromise.then(() =>
+      this._helpers
+        .allPromiseHash(loadedPromises)
+        .then(async (fetchedResources: unknown) => {
+          const pageState = Object.assign(
+            {},
+            defaultPageState,
+            fetchedResources
+          );
 
-        const isViewContainerEmpty =
-          !this._viewContainer || !this._viewContainer.children.length;
+          const isViewContainerEmpty =
+            !this._viewContainer || !this._viewContainer.children.length;
 
-        isViewContainerEmpty && controller.setState(pageState);
+          isViewContainerEmpty && controller.setState(pageState);
 
-        controller.setMetaParams(pageState);
+          controller.setMetaParams(pageState);
 
-        isViewContainerEmpty &&
-          (await this._renderPageViewToDOM(controller, pageView, routeOptions));
+          isViewContainerEmpty &&
+            (await this._renderPageViewToDOM(
+              controller,
+              pageView,
+              routeOptions
+            ));
 
-        this._updateMetaAttributes(controller.getMetaManager());
+          this._updateMetaAttributes(controller.getMetaManager());
 
-        return {
-          pageState: controller.getState(),
-          status: controller.getHttpStatus(),
-        };
-      })
-      .catch((error: Error) => this._handleError(error));
+          return {
+            pageState: controller.getState(),
+            status: controller.getHttpStatus(),
+          };
+        })
+        .catch((error: Error) => this._handleError(error))
+    );
   }
 
   /**
@@ -126,22 +137,25 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
     controller.setState(defaultPageState);
     this._patchPromisesToState(controller, updatedPromises);
+    let batchPromise: Promise<unknown> = Promise.resolve();
     if (this._settings?.$Page?.$Render?.batchResolve) {
-      this._startBatchTransactions(controller, updatedPromises);
+      batchPromise = this._startBatchTransactions(controller, updatedPromises);
     }
 
-    return this._helpers
-      .allPromiseHash(updatedPromises)
-      .then(() => {
-        controller.setMetaParams(controller.getState());
-        this._updateMetaAttributes(controller.getMetaManager());
+    return batchPromise.then(() =>
+      this._helpers
+        .allPromiseHash(updatedPromises)
+        .then(() => {
+          controller.setMetaParams(controller.getState());
+          this._updateMetaAttributes(controller.getMetaManager());
 
-        return {
-          pageState: controller.getState(),
-          status: controller.getHttpStatus(),
-        };
-      })
-      .catch((error: Error) => this._handleError(error));
+          return {
+            pageState: controller.getState(),
+            status: controller.getHttpStatus(),
+          };
+        })
+        .catch((error: Error) => this._handleError(error))
+    );
   }
 
   unmount(): void {
@@ -234,7 +248,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   private _startBatchTransactions(
     controller: ControllerDecorator,
     patchedPromises: UnknownPromiseParameters
-  ) {
+  ): Promise<unknown> {
     let hasResourcesLoaded = false;
     const options = {
       timeout: 100,
@@ -248,19 +262,23 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     if (Window && Window['requestIdleCallback']) {
       requestIdleCallback = Window.requestIdleCallback;
     }
-    const handler = () => {
+    const handler = (resolve: any) => () => {
       controller.commitStateTransaction();
 
       if (!hasResourcesLoaded) {
         controller.beginStateTransaction();
         setTimeout(() => {
-          requestIdleCallback(handler, options);
+          requestIdleCallback(handler(resolve), options);
         }, 1000 / 60);
+      } else {
+        resolve();
       }
     };
 
     controller.beginStateTransaction();
-    requestIdleCallback(handler, options);
+    const batchPromise = new Promise(resolve => {
+      requestIdleCallback(handler(resolve), options);
+    });
 
     this._helpers
       .allPromiseHash(patchedPromises)
@@ -270,6 +288,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       .catch(() => {
         hasResourcesLoaded = true;
       });
+
+    return batchPromise;
   }
 
   protected abstract _renderViewAdapter(
