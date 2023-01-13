@@ -255,7 +255,9 @@ describe('Server App Factory', () => {
     });
 
     it('should render 500 ima app page', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+      jest
+        .spyOn(router, 'route')
+        .mockReturnValue(Promise.reject(new Error('Error')));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -267,8 +269,17 @@ describe('Server App Factory', () => {
     });
 
     it('should render 500 static page', async () => {
-      environment.$Server.staticConcurrency = 1;
-      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return 'home ';
+          },
+        },
+      });
+      jest
+        .spyOn(router, 'route')
+        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
