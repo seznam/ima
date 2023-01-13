@@ -1,4 +1,17 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
+export type MetaValue = number | boolean | string | null | undefined;
+export type MetaAttributesRecord = Record<string, MetaValue>;
+export type MetaAttributes =
+  | MetaAttributesRecord
+  | Record<string, MetaAttributesRecord>;
+
+export type MetaManagerRecord =
+  | ({
+      value: MetaValue;
+    } & MetaAttributes)
+  | MetaValue;
 
 /**
  * The Meta manager is a utility for managing various page attributes related
@@ -21,10 +34,9 @@ export default abstract class MetaManager {
    * Sets the page title.
    *
    * @param title The new page title.
+   * @parram attr Additional optional title attributes.
    */
-  setTitle(title: string) {
-    return;
-  }
+  setTitle(title: string, attr?: MetaAttributes): void {}
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -36,7 +48,7 @@ export default abstract class MetaManager {
    *
    * @return The current page title.
    */
-  getTitle() {
+  getTitle(): MetaManagerRecord {
     return '';
   }
 
@@ -46,10 +58,9 @@ export default abstract class MetaManager {
    * @param name Meta information property name, for example
    *        `keywords`.
    * @param value The meta information value.
+   * @parram attr Additional optional meta attributes.
    */
-  setMetaName(name: string, value: string) {
-    return;
-  }
+  setMetaName(name: string, value: MetaValue, attr?: MetaAttributes): void {}
 
   /**
    * Returns the value of the specified named meta information property. The
@@ -59,7 +70,7 @@ export default abstract class MetaManager {
    * @param name The name of the named meta information property.
    * @return The value of the generic meta information, or an empty string.
    */
-  getMetaName(name: string) {
+  getMetaName(name: string): MetaManagerRecord {
     return '';
   }
 
@@ -79,10 +90,13 @@ export default abstract class MetaManager {
    *
    * @param name Name of the specialized meta information property.
    * @param value The value of the meta information property.
+   * @parram attr Additional optional meta attributes.
    */
-  setMetaProperty(name: string, value: string) {
-    return;
-  }
+  setMetaProperty(
+    name: string,
+    value: MetaValue,
+    attr?: MetaAttributes
+  ): void {}
 
   /**
    * Returns the value of the specified specialized meta information
@@ -94,7 +108,7 @@ export default abstract class MetaManager {
    * @return The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string) {
+  getMetaProperty(name: string): MetaManagerRecord {
     return '';
   }
 
@@ -116,10 +130,9 @@ export default abstract class MetaManager {
    *        page.
    * @param reference The reference to the location of the related
    *        document, e.g. a URL.
+   * @parram attr Additional optional link attributes.
    */
-  setLink(relation: string, reference: string) {
-    return;
-  }
+  setLink(relation: string, reference: string, attr?: MetaAttributes): void {}
 
   /**
    * Return the reference to the specified related linked document. The
@@ -131,7 +144,7 @@ export default abstract class MetaManager {
    * @return The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation: string) {
+  getLink(relation: string): MetaManagerRecord {
     return '';
   }
 
