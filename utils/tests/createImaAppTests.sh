@@ -12,6 +12,7 @@ echo "Run benchmark test on create-ima-app"
 cd "$ROOT_DIR_IMA"
 node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS --no-progress "$TARGET_WEB_URL"
 
+kill $IMA_SKELETON_SERVER_PID
 
 cd "$ROOT_DIR_IMA_APP"
 
@@ -20,5 +21,3 @@ npm run lint
 
 echo "Test unit and integration tests for create-ima-app"
 npm run test
-
-kill $IMA_SKELETON_SERVER_PID

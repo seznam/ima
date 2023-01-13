@@ -27,7 +27,7 @@ describe('Home page', () => {
     clearImaApp(app);
   });
 
-  it('can render component', async () => {
+  it('can render component', () => {
     expect(document.querySelectorAll('.cards')).toHaveLength(1);
     expect(document.querySelectorAll('.card')).toHaveLength(cards.length);
 
@@ -35,7 +35,7 @@ describe('Home page', () => {
     const titleElements = document.querySelectorAll('.card h3');
 
     for (let i = 0; i < cards.length; i++) {
-      let paragraphText = paragraphElements[i].innerHTML.replace(
+      const paragraphText = paragraphElements[i].innerHTML.replace(
         /href=".*"/,
         'href="{link}"'
       );
