@@ -204,7 +204,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * @inheritDoc
    */
   clear(): this {
-    for (const cookieName of this.keys()) {
+    for (const cookieName of this._storage.keys()) {
       this.delete(cookieName);
     }
 
@@ -279,21 +279,11 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    * property at the client side.
    */
   parse(): void {
-    const cookies = this.#memoParseRawCookies(
+    const cookiesNames = this.#memoParseRawCookies(
       this._window.isClient()
         ? document.cookie
         : this._request.getCookieHeader()
     );
-
-    const cookiesNames: string[] = [];
-    cookies.forEach(cookie => {
-      cookiesNames.push(cookie.name);
-      // add new cookie or update existing one
-      this._storage.set(cookie.name, {
-        value: this.sanitizeCookieValue(cookie.value),
-        options: cookie.options,
-      });
-    });
 
     // remove cookies from storage, which were not parsed
     for (const storageCookieName of this._storage.keys()) {
@@ -390,11 +380,9 @@ export default class CookieStorage extends Storage<Cookie['value']> {
     return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
   }
 
-  #parseRawCookies(
-    rawCookies: string | undefined
-  ): (Cookie & { name: string })[] {
+  #parseRawCookies(rawCookies: string | undefined): string[] {
     const cookiesArray = rawCookies ? rawCookies.split(COOKIE_SEPARATOR) : [];
-    const cookies: (Cookie & { name: string })[] = [];
+    const cookiesNames: string[] = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
       const cookie = this.#extractCookie(cookiesArray[i]);
@@ -407,22 +395,24 @@ export default class CookieStorage extends Storage<Cookie['value']> {
           oldCookieOptions = this._storage.get(cookie.name)!.options;
         }
 
-        const cookieWithName: Cookie & { name: string } = {
-          name: cookie.name,
-          options: Object.assign(
-            {},
-            this._options, // default options
-            oldCookieOptions, // old cookie options (if any)
-            cookie.options // new cookie options (if any)
-          ),
-          value: this.sanitizeCookieValue(cookie.value),
-        };
+        cookie.options = Object.assign(
+          {},
+          this._options, // default options
+          oldCookieOptions, // old cookie options (if any)
+          cookie.options // new cookie options (if any)
+        );
 
-        cookies.push(cookieWithName);
+        cookiesNames.push(cookie.name);
+
+        // add new cookie or update existing one
+        this._storage.set(cookie.name, {
+          value: this.sanitizeCookieValue(cookie.value),
+          options: cookie.options,
+        });
       }
     }
 
-    return cookies;
+    return cookiesNames;
   }
 
   /**
