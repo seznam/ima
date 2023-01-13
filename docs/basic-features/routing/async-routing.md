@@ -3,7 +3,7 @@ title: Async Routing
 description: Basic features > Routing > Async Routing
 ---
 
-Async routing allows you to split views and controllers into separate bundes and load them dynamically. This can be usefull for some specific routes, that are not visited regularly and contain large amounts of unique code.
+Async routing allows you to split views and controllers into separate bundles and load them dynamically. This can be useful for some specific routes, that are not visited regularly and contain large amounts of unique code.
 
 To take advantage of this feature, you simply wrap your [`controller`](./introduction.md#controller) and [`view`](./introduction.md#view) arguments into `async` function which calls a dynamic import():
 
@@ -75,7 +75,7 @@ export let init = (ns, oc, config) => {
 
 ## Preloading routeHandlers
 
-Each route handler exposes `preload()` method, which can be used to programatically trigger preload of the dynamic imports for specific route.
+Each route handler exposes `preload()` method, which can be used to programmatically trigger preload of the dynamic imports for specific route.
 
 :::tip
 

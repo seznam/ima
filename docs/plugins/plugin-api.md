@@ -96,7 +96,7 @@ export { ClientUserAgent, ServerUserAgent, UserAgent, PlatformJS };
 
 ## Dynamically imported plugins and tree shaking
 
-When the plugin is imported dynamically and intialized lazily, you receive `isDynamicallyLoaded = true` as the last argument in the registration bootstrap functions. This can help you in certain situations where you need to know when the plugin was initialized.
+When the plugin is imported dynamically and initialized lazily, you receive `isDynamicallyLoaded = true` as the last argument in the registration bootstrap functions. This can help you in certain situations where you need to know when the plugin was initialized.
 
 The bootstrap process works the same way as with plugins initialized upon application startup, meaning all plugin settings are still overwritten with possible overrides in the application settings. There's however one caveat with the `ObjectContainer` that you need to pay attention to.
 

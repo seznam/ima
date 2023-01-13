@@ -872,7 +872,7 @@ end of the file:
 ```
 
 This adds a soft transition of the post's background color. Or does it? The
-transition does not seem to work, because we change the ID (remeber the `key`
+transition does not seem to work, because we change the ID (remember the `key`
 attribute we set to `post.id` in `app/page/home/HomeView.jsx`?) of the post in
 the DOM once we receive it from the server. Because of this the React
 considers it to be a different post and removes the old one while adding a new
@@ -999,8 +999,8 @@ pending posts. Add the following snippet to the post component's view
 </div>
 ```
 
-Then add the following declaration to the post componet's
-`app/componet/post/post.less` file to the `.post-author` rule:
+Then add the following declaration to the post component's
+`app/component/post/post.less` file to the `.post-author` rule:
 
 ```scss
 position: relative;

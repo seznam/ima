@@ -499,7 +499,7 @@ export default class HttpProxy {
    * the provided data to the URL's query string.
    *
    * @param url The URL to prepare for use with the fetch API.
-   * @param data The data to be atached to the query string.
+   * @param data The data to be attached to the query string.
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */

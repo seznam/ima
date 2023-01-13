@@ -32,7 +32,7 @@ describe('devErrorPageFactory', () => {
 
   const ERROR = new Error('My own Error');
 
-  describe("Method's behaviour", () => {
+  describe("Method's behavior", () => {
     afterAll(() => {
       jest.resetAllMocks();
     });

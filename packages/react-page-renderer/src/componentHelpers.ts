@@ -80,11 +80,11 @@ export function link(
  * object that resolve to `true`.
  *
  * @example
- *        this.cssClasses('my-class my-class-modificator', true);
+ *        this.cssClasses('my-class my-class-modifier', true);
  * @example
  *        this.cssClasses({
  *            'my-class': true,
- *            'my-class-modificator': this.props.modificator
+ *            'my-class-modifier': this.props.modifier
  *        }, true);
  * @param component The component
  *        requiring the composition of the CSS class names.

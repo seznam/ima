@@ -2,7 +2,7 @@ const ignorePaths = /(node_modules\/(?!@ima).*)/;
 
 /**
  * This ima config makes sure that webpack watches changes
- * in node modules @ima/* directories. This is usefull during
+ * in node modules @ima/* directories. This is useful during
  * development of new ima features.
  *
  * @type import('@ima/cli').ImaConfig

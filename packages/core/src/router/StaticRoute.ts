@@ -54,7 +54,7 @@ const PARAMS_MAIN_REGEXP =
 
 /**
  * Regular expression used to match the required subparameter names from a path expression.
- * (e.g. for path '/:paramA-:paramB/:nextParam' are subparametres 'paramA' and 'paramB')
+ * (e.g. for path '/:paramA-:paramB/:nextParam' are subparameters 'paramA' and 'paramB')
  */
 const SUBPARAMS_REQUIRED_REGEXP = {
   LAST: /([_-]{1})((\w-)?:[a-z0-9]+)(?=\\\/|$)/gi,
@@ -255,8 +255,8 @@ export default class StaticRoute extends AbstractRoute {
   /**
    * Get pattern for subparameter.
    */
-  _getSubparamPattern(delimeter: string) {
-    const pattern = `([^${delimeter}?/]+)`;
+  _getSubparamPattern(delimiter: string) {
+    const pattern = `([^${delimiter}?/]+)`;
 
     return pattern;
   }
@@ -284,7 +284,7 @@ export default class StaticRoute extends AbstractRoute {
   }
 
   /**
-   * Check if main parametres have correct order.
+   * Check if main parameters have correct order.
    * It means that required param cannot follow optional one.
    *
    * @param clearedPathExpr The cleared URL path (removed first and last slash, ...).
@@ -348,9 +348,9 @@ export default class StaticRoute extends AbstractRoute {
 
     path = requiredSubparamsOthers.reduce((pattern, paramExpr) => {
       const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
-      const delimeter = pattern.substr(paramIdx, 1);
+      const delimiter = pattern.substr(paramIdx, 1);
 
-      const regExpr = this._getSubparamPattern(delimeter);
+      const regExpr = this._getSubparamPattern(delimiter);
 
       return pattern.replace(paramExpr, regExpr);
     }, path);
@@ -380,8 +380,8 @@ export default class StaticRoute extends AbstractRoute {
   ) {
     path = optionalSubparamsOthers.reduce((pattern, paramExpr) => {
       const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
-      const delimeter = pattern.substr(paramIdx, 1);
-      const paramPattern = this._getSubparamPattern(delimeter);
+      const delimiter = pattern.substr(paramIdx, 1);
+      const paramPattern = this._getSubparamPattern(delimiter);
       const regExpr = paramPattern + '?';
 
       return pattern.replace(paramExpr, regExpr);

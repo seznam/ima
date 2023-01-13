@@ -9,7 +9,7 @@ In order to upgrade your project to use IMA.js 0.14.0, please follow these steps
 - Update your own custom gulp tasks to be compatible with [gulp 4](https://github.com/gulpjs/gulp/tree/4.0)
 - Remove references to the `ima.client.js` file in the `settings.js` file and the `bundle` section in the `build.js` file.
 - Add the `ima` package to the `common` group in the `vendors` section in the `build.js` file.
-- Update your `main.js` file, the `ima.onLoad` method [returns a promise instead of accepting a callack](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/main.js#L17).
+- Update your `main.js` file, the `ima.onLoad` method [returns a promise instead of accepting a callback](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/main.js#L17).
 - Update your `ima-server` installation according to the [Hello World example](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello).
 - Plugins can no longer use namespaces, please update your `bind.js` file if you were using namespace references to IMA plugins.
 - Import the `RouteNames` constants from `ima/router/RouteNames` in your `router.js` configuration file.

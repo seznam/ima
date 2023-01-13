@@ -110,7 +110,7 @@ Similarly to the `ctx` you can also use the `imaConfig` parameter, which contain
 
 :::
 
-We're now going to use these options and pass [seed](https://github.com/shellscape/webpack-manifest-plugin#seed) argument to the plugin. The `seed` object is used to share data between multiple manifest plugin instancess (in our case multiple webpack compilations). This makes sure that the final `manifest.json` file contains paths to all generated assets and is not overwritten by each finished webpack compilation.
+We're now going to use these options and pass [seed](https://github.com/shellscape/webpack-manifest-plugin#seed) argument to the plugin. The `seed` object is used to share data between multiple manifest plugin instances (in our case multiple webpack compilations). This makes sure that the final `manifest.json` file contains paths to all generated assets and is not overwritten by each finished webpack compilation.
 
 
 ```js title=./ima.config.js
@@ -163,7 +163,7 @@ Options:
 
 ### Accessing CLI arguments
 
-CLI argument **values are merged into the `ctx` parametr**, so you can access them here. In our case we would like to extend the plugin options with the CLI override:
+CLI argument **values are merged into the `ctx` parameter**, so you can access them here. In our case we would like to extend the plugin options with the CLI override:
 
 ```js title=./ima.config.js
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');

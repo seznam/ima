@@ -151,5 +151,5 @@ For some heavy-used utilities we've created a shortcut methods in **AbstractComp
 - **`listen`**`(eventTarget, eventName, listener)` = [**EventBus.listen()**](./events#eventbus)
 - **`unlisten`**`(eventTarget, eventName, listener)` = [**EventBus.unlisten()**](./events#eventbus)
 
-One special case would be `cssClasses` shortcut which is by default alias for [**classnames**](https://www.npmjs.com/package/classnames) package. You can overwrite this behaviour by registering you own helper in ComponentUtils under `$CssClasses` alias.
+One special case would be `cssClasses` shortcut which is by default alias for [**classnames**](https://www.npmjs.com/package/classnames) package. You can overwrite this behavior by registering you own helper in ComponentUtils under `$CssClasses` alias.
 - **`cssClasses`**`(classRules, includeComponentClassName` = `this.utils.$CssClasses()`

@@ -19,7 +19,7 @@ The power of dynamic routes comes at a cost. You have to be really sure to defin
 
 Dynamic routes can be created just like the regular (static routes). The only thing that's different is the [`pathExpression`](./introduction.md#pathexpression) positional argument, which is now object with three properties: `matcher`, `toPath` and `extractParameters`.
 
-The following example parses `/category/subcategory/post/124` url formats with optional categories, and exract them along with the post `itemId`:
+The following example parses `/category/subcategory/post/124` url formats with optional categories, and extract them along with the post `itemId`:
 
 ```js title=./app/config/routes.js
 import { AbstractRoute } from '@ima/core';

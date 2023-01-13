@@ -25,7 +25,7 @@ data.
 Putting the component's logic inside the controller would be unwise for 3
 reasons:
 
-1. Controller would contain code that is not as clear. For new-commers to
+1. Controller would contain code that is not as clear. For newcomers to
 your project it'd seem strange why you're mixing e.g. **HomeController**
 logic with **GalleryComponent** logic.
 2. Component file and its extension file should be kept together because nothing is
@@ -180,9 +180,9 @@ export default class PostController extends AbstractController {
 
 ## Passing partial state from controllers
 
-During any lifecycle phase of the page the controller's lifecycle method is called first and then the same method is called on every extension reqistered in the controller. Order of the extensions is crutial and the same as in which the extensions were registered.
+During any lifecycle phase of the page the controller's lifecycle method is called first and then the same method is called on every extension registered in the controller. Order of the extensions is crucial and the same as in which the extensions were registered.
 
-Since [v16](https://github.com/seznam/IMA.js-core/releases/tag/0.16.0) you can access the state loaded in controller and preceding extensions (hence the crutiality of extensions order). Bear in mind that the accessed state may contain unresolved promises that need to be treated differently.
+Since [v16](https://github.com/seznam/IMA.js-core/releases/tag/0.16.0) you can access the state loaded in controller and preceding extensions (hence the cruciality of extensions order). Bear in mind that the accessed state may contain unresolved promises that need to be treated differently.
 
 Addition of `async/await` functionality in **v17** can lead to dramatic performance drop if not used well. Keep in mind that every `await` in Controller's or Extension's `load` method will delay execution of next `load` method until the asynchronous operation finishes.
 

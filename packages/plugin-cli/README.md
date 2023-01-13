@@ -30,14 +30,14 @@ npx ima-plugin --help
 
 The plugin works **without the need to provide custom ima-plugin.config.js**. There are 3 configuration presets that should cover most situations, which can be forced using CLI args:
  - `npm run [build|dev|link]` - generates two bundles, one in cjs and other in esm. Use this for almost any plugin that doesn't need server/client specific bundles.
- - `npm run [build|dev|link] --nodeConfig` - generates only cjs bundle (in ./dist directory), usefull for CLI and node plugins.
+ - `npm run [build|dev|link] --nodeConfig` - generates only cjs bundle (in ./dist directory), useful for CLI and node plugins.
  - `npm run [build|dev|link] --clientServerConfig` - generates code in cjs and two bundles in esm, where you can drop client/server specific syntax using pragma comments.
 
 ### jsxRuntime
 You can override used React jsxRuntime to `classic` or newer `automatic` using `jsxRuntime` config option, or `-j=automatic` or `--jsxRuntime=classic` CLI argument.
 
 ### additionalWatchPaths
-Optional array type option, which can be used to add additional watch paths to link command. This is usefull if you want to watch and copy additional files outside of the `inputDir`.
+Optional array type option, which can be used to add additional watch paths to link command. This is useful if you want to watch and copy additional files outside of the `inputDir`.
 
 ### Custom `ima-plugin.config.js`
 You can always provide custom ima-plugin.config.js where you can either extend one of the provided default configurations or create completely new one:

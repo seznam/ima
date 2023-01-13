@@ -197,7 +197,7 @@ describe('ima.core.router.StaticRoute', function () {
         result: '/cool/home/1/something/2',
       },
 
-      // invalid parametres order
+      // invalid parameters order
       {
         pathExpression: '/:?optional/home/:userId/something/:someId/',
         params: { optional: 'too-bad', userId: 1, someId: 2 },
@@ -785,7 +785,7 @@ describe('ima.core.router.StaticRoute', function () {
         params: {},
       },
 
-      // invalid parametres order (required vs. optional)
+      // invalid parameters order (required vs. optional)
       {
         pathExpression: '/:?userId/something/:someId',
         path: '/something/param1',
@@ -1378,7 +1378,7 @@ describe('ima.core.router.StaticRoute', function () {
       },
     ].forEach(value => {
       const { path, clearPathExpr, result } = value;
-      it(`should check parametres order for '${path}' [${result.toString()}]`, function () {
+      it(`should check parameters order for '${path}' [${result.toString()}]`, function () {
         const localStaticRoute = new StaticRoute(
           name,
           path,
@@ -1408,7 +1408,7 @@ describe('ima.core.router.StaticRoute', function () {
       },
     ].forEach(value => {
       const { path, clearPathExpr, optionalParams, result } = value;
-      it(`should replace optional parametres in ${path}`, function () {
+      it(`should replace optional parameters in ${path}`, function () {
         const localStaticRoute = new StaticRoute(
           name,
           path,
@@ -1441,7 +1441,7 @@ describe('ima.core.router.StaticRoute', function () {
       },
     ].forEach(value => {
       const { path, clearPathExpr, result } = value;
-      it(`should replace required subparametres in ${path}`, function () {
+      it(`should replace required subparameters in ${path}`, function () {
         const localStaticRoute = new StaticRoute(
           name,
           path,
@@ -1488,7 +1488,7 @@ describe('ima.core.router.StaticRoute', function () {
         optionalSubparamsLast,
         result,
       } = value;
-      it(`should replace optional parametres in ${path} to ${result}`, function () {
+      it(`should replace optional parameters in ${path} to ${result}`, function () {
         const localStaticRoute = new StaticRoute(
           name,
           path,

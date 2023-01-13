@@ -6,7 +6,7 @@ export type SerializedData<V = unknown> = {
 };
 
 /**
- * The cache provides a temporary storage for expireable information. The
+ * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
  * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.

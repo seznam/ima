@@ -61,11 +61,11 @@ export default abstract class AbstractComponent extends Component {
    * object that resolve to true.
    *
    * @example
-   *        this.cssClasses('my-class my-class-modificator', true);
+   *        this.cssClasses('my-class my-class-modifier', true);
    * @example
    *        this.cssClasses({
    *            'my-class': true,
-   *            'my-class-modificator': this.props.modificator
+   *            'my-class-modifier': this.props.modifier
    *        }, true);
    *
    * @param classRules CSS classes in a

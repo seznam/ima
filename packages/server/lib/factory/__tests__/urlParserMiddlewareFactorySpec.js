@@ -54,7 +54,7 @@ describe('urlParserMiddlewareFactory', () => {
     RES.redirect.mockReset();
   });
 
-  describe("method's behaviour", () => {
+  describe("method's behavior", () => {
     afterAll(() => {
       next.mockReset();
     });

@@ -183,7 +183,7 @@ export default abstract class Extension implements IExtension {
   }
 
   /**
-   * Cancels ongoing state transaction. Uncommited state changes are lost.
+   * Cancels ongoing state transaction. Uncommitted state changes are lost.
    */
   cancelStateTransaction() {
     return;
