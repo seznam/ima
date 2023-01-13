@@ -333,8 +333,6 @@ describe('ima.storage.CookieStorage', () => {
 
       requestGetCookieHeaderSpy.mockReturnValue(cookieStringWithNoOptions);
 
-      cookie.parse();
-      expect(cookie['_storage'].size).toBe(2);
       cookie.clear();
       expect(cookie['_storage'].size).toBe(0);
       cookie.parse();

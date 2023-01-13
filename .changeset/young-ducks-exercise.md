@@ -2,4 +2,4 @@
 "@ima/core": patch
 ---
 
-Fix CookieStorage memoize parse method - exclude storage set part
+Fix CookieStorage clear method - side effect parse
