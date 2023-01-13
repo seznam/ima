@@ -101,7 +101,6 @@ module.exports = function hooksFactory({
     const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
 
     // TODO IMA@18 documentation badRequestConcurrency
-    //TODO IMA@18 update for better performance check
     return isBadRequest && _hasToServeStatic(event);
   }
 
