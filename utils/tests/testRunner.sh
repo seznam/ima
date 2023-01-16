@@ -42,7 +42,6 @@ done
 
 # Install @ima scoped packages from local registry
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
-npm config set legacy-peer-deps true
 
 # Update create-ima-app versions
 cd "$ROOT_DIR_IMA"
