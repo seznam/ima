@@ -17,7 +17,7 @@ import {
   PageRendererFactory,
   ServerPageRenderer,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/dist/client/ClientPageRenderer';
+import ClientPageRenderer from '@ima/react-page-renderer/renderer/ClientPageRenderer';
 
 export default (ns, oc, config) => {
   oc.bind('$CssClasses', function () {
@@ -54,7 +54,7 @@ export default (ns, oc, config) => {
 
 If your app is using legacy React@17, use legacy client page renderer instead of the default one.
 ```javascript
-import ClientPageRenderer from '@ima/react-page-renderer/dist/client/LegacyClientPageRenderer';
+import ClientPageRenderer from '@ima/react-page-renderer/renderer/LegacyClientPageRenderer';
 ```
 
 ### app/config/settings.js
@@ -80,7 +80,7 @@ export default (ns, oc, config) => {
 // You should already have this line in your file
 const imaServer = require('@ima/server')();
 
-require('@ima/react-page-renderer/dist/hook/server')(imaServer);
+require('@ima/react-page-renderer/hook/server')(imaServer);
 ```
 
 ### Components

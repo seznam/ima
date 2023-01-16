@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.2
+
+### Patch Changes
+
+- 15b7fb248: Fix CookieStorage clear method - side effect parse
+
 ## 18.0.1
 
 ### Patch Changes

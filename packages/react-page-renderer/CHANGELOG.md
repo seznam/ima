@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.3
+
+### Patch Changes
+
+- f55268f97: Fix typescript types export
+
 ## 18.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "18.1.3",
+  "version": "18.1.4",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -24,7 +24,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@esmj/emitter": "^0.2.0",
+    "@esmj/emitter": "^0.2.1",
     "@esmj/monitor": "^0.2.0",
     "ejs": "^3.1.6",
     "http-proxy-middleware": "^2.0.6",

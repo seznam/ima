@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.0
+
+### Minor Changes
+
+- f55268f97: Export `resolveImaConfig` function
+
 ## 18.0.1
 
 ### Patch Changes

@@ -7,4 +7,4 @@ export {
   ImaConfigurationContext,
 } from './types';
 
-export { resolveEnvironment } from './webpack/utils';
+export { resolveEnvironment, resolveImaConfig } from './webpack/utils';
