@@ -24,7 +24,10 @@
         "import": "./dist/esm/server/index.js",
         "require": "./dist/cjs/index.js"
       },
-      "default": "./dist/esm/client/index.js"
+      "default": {
+        "import": "./dist/esm/client/index.js",
+        "require": "./dist/cjs/index.js"
+      }
     },
     "./renderer/*": {
       "types": "./dist/esm/client/renderer/*.d.ts",
@@ -32,7 +35,10 @@
         "import": "./dist/esm/server/renderer/*.js",
         "require": "./dist/cjs/renderer/*.js"
       },
-      "default": "./dist/esm/client/renderer/*.js"
+      "default": {
+        "import": "./dist/esm/client/renderer/*.js",
+        "require": "./dist/cjs/renderer/*.js"
+      }
     },
     "./hook/*": "./dist/hook/*.js",
     "./*": {
