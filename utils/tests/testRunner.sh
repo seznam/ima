@@ -38,13 +38,18 @@ for PACKAGE in $PACKAGES ; do
         echo "======= $PACKAGE_UPDATE@$PACKAGE_VERSION"
         find . -print | grep -i package.json
         sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
+
+        if [[ "$PACKAGE" == "create-ima-app" ]]
+        then
+            sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" template/package.json
+        fi
         #cat package.json
     done
 
     if [[ "$PACKAGE" == "create-ima-app" ]]
     then
-        cat ./package.json
-        cat ./template/package.json
+        cat package.json
+        cat template/package.json
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
