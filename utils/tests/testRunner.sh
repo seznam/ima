@@ -41,7 +41,7 @@ for PACKAGE in $PACKAGES ; do
         #cat package.json
     done
 
-    if [["$PACKAGE"=="create-ima-app"]]
+    if [[ "$PACKAGE" == "create-ima-app" ]]
     then
         cat ./package.json
         cat ./template/package.json
