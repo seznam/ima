@@ -17,7 +17,7 @@ ROOT_DIR_IMA_APP="$ROOT_DIR/ima-app"
 cd "$ROOT_DIR_IMA"
 
 CREATE_IMA_APP_DIR="$ROOT_DIR_IMA/packages/create-ima-app"
-PACKAGE_VERSION="18.0.0-next"
+PACKAGE_VERSION="0.0.0-next"
 PACKAGES="cli core dev-utils error-overlay helpers hmr-client server react-page-renderer"
 
 # Setup local registry
