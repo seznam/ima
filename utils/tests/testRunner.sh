@@ -19,6 +19,7 @@ cd "$ROOT_DIR_IMA"
 CREATE_IMA_APP_DIR="$ROOT_DIR_IMA/packages/create-ima-app"
 PACKAGE_VERSION="0.0.0-next"
 PACKAGES="cli core create-ima-app dev-utils error-overlay helpers hmr-client server react-page-renderer"
+PACKAGES2="cli core create-ima-app dev-utils error-overlay helpers hmr-client server react-page-renderer create-ima-app/template"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/tests/verdaccio_config.yml >/dev/null &
@@ -27,7 +28,7 @@ NPM_LOCAL_REGISTRY_PID=$!
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
 # Release ima packages to local registry
-for PACKAGE in $PACKAGES ; do
+for PACKAGE in $PACKAGES2 ; do
     cd "$ROOT_DIR_IMA/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
     #find . -print | grep -i package.json
