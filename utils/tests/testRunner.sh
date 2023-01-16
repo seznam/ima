@@ -19,7 +19,7 @@ cd "$ROOT_DIR_IMA"
 CREATE_IMA_APP_DIR="$ROOT_DIR_IMA/packages/create-ima-app"
 PACKAGE_VERSION="0.0.0-next"
 PACKAGES="cli core create-ima-app dev-utils error-overlay helpers hmr-client server react-page-renderer"
-PACKAGES2="cli core create-ima-app dev-utils error-overlay helpers hmr-client server react-page-renderer create-ima-app/template"
+#PACKAGES2="cli core create-ima-app dev-utils error-overlay helpers hmr-client server react-page-renderer create-ima-app/template"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/tests/verdaccio_config.yml >/dev/null &
@@ -28,19 +28,24 @@ NPM_LOCAL_REGISTRY_PID=$!
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
 # Release ima packages to local registry
-for PACKAGE in $PACKAGES2 ; do
+for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR_IMA/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
-    #find . -print | grep -i package.json
+    find . -print | grep -i package.json
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
-    cat package.json
 
     for PACKAGE_UPDATE in $PACKAGES ; do
         echo "======= $PACKAGE_UPDATE@$PACKAGE_VERSION"
-        #find . -print | grep -i package.json
+        find . -print | grep -i package.json
         sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
-        cat package.json
+        #cat package.json
     done
+
+        if [$PACKAGE = "create-ima-app"]
+    then
+        cat ./package.json;
+        cat ./template/package.json;
+    fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
