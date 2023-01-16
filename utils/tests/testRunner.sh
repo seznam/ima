@@ -41,10 +41,10 @@ for PACKAGE in $PACKAGES ; do
         #cat package.json
     done
 
-        if [$PACKAGE = "create-ima-app"]
+    if [["$PACKAGE"=="create-ima-app"]]
     then
-        cat ./package.json;
-        cat ./template/package.json;
+        cat ./package.json
+        cat ./template/package.json
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
