@@ -40,10 +40,13 @@ for PACKAGE in $PACKAGES ; do
         if [[ "$PACKAGE" == "create-ima-app" ]]
         then
             sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" template/package.json
-            json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
-            cat template/package.json
         fi
     done
+
+    if [[ "$PACKAGE" == "create-ima-app" ]]
+    then
+        json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
+    fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
