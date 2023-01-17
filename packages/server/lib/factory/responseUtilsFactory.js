@@ -7,6 +7,50 @@ module.exports = function responseUtilsFactory() {
   const runnerPath = path.resolve('./build/server/runner.js');
   const manifestPath = path.resolve('./build/manifest.json');
 
+  function _getMetaTags(iterator, tagName, valueName) {
+    const metaTags = [];
+
+    for (const [key, value] of iterator) {
+      const tagParts = [`<${tagName}`, 'data-ima-meta'];
+      const attributes = {
+        [tagName === 'link' ? 'rel' : 'name']: key,
+        ...(typeof value === 'object' ? value : { [valueName]: value }),
+      };
+
+      for (let [attrName, attrValue] of Object.entries(attributes)) {
+        // Skip invalid values
+        if (attrName === undefined || attrValue === null) {
+          continue;
+        }
+
+        tagParts.push(`${attrName}="${attrValue}"`);
+      }
+
+      tagParts.push('/>');
+      metaTags.push(tagParts.join(' '));
+    }
+
+    return metaTags;
+  }
+
+  function _renderMetaTags({ response }) {
+    const { metaManager } = response?.page || {};
+
+    if (!metaManager) {
+      return '';
+    }
+
+    return [
+      ..._getMetaTags(metaManager.getLinksIterator(), 'link', 'href'),
+      ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta', 'content'),
+      ..._getMetaTags(
+        metaManager.getMetaPropertiesIterator(),
+        'meta',
+        'property'
+      ),
+    ].join('');
+  }
+
   /**
    * Load manifest, runner resources and prepare sources object.
    */
@@ -225,6 +269,7 @@ module.exports = function responseUtilsFactory() {
       revivalCache,
       runner,
       styles,
+      metaTags: _renderMetaTags({ response }),
 
       // Backwards compatibility, remove in IMA@19
       $Source: source,

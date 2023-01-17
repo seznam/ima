@@ -1,6 +1,7 @@
 import MetaManager, {
   MetaAttributes,
   MetaManagerRecord,
+  MetaManagerRecordNames,
   MetaValue,
 } from './MetaManager';
 
@@ -8,10 +9,10 @@ import MetaManager, {
  * Default implementation of the {@link MetaManager} interface.
  */
 export default class MetaManagerImpl extends MetaManager {
-  protected _title: MetaManagerRecord;
-  protected _metaName: Map<string, MetaManagerRecord>;
-  protected _metaProperty: Map<string, MetaManagerRecord>;
-  protected _link: Map<string, MetaManagerRecord>;
+  protected _title: string;
+  protected _metaName: Map<string, MetaManagerRecord<'content'>>;
+  protected _metaProperty: Map<string, MetaManagerRecord<'property'>>;
+  protected _link: Map<string, MetaManagerRecord<'href'>>;
 
   static get $dependencies() {
     return [];
@@ -47,29 +48,29 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setTitle(title: string, attr?: MetaAttributes): void {
-    this._title = this.#createRecord(title, attr);
+  setTitle(title: string): void {
+    this._title = title;
   }
 
   /**
    * @inheritDoc
    */
-  getTitle(): MetaManagerRecord {
+  getTitle(): string {
     return this._title;
   }
 
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, value: string, attr?: MetaAttributes): void {
-    this._metaName.set(name, this.#createRecord(value, attr));
+  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): void {
+    this._metaName.set(name, this.#createRecord('content', content, attr));
   }
 
   /**
    * @inheritDoc
    */
-  getMetaName(name: string): MetaManagerRecord {
-    return this._metaName.get(name) || '';
+  getMetaName(name: string): MetaManagerRecord<'content'> {
+    return this._metaName.get(name) || super.getMetaName(name);
   }
 
   /**
@@ -82,20 +83,37 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaProperty(name: string, value: MetaValue, attr?: MetaAttributes): void {
-    this._metaProperty.set(name, this.#createRecord(value, attr));
+  getMetaNamesIterator(): IterableIterator<
+    [string, MetaManagerRecord<'content'>]
+  > {
+    return this._metaName.entries();
   }
 
   /**
    * @inheritDoc
    */
-  getMetaProperty(name: string): MetaManagerRecord {
-    return this._metaProperty.get(name) || '';
+  setMetaProperty(
+    name: string,
+    property: MetaValue,
+    attr?: MetaAttributes
+  ): void {
+    this._metaProperty.set(
+      name,
+      this.#createRecord('property', property, attr)
+    );
   }
 
   /**
    * @inheritDoc
    */
+  getMetaProperty(name: string): MetaManagerRecord<'property'> {
+    return this._metaProperty.get(name) || super.getMetaProperty(name);
+  }
+
+  /**
+   * @inheritDoc
+   */
+
   getMetaProperties(): string[] {
     return Array.from(this._metaProperty.keys());
   }
@@ -103,15 +121,24 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(relation: string, value: string, attr?: MetaAttributes): void {
-    this._link.set(relation, this.#createRecord(value, attr));
+  getMetaPropertiesIterator(): IterableIterator<
+    [string, MetaManagerRecord<'property'>]
+  > {
+    return this._metaProperty.entries();
   }
 
   /**
    * @inheritDoc
    */
-  getLink(relation: string): MetaManagerRecord {
-    return this._link.get(relation) || '';
+  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): void {
+    this._link.set(relation, this.#createRecord('href', href, attr));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getLink(relation: string): MetaManagerRecord<'href'> {
+    return this._link.get(relation) || super.getLink(relation);
   }
 
   /**
@@ -121,15 +148,29 @@ export default class MetaManagerImpl extends MetaManager {
     return Array.from(this._link.keys());
   }
 
-  #createRecord(value: MetaValue, attr?: MetaAttributes): MetaManagerRecord {
-    let record: MetaManagerRecord;
+  /**
+   * @inheritDoc
+   */
+  getLinksIterator(): IterableIterator<[string, MetaManagerRecord<'href'>]> {
+    return this._link.entries();
+  }
 
-    if (attr) {
-      record = { value: value, ...attr };
-    } else {
-      record = value;
-    }
+  /**
+   * @inheritdoc
+   */
+  clearMetaAttributes(): void {
+    this._metaProperty.clear();
+    this._metaName.clear();
+    this._link.clear();
+  }
 
-    return record;
+  #createRecord<R extends MetaManagerRecordNames>(
+    valueName: MetaManagerRecordNames,
+    value: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManagerRecord<R> {
+    return attr
+      ? ({ [valueName]: value, ...attr } as unknown as MetaManagerRecord<R>)
+      : value;
   }
 }

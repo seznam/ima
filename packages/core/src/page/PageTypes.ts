@@ -3,11 +3,13 @@ import { UnknownParameters } from '../CommonTypes';
 import Controller, { IController } from '../controller/Controller';
 import ControllerDecorator from '../controller/ControllerDecorator';
 import AbstractRoute from '../router/AbstractRoute';
+import MetaManager from '../meta/MetaManager';
 
 export type ManagedPage = {
   controller?: IController;
   controllerInstance?: Controller;
   decoratedController?: ControllerDecorator;
+  metaManager?: MetaManager;
   options?: RouteOptions;
   params?: UnknownParameters;
   route?: AbstractRoute;

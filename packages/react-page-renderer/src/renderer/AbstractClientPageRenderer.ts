@@ -15,6 +15,11 @@ import type {
   UnknownPromiseParameters,
   RouteOptions,
 } from '@ima/core';
+import {
+  MetaManagerRecordNames,
+  MetaManagerRecord,
+  MetaAttributes,
+} from '@ima/core/dist/esm/client/meta/MetaManager';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
@@ -95,6 +100,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
         isViewContainerEmpty && controller.setState(pageState);
 
+        controller.getMetaManager().clearMetaAttributes();
         controller.setMetaParams(pageState);
 
         isViewContainerEmpty &&
@@ -302,7 +308,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   /**
-   * Updates the title and the contents of the meta elements used for SEO.
+   * Update specified meta or link tags in DOM.
    *
    * @param metaManager meta attributes storage providing the
    *        new values for page meta elements and title.
@@ -310,62 +316,63 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   private _updateMetaAttributes(metaManager: MetaManager) {
     this._window.setTitle(metaManager.getTitle());
 
-    this._updateMetaNameAttributes(metaManager);
-    this._updateMetaPropertyAttributes(metaManager);
-    this._updateMetaLinkAttributes(metaManager);
+    // Remove IMA managed meta tags
+    this._window
+      .querySelectorAll(`[data-ima-meta]`)
+      .forEach(el => (el as HTMLElement)?.remove());
+
+    this.#updateMetaTag<'href'>(metaManager.getLinksIterator(), 'link', 'href');
+    this.#updateMetaTag<'property'>(
+      metaManager.getMetaPropertiesIterator(),
+      'meta',
+      'property'
+    );
+    this.#updateMetaTag<'content'>(
+      metaManager.getMetaNamesIterator(),
+      'meta',
+      'content'
+    );
   }
 
-  /**
-   * Updates the contents of the generic meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaNameAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaNames()) {
-      const metaTag = this._window.querySelector(
-        `meta[name="${metaTagKey}"]`
-      ) as HTMLMetaElement;
+  #updateMetaTag<R extends MetaManagerRecordNames>(
+    iterator: IterableIterator<[string, MetaManagerRecord<R>]> | never[],
+    tagName: 'link' | 'meta',
+    valueName: MetaManagerRecordNames
+  ): void {
+    const document = this._window.getDocument();
 
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaName(metaTagKey);
-      }
+    if (!document) {
+      return;
     }
-  }
 
-  /**
-   * Updates the contents of the specialized meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaPropertyAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaProperties()) {
-      const metaTag = this._window.querySelector(
-        `meta[property="${metaTagKey}"]`
-      ) as HTMLMetaElement;
+    for (const [key, value] of iterator) {
+      const attributes = {
+        [tagName === 'link' ? 'rel' : 'name']: key,
+        ...(typeof value === 'object' ? value : { [valueName]: value }),
+      } as MetaAttributes;
 
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaProperty(metaTagKey);
+      // TODO IMA@19 - remove backwards compatibility
+      const existingMetaTag = this._window.querySelector(`meta[name="${key}"]`);
+
+      if (existingMetaTag) {
+        existingMetaTag[valueName] = attributes[valueName] as string;
+        return;
       }
-    }
-  }
 
-  /**
-   * Updates the href of the specialized link elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaLinkAttributes(metaManager: MetaManager) {
-    for (const linkTagKey of metaManager.getLinks()) {
-      const linkTag = this._window.querySelector(
-        `link[rel="${linkTagKey}"]`
-      ) as HTMLLinkElement;
+      // TODO IMA@19 - following should be default from IMA@19
+      const metaTag = document.createElement(tagName);
+      metaTag.setAttribute('data-ima-meta', '');
 
-      if (linkTag && linkTag.href) {
-        linkTag.href = metaManager.getLink(linkTagKey);
+      for (const [attrName, attrValue] of Object.entries(attributes)) {
+        // Skip invalid values
+        if (attrValue === undefined || attrValue === null) {
+          continue;
+        }
+
+        metaTag?.setAttribute(attrName, attrValue.toString());
       }
+
+      document?.head.appendChild(metaTag);
     }
   }
 }

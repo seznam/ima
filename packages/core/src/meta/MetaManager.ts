@@ -2,14 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export type MetaValue = number | boolean | string | null | undefined;
-export type MetaAttributesRecord = Record<string, MetaValue>;
-export type MetaAttributes =
-  | MetaAttributesRecord
-  | Record<string, MetaAttributesRecord>;
+export type MetaAttributes = Record<string, MetaValue>;
 
-export type MetaManagerRecord =
+export type MetaManagerRecordNames = 'property' | 'content' | 'href';
+export type MetaManagerRecord<R extends MetaManagerRecordNames> =
   | ({
-      value: MetaValue;
+      [key in R]: MetaValue;
     } & MetaAttributes)
   | MetaValue;
 
@@ -34,9 +32,8 @@ export default abstract class MetaManager {
    * Sets the page title.
    *
    * @param title The new page title.
-   * @parram attr Additional optional title attributes.
    */
-  setTitle(title: string, attr?: MetaAttributes): void {}
+  setTitle(title: string): void {}
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -48,7 +45,7 @@ export default abstract class MetaManager {
    *
    * @return The current page title.
    */
-  getTitle(): MetaManagerRecord {
+  getTitle(): string {
     return '';
   }
 
@@ -57,10 +54,10 @@ export default abstract class MetaManager {
    *
    * @param name Meta information property name, for example
    *        `keywords`.
-   * @param value The meta information value.
+   * @param content The meta information content.
    * @parram attr Additional optional meta attributes.
    */
-  setMetaName(name: string, value: MetaValue, attr?: MetaAttributes): void {}
+  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): void {}
 
   /**
    * Returns the value of the specified named meta information property. The
@@ -70,7 +67,7 @@ export default abstract class MetaManager {
    * @param name The name of the named meta information property.
    * @return The value of the generic meta information, or an empty string.
    */
-  getMetaName(name: string): MetaManagerRecord {
+  getMetaName(name: string): MetaManagerRecord<'content'> {
     return '';
   }
 
@@ -82,6 +79,17 @@ export default abstract class MetaManager {
    *         information properties.
    */
   getMetaNames(): string[] {
+    return [];
+  }
+
+  /**
+   * Return [key, value] pairs of named meta information.
+   *
+   * @return [key, value] pairs of named meta information.
+   */
+  getMetaNamesIterator():
+    | IterableIterator<[string, MetaManagerRecord<'content'>]>
+    | never[] {
     return [];
   }
 
@@ -108,7 +116,7 @@ export default abstract class MetaManager {
    * @return The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string): MetaManagerRecord {
+  getMetaProperty(name: string): MetaManagerRecord<'property'> {
     return '';
   }
 
@@ -124,6 +132,17 @@ export default abstract class MetaManager {
   }
 
   /**
+   * Return [key, value] pairs of meta information properties.
+   *
+   * @return [key, value] pairs of meta information properties.
+   */
+  getMetaPropertiesIterator():
+    | IterableIterator<[string, MetaManagerRecord<'property'>]>
+    | never[] {
+    return [];
+  }
+
+  /**
    * Sets the specified specialized link information.
    *
    * @param relation The relation of the link target to the current
@@ -132,7 +151,11 @@ export default abstract class MetaManager {
    *        document, e.g. a URL.
    * @parram attr Additional optional link attributes.
    */
-  setLink(relation: string, reference: string, attr?: MetaAttributes): void {}
+  setLink(
+    relation: string,
+    reference: MetaValue,
+    attr?: MetaAttributes
+  ): void {}
 
   /**
    * Return the reference to the specified related linked document. The
@@ -144,7 +167,7 @@ export default abstract class MetaManager {
    * @return The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation: string): MetaManagerRecord {
+  getLink(relation: string): MetaManagerRecord<'href'> {
     return '';
   }
 
@@ -155,4 +178,20 @@ export default abstract class MetaManager {
   getLinks(): string[] {
     return [];
   }
+
+  /**
+   * Return [key, value] pairs of currently set links.
+   *
+   * @return [key, value] pairs of currently set links.
+   */
+  getLinksIterator():
+    | IterableIterator<[string, MetaManagerRecord<'href'>]>
+    | never[] {
+    return [];
+  }
+
+  /**
+   * Resets the stored meta names, properties and links.
+   */
+  clearMetaAttributes(): void {}
 }
