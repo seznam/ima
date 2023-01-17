@@ -48,12 +48,5 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-favicon": "^2.5.0"
-  },
-  "overrides": {
-    "@ima/plugin-testing-integration": {
-        "@ima/cli": ">=0.0.0-next",
-        "@ima/core": ">=0.0.0-next",
-        "@ima/helpers": "^0.0.0-next"
-    }
   }
 }

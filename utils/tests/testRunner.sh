@@ -26,6 +26,8 @@ NPM_LOCAL_REGISTRY_PID=$!
 
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
+npm install -g json
+
 # Release ima packages to local registry
 for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR_IMA/packages/$PACKAGE"
@@ -33,20 +35,15 @@ for PACKAGE in $PACKAGES ; do
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 
     for PACKAGE_UPDATE in $PACKAGES ; do
-        echo "======= $PACKAGE_UPDATE@$PACKAGE_VERSION"
         sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
 
         if [[ "$PACKAGE" == "create-ima-app" ]]
         then
             sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" template/package.json
+            json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
+            cat template/package.json
         fi
     done
-
-    if [[ "$PACKAGE" == "create-ima-app" ]]
-    then
-        cat package.json
-        cat template/package.json
-    fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
@@ -64,11 +61,10 @@ npm link
 
 # Setup app from example hello
 cd "$ROOT_DIR"
-echo "creating CREATE-IMA-APP"
 npx create-ima-app ima-app
 
 cd "$ROOT_DIR_IMA_APP"
-echo "CREATE-IMA-APP BUILD"
+
 npm run build
 
 # Run tests
