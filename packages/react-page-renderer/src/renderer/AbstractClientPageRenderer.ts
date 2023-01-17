@@ -334,6 +334,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     );
   }
 
+  /**
+   * Helper to update specific meta tags in page document.
+   *
+   * @param iterator Collection of meta records to update.
+   * @param tagName Tag name for the given collection.
+   * @param valueName Name of the main value for given meta collection.
+   */
   #updateMetaTag<R extends MetaManagerRecordNames>(
     iterator: IterableIterator<[string, MetaManagerRecord<R>]> | never[],
     tagName: 'link' | 'meta',
@@ -355,8 +362,12 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       const existingMetaTag = this._window.querySelector(`meta[name="${key}"]`);
 
       if (existingMetaTag) {
-        existingMetaTag[valueName] = attributes[valueName] as string;
-        return;
+        existingMetaTag.setAttribute(
+          valueName,
+          attributes[valueName] as string
+        );
+
+        continue;
       }
 
       // TODO IMA@19 - following should be default from IMA@19
