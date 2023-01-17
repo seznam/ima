@@ -18,7 +18,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "^18.0.0",
-    "@ima/plugin-testing-integration": "cnsqa-993",
+    "@ima/plugin-testing-integration": "^3.0.0",
     "@swc/jest": "^0.2.20",
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
     "enzyme": "^3.11.0",
@@ -48,5 +48,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-favicon": "^2.5.0"
+  },
+  "overrides": {
+    "@ima/plugin-testing-integration": {
+        "@ima/cli": ">=0.0.0-next",
+        "@ima/core": ">=0.0.0-next",
+        "@ima/helpers": "^0.0.0-next"
+    }
   }
 }
