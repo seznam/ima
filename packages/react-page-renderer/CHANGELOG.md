@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.4
+
+### Patch Changes
+
+- 6fdc663cd: Fix import of @ima/react-page-renderer in jest tests with `testEnvironment: 'jsdom'`
+
 ## 18.1.3
 
 ### Patch Changes
