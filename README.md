@@ -57,13 +57,4 @@ yarn dev
 
 ## Contributing
   
-Contribute to this project via [Pull-Requests](https://github.com/seznam/ima/pulls).
-
-We are using [changesets](https://github.com/changesets/changesets/blob/main/docs/common-questions.md) for version management. To simplify the changeset creation process, you can use `npm run changeset` command. It opens an interactive interface, which should help you with changeset file composition.
-
-
-### Set up the dev environment
-
-Our dev stack expects `node>=18` and `npm>=7`.
-
-To set up, simply run `npm install` from the repo root.
+See [How to Contribute](https://imajs.io/contributing/how-to-contribute).
