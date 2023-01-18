@@ -48,28 +48,6 @@ Everything from folder app/public is moved to build folder into static folder.
 * @ima/plugin-hot-reload
 * @ima/plugin-websocket
 
-
-
-
-
-**Example:**
-
-This is original IMA.js v16 code.
-```js
-import PropTypes from 'prop-types';
-
-export default class MyComponent extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object,
-      urlParams: PropTypes.object
-    };
-  }
-}
-```
-
-
-
 ## IMA.js Plugins
 
 All IMA.js plugins need to be updated to the latest version. Older versions won't work.
