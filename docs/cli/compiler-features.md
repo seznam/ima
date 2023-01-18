@@ -196,7 +196,7 @@ All other assets are either **inlined** as **base64 encoded string** or copied t
 
 Images (bmp, gif, jpeg, png, webp, svg) are automatically inlined if their size is below `imageInlineSizeLimit`, which can be configured in [ima.config.js](./ima.config.js.md#imageinlinesizelimit), with default value of **8Kb**. Images exceeding this size limit are copied to the static media folder and import return's their public URL.
 
-To enforce either one of the two modes, you can use `?external` or `?internal` query parameter in the import path:
+To enforce either one of the two modes, you can use `?external` or `?inline` query parameter in the import path:
 
 ```js
 // This always converts the image to base64 encoded string and inlines it.
