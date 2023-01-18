@@ -37,10 +37,13 @@ Everything from folder app/public is moved to build folder into static folder.
 * Prepared for typescript
 
 ## Styles
-* You have to move definition of languages from build.js to "imports" - you have two options:
+* Remove files mark as `FAKE FILE FOR GULP LESS`
+* Move less files from `assets/less` to `app/less`
+* You have to move definition of less files pathes from build.js to "imports" - you have two options:
   * import less files per component
-  * import root less file e.g. in main.js and use glob pattern to import other less files similar like in build.js 
-* app/less/globals.less - this file is prepending to every less file. So that you can import here variables, etc.
+  * import root less file e.g. in main.js and use glob pattern to import other less files similar like in build.js
+* app/less/globals.less - this file is prepending to every less file so that you can import here variables, etc.
+* strictMaths is enabled
 
 ## Deleted packages
 * @ima/react-hooks - functionality moved to @ima/react-page-renderer
