@@ -89,8 +89,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       }
     }
 
-    return batchPromise.then(() =>
-      this._helpers
+    return batchPromise.then(() => {
+      return this._helpers
         .allPromiseHash(loadedPromises)
         .then(async (fetchedResources: unknown) => {
           const pageState = Object.assign(
@@ -120,8 +120,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
             status: controller.getHttpStatus(),
           };
         })
-        .catch((error: Error) => this._handleError(error))
-    );
+        .catch((error: Error) => this._handleError(error));
+    });
   }
 
   /**
@@ -142,8 +142,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       batchPromise = this._startBatchTransactions(controller, updatedPromises);
     }
 
-    return batchPromise.then(() =>
-      this._helpers
+    return batchPromise.then(() => {
+      return this._helpers
         .allPromiseHash(updatedPromises)
         .then(() => {
           controller.setMetaParams(controller.getState());
@@ -154,8 +154,8 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
             status: controller.getHttpStatus(),
           };
         })
-        .catch((error: Error) => this._handleError(error))
-    );
+        .catch((error: Error) => this._handleError(error));
+    });
   }
 
   unmount(): void {
