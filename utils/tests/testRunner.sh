@@ -26,8 +26,6 @@ NPM_LOCAL_REGISTRY_PID=$!
 
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
-npm install -g json
-
 # Release ima packages to local registry
 for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR_IMA/packages/$PACKAGE"
@@ -45,7 +43,7 @@ for PACKAGE in $PACKAGES ; do
 
     if [[ "$PACKAGE" == "create-ima-app" ]]
     then
-        json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
+        npx json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
