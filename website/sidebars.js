@@ -113,6 +113,12 @@ const sidebars = {
         'migration/migration-17.0.0',
       ],
     },
+    {
+      type: 'category',
+      label: 'Contributing',
+      collapsed: false,
+      items: ['contributing/how-to-contribute'],
+    },
   ],
 };
 
