@@ -33,6 +33,7 @@ Remove `"main": "build/server.js"` from `package.json` too. (Server is not anymo
 Dependencies:
 * @ima/gulp-task-loader
 * @ima/gulp-tasks
+
 Files:
 * gulpfile.js
 * gulpConfig.js
@@ -58,8 +59,16 @@ npm i @ima/react-page-renderer
 Rewrite your DocumentView similar like in create-ima-app.
 
 ## Update Server
-You have to add dependecy to `error-to-json` on your own. It was removed from @ima/server.
-Rewrite your server similar like in create-ima-app.
+You have to add dependency to `error-to-json` on your own. It was removed from @ima/server.
+
+Replace
+```
+let errorToJSON = require('error-to-json');
+```
+by
+```
+const errorToJSON = require('error-to-json').default;
+```
 
 ### Split server.js -> server.js and app.js
 This change is optionally, but we use it in our create-ima-app.
@@ -83,7 +92,7 @@ let environment = imaServer.environment;
 let logger = imaServer.logger;
 let cache = imaServer.cache;
 ```
-Replace by
+by
 ```
 const imaServer = require('@ima/server')();
 const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
