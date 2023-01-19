@@ -300,10 +300,7 @@ export default class HttpAgentImpl extends HttpAgent {
     const cacheKey = this.getCacheKey(method, url, data);
 
     const cachePromise = this._proxy.request(method, url, data, options).then(
-      response =>
-        this._proxyResolved(
-          this._cleanCacheResponse(response as HttpAgentResponse)
-        ),
+      response => this._proxyResolved(response as HttpAgentResponse),
       error => this._proxyRejected(error)
     );
 
@@ -347,11 +344,12 @@ export default class HttpAgentImpl extends HttpAgent {
       agentResponse = postProcessor(agentResponse);
     }
 
+    const pureResponse = this._cleanResponse(agentResponse);
     if (cache) {
-      this._saveAgentResponseToCache(agentResponse);
+      this._saveAgentResponseToCache(pureResponse);
     }
 
-    return agentResponse;
+    return pureResponse;
   }
 
   /**
@@ -482,28 +480,25 @@ export default class HttpAgentImpl extends HttpAgent {
 
     agentResponse.cached = true;
 
-    this._cache.set(
-      cacheKey,
-      this._cleanCacheResponse(agentResponse),
-      agentResponse.params.options.ttl
-    );
+    this._cache.set(cacheKey, agentResponse, agentResponse.params.options.ttl);
 
     agentResponse.cached = false;
   }
 
   /**
-   * Cleans cache response from data (abort controller), that cannot be persisted,
+   * Cleans cache response from data (abort controller, postProcessor), that cannot be persisted,
    * before saving the data to the cache.
    */
-  _cleanCacheResponse(response: HttpAgentResponse) {
+  _cleanResponse(response: HttpAgentResponse) {
     /**
-     * Create copy of agentResponse without AbortController and AbortController signal.
-     * Setting agentResponse with AbortController or signal into cache would result in crash.
+     * Create copy of agentResponse without AbortController and AbortController signal and postProcessor.
+     * Setting agentResponse with AbortController or signal or postProcessor into cache would result in crash.
      */
     // eslint-disable-next-line no-unused-vars
     const { signal, ...fetchOptions } =
       response.params.options.fetchOptions || {};
-    const { abortController, ...options } = response.params.options || {};
+    const { abortController, postProcessor, ...options } =
+      response.params.options || {};
     options.fetchOptions = fetchOptions;
 
     return {
