@@ -18,7 +18,7 @@ export const defaultConfig: ImaPluginConfig = {
       exclude: stylesRe,
     },
     {
-      dir: './dist/less',
+      dir: './dist/styles',
       format: 'es6',
       include: stylesRe,
     },
@@ -58,7 +58,7 @@ export const clientServerConfig: ImaPluginConfig = {
       exclude: stylesRe,
     },
     {
-      dir: './dist/less',
+      dir: './dist/styles',
       format: 'es6',
       include: stylesRe,
     },
