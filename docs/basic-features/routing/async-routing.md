@@ -18,9 +18,7 @@ export let init = (ns, oc, config) => {
     .add(
       'home',
       '/',
-      // highlight-next-line
       async() => import('app/page/home/HomeController'),
-      // highlight-next-line
       async() => import('app/page/home/HomeView')
     )
 }

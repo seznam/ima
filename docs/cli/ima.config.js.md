@@ -28,7 +28,9 @@ module.exports = {
   webpack: async (config, ctx) => {
     // Enable webpack infrastructure logging
     if (ctx.command === 'dev') {
-      config.infrastructureLogging = 'info';
+      config.infrastructureLogging = {
+        level: 'info',
+      };
     }
 
     return config;

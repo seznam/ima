@@ -240,9 +240,9 @@ export default class OrderController extends AbstractController {
 
   static get $dependencies() {
     return [
-      [OrderService, { optional: true }]
-      [UserService, { optional: false }]
-      '?$Router' //If $Router is registered in the OC, the constructor will receive router instance. Otherwise it will receive undefined.
+      [OrderService, { optional: true }],
+      [UserService, { optional: false }],
+      '?$Settings.api.serverApiUrl'
     ];
   }
 

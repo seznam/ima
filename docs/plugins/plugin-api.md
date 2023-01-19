@@ -36,8 +36,8 @@ import { pluginLoader } from '@ima/core';
 
 pluginLoader.register('my-ima-plugin', ns => {
   return {
-    initBind: (ns, oc, config) => {}
-    initServices: (ns, oc, config) => {}
+    initBind: (ns, oc, config) => {},
+    initServices: (ns, oc, config) => {},
     initSettings: (ns, oc, config) => {}
   }
 });
