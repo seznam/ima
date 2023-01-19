@@ -42,6 +42,16 @@ export interface ImaPluginOutputConfig {
    * exclude option).
    */
   include?: RegExp | ((filePath: string) => boolean);
+
+  /**
+   * Optional regexp to test files, which should not be coopied/transformed
+   * to the output dir. This is for example used in configurations
+   * to ignore less or json files in one output directory and process
+   * only JS files in others. By default the CLI processes/copies all
+   * files inside the inputDir (except the ones excluded using global
+   * exclude option).
+   */
+  exclude?: RegExp | ((filePath: string) => boolean);
 }
 
 export interface ImaPluginConfig {

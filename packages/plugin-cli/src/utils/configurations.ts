@@ -1,7 +1,7 @@
 import { typescriptDeclarationsPlugin } from '../plugins/typescriptDeclarationsPlugin';
 import { ImaPluginConfig } from '../types';
 
-const jsRe = /\.(jsx?|tsx?)$/i;
+const stylesRe = /\.(less|css)$/i;
 
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
@@ -10,11 +10,17 @@ export const defaultConfig: ImaPluginConfig = {
     {
       dir: './dist/esm',
       format: 'es6',
+      exclude: stylesRe,
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
-      include: jsRe,
+      exclude: stylesRe,
+    },
+    {
+      dir: './dist/less',
+      format: 'es6',
+      include: stylesRe,
     },
   ],
   plugins: [
@@ -38,17 +44,23 @@ export const clientServerConfig: ImaPluginConfig = {
       dir: './dist/esm/client',
       format: 'es6',
       bundle: 'client',
+      exclude: stylesRe,
     },
     {
       dir: './dist/esm/server',
       format: 'es6',
       bundle: 'server',
-      include: jsRe,
+      exclude: stylesRe,
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
-      include: jsRe,
+      exclude: stylesRe,
+    },
+    {
+      dir: './dist/less',
+      format: 'es6',
+      include: stylesRe,
     },
   ],
 };
