@@ -254,6 +254,35 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
+    it('should render 200 ima app page with custom content variables', async () => {
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: '#{myID} app html #{myVariable}',
+      });
+
+      emitter.on(Event.CreateContentVariables, ({ result }) => {
+        return {
+          ...result,
+          myVariable: 'custom variable',
+        };
+      });
+
+      emitter.on(Event.CreateContentVariables, ({ result }) => {
+        return {
+          ...result,
+          myID: 123,
+        };
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('123 app html custom variable');
+      expect(response.cache).toBeFalsy();
+    });
+
     it('should render 500 ima app page', async () => {
       jest
         .spyOn(router, 'route')
