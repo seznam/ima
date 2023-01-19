@@ -234,12 +234,15 @@ module.exports = function hooksFactory({
   function useCreateContentVariablesHook() {
     emitter.on(Event.CreateContentVariables, async event => {
       if (!_isValidResponse(event)) {
-        return;
+        return event.result;
       }
 
-      event.context.response.contentVariables = createContentVariables({
-        ...event.context,
-      });
+      return {
+        ...event.result,
+        ...createContentVariables({
+          ...event.context,
+        }),
+      };
     });
   }
 
@@ -266,6 +269,10 @@ module.exports = function hooksFactory({
       }
 
       event = await emitter.emit(Event.CreateContentVariables, event);
+      event.context.response.contentVariables = {
+        ...event.context.response.contentVariables,
+        ...event.result,
+      };
 
       event.context.response.content = processContent({
         ...event.context,
