@@ -10,10 +10,10 @@ import { ComponentType, createElement, ReactElement } from 'react';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
+import PageRendererFactory from './PageRendererFactory';
 import BlankManagedRootView from '../component/BlankManagedRootView';
 import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
 import { Settings, Utils } from '../types';
-import PageRendererFactory from './PageRendererFactory';
 
 export type PageData = {
   documentView?: ComponentType;
