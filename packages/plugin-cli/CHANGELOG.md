@@ -1,5 +1,15 @@
 # Change Log
 
+## 18.1.0
+
+### Minor Changes
+
+- 4342d6e60: Add support for `ImaPluginConfig.output.exclude`, which works just like inverted `include`
+
+### Patch Changes
+
+- 4342d6e60: Updated `defaultConfig` and `clientServerConfig` to bundle less/css files into seperate directory in dist and all other assets are now bundled into each bundle version (esm/cjs/client/server). This fixes an issue, where some essential json files were not available in the cjs bundle.
+
 ## 18.0.0
 
 ### Major Changes

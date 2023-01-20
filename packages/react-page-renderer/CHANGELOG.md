@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.1.5
+
+### Patch Changes
+
+- 34d729757: Return batchResolve to renderer
+- abb9308ad: Update code style - return for batchPromise
+
 ## 18.1.4
 
 ### Patch Changes
