@@ -21,7 +21,6 @@ import webpack, {
   WebpackPluginInstance,
 } from 'webpack';
 
-import { ImaConfigurationContext, ImaConfig } from '../types';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
@@ -34,6 +33,7 @@ import {
   getCurrentCoreJsVersion,
   getLocaleEntryPoints,
 } from './utils';
+import { ImaConfigurationContext, ImaConfig } from '../types';
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
