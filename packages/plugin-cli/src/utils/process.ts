@@ -199,11 +199,14 @@ export async function createProcessingPipeline(ctx: Context) {
 
     // Run transformers for each output and emit
     await Promise.all(
-      config.output.map(async ({ dir, include }) => {
+      config.output.map(async ({ dir, include, exclude }) => {
         if (
-          include &&
-          ((typeof include === 'function' && !include(filePath)) ||
-            (typeof include === 'object' && !include?.test(filePath)))
+          (include &&
+            ((typeof include === 'function' && !include(filePath)) ||
+              (typeof include === 'object' && !include?.test(filePath)))) ||
+          (exclude &&
+            ((typeof exclude === 'function' && exclude(filePath)) ||
+              (typeof exclude === 'object' && exclude?.test(filePath))))
         ) {
           return;
         }
