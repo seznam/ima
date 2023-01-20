@@ -29,6 +29,9 @@ There is new @ima/cli used in scripts instead of gulp.
 ```
 Remove `"main": "build/server.js"` from `package.json` too. (Server is not anymore in build/server.js.)
 
+### Update settings.js
+Remove scripts and esScripts from $Page.$Render (IMA process this things now by manifest and contentVariables).
+
 ### Remove gulp specific things
 Dependencies:
 * @ima/gulp-task-loader
@@ -54,6 +57,11 @@ Add `@swc/jest` devDependency for tests.
 npm i @ima/react-page-renderer
 ```
 * You can use codemod `npx @cns/web-plugins-codemods` -> ima18: react page renderer imports
+
+* Update DocumentView - use AbstractPureComponent from @ima/react-page-renderer instead of AbstractDocumentView
+
+### Update EventBus 
+You have to add target as the second argument for EventBus fire, listen/unlisten.
 
 ## Update DocumentView
 Rewrite your DocumentView similar like in create-ima-app.
@@ -101,12 +109,45 @@ const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
 require('@ima/react-page-renderer/hook/server')(imaServer);
 ```
 
+Replace clientApp.requestHandler by serverApp.requestHandlerMiddleware.
+
+Remove staticErrorPage and replace errorHandler function by
+```
+function renderError(error, req, res, next) {
+  serverApp
+    .errorHandlerMiddleware(error, req, res, next)
+    .then(response => {
+      logger.error(response.error);
+    })
+    .catch(next);
+}
+```
+
 ### Move environment.js file
 * File `app/environment.js` was moved to location `/server/config/environment.js`
   There was removed **test** env.
 
 ### Templates
 * 400, 500, spa templates are in `server/template` (look at [create-ima-app](https://github.com/seznam/ima/tree/master/packages/create-ima-app/template/server/template))
+
+### Update DocumentView
+You can remove getAsyncScripts method and body content replace with:
+(You have to add $Page.$Render.masterElementId property to settings.js)
+```
+ <div
+  id={this.utils.$Settings.$Page.$Render.masterElementId}
+  dangerouslySetInnerHTML={{ __html: this.props.page }}
+/>
+	{'#{revivalCache}'}
+    {'#{revivalSettings}'}
+    {'#{runner}'}
+```
+
+Instead of app css loading use:
+```
+  {'#{styles}'}
+```
+
 
 ## Assets => app/public
 Everything from folder app/public is moved to build folder into static folder.
