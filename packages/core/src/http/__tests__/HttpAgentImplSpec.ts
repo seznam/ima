@@ -109,6 +109,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
               cached: false,
             };
 
+              // @ts-ignore
+            delete agentResponse.params.options.postProcessor;
+
             // eslint-disable-next-line jest/no-conditional-expect
             expect(response).toStrictEqual(agentResponse);
           })
