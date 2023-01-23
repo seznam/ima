@@ -65,18 +65,23 @@ module.exports = {
     {
       dir: './dist/esm',
       format: 'es6',
+      /**
+       * Since we want to handle less/css files separately, we can exclude them
+       * from this output dir. This extends the root `exclude` definition.
+       * When the option is not defined, it copies all files to the dist folder.
+       */
+      exclude: /\.(less|css)$/i
     },
     {
       dir: './dist/cjs',
       format: 'commonjs',
-      /**
-       * This makes sure that cjs folder only contains JS files. When the option
-       * is not defined, it copies all files to the dist folder.
-       *
-       * We use this option for example to only have less, json and other assets in
-       * one output folder.
-       */
-      include: /\.(jsx?|tsx?)/i
+      exclude: /\.(less|css)$/i
+    },
+    {
+      dir: './dist/less',
+      format: 'es6',
+      // Here we can have an individual bundle just for less/css files.
+      include: /\.(less|css)$/i
     },
   ],
   plugins: [

@@ -4,6 +4,11 @@ import path from 'path';
 import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 
+import {
+  clientServerConfig,
+  defaultConfig,
+  nodeConfig,
+} from './configurations';
 import { preprocessTransformer } from '../transformers/preprocessTransformer';
 import { createSwcTransformer } from '../transformers/swcTransformer';
 import {
@@ -14,11 +19,6 @@ import {
   ImaPluginConfig,
   Args,
 } from '../types';
-import {
-  clientServerConfig,
-  defaultConfig,
-  nodeConfig,
-} from './configurations';
 
 const CONFIG_BASENAME = 'ima-plugin.config';
 
@@ -199,11 +199,14 @@ export async function createProcessingPipeline(ctx: Context) {
 
     // Run transformers for each output and emit
     await Promise.all(
-      config.output.map(async ({ dir, include }) => {
+      config.output.map(async ({ dir, include, exclude }) => {
         if (
-          include &&
-          ((typeof include === 'function' && !include(filePath)) ||
-            (typeof include === 'object' && !include?.test(filePath)))
+          (include &&
+            ((typeof include === 'function' && !include(filePath)) ||
+              (typeof include === 'object' && !include?.test(filePath)))) ||
+          (exclude &&
+            ((typeof exclude === 'function' && exclude(filePath)) ||
+              (typeof exclude === 'object' && exclude?.test(filePath))))
         ) {
           return;
         }

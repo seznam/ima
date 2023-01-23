@@ -111,7 +111,14 @@ const sidebars = {
         'migration/migration-0.15.0',
         'migration/migration-0.16.0',
         'migration/migration-17.0.0',
+        'migration/migration-18.0.0',
       ],
+    },
+    {
+      type: 'category',
+      label: 'Contributing',
+      collapsed: false,
+      items: ['contributing/how-to-contribute'],
     },
   ],
 };

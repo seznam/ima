@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.2.0
+
+### Minor Changes
+
+- 6a5154d81: - Added unit and integration tests.
+  - Script `benchmark` replaced by `test:create-ima-app`.
+
 ## 18.1.2
 
 ### Patch Changes

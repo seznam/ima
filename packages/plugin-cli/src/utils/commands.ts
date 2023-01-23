@@ -8,13 +8,13 @@ import chokidar from 'chokidar';
 import globby from 'globby';
 import { Arguments } from 'yargs';
 
-import { Args, Context, ImaPluginConfig } from '../types';
 import {
   createProcessingPipeline,
   parseConfigFile,
   runPlugins,
 } from './process';
 import { cleanOutput, processOutput } from './utils';
+import { Args, Context, ImaPluginConfig } from '../types';
 
 function parseArgs(args: Arguments) {
   const [command] = args._ as [Args['command']];

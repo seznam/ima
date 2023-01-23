@@ -18,6 +18,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "^18.0.0",
+    "@ima/plugin-testing-integration": "^3.0.0",
     "@swc/jest": "^0.2.20",
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
     "enzyme": "^3.11.0",
@@ -29,7 +30,7 @@
     "eslint-plugin-react": "^7.29.4",
     "error-to-json": "2.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.5.1",
+    "jest": "^29.3.1",
     "prettier": "^2.6.0"
   },
   "dependencies": {
