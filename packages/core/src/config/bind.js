@@ -19,6 +19,7 @@ import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
 import PageFactory from '../page/PageFactory';
 import PageHandlerRegistry from '../page/handler/PageHandlerRegistry';
+import PageMetaHandler from '../page/handler/PageMetaHandler';
 import PageNavigationHandler from '../page/handler/PageNavigationHandler';
 import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
@@ -152,6 +153,7 @@ export default (ns, oc, config) => {
   if (oc.get(Window).isClient()) {
     oc.bind('$PageHandlerRegistry', PageHandlerRegistry, [
       PageNavigationHandler,
+      PageMetaHandler,
     ]);
     oc.provide(PageManager, ClientPageManager);
   } else {

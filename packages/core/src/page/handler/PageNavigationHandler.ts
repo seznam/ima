@@ -59,8 +59,6 @@ export default class PageNavigationHandler extends PageHandler {
     if ((options as RouteOptions).autoScroll) {
       this._scrollTo({ x: 0, y: 0 });
     }
-
-    managedPage?.metaManager?.clearMetaAttributes();
   }
 
   /**

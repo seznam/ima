@@ -5,7 +5,6 @@ import {
   Controller,
   ControllerDecorator,
   Dispatcher,
-  MetaManager,
   RendererEvents,
   RendererTypes,
   Window,
@@ -15,11 +14,6 @@ import type {
   UnknownPromiseParameters,
   RouteOptions,
 } from '@ima/core';
-import {
-  MetaManagerRecordNames,
-  MetaManagerRecord,
-  MetaAttributes,
-} from '@ima/core/dist/esm/client/meta/MetaManager';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
@@ -98,15 +92,10 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         const isViewContainerEmpty =
           !this._viewContainer || !this._viewContainer.children.length;
 
-        isViewContainerEmpty && controller.setState(pageState);
-
-        controller.getMetaManager().clearMetaAttributes();
         controller.setMetaParams(pageState);
-
+        isViewContainerEmpty && controller.setState(pageState);
         isViewContainerEmpty &&
           (await this._renderPageViewToDOM(controller, pageView, routeOptions));
-
-        this._updateMetaAttributes(controller.getMetaManager());
 
         return {
           pageState: controller.getState(),
@@ -133,8 +122,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     return this._helpers
       .allPromiseHash(updatedPromises)
       .then(() => {
-        controller.setMetaParams(controller.getState());
-        this._updateMetaAttributes(controller.getMetaManager());
+        controller.setMetaParams(pageState);
 
         return {
           pageState: controller.getState(),
@@ -305,86 +293,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     }
 
     return { promises, values };
-  }
-
-  /**
-   * Update specified meta or link tags in DOM.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaAttributes(metaManager: MetaManager) {
-    this._window.setTitle(metaManager.getTitle());
-
-    // Remove IMA managed meta tags
-    this._window
-      .querySelectorAll(`[data-ima-meta]`)
-      .forEach(el => (el as HTMLElement)?.remove());
-
-    this.#updateMetaTag<'href'>(metaManager.getLinksIterator(), 'link', 'href');
-    this.#updateMetaTag<'property'>(
-      metaManager.getMetaPropertiesIterator(),
-      'meta',
-      'property'
-    );
-    this.#updateMetaTag<'content'>(
-      metaManager.getMetaNamesIterator(),
-      'meta',
-      'content'
-    );
-  }
-
-  /**
-   * Helper to update specific meta tags in page document.
-   *
-   * @param iterator Collection of meta records to update.
-   * @param tagName Tag name for the given collection.
-   * @param valueName Name of the main value for given meta collection.
-   */
-  #updateMetaTag<R extends MetaManagerRecordNames>(
-    iterator: IterableIterator<[string, MetaManagerRecord<R>]> | never[],
-    tagName: 'link' | 'meta',
-    valueName: MetaManagerRecordNames
-  ): void {
-    const document = this._window.getDocument();
-
-    if (!document) {
-      return;
-    }
-
-    for (const [key, value] of iterator) {
-      const attributes = {
-        [tagName === 'link' ? 'rel' : 'name']: key,
-        ...(typeof value === 'object' ? value : { [valueName]: value }),
-      } as MetaAttributes;
-
-      // TODO IMA@19 - remove backwards compatibility
-      const existingMetaTag = this._window.querySelector(`meta[name="${key}"]`);
-
-      if (existingMetaTag) {
-        existingMetaTag.setAttribute(
-          valueName,
-          attributes[valueName] as string
-        );
-
-        continue;
-      }
-
-      // TODO IMA@19 - following should be default from IMA@19
-      const metaTag = document.createElement(tagName);
-      metaTag.setAttribute('data-ima-meta', '');
-
-      for (const [attrName, attrValue] of Object.entries(attributes)) {
-        // Skip invalid values
-        if (attrValue === undefined || attrValue === null) {
-          continue;
-        }
-
-        metaTag?.setAttribute(attrName, attrValue.toString());
-      }
-
-      document?.head.appendChild(metaTag);
-    }
   }
 }
 /* @endif */
