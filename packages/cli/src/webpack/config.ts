@@ -60,6 +60,10 @@ export default async (
   const mode = ctx.environment === 'production' ? 'production' : 'development';
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
 
+  // Bundle entries
+  const publicPathEntry = path.join(__dirname, './entries/publicPathEntry');
+  const appMainEntry = path.join(rootDir, 'app/main.js');
+
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
 
@@ -221,10 +225,11 @@ export default async (
     entry: {
       ...(isServer
         ? {
-            server: [path.join(rootDir, 'app/main.js')],
+            server: [publicPathEntry, appMainEntry],
           }
         : {
             [name]: [
+              publicPathEntry,
               useHMR &&
                 isDebug &&
                 `@ima/hmr-client?${new URLSearchParams({
@@ -237,7 +242,7 @@ export default async (
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
                 }).toString()}`,
-              path.join(rootDir, 'app/main.js'),
+              appMainEntry,
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),

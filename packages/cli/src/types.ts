@@ -9,8 +9,10 @@ declare global {
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_LAZY_SERVER?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
-      IMA_CLI_PUBLIC_PATH?: string;
       IMA_CLI_OPEN?: string;
+
+      // Used to pass env publicPath settings to webpack
+      IMA_PUBLIC_PATH?: string;
     }
   }
 }
