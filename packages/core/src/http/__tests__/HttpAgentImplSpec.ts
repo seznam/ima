@@ -16,6 +16,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const cookie = toMockedInstance(CookieStorage);
   let options = null;
   let data: HttpAgentResponse;
+  // @ts-ignore
   let httpConfig = null;
   const helper = {
     ...Helper,
@@ -49,7 +50,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
       cache: true,
       fetchOptions: {},
       withCredentials: true,
-      postProcessor: httpConfig.defaultRequestOptions.postProcessor,
       // @ts-ignore
       language: httpConfig.defaultRequestOptions.language,
     };
@@ -192,6 +192,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
+
+        data.params.options.postProcessor =
+          // @ts-ignore
+          httpConfig.defaultRequestOptions.postProcessor;
         jest.spyOn(data.params.options, 'postProcessor');
 
         // @ts-ignore
@@ -201,6 +205,27 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then(() => {
           expect(data.params.options.postProcessor).toHaveBeenCalled();
+        });
+      });
+
+      it('should call clear response from postProcessor and abortController', async () => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
+          return Promise.resolve(data);
+        });
+
+        data.params.options.postProcessor =
+          // @ts-ignore
+          httpConfig.defaultRequestOptions.postProcessor;
+        data.params.options.abortController = new AbortController();
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then((response: HttpAgentResponse) => {
+          expect(response.params.options.abortController).toBeUndefined();
+          expect(response.params.options.postProcessor).toBeUndefined();
         });
       });
 
