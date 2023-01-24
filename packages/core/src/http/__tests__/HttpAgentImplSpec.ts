@@ -203,6 +203,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then((response: HttpAgentResponse) => {
           expect(data.params.options.postProcessor).toHaveBeenCalled();
+          expect(response.params.options.postProcessor).toBeUndefined();
         });
       });
 
