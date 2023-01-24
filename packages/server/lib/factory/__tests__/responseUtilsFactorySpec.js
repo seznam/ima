@@ -91,6 +91,10 @@ describe('responseUtilsFactory', () => {
   });
 
   describe('_prepareSource', () => {
+    afterEach(() => {
+      process.env.IMA_PUBLIC_PATH = '';
+    });
+
     it('should prepare default sources structure from provided manifest file', () => {
       expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
     });
@@ -99,7 +103,6 @@ describe('responseUtilsFactory', () => {
       process.env.IMA_PUBLIC_PATH = 'cdn://';
 
       expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-      process.env.IMA_PUBLIC_PATH = '';
     });
 
     it('should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath', () => {
@@ -114,7 +117,6 @@ describe('responseUtilsFactory', () => {
           'en'
         )
       ).toMatchSnapshot();
-      process.env.IMA_PUBLIC_PATH = '';
     });
 
     // TODO IMA@19 remove CDN_STATIC_ROOT_URL in favor of IMA_PUBLIC_PATH >>>

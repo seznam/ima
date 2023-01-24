@@ -42,19 +42,13 @@ module.exports = function responseUtilsFactory() {
         const assetFile = assets[asset.name]?.fileName;
 
         // TODO IMA@19 remove deprecated use of CDN_STATIC_ROOT_URL in favor of IMA_PUBLIC_PATH >>>>>
-        if (process.env.CDN_STATIC_ROOT_URL) {
-          // Add CDN as primary source with static file asn fallback
-          return [
-            `${process.env.CDN_STATIC_ROOT_URL}${assetFile}`,
-            {
-              ...attr,
-              fallback: publicPath + assetFile,
-            },
-          ];
+        if (process.env.CDN_STATIC_ROOT_URL && !process.env.IMA_PUBLIC_PATH) {
+          process.env.IMA_PUBLIC_PATH = process.env.CDN_STATIC_ROOT_URL;
         }
+        // TODO <<<<<
 
         if (process.env.IMA_PUBLIC_PATH) {
-          // Add fallback url for sources if new public path is defined
+          // Add fallback url for sources when new public path is defined
           return [
             `${process.env.IMA_PUBLIC_PATH}${assetFile}`,
             {
@@ -65,7 +59,6 @@ module.exports = function responseUtilsFactory() {
         }
 
         return [publicPath + assetFile, attr];
-        // TODO <<<<<
       });
     };
 
