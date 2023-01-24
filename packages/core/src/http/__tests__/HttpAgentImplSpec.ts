@@ -16,6 +16,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const cookie = toMockedInstance(CookieStorage);
   let options = null;
   let data: HttpAgentResponse;
+  // @ts-ignore
   let httpConfig = null;
   const helper = {
     ...Helper,
@@ -49,7 +50,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
       cache: true,
       fetchOptions: {},
       withCredentials: true,
-      postProcessor: httpConfig.defaultRequestOptions.postProcessor,
       // @ts-ignore
       language: httpConfig.defaultRequestOptions.language,
     };
@@ -108,9 +108,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
               headersRaw: data.headersRaw,
               cached: false,
             };
-
-              // @ts-ignore
-            delete agentResponse.params.options.postProcessor;
 
             // eslint-disable-next-line jest/no-conditional-expect
             expect(response).toStrictEqual(agentResponse);
@@ -191,10 +188,12 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should call postProcessor function', async () => {
+      it('should call postProcessor function and delete it from response', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
+        // @ts-ignore
+        data.params.options.postProcessor = httpConfig.defaultRequestOptions.postProcessor;
         jest.spyOn(data.params.options, 'postProcessor');
 
         // @ts-ignore
@@ -202,7 +201,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        ).then(() => {
+        ).then((response: HttpAgentResponse) => {
           expect(data.params.options.postProcessor).toHaveBeenCalled();
         });
       });
