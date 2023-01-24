@@ -188,12 +188,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should call postProcessor function and delete it from response', async () => {
+      it('should call postProcessor function', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        // @ts-ignore
-        data.params.options.postProcessor = httpConfig.defaultRequestOptions.postProcessor;
+
+        data.params.options.postProcessor =
+          // @ts-ignore
+          httpConfig.defaultRequestOptions.postProcessor;
         jest.spyOn(data.params.options, 'postProcessor');
 
         // @ts-ignore
@@ -201,8 +203,28 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        ).then((response: HttpAgentResponse) => {
+        ).then(() => {
           expect(data.params.options.postProcessor).toHaveBeenCalled();
+        });
+      });
+
+      it('should call clear response from postProcessor and abortController', async () => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
+          return Promise.resolve(data);
+        });
+
+        data.params.options.postProcessor =
+          // @ts-ignore
+          httpConfig.defaultRequestOptions.postProcessor;
+        data.params.options.abortController = new AbortController();
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then((response: HttpAgentResponse) => {
+          expect(response.params.options.abortController).toBeUndefined();
           expect(response.params.options.postProcessor).toBeUndefined();
         });
       });
