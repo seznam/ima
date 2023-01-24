@@ -33,14 +33,15 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let imaConfig = {
-        languages: { cs: [], en: [] },
-      };
+      let langCodes = ['cs', 'en'];
+
       if (fs.existsSync(IMA_CONFIG_JS_PATH)) {
-        imaConfig = require(IMA_CONFIG_JS_PATH) || imaConfig;
+        const imaConfig = require(IMA_CONFIG_JS_PATH);
+        if (imaConfig?.languages) {
+          langCodes = Object.keys(imaConfig.languages);
+        }
       }
 
-      const langCodes = Object.keys(imaConfig.languages);
       let languagesExpr = langCodes.join('|');
       rootReg += '(/(' + languagesExpr + '))?';
     }
