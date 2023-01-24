@@ -53,7 +53,7 @@ Add `@swc/jest` devDependency for tests.
 
 ## New React-page-renderer
 * React-page-renderer moved to new package @ima/react-page-renderer 
-```
+```bash npm2yarn
 npm i @ima/react-page-renderer
 ```
 * You can use codemod `npx @cns/web-plugins-codemods` -> ima18: react page renderer imports
@@ -70,11 +70,11 @@ Rewrite your DocumentView similar like in create-ima-app.
 You have to add dependency to `error-to-json` on your own. It was removed from @ima/server.
 
 Replace
-```
+```js
 let errorToJSON = require('error-to-json');
 ```
 by
-```
+```js
 const errorToJSON = require('error-to-json').default;
 ```
 
@@ -83,7 +83,7 @@ This change is optionally, but we use it in our create-ima-app.
 
 ### Server changes
 Remove:
-```
+```js
 'use strict';
 
 require('@ima/core/polyfill/imaLoader.js');
@@ -91,7 +91,7 @@ require('@ima/core/polyfill/imaRunner.js');
 ```
 
 Replace this part:
-```
+```js
 let imaServer = require('@ima/server');
 
 let clientApp = imaServer.clientApp;
@@ -101,7 +101,7 @@ let logger = imaServer.logger;
 let cache = imaServer.cache;
 ```
 by
-```
+```js
 const imaServer = require('@ima/server')();
 const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
   imaServer;
@@ -112,7 +112,7 @@ require('@ima/react-page-renderer/hook/server')(imaServer);
 Replace clientApp.requestHandler by serverApp.requestHandlerMiddleware.
 
 Remove staticErrorPage and replace errorHandler function by
-```
+```js
 function renderError(error, req, res, next) {
   serverApp
     .errorHandlerMiddleware(error, req, res, next)
@@ -133,7 +133,7 @@ function renderError(error, req, res, next) {
 ### Update DocumentView
 You can remove getAsyncScripts method and body content replace with:
 (You have to add $Page.$Render.masterElementId property to settings.js)
-```
+```jsx
  <div
   id={this.utils.$Settings.$Page.$Render.masterElementId}
   dangerouslySetInnerHTML={{ __html: this.props.page }}
