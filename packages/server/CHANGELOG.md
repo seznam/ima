@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.1.5
+
+### Patch Changes
+
+- 121a44bc7: update @esmj/monitor dependency to 0.3.0
+- 026f2434d: Allow extend content variables with returns value from CreatecontentVariable hook.
+
 ## 18.1.4
 
 ### Patch Changes
