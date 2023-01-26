@@ -120,7 +120,7 @@ describe('responseUtilsFactory', () => {
     });
 
     // TODO IMA@19 remove CDN_STATIC_ROOT_URL in favor of IMA_PUBLIC_PATH >>>
-    it('dEPRECATED: should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
+    it('deprecated: should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
       process.env.CDN_STATIC_ROOT_URL = 'cdn://';
 
       expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
