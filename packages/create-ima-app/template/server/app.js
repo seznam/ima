@@ -104,7 +104,7 @@ app
   .use(helmet())
   .use(
     compression({
-      filter: req => req.baseUrl !== environment.$Server.staticFolder,
+      filter: req => req.baseUrl !== environment.$Server.staticPath,
     })
   )
   .use(
@@ -113,9 +113,9 @@ app
     )
   )
   .use(
-    environment.$Server.staticFolder,
+    environment.$Server.staticPath,
     memStaticProxy,
-    expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
+    expressStaticGzip(path.resolve(path.join(__dirname, '../build')), {
       enableBrotli: true,
       index: false,
       orderPreference: ['br'],

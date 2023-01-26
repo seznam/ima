@@ -109,7 +109,6 @@ const dev: HandlerFn = async args => {
     // Load ima config & env
     const imaConfig = await resolveImaConfig(args);
     const environment = resolveEnvironment(args.rootDir);
-    process.env.IMA_CLI_PUBLIC_PATH = imaConfig.publicPath;
 
     /**
      * Set public env variable which is used to load assets in the SSR error view.
