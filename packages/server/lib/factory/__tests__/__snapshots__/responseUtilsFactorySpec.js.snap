@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`responseUtilsFactory _prepareSource dEPRECATED: should add fallbacks when CDN_STATIC_ROOT_URL is defined 1`] = `
+exports[`responseUtilsFactory _prepareSource deprecated: should add fallbacks when CDN_STATIC_ROOT_URL is defined 1`] = `
 {
   "esScripts": [
     [
