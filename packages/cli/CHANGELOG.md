@@ -1,5 +1,16 @@
 # Change Log
 
+## 18.2.0
+
+### Minor Changes
+
+- f66d8808b: Added ability to set custom publicPath during runtime using IMA_PUBLIC_PATH env variable
+  Proper handling of publicPath in assets serving and sources fallbacks
+
+### Patch Changes
+
+- ec39ad559: CLI now returns exit code 1 when unexpected error occurs, allowing it to be processed further by other tools. Was previously incorrectly returning exit code 0 no matter the situation.
+
 ## 18.1.0
 
 ### Minor Changes
