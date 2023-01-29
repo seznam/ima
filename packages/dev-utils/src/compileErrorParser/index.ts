@@ -16,6 +16,10 @@ export const COMPILE_ERROR_NEEDLES_RE = [
 export function resolveErrorType(
   error: Error | StatsError
 ): 'compile' | 'runtime' {
+  if ((error as StatsError)?.loc) {
+    return 'compile';
+  }
+
   return COMPILE_ERROR_NEEDLES_RE.some(re =>
     re.test(error?.message || error?.stack || '')
   )
