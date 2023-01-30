@@ -1,6 +1,6 @@
 ---
-"create-ima-app": patch
-"@ima/cli": patch
+"create-ima-app": minor
+"@ima/cli": minor
 ---
 
 Replaced locale-loader with custom compilation process of language files
