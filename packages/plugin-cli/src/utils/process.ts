@@ -4,6 +4,11 @@ import path from 'path';
 import { logger } from '@ima/dev-utils/dist/logger';
 import chalk from 'chalk';
 
+import {
+  clientServerConfig,
+  defaultConfig,
+  nodeConfig,
+} from './configurations';
 import { preprocessTransformer } from '../transformers/preprocessTransformer';
 import { createSwcTransformer } from '../transformers/swcTransformer';
 import {
@@ -14,11 +19,6 @@ import {
   ImaPluginConfig,
   Args,
 } from '../types';
-import {
-  clientServerConfig,
-  defaultConfig,
-  nodeConfig,
-} from './configurations';
 
 const CONFIG_BASENAME = 'ima-plugin.config';
 

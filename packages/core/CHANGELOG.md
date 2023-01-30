@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.0.3
+
+### Patch Changes
+
+- e52756d23: fix: delete postProcessor before saving it to cache
+
 ## 18.0.2
 
 ### Patch Changes

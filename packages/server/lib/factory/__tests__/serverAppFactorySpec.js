@@ -254,8 +254,39 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
+    it('should render 200 ima app page with custom content variables', async () => {
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: '#{myID} app html #{myVariable}',
+      });
+
+      emitter.on(Event.CreateContentVariables, ({ result }) => {
+        return {
+          ...result,
+          myVariable: 'custom variable',
+        };
+      });
+
+      emitter.on(Event.CreateContentVariables, ({ result }) => {
+        return {
+          ...result,
+          myID: 123,
+        };
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('123 app html custom variable');
+      expect(response.cache).toBeFalsy();
+    });
+
     it('should render 500 ima app page', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+      jest
+        .spyOn(router, 'route')
+        .mockReturnValue(Promise.reject(new Error('Error')));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -267,8 +298,17 @@ describe('Server App Factory', () => {
     });
 
     it('should render 500 static page', async () => {
-      environment.$Server.staticConcurrency = 1;
-      jest.spyOn(router, 'route').mockReturnValue(Promise.reject('Error'));
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return 'home ';
+          },
+        },
+      });
+      jest
+        .spyOn(router, 'route')
+        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 

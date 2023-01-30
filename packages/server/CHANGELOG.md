@@ -1,5 +1,23 @@
 # Change Log
 
+## 18.2.0
+
+### Minor Changes
+
+- f66d8808b: Added ability to set custom publicPath during runtime using IMA_PUBLIC_PATH env variable
+  Proper handling of publicPath in assets serving and sources fallbacks
+
+### Patch Changes
+
+- f07da7c17: Fix urlParserMiddleware with missing ima.config.js
+
+## 18.1.5
+
+### Patch Changes
+
+- 121a44bc7: update @esmj/monitor dependency to 0.3.0
+- 026f2434d: Allow extend content variables with returns value from CreatecontentVariable hook.
+
 ## 18.1.4
 
 ### Patch Changes

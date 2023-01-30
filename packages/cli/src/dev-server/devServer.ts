@@ -6,9 +6,9 @@ import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 
-import { ImaCliArgs, ImaConfig } from '../types';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
+import { ImaCliArgs, ImaConfig } from '../types';
 
 const WRITE_TO_DISK_WHITELIST = /(runner\.js|manifest\.json|favicon\.ico)$/i;
 
@@ -67,7 +67,7 @@ export async function createDevServer({
       .use(
         devMiddleware(compiler, {
           index: false,
-          publicPath: config.publicPath,
+          publicPath: process.env.IMA_PUBLIC_PATH ?? config.publicPath,
           writeToDisk: args.writeToDisk
             ? true
             : filePath =>

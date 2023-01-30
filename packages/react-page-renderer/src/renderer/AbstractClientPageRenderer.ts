@@ -18,9 +18,9 @@ import type {
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
-import { Settings } from '../types';
 import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
 import PageRendererFactory from './PageRendererFactory';
+import { Settings } from '../types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by

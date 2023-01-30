@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.3.0
+
+### Minor Changes
+
+- f66d8808b: Added ability to set custom publicPath during runtime using IMA_PUBLIC_PATH env variable
+  Proper handling of publicPath in assets serving and sources fallbacks
+
 ## 18.2.0
 
 ### Minor Changes

@@ -2,9 +2,9 @@ import type { UnknownParameters } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
+import ErrorBoundary from './ErrorBoundary';
 import PageContext from '../PageContext';
 import { Utils } from '../types';
-import ErrorBoundary from './ErrorBoundary';
 
 export interface ViewAdapterProps {
   $Utils: Utils;

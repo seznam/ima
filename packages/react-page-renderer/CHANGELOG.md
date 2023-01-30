@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.6
+
+### Patch Changes
+
+- 3df9b0521: Fix compatibility with `eslint-plugin-import`
+
 ## 18.1.5
 
 ### Patch Changes

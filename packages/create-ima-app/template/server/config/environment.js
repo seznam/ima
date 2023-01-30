@@ -29,7 +29,7 @@ module.exports = (() => {
       $Server: {
         port: 3001, // The port at which the server listens for
         // incoming HTTP connections
-        staticFolder: '/static', // Define the path to the folder with
+        staticPath: '/static', // Define the path to the folder with
         // static assets
         concurrency: 100, // The number of application instances (not
         // threads) used to handle concurrent

@@ -2,6 +2,7 @@
 
 const { URL } = require('url');
 const path = require('path');
+const fs = require('fs');
 
 module.exports = function urlParserMiddlewareFactory({ environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
@@ -32,11 +33,15 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let imaConfig = require(IMA_CONFIG_JS_PATH) || {
-        languages: { cs: [], en: [] },
-      };
+      let langCodes = ['cs', 'en'];
 
-      const langCodes = Object.keys(imaConfig.languages);
+      if (fs.existsSync(IMA_CONFIG_JS_PATH)) {
+        const imaConfig = require(IMA_CONFIG_JS_PATH);
+        if (imaConfig?.languages) {
+          langCodes = Object.keys(imaConfig.languages);
+        }
+      }
+
       let languagesExpr = langCodes.join('|');
       rootReg += '(/(' + languagesExpr + '))?';
     }

@@ -91,16 +91,42 @@ describe('responseUtilsFactory', () => {
   });
 
   describe('_prepareSource', () => {
+    afterEach(() => {
+      process.env.IMA_PUBLIC_PATH = '';
+    });
+
     it('should prepare default sources structure from provided manifest file', () => {
       expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
     });
 
-    it('should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
+    it('should add fallbacks when IMA_PUBLIC_PATH is defined', () => {
+      process.env.IMA_PUBLIC_PATH = 'cdn://';
+
+      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
+    });
+
+    it('should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath', () => {
+      process.env.IMA_PUBLIC_PATH = 'cdn://';
+
+      expect(
+        _prepareSource(
+          {
+            ...manifestMock,
+            publicPath: '/pro/static/',
+          },
+          'en'
+        )
+      ).toMatchSnapshot();
+    });
+
+    // TODO IMA@19 remove CDN_STATIC_ROOT_URL in favor of IMA_PUBLIC_PATH >>>
+    it('deprecated: should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
       process.env.CDN_STATIC_ROOT_URL = 'cdn://';
 
       expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
       process.env.CDN_STATIC_ROOT_URL = '';
     });
+    // TODO IMA@19 <<<
 
     it('should skip compilations without assets', () => {
       const sources = _prepareSource(

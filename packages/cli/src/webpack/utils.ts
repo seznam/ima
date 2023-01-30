@@ -7,13 +7,13 @@ import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
 import { Configuration } from 'webpack';
 
+import webpackConfig from './config';
 import {
   ImaConfigurationContext,
   ImaEnvironment,
   ImaConfig,
   ImaCliArgs,
 } from '../types';
-import webpackConfig from './config';
 
 const IMA_CONF_FILENAME = 'ima.config.js';
 
