@@ -172,7 +172,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     },
     imageInlineSizeLimit: 8192,
     watchOptions: {
-      ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
+      ignored: ['**/node_modules'],
       aggregateTimeout: 5,
     },
     swc: async config => config,
