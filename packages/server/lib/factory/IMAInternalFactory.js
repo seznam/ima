@@ -139,7 +139,7 @@ module.exports = function IMAInternalFactory({
       routeName = routeInfo.route.getName();
     }
 
-    res.locals.routeName = routeName;
+    res.$IMA = res.$IMA ? { ...res.$IMA, routeName } : { routeName };
   }
 
   function _importAppMainSync({ environment, context = {} }) {
