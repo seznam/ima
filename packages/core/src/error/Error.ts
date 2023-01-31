@@ -6,9 +6,7 @@ import { UnknownParameters } from '../CommonTypes';
  */
 export default abstract class IMAError extends Error {
   constructor(message: string, params?: { cause?: Error | string }) {
-    super(message);
-
-    this.cause = params?.cause;
+    super(message, { cause: params?.cause });
   }
 
   /**

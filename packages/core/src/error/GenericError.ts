@@ -35,7 +35,7 @@ export default class GenericError extends IMAError {
    * @inheritDoc
    */
   getHttpStatus(): number {
-    return this._params.status || 500;
+    return this._params.status || super.getHttpStatus();
   }
 
   /**
