@@ -1,5 +1,4 @@
 import MetaManager, {
-  MetaAttributes,
   MetaManagerRecord,
   MetaManagerRecordNames,
 } from '../../meta/MetaManager';
@@ -51,20 +50,15 @@ export default class PageMetaHandler extends PageHandler {
       .querySelectorAll(`[data-ima-meta]`)
       .forEach(el => (el as HTMLElement)?.remove());
 
-    this.#updateMetaTag<'href'>(
-      this.#metaManager.getLinksIterator(),
-      'link',
-      'href'
-    );
+    // Update meta tags
+    this.#updateMetaTag<'href'>(this.#metaManager.getLinksIterator(), 'link');
     this.#updateMetaTag<'property'>(
       this.#metaManager.getMetaPropertiesIterator(),
-      'meta',
-      'property'
+      'meta'
     );
     this.#updateMetaTag<'content'>(
       this.#metaManager.getMetaNamesIterator(),
-      'meta',
-      'content'
+      'meta'
     );
   }
 
@@ -77,39 +71,21 @@ export default class PageMetaHandler extends PageHandler {
    */
   #updateMetaTag<R extends MetaManagerRecordNames>(
     iterator: IterableIterator<[string, MetaManagerRecord<R>]> | never[],
-    tagName: 'link' | 'meta',
-    valueName: MetaManagerRecordNames
+    tagName: 'link' | 'meta'
   ): void {
-    const document = this.#window.getDocument();
-
-    if (!document) {
-      return;
-    }
+    const document = this.#window.getDocument()!;
 
     for (const [key, value] of iterator) {
       const attributes = {
         [tagName === 'link' ? 'rel' : 'name']: key,
-        ...(typeof value === 'object' ? value : { [valueName]: value }),
-      } as MetaAttributes;
+        ...value,
+      };
 
-      // TODO IMA@19 - remove backwards compatibility
-      const existingMetaTag = this.#window.querySelector(`meta[name="${key}"]`);
-
-      if (existingMetaTag) {
-        existingMetaTag.setAttribute(
-          valueName,
-          attributes[valueName] as string
-        );
-
-        continue;
-      }
-
-      // TODO IMA@19 - following should be default from IMA@19
       const metaTag = document.createElement(tagName);
       metaTag.setAttribute('data-ima-meta', '');
 
       for (const [attrName, attrValue] of Object.entries(attributes)) {
-        // Skip invalid values
+        // Skip empty values
         if (attrValue === undefined || attrValue === null) {
           continue;
         }
@@ -118,7 +94,6 @@ export default class PageMetaHandler extends PageHandler {
       }
 
       document?.head.appendChild(metaTag);
-      document.head.innerHTML += 'meta-tagy';
     }
   }
 }

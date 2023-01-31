@@ -1,7 +1,6 @@
 import MetaManager, {
   MetaAttributes,
   MetaManagerRecord,
-  MetaManagerRecordNames,
   MetaValue,
 } from './MetaManager';
 
@@ -63,7 +62,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): void {
-    this._metaName.set(name, this.#createRecord('content', content, attr));
+    this._metaName.set(name, { content, ...attr });
   }
 
   /**
@@ -97,10 +96,7 @@ export default class MetaManagerImpl extends MetaManager {
     property: MetaValue,
     attr?: MetaAttributes
   ): void {
-    this._metaProperty.set(
-      name,
-      this.#createRecord('property', property, attr)
-    );
+    this._metaProperty.set(name, { property, ...attr });
   }
 
   /**
@@ -131,7 +127,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   setLink(relation: string, href: MetaValue, attr?: MetaAttributes): void {
-    this._link.set(relation, this.#createRecord('href', href, attr));
+    this._link.set(relation, { href, ...attr });
   }
 
   /**
@@ -162,15 +158,5 @@ export default class MetaManagerImpl extends MetaManager {
     this._metaProperty.clear();
     this._metaName.clear();
     this._link.clear();
-  }
-
-  #createRecord<R extends MetaManagerRecordNames>(
-    valueName: MetaManagerRecordNames,
-    value: MetaValue,
-    attr?: MetaAttributes
-  ): MetaManagerRecord<R> {
-    return attr
-      ? ({ [valueName]: value, ...attr } as unknown as MetaManagerRecord<R>)
-      : value;
   }
 }

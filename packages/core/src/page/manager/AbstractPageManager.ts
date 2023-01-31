@@ -140,7 +140,6 @@ export default abstract class AbstractPageManager extends PageManager {
     // extensions
     this._managedPage = newManagedPage;
     await this._initPageSource();
-
     const response = await this._loadPageSource();
     await this._runPostManageHandlers(this._previousManagedPage, action);
 

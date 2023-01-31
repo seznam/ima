@@ -1,55 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 const memoizeOne = require('memoize-one');
+const { _renderMetaTags } = require('./contentVariableHelpers/metaHelpers');
+const {
+  _prepareSource,
+  _renderScript,
+  _renderStyles,
+} = require('./contentVariableHelpers/sourceHelpers');
 
 module.exports = function responseUtilsFactory() {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve('./build/server/runner.js');
   const manifestPath = path.resolve('./build/manifest.json');
-
-  function _getMetaTags(iterator, tagName, valueName) {
-    const metaTags = [];
-
-    for (const [key, value] of iterator) {
-      const tagParts = [`<${tagName}`, 'data-ima-meta'];
-      const attributes = {
-        [tagName === 'link' ? 'rel' : 'name']: key,
-        ...(typeof value === 'object' ? value : { [valueName]: value }),
-      };
-
-      for (let [attrName, attrValue] of Object.entries(attributes)) {
-        // Skip invalid values
-        if (attrName === undefined || attrValue === null) {
-          continue;
-        }
-
-        tagParts.push(`${attrName}="${attrValue}"`);
-      }
-
-      tagParts.push('/>');
-      metaTags.push(tagParts.join(' '));
-    }
-
-    return metaTags;
-  }
-
-  function _renderMetaTags({ response }) {
-    const { metaManager } = response?.page || {};
-
-    if (!metaManager) {
-      return '';
-    }
-
-    return [
-      ..._getMetaTags(metaManager.getLinksIterator(), 'link', 'href'),
-      ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta', 'content'),
-      ..._getMetaTags(
-        metaManager.getMetaPropertiesIterator(),
-        'meta',
-        'property'
-      ),
-    ].join('');
-  }
 
   /**
    * Load manifest, runner resources and prepare sources object.
@@ -65,95 +27,6 @@ module.exports = function responseUtilsFactory() {
         ? fs.readFileSync(runnerPath, 'utf8')
         : '',
     };
-  }
-
-  /**
-   * Prepares default $Source object structure assembled
-   * from the built manifest.json file.
-   */
-  function _prepareSource({ assetsByCompiler, assets, publicPath }, language) {
-    const buildSource = (name, sourceFilter, attr = {}) => {
-      if (!assetsByCompiler?.[name]) {
-        return [];
-      }
-
-      // Filter unwanted assets and use only current language
-      const assetsData = Object.values(assetsByCompiler[name]);
-      const filteredAssets = assetsData.filter(sourceFilter);
-
-      // Resolve asset names to actual filenames
-      return filteredAssets.map(asset => {
-        const assetFile = assets[asset.name]?.fileName;
-
-        if (!process.env.CDN_STATIC_ROOT_URL) {
-          return [publicPath + assetFile, attr];
-        }
-
-        // Add CDN as primary source with static file asn fallback
-        return [
-          `${process.env.CDN_STATIC_ROOT_URL}${assetFile}`,
-          {
-            ...attr,
-            fallback: publicPath + assetFile,
-          },
-        ];
-      });
-    };
-
-    // Filter out specific assets for each source entry
-    const cssFilter = ({ name }) => name.endsWith('.css');
-    const jsFilter = ({ name }) =>
-      (name.endsWith('.js') && !name.includes('/locale/')) ||
-      name.includes(`locale/${language}.js`);
-
-    return {
-      styles: buildSource('client.es', cssFilter, {
-        rel: 'stylesheet',
-        preload: true,
-      }),
-      scripts: buildSource('client', jsFilter, {
-        async: true,
-        crossorigin: 'anonymous',
-      }),
-      esScripts: buildSource('client.es', jsFilter, {
-        async: true,
-        crossorigin: 'anonymous',
-      }),
-    };
-  }
-
-  function _renderStyles(styles) {
-    if (!Array.isArray(styles)) {
-      return '';
-    }
-
-    return styles.reduce((acc, cur) => {
-      if (typeof cur === 'string') {
-        acc += `<link rel="stylesheet" href="${cur}" />`;
-
-        return acc;
-      }
-
-      const [
-        href,
-        { fallback = null, preload, rel = 'stylesheet', ...options },
-      ] = cur;
-      let link = `<link href="${href}" rel="${rel}"`;
-
-      // Generate fallback handler
-      if (fallback) {
-        link += ` onerror="this.onerror=null;this.href='${fallback}';"`;
-      }
-
-      // Generate other attributes
-      for (const [attr, value] of Object.entries(options)) {
-        link += ` ${attr}="${value}"`;
-      }
-
-      acc += link + ' />';
-
-      return acc;
-    }, '');
   }
 
   function _getRevivalSettings({ settings, response }) {
@@ -181,14 +54,6 @@ module.exports = function responseUtilsFactory() {
       $IMA.Cache = ${response?.page?.cache ?? JSON.stringify({})};
     })(typeof window !== 'undefined' && window !== null ? window : global);
     `;
-  }
-
-  function _renderScript(name, script) {
-    if (!script) {
-      return '';
-    }
-
-    return `<script id="ima-${name}">${script}</script>`;
   }
 
   function _setCookieHeaders({ res, context }) {
@@ -304,7 +169,6 @@ module.exports = function responseUtilsFactory() {
     createContentVariables,
     processContent,
     sendResponseHeaders,
-    _prepareSource,
     _renderStyles,
     _prepareCookieOptionsForExpress,
   };

@@ -5,11 +5,9 @@ export type MetaValue = number | boolean | string | null | undefined;
 export type MetaAttributes = Record<string, MetaValue>;
 
 export type MetaManagerRecordNames = 'property' | 'content' | 'href';
-export type MetaManagerRecord<R extends MetaManagerRecordNames> =
-  | ({
-      [key in R]: MetaValue;
-    } & MetaAttributes)
-  | MetaValue;
+export type MetaManagerRecord<R extends MetaManagerRecordNames> = {
+  [key in R]: MetaValue;
+} & MetaAttributes;
 
 /**
  * The Meta manager is a utility for managing various page attributes related
@@ -68,7 +66,7 @@ export default abstract class MetaManager {
    * @return The value of the generic meta information, or an empty string.
    */
   getMetaName(name: string): MetaManagerRecord<'content'> {
-    return '';
+    return { content: '' };
   }
 
   /**
@@ -97,12 +95,12 @@ export default abstract class MetaManager {
    * Sets the specified specialized meta information property.
    *
    * @param name Name of the specialized meta information property.
-   * @param value The value of the meta information property.
+   * @param property The value of the meta information property.
    * @parram attr Additional optional meta attributes.
    */
   setMetaProperty(
     name: string,
-    value: MetaValue,
+    property: MetaValue,
     attr?: MetaAttributes
   ): void {}
 
@@ -117,7 +115,7 @@ export default abstract class MetaManager {
    *         empty string.
    */
   getMetaProperty(name: string): MetaManagerRecord<'property'> {
-    return '';
+    return { property: '' };
   }
 
   /**
@@ -147,15 +145,11 @@ export default abstract class MetaManager {
    *
    * @param relation The relation of the link target to the current
    *        page.
-   * @param reference The reference to the location of the related
+   * @param href The reference to the location of the related
    *        document, e.g. a URL.
    * @parram attr Additional optional link attributes.
    */
-  setLink(
-    relation: string,
-    reference: MetaValue,
-    attr?: MetaAttributes
-  ): void {}
+  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): void {}
 
   /**
    * Return the reference to the specified related linked document. The
@@ -168,7 +162,7 @@ export default abstract class MetaManager {
    *         e.g. a URL.
    */
   getLink(relation: string): MetaManagerRecord<'href'> {
-    return '';
+    return { href: '' };
   }
 
   /**
