@@ -11,7 +11,7 @@ export default function DocumentView({ metaManager, page, $Utils }) {
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        {'#{metaTags}'}
+        {'#{meta}'}
         {'#{styles}'}
         {'#{revivalSettings}'}
         {'#{runner}'}

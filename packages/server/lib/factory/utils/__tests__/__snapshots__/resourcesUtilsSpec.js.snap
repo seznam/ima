@@ -224,3 +224,5 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
   ],
 }
 `;
+
+exports[`resourcesUtils renderScript should wrap script contents in script tag 1`] = `"<script id="ima-revival-settings">function () {}</script>"`;

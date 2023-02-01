@@ -88,6 +88,12 @@ describe('resourcesUtils', () => {
       expect(renderScript({}, {})).toBe('');
       expect(renderScript('name', null)).toBe('');
     });
+
+    it('should wrap script contents in script tag', () => {
+      expect(
+        renderScript('revival-settings', 'function () {}')
+      ).toMatchSnapshot();
+    });
   });
 
   describe('prepareDefaultResources', () => {

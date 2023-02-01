@@ -17,7 +17,7 @@ jest.mock('fs', () => {
           return JSON.stringify(manifestMock);
         }
 
-        return 'runner#{source}';
+        return 'runner#{resources}';
       },
     }),
   };
@@ -53,11 +53,15 @@ describe('responseUtilsFactory', () => {
 
   describe('createContentVariables', () => {
     it('should return empty object if there is no valid bootConfig', () => {
-      expect(createContentVariables({})).toStrictEqual({});
-      expect(createContentVariables({ bootConfig: null })).toStrictEqual({});
-      expect(createContentVariables({ bootConfig: {} })).toStrictEqual({});
+      expect(createContentVariables({ context: {} })).toStrictEqual({});
       expect(
-        createContentVariables({ bootConfig: { settings: null } })
+        createContentVariables({ context: { bootConfig: null } })
+      ).toStrictEqual({});
+      expect(
+        createContentVariables({ context: { bootConfig: {} } })
+      ).toStrictEqual({});
+      expect(
+        createContentVariables({ context: { bootConfig: { settings: null } } })
       ).toStrictEqual({});
     });
 
@@ -73,16 +77,16 @@ describe('responseUtilsFactory', () => {
       };
 
       expect(
-        createContentVariables({ bootConfig, response })
+        createContentVariables({ context: { bootConfig, response } })
       ).toMatchSnapshot();
     });
   });
 
   describe('processContent', () => {
     it('should return original content without any boot config', () => {
-      expect(processContent({ response: { content: 'content' } })).toBe(
-        'content'
-      );
+      expect(
+        processContent({ context: { response: { content: 'content' } } })
+      ).toBe('content');
     });
 
     it('should interpolate revival scripts into page content', () => {
@@ -94,11 +98,12 @@ describe('responseUtilsFactory', () => {
       };
       const response = {
         content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
-        contentVariables: createContentVariables({ bootConfig, response: {} }),
       };
-      const contextMock = { response, bootConfig };
+      const event = { context: { response, bootConfig } };
+      const contentVariables = createContentVariables(event);
+      response.contentVariables = contentVariables;
 
-      const content = processContent(contextMock);
+      const content = processContent(event);
       expect(content).toMatchSnapshot();
     });
 
@@ -107,7 +112,7 @@ describe('responseUtilsFactory', () => {
         settings: {
           $Language: 'en',
           $Debug: true,
-          $Source: (context, manifest, sources) => {
+          $Resources: (context, manifest, sources) => {
             return {
               styles: [],
               esScripts: [...sources.scripts, 'custom-script-src'],
@@ -117,10 +122,12 @@ describe('responseUtilsFactory', () => {
       };
       const response = {
         content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
-        contentVariables: createContentVariables({ bootConfig, response: {} }),
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const contentVariables = createContentVariables(event);
+      response.contentVariables = contentVariables;
+
+      const content = processContent(event);
 
       expect(content).toMatchSnapshot();
     });
@@ -144,8 +151,8 @@ describe('responseUtilsFactory', () => {
           v7: 'final v7 content',
         },
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const content = processContent(event);
 
       expect(content).toBe('<html>final v7 content</html>');
     });
@@ -164,8 +171,8 @@ describe('responseUtilsFactory', () => {
           c1: 'content-variable',
         },
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const content = processContent(event);
 
       expect(content).toBe('<html>content-variable: 1.0.0</html>');
     });

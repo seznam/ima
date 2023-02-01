@@ -199,10 +199,6 @@ describe('ClientPageRenderer', () => {
           values: { param1: params.param1 },
           promises: { param2: params.param2 },
         } as never);
-
-      jest
-        .spyOn(pageRenderer, '_updateMetaAttributes' as never)
-        .mockImplementation(() => ({} as never));
     });
 
     it('should set default page state values', async () => {
