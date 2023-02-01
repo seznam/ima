@@ -90,6 +90,7 @@ describe('revive client application', () => {
       $Version: 1,
     });
 
+    // @ts-expect-error
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
 

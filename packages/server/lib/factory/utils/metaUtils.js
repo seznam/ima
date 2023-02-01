@@ -55,10 +55,8 @@ function renderMeta(metaManager) {
     return '';
   }
 
-  const title = _sanitizeValue(metaManager.getTitle());
-
   return [
-    title !== null && `<title>${title}</title>`,
+    `<title>${metaManager.getTitle()}</title>`,
     ..._getMetaTags(metaManager.getLinksIterator(), 'link'),
     ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta'),
     ..._getMetaTags(metaManager.getMetaPropertiesIterator(), 'meta'),

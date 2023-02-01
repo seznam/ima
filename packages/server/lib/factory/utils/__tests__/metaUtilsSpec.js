@@ -52,7 +52,7 @@ describe('metaUtils', () => {
 
     it('should return empty string for empty meta manager', () => {
       const meta = renderMeta({
-        getTitle: jest.fn(),
+        getTitle: jest.fn().mockReturnValue(''),
         getMetaNamesIterator: jest.fn().mockReturnValue(new Map([]).entries()),
         getMetaPropertiesIterator: jest
           .fn()
@@ -60,7 +60,7 @@ describe('metaUtils', () => {
         getLinksIterator: jest.fn().mockReturnValue(new Map([]).entries()),
       });
 
-      expect(meta).toBe('');
+      expect(meta).toBe('<title></title>');
     });
   });
 });

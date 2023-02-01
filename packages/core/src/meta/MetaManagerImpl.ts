@@ -155,6 +155,7 @@ export default class MetaManagerImpl extends MetaManager {
    * @inheritdoc
    */
   clearMetaAttributes(): void {
+    this._title = '';
     this._metaProperty.clear();
     this._metaName.clear();
     this._link.clear();

@@ -6,7 +6,7 @@ import MetaManager, {
 import Window from '../../window/Window';
 import PageHandler from './PageHandler';
 
-const IMA_META_DATA_ATTR = 'data-ima-meta';
+export const IMA_META_DATA_ATTR = 'data-ima-meta';
 
 export default class PageMetaHandler extends PageHandler {
   #window: Window;
@@ -62,11 +62,7 @@ export default class PageMetaHandler extends PageHandler {
     this.#selectMetaTags().forEach(el => (el as HTMLElement)?.remove());
 
     // Set title
-    const title = this.#sanitizeValue(this.#metaManager.getTitle());
-
-    if (title !== null) {
-      this.#window.setTitle(title);
-    }
+    this.#window.setTitle(this.#metaManager.getTitle());
 
     // Update meta tags
     this.#updateMetaTag<'href'>(this.#metaManager.getLinksIterator(), 'link');
