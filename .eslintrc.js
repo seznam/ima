@@ -162,7 +162,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
-          { 'ts-expect-error': 'error' },
+          { 'ts-expect-error': false },
         ],
         '@typescript-eslint/no-unused-vars': [
           'error',
