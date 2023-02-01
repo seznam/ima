@@ -31,7 +31,9 @@ export default abstract class MetaManager {
    *
    * @param title The new page title.
    */
-  setTitle(title: string): void {}
+  setTitle(title: string): MetaManager {
+    return this;
+  }
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -55,7 +57,13 @@ export default abstract class MetaManager {
    * @param content The meta information content.
    * @parram attr Additional optional meta attributes.
    */
-  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): void {}
+  setMetaName(
+    name: string,
+    content: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
+    return this;
+  }
 
   /**
    * Returns the value of the specified named meta information property. The
@@ -102,7 +110,9 @@ export default abstract class MetaManager {
     name: string,
     property: MetaValue,
     attr?: MetaAttributes
-  ): void {}
+  ): MetaManager {
+    return this;
+  }
 
   /**
    * Returns the value of the specified specialized meta information
@@ -149,7 +159,13 @@ export default abstract class MetaManager {
    *        document, e.g. a URL.
    * @parram attr Additional optional link attributes.
    */
-  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): void {}
+  setLink(
+    relation: string,
+    href: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
+    return this;
+  }
 
   /**
    * Return the reference to the specified related linked document. The

@@ -47,8 +47,10 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setTitle(title: string): void {
+  setTitle(title: string): MetaManager {
     this._title = title;
+
+    return this;
   }
 
   /**
@@ -61,8 +63,14 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): void {
+  setMetaName(
+    name: string,
+    content: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
     this._metaName.set(name, { content, ...attr });
+
+    return this;
   }
 
   /**
@@ -95,8 +103,10 @@ export default class MetaManagerImpl extends MetaManager {
     name: string,
     property: MetaValue,
     attr?: MetaAttributes
-  ): void {
+  ): MetaManager {
     this._metaProperty.set(name, { property, ...attr });
+
+    return this;
   }
 
   /**
@@ -126,8 +136,14 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): void {
+  setLink(
+    relation: string,
+    href: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
     this._link.set(relation, { href, ...attr });
+
+    return this;
   }
 
   /**
