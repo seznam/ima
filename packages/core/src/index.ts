@@ -36,6 +36,7 @@ import MetaManager from './meta/MetaManager';
 import MetaManagerImpl from './meta/MetaManagerImpl';
 import PageHandler from './page/handler/PageHandler';
 import PageHandlerRegistry from './page/handler/PageHandlerRegistry';
+import PageMetaHandler from './page/handler/PageMetaHandler';
 import PageNavigationHandler from './page/handler/PageNavigationHandler';
 import AbstractPageManager from './page/manager/AbstractPageManager';
 import ClientPageManager from './page/manager/ClientPageManager';
@@ -309,6 +310,7 @@ export {
   MetaManagerImpl,
   PageHandler,
   PageHandlerRegistry,
+  PageMetaHandler,
   PageNavigationHandler,
   AbstractPageManager,
   ClientPageManager,
