@@ -46,7 +46,7 @@ export default class PageMetaHandler extends PageHandler {
       return;
     }
 
-    this._updateMetaAttributes();
+    this.#updateMetaAttributes();
   }
 
   /**
@@ -55,7 +55,7 @@ export default class PageMetaHandler extends PageHandler {
    * @param metaManager meta attributes storage providing the
    *        new values for page meta elements and title.
    */
-  private _updateMetaAttributes() {
+  #updateMetaAttributes() {
     this.#window.setTitle(this.#metaManager.getTitle());
 
     // Remove IMA managed meta tags
