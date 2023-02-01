@@ -91,6 +91,26 @@ declare global {
   // Test Functions
   var using: (values: unknown[], func: object) => void;
   var extend: (ChildClass: object, ParentClass: object) => void;
+
+  interface Window {
+    $IMA?: {
+      SPA: boolean;
+      $PublicPath: string;
+      $Language: string;
+      $Env: string;
+      $Debug: boolean;
+      $Version: string;
+      $App: string;
+      $Protocol: string;
+      $Host: string;
+      $Path: string;
+      $Root: string;
+      $LanguagePartPath: string;
+      Runner: string;
+      Cache: object;
+      i18n?: object;
+    };
+  }
 }
 
 function getInitialImaConfigFunctions() {

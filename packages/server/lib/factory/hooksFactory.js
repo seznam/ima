@@ -267,11 +267,17 @@ module.exports = function hooksFactory({
         };
       }
 
+      // Store copy of BeforeResponse result before emitting new event
+      const beforeResponseResult = { ...event.result };
+
       // Generate content variables
       event = await emitter.emit(Event.CreateContentVariables, event);
       event.context.response.contentVariables = {
         ...event.result,
       };
+
+      // Restore before response event result contents
+      event.result = beforeResponseResult;
 
       // Interpolate contentVariables into the response content
       event.context.response.content = processContent(event);
