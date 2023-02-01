@@ -284,9 +284,9 @@ export interface ImaEnvironment {
   $App: unknown;
 
   /**
-   * App script and style sources
+   * App script and style resources
    */
-  $Source: unknown;
+  $Resources: unknown;
 
   /**
    * Array of defined languages

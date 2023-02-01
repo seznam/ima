@@ -5,7 +5,6 @@ import {
   Controller,
   ControllerDecorator,
   Dispatcher,
-  MetaManager,
   RendererEvents,
   RendererTypes,
   Window,
@@ -101,9 +100,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
           const isViewContainerEmpty =
             !this._viewContainer || !this._viewContainer.children.length;
-
           isViewContainerEmpty && controller.setState(pageState);
-
           controller.setMetaParams(pageState);
 
           isViewContainerEmpty &&
@@ -112,8 +109,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
               pageView,
               routeOptions
             ));
-
-          this._updateMetaAttributes(controller.getMetaManager());
 
           return {
             pageState: controller.getState(),
@@ -147,7 +142,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         .allPromiseHash(updatedPromises)
         .then(() => {
           controller.setMetaParams(controller.getState());
-          this._updateMetaAttributes(controller.getMetaManager());
 
           return {
             pageState: controller.getState(),
@@ -369,74 +363,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     }
 
     return { promises, values };
-  }
-
-  /**
-   * Updates the title and the contents of the meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaAttributes(metaManager: MetaManager) {
-    this._window.setTitle(metaManager.getTitle());
-
-    this._updateMetaNameAttributes(metaManager);
-    this._updateMetaPropertyAttributes(metaManager);
-    this._updateMetaLinkAttributes(metaManager);
-  }
-
-  /**
-   * Updates the contents of the generic meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaNameAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaNames()) {
-      const metaTag = this._window.querySelector(
-        `meta[name="${metaTagKey}"]`
-      ) as HTMLMetaElement;
-
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaName(metaTagKey);
-      }
-    }
-  }
-
-  /**
-   * Updates the contents of the specialized meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaPropertyAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaProperties()) {
-      const metaTag = this._window.querySelector(
-        `meta[property="${metaTagKey}"]`
-      ) as HTMLMetaElement;
-
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaProperty(metaTagKey);
-      }
-    }
-  }
-
-  /**
-   * Updates the href of the specialized link elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaLinkAttributes(metaManager: MetaManager) {
-    for (const linkTagKey of metaManager.getLinks()) {
-      const linkTag = this._window.querySelector(
-        `link[rel="${linkTagKey}"]`
-      ) as HTMLLinkElement;
-
-      if (linkTag && linkTag.href) {
-        linkTag.href = metaManager.getLink(linkTagKey);
-      }
-    }
   }
 }
 /* @endif */
