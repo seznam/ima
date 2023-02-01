@@ -7,7 +7,11 @@ const memoizeOne = require('memoize-one');
  * @returns string HTML string of link tags to given CSS files.
  */
 function renderStyles(styles) {
-  return (Array.isArray(styles) ? styles : [styles]).reduce((acc, cur) => {
+  if (!Array.isArray(styles)) {
+    return '';
+  }
+
+  return styles.reduce((acc, cur) => {
     if (typeof cur === 'string') {
       acc += `<link rel="stylesheet" href="${cur}" />`;
 
@@ -42,7 +46,7 @@ function renderStyles(styles) {
  * @returns string HTML string with script contents wrapped in <script /> tag.
  */
 function renderScript(name, script) {
-  if (!script) {
+  if (typeof script !== 'string') {
     return '';
   }
 

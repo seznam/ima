@@ -98,10 +98,10 @@ export default class PageMetaHandler extends PageHandler {
           continue;
         }
 
-        metaTag?.setAttribute(attrName, sanitizedAttrValue);
+        metaTag.setAttribute(attrName, sanitizedAttrValue);
       }
 
-      document?.head.appendChild(metaTag);
+      document?.head?.appendChild(metaTag);
     }
   }
 

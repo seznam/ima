@@ -27,112 +27,11 @@ describe('responseUtilsFactory', () => {
   const {
     processContent,
     createContentVariables,
-    _renderStyles,
     _prepareCookieOptionsForExpress,
-    _prepareSource,
   } = responseUtilsFactory();
 
   afterEach(() => {
     jest.resetAllMocks();
-  });
-
-  describe('_renderStyles', () => {
-    it('should return empty string for invalid input', () => {
-      expect(_renderStyles()).toBe('');
-      expect(_renderStyles([])).toBe('');
-      expect(_renderStyles({})).toBe('');
-      expect(_renderStyles(null)).toBe('');
-      expect(_renderStyles('/static/app.css')).toBe('');
-    });
-
-    it('should return link stylesheet tags for string items', () => {
-      expect(_renderStyles(['/static/app.css'])).toBe(
-        '<link rel="stylesheet" href="/static/app.css" />'
-      );
-
-      expect(
-        _renderStyles([
-          '/static/app1.css',
-          '/static/app2.css',
-          '/static/app3.css',
-        ])
-      ).toBe(
-        '<link rel="stylesheet" href="/static/app1.css" />' +
-          '<link rel="stylesheet" href="/static/app2.css" />' +
-          '<link rel="stylesheet" href="/static/app3.css" />'
-      );
-    });
-
-    it('should return link tag with custom attributes', () => {
-      expect(
-        _renderStyles([
-          [
-            '/static/app.css',
-            { type: 'text/css', rel: 'preload', as: 'style' },
-          ],
-        ])
-      ).toBe(
-        '<link href="/static/app.css" rel="preload" type="text/css" as="style" />'
-      );
-    });
-
-    it('should insert custom mini script for fallback sources', () => {
-      expect(
-        _renderStyles([
-          [
-            '/static/app.css',
-            { rel: 'stylesheet', fallback: '/static/fallback.css' },
-          ],
-        ])
-      ).toBe(
-        `<link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />`
-      );
-    });
-  });
-
-  describe('_prepareSource', () => {
-    afterEach(() => {
-      process.env.IMA_PUBLIC_PATH = '';
-    });
-
-    it('should prepare default sources structure from provided manifest file', () => {
-      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-    });
-
-    it('should add fallbacks when IMA_PUBLIC_PATH is defined', () => {
-      process.env.IMA_PUBLIC_PATH = 'cdn://';
-
-      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-    });
-
-    it('should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath', () => {
-      process.env.IMA_PUBLIC_PATH = 'cdn://';
-
-      expect(
-        _prepareSource(
-          {
-            ...manifestMock,
-            publicPath: '/pro/static/',
-          },
-          'en'
-        )
-      ).toMatchSnapshot();
-    });
-
-    it('should skip compilations without assets', () => {
-      const sources = _prepareSource(
-        {
-          ...manifestMock,
-          assetsByCompiler: {
-            ...manifestMock.assetsByCompiler,
-            client: {},
-          },
-        },
-        'en'
-      );
-
-      expect(sources).toMatchSnapshot();
-    });
   });
 
   describe('_prepareCookieOptionsForExpress', () => {
