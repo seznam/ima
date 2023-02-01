@@ -6,9 +6,12 @@ import MetaManager, {
 import Window from '../../window/Window';
 import PageHandler from './PageHandler';
 
+const IMA_META_DATA_ATTR = 'data-ima-meta';
+
 export default class PageMetaHandler extends PageHandler {
   #window: Window;
   #metaManager: MetaManager;
+  #managed = false;
 
   static get $dependencies() {
     return [Window, MetaManager];
@@ -32,6 +35,17 @@ export default class PageMetaHandler extends PageHandler {
    * @inheritDoc
    */
   handlePostManagedState() {
+    // Skip first manage state after SSR, so we don't
+    if (
+      !this.#window.getWindow()?.$IMA?.SPA &&
+      !this.#managed &&
+      this.#selectMetaTags().length
+    ) {
+      this.#managed = true;
+
+      return;
+    }
+
     this._updateMetaAttributes();
   }
 
@@ -45,9 +59,7 @@ export default class PageMetaHandler extends PageHandler {
     this.#window.setTitle(this.#metaManager.getTitle());
 
     // Remove IMA managed meta tags
-    this.#window
-      .querySelectorAll(`[data-ima-meta]`)
-      .forEach(el => (el as HTMLElement)?.remove());
+    this.#selectMetaTags().forEach(el => (el as HTMLElement)?.remove());
 
     // Set title
     const title = this.#sanitizeValue(this.#metaManager.getTitle());
@@ -88,7 +100,7 @@ export default class PageMetaHandler extends PageHandler {
       };
 
       const metaTag = document.createElement(tagName);
-      metaTag.setAttribute('data-ima-meta', '');
+      metaTag.setAttribute(IMA_META_DATA_ATTR, '');
 
       for (const [attrName, attrValue] of Object.entries(attributes)) {
         const sanitizedAttrValue = this.#sanitizeValue(attrValue);
@@ -107,5 +119,9 @@ export default class PageMetaHandler extends PageHandler {
 
   #sanitizeValue(value: MetaValue): string | null {
     return value === undefined || value === null ? null : value.toString();
+  }
+
+  #selectMetaTags(): NodeList {
+    return this.#window.querySelectorAll(`[${IMA_META_DATA_ATTR}]`);
   }
 }
