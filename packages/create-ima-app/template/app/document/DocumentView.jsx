@@ -1,4 +1,4 @@
-export default function DocumentView({ metaManager, page, $Utils }) {
+export default function DocumentView({ page, $Utils }) {
   /**
    * #{...} Represents variables that are injected before sending the response
    * to client from server. These are defined in event.response.content.contentVariables.
@@ -15,7 +15,6 @@ export default function DocumentView({ metaManager, page, $Utils }) {
         {'#{styles}'}
         {'#{revivalSettings}'}
         {'#{runner}'}
-        <title>{metaManager.getTitle()}</title>
       </head>
       <body>
         <div
