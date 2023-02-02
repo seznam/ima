@@ -105,7 +105,7 @@ module.exports = function hooksFactory({
   }
 
   async function _applyError(event) {
-    if (!event?.context?.app || _hasToServeStatic(event)) {
+    if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticServerErrorPage(event);
     }
 
@@ -123,7 +123,7 @@ module.exports = function hooksFactory({
   }
 
   async function _applyNotFound(event) {
-    if (!event?.context?.app || _hasToServeStatic(event)) {
+    if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticClientErrorPage(event);
     }
 
@@ -162,15 +162,15 @@ module.exports = function hooksFactory({
       return devErrorPage(event);
     } else {
       try {
-        const { context } = event;
+        const { context, error } = event;
 
         if (context?.app) {
           context.app.oc.get('$Cache').clear();
         }
 
-        if (event.error.isClientError?.()) {
+        if (error.isClientError?.()) {
           return _applyNotFound(event);
-        } else if (event.error.isRedirection?.()) {
+        } else if (error.isRedirection?.()) {
           return _applyRedirect(event);
         } else {
           return _applyError(event);
