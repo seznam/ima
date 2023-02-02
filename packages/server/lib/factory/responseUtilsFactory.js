@@ -7,6 +7,8 @@ const {
   prepareDefaultResources,
 } = require('./utils/resourcesUtils');
 
+const crypto = require('crypto');
+
 module.exports = function responseUtilsFactory() {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve('./build/server/runner.js');
@@ -28,12 +30,16 @@ module.exports = function responseUtilsFactory() {
     };
   }
 
-  function _getRevivalSettings({ settings, response }) {
+  function _getRevivalSettings({ settings, response, req }) {
+    const requestID = req.get('X-Request-ID') ?? crypto.randomUUID();
+    req.locals = requestID;
+
     return `(function (root) {
       root.$Debug = ${settings.$Debug};
       root.$IMA = root.$IMA || {};
       $IMA.SPA = ${response?.SPA ?? false};
       $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
+      $IMA.$RequestID = "${requestID}";
       $IMA.$Language = "${settings.$Language}";
       $IMA.$Env = "${settings.$Env}";
       $IMA.$Debug = ${settings.$Debug};
@@ -75,8 +81,10 @@ module.exports = function responseUtilsFactory() {
     return expressOptions;
   }
 
-  function sendResponseHeaders({ context, res }) {
+  function sendResponseHeaders({ context, res, req }) {
     _setCookieHeaders({ res, context });
+
+    res.set('X-Request-ID', req.get('X-Request-ID') ?? req.locals);
     res.set(context?.page?.headers ?? {});
   }
 
@@ -91,7 +99,7 @@ module.exports = function responseUtilsFactory() {
    * @param event IMA hooks server event.
    * @returns object Object with default set of content variables.
    */
-  function createContentVariables({ context }) {
+  function createContentVariables({ req, context }) {
     const { response, bootConfig, app } = context;
 
     if (!bootConfig?.settings) {
@@ -127,7 +135,7 @@ module.exports = function responseUtilsFactory() {
       resources: JSON.stringify(scripts).replace(/"/g, '\\"'),
       revivalSettings: renderScript(
         'revival-settings',
-        _getRevivalSettings({ response, settings })
+        _getRevivalSettings({ response, settings, req })
       ),
       revivalCache: renderScript(
         'revival-cache',
