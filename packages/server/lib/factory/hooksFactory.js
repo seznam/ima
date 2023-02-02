@@ -101,6 +101,7 @@ module.exports = function hooksFactory({
     const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
 
     // TODO IMA@18 documentation badRequestConcurrency
+    //TODO IMA@18 update for better performance check
     return isBadRequest && _hasToServeStatic(event);
   }
 
@@ -239,9 +240,7 @@ module.exports = function hooksFactory({
 
       return {
         ...event.result,
-        ...createContentVariables({
-          ...event.context,
-        }),
+        ...createContentVariables(event),
       };
     });
   }
@@ -268,15 +267,20 @@ module.exports = function hooksFactory({
         };
       }
 
+      // Store copy of BeforeResponse result before emitting new event
+      const beforeResponseResult = { ...event.result };
+
+      // Generate content variables
       event = await emitter.emit(Event.CreateContentVariables, event);
       event.context.response.contentVariables = {
-        ...event.context.response.contentVariables,
         ...event.result,
       };
 
-      event.context.response.content = processContent({
-        ...event.context,
-      });
+      // Restore before response event result contents
+      event.result = beforeResponseResult;
+
+      // Interpolate contentVariables into the response content
+      event.context.response.content = processContent(event);
     });
 
     emitter.on(Event.Response, async ({ res, context }) => {

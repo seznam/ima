@@ -201,7 +201,7 @@ module.exports = function IMAInternalFactory({
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
-        $Source: environment.$Source,
+        $Resources: environment.$Resources,
         $Protocol: protocol,
         $Language: language,
         $Host: host,

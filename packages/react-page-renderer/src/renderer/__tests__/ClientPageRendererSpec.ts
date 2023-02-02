@@ -171,16 +171,6 @@ describe('ClientPageRenderer', () => {
       expect(controller.setMetaParams).toHaveBeenCalledWith(pageState);
     });
 
-    it('should update page meta attributes', async () => {
-      jest
-        .spyOn(pageRenderer, '_updateMetaAttributes' as never)
-        .mockImplementation();
-
-      await pageRenderer.mount(controller, () => null, {}, routeOptions);
-
-      expect(pageRenderer['_updateMetaAttributes']).toHaveBeenCalled();
-    });
-
     it('should return resolved promise with object of property status and pageState', async () => {
       jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
       jest.spyOn(controller, 'getState').mockReturnValue(params);
@@ -209,10 +199,6 @@ describe('ClientPageRenderer', () => {
           values: { param1: params.param1 },
           promises: { param2: params.param2 },
         } as never);
-
-      jest
-        .spyOn(pageRenderer, '_updateMetaAttributes' as never)
-        .mockImplementation(() => ({} as never));
     });
 
     it('should set default page state values', async () => {
@@ -247,12 +233,6 @@ describe('ClientPageRenderer', () => {
       await pageRenderer.update(controller, () => null, params);
 
       expect(controller.setMetaParams).toHaveBeenCalledWith(params);
-    });
-
-    it('should update page meta attributes', async () => {
-      await pageRenderer.update(controller, () => null, params);
-
-      expect(pageRenderer['_updateMetaAttributes']).toHaveBeenCalled();
     });
 
     it('should return resolved promise with object of property status and pageState', async () => {

@@ -41,7 +41,7 @@ module.exports = function createIMAServer({
   const serverGlobal = require('./lib/serverGlobal.js');
   logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
 
-  const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
+  const urlParser = require('./lib/middlewares/urlParserMiddlewareFactory.js')({
     environment,
     applicationFolder,
   });
@@ -57,7 +57,7 @@ module.exports = function createIMAServer({
     serverGlobal,
   });
   const memStaticProxy =
-    require('./lib/factory/memStaticProxyMiddlewareFactory')();
+    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
 

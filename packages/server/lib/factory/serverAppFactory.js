@@ -152,8 +152,8 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.BeforeError, event);
       event = await emitter.emit(Event.Error, event);
-      event.context.response = event.result;
 
+      event.context.response = event.result;
       event.context.response = {
         ...defaultResponse,
         ...event.context.response,

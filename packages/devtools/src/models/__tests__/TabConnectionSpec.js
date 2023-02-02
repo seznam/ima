@@ -28,7 +28,9 @@ describe('TabConnection', () => {
     },
   });
 
-  jest.spyOn(utils, 'setIcon').mockImplementation();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe('constructor', () => {
     it('should initialize defaults', () => {

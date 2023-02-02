@@ -17,7 +17,7 @@ jest.mock('fs', () => {
           return JSON.stringify(manifestMock);
         }
 
-        return 'runner#{source}';
+        return 'runner#{resources}';
       },
     }),
   };
@@ -27,121 +27,11 @@ describe('responseUtilsFactory', () => {
   const {
     processContent,
     createContentVariables,
-    _renderStyles,
     _prepareCookieOptionsForExpress,
-    _prepareSource,
   } = responseUtilsFactory();
 
   afterEach(() => {
     jest.resetAllMocks();
-  });
-
-  describe('_renderStyles', () => {
-    it('should return empty string for invalid input', () => {
-      expect(_renderStyles()).toBe('');
-      expect(_renderStyles([])).toBe('');
-      expect(_renderStyles({})).toBe('');
-      expect(_renderStyles(null)).toBe('');
-      expect(_renderStyles('/static/app.css')).toBe('');
-    });
-
-    it('should return link stylesheet tags for string items', () => {
-      expect(_renderStyles(['/static/app.css'])).toBe(
-        '<link rel="stylesheet" href="/static/app.css" />'
-      );
-
-      expect(
-        _renderStyles([
-          '/static/app1.css',
-          '/static/app2.css',
-          '/static/app3.css',
-        ])
-      ).toBe(
-        '<link rel="stylesheet" href="/static/app1.css" />' +
-          '<link rel="stylesheet" href="/static/app2.css" />' +
-          '<link rel="stylesheet" href="/static/app3.css" />'
-      );
-    });
-
-    it('should return link tag with custom attributes', () => {
-      expect(
-        _renderStyles([
-          [
-            '/static/app.css',
-            { type: 'text/css', rel: 'preload', as: 'style' },
-          ],
-        ])
-      ).toBe(
-        '<link href="/static/app.css" rel="preload" type="text/css" as="style" />'
-      );
-    });
-
-    it('should insert custom mini script for fallback sources', () => {
-      expect(
-        _renderStyles([
-          [
-            '/static/app.css',
-            { rel: 'stylesheet', fallback: '/static/fallback.css' },
-          ],
-        ])
-      ).toBe(
-        `<link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />`
-      );
-    });
-  });
-
-  describe('_prepareSource', () => {
-    afterEach(() => {
-      process.env.IMA_PUBLIC_PATH = '';
-    });
-
-    it('should prepare default sources structure from provided manifest file', () => {
-      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-    });
-
-    it('should add fallbacks when IMA_PUBLIC_PATH is defined', () => {
-      process.env.IMA_PUBLIC_PATH = 'cdn://';
-
-      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-    });
-
-    it('should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath', () => {
-      process.env.IMA_PUBLIC_PATH = 'cdn://';
-
-      expect(
-        _prepareSource(
-          {
-            ...manifestMock,
-            publicPath: '/pro/static/',
-          },
-          'en'
-        )
-      ).toMatchSnapshot();
-    });
-
-    // TODO IMA@19 remove CDN_STATIC_ROOT_URL in favor of IMA_PUBLIC_PATH >>>
-    it('deprecated: should add fallbacks when CDN_STATIC_ROOT_URL is defined', () => {
-      process.env.CDN_STATIC_ROOT_URL = 'cdn://';
-
-      expect(_prepareSource(manifestMock, 'en')).toMatchSnapshot();
-      process.env.CDN_STATIC_ROOT_URL = '';
-    });
-    // TODO IMA@19 <<<
-
-    it('should skip compilations without assets', () => {
-      const sources = _prepareSource(
-        {
-          ...manifestMock,
-          assetsByCompiler: {
-            ...manifestMock.assetsByCompiler,
-            client: {},
-          },
-        },
-        'en'
-      );
-
-      expect(sources).toMatchSnapshot();
-    });
   });
 
   describe('_prepareCookieOptionsForExpress', () => {
@@ -163,11 +53,15 @@ describe('responseUtilsFactory', () => {
 
   describe('createContentVariables', () => {
     it('should return empty object if there is no valid bootConfig', () => {
-      expect(createContentVariables({})).toStrictEqual({});
-      expect(createContentVariables({ bootConfig: null })).toStrictEqual({});
-      expect(createContentVariables({ bootConfig: {} })).toStrictEqual({});
+      expect(createContentVariables({ context: {} })).toStrictEqual({});
       expect(
-        createContentVariables({ bootConfig: { settings: null } })
+        createContentVariables({ context: { bootConfig: null } })
+      ).toStrictEqual({});
+      expect(
+        createContentVariables({ context: { bootConfig: {} } })
+      ).toStrictEqual({});
+      expect(
+        createContentVariables({ context: { bootConfig: { settings: null } } })
       ).toStrictEqual({});
     });
 
@@ -183,16 +77,16 @@ describe('responseUtilsFactory', () => {
       };
 
       expect(
-        createContentVariables({ bootConfig, response })
+        createContentVariables({ context: { bootConfig, response } })
       ).toMatchSnapshot();
     });
   });
 
   describe('processContent', () => {
     it('should return original content without any boot config', () => {
-      expect(processContent({ response: { content: 'content' } })).toBe(
-        'content'
-      );
+      expect(
+        processContent({ context: { response: { content: 'content' } } })
+      ).toBe('content');
     });
 
     it('should interpolate revival scripts into page content', () => {
@@ -204,11 +98,12 @@ describe('responseUtilsFactory', () => {
       };
       const response = {
         content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
-        contentVariables: createContentVariables({ bootConfig, response: {} }),
       };
-      const contextMock = { response, bootConfig };
+      const event = { context: { response, bootConfig } };
+      const contentVariables = createContentVariables(event);
+      response.contentVariables = contentVariables;
 
-      const content = processContent(contextMock);
+      const content = processContent(event);
       expect(content).toMatchSnapshot();
     });
 
@@ -217,7 +112,7 @@ describe('responseUtilsFactory', () => {
         settings: {
           $Language: 'en',
           $Debug: true,
-          $Source: (context, manifest, sources) => {
+          $Resources: (context, manifest, sources) => {
             return {
               styles: [],
               esScripts: [...sources.scripts, 'custom-script-src'],
@@ -227,10 +122,12 @@ describe('responseUtilsFactory', () => {
       };
       const response = {
         content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
-        contentVariables: createContentVariables({ bootConfig, response: {} }),
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const contentVariables = createContentVariables(event);
+      response.contentVariables = contentVariables;
+
+      const content = processContent(event);
 
       expect(content).toMatchSnapshot();
     });
@@ -254,8 +151,8 @@ describe('responseUtilsFactory', () => {
           v7: 'final v7 content',
         },
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const content = processContent(event);
 
       expect(content).toBe('<html>final v7 content</html>');
     });
@@ -274,8 +171,8 @@ describe('responseUtilsFactory', () => {
           c1: 'content-variable',
         },
       };
-      const contextMock = { response, bootConfig };
-      const content = processContent(contextMock);
+      const event = { context: { response, bootConfig } };
+      const content = processContent(event);
 
       expect(content).toBe('<html>content-variable: 1.0.0</html>');
     });
