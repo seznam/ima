@@ -38,8 +38,8 @@ describe('responseUtilsFactory', () => {
 
   beforeEach(() => {
     event = {
-      req: {
-        get: jest.fn(),
+      res: {
+        locals: {},
       },
       context: {
         response: {

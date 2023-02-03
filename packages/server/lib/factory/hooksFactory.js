@@ -284,12 +284,12 @@ module.exports = function hooksFactory({
     });
 
     emitter.on(Event.Response, async event => {
-      const { req, res, context } = event;
+      const { res, context } = event;
       if (res.headersSent || !context.response) {
         return;
       }
 
-      sendResponseHeaders({ req, res, context });
+      sendResponseHeaders({ res, context });
 
       if (
         context.response.status >= 300 &&
