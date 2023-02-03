@@ -1,5 +1,27 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- ceb4cbd12: Updated types
+- Updated dependencies [2f789cdae]
+- Updated dependencies [073adb5d5]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [1a4c07a96]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ca55af922]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [c0fe68ef3]
+  - @ima/server@19.0.0-rc.0
+  - @ima/dev-utils@19.0.0-rc.0
+  - @ima/error-overlay@19.0.0-rc.0
+  - @ima/hmr-client@19.0.0-rc.0
+
 ## 18.2.0
 
 ### Minor Changes

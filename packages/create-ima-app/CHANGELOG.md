@@ -1,5 +1,26 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
+
 ## 18.3.0
 
 ### Minor Changes

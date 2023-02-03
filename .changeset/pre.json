@@ -16,5 +16,19 @@
     "@ima/server": "18.2.0",
     "@ima/docs": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "curly-plants-knock",
+    "eight-keys-happen",
+    "empty-pets-sell",
+    "gentle-snakes-speak",
+    "long-bikes-sparkle",
+    "modern-forks-join",
+    "polite-wasps-protect",
+    "rich-ducks-bathe",
+    "selfish-eels-call",
+    "shaggy-toys-accept",
+    "smooth-goats-float",
+    "soft-snails-warn",
+    "spicy-cheetahs-notice"
+  ]
 }

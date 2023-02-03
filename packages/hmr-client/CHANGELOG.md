@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
 ## 18.0.2
 
 ### Patch Changes
