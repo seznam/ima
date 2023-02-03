@@ -26,7 +26,7 @@ const REQUEST_GET_BOOK = Object.freeze({
 });
 
 describe('urlParserMiddlewareFactory', () => {
-  const parseUrl = urlParserMiddlewareFactory({
+  let parseUrl = urlParserMiddlewareFactory({
     environment: ENVIRONMENT,
     applicationFolder: '.',
   });
@@ -126,28 +126,41 @@ describe('urlParserMiddlewareFactory', () => {
       },
     ];
 
+    function getHost(originalUrl, header, host) {
+      const getCodeBook = {
+        host: host || '',
+      };
+
+      // eslint-disable-next-line jest/no-if
+      if (header) {
+        const [headerKey, headerValue] = Object.entries(header)[0];
+        getCodeBook[headerKey] = headerValue;
+      }
+
+      const usedRes = Object.assign({}, RES);
+      const usedReq = Object.assign({}, REQ, {
+        originalUrl,
+        get: getMethod.bind(null, getCodeBook),
+      });
+
+      parseUrl(usedReq, usedRes, next);
+
+      return usedRes.locals.host;
+    }
+
     hosts.forEach(({ originalUrl, header, host, expected }) => {
       it(`should get host for ${originalUrl}`, () => {
-        const getCodeBook = {
-          host: host || '',
+        expect(getHost(originalUrl, header, host)).toBe(expected);
+      });
+
+      it(`should always use environment.$Server.host, when defined for ${originalUrl}`, () => {
+        ENVIRONMENT.$Server = {
+          host: 'environment-host',
         };
 
-        // eslint-disable-next-line jest/no-if
-        if (header) {
-          const [headerKey, headerValue] = Object.entries(header)[0];
-          getCodeBook[headerKey] = headerValue;
-        }
+        expect(getHost(originalUrl, header, host)).toBe('environment-host');
 
-        const usedRes = Object.assign({}, RES);
-        const usedReq = Object.assign({}, REQ, {
-          originalUrl,
-          get: getMethod.bind(null, getCodeBook),
-        });
-
-        parseUrl(usedReq, usedRes, next);
-
-        const result = usedRes.locals;
-        expect(result.host).toBe(expected);
+        ENVIRONMENT.$Server = {};
       });
     });
   });
@@ -261,18 +274,33 @@ describe('urlParserMiddlewareFactory', () => {
       },
     ];
 
+    function getProtocol(originalUrl, protocol) {
+      const usedReq = Object.assign({}, REQ, {
+        originalUrl,
+        protocol,
+        get: getMethod.bind(null, { host: HOST3 }),
+      });
+
+      const result = usedRes.locals;
+
+      parseUrl(usedReq, usedRes, next);
+
+      return result.protocol;
+    }
+
     protocols.forEach(({ originalUrl, protocol, expected }) => {
       it(`should set protocol in results object for URL ${originalUrl}`, () => {
-        const usedReq = Object.assign({}, REQ, {
-          originalUrl,
-          protocol,
-          get: getMethod.bind(null, { host: HOST3 }),
-        });
+        expect(getProtocol(originalUrl, protocol)).toBe(expected);
+      });
 
-        const result = usedRes.locals;
+      it(`should always use environment.$Server.protocol, when defined for ${originalUrl}`, () => {
+        ENVIRONMENT.$Server = {
+          protocol: 'env-protocol',
+        };
 
-        parseUrl(usedReq, usedRes, next);
-        expect(result.protocol).toBe(expected);
+        expect(getProtocol(originalUrl, protocol)).toBe('env-protocol:');
+
+        ENVIRONMENT.$Server = {};
       });
     });
 
@@ -309,28 +337,42 @@ describe('urlParserMiddlewareFactory', () => {
       },
     ];
 
+    function getHeadersProtocol(header, headerKey) {
+      const getCodeBook = {
+        host: HOST2,
+      };
+
+      // eslint-disable-next-line jest/no-if
+      if (headerKey) {
+        getCodeBook[headerKey] = header[headerKey];
+      }
+
+      const usedReq = Object.assign({}, REQ, {
+        get: getMethod.bind(null, getCodeBook),
+      });
+
+      parseUrl(usedReq, usedRes, next);
+
+      const result = usedRes.locals;
+
+      return result.protocol;
+    }
+
     protocolHeaders.forEach(({ header, expected }) => {
       const [headerKey = ''] = Object.keys(header);
 
       it(`should read protocol from header key '${headerKey}'`, () => {
-        const getCodeBook = {
-          host: HOST2,
+        expect(getHeadersProtocol(header, headerKey)).toBe(expected);
+      });
+
+      it(`should always use environment.$Server.protocol, when defined for header key '${headerKey}'`, () => {
+        ENVIRONMENT.$Server = {
+          protocol: 'env-protocol',
         };
 
-        // eslint-disable-next-line jest/no-if
-        if (headerKey) {
-          getCodeBook[headerKey] = header[headerKey];
-        }
+        expect(getHeadersProtocol(header, headerKey)).toBe('env-protocol:');
 
-        const usedReq = Object.assign({}, REQ, {
-          get: getMethod.bind(null, getCodeBook),
-        });
-
-        parseUrl(usedReq, usedRes, next);
-
-        const result = usedRes.locals;
-
-        expect(result.protocol).toBe(expected);
+        ENVIRONMENT.$Server = {};
       });
     });
   });
