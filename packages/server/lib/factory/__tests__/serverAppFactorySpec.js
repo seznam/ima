@@ -512,20 +512,6 @@ describe('Server App Factory', () => {
       expect(response.content).toBe('read file content');
       expect(response.error).toEqual(error);
     });
-
-    it('should render static error page for overloaded server', async () => {
-      environment.$Debug = false;
-      const error = new Error('Custom');
-
-      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.status).toBe(500);
-      expect(response.cache).toBeFalsy();
-      expect(response.static).toBeTruthy();
-      expect(response.content).toBe('read file content');
-      expect(response.error).toEqual(error);
-    });
   });
 
   it('handle request', async () => {

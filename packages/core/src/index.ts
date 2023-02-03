@@ -16,7 +16,6 @@ import ControllerDecorator from './controller/ControllerDecorator';
 import Dictionary from './dictionary/Dictionary';
 import MessageFormatDictionary from './dictionary/MessageFormatDictionary';
 import Error from './error/Error';
-import ExtensibleError from './error/ExtensibleError';
 import GenericError from './error/GenericError';
 import Dispatcher from './event/Dispatcher';
 import DispatcherImpl from './event/DispatcherImpl';
@@ -290,7 +289,6 @@ export {
   Dictionary,
   MessageFormatDictionary,
   Error,
-  ExtensibleError,
   GenericError,
   Dispatcher,
   DispatcherImpl,
