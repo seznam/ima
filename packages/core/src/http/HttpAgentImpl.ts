@@ -1,4 +1,5 @@
 import HttpAgent, {
+  OptionalHttpAgentRequestOptions,
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
@@ -98,7 +99,7 @@ export default class HttpAgentImpl extends HttpAgent {
   get(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options = {} as OptionalHttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache('get', url, data, options);
   }
@@ -109,7 +110,7 @@ export default class HttpAgentImpl extends HttpAgent {
   post(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options = {} as OptionalHttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
       'post',
@@ -125,7 +126,7 @@ export default class HttpAgentImpl extends HttpAgent {
   put(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options = {} as OptionalHttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
       'put',
@@ -141,7 +142,7 @@ export default class HttpAgentImpl extends HttpAgent {
   patch(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options = {} as OptionalHttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
       'patch',
@@ -157,7 +158,7 @@ export default class HttpAgentImpl extends HttpAgent {
   delete(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options = {} as OptionalHttpAgentRequestOptions
   ) {
     return this._requestWithCheckCache(
       'delete',
@@ -228,9 +229,9 @@ export default class HttpAgentImpl extends HttpAgent {
     method: string,
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ) {
-    options = this._prepareOptions(options);
+    const optionsWithDefault = this._prepareOptions(options);
 
     if (options.cache) {
       const cachedData = this._getCachedData(method, url, data);
@@ -240,7 +241,7 @@ export default class HttpAgentImpl extends HttpAgent {
       }
     }
 
-    return this._request(method, url, data, options);
+    return this._request(method, url, data, optionsWithDefault);
   }
 
   /**
@@ -405,7 +406,9 @@ export default class HttpAgentImpl extends HttpAgent {
    *         default values for missing fields, and extra options used
    *         internally.
    */
-  _prepareOptions(options: HttpAgentRequestOptions): HttpAgentRequestOptions {
+  _prepareOptions(
+    options: OptionalHttpAgentRequestOptions
+  ): HttpAgentRequestOptions {
     const composedOptions = Object.assign(
       {},
       this._defaultRequestOptions,
@@ -501,9 +504,17 @@ export default class HttpAgentImpl extends HttpAgent {
       response.params.options || {};
     options.fetchOptions = fetchOptions;
 
-    return {
+    const pureResponse = {
       ...response,
-      params: { ...response.params, options },
+      params: { ...response.params, options: { ...options } },
     } as HttpAgentResponse;
+
+    if (pureResponse.params.options.keepSensitiveHeaders !== true) {
+      pureResponse.headers = {};
+      delete pureResponse.headersRaw;
+      pureResponse.params.options.headers = {};
+    }
+
+    return pureResponse;
   }
 }

@@ -34,10 +34,13 @@ export type HttpAgentRequestOptions = {
   fetchOptions: Omit<RequestInit, 'body'>;
   cache: boolean;
   withCredentials: boolean;
-  listeners: { progress: (event: Event) => unknown };
-  postProcessor: (response: HttpAgentResponse) => HttpAgentResponse;
-  abortController: AbortController;
+  listeners?: { progress: (event: Event) => unknown };
+  postProcessor?: (response: HttpAgentResponse) => HttpAgentResponse;
+  abortController?: AbortController;
+  keepSensitiveHeaders?: boolean;
 };
+
+export type OptionalHttpAgentRequestOptions = Partial<HttpAgentRequestOptions>;
 
 /**
  * A response from the server.
@@ -77,7 +80,7 @@ export default abstract class HttpAgent {
   get(
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
   }
@@ -98,7 +101,7 @@ export default abstract class HttpAgent {
   post(
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
   }
@@ -119,7 +122,7 @@ export default abstract class HttpAgent {
   put(
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
   }
@@ -140,7 +143,7 @@ export default abstract class HttpAgent {
   patch(
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
   }
@@ -161,7 +164,7 @@ export default abstract class HttpAgent {
   delete(
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: OptionalHttpAgentRequestOptions
   ): Promise<HttpAgentResponse> {
     return Promise.reject();
   }
