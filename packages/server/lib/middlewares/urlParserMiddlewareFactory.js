@@ -8,6 +8,10 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
   function _getHost(req) {
+    if (environment?.$Server?.host) {
+      return environment.$Server.host;
+    }
+
     let forwardedHost = req.get('X-Forwarded-Host');
     let host = req.get('host');
 
@@ -91,13 +95,16 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
   }
 
   function _getProtocol(req) {
-    let protocol =
-      _getProtocolFromForwardedHeader(req) ||
-      _getProtocolFromXForwardedProtoHeader(req) ||
-      _getProtocolFromFrontEndHttpsHeader(req) ||
-      req.protocol;
+    if (environment?.$Server?.protocol) {
+      return environment.$Server.protocol + ':';
+    }
 
-    return protocol + ':';
+    return (
+      (_getProtocolFromForwardedHeader(req) ||
+        _getProtocolFromXForwardedProtoHeader(req) ||
+        _getProtocolFromFrontEndHttpsHeader(req) ||
+        req.protocol) + ':'
+    );
   }
 
   function parseUrl(req, res, next) {
