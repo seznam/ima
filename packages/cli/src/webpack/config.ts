@@ -21,7 +21,7 @@ import webpack, {
   WebpackPluginInstance,
 } from 'webpack';
 
-import { getLanguageEntryPoints } from './language';
+import { getLanguageEntryPoints } from './languages';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';

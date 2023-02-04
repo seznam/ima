@@ -118,6 +118,41 @@ export const isUpToDate = (() => {
   };
 })();
 
+export function processUpdatedModules({
+  updatedModules,
+  logger,
+  options,
+  emitter,
+}: {
+  updatedModules: __WebpackModuleApi.ModuleId[];
+  options: HMROptions;
+  logger: Logger;
+  emitter: Emitter;
+}): void {
+  // Language files have their own HMR handler, no need to kill ima APP
+  if (
+    updatedModules.every(
+      filePath =>
+        typeof filePath === 'string' && filePath.includes('build/.cache/locale')
+    )
+  ) {
+    return;
+  }
+
+  // TODO needs better solution
+  // Kill ima app before hot reloading.
+  if (
+    !options.reactRefresh ||
+    (options.reactRefresh &&
+      updatedModules.some(
+        filePath => typeof filePath === 'string' && /(js|ts)$/.test(filePath)
+      ))
+  ) {
+    logger.info('cross', 'Destroying IMA app');
+    emitter.emit('destroy');
+  }
+}
+
 /**
  * Based on:
  *
@@ -149,18 +184,16 @@ export async function processUpdate({
       return options.reload && window.location.reload();
     }
 
-    // TODO needs better solution
-    // Kill ima app before hot reloading.
-    if (
-      !options.reactRefresh ||
-      (options.reactRefresh &&
-        updatedModules.some(
-          filePath => typeof filePath === 'string' && /(js|ts)$/.test(filePath)
-        ))
-    ) {
-      logger.info('cross', 'Destroying IMA app');
-      emitter.emit('destroy');
-    }
+    /**
+     * Process updated modules and do some additional updates
+     * before applying new changes if necessary.
+     */
+    processUpdatedModules({
+      logger,
+      options,
+      updatedModules,
+      emitter,
+    });
 
     // Apply changes to modules
     const renewedModules = await module.hot?.apply({

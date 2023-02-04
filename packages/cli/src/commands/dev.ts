@@ -16,7 +16,7 @@ import {
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/language';
+import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
   createDevServerConfig,

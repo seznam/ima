@@ -23,6 +23,18 @@ const LOCALE_TEMP_BASEPATH = './build/.cache/locale';
  * @returns Path to compiled locale module.
  */
 export function getLanguageModulePath(locale: string, rootDir: string) {
+  return path.join(rootDir, LOCALE_TEMP_BASEPATH, `${locale}.module.js`);
+}
+
+/**
+ * Returns path to location of compiled messageformat JS modules
+ * for given locale.
+ *
+ * @param locale Currently processed locale identifier.
+ * @param rootDir Current compilation root directory.
+ * @returns Path to compiled locale module.
+ */
+export function getLanguageEntryPath(locale: string, rootDir: string) {
   return path.join(rootDir, LOCALE_TEMP_BASEPATH, `${locale}.js`);
 }
 
@@ -53,19 +65,34 @@ export function getLanguageEntryPoints(
   rootDir: string
 ): Record<string, string> {
   return Object.keys(languages).reduce((resultEntries, locale) => {
-    const content = Buffer.from(
-      `import message from '${getLanguageModulePath(locale, rootDir)}';
+    const entryPath = getLanguageEntryPath(locale, rootDir);
+    const modulePath = getLanguageModulePath(locale, rootDir);
+    const content = `
+      import message from '${modulePath}';
 
       (function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
         $IMA.i18n = message;
       })();
 
+      if (module.hot) {
+        module.hot.accept('${modulePath}', () => {
+          $IMA.i18n = message;
+
+          window.__IMA_HMR.emitter.emit('update', { type: 'languages' })
+        });
+      }
+
       export default message;
-      `
-    ).toString('base64');
+    `;
+
+    if (!fs.existsSync(entryPath)) {
+      fs.mkdirSync(path.dirname(entryPath), { recursive: true });
+    }
+
+    fs.writeFileSync(entryPath, content);
 
     return Object.assign(resultEntries, {
-      [`locale/${locale}`]: `data:text/javascript;base64,${content}`,
+      [`locale/${locale}`]: entryPath,
     });
   }, {});
 }

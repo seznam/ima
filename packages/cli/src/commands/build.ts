@@ -9,7 +9,7 @@ import {
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
 import { HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/language';
+import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
   createWebpackConfig,
