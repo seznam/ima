@@ -246,7 +246,7 @@ export default async (
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),
-      ...getLanguageEntryPoints(imaConfig.languages, rootDir),
+      ...getLanguageEntryPoints(imaConfig.languages, rootDir, useHMR),
     },
     output: {
       path: outputDir,

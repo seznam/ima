@@ -62,18 +62,25 @@ export function getDictionaryKeyFromFileName(
  */
 export function getLanguageEntryPoints(
   languages: ImaConfig['languages'],
-  rootDir: string
+  rootDir: string,
+  useHMR = false
 ): Record<string, string> {
   return Object.keys(languages).reduce((resultEntries, locale) => {
     const entryPath = getLanguageEntryPath(locale, rootDir);
     const modulePath = getLanguageModulePath(locale, rootDir);
-    const content = `
+
+    let content = `
       import message from '${modulePath}';
 
       (function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
         $IMA.i18n = message;
       })();
 
+      export default message;
+    `;
+
+    if (useHMR) {
+      content += `
       if (module.hot) {
         module.hot.accept('${modulePath}', () => {
           $IMA.i18n = message;
@@ -81,9 +88,8 @@ export function getLanguageEntryPoints(
           window.__IMA_HMR.emitter.emit('update', { type: 'languages' })
         });
       }
-
-      export default message;
-    `;
+      `;
+    }
 
     if (!fs.existsSync(entryPath)) {
       fs.mkdirSync(path.dirname(entryPath), { recursive: true });
