@@ -12,7 +12,7 @@ import globby from 'globby';
 
 import { ImaConfig } from '../types';
 
-const LOCALE_TEMP_BASEPATH = './build/.cache/locale';
+const LOCALE_TEMP_BASEPATH = './build/tmp/locale';
 
 /**
  * Returns path to location of compiled messageformat JS modules
