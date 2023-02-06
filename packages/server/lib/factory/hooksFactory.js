@@ -1,3 +1,4 @@
+const { RouteNames } = require('@ima/core');
 const { Event } = require('../emitter.js');
 
 module.exports = function hooksFactory({
@@ -97,11 +98,11 @@ module.exports = function hooksFactory({
     const { req, res } = event;
     const routeInfo = _getRouteInfo({ req, res });
 
-    // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
-    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
+    const isBadRequest =
+      routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
 
     // TODO IMA@18 documentation badRequestConcurrency
-    //TODO IMA@18 update for better performance check
+    // TODO IMA@18 update for better performance check
     return isBadRequest && _hasToServeStatic(event);
   }
 
