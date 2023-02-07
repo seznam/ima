@@ -65,15 +65,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
      * regardless of the client/server-side environment.
      */
     this._window = window;
-
-    /**
-     * HMR handler to trigger react app re-render
-     */
-    if ($Debug && window.isClient()) {
-      window.getWindow()?.__IMA_HMR?.emitter?.on('render', () => {
-        this._renderViewAdapter();
-      });
-    }
   }
 
   /**

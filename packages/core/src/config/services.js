@@ -54,7 +54,7 @@ export default (ns, oc, config) => {
           dictionary: window.$IMA.i18n,
         });
 
-        window.__IMA_HMR.emitter.emit('render');
+        oc.get('$Router').route(window.location.pathname);
       }
     });
   }

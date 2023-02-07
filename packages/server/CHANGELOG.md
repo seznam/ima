@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.2.1
+
+### Patch Changes
+
+- 7ede4a192: Fixed default invalid static path and default PUBLIC_PATH config
+
 ## 18.2.0
 
 ### Minor Changes

@@ -133,7 +133,7 @@ export function processUpdatedModules({
   if (
     updatedModules.every(
       filePath =>
-        typeof filePath === 'string' && filePath.includes('build/.cache/locale')
+        typeof filePath === 'string' && filePath.includes('build/tmp/locale')
     )
   ) {
     return;
