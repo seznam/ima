@@ -8,9 +8,10 @@ import { useRef } from 'react';
  * useOnce(() => {
  * 	oneTimeAction();
  * });
+ *
  * @param {Function} callback
  */
-function useOnce(callback) {
+export function useOnce(callback: typeof Function): void {
   const called = useRef(false);
 
   if (called.current) {
@@ -20,5 +21,3 @@ function useOnce(callback) {
   callback && callback();
   called.current = true;
 }
-
-export { useOnce };

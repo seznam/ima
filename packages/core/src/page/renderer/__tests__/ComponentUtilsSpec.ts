@@ -78,11 +78,14 @@ describe('componentUtils', () => {
       const utils = componentUtils.getUtils();
 
       expect(oc.get).toHaveBeenCalledTimes(2);
+      // @ts-expect-error error expected
       expect(utils['SomeHelper'] instanceof SomeHelper).toBeTruthy();
+      // @ts-expect-error error expected
       expect(utils['SomeMockHelper'] instanceof SomeMockHelper).toBeTruthy();
     });
 
     it('should not create instances again.', () => {
+      // @ts-expect-error error expected
       const utils = (componentUtils['_utilities'] = {});
       jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 

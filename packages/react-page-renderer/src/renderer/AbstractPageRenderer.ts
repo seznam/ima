@@ -1,4 +1,10 @@
-import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
+import {
+  Controller,
+  Dispatcher,
+  MetaManager,
+  PageRenderer,
+  Utils,
+} from '@ima/core';
 import type {
   UnknownParameters,
   UnknownPromiseParameters,
@@ -13,12 +19,12 @@ import * as reactDOM from 'react-dom/server';
 import PageRendererFactory from './PageRendererFactory';
 import BlankManagedRootView from '../component/BlankManagedRootView';
 import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
-import { Settings, Utils } from '../types';
+import { Settings } from '../types';
 
 export type PageData = {
   documentView?: ComponentType;
   documentViewProps?: {
-    $Utils: UnknownParameters;
+    $Utils: Utils;
     metaManager: MetaManager;
   };
   react?: typeof react;
@@ -127,7 +133,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     state: UnknownParameters = {}
   ): ViewAdapterProps {
     const props = {
-      $Utils: this._factory.getUtils() as Utils,
+      $Utils: this._factory.getUtils(),
       managedRootView,
       pageView,
       state,

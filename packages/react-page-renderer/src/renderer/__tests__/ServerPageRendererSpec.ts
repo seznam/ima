@@ -43,7 +43,7 @@ const settings = {
   $Protocol: undefined,
   $Root: undefined,
   $Version: undefined,
-} as Settings;
+} as unknown as Settings;
 
 describe('ServerPageRenderer', () => {
   let pageRenderer: ServerPageRenderer;

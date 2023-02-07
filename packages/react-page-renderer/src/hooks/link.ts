@@ -1,3 +1,4 @@
+import { Router } from '@ima/core';
 import { useCallback } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -7,12 +8,11 @@ import { useComponentUtils } from './componentUtils';
  *
  * @example
  * const link = useLink();
- * @returns {function(string, Object<string, *>): string} Router.link
+ *
+ * @returns URL to linked path.
  */
-function useLink() {
+export function useLink(): InstanceType<typeof Router>['link'] {
   const { $Router } = useComponentUtils();
 
   return useCallback((...params) => $Router.link(...params), [$Router]);
 }
-
-export { useLink };

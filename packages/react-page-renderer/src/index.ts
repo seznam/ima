@@ -26,10 +26,10 @@ export * from './hooks/localize';
 export * from './hooks/once';
 export * from './hooks/pageContext';
 export * from './hooks/settings';
-export * from './hooks/ssr';
+export * from './hooks/eventBus';
 export * from './hooks/windowEvent';
 
-export type { Utils, Settings } from './types';
+export { Settings } from './types';
 
 export {
   AbstractComponent,

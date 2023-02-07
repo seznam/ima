@@ -1,8 +1,8 @@
+import { Utils } from '@ima/core';
 import { Component, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
 import PageContext from '../PageContext';
-import { Utils } from '../types';
 
 /**
  * The base class for all view components.
@@ -77,7 +77,7 @@ export default abstract class AbstractComponent extends Component {
    *         to `true`.
    */
   cssClasses(
-    classRules: string | { [key: string]: boolean },
+    classRules: string | { [key: string]: boolean } | string[],
     includeComponentClassName = false
   ) {
     return helpers.cssClasses(this, classRules, includeComponentClassName);

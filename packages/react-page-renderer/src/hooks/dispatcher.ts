@@ -1,6 +1,11 @@
+import { Dispatcher, Listener } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
+
+export interface useDispatcherType {
+  fire: InstanceType<typeof Dispatcher>['fire'];
+}
 
 /**
  * Hook to register listeners for dispatcher events. Returns
@@ -21,13 +26,15 @@ import { useComponentUtils } from './componentUtils';
  * useEffect(() => {
  * 	fire('another-event', { data: {} })
  * });
- * @param {string} [event=null] Event name.
- * @param {Function} [callback=null] Callback to register to dispatcher.
- * @returns {{
- * 	fire: function(string, Object<string, *>, boolean)
- * }} Dispatcher `fire` method.
+ *
+ * @param event Event name.
+ * @param callback Callback to register to dispatcher.
+ * @returns Dispatcher `fire` method.
  */
-function useDispatcher(event = null, callback = null) {
+export function useDispatcher(
+  event?: string,
+  callback?: Listener
+): useDispatcherType {
   const { $Dispatcher } = useComponentUtils();
 
   useEffect(() => {
@@ -42,12 +49,10 @@ function useDispatcher(event = null, callback = null) {
     };
   }, [$Dispatcher, event, callback]);
 
-  return useMemo(
+  return useMemo<useDispatcherType>(
     () => ({
       fire: (...params) => $Dispatcher.fire(...params),
     }),
     [$Dispatcher]
   );
 }
-
-export { useDispatcher };

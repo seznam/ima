@@ -1,10 +1,10 @@
+import { Utils } from '@ima/core';
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
 
 import AbstractComponent from './component/AbstractComponent';
 import AbstractPureComponent from './component/AbstractPureComponent';
 import PageContext from './PageContext';
-import { Utils } from './types';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -98,13 +98,12 @@ export function link(
  */
 export function cssClasses(
   component: AbstractComponent | AbstractPureComponent,
-  classRules: string | object,
+  classRules: string | { [key: string]: boolean } | string[],
   includeComponentClassName: boolean
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$CssClasses(
     classRules,
-    includeComponentClassName ? component : ''
+    includeComponentClassName ? (component as unknown as ComponentType) : ''
   );
 }
 
@@ -123,7 +122,7 @@ export function cssClasses(
  *         to `true`.
  */
 export function defaultCssClasses(
-  classRules: classnames.Value | classnames.Mapping,
+  classRules: classnames.Argument,
   component: string | ComponentType
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;

@@ -1,6 +1,18 @@
+import { Dictionary, Router, EventBus, Utils } from '@ima/core';
 import { useMemo } from 'react';
 
 import { usePageContext } from './pageContext';
+import { defaultCssClasses } from '../componentHelpers';
+
+export interface useComponentType {
+  utils: Utils;
+  cssClasses: typeof defaultCssClasses;
+  localize: InstanceType<typeof Dictionary>['get'];
+  link: InstanceType<typeof Router>['link'];
+  fire: InstanceType<typeof EventBus>['fire'];
+  listen: InstanceType<typeof EventBus>['listen'];
+  unlisten: InstanceType<typeof EventBus>['unlisten'];
+}
 
 /**
  * Base hook you can use to initialize your component.
@@ -12,20 +24,13 @@ import { usePageContext } from './pageContext';
  *
  * @example
  * const { utils, cssClasses } = useComponent();
- * @returns {{
- * 	utils: Object<string, Object>
- * 	cssClasses: function(...(string|Object<string, boolean>|string[])): string
- * 	localize: function(string, ?object)
- * 	link: function(string, Object<string, Object>)
- * 	fire: function(string, ?object=)
- * 	listen: function((React.Element|EventTarget), string, function(Event))
- * 	unlisten: function((React.Element|EventTarget), string, function(Event))
- * }} object containing context data and utility methods.
+ *
+ * @returns Object containing context data and utility methods.
  */
-export default function useComponent() {
+export function useComponent(): useComponentType {
   const { $Utils } = usePageContext();
 
-  return useMemo(
+  return useMemo<useComponentType>(
     () => ({
       utils: $Utils,
       cssClasses: (...params) => $Utils.$CssClasses(...params),
@@ -38,5 +43,3 @@ export default function useComponent() {
     [$Utils]
   );
 }
-
-export { useComponent };

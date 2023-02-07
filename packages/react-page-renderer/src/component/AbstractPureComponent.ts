@@ -1,8 +1,8 @@
+import { Utils } from '@ima/core';
 import { PureComponent, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
 import PageContext from '../PageContext';
-import { Utils } from '../types';
 
 /**
  * The base class for all view components.
@@ -24,7 +24,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
       this._utils = helpers.getUtils(this.props, this.context);
     }
 
-    return this._utils as Utils;
+    return this._utils!;
   }
 
   /**

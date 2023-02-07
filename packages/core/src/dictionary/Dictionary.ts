@@ -56,7 +56,7 @@ export default abstract class Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: ObjectParameters) {
+  get(key: string, parameters: ObjectParameters): string {
     return '';
   }
 

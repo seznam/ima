@@ -153,16 +153,18 @@ module.exports = {
     // Typescript support
     {
       files: ['**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
       },
       extends: ['plugin:@typescript-eslint/recommended'],
+      plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
-          { 'ts-expect-error': 'allow-with-description' },
+          { 'ts-expect-error': 'off' },
         ],
         '@typescript-eslint/no-unused-vars': [
           'error',

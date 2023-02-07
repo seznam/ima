@@ -4,6 +4,7 @@ import {
   DispatcherImpl,
   MetaManager,
   RendererEvents,
+  Utils,
   Window,
 } from '@ima/core';
 import type { RouteOptions } from '@ima/core';
@@ -71,7 +72,7 @@ const settings = {
   $Protocol: undefined,
   $Root: undefined,
   $Version: undefined,
-} as Settings;
+} as unknown as Settings;
 
 const param1 = 'param1';
 const param2 = 'param2';
@@ -307,7 +308,7 @@ describe('ClientPageRenderer', () => {
   });
 
   describe('_prepareViewAdapter method', () => {
-    const utils = { router: 'router' };
+    const utils = { router: 'router' } as unknown as Utils;
     const state = { state: 'state', pageView: () => null };
 
     beforeEach(() => {

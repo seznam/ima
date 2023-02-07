@@ -1,9 +1,8 @@
+import { Utils } from '@ima/core';
 import { createContext } from 'react';
 
-import { Utils } from './types';
-
-export interface PageContextInterface {
+export interface PageContextType {
   $Utils: Utils;
 }
 
-export default createContext<PageContextInterface>({} as PageContextInterface);
+export default createContext<PageContextType>({} as PageContextType);

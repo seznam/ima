@@ -1,4 +1,8 @@
-import EventBus, { Listener, NativeListener, Options } from './EventBus';
+import EventBus, {
+  EventBusListener,
+  NativeListener,
+  EventBusOptions,
+} from './EventBus';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
 
@@ -6,7 +10,7 @@ type NativeListenerMap = Map<string, NativeListener>;
 
 type ListenersWeakMap = WeakMap<EventTarget, NativeListenerMap>;
 
-type AllListenersWeakMap = WeakMap<Listener, NativeListener>;
+type AllListenersWeakMap = WeakMap<EventBusListener, NativeListener>;
 
 /**
  * Global name of IMA.js custom event.
@@ -28,7 +32,8 @@ export default class EventBusImpl extends EventBus {
    *
    * The "listen all" event listeners are not registered in this map.
    */
-  private _listeners: WeakMap<Listener, ListenersWeakMap> = new WeakMap();
+  private _listeners: WeakMap<EventBusListener, ListenersWeakMap> =
+    new WeakMap();
   /**
    * Map of event targets to listeners executed on all IMA.js event bus
    * events.
@@ -61,7 +66,7 @@ export default class EventBusImpl extends EventBus {
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
-    options: Options = {}
+    options: EventBusOptions = {}
   ) {
     const eventInitialization = {};
     const params = { detail: { eventName, data } };
@@ -90,7 +95,7 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  listenAll(eventTarget: EventTarget, listener: Listener): this {
+  listenAll(eventTarget: EventTarget, listener: EventBusListener): this {
     if (!this._allListenersTargets.has(eventTarget)) {
       this._allListenersTargets.set(eventTarget, new WeakMap());
     }
@@ -118,7 +123,11 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     if (!eventTarget) {
       if ($Debug) {
         console.warn(
@@ -168,7 +177,7 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  unlistenAll(eventTarget: EventTarget, listener: Listener) {
+  unlistenAll(eventTarget: EventTarget, listener: EventBusListener) {
     if (!this._allListenersTargets.has(eventTarget)) {
       if ($Debug) {
         console.warn(
@@ -209,7 +218,11 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  unlisten(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  unlisten(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     if (!this._listeners.has(listener)) {
       if ($Debug) {
         console.warn(

@@ -18,9 +18,13 @@ import MessageFormatDictionary from './dictionary/MessageFormatDictionary';
 import Error from './error/Error';
 import ExtensibleError from './error/ExtensibleError';
 import GenericError from './error/GenericError';
-import Dispatcher from './event/Dispatcher';
+import Dispatcher, { DispatcherListener } from './event/Dispatcher';
 import DispatcherImpl from './event/DispatcherImpl';
-import EventBus from './event/EventBus';
+import EventBus, {
+  EventBusListener,
+  NativeListener,
+  EventBusOptions,
+} from './event/EventBus';
 import EventBusImpl from './event/EventBusImpl';
 import AbstractExecution from './execution/AbstractExecution';
 import Execution from './execution/Execution';
@@ -69,10 +73,11 @@ import SessionMapStorage from './storage/SessionMapStorage';
 import SessionStorage from './storage/SessionStorage';
 import Storage from './storage/Storage';
 import WeakMapStorage from './storage/WeakMapStorage';
-import Window from './window/Window';
+import Window, { ListenerOptions } from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 
+export type { Utils } from './types';
 export type { RouteOptions } from './router/Router';
 export type { PageData } from './page/PageTypes';
 export type {
@@ -271,10 +276,14 @@ export {
   Error,
   ExtensibleError,
   GenericError,
+  DispatcherListener as Listener,
   Dispatcher,
   DispatcherImpl,
   EventBus,
   EventBusImpl,
+  EventBusListener,
+  NativeListener,
+  EventBusOptions,
   AbstractExecution,
   Execution,
   SerialBatch,
@@ -324,6 +333,7 @@ export {
   Storage,
   WeakMapStorage,
   Window,
+  ListenerOptions,
   ServerWindow,
   ClientWindow,
   ns,
