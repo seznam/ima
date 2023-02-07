@@ -232,7 +232,7 @@ export default async (
               publicPathEntry,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client?${new URLSearchParams({
+                `${require.resolve('@ima/hmr-client')}?${new URLSearchParams({
                   name,
                   noInfo: 'false',
                   reload: 'true',
