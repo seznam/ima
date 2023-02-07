@@ -26,7 +26,7 @@ export default class LegacyClientPageRenderer extends AbstractClientPageRenderer
     );
   }
 
-  protected _renderViewAdapter(callback: () => void, props?: unknown): void {
+  protected _renderViewAdapter(callback?: () => void, props?: unknown): void {
     render(
       this._getViewAdapterElement(Object.assign({}, props)) as ReactElement,
       this._viewContainer as Element,

@@ -293,7 +293,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
   }
 
   protected abstract _renderViewAdapter(
-    callback: () => void,
+    callback?: () => void,
     props?: unknown
   ): void;
 
