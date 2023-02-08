@@ -1,5 +1,17 @@
 # Change Log
 
+## 18.4.0
+
+### Minor Changes
+
+- a7de413a2: Replaced locale-loader with custom compilation process of language files, this fixes an issue where newly added language files are not visible by the webpack compile and requires restart with forced cache clear.
+  Implemented custom solution for hot module replacement API for language files (HMR for language files should be much faster and only )
+- f18224908: Add timeout middleware to the server app with default timeout 30s for each request.
+
+### Patch Changes
+
+- f18224908: Removed body-parser middleware as it is not needed in the default IMA app build. You can always add it if needed.
+
 ## 18.3.1
 
 ### Patch Changes
