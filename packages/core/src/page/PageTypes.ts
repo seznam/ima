@@ -1,4 +1,4 @@
-import { RouteOptions } from '../router/Router';
+import { RouteAction, RouteOptions } from '../router/Router';
 import { UnknownParameters } from '../CommonTypes';
 import Controller, { IController } from '../controller/Controller';
 import ControllerDecorator from '../controller/ControllerDecorator';
@@ -18,19 +18,14 @@ export type ManagedPage = {
   };
 };
 
-export type PageAction = {
-  action?: string;
-  event?: Event & {
-    state: {
-      scroll: {
-        x: number;
-        y: number;
-      };
+export interface PageAction extends RouteAction {
+  state?: {
+    scroll: {
+      x: number;
+      y: number;
     };
   };
-  type?: string;
-  url?: string;
-};
+}
 
 export type PageData = {
   status: number;

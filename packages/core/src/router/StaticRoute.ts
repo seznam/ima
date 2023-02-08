@@ -98,7 +98,7 @@ export default class StaticRoute extends AbstractRoute {
     pathExpression: string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: RouteOptions
+    options: Partial<RouteOptions>
   ) {
     super(name, pathExpression, controller, view, options);
 

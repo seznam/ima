@@ -1,27 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
 import { UnknownParameters } from '../CommonTypes';
 import IMAError from '../error/Error';
+import { ActionTypes } from './ActionTypes';
 
-export type RouteOptions = {
-  autoScroll?: boolean;
-  documentView?: unknown;
+export interface RouteAction {
+  type?: ActionTypes;
+  event?: Event;
+  url?: string;
+}
+
+export interface RouteLocals {
+  [key: string]: unknown;
+  action?: RouteAction;
+  route?: AbstractRoute;
+}
+
+export type RouterMiddleware = (
+  params: RouteParams,
+  locals: RouteLocals,
+  next?: (result: UnknownParameters) => void
+) => UnknownParameters | undefined | Promise<UnknownParameters | undefined>;
+
+export interface RouteOptions {
+  autoScroll: boolean;
+  documentView: null | unknown;
+  managedRootView: null | unknown;
+  onlyUpdate: boolean | ((controller: IController, view: unknown) => boolean);
+  viewAdapter: null | unknown;
+  middlewares: RouterMiddleware[];
+  // TODO add defaults
   extensions?: IExtension[];
+  // TODO what ->>
   headers?: UnknownParameters;
   httpStatus?: number;
-  managedRootView?: unknown;
-  middlewares?:
-    | Promise<RouterMiddleware>[]
-    | RouterMiddleware[]
-    | MiddleWareFunction[];
-  onlyUpdate?: boolean | ((controller: IController, view: unknown) => boolean);
-  viewAdapter?: unknown;
-};
+}
 
 /**
  * The router manages the application's routing configuration and dispatches
@@ -100,7 +117,7 @@ export default abstract class Router {
     pathExpression: string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: RouteOptions | undefined
+    options?: Partial<RouteOptions>
   ) {
     return this;
   }
@@ -115,7 +132,7 @@ export default abstract class Router {
    * @return This router.
    * @throws Thrown if a middleware with the same name already exists.
    */
-  use(middleware: (routeParams: RouteParams, locals: object) => unknown) {
+  use(middleware: RouterMiddleware) {
     return this;
   }
 
@@ -278,9 +295,9 @@ export default abstract class Router {
    */
   redirect(
     url: string,
-    options?: RouteOptions,
-    action?: Record<string, unknown>,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
   ) {
     return;
   }
@@ -318,9 +335,9 @@ export default abstract class Router {
    */
   route(
     path: string,
-    options?: RouteOptions,
-    action?: Record<string, unknown>,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
@@ -341,8 +358,8 @@ export default abstract class Router {
    */
   handleError(
     params: RouteParams,
-    options?: RouteOptions,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
@@ -363,8 +380,8 @@ export default abstract class Router {
    */
   handleNotFound(
     params: RouteParams,
-    options?: RouteOptions,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }

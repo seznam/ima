@@ -1,8 +1,7 @@
 import PageHandler from './PageHandler';
 import Window from '../../window/Window';
-import ActionTypes from '../../router/ActionTypes';
+import { ActionTypes } from '../../router/ActionTypes';
 import { ManagedPage, PageAction } from '../PageTypes';
-import { RouteOptions } from '../../router/Router';
 
 export default class PageNavigationHandler extends PageHandler {
   private _window: Window;
@@ -56,7 +55,8 @@ export default class PageNavigationHandler extends PageHandler {
       this._setAddressBar(action.url as string, isRedirection);
     }
 
-    if ((options as RouteOptions).autoScroll) {
+    // FIXME autoscroll will probably always be defined
+    if (options?.autoScroll) {
       this._scrollTo({ x: 0, y: 0 });
     }
   }
@@ -69,16 +69,12 @@ export default class PageNavigationHandler extends PageHandler {
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
-    const { event } = action;
+    const { state } = action;
     const { options } = managedPage;
 
-    if (
-      event &&
-      event.state &&
-      event.state.scroll &&
-      (options as RouteOptions).autoScroll
-    ) {
-      this._scrollTo(event.state.scroll);
+    // FIXME autoscroll will probably always be defined
+    if (state?.scroll && options?.autoScroll) {
+      this._scrollTo(state.scroll);
     }
   }
 

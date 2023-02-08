@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
 import Controller, { IController } from '../controller/Controller';
@@ -203,32 +200,27 @@ export default abstract class AbstractRoute {
     pathExpression: RoutePathExpression | string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: RouteOptions
+    options: Partial<RouteOptions>
   ) {
     this._name = name;
-
     this._pathExpression = pathExpression;
-
     this._controller = controller;
-
     this._view = view;
 
-    this._options = Object.assign(
-      {
-        onlyUpdate: false,
+    /**
+     * Init options with defaults.
+     */
+    this._options = {
+      ...{
         autoScroll: true,
         documentView: null,
         managedRootView: null,
+        onlyUpdate: false,
         viewAdapter: null,
         middlewares: [],
       },
-      options
-    );
-
-    // Initialize router middlewares
-    this._options.middlewares = this._options?.middlewares?.map(
-      middleware => new RouterMiddleware(middleware as MiddleWareFunction)
-    );
+      ...options,
+    };
   }
 
   /**
@@ -314,7 +306,8 @@ export default abstract class AbstractRoute {
   toPath(params: RouteParams): string {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.toPath method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { params }
     );
   }
 
@@ -328,7 +321,8 @@ export default abstract class AbstractRoute {
   matches(path: string): boolean {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.matches method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { path }
     );
   }
 
@@ -347,7 +341,8 @@ export default abstract class AbstractRoute {
   extractParameters(path?: string): RouteParams {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { path }
     );
   }
 

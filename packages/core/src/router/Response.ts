@@ -76,7 +76,7 @@ export default class Response {
    */
   redirect(
     url: string,
-    options: RouteOptions = { httpStatus: 302, headers: {} }
+    options: Partial<RouteOptions> = { httpStatus: 302, headers: {} }
   ) {
     if ($Debug) {
       if (this._response && this._response.headersSent) {

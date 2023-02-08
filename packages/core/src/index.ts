@@ -51,7 +51,7 @@ import PageStateManagerDecorator from './page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from './page/state/PageStateManagerImpl';
 import PageFactory from './page/PageFactory';
 import AbstractRouter from './router/AbstractRouter';
-import ActionTypes from './router/ActionTypes';
+import { ActionTypes } from './router/ActionTypes';
 import ClientRouter from './router/ClientRouter';
 import RouterEvents from './router/Events';
 import Request from './router/Request';

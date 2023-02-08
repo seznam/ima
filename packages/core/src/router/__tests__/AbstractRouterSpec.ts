@@ -5,7 +5,7 @@ import DispatcherImpl from '../../event/DispatcherImpl';
 import PageManager from '../../page/manager/PageManager';
 import AbstractRouter from '../AbstractRouter';
 import AbstractRoute from '../AbstractRoute';
-import ActionTypes from '../ActionTypes';
+import { ActionTypes } from '../ActionTypes';
 import RouteEvents from '../Events';
 import RouteFactory from '../RouteFactory';
 import RouteNames from '../RouteNames';
@@ -835,11 +835,11 @@ describe('ima.core.router.AbstractRouter', () => {
       await router._runMiddlewares([m1, m2, m3], 'params', middlewareLocals);
 
       // @ts-ignore
-      expect(m1._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m1.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
       // @ts-ignore
-      expect(m2._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m2.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
       // @ts-ignore
-      expect(m3._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m3.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
       // @ts-ignore
       expect(results).toStrictEqual(['m1', 'm2', 'm3']);
       expect(middlewareLocals).toStrictEqual({

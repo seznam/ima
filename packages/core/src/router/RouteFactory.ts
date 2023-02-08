@@ -35,7 +35,7 @@ export default class RouteFactory {
     pathExpression: string | RoutePathExpression,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options?: RouteOptions
+    options?: Partial<RouteOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,

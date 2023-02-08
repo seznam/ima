@@ -4,7 +4,7 @@
 
 import Dispatcher from '../../event/Dispatcher';
 import PageManager from '../../page/manager/PageManager';
-import ActionTypes from '../ActionTypes';
+import { ActionTypes } from '../ActionTypes';
 import ClientRouter from '../ClientRouter';
 import RouteFactory from '../RouteFactory';
 import ClientWindow from '../../window/ClientWindow';
