@@ -21,6 +21,7 @@ import webpack, {
   WebpackPluginInstance,
 } from 'webpack';
 
+import { getLanguageEntryPoints } from './languages';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
@@ -31,7 +32,6 @@ import {
   createPolyfillEntry,
   createDevServerConfig,
   getCurrentCoreJsVersion,
-  getLocaleEntryPoints,
 } from './utils';
 import { ImaConfigurationContext, ImaConfig } from '../types';
 
@@ -246,7 +246,7 @@ export default async (
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),
-      ...getLocaleEntryPoints(imaConfig),
+      ...getLanguageEntryPoints(imaConfig.languages, rootDir, useHMR),
     },
     output: {
       path: outputDir,
@@ -532,15 +532,6 @@ export default async (
           type: 'javascript/auto',
           resolve: {
             fullySpecified: false,
-          },
-        },
-        {
-          test: /virtualImaLocale\.json$/,
-          type: 'javascript/auto',
-          loader: 'locale-loader',
-          options: {
-            imaConfig,
-            rootDir,
           },
         },
       ].filter(Boolean) as RuleSetRule[],

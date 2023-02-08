@@ -22,6 +22,18 @@
   - @ima/error-overlay@19.0.0-rc.0
   - @ima/hmr-client@19.0.0-rc.0
 
+## 18.3.0
+
+### Minor Changes
+
+- a7de413a2: Replaced locale-loader with custom compilation process of language files, this fixes an issue where newly added language files are not visible by the webpack compile and requires restart with forced cache clear.
+  Implemented custom solution for hot module replacement API for language files (HMR for language files should be much faster and only )
+
+### Patch Changes
+
+- Updated dependencies [a7de413a2]
+  - @ima/hmr-client@18.1.0
+
 ## 18.2.0
 
 ### Minor Changes
