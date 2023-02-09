@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jest/no-conditional-expect */
-
 import Controller, { IController } from '../../../controller/Controller';
 import Extension from '../../../extension/Extension';
 import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
@@ -17,6 +13,7 @@ import PageFactory from '../../../page/PageFactory';
 import DynamicRoute from '../../../router/DynamicRoute';
 import StaticRoute from '../../../router/StaticRoute';
 import ControllerDecorator from '../../..//controller/ControllerDecorator';
+import { RouteOptions } from '../../..';
 
 class AbstractControllerTest extends AbstractController {
   dependency: unknown;
@@ -76,12 +73,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   const routePath = '/link';
   let route: StaticRoute | DynamicRoute;
 
-  const options = {
-    onlyUpdate: undefined,
-    autoScroll: true,
-    documentView: null,
-    managedRootView: null,
-  };
+  let options: RouteOptions;
   const params = {
     param1: 'param1',
     param2: 2,
@@ -107,6 +99,15 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       pageStateManager,
       handlerRegistry
     );
+
+    options = {
+      autoScroll: true,
+      documentView: null,
+      managedRootView: null,
+      onlyUpdate: false,
+      viewAdapter: null,
+      middlewares: [],
+    };
 
     (
       jest.spyOn(controllerInstance, 'getExtensions') as jest.SpyInstance
@@ -866,14 +867,15 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_hasOnlyUpdate method', () => {
     it('should return value from onlyUpdate function', () => {
-      const newOptions = Object.assign({}, options, {
-        onlyUpdate: () => true,
-      }) as UnknownParameters;
+      const newOptions: RouteOptions = {
+        ...options,
+        onlyUpdate: jest.fn().mockReturnValue(true),
+      };
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
       const spy = jest.spyOn(newOptions, 'onlyUpdate' as never);
       const mockSpyWrapper = (...args: unknown[]) => {
-        // @ts-ignore
+        // @ts-expect-error
         return spy(...args);
       };
       newOptions.onlyUpdate = mockSpyWrapper;
@@ -906,7 +908,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
       jest.spyOn(pageRenderer, 'unmount').mockImplementation();
 
-      pageManager._clearComponentState({});
+      pageManager._clearComponentState({} as RouteOptions);
 
       expect(pageRenderer.unmount).toHaveBeenCalled();
     });

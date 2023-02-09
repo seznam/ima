@@ -820,8 +820,7 @@ describe('ima.core.router.StaticRoute', function () {
         const keys = Object.keys(value.params);
 
         keys.forEach(key => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+          // @ts-expect-error
           expect(routeParams[key]).toBe(value.params[key]);
         });
       });

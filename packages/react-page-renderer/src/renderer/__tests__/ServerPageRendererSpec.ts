@@ -21,10 +21,14 @@ class DocumentView extends AbstractPureComponent {
   }
 }
 
-const routeOptions = {
-  autoScroll: false,
-  allowSPA: false,
-} as RouteOptions;
+const routeOptions: RouteOptions = {
+  autoScroll: true,
+  documentView: null,
+  managedRootView: null,
+  onlyUpdate: false,
+  viewAdapter: null,
+  middlewares: [],
+};
 
 const settings = {
   $App: undefined,

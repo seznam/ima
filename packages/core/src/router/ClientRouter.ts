@@ -164,7 +164,7 @@ export default class ClientRouter extends AbstractRouter {
           ...action,
           url,
         },
-        locals
+        locals ?? {}
       );
     } else {
       this._window.redirect(url);

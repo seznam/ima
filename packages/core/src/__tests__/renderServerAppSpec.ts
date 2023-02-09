@@ -73,7 +73,6 @@ describe('render server application', () => {
   const options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: DocumentView,
   };
 

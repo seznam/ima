@@ -74,10 +74,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   const extensionInstance = new ExtensionTest();
 
   const options = {
-    onlyUpdate: undefined,
     autoScroll: true,
-    allowSPA: true,
     documentView: null,
+    managedRootView: null,
+    onlyUpdate: false,
+    viewAdapter: null,
+    middlewares: [],
   };
   const params = {
     param1: 'param1',
@@ -257,7 +259,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
           route,
           controller: controllerInstance,
           view: viewInstance,
-          options: {},
+          options,
         })
         .then(() => {
           expect(pageManager['_activatePageSource']).toHaveBeenCalled();

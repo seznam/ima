@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable jest/no-conditional-expect */
 import GenericError from '../../error/GenericError';
 import DispatcherImpl from '../../event/DispatcherImpl';
 import PageManager from '../../page/manager/PageManager';
@@ -9,8 +7,8 @@ import { ActionTypes } from '../ActionTypes';
 import RouteEvents from '../Events';
 import RouteFactory from '../RouteFactory';
 import RouteNames from '../RouteNames';
-import RouterMiddleware from '../RouterMiddleware';
 import { toMockedInstance } from 'to-mock';
+import { RouteAction } from '../Router';
 
 class MockedAbstractRouter extends AbstractRouter {
   getPath = jest.fn();
@@ -46,9 +44,8 @@ describe('ima.core.router.AbstractRouter', () => {
   };
   const globalMiddleware = jest.fn();
   const homeRouteMiddleware = jest.fn();
-  const action: { type: string; route?: AbstractRoute } = {
+  const action: RouteAction = {
     type: ActionTypes.REDIRECT,
-    route: undefined,
   };
   const errorAction = {
     type: ActionTypes.ERROR,
@@ -140,7 +137,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       expect(router['_routeHandlers'].set).toHaveBeenCalledWith(
         'middleware-1',
-        new RouterMiddleware(globalMiddleware)
+        globalMiddleware
       );
     });
   });
@@ -222,7 +219,6 @@ describe('ima.core.router.AbstractRouter', () => {
       route = routeFactory.createRoute(routeName, path, Controller, View, {
         middlewares: [routeMiddleware],
       });
-      action.route = route;
     });
 
     it('should handle valid route path', async () => {
@@ -243,7 +239,7 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should handle valid route path with middlewares', async () => {
-      const middlewaresMock = [new RouterMiddleware(globalMiddleware)];
+      const middlewaresMock = [globalMiddleware];
       jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
         route,
         middlewares: middlewaresMock,
@@ -267,14 +263,14 @@ describe('ima.core.router.AbstractRouter', () => {
       );
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         2,
-        [new RouterMiddleware(routeMiddleware)],
+        [routeMiddleware],
         {},
         { route, action }
       );
     });
 
     it('should handle "not-found" route', async () => {
-      // @ts-ignore
+      // @ts-expect-error
       jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({});
 
       jest.spyOn(router, 'handleNotFound').mockImplementation(params => {
@@ -282,7 +278,7 @@ describe('ima.core.router.AbstractRouter', () => {
       });
 
       await router.route(path).then(params => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(params.error instanceof GenericError).toBe(true);
       });
     });
@@ -346,13 +342,10 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             errorAction
           );
-          // @ts-ignore
+          // @ts-expect-error
           expect(response.error).toStrictEqual(params.error);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [
-              new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware),
-            ],
+            [globalMiddleware, routeMiddleware],
             expect.objectContaining({
               ...params,
               userId: '2345',
@@ -423,7 +416,6 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
-        // @ts-ignore
         .handleNotFound(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -435,13 +427,10 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             redirectAction
           );
-          // @ts-ignore
+          // @ts-expect-error
           expect(response.error instanceof GenericError).toBeTruthy();
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [
-              new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware),
-            ],
+            [globalMiddleware, routeMiddleware],
             expect.objectContaining({
               ...params,
               userId: '2345',
@@ -458,7 +447,6 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
-      // @ts-ignore
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
@@ -560,7 +548,6 @@ describe('ima.core.router.AbstractRouter', () => {
         params: params,
         path: routePath,
         options: options,
-        action: {},
       };
 
       router.getPath.mockReturnValue(routePath);
@@ -595,7 +582,6 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: response,
           options: options,
-          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -623,7 +609,6 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: Object.assign({}, response, params),
           options: options,
-          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -734,14 +719,11 @@ describe('ima.core.router.AbstractRouter', () => {
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/').middlewares
-      ).toStrictEqual([new RouterMiddleware(globalMiddleware)]);
+      ).toStrictEqual([globalMiddleware]);
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares
-      ).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware),
-      ]);
+      ).toStrictEqual([globalMiddleware, afterHomeMiddleware]);
     });
   });
 
@@ -773,81 +755,104 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(middlewareRouter['_routeHandlers'].size).toBe(6);
 
       expect(middlewareRouter._getMiddlewaresForRoute('home')).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
+        globalMiddleware,
       ]);
 
       expect(middlewareRouter._getMiddlewaresForRoute('contact')).toStrictEqual(
-        [
-          new RouterMiddleware(globalMiddleware),
-          new RouterMiddleware(afterHomeMiddleware),
-        ]
+        [globalMiddleware, afterHomeMiddleware]
       );
 
       expect(
         middlewareRouter._getMiddlewaresForRoute(RouteNames.ERROR)
-      ).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware),
-        new RouterMiddleware(endMiddleware),
-      ]);
+      ).toStrictEqual([globalMiddleware, afterHomeMiddleware, endMiddleware]);
     });
   });
 
   describe('_runMiddlewares method', () => {
     it('should not break when middlewares are not a valid array', async () => {
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares([])).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares()).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares(null)).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares({})).resolves.toBeUndefined();
     });
 
     it('should run middlewares in sequence', async () => {
       const middlewareLocals = { middleware: 'locals' };
+      const results: { middleware: string; locals: unknown }[] = [];
 
-      const results: string[] = [];
-      const m1 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m1');
-          // @ts-ignore
-          locals.m1 = true;
-        })
-      );
-      const m2 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m2');
-          // @ts-ignore
-          locals.m2 = true;
-        })
-      );
-      const m3 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m3');
-          // @ts-ignore
-          locals.m3 = true;
-        })
-      );
+      const m1 = jest.fn((params, locals) => {
+        results.push({
+          middleware: 'm1',
+          locals: { ...locals },
+        });
 
-      // @ts-ignore
-      await router._runMiddlewares([m1, m2, m3], 'params', middlewareLocals);
-
-      // @ts-ignore
-      expect(m1.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(m2.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(m3.#middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(results).toStrictEqual(['m1', 'm2', 'm3']);
-      expect(middlewareLocals).toStrictEqual({
-        middleware: 'locals',
-        m1: true,
-        m2: true,
-        m3: true,
+        return { m1: true };
       });
+      const m2 = jest.fn().mockImplementation(async (params, locals) => {
+        results.push({
+          middleware: 'm2',
+          locals: { ...locals },
+        });
+
+        return { m2: true };
+      });
+      const m3 = jest.fn((params, locals, next) => {
+        results.push({
+          middleware: 'm3',
+          locals: { ...locals },
+        });
+
+        next({ m3: true });
+      });
+
+      await router._runMiddlewares(
+        [m1, m2, m3],
+        { params: 'params' },
+        middlewareLocals
+      );
+
+      expect(m1).toHaveBeenCalledWith(
+        { params: 'params' },
+        { middleware: 'locals' }
+      );
+      expect(m2).toHaveBeenCalledWith(
+        { params: 'params' },
+        { m1: true, middleware: 'locals' }
+      );
+      expect(m3).toHaveBeenCalledWith(
+        { params: 'params' },
+        { m1: true, m2: true, middleware: 'locals' },
+        expect.any(Function)
+      );
+      expect(results).toMatchInlineSnapshot(`
+        [
+          {
+            "locals": {
+              "middleware": "locals",
+            },
+            "middleware": "m1",
+          },
+          {
+            "locals": {
+              "m1": true,
+              "middleware": "locals",
+            },
+            "middleware": "m2",
+          },
+          {
+            "locals": {
+              "m1": true,
+              "m2": true,
+              "middleware": "locals",
+            },
+            "middleware": "m3",
+          },
+        ]
+      `);
     });
   });
 });

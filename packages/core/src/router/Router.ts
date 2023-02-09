@@ -24,7 +24,7 @@ export type RouterMiddleware = (
   params: RouteParams,
   locals: RouteLocals,
   next?: (result: UnknownParameters) => void
-) => UnknownParameters | undefined | Promise<UnknownParameters | undefined>;
+) => UnknownParameters | void | Promise<UnknownParameters | void>;
 
 export interface RouteOptions {
   autoScroll: boolean;
@@ -102,13 +102,6 @@ export default abstract class Router {
    *        The `autoScroll` flag signals whether the page should be
    *        scrolled to the top when the navigation takes place. This flag is
    *        enabled by default.
-   *        The `allowSPA` flag can be used to make the route
-   *        always served from the server and never using the SPA page even
-   *        if the server is overloaded. This is useful for routes that use
-   *        different document views (specified by the `documentView`
-   *        option), for example for rendering the content of iframes.
-   *        The route specific `middlewares` which are run after
-   *        extracting parameters before route handling.
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
