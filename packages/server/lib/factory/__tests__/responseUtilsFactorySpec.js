@@ -28,11 +28,17 @@ jest.mock('fs', () => {
 });
 
 describe('responseUtilsFactory', () => {
+  const nowMock = jest.spyOn(global.Date, 'now').mockReturnValue('now');
+  const randomMock = jest.spyOn(global.Math, 'random').mockReturnValue(0);
+
   const {
     processContent,
     createContentVariables,
     _prepareCookieOptionsForExpress,
   } = responseUtilsFactory();
+
+  nowMock.mockRestore();
+  randomMock.mockRestore();
 
   let event;
 
