@@ -1,5 +1,4 @@
 import HttpAgent, {
-  OptionalHttpAgentRequestOptions,
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
@@ -99,7 +98,7 @@ export default class HttpAgentImpl extends HttpAgent {
   get(
     url: string,
     data: UnknownParameters,
-    options = {} as OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     return this._requestWithCheckCache('get', url, data, options);
   }
@@ -110,7 +109,7 @@ export default class HttpAgentImpl extends HttpAgent {
   post(
     url: string,
     data: UnknownParameters,
-    options = {} as OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     return this._requestWithCheckCache(
       'post',
@@ -126,7 +125,7 @@ export default class HttpAgentImpl extends HttpAgent {
   put(
     url: string,
     data: UnknownParameters,
-    options = {} as OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     return this._requestWithCheckCache(
       'put',
@@ -142,7 +141,7 @@ export default class HttpAgentImpl extends HttpAgent {
   patch(
     url: string,
     data: UnknownParameters,
-    options = {} as OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     return this._requestWithCheckCache(
       'patch',
@@ -158,7 +157,7 @@ export default class HttpAgentImpl extends HttpAgent {
   delete(
     url: string,
     data: UnknownParameters,
-    options = {} as OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     return this._requestWithCheckCache(
       'delete',
@@ -229,11 +228,11 @@ export default class HttpAgentImpl extends HttpAgent {
     method: string,
     url: string,
     data: UnknownParameters,
-    options: OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ) {
     const optionsWithDefault = this._prepareOptions(options);
 
-    if (options.cache) {
+    if (optionsWithDefault.cache) {
       const cachedData = this._getCachedData(method, url, data);
 
       if (cachedData) {
@@ -407,24 +406,23 @@ export default class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options: OptionalHttpAgentRequestOptions
+    options?: Partial<HttpAgentRequestOptions>
   ): HttpAgentRequestOptions {
-    const composedOptions = Object.assign(
-      {},
-      this._defaultRequestOptions,
-      options
-    );
+    const composedOptions = {
+      ...this._defaultRequestOptions,
+      ...options,
+    };
     let cookieHeader = {};
 
     if (composedOptions.withCredentials) {
       cookieHeader = { Cookie: this._cookie.getCookiesStringForCookieHeader() };
     }
 
-    composedOptions.headers = Object.assign(
-      cookieHeader,
-      this._defaultRequestOptions.headers,
-      options.headers || {}
-    );
+    composedOptions.headers = {
+      ...cookieHeader,
+      ...this._defaultRequestOptions.headers,
+      ...(options?.headers ?? {}),
+    };
 
     return composedOptions;
   }
