@@ -9,6 +9,7 @@
 import { toMockedInstance } from 'to-mock';
 import AbstractController from '../../../controller/AbstractController';
 import ClientPageManager from '../ClientPageManager';
+import AbstractPageManager from '../AbstractPageManager';
 import ClientWindow from '../../../window/ClientWindow';
 import Controller, { IController } from '../../../controller/Controller';
 import ControllerDecorator from '../../../controller/ControllerDecorator';
@@ -248,8 +249,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       jest
         .spyOn(pageManager, '_activatePageSource' as never)
         .mockImplementation();
+      //@ts-ignore
       jest
-        .spyOn(pageManager, 'manage')
+        .spyOn(AbstractPageManager.prototype, 'manage')
         .mockReturnValue(Promise.resolve({ status: 200 }));
 
       await pageManager
@@ -261,9 +263,6 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         })
         .then(() => {
           expect(pageManager['_activatePageSource']).toHaveBeenCalled();
-        })
-        .catch(error => {
-          console.error('ima.core.page.manager.Client: CATCH ERROR: ', error);
         });
     });
   });
