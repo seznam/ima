@@ -117,13 +117,14 @@ module.exports = function serverAppFactory({
 
       if (!event.defaultPrevented) {
         event = await emitter.emit(Event.Request, event);
-        event.context.response = event.result;
       }
 
       event.context.response = {
         ...defaultResponse,
         ...event.context.response,
+        ...event.result,
       };
+
       event = await emitter.emit(Event.AfterRequest, event);
 
       event = await responseHandler(event);
@@ -153,10 +154,10 @@ module.exports = function serverAppFactory({
       event = await emitter.emit(Event.BeforeError, event);
       event = await emitter.emit(Event.Error, event);
 
-      event.context.response = event.result;
       event.context.response = {
         ...defaultResponse,
         ...event.context.response,
+        ...event.result,
       };
 
       event = await emitter.emit(Event.AfterError, event);

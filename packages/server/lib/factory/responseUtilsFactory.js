@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const validator = require('validator');
 const { renderMeta } = require('./utils/metaUtils');
 const {
   renderScript,
@@ -7,10 +8,15 @@ const {
   prepareDefaultResources,
 } = require('./utils/resourcesUtils');
 
+const crypto = require('crypto');
+
 module.exports = function responseUtilsFactory() {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve('./build/server/runner.js');
   const manifestPath = path.resolve('./build/manifest.json');
+  const uuidPrefix = `${Date.now().toString(36)}-${(
+    Math.random() * 2057
+  ).toString(36)}`;
 
   /**
    * Load manifest, runner resources and prepare sources object.
@@ -28,19 +34,25 @@ module.exports = function responseUtilsFactory() {
     };
   }
 
-  function _getRevivalSettings({ settings, response }) {
+  function _getRevivalSettings({ res, settings, response }) {
+    const requestID = `${uuidPrefix}-${crypto.randomUUID()}`;
+    res.locals.requestID = requestID;
+
     return `(function (root) {
       root.$Debug = ${settings.$Debug};
       root.$IMA = root.$IMA || {};
       $IMA.SPA = ${response?.SPA ?? false};
       $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
+      $IMA.$RequestID = "${requestID}";
       $IMA.$Language = "${settings.$Language}";
       $IMA.$Env = "${settings.$Env}";
       $IMA.$Debug = ${settings.$Debug};
       $IMA.$Version = "${settings.$Version}";
       $IMA.$App = ${JSON.stringify(settings.$App)};
-      $IMA.$Protocol = "${settings.$Protocol}";
-      $IMA.$Host = "${settings.$Host}";
+      $IMA.$Protocol = "${
+        settings.$Protocol && validator.escape(settings.$Protocol)
+      }";
+      $IMA.$Host = "${settings.$Host && validator.escape(settings.$Host)}";
       $IMA.$Path = "${settings.$Path}";
       $IMA.$Root = "${settings.$Root}";
       $IMA.$LanguagePartPath = "${settings.$LanguagePartPath}";
@@ -77,6 +89,7 @@ module.exports = function responseUtilsFactory() {
 
   function sendResponseHeaders({ context, res }) {
     _setCookieHeaders({ res, context });
+
     res.set(context?.page?.headers ?? {});
   }
 
@@ -91,7 +104,7 @@ module.exports = function responseUtilsFactory() {
    * @param event IMA hooks server event.
    * @returns object Object with default set of content variables.
    */
-  function createContentVariables({ context }) {
+  function createContentVariables({ res, context }) {
     const { response, bootConfig, app } = context;
 
     if (!bootConfig?.settings) {
@@ -127,7 +140,7 @@ module.exports = function responseUtilsFactory() {
       resources: JSON.stringify(scripts).replace(/"/g, '\\"'),
       revivalSettings: renderScript(
         'revival-settings',
-        _getRevivalSettings({ response, settings })
+        _getRevivalSettings({ response, settings, res })
       ),
       revivalCache: renderScript(
         'revival-cache',

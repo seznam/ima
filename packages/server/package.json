@@ -29,12 +29,14 @@
     "ejs": "^3.1.6",
     "http-proxy-middleware": "^2.0.6",
     "memoize-one": "^6.0.0",
+    "validator": "^13.9.0",
     "winston": "^3.8.2"
   },
   "devDependencies": {
     "express": "^4.17.3"
   },
   "peerDependencies": {
+    "@ima/core": ">=19.0.0-rc.0",
     "@ima/dev-utils": ">=19.0.0-rc.0",
     "@ima/helpers": ">=19.0.0-rc.0"
   },

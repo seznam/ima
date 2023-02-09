@@ -50,7 +50,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
     );
   }
 
-  protected _renderViewAdapter(callback: () => void, props?: unknown): void {
+  protected _renderViewAdapter(callback?: () => void, props?: unknown): void {
     if (!this._reactRoot) {
       this._reactRoot = createRoot(this._viewContainer as Element);
     }

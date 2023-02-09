@@ -9,6 +9,7 @@ import {
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
 import { HandlerFn } from '../types';
+import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
   createWebpackConfig,
@@ -32,6 +33,11 @@ const build: HandlerFn = async args => {
 
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
+
+    // Compile language files
+    logger.info(`Compiling language files...`, { trackTime: true });
+    await compileLanguages(imaConfig, args.rootDir);
+    logger.endTracking();
 
     // Generate webpack config
     const config = await createWebpackConfig(args, imaConfig);
