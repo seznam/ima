@@ -255,9 +255,15 @@ The `publicPath` option is used to specify base path for all asses within the ap
 
 :::tip
 
-Use this option for example in cases of asset upload to CDN, when the CDN URL is known beforehand (the public path can't be changed after the app is already built).
+Use this option to change base public path for static served files, for example when uploading static files to CDN.
 
-If you want to serve your static files on different route (default is `/static`), customize the `staticFolder` option in `./server/config/environment.js` file and change `publicPath` option accordingly:
+Additionally, **if the CDN url is not known before building the application**, you can use `IMA_PUBLIC_PATH` env variable, when starting the application server. This variable takes preference before the ima config `publicPath` option.
+
+```bash
+IMA_PUBLIC_PATH="https://cdn.basePath/cd_F/" node ./server/server.js
+```
+
+If you want to serve your static files on a different route (default is `/static`), customize the `staticPath` option in `./server/config/environment.js` file and change `publicPath` option accordingly:
 
 ```javascript title=./server/config/environment.js
 module.exports = (() => {
@@ -268,7 +274,7 @@ module.exports = (() => {
          * The built static files are served on the
          * http://localhost:3001/pro/static base url
          */
-        staticFolder: '/pro/static',
+        staticPath: '/pro/static',
       }
     }
   }
@@ -280,11 +286,7 @@ module.exports = (() => {
  * @type import('@ima/cli').ImaConfig
  */
 module.exports = {
-  /**
-   * We already serve from static folder, so it is included in the
-   * final baseURL and we just need to add the `pro` prefix.
-   */
-  publicPath: '/pro/',
+  publicPath: '/pro/static/',
 };
 ```
 

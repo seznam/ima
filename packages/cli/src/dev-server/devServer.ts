@@ -67,7 +67,7 @@ export async function createDevServer({
       .use(
         devMiddleware(compiler, {
           index: false,
-          publicPath: config.publicPath,
+          publicPath: process.env.IMA_PUBLIC_PATH ?? config.publicPath,
           writeToDisk: args.writeToDisk
             ? true
             : filePath =>

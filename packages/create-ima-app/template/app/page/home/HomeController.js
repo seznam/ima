@@ -96,23 +96,23 @@ export default class HomeController extends AbstractPageController {
     let image = `${domain}/${IMAjsShareImg}`;
 
     metaManager.setTitle(title);
-
-    metaManager.setMetaName('description', description);
-    metaManager.setMetaName(
-      'keywords',
-      'IMA.js, isomorphic application, javascript, hello world'
-    );
-
-    metaManager.setMetaName('twitter:title', title);
-    metaManager.setMetaName('twitter:description', description);
-    metaManager.setMetaName('twitter:card', 'summary');
-    metaManager.setMetaName('twitter:image', image);
-    metaManager.setMetaName('twitter:url', url);
-
-    metaManager.setMetaProperty('og:title', title);
-    metaManager.setMetaProperty('og:description', description);
-    metaManager.setMetaProperty('og:type', 'website');
-    metaManager.setMetaProperty('og:image', image);
-    metaManager.setMetaProperty('og:url', url);
+    metaManager
+      .setMetaName('description', description)
+      .setMetaName(
+        'keywords',
+        'IMA.js, isomorphic application, javascript, hello world'
+      );
+    metaManager
+      .setMetaName('twitter:title', title)
+      .setMetaName('twitter:description', description)
+      .setMetaName('twitter:card', 'summary')
+      .setMetaName('twitter:image', image)
+      .setMetaName('twitter:url', url);
+    metaManager
+      .setMetaProperty('og:title', title)
+      .setMetaProperty('og:description', description)
+      .setMetaProperty('og:type', 'website')
+      .setMetaProperty('og:image', image)
+      .setMetaProperty('og:url', url);
   }
 }

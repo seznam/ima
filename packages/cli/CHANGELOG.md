@@ -1,5 +1,50 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- ceb4cbd12: Updated types
+- Updated dependencies [2f789cdae]
+- Updated dependencies [073adb5d5]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [1a4c07a96]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ca55af922]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [c0fe68ef3]
+  - @ima/server@19.0.0-rc.0
+  - @ima/dev-utils@19.0.0-rc.0
+  - @ima/error-overlay@19.0.0-rc.0
+  - @ima/hmr-client@19.0.0-rc.0
+
+## 18.3.0
+
+### Minor Changes
+
+- a7de413a2: Replaced locale-loader with custom compilation process of language files, this fixes an issue where newly added language files are not visible by the webpack compile and requires restart with forced cache clear.
+  Implemented custom solution for hot module replacement API for language files (HMR for language files should be much faster and only )
+
+### Patch Changes
+
+- Updated dependencies [a7de413a2]
+  - @ima/hmr-client@18.1.0
+
+## 18.2.0
+
+### Minor Changes
+
+- f66d8808b: Added ability to set custom publicPath during runtime using IMA_PUBLIC_PATH env variable
+  Proper handling of publicPath in assets serving and sources fallbacks
+
+### Patch Changes
+
+- ec39ad559: CLI now returns exit code 1 when unexpected error occurs, allowing it to be processed further by other tools. Was previously incorrectly returning exit code 0 no matter the situation.
+
 ## 18.1.0
 
 ### Minor Changes

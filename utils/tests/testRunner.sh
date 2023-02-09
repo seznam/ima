@@ -50,12 +50,14 @@ for PACKAGE in $PACKAGES ; do
     npm publish
 done
 
+cd "$ROOT_DIR_IMA"
+
 # Install @ima scoped packages from local registry
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 
 # Update create-ima-app versions
-cd "$ROOT_DIR_IMA"
 node utils/version/create-ima-app-versions.js
+
 # Link current create-ima-app version to global scope
 cd "$CREATE_IMA_APP_DIR"
 npm link

@@ -139,7 +139,7 @@ module.exports = function IMAInternalFactory({
       routeName = routeInfo.route.getName();
     }
 
-    res.$IMA = res.$IMA ? { ...res.$IMA, routeName } : { routeName };
+    res.locals.routeName = routeName;
   }
 
   function _importAppMainSync({ environment, context = {} }) {
@@ -201,7 +201,7 @@ module.exports = function IMAInternalFactory({
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
-        $Source: environment.$Source,
+        $Resources: environment.$Resources,
         $Protocol: protocol,
         $Language: language,
         $Host: host,

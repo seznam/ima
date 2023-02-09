@@ -9,7 +9,7 @@ require('@ima/react-page-renderer/hook/server')(imaServer);
 
 const express = require('express');
 const favicon = require('serve-favicon');
-const bodyParser = require('body-parser');
+const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const helmet = require('helmet');
@@ -101,10 +101,11 @@ const app = express();
 
 app
   .set('trust proxy', true)
+  .use(timeout('30s'))
   .use(helmet())
   .use(
     compression({
-      filter: req => req.baseUrl !== environment.$Server.staticFolder,
+      filter: req => req.baseUrl !== environment.$Server.staticPath,
     })
   )
   .use(
@@ -113,7 +114,7 @@ app
     )
   )
   .use(
-    environment.$Server.staticFolder,
+    environment.$Server.staticPath,
     memStaticProxy,
     expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
       enableBrotli: true,
@@ -125,8 +126,6 @@ app
       },
     })
   )
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
   .use(cookieParser())
   .use(
     environment.$Proxy.path + '/',

@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
+## 18.0.1
+
+### Patch Changes
+
+- 073adb5d5: Fixed issue where webpack compile errors were identified as runtime errors, resulting in invalid results in error overlay
+
 ## 18.0.0
 
 ### Major Changes

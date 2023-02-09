@@ -1,3 +1,4 @@
+const { RouteNames } = require('@ima/core');
 const { Event } = require('../emitter.js');
 
 module.exports = function hooksFactory({
@@ -97,15 +98,16 @@ module.exports = function hooksFactory({
     const { req, res } = event;
     const routeInfo = _getRouteInfo({ req, res });
 
-    // TODO IMA@18 import from @ima/core 'notfound' alias, after merging to next
-    const isBadRequest = routeInfo && routeInfo.route.getName() === 'notFound';
+    const isBadRequest =
+      routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
 
     // TODO IMA@18 documentation badRequestConcurrency
+    // TODO IMA@18 update for better performance check
     return isBadRequest && _hasToServeStatic(event);
   }
 
   async function _applyError(event) {
-    if (_hasToServeStatic(event)) {
+    if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticServerErrorPage(event);
     }
 
@@ -123,7 +125,7 @@ module.exports = function hooksFactory({
   }
 
   async function _applyNotFound(event) {
-    if (_hasToServeStatic(event)) {
+    if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticClientErrorPage(event);
     }
 
@@ -162,18 +164,15 @@ module.exports = function hooksFactory({
       return devErrorPage(event);
     } else {
       try {
-        const { context } = event;
+        const { context, error } = event;
 
-        if (!context?.app) {
-          return renderStaticServerErrorPage(event);
+        if (context?.app) {
+          context.app.oc.get('$Cache').clear();
         }
 
-        let router = context.app.oc.get('$Router');
-        context.app.oc.get('$Cache').clear();
-
-        if (router.isClientError(event.error)) {
+        if (error.isClientError?.()) {
           return _applyNotFound(event);
-        } else if (router.isRedirection(event.error)) {
+        } else if (error.isRedirection?.()) {
           return _applyRedirect(event);
         } else {
           return _applyError(event);
@@ -239,9 +238,7 @@ module.exports = function hooksFactory({
 
       return {
         ...event.result,
-        ...createContentVariables({
-          ...event.context,
-        }),
+        ...createContentVariables(event),
       };
     });
   }
@@ -268,18 +265,24 @@ module.exports = function hooksFactory({
         };
       }
 
+      // Store copy of BeforeResponse result before emitting new event
+      const beforeResponseResult = { ...event.result };
+
+      // Generate content variables
       event = await emitter.emit(Event.CreateContentVariables, event);
       event.context.response.contentVariables = {
-        ...event.context.response.contentVariables,
         ...event.result,
       };
 
-      event.context.response.content = processContent({
-        ...event.context,
-      });
+      // Restore before response event result contents
+      event.result = beforeResponseResult;
+
+      // Interpolate contentVariables into the response content
+      event.context.response.content = processContent(event);
     });
 
-    emitter.on(Event.Response, async ({ res, context }) => {
+    emitter.on(Event.Response, async event => {
+      const { res, context } = event;
       if (res.headersSent || !context.response) {
         return;
       }

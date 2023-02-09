@@ -21,6 +21,7 @@ import webpack, {
   WebpackPluginInstance,
 } from 'webpack';
 
+import { getLanguageEntryPoints } from './languages';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
@@ -31,7 +32,6 @@ import {
   createPolyfillEntry,
   createDevServerConfig,
   getCurrentCoreJsVersion,
-  getLocaleEntryPoints,
 } from './utils';
 import { ImaConfigurationContext, ImaConfig } from '../types';
 
@@ -59,6 +59,10 @@ export default async (
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
   const mode = ctx.environment === 'production' ? 'production' : 'development';
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
+
+  // Bundle entries
+  const publicPathEntry = path.join(__dirname, './entries/publicPathEntry');
+  const appMainEntry = path.join(rootDir, 'app/main.js');
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
@@ -221,13 +225,14 @@ export default async (
     entry: {
       ...(isServer
         ? {
-            server: [path.join(rootDir, 'app/main.js')],
+            server: [publicPathEntry, appMainEntry],
           }
         : {
             [name]: [
+              publicPathEntry,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client?${new URLSearchParams({
+                `${require.resolve('@ima/hmr-client')}?${new URLSearchParams({
                   name,
                   noInfo: 'false',
                   reload: 'true',
@@ -237,11 +242,11 @@ export default async (
                   hostname: devServerConfig.hostname,
                   publicUrl: devServerConfig.publicUrl,
                 }).toString()}`,
-              path.join(rootDir, 'app/main.js'),
+              appMainEntry,
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
           }),
-      ...getLocaleEntryPoints(imaConfig),
+      ...getLanguageEntryPoints(imaConfig.languages, rootDir, useHMR),
     },
     output: {
       path: outputDir,
@@ -527,15 +532,6 @@ export default async (
           type: 'javascript/auto',
           resolve: {
             fullySpecified: false,
-          },
-        },
-        {
-          test: /virtualImaLocale\.json$/,
-          type: 'javascript/auto',
-          loader: 'locale-loader',
-          options: {
-            imaConfig,
-            rootDir,
           },
         },
       ].filter(Boolean) as RuleSetRule[],

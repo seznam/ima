@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`metaUtils renderMeta should generate meta tags while filtering out invalid values 1`] = `"<title>Page title</title><link data-ima-meta rel="stylesheet" href="/media/examples/link-element-example.css" /><meta data-ima-meta name="description" content="meta description" /><meta data-ima-meta name="keywords" content="ima core cli" data-custom-attr="custom-attribute" /><meta data-ima-meta name="og:description" /><meta data-ima-meta name="og:keywords" property="ima core cli" data-custom-attr="custom-attribute" />"`;
