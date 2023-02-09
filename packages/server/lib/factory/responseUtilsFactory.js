@@ -13,6 +13,9 @@ module.exports = function responseUtilsFactory() {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve('./build/server/runner.js');
   const manifestPath = path.resolve('./build/manifest.json');
+  const uuidPrefix = `${Date.now().toString(36)}-${(
+    Math.random() * 2057
+  ).toString(36)}`;
 
   /**
    * Load manifest, runner resources and prepare sources object.
@@ -31,7 +34,7 @@ module.exports = function responseUtilsFactory() {
   }
 
   function _getRevivalSettings({ res, settings, response }) {
-    const requestID = crypto.randomUUID();
+    const requestID = `${uuidPrefix}-${crypto.randomUUID()}`;
     res.locals.requestID = requestID;
 
     return `(function (root) {
