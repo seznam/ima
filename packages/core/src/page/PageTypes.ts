@@ -4,6 +4,7 @@ import Controller, { IController } from '../controller/Controller';
 import ControllerDecorator from '../controller/ControllerDecorator';
 import AbstractRoute from '../router/AbstractRoute';
 
+// FIXME most of these types are probably always defined
 export type ManagedPage = {
   controller?: IController;
   controllerInstance?: Controller;
@@ -19,10 +20,12 @@ export type ManagedPage = {
 };
 
 export interface PageAction extends RouteAction {
-  state?: {
-    scroll: {
-      x: number;
-      y: number;
+  event?: Event & {
+    state?: {
+      scroll?: {
+        x: number;
+        y: number;
+      };
     };
   };
 }

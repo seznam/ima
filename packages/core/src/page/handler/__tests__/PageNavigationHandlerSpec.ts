@@ -160,8 +160,8 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         managedPage as ManagedPage,
         {} as ManagedPage,
         {
-          state: { scroll },
-        }
+          event: { state: { scroll } },
+        } as PageAction
       );
 
       jest.runAllTimers();
@@ -193,8 +193,8 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         managedPage as ManagedPage,
         {} as ManagedPage,
         {
-          state: { scroll },
-        }
+          event: { state: { scroll } },
+        } as PageAction
       );
 
       jest.runAllTimers();

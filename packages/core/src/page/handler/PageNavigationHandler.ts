@@ -69,12 +69,12 @@ export default class PageNavigationHandler extends PageHandler {
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
-    const { state } = action;
+    const { event } = action;
     const { options } = managedPage;
 
     // FIXME autoscroll will probably always be defined
-    if (state?.scroll && options?.autoScroll) {
-      this._scrollTo(state.scroll);
+    if (event?.state?.scroll && options?.autoScroll) {
+      this._scrollTo(event?.state.scroll);
     }
   }
 

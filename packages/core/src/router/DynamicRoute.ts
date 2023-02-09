@@ -48,7 +48,7 @@ export default class DynamicRoute extends AbstractRoute {
     pathExpression: RoutePathExpression,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: Partial<RouteOptions>
+    options?: Partial<RouteOptions>
   ) {
     super(name, pathExpression, controller, view, options);
 

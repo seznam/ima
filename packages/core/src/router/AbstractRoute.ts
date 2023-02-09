@@ -200,7 +200,7 @@ export default abstract class AbstractRoute {
     pathExpression: RoutePathExpression | string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: Partial<RouteOptions>
+    options?: Partial<RouteOptions>
   ) {
     this._name = name;
     this._pathExpression = pathExpression;
