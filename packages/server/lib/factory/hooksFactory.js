@@ -281,7 +281,8 @@ module.exports = function hooksFactory({
       event.context.response.content = processContent(event);
     });
 
-    emitter.on(Event.Response, async ({ res, context }) => {
+    emitter.on(Event.Response, async event => {
+      const { res, context } = event;
       if (res.headersSent || !context.response) {
         return;
       }
