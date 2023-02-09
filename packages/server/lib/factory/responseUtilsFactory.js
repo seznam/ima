@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const validator = require('validator');
 const { renderMeta } = require('./utils/metaUtils');
 const {
   renderScript,
@@ -39,8 +40,10 @@ module.exports = function responseUtilsFactory() {
       $IMA.$Debug = ${settings.$Debug};
       $IMA.$Version = "${settings.$Version}";
       $IMA.$App = ${JSON.stringify(settings.$App)};
-      $IMA.$Protocol = "${settings.$Protocol}";
-      $IMA.$Host = "${settings.$Host}";
+      $IMA.$Protocol = "${
+        settings.$Protocol && validator.escape(settings.$Protocol)
+      }";
+      $IMA.$Host = "${settings.$Host && validator.escape(settings.$Host)}";
       $IMA.$Path = "${settings.$Path}";
       $IMA.$Root = "${settings.$Root}";
       $IMA.$LanguagePartPath = "${settings.$LanguagePartPath}";

@@ -138,7 +138,6 @@ describe('Server App Factory', () => {
                 run: jest.fn(),
               },
               oc: {
-                // TODO IMA@18+ change for imports from @ima/core
                 get(name) {
                   if (name === '$Router') {
                     return router;
