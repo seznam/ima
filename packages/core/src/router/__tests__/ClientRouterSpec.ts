@@ -27,7 +27,13 @@ describe('ima.core.router.ClientRouter', () => {
   };
 
   beforeEach(() => {
-    router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
+    router = new ClientRouter(
+      pageRenderer,
+      routeFactory,
+      dispatcher,
+      window,
+      30000
+    );
 
     jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
 

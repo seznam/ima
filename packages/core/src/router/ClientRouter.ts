@@ -45,7 +45,13 @@ export default class ClientRouter extends AbstractRouter {
     this._handlePopState(event as PopStateEvent);
 
   static get $dependencies() {
-    return [PageManager, RouteFactory, Dispatcher, Window];
+    return [
+      PageManager,
+      RouteFactory,
+      Dispatcher,
+      Window,
+      '$Settings.$Router.middlewareTimeout',
+    ];
   }
 
   /**
@@ -56,14 +62,16 @@ export default class ClientRouter extends AbstractRouter {
    * @param factory Factory for routes.
    * @param dispatcher Dispatcher fires events to app.
    * @param window The current global client-side APIs provider.
+   * @param middlewareTimeout Middleware timeout value in ms.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
-    window: Window
+    window: Window,
+    middlewareTimeout: number
   ) {
-    super(pageManager, factory, dispatcher);
+    super(pageManager, factory, dispatcher, middlewareTimeout);
 
     /**
      * Helper for accessing the native client-side APIs.

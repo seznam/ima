@@ -65,7 +65,12 @@ describe('ima.core.router.AbstractRouter', () => {
 
   beforeEach(() => {
     routeFactory = new RouteFactory();
-    router = new MockedAbstractRouter(pageManager, routeFactory, dispatcher);
+    router = new MockedAbstractRouter(
+      pageManager,
+      routeFactory,
+      dispatcher,
+      30000
+    );
 
     jest.spyOn(router, 'getPath').mockReturnValue(currentRoutePath);
 
@@ -658,7 +663,12 @@ describe('ima.core.router.AbstractRouter', () => {
     const path = '/path';
 
     beforeEach(() => {
-      router = new MockedAbstractRouter(pageManager, routeFactory, dispatcher);
+      router = new MockedAbstractRouter(
+        pageManager,
+        routeFactory,
+        dispatcher,
+        30000
+      );
       jest.spyOn(router, 'getPath').mockReturnValue(path);
     });
 
@@ -700,7 +710,8 @@ describe('ima.core.router.AbstractRouter', () => {
       middlewareRouter = new MockedAbstractRouter(
         pageManager,
         routeFactory,
-        dispatcher
+        dispatcher,
+        30000
       );
 
       jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
@@ -736,7 +747,8 @@ describe('ima.core.router.AbstractRouter', () => {
       middlewareRouter = new MockedAbstractRouter(
         pageManager,
         routeFactory,
-        dispatcher
+        dispatcher,
+        30000
       );
 
       jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
@@ -853,6 +865,27 @@ describe('ima.core.router.AbstractRouter', () => {
           },
         ]
       `);
+    });
+
+    it('should timeout when there are long promises still running', async () => {
+      jest.useFakeTimers();
+
+      const m1 = jest.fn(async () => {
+        new Promise<void>(resolve => {
+          setTimeout(() => {
+            resolve();
+          }, 100_000);
+        });
+
+        return { m1: true };
+      });
+
+      const middlewaresPromise = router._runMiddlewares([m1], {}, {});
+      jest.advanceTimersByTime(50_000);
+
+      await expect(middlewaresPromise).rejects.toBeInstanceOf(GenericError);
+
+      jest.useRealTimers();
     });
   });
 });

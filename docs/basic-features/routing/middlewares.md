@@ -130,3 +130,21 @@ In case of an **error** or not **found page**, the execution order is still **th
 There's only one exception, since the `locals` object is cleared to an empty object before route handling, if an error occurs during route handling and execution is internally passed to error handling (displaying error page), the locals object may retain values that were there for the previous route matching. However the `locals.route` object will still be up to date and equal to currently routed route (error in this case).
 
 :::
+
+## Execution timeout
+
+To prevent middlewares from freezing the application, for example when the middlewares takes too long to execute, we've implemented execution timeout, which prevents them from running indefinitely.
+
+You can **customize the timeout value** in app settings:
+
+```js title="./app/config/settings.js"
+export default (ns, oc, config) => {
+  return {
+    prod: {
+      $Router: {
+        middlewareTimeout: 30000, // ms
+      },
+    },
+  };
+};
+```

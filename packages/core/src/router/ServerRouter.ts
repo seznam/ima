@@ -17,7 +17,14 @@ export default class ServerRouter extends AbstractRouter {
   #response: Response;
 
   static get $dependencies() {
-    return [PageManager, RouteFactory, Dispatcher, Request, Response];
+    return [
+      PageManager,
+      RouteFactory,
+      Dispatcher,
+      Request,
+      Response,
+      '$Settings.$Router.middlewareTimeout',
+    ];
   }
 
   /**
@@ -28,15 +35,17 @@ export default class ServerRouter extends AbstractRouter {
    * @param dispatcher Dispatcher fires events to app.
    * @param request The current HTTP request.
    * @param response The current HTTP response.
+   * @param middlewareTimeout Middleware timeout value in ms.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
     request: Request,
-    response: Response
+    response: Response,
+    middlewareTimeout: number
   ) {
-    super(pageManager, factory, dispatcher);
+    super(pageManager, factory, dispatcher, middlewareTimeout);
 
     this.#request = request;
     this.#response = response;

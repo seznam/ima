@@ -59,6 +59,7 @@ export default abstract class AbstractRouter extends Router {
    */
   protected _currentMiddlewareId = 0;
   protected _currentlyRoutedPath = '';
+  protected _middlewareTimeout: number;
 
   /**
    * Initializes the router.
@@ -89,15 +90,15 @@ export default abstract class AbstractRouter extends Router {
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
-    dispatcher: Dispatcher
+    dispatcher: Dispatcher,
+    middlewareTimeout: number
   ) {
     super();
 
     this._pageManager = pageManager;
-
     this._factory = factory;
-
     this._dispatcher = dispatcher;
+    this._middlewareTimeout = middlewareTimeout;
   }
 
   /**
@@ -607,28 +608,47 @@ export default abstract class AbstractRouter extends Router {
     middlewares: RouterMiddleware[] | undefined,
     params: RouteParams,
     locals: RouteLocals
-  ) {
+  ): Promise<void> {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
-    for (const middleware of middlewares) {
-      /**
-       * When middleware uses next() function we await in indefinitely
-       * until the function is called. Otherwise we just await the middleware
-       * async function.
-       */
-      const result = await (middleware.length === 3
-        ? new Promise<ReturnType<RouterMiddleware>>(resolve =>
-            middleware(params, locals, resolve)
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise<void>(async (resolve, reject) => {
+      const rejectTimeout = setTimeout(() => {
+        reject(
+          new GenericError(
+            'Middleware execution timeout, check your middlewares for any unresolved time consuming promises.' +
+              ` All middlewares should finish execution within ${this._middlewareTimeout}ms timeframe.`
           )
-        : middleware(params, locals));
+        );
+      }, this._middlewareTimeout);
 
-      locals = {
-        ...locals,
-        ...result,
-      };
-    }
+      for (const middleware of middlewares) {
+        try {
+          /**
+           * When middleware uses next() function we await in indefinitely
+           * until the function is called. Otherwise we just await the middleware
+           * async function.
+           */
+          const result = await (middleware.length === 3
+            ? new Promise<ReturnType<RouterMiddleware>>(resolve =>
+                middleware(params, locals, resolve)
+              )
+            : middleware(params, locals));
+
+          locals = {
+            ...locals,
+            ...result,
+          };
+        } catch (error) {
+          reject(error);
+        }
+      }
+
+      clearTimeout(rejectTimeout);
+      resolve();
+    });
   }
 
   /**

@@ -161,6 +161,9 @@ describe('render server application', () => {
             $Http: {
               cacheOptions: {},
             },
+            $Router: {
+              middlewareTimeout: 30000,
+            },
             $Page: {
               $Render: {
                 masterElementId: 'id',

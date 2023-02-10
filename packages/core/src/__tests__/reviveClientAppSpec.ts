@@ -112,6 +112,9 @@ describe('revive client application', () => {
           return {
             prod: {
               $Http: {},
+              $Router: {
+                middlewareTimeout: 30000,
+              },
               $Page: {
                 $Render: {
                   masterElementId: MASTER_ELEMENT_ID,
