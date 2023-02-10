@@ -94,32 +94,6 @@ function createDevServerConfig({
 }
 
 /**
- * Returns virtual entry point for every language
- *
- * @param {ImaConfig} imaConfig Current ima configuration.
- * @returns {Record<string, string>} object with entries
- */
-function getLocaleEntryPoints(imaConfig: ImaConfig): Record<string, string> {
-  return Object.keys(imaConfig.languages).reduce((resultEntries, locale) => {
-    const localeBase64 = Buffer.from(locale).toString('base64');
-    const content = Buffer.from(
-      `import message from 'virtualImaLocale.json!=!data:text/javascript;base64,${localeBase64}';
-
-(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
-  $IMA.i18n = message;
-})();
-
-export default message;
-`
-    ).toString('base64');
-
-    return Object.assign(resultEntries, {
-      [`locale/${locale}`]: `data:text/javascript;base64,${content}`,
-    });
-  }, {});
-}
-
-/**
  * Creates hash representing current webpack environment.
  *
  * @param {ImaConfigurationContext} ctx Current configuration context.
@@ -198,7 +172,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     },
     imageInlineSizeLimit: 8192,
     watchOptions: {
-      ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
+      ignored: ['**/node_modules'],
       aggregateTimeout: 5,
     },
     swc: async config => config,
@@ -431,6 +405,5 @@ export {
   runImaPluginsHook,
   createPolyfillEntry,
   getCurrentCoreJsVersion,
-  getLocaleEntryPoints,
   IMA_CONF_FILENAME,
 };

@@ -16,7 +16,6 @@ import ControllerDecorator from './controller/ControllerDecorator';
 import Dictionary from './dictionary/Dictionary';
 import MessageFormatDictionary from './dictionary/MessageFormatDictionary';
 import Error from './error/Error';
-import ExtensibleError from './error/ExtensibleError';
 import GenericError from './error/GenericError';
 import Dispatcher, { DispatcherListener } from './event/Dispatcher';
 import DispatcherImpl from './event/DispatcherImpl';
@@ -40,6 +39,7 @@ import MetaManager from './meta/MetaManager';
 import MetaManagerImpl from './meta/MetaManagerImpl';
 import PageHandler from './page/handler/PageHandler';
 import PageHandlerRegistry from './page/handler/PageHandlerRegistry';
+import PageMetaHandler from './page/handler/PageMetaHandler';
 import PageNavigationHandler from './page/handler/PageNavigationHandler';
 import AbstractPageManager from './page/manager/AbstractPageManager';
 import ClientPageManager from './page/manager/ClientPageManager';
@@ -96,6 +96,26 @@ declare global {
   // Test Functions
   var using: (values: unknown[], func: object) => void;
   var extend: (ChildClass: object, ParentClass: object) => void;
+
+  interface Window {
+    $IMA?: {
+      SPA: boolean;
+      $PublicPath: string;
+      $Language: string;
+      $Env: string;
+      $Debug: boolean;
+      $Version: string;
+      $App: string;
+      $Protocol: string;
+      $Host: string;
+      $Path: string;
+      $Root: string;
+      $LanguagePartPath: string;
+      Runner: string;
+      Cache: object;
+      i18n?: object;
+    };
+  }
 }
 
 function getInitialImaConfigFunctions() {
@@ -171,7 +191,7 @@ function getClientBootConfig(
       $Env: $IMA.$Env,
       $Version: $IMA.$Version,
       $App: $IMA.$App,
-      $Source: $IMA.$Source,
+      $Resources: $IMA.$Resources,
       $Protocol: $IMA.$Protocol,
       $Language: $IMA.$Language,
       $Host: $IMA.$Host,
@@ -274,7 +294,6 @@ export {
   Dictionary,
   MessageFormatDictionary,
   Error,
-  ExtensibleError,
   GenericError,
   DispatcherListener as Listener,
   Dispatcher,
@@ -298,6 +317,7 @@ export {
   MetaManagerImpl,
   PageHandler,
   PageHandlerRegistry,
+  PageMetaHandler,
   PageNavigationHandler,
   AbstractPageManager,
   ClientPageManager,

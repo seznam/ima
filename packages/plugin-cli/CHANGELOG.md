@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- Updated dependencies [073adb5d5]
+- Updated dependencies [c0fe68ef3]
+  - @ima/dev-utils@19.0.0-rc.0
+
 ## 18.1.0
 
 ### Minor Changes

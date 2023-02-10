@@ -6,6 +6,7 @@ import AbstractRoute, { RouteParams } from './AbstractRoute';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
 import { UnknownParameters } from '../CommonTypes';
+import IMAError from '../error/Error';
 
 export type RouteOptions = {
   autoScroll?: boolean;
@@ -377,7 +378,7 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         client.
    */
-  isClientError(reason: GenericError | Error) {
+  isClientError(reason: IMAError | Error) {
     return false;
   }
 
@@ -388,7 +389,7 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         redirection.
    */
-  isRedirection(reason: GenericError | Error) {
+  isRedirection(reason: IMAError | Error) {
     return false;
   }
 }

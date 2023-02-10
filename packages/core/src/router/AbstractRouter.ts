@@ -13,6 +13,7 @@ import Dispatcher from '../event/Dispatcher';
 import { RouteOptions } from './Router';
 import Controller, { IController } from '../controller/Controller';
 import { StringParameters, UnknownParameters } from '../CommonTypes';
+import IMAError from '../error/Error';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
@@ -431,23 +432,15 @@ export default abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  isClientError(reason: GenericError | Error) {
-    return (
-      reason instanceof GenericError &&
-      reason.getHttpStatus() >= 400 &&
-      reason.getHttpStatus() < 500
-    );
+  isClientError(reason: IMAError | Error) {
+    return reason instanceof IMAError && reason.isClientError();
   }
 
   /**
    * @inheritDoc
    */
-  isRedirection(reason: GenericError | Error) {
-    return (
-      reason instanceof GenericError &&
-      reason.getHttpStatus() >= 300 &&
-      reason.getHttpStatus() < 400
-    );
+  isRedirection(reason: IMAError | Error) {
+    return reason instanceof IMAError && reason.isRedirection();
   }
 
   /**

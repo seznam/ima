@@ -273,7 +273,7 @@ export default abstract class Window {
   }
 
   /**
-   * Deregisters the provided event listener, so it will no longer we
+   * Deregister the provided event listener, so it will no longer we
    * executed when the specified event occurs on the specified event target.
    *
    * The method has no effect if the provided event listener is not

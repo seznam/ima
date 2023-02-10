@@ -1,0 +1,34 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@ima/cli": "18.2.0",
+    "@ima/core": "18.0.3",
+    "create-ima-app": "18.3.0",
+    "@ima/dev-utils": "18.0.0",
+    "@ima/devtools": "0.4.0",
+    "@ima/devtools-scripts": "18.0.0",
+    "@ima/error-overlay": "18.0.0",
+    "@ima/helpers": "18.0.0",
+    "@ima/hmr-client": "18.0.2",
+    "@ima/plugin-cli": "18.1.0",
+    "@ima/react-page-renderer": "18.1.6",
+    "@ima/server": "18.2.0",
+    "@ima/docs": "0.0.0"
+  },
+  "changesets": [
+    "curly-plants-knock",
+    "eight-keys-happen",
+    "empty-pets-sell",
+    "gentle-snakes-speak",
+    "long-bikes-sparkle",
+    "modern-forks-join",
+    "polite-wasps-protect",
+    "rich-ducks-bathe",
+    "selfish-eels-call",
+    "shaggy-toys-accept",
+    "smooth-goats-float",
+    "soft-snails-warn",
+    "spicy-cheetahs-notice"
+  ]
+}

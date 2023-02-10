@@ -1,5 +1,31 @@
 # Change Log
 
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- Updated dependencies [2f789cdae]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [464d307ae]
+- Updated dependencies [961d65688]
+- Updated dependencies [c0fe68ef3]
+  - @ima/core@19.0.0-rc.0
+  - @ima/helpers@19.0.0-rc.0
+
+## 18.2.0
+
+### Minor Changes
+
+- a7de413a2: Replaced locale-loader with custom compilation process of language files, this fixes an issue where newly added language files are not visible by the webpack compile and requires restart with forced cache clear.
+  Implemented custom solution for hot module replacement API for language files (HMR for language files should be much faster and only )
+
 ## 18.1.6
 
 ### Patch Changes
