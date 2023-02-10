@@ -50,7 +50,7 @@ export default class ClientRouter extends AbstractRouter {
       RouteFactory,
       Dispatcher,
       Window,
-      '$Settings.$Router.middlewareTimeout',
+      '?$Settings.$Router.middlewareTimeout',
     ];
   }
 
@@ -69,7 +69,7 @@ export default class ClientRouter extends AbstractRouter {
     factory: RouteFactory,
     dispatcher: Dispatcher,
     window: Window,
-    middlewareTimeout: number
+    middlewareTimeout: number | undefined
   ) {
     super(pageManager, factory, dispatcher, middlewareTimeout);
 

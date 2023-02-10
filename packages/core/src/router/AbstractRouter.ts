@@ -91,14 +91,14 @@ export default abstract class AbstractRouter extends Router {
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
-    middlewareTimeout: number
+    middlewareTimeout?: number
   ) {
     super();
 
     this._pageManager = pageManager;
     this._factory = factory;
     this._dispatcher = dispatcher;
-    this._middlewareTimeout = middlewareTimeout;
+    this._middlewareTimeout = middlewareTimeout ?? 30000;
   }
 
   /**

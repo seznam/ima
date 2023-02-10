@@ -23,7 +23,7 @@ export default class ServerRouter extends AbstractRouter {
       Dispatcher,
       Request,
       Response,
-      '$Settings.$Router.middlewareTimeout',
+      '?$Settings.$Router.middlewareTimeout',
     ];
   }
 
@@ -43,7 +43,7 @@ export default class ServerRouter extends AbstractRouter {
     dispatcher: Dispatcher,
     request: Request,
     response: Response,
-    middlewareTimeout: number
+    middlewareTimeout: number | undefined
   ) {
     super(pageManager, factory, dispatcher, middlewareTimeout);
 
