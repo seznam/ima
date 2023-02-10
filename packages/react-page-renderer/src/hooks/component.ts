@@ -1,8 +1,8 @@
-import { Dictionary, Router, EventBus, Utils } from '@ima/core';
+import type { Dictionary, Router, EventBus, Utils } from '@ima/core';
 import { useMemo } from 'react';
 
 import { usePageContext } from './pageContext';
-import { defaultCssClasses } from '../componentHelpers';
+import type { defaultCssClasses } from '../componentHelpers';
 
 export interface useComponentType {
   utils: Utils;

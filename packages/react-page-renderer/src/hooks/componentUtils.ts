@@ -1,4 +1,4 @@
-import { Utils } from '@ima/core';
+import type { Utils } from '@ima/core';
 
 import { usePageContext } from './pageContext';
 

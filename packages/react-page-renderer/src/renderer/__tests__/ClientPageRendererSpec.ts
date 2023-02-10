@@ -4,10 +4,10 @@ import {
   DispatcherImpl,
   MetaManager,
   RendererEvents,
-  Utils,
+  type Utils,
+  type RouteOptions,
   Window,
 } from '@ima/core';
-import type { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';

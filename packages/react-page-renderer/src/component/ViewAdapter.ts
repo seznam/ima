@@ -1,5 +1,4 @@
-import type { UnknownParameters } from '@ima/core';
-import { Utils } from '@ima/core';
+import type { UnknownParameters, Utils } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 

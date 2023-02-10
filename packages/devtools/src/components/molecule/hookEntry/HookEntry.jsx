@@ -1,3 +1,4 @@
+import { HookType } from '@/utils';
 import { Tooltip } from '@reach/tooltip';
 import Editor from '@uiw/react-textarea-code-editor';
 import cn from 'clsx';
@@ -5,7 +6,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { IconButton } from '@/components/atom';
-import { HookType } from '@/utils';
 
 import styles from './hookEntry.module.less';
 

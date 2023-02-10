@@ -3,13 +3,11 @@ import {
   Dispatcher,
   MetaManager,
   PageRenderer,
-  Utils,
-} from '@ima/core';
-import type {
-  UnknownParameters,
-  UnknownPromiseParameters,
-  PageData as BasePageData,
-  RouteOptions,
+  type Utils,
+  type UnknownParameters,
+  type UnknownPromiseParameters,
+  type PageData as BasePageData,
+  type RouteOptions,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';

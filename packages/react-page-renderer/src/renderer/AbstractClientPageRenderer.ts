@@ -8,11 +8,9 @@ import {
   RendererEvents,
   RendererTypes,
   Window,
-} from '@ima/core';
-import type {
-  UnknownParameters,
-  UnknownPromiseParameters,
-  RouteOptions,
+  type UnknownParameters,
+  type UnknownPromiseParameters,
+  type RouteOptions,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';

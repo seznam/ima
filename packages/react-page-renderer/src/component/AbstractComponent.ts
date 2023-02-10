@@ -1,4 +1,4 @@
-import { Utils } from '@ima/core';
+import type { Utils } from '@ima/core';
 import { Component, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
