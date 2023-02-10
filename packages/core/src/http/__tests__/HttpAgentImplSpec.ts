@@ -145,7 +145,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.options.abortController = new AbortController();
 
         jest.spyOn(proxy, 'request').mockImplementation(() => {
-          data.params.options.abortController.abort();
+          data.params.options.abortController?.abort();
 
           return Promise.reject(new GenericError('', data.params));
         });

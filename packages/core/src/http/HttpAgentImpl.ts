@@ -18,7 +18,7 @@ export default class HttpAgentImpl extends HttpAgent {
   protected _cache: Cache<unknown>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: StringParameters;
-  protected _defaultRequestOptions: HttpAgentRequestOptions;
+  protected _defaultRequestOptions: Partial<HttpAgentRequestOptions>;
   protected _Helper: typeof Helpers;
   protected _internalCacheOfPromises = new Map();
 
@@ -84,7 +84,7 @@ export default class HttpAgentImpl extends HttpAgent {
     this._cacheOptions = config.cacheOptions as StringParameters;
 
     this._defaultRequestOptions =
-      config.defaultRequestOptions as HttpAgentRequestOptions;
+      config.defaultRequestOptions as Partial<HttpAgentRequestOptions>;
 
     /**
      * Tha IMA.js helper methods.
@@ -98,7 +98,7 @@ export default class HttpAgentImpl extends HttpAgent {
   get(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions> = {}
   ) {
     return this._requestWithCheckCache('get', url, data, options);
   }
@@ -109,7 +109,7 @@ export default class HttpAgentImpl extends HttpAgent {
   post(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions> = {}
   ) {
     return this._requestWithCheckCache(
       'post',
@@ -125,7 +125,7 @@ export default class HttpAgentImpl extends HttpAgent {
   put(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions> = {}
   ) {
     return this._requestWithCheckCache(
       'put',
@@ -141,7 +141,7 @@ export default class HttpAgentImpl extends HttpAgent {
   patch(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions> = {}
   ) {
     return this._requestWithCheckCache(
       'patch',
@@ -157,7 +157,7 @@ export default class HttpAgentImpl extends HttpAgent {
   delete(
     url: string,
     data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions> = {}
   ) {
     return this._requestWithCheckCache(
       'delete',
@@ -228,7 +228,7 @@ export default class HttpAgentImpl extends HttpAgent {
     method: string,
     url: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
+    options: Partial<HttpAgentRequestOptions>
   ) {
     options = this._prepareOptions(options);
 
@@ -240,7 +240,7 @@ export default class HttpAgentImpl extends HttpAgent {
       }
     }
 
-    return this._request(method, url, data, options);
+    return this._request(method, url, data, options as HttpAgentRequestOptions);
   }
 
   /**
@@ -381,8 +381,8 @@ export default class HttpAgentImpl extends HttpAgent {
       options.fetchOptions?.signal?.aborted ||
       options.abortController?.signal.aborted;
 
-    if (!isAborted && options.repeatRequest > 0) {
-      options.repeatRequest--;
+    if (!isAborted && (options.repeatRequest as number) > 0) {
+      (options.repeatRequest as number)--;
 
       return this._request(method, url, data, options);
     } else {
@@ -405,7 +405,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *         default values for missing fields, and extra options used
    *         internally.
    */
-  _prepareOptions(options: HttpAgentRequestOptions): HttpAgentRequestOptions {
+  _prepareOptions(options: Partial<HttpAgentRequestOptions>) {
     const composedOptions = Object.assign(
       {},
       this._defaultRequestOptions,
@@ -423,7 +423,7 @@ export default class HttpAgentImpl extends HttpAgent {
       options.headers || {}
     );
 
-    return composedOptions;
+    return composedOptions as HttpAgentRequestOptions;
   }
 
   /**
