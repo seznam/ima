@@ -149,11 +149,11 @@ export function defaultCssClasses(
  */
 export function fire(
   component: AbstractComponent | AbstractPureComponent,
+  eventTarget: EventTarget,
   eventName: string,
-  target: EventTarget,
   data: unknown = null
 ) {
-  return component.utils.$EventBus.fire(target, eventName, data);
+  return component.utils.$EventBus.fire(eventTarget, eventName, data);
 }
 
 /**

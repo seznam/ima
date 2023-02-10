@@ -90,8 +90,8 @@ export default abstract class AbstractPureComponent extends PureComponent {
    * @param target EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventName: string, target: EventTarget, data = undefined) {
-    helpers.fire(this, eventName, target, data);
+  fire(eventTarget: EventTarget, eventName: string, data = undefined) {
+    helpers.fire(this, eventTarget, eventName, data);
   }
 
   /**
