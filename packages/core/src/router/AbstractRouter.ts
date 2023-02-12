@@ -3,17 +3,16 @@
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
-import Router from './Router';
-import RouteNames from './RouteNames';
-import GenericError from '../error/GenericError';
-import RouterMiddleware from './RouterMiddleware';
-import PageManager from '../page/manager/PageManager';
 import RouteFactory from './RouteFactory';
-import Dispatcher from '../event/Dispatcher';
-import { RouteOptions } from './Router';
-import Controller, { IController } from '../controller/Controller';
+import RouteNames from './RouteNames';
+import Router, { RouteOptions } from './Router';
+import RouterMiddleware from './RouterMiddleware';
 import { StringParameters, UnknownParameters } from '../CommonTypes';
+import Controller, { IController } from '../controller/Controller';
 import IMAError from '../error/Error';
+import GenericError from '../error/GenericError';
+import Dispatcher from '../event/Dispatcher';
+import PageManager from '../page/manager/PageManager';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the

@@ -1,6 +1,6 @@
-import Execution from '../../execution/Execution';
-import GenericError from '../../error/GenericError';
 import PageHandler from './PageHandler';
+import GenericError from '../../error/GenericError';
+import Execution from '../../execution/Execution';
 import SerialBatch from '../../execution/SerialBatch';
 import { ManagedPage, PageAction } from '../PageTypes';
 

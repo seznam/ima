@@ -2,8 +2,8 @@
 export default class ServerWindow {};
 /* @else */
 import Window from './Window';
-import GenericError from '../error/GenericError';
 import { UnknownParameters } from '../CommonTypes';
+import GenericError from '../error/GenericError';
 
 /**
  * Server-side implementation of the `Window` utility API.

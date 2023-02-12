@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
+import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
+import { UnknownParameters } from '../CommonTypes';
+import Controller, { IController } from '../controller/Controller';
+import IMAError from '../error/Error';
 import GenericError from '../error/GenericError';
 import { IExtension } from '../extension/Extension';
-import { UnknownParameters } from '../CommonTypes';
-import IMAError from '../error/Error';
 
 export type RouteOptions = {
   autoScroll?: boolean;

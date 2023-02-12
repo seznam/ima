@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
 import Extension from './Extension';
-import PageStateManager from '../page/state/PageStateManager';
 import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
-import { EventHandler } from '../page/PageTypes';
 import GenericError from '../error/GenericError';
+import { EventHandler } from '../page/PageTypes';
+import PageStateManager from '../page/state/PageStateManager';
 
 /**
  * Abstract extension

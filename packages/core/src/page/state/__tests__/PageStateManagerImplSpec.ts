@@ -1,7 +1,8 @@
-import PageStateManager from '../PageStateManagerImpl';
+import { toMockedInstance } from 'to-mock';
+
 import Dispatcher from '../../../event/DispatcherImpl';
 import Events from '../Events';
-import { toMockedInstance } from 'to-mock';
+import PageStateManager from '../PageStateManagerImpl';
 
 describe('ima.core.page.state.PageStateManagerImpl', () => {
   let stateManager: PageStateManager;

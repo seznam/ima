@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
-import CacheFactory from '../CacheFactory';
-import Cache from '../CacheImpl';
+
 import MapStorage from '../../storage/MapStorage';
 import CacheEntry from '../CacheEntry';
+import CacheFactory from '../CacheFactory';
+import Cache from '../CacheImpl';
 
 describe('ima.core.cache.CacheImpl', () => {
   let cache: Cache<unknown>;

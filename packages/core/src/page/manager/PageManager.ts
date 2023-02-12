@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { PageAction } from '../PageTypes';
-import { RouteOptions } from '../../router/Router';
 import { UnknownParameters } from '../../CommonTypes';
-import AbstractRoute from '../../router/AbstractRoute';
 import { IController } from '../../controller/Controller';
+import AbstractRoute from '../../router/AbstractRoute';
+import { RouteOptions } from '../../router/Router';
+import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
   route: AbstractRoute;

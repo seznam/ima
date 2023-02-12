@@ -1,7 +1,7 @@
 import Bootstrap, { Config, Module } from '../Bootstrap';
+import namespace from '../Namespace';
 import ObjectContainer from '../ObjectContainer';
 import { PluginLoader } from '../pluginLoader';
-import namespace from '../Namespace';
 
 describe('pluginLoader', () => {
   let bootstrap: Bootstrap;

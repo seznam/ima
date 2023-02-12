@@ -1,9 +1,9 @@
-import { Utils } from '../../types';
 import { StringParameters } from '../../CommonTypes';
 import ObjectContainer, {
   FactoryFunction,
   UnknownConstructable,
 } from '../../ObjectContainer';
+import { Utils } from '../../types';
 
 export default class ComponentUtils {
   /**

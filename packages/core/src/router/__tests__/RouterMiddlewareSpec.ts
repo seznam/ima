@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { toMockedInstance } from 'to-mock';
+
 import GenericError from '../../error/GenericError';
 import RouterMiddleware from '../RouterMiddleware';
 

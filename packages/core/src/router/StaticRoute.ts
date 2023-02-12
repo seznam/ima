@@ -1,11 +1,11 @@
-import { StringParameters } from '../CommonTypes';
-import Controller, { IController } from '../controller/Controller';
 import AbstractRoute, {
   LOOSE_SLASHES_REGEXP,
   ParamValue,
   RouteParams,
 } from './AbstractRoute';
 import { RouteOptions } from './Router';
+import { StringParameters } from '../CommonTypes';
+import Controller, { IController } from '../controller/Controller';
 
 /**
  * Regular expression matching all control characters used in regular

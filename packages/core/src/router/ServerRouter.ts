@@ -5,9 +5,9 @@ import AbstractRouter from './AbstractRouter';
 import Request from './Request';
 import Response from './Response';
 import RouteFactory from './RouteFactory';
+import { UnknownParameters } from '../CommonTypes';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
-import { UnknownParameters } from '../CommonTypes';
 
 /**
  * The server-side implementation of the {@link Router} interface.

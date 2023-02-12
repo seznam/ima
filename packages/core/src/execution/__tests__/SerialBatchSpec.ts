@@ -1,5 +1,5 @@
-import SerialBatch from '../SerialBatch';
 import { Job } from '../Execution';
+import SerialBatch from '../SerialBatch';
 
 describe('ima.core.execution.SerialBatch', () => {
   let serialBatch: SerialBatch;

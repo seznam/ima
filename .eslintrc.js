@@ -16,6 +16,7 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
+    'plugin:import/recommended',
   ],
   rules: {
     'no-console': [
@@ -63,10 +64,61 @@ module.exports = {
 
     // React plugin overrides
     'react/prop-types': 'off',
+
+    // Import plugin
+    'import/no-unresolved': [
+      'warn',
+      {
+        ignore: [
+          '^@\\/', // ignore @/* aliases
+          '@(docusaurus|theme)',
+        ],
+      },
+    ],
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal'],
+        pathGroups: [
+          {
+            pattern: '{preact|react|svelte|docusaurus|theme}{/**,**}',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '@/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
+            group: 'object',
+            patternOptions: { matchBase: true },
+            position: 'after',
+          },
+        ],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
   settings: {
     react: {
       version: 'detect',
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.mjs', '.json'],
+      },
+      typescript: {
+        project: 'packages/*/tsconfig.json',
+      },
     },
   },
   parser: '@babel/eslint-parser',
@@ -87,75 +139,6 @@ module.exports = {
     $IMA: true,
   },
   overrides: [
-    // TODO IMA@18 Enable repo-wide when merged to master
-    // Import plugin
-    {
-      files: [
-        'website/**',
-        'packages/cli/**',
-        'packages/plugin-cli/**',
-        'packages/devtools/**',
-        'packages/devtools-scripts/**',
-        'packages/hmr-client/**',
-        'packages/error-overlay/**',
-        'packages/dev-utils/**',
-        'packages/react-page-renderer/**',
-      ],
-      extends: ['plugin:import/recommended'],
-      rules: {
-        'import/no-unresolved': [
-          'warn',
-          {
-            ignore: [
-              '^@\\/', // ignore @/* aliases
-              '@(docusaurus|theme)',
-            ],
-          },
-        ],
-        'import/order': [
-          'error',
-          {
-            groups: ['builtin', 'external', 'internal'],
-            pathGroups: [
-              {
-                pattern: '{preact|react|svelte|docusaurus|theme}{/**,**}',
-                group: 'external',
-                position: 'before',
-              },
-              {
-                pattern: '@/**',
-                group: 'internal',
-                position: 'after',
-              },
-              {
-                pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
-                group: 'object',
-                patternOptions: { matchBase: true },
-                position: 'after',
-              },
-            ],
-            'newlines-between': 'always',
-            alphabetize: {
-              order: 'asc',
-              caseInsensitive: true,
-            },
-          },
-        ],
-      },
-      settings: {
-        'import/parsers': {
-          '@typescript-eslint/parser': ['.ts', '.tsx'],
-        },
-        'import/resolver': {
-          node: {
-            extensions: ['.js', '.jsx', '.mjs', '.json'],
-          },
-          typescript: {
-            project: 'packages/*/tsconfig.json',
-          },
-        },
-      },
-    },
     // Typescript support
     {
       files: ['**/*.{ts,tsx}'],

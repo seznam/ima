@@ -1,7 +1,7 @@
 import Events from './Events';
 import PageStateManager from './PageStateManager';
-import Dispatcher from '../../event/Dispatcher';
 import { UnknownParameters } from '../../CommonTypes';
+import Dispatcher from '../../event/Dispatcher';
 
 const MAX_HISTORY_LIMIT = 10;
 

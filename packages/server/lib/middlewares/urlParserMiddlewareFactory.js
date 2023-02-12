@@ -1,8 +1,8 @@
 'use strict';
 
-const { URL } = require('url');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const { URL } = require('url');
 
 module.exports = function urlParserMiddlewareFactory({ environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');

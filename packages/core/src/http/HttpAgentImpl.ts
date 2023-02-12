@@ -1,13 +1,14 @@
+import * as Helpers from '@ima/helpers';
+
 import HttpAgent, {
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
 import HttpProxy from './HttpProxy';
 import Cache from '../cache/Cache';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 import GenericError from '../error/GenericError';
 import CookieStorage from '../storage/CookieStorage';
-import * as Helpers from '@ima/helpers';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching

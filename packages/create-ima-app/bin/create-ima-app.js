@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
+import { spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
+
 import chalk from 'chalk';
+
 import { error, warn } from '../scripts/utils.js';
 
 const MIN_NODE_VERSION = 16;

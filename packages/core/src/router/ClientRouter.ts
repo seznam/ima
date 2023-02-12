@@ -4,12 +4,12 @@ export default class ClientRouter {};
 import AbstractRouter from './AbstractRouter';
 import ActionTypes from './ActionTypes';
 import RouteFactory from './RouteFactory';
-import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
-import Window from '../window/Window';
 import { RouteOptions } from './Router';
 import { GenericError } from '..';
 import { StringParameters, UnknownParameters } from '../CommonTypes';
+import Dispatcher from '../event/Dispatcher';
+import PageManager from '../page/manager/PageManager';
+import Window from '../window/Window';
 
 /**
  * Names of the DOM events the router responds to.

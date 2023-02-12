@@ -2,21 +2,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jest/no-conditional-expect */
 
+import { toMockedInstance } from 'to-mock';
+
+import ControllerDecorator from '../../..//controller/ControllerDecorator';
+import { UnknownParameters } from '../../../CommonTypes';
+import AbstractController from '../../../controller/AbstractController';
 import Controller, { IController } from '../../../controller/Controller';
 import Extension from '../../../extension/Extension';
-import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
 import PageHandlerRegistry from '../../../page/handler/PageHandlerRegistry';
-import AbstractPageManager from '../AbstractPageManager';
+import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
+import PageFactory from '../../../page/PageFactory';
 import PageRenderer from '../../../page/renderer/PageRenderer';
 import PageStateManager from '../../../page/state/PageStateManager';
-import RouteFactory from '../../../router/RouteFactory';
-import { toMockedInstance } from 'to-mock';
-import AbstractController from '../../../controller/AbstractController';
-import { UnknownParameters } from '../../../CommonTypes';
-import PageFactory from '../../../page/PageFactory';
 import DynamicRoute from '../../../router/DynamicRoute';
+import RouteFactory from '../../../router/RouteFactory';
 import StaticRoute from '../../../router/StaticRoute';
-import ControllerDecorator from '../../..//controller/ControllerDecorator';
+import AbstractPageManager from '../AbstractPageManager';
 
 class AbstractControllerTest extends AbstractController {
   dependency: unknown;

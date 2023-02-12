@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
+
+const chalk = require('chalk');
 const yargs = require('yargs');
 
 const { initApp, copyChanges, watchChanges } = require('./utils/utils');

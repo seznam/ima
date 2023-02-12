@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import Dictionary from '../dictionary/Dictionary';
 import Extension, { IExtension } from '../extension/Extension';
 import MetaManager from '../meta/MetaManager';
-import Router from '../router/Router';
-import PageStateManager from '../page/state/PageStateManager';
-import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
 import { EventHandler } from '../page/PageTypes';
+import PageStateManager from '../page/state/PageStateManager';
+import Router from '../router/Router';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IController {}

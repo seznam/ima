@@ -2,16 +2,16 @@
 export default class ClientPageManager {};
 /* @else */
 import AbstractPageManager from './AbstractPageManager';
+import { ManageArgs } from './PageManager';
+import { UnknownParameters } from '../../CommonTypes';
+import Controller from '../../controller/Controller';
+import EventBus from '../../event/EventBus';
+import ImaWindow from '../../window/Window';
+import PageHandlerRegistry from '../handler/PageHandlerRegistry';
 import PageFactory from '../PageFactory';
+import { EventHandler } from '../PageTypes';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
-import EventBus from '../../event/EventBus';
-import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import ImaWindow from '../../window/Window';
-import Controller from '../../controller/Controller';
-import { UnknownParameters } from '../../CommonTypes';
-import { EventHandler } from '../PageTypes';
-import { ManageArgs } from './PageManager';
 
 /**
  * Page manager for controller on the client side.

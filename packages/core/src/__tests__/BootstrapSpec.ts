@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import Bootstrap, { Module, Config } from '../Bootstrap';
-import ObjectContainer from '../ObjectContainer';
-import namespace from '../Namespace';
 import { UnknownParameters } from '../CommonTypes';
+import namespace from '../Namespace';
+import ObjectContainer from '../ObjectContainer';
 
 describe('bootstrap', () => {
   let bootstrap: Bootstrap;
