@@ -94,11 +94,11 @@ export abstract class AbstractPureComponent<
    * Creates and sends a new IMA.js DOM custom event from this component.
    *
    * @param eventName The name of the event.
-   * @param target EventTarget compatible node.
+   * @param eventTarget EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventName: string, target: EventTarget, data = undefined): void {
-    helpers.fire(this, eventName, target, data);
+  fire(eventTarget: EventTarget, eventName: string, data = undefined): void {
+    helpers.fire(this, eventTarget, eventName, data);
   }
 
   /**
