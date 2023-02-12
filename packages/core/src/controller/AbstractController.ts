@@ -1,7 +1,7 @@
-import PageStateManager from '../page/state/PageStateManager';
 import Controller from './Controller';
-import Extension, { IExtension } from '../extension/Extension';
 import { UnknownParameters } from '../CommonTypes';
+import Extension, { IExtension } from '../extension/Extension';
+import PageStateManager from '../page/state/PageStateManager';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the

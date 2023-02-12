@@ -1,16 +1,16 @@
-import { ManagedPage, PageAction } from '../PageTypes';
-import { RouteOptions } from '../../router/Router';
+import PageManager, { ManageArgs } from './PageManager';
 import { StringParameters, UnknownParameters } from '../../CommonTypes';
 import AbstractController from '../../controller/AbstractController';
-import AbstractRoute from '../../router/AbstractRoute';
+import Controller, { IController } from '../../controller/Controller';
 import ControllerDecorator from '../../controller/ControllerDecorator';
-import PageFactory from '../PageFactory';
+import Extension from '../../extension/Extension';
+import AbstractRoute from '../../router/AbstractRoute';
+import { RouteOptions } from '../../router/Router';
 import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import PageManager, { ManageArgs } from './PageManager';
+import PageFactory from '../PageFactory';
+import { ManagedPage, PageAction } from '../PageTypes';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
-import Extension from '../../extension/Extension';
-import Controller, { IController } from '../../controller/Controller';
 
 /**
  * Page manager for controller.

@@ -1,15 +1,15 @@
-import ObjectContainer, { UnknownConstructable } from '../ObjectContainer';
-import GenericError from '../error/GenericError';
-import AbstractController from '../controller/AbstractController';
-import { IController } from '../controller/Controller';
-import Router, { RouteOptions } from '../router/Router';
-import Extension from '../extension/Extension';
 import PageStateManager from './state/PageStateManager';
-import ControllerDecorator from '../controller/ControllerDecorator';
-import MetaManager from '../meta/MetaManager';
-import Dictionary from '../dictionary/Dictionary';
 import PageStateManagerDecorator from './state/PageStateManagerDecorator';
 import { UnknownParameters } from '../CommonTypes';
+import AbstractController from '../controller/AbstractController';
+import { IController } from '../controller/Controller';
+import ControllerDecorator from '../controller/ControllerDecorator';
+import Dictionary from '../dictionary/Dictionary';
+import GenericError from '../error/GenericError';
+import Extension from '../extension/Extension';
+import MetaManager from '../meta/MetaManager';
+import ObjectContainer, { UnknownConstructable } from '../ObjectContainer';
+import Router, { RouteOptions } from '../router/Router';
 
 /**
  * Factory for page.

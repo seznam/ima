@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import GenericError from '../error/GenericError';
 import Execution, { Job } from './Execution';
+import GenericError from '../error/GenericError';
 
 const CLASS_REGEX = /^\s*class\b/;
 

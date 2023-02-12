@@ -1,8 +1,8 @@
 /* @if server **
 export default class ClientWindow {};
 /* @else */
-import { UnknownParameters } from '../CommonTypes';
 import Window, { ListenerOptions } from './Window';
+import { UnknownParameters } from '../CommonTypes';
 
 /**
  * Client-side implementation of the {@link Window} utility API.

@@ -3,6 +3,7 @@ const {
   prepareDefaultResources,
   renderScript,
 } = require('../resourcesUtils');
+
 const manifestMock = require('../../__mocks__/manifest.json');
 
 jest.mock('fs', () => {

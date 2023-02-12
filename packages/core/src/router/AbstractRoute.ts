@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
+import { RouteOptions } from './Router';
+import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
 import Controller, { IController } from '../controller/Controller';
 import GenericError from '../error/GenericError';
 

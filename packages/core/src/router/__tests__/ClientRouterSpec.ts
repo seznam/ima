@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 
+import { toMockedInstance } from 'to-mock';
+
 import Dispatcher from '../../event/Dispatcher';
 import PageManager from '../../page/manager/PageManager';
+import ClientWindow from '../../window/ClientWindow';
 import ActionTypes from '../ActionTypes';
 import ClientRouter from '../ClientRouter';
 import RouteFactory from '../RouteFactory';
-import ClientWindow from '../../window/ClientWindow';
-
-import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.router.ClientRouter', () => {
   let router: ClientRouter;

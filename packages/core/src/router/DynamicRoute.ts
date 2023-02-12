@@ -1,7 +1,7 @@
-import Controller, { IController } from '../controller/Controller';
-import GenericError from '../error/GenericError';
 import AbstractRoute, { RouteParams } from './AbstractRoute';
 import { RouteOptions } from './Router';
+import Controller, { IController } from '../controller/Controller';
+import GenericError from '../error/GenericError';
 
 /**
  * Path expression type used for router routes definition.

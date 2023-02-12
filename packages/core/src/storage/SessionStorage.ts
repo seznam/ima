@@ -1,8 +1,8 @@
-import GenericError from '../error/GenericError';
 import ImaStorage from './Storage';
-import Window from '../window/Window';
-import ClientWindow from '../window/ClientWindow';
+import GenericError from '../error/GenericError';
 import { Dependencies } from '../ObjectContainer';
+import ClientWindow from '../window/ClientWindow';
+import Window from '../window/Window';
 
 /**
  * Implementation of the `link Storage` interface that relies on the

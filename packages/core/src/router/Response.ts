@@ -1,10 +1,11 @@
 /* @if client **
 export default class Response {};
 /* @else */
-import GenericError from '../error/GenericError';
 import { Response as ExpressResponse, CookieOptions } from 'express';
-import { UnknownParameters } from '../CommonTypes';
+
 import { RouteOptions } from './Router';
+import { UnknownParameters } from '../CommonTypes';
+import GenericError from '../error/GenericError';
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.

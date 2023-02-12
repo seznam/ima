@@ -4,14 +4,15 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jest/no-conditional-expect */
+import { toMockedInstance } from 'to-mock';
+
+import { UnknownParameters } from '../../CommonTypes';
+import GenericError from '../../error/GenericError';
+import Window from '../../window/ClientWindow';
+import { HttpAgentRequestOptions } from '../HttpAgent';
 import HttpProxy from '../HttpProxy';
 import StatusCode from '../StatusCode';
 import UrlTransformer from '../UrlTransformer';
-import { toMockedInstance } from 'to-mock';
-import Window from '../../window/ClientWindow';
-import GenericError from '../../error/GenericError';
-import { HttpAgentRequestOptions } from '../HttpAgent';
-import { UnknownParameters } from '../../CommonTypes';
 
 describe('ima.core.http.HttpProxy', () => {
   jest.useFakeTimers();

@@ -1,6 +1,6 @@
 import Dispatcher, { DispatcherListener } from './Dispatcher';
-import GenericError from '../error/GenericError';
 import { UnknownParameters } from '../CommonTypes';
+import GenericError from '../error/GenericError';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in

@@ -1,5 +1,7 @@
-import * as helpers from '@ima/helpers';
 import { Module } from 'module';
+
+import * as helpers from '@ima/helpers';
+
 import { UnknownParameters } from './CommonTypes';
 import ns, { Namespace } from './Namespace';
 import ObjectContainer from './ObjectContainer';

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { toMockedInstance } from 'to-mock';
-import EventBus, { IMA_EVENT } from '../EventBusImpl';
+
 import ClientWindow from '../../window/ClientWindow';
+import EventBus, { IMA_EVENT } from '../EventBusImpl';
 
 describe('ima.core.event.EventBusImpl', () => {
   const listeners = {

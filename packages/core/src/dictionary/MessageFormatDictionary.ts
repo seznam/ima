@@ -1,6 +1,6 @@
-import GenericError from '../error/GenericError';
 import Dictionary, { Config, Fields, LocalizationFunction } from './Dictionary';
 import { ObjectParameters } from '../CommonTypes';
+import GenericError from '../error/GenericError';
 
 /**
  * Implementation of the {@link Dictionary} interface that relies on

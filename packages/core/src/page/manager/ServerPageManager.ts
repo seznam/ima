@@ -1,10 +1,10 @@
 /* @if client **
 export default class ServerPageManager {};
 /* @else */
+import AbstractPageManager from './AbstractPageManager';
 import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
-import AbstractPageManager from './AbstractPageManager';
 
 /**
  * Page manager for controller on the server side.

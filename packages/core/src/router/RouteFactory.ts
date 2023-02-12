@@ -1,7 +1,6 @@
-import DynamicRoute from './DynamicRoute';
-import StaticRoute from './StaticRoute';
+import DynamicRoute, { RoutePathExpression } from './DynamicRoute';
 import { RouteOptions } from './Router';
-import { RoutePathExpression } from './DynamicRoute';
+import StaticRoute from './StaticRoute';
 import Controller, { IController } from '../controller/Controller';
 
 /**

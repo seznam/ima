@@ -1,3 +1,4 @@
+const { createMonitoring } = require('@esmj/monitor');
 const {
   GenericError,
   ServerRouter,
@@ -5,11 +6,12 @@ const {
   PageStateManager,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
-const serverAppFactory = require('../serverAppFactory.js');
+
 const { Emitter, Event } = require('../../emitter.js');
-const { createMonitoring } = require('@esmj/monitor');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
+const serverAppFactory = require('../serverAppFactory.js');
+
 const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('fs', () => {

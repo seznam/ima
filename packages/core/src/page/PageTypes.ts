@@ -1,8 +1,8 @@
-import { RouteOptions } from '../router/Router';
 import { UnknownParameters } from '../CommonTypes';
 import Controller, { IController } from '../controller/Controller';
 import ControllerDecorator from '../controller/ControllerDecorator';
 import AbstractRoute from '../router/AbstractRoute';
+import { RouteOptions } from '../router/Router';
 
 export type ManagedPage = {
   controller?: IController;

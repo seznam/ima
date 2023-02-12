@@ -1,6 +1,6 @@
 import PageStateManager from './PageStateManager';
-import GenericError from '../../error/GenericError';
 import { UnknownParameters } from '../../CommonTypes';
+import GenericError from '../../error/GenericError';
 
 /**
  * Decorator for page state manager, which add logic for limiting Extension

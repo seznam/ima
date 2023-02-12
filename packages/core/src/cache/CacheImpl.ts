@@ -1,9 +1,10 @@
+import * as Helpers from '@ima/helpers';
+
 import Cache from './Cache';
 import CacheEntry, { SerializedCacheEntry } from './CacheEntry';
 import CacheFactory from './CacheFactory';
-import Storage from '../storage/Storage';
-import * as Helpers from '@ima/helpers';
 import { UnknownParameters } from '../CommonTypes';
+import Storage from '../storage/Storage';
 
 /**
  * Configurable generic implementation of the {@link Cache} interface.

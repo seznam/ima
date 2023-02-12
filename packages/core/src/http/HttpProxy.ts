@@ -1,9 +1,9 @@
-import HttpStatusCode from './StatusCode';
 import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
+import HttpStatusCode from './StatusCode';
 import UrlTransformer from './UrlTransformer';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * An object representing the complete request parameters used to create and

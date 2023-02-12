@@ -1,21 +1,22 @@
 const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
+// eslint-disable-next-line import/order
 const imaServer = require('@ima/server')();
 const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
   imaServer;
 
 require('@ima/react-page-renderer/hook/server')(imaServer);
 
-const express = require('express');
-const favicon = require('serve-favicon');
+const compression = require('compression');
 const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
-const compression = require('compression');
-const helmet = require('helmet');
 const errorToJSON = require('error-to-json').default;
+const express = require('express');
 const proxy = require('express-http-proxy');
 const expressStaticGzip = require('express-static-gzip');
+const helmet = require('helmet');
+const favicon = require('serve-favicon');
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);

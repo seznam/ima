@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { EventHandler } from '../page/PageTypes';
 import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
+import { EventHandler } from '../page/PageTypes';
 import PageStateManager from '../page/state/PageStateManager';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

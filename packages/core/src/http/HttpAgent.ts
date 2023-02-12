@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { StringParameters, UnknownParameters } from '../CommonTypes';
 import { HttpProxyRequestParams } from './HttpProxy';
+import { StringParameters, UnknownParameters } from '../CommonTypes';
 
 /**
  * Options for a request sent using the HTTP agent.

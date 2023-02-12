@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
+import { toMockedInstance } from 'to-mock';
 
 import Cache from '../../cache/CacheImpl';
 import GenericError from '../../error/GenericError';
-import HttpAgentImpl from '../HttpAgentImpl';
-import { HttpAgentResponse } from '../HttpAgent';
-import HttpAgentProxy from '../HttpProxy';
 import CookieStorage from '../../storage/CookieStorage';
-import { toMockedInstance } from 'to-mock';
+import { HttpAgentResponse } from '../HttpAgent';
+import HttpAgentImpl from '../HttpAgentImpl';
+import HttpAgentProxy from '../HttpProxy';
 
 describe('ima.core.http.HttpAgentImpl', () => {
   let http: HttpAgentImpl;

@@ -1,14 +1,15 @@
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+
 const validator = require('validator');
+
 const { renderMeta } = require('./utils/metaUtils');
 const {
   renderScript,
   renderStyles,
   prepareDefaultResources,
 } = require('./utils/resourcesUtils');
-
-const crypto = require('crypto');
 
 module.exports = function responseUtilsFactory() {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;

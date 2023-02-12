@@ -1,4 +1,5 @@
 const { RouteNames } = require('@ima/core');
+
 const { Event } = require('../emitter.js');
 
 module.exports = function hooksFactory({

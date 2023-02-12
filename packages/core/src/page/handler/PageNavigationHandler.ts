@@ -1,8 +1,8 @@
 import PageHandler from './PageHandler';
-import Window from '../../window/Window';
 import ActionTypes from '../../router/ActionTypes';
-import { ManagedPage, PageAction } from '../PageTypes';
 import { RouteOptions } from '../../router/Router';
+import Window from '../../window/Window';
+import { ManagedPage, PageAction } from '../PageTypes';
 
 export default class PageNavigationHandler extends PageHandler {
   private _window: Window;

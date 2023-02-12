@@ -1,6 +1,6 @@
+import { StringParameters } from '../../CommonTypes';
 import AbstractRoute from '../AbstractRoute';
 import DynamicRoute, { RoutePathExpression } from '../DynamicRoute';
-import { StringParameters } from '../../CommonTypes';
 import { RouteOptions } from '../Router';
 
 describe('ima.core.router.DynamicRoute', function () {

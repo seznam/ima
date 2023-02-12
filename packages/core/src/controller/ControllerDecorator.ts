@@ -1,10 +1,10 @@
 import Controller from './Controller';
-import MetaManager from '../meta/MetaManager';
-import Router from '../router/Router';
+import { UnknownParameters } from '../CommonTypes';
 import Dictionary from '../dictionary/Dictionary';
 import Extension, { IExtension } from '../extension/Extension';
+import MetaManager from '../meta/MetaManager';
 import PageStateManager from '../page/state/PageStateManager';
-import { UnknownParameters } from '../CommonTypes';
+import Router from '../router/Router';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta

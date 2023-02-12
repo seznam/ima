@@ -4,10 +4,10 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import PageNavigationHandler from '../PageNavigationHandler';
-import ClientWindow from '../../../window/ClientWindow';
 import ActionTypes from '../../../router/ActionTypes';
+import ClientWindow from '../../../window/ClientWindow';
 import { ManagedPage, PageAction } from '../../PageTypes';
+import PageNavigationHandler from '../PageNavigationHandler';
 
 window.scrollTo = jest.fn();
 
