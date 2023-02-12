@@ -49,7 +49,6 @@ export function localize(
   key: string,
   params: { [key: string]: string | number }
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$Dictionary.get(key, params);
 }
 
@@ -71,7 +70,6 @@ export function link(
   name: string,
   params: { [key: string]: string | number }
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$Router.link(name, params);
 }
 
@@ -127,12 +125,12 @@ export function defaultCssClasses(
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;
 
-  // TODO find out why is ts complaining..
   const isComponent = component instanceof Component;
   const isPureComponent = component instanceof PureComponent;
 
   if (!extraClasses && (isComponent || isPureComponent)) {
-    extraClasses = component.props.className;
+    extraClasses = (component as Component<{ className: string }>).props
+      .className;
   }
 
   return classnames(classRules, extraClasses);

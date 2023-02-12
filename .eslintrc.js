@@ -187,6 +187,14 @@ module.exports = {
         ],
       },
     },
+    // Type-checkd Typescript support
+    // TODO gradually enable everywhere
+    {
+      files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
+      extends: [
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+    },
     // Website/docs overrides
     {
       files: ['website/**'],

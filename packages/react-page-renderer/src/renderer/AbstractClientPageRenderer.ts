@@ -222,7 +222,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
             [resourceName]: resource,
           });
         })
-        .catch(error => this._handleError(error));
+        .catch(error => this._handleError(error as Error));
     }
   }
 
@@ -251,10 +251,13 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
       callback: IdleRequestCallback,
       options?: IdleRequestOptions | undefined
     ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
+
     if (Window && Window['requestIdleCallback']) {
-      requestIdleCallback = Window.requestIdleCallback;
+      requestIdleCallback = (callback, options) =>
+        Window.requestIdleCallback(callback, options);
     }
-    const handler = (resolve: any) => () => {
+
+    const handler = (resolve: () => void) => () => {
       controller.commitStateTransaction();
 
       if (!hasResourcesLoaded) {
@@ -268,7 +271,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     };
 
     controller.beginStateTransaction();
-    const batchPromise = new Promise(resolve => {
+    const batchPromise = new Promise<void>(resolve => {
       requestIdleCallback(handler(resolve), options);
     });
 
@@ -312,7 +315,9 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     if (!this._viewContainer) {
       const errorMessage =
         `ima.core.page.renderer.ClientPageRenderer:_renderPageViewToDOM: ` +
-        `Element with ID "${masterElementId}" was not found in the DOM. ` +
+        `Element with ID "${
+          masterElementId || 'unknown'
+        }" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 
       this._dispatcher.fire(

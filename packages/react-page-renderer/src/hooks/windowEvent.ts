@@ -1,4 +1,4 @@
-import { type ListenerOptions } from '@ima/core';
+import type { UnknownParameters, ListenerOptions } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -82,8 +82,9 @@ export function useWindowEvent({
   return useMemo(
     () => ({
       window,
-      dispatchEvent: window && window.dispatchEvent,
-      createCustomEvent: $Window.createCustomEvent,
+      dispatchEvent: (event: Event) => window && window.dispatchEvent(event),
+      createCustomEvent: (name: string, options: UnknownParameters) =>
+        $Window.createCustomEvent(name, options),
     }),
     [$Window]
   );

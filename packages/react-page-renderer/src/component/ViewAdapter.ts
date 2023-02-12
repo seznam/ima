@@ -55,8 +55,9 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
     /**
      * The memoized context value.
      */
-    this._getContextValue = memoizeOne((props, state) =>
-      this.getContextValue(props, state)
+    this._getContextValue = memoizeOne(
+      (props: ViewAdapterProps, state: State) =>
+        this.getContextValue(props, state)
     );
 
     /**
@@ -97,7 +98,7 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
 
     return this.createContext(
       props.$Utils,
-      Object.assign.apply(null, [{}, ...selectedValues])
+      Object.assign.apply(null, [{}, ...selectedValues]) as UnknownParameters
     );
   }
 

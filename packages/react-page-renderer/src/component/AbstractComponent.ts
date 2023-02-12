@@ -7,7 +7,11 @@ import { PageContext } from '../PageContext';
 /**
  * The base class for all view components.
  */
-export abstract class AbstractComponent extends Component {
+export abstract class AbstractComponent<
+  P = unknown,
+  S = unknown,
+  SS = unknown
+> extends Component<P, S, SS> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;
 
@@ -37,7 +41,10 @@ export abstract class AbstractComponent extends Component {
    *        the placeholders in the localization phrase.
    * @return Localized phrase.
    */
-  localize(key: string, params: { [key: string]: string | number } = {}) {
+  localize(
+    key: string,
+    params: { [key: string]: string | number } = {}
+  ): string {
     return helpers.localize(this, key, params);
   }
 
@@ -52,7 +59,7 @@ export abstract class AbstractComponent extends Component {
    *        extraneous parameters to add to the URL as a query string.
    * @return The generated URL.
    */
-  link(name: string, params: { [key: string]: string | number } = {}) {
+  link(name: string, params: { [key: string]: string | number } = {}): string {
     return helpers.link(this, name, params);
   }
 
@@ -79,7 +86,7 @@ export abstract class AbstractComponent extends Component {
   cssClasses(
     classRules: string | { [key: string]: boolean } | string[],
     includeComponentClassName = false
-  ) {
+  ): string {
     return helpers.cssClasses(this, classRules, includeComponentClassName);
   }
 
@@ -90,7 +97,7 @@ export abstract class AbstractComponent extends Component {
    * @param target EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventName: string, target: EventTarget, data = undefined) {
+  fire(eventName: string, target: EventTarget, data = undefined): void {
     helpers.fire(this, eventName, target, data);
   }
 
@@ -108,7 +115,7 @@ export abstract class AbstractComponent extends Component {
     eventTarget: EventTarget,
     eventName: string,
     listener: (event: Event) => void
-  ) {
+  ): void {
     helpers.listen(this, eventTarget, eventName, listener);
   }
 
@@ -125,7 +132,7 @@ export abstract class AbstractComponent extends Component {
     eventTarget: EventTarget,
     eventName: string,
     listener: (event: Event) => void
-  ) {
+  ): void {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }
