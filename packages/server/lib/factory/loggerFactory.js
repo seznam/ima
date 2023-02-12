@@ -6,8 +6,8 @@ const { printf, combine, json } = format;
 const {
   formatError: devFormatError,
   parseError,
-} = require('@ima/dev-utils/dist/cliUtils');
-const { resolveErrorType } = require('@ima/dev-utils/dist/compileErrorParser');
+} = require('@ima/dev-utils/cliUtils');
+const { resolveErrorType } = require('@ima/dev-utils/compileErrorParser');
 
 function colorizeLevel(level) {
   switch (level) {
