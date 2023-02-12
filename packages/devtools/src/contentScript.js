@@ -1,9 +1,5 @@
 // Injection scripts
 
-import imaDevtoolsCode from '@ima/devtools-scripts/dist/index.string.js';
-
-import { Actions } from '@/constants';
-import { detectImaAppCode, runImaAppCode } from '@/inject';
 import {
   InjectType,
   injectCode,
@@ -12,6 +8,10 @@ import {
   SENTINEL_TO_EXTENSION,
   SENTINEL_TO_WEB,
 } from '@/utils';
+import imaDevtoolsCode from '@ima/devtools-scripts/dist/index.string.js';
+
+import { Actions } from '@/constants';
+import { detectImaAppCode, runImaAppCode } from '@/inject';
 
 let port = null;
 

@@ -2,7 +2,7 @@
 
 import { UnknownParameters } from '../CommonTypes';
 
-export type Listener = (data: UnknownParameters) => unknown;
+export type DispatcherListener = (data: UnknownParameters) => unknown;
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -39,7 +39,7 @@ export default abstract class Dispatcher {
    *        will be bound in the event listener.
    * @return This dispatcher.
    */
-  listen(event: string, listener: Listener, scope?: unknown) {
+  listen(event: string, listener: DispatcherListener, scope?: unknown) {
     return this;
   }
 
@@ -54,7 +54,7 @@ export default abstract class Dispatcher {
    *        would be bound in the event listener.
    * @return This dispatcher.
    */
-  unlisten(event: string, listener: Listener, scope?: unknown) {
+  unlisten(event: string, listener: DispatcherListener, scope?: unknown) {
     return this;
   }
 

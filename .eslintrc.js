@@ -143,9 +143,15 @@ module.exports = {
         ],
       },
       settings: {
+        'import/parsers': {
+          '@typescript-eslint/parser': ['.ts', '.tsx'],
+        },
         'import/resolver': {
           node: {
-            extensions: ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.json'],
+            extensions: ['.js', '.jsx', '.mjs', '.json'],
+          },
+          typescript: {
+            project: 'packages/*/tsconfig.json',
           },
         },
       },
@@ -153,16 +159,18 @@ module.exports = {
     // Typescript support
     {
       files: ['**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
       },
       extends: ['plugin:@typescript-eslint/recommended'],
+      plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
-          { 'ts-expect-error': false },
+          { 'ts-expect-error': 'off' },
         ],
         '@typescript-eslint/no-unused-vars': [
           'error',
@@ -178,6 +186,14 @@ module.exports = {
           { allowDeclarations: true },
         ],
       },
+    },
+    // Type-checkd Typescript support
+    // TODO gradually enable everywhere
+    {
+      files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
+      extends: [
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
     },
     // Website/docs overrides
     {

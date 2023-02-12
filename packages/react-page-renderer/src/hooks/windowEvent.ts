@@ -1,3 +1,4 @@
+import type { UnknownParameters, ListenerOptions } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -39,23 +40,25 @@ import { useComponentUtils } from './componentUtils';
  *   dispatchEvent,
  *   createCustomEvent
  * } = useWindowEvent();
- * @param	{object} params
- * @param {*} [params.eventTarget=null] Optional event target, if left blank
+ *
+ * @param	params
+ * @param eventTarget Optional event target, if left blank
  * 	it defaults to current window (=> can be omitted in most use cases).
- * @param {string} [params.event] Event name.
- * @param {Function} [params.callback] Callback to register to window event.
- * @param {boolean} [params.useCapture=false] Use capture instead of bubbling (default).
- * @returns {{
- * 	window: function(string, Object<string, *>, boolean),
- * 	dispatchEvent: function(),
- * 	createCustomEvent: function()
- * }} `window` object and utility methods.
+ * @param event Event name.
+ * @param callback Callback to register to window event.
+ * @param useCapture Use capture instead of bubbling (default).
+ * @returns `window` object and utility methods.
  */
-function useWindowEvent({
-  eventTarget = null,
+export function useWindowEvent({
+  eventTarget,
   event,
   callback,
   useCapture = false,
+}: {
+  eventTarget?: EventTarget;
+  event?: string;
+  callback?: (event: Event) => void;
+  useCapture?: boolean | ListenerOptions;
 } = {}) {
   const { $Window } = useComponentUtils();
   const window = $Window.getWindow();
@@ -79,11 +82,10 @@ function useWindowEvent({
   return useMemo(
     () => ({
       window,
-      dispatchEvent: window && window.dispatchEvent,
-      createCustomEvent: $Window.createCustomEvent,
+      dispatchEvent: (event: Event) => window && window.dispatchEvent(event),
+      createCustomEvent: (name: string, options: UnknownParameters) =>
+        $Window.createCustomEvent(name, options),
     }),
     [$Window]
   );
 }
-
-export { useWindowEvent };

@@ -1,3 +1,5 @@
+import type { Utils } from '@ima/core';
+
 import { usePageContext } from './pageContext';
 
 /**
@@ -5,12 +7,11 @@ import { usePageContext } from './pageContext';
  *
  * @example
  * const utils = useComponentUtils();
- * @returns {Object<string, Object>} IMA.js ComponentUtils
+ *
+ * @returns Component utils.
  */
-function useComponentUtils() {
+export function useComponentUtils(): Utils {
   const pageContext = usePageContext();
 
-  return pageContext.$Utils || {};
+  return pageContext.$Utils ?? {};
 }
-
-export { useComponentUtils };

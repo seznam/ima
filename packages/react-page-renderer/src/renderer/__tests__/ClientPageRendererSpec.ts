@@ -4,19 +4,20 @@ import {
   DispatcherImpl,
   MetaManager,
   RendererEvents,
+  type Utils,
+  type RouteOptions,
   Window,
 } from '@ima/core';
-import type { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
 
-import AbstractPureComponent from '../../component/AbstractPureComponent';
-import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { AbstractPureComponent } from '../../component/AbstractPureComponent';
+import { BlankManagedRootView } from '../../component/BlankManagedRootView';
 import { Settings } from '../../types';
-import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
-import PageRendererFactory from '../PageRendererFactory';
+import { AbstractClientPageRenderer } from '../AbstractClientPageRenderer';
+import { PageRendererFactory } from '../PageRendererFactory';
 
 class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
@@ -71,7 +72,7 @@ const settings = {
   $Protocol: undefined,
   $Root: undefined,
   $Version: undefined,
-} as Settings;
+} as unknown as Settings;
 
 const param1 = 'param1';
 const param2 = 'param2';
@@ -287,7 +288,7 @@ describe('ClientPageRenderer', () => {
   });
 
   describe('_prepareViewAdapter method', () => {
-    const utils = { router: 'router' };
+    const utils = { router: 'router' } as unknown as Utils;
     const state = { state: 'state', pageView: () => null };
 
     beforeEach(() => {
