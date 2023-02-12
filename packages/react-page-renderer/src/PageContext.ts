@@ -5,4 +5,6 @@ export interface PageContextType {
   $Utils: Utils;
 }
 
-export default createContext<PageContextType>({} as PageContextType);
+export const PageContext = createContext<PageContextType>(
+  {} as PageContextType
+);

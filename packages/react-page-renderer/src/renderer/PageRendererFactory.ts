@@ -4,7 +4,7 @@ import { Component, ComponentType, PureComponent } from 'react';
 /**
  * Factory for page render.
  */
-export default class PageRendererFactory {
+export class PageRendererFactory {
   private _componentUtils: ComponentUtils;
 
   /**

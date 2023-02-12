@@ -2,8 +2,8 @@ import type { UnknownParameters, Utils } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
-import ErrorBoundary from './ErrorBoundary';
-import PageContext from '../PageContext';
+import { ErrorBoundary } from './ErrorBoundary';
+import { PageContext } from '../PageContext';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -21,7 +21,7 @@ interface State {
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
-export default class ViewAdapter extends Component<ViewAdapterProps, State> {
+export class ViewAdapter extends Component<ViewAdapterProps, State> {
   private _getContextValue: (
     props: ViewAdapterProps,
     state: State

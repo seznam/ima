@@ -1,4 +1,4 @@
-import { Dispatcher, Listener } from '@ima/core';
+import { Dispatcher, type Listener } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';

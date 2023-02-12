@@ -1,4 +1,4 @@
-import { ListenerOptions } from '@ima/core';
+import { type ListenerOptions } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';

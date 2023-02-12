@@ -14,9 +14,9 @@ import { ComponentType, createElement, ReactElement } from 'react';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import PageRendererFactory from './PageRendererFactory';
-import BlankManagedRootView from '../component/BlankManagedRootView';
-import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
+import { PageRendererFactory } from './PageRendererFactory';
+import { BlankManagedRootView } from '../component/BlankManagedRootView';
+import { ViewAdapter, ViewAdapterProps } from '../component/ViewAdapter';
 import { Settings } from '../types';
 
 export type PageData = {
@@ -33,7 +33,7 @@ export type PageData = {
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
-export default abstract class AbstractPageRenderer extends PageRenderer {
+export abstract class AbstractPageRenderer extends PageRenderer {
   protected _dispatcher: Dispatcher;
   protected _factory: PageRendererFactory;
   protected _helpers: typeof Helpers;

@@ -1,5 +1,5 @@
 /* @if server **
-export default class AbstractClientPageRenderer {};
+export class AbstractClientPageRenderer {};
 /* @else */
 import {
   Controller,
@@ -15,15 +15,15 @@ import {
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
-import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
+import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
+import { PageRendererFactory } from './PageRendererFactory';
 import { Settings } from '../types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  */
-export default abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
+export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   private _hydrated = false;
   private _mounted = this._createMountedPromise();
   /**

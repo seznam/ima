@@ -6,7 +6,7 @@ import pluginLoader from './pluginLoader';
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
 
-import Cache, { SerializedData } from './cache/Cache';
+import Cache, { type SerializedData } from './cache/Cache';
 import CacheEntry from './cache/CacheEntry';
 import CacheFactory from './cache/CacheFactory';
 import CacheImpl from './cache/CacheImpl';
@@ -17,12 +17,12 @@ import Dictionary from './dictionary/Dictionary';
 import MessageFormatDictionary from './dictionary/MessageFormatDictionary';
 import Error from './error/Error';
 import GenericError from './error/GenericError';
-import Dispatcher, { DispatcherListener } from './event/Dispatcher';
+import Dispatcher, { type DispatcherListener } from './event/Dispatcher';
 import DispatcherImpl from './event/DispatcherImpl';
 import EventBus, {
-  EventBusListener,
-  NativeListener,
-  EventBusOptions,
+  type EventBusListener,
+  type NativeListener,
+  type EventBusOptions,
 } from './event/EventBus';
 import EventBusImpl from './event/EventBusImpl';
 import AbstractExecution from './execution/AbstractExecution';
@@ -73,7 +73,7 @@ import SessionMapStorage from './storage/SessionMapStorage';
 import SessionStorage from './storage/SessionStorage';
 import Storage from './storage/Storage';
 import WeakMapStorage from './storage/WeakMapStorage';
-import Window, { ListenerOptions } from './window/Window';
+import Window, { type ListenerOptions } from './window/Window';
 import ServerWindow from './window/ServerWindow';
 import ClientWindow from './window/ClientWindow';
 

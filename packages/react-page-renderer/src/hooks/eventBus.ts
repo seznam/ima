@@ -1,4 +1,4 @@
-import { EventBus, EventBusListener } from '@ima/core';
+import { EventBus, type EventBusListener } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';

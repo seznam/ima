@@ -13,11 +13,11 @@ import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
 
-import AbstractPureComponent from '../../component/AbstractPureComponent';
-import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { AbstractPureComponent } from '../../component/AbstractPureComponent';
+import { BlankManagedRootView } from '../../component/BlankManagedRootView';
 import { Settings } from '../../types';
-import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
-import PageRendererFactory from '../PageRendererFactory';
+import { AbstractClientPageRenderer } from '../AbstractClientPageRenderer';
+import { PageRendererFactory } from '../PageRendererFactory';
 
 class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {

@@ -2,12 +2,12 @@ import type { Utils } from '@ima/core';
 import { Component, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
-import PageContext from '../PageContext';
+import { PageContext } from '../PageContext';
 
 /**
  * The base class for all view components.
  */
-export default abstract class AbstractComponent extends Component {
+export abstract class AbstractComponent extends Component {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;
 

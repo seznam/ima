@@ -2,9 +2,9 @@ import type { Utils } from '@ima/core';
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
 
-import AbstractComponent from './component/AbstractComponent';
-import AbstractPureComponent from './component/AbstractPureComponent';
-import PageContext from './PageContext';
+import { AbstractComponent } from './component/AbstractComponent';
+import { AbstractPureComponent } from './component/AbstractPureComponent';
+import { PageContext } from './PageContext';
 
 /**
  * Retrieves the view utilities from the component's current context or
