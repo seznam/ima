@@ -1,4 +1,4 @@
-import GenericError from '../GenericError';
+import { GenericError } from '../GenericError';
 
 describe('GenericError', () => {
   it('throws instance of native error', () => {

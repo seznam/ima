@@ -1,9 +1,10 @@
 import { toMockedInstance } from 'to-mock';
 
-import ObjectContainer, {
+import {
+  ObjectContainer,
   UnknownConstructable,
 } from '../../../ObjectContainer';
-import ComponentUtils from '../ComponentUtils';
+import { ComponentUtils } from '../ComponentUtils';
 
 class SomeMockHelper {}
 

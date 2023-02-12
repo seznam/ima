@@ -1,4 +1,4 @@
-import GenericError from '../error/GenericError';
+import { GenericError } from '../error/GenericError';
 
 export type MiddleWareFunction = (
   params: { [key: string]: string | number },
@@ -8,7 +8,7 @@ export type MiddleWareFunction = (
 /**
  * Utility for representing and running router middleware.
  */
-export default class RouterMiddleware {
+export class RouterMiddleware {
   protected _middleware: MiddleWareFunction;
   /**
    * Initializes the middleware

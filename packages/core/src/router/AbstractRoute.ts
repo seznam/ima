@@ -2,14 +2,14 @@
 
 import { RoutePathExpression } from './DynamicRoute';
 import { RouteOptions } from './Router';
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import Controller, { IController } from '../controller/Controller';
-import GenericError from '../error/GenericError';
+import { RouterMiddleware, MiddleWareFunction } from './RouterMiddleware';
+import { Controller, IController } from '../controller/Controller';
+import { GenericError } from '../error/GenericError';
 
-export type ParamValue = string | number | boolean;
+export type RouteParamValue = string | number | boolean;
 
 export type RouteParams = {
-  [key: string]: ParamValue | Error;
+  [key: string]: RouteParamValue | Error;
 };
 
 /**
@@ -25,7 +25,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
-export default abstract class AbstractRoute {
+export abstract class AbstractRoute {
   /**
    * The unique name of this route, identifying it among the rest of the
    * routes in the application.

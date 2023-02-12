@@ -1,10 +1,11 @@
-import EventBus, {
+import {
+  EventBus,
   EventBusListener,
   NativeListener,
   EventBusOptions,
 } from './EventBus';
-import GenericError from '../error/GenericError';
-import Window from '../window/Window';
+import { GenericError } from '../error/GenericError';
+import { Window } from '../window/Window';
 
 type NativeListenerMap = Map<string, NativeListener>;
 
@@ -23,7 +24,7 @@ export const IMA_EVENT = '$IMA.CustomEvent';
  * It offers public methods for firing custom events and two methods for
  * catching events (e.g. inside view components).
  */
-export default class EventBusImpl extends EventBus {
+export class EventBusImpl extends EventBus {
   private _window: Window;
   /**
    * Map of listeners provided to the public API of this event bus to a

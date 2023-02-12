@@ -4,20 +4,20 @@
 
 import { toMockedInstance } from 'to-mock';
 
-import ControllerDecorator from '../../..//controller/ControllerDecorator';
-import { UnknownParameters } from '../../../CommonTypes';
-import AbstractController from '../../../controller/AbstractController';
-import Controller, { IController } from '../../../controller/Controller';
-import Extension from '../../../extension/Extension';
-import PageHandlerRegistry from '../../../page/handler/PageHandlerRegistry';
-import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
-import PageFactory from '../../../page/PageFactory';
-import PageRenderer from '../../../page/renderer/PageRenderer';
-import PageStateManager from '../../../page/state/PageStateManager';
-import DynamicRoute from '../../../router/DynamicRoute';
-import RouteFactory from '../../../router/RouteFactory';
-import StaticRoute from '../../../router/StaticRoute';
-import AbstractPageManager from '../AbstractPageManager';
+import { ControllerDecorator } from '../../..//controller/ControllerDecorator';
+import { AbstractController } from '../../../controller/AbstractController';
+import { Controller, IController } from '../../../controller/Controller';
+import { Extension } from '../../../extension/Extension';
+import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
+import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
+import { PageFactory } from '../../../page/PageFactory';
+import { PageRenderer } from '../../../page/renderer/PageRenderer';
+import { PageStateManager } from '../../../page/state/PageStateManager';
+import { DynamicRoute } from '../../../router/DynamicRoute';
+import { RouteFactory } from '../../../router/RouteFactory';
+import { StaticRoute } from '../../../router/StaticRoute';
+import { UnknownParameters } from '../../../types';
+import { AbstractPageManager } from '../AbstractPageManager';
 
 class AbstractControllerTest extends AbstractController {
   dependency: unknown;

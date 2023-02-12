@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { ObjectParameters } from '../CommonTypes';
+import { ObjectParameters } from '../types';
 
-export type Config = {
+export type DictionaryConfig = {
   $Language: string;
-  dictionary: Fields;
+  dictionary: DictionaryData;
 };
 
-export type Fields = {
-  [key: string]: Fields | LocalizationFunction;
+export type DictionaryData = {
+  [key: string]: DictionaryData | LocalizationFunction;
 };
 
 export type LocalizationFunction = (parameters: ObjectParameters) => string;
@@ -18,7 +18,7 @@ export type LocalizationFunction = (parameters: ObjectParameters) => string;
  * single language. The format of the localization phrases depends on the
  * implementation of this interface.
  */
-export default abstract class Dictionary {
+export abstract class Dictionary {
   /**
    * Initializes this dictionary with the provided language and localization
    * phrases.
@@ -29,7 +29,7 @@ export default abstract class Dictionary {
    * @param config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.
    */
-  init(config: Config) {
+  init(config: DictionaryConfig) {
     return;
   }
 

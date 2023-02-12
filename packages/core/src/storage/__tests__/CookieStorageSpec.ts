@@ -3,10 +3,10 @@ import {
   Response as ExpressResponse,
 } from 'express';
 
-import Request from '../../router/Request';
-import Response from '../../router/Response';
-import ServerWindow from '../../window/ServerWindow';
-import CookieStorage, { Cookie } from '../CookieStorage';
+import { Request } from '../../router/Request';
+import { Response } from '../../router/Response';
+import { ServerWindow } from '../../window/ServerWindow';
+import { CookieStorage, Cookie } from '../CookieStorage';
 
 describe('ima.storage.CookieStorage', () => {
   const cookieString =

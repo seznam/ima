@@ -1,20 +1,21 @@
 import * as Helpers from '@ima/helpers';
 
-import HttpAgent, {
+import {
+  HttpAgent,
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
-import HttpProxy from './HttpProxy';
-import Cache from '../cache/Cache';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
-import GenericError from '../error/GenericError';
-import CookieStorage from '../storage/CookieStorage';
+import { HttpProxy } from './HttpProxy';
+import { Cache } from '../cache/Cache';
+import { GenericError } from '../error/GenericError';
+import { CookieStorage } from '../storage/CookieStorage';
+import { StringParameters, UnknownParameters } from '../types';
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
-export default class HttpAgentImpl extends HttpAgent {
+export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
   protected _cache: Cache<unknown>;
   protected _cookie: CookieStorage;

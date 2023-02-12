@@ -1,11 +1,11 @@
-import { StringParameters } from '../../CommonTypes';
-import ObjectContainer, {
+import {
+  ObjectContainer,
   FactoryFunction,
   UnknownConstructable,
 } from '../../ObjectContainer';
-import { Utils } from '../../types';
+import { StringParameters, Utils } from '../../types';
 
-export default class ComponentUtils {
+export class ComponentUtils {
   /**
    * The application's dependency injector - the object container.
    */

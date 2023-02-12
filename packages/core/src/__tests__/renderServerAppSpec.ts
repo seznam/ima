@@ -19,7 +19,7 @@ import {
   PageRenderer,
   Router,
 } from '../index';
-import Response from '../router/Response';
+import { Response } from '../router/Response';
 
 jest.mock('fs');
 jest.mock('path', () => {

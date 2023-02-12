@@ -1,10 +1,10 @@
-import { UnknownParameters } from '../CommonTypes';
+import { UnknownParameters } from '../types';
 
 /**
  * The IMA application error extends the native `Error` with additional details
  * that lead to the error and the HTTP status code to send to the client.
  */
-export default abstract class IMAError extends Error {
+export abstract class IMAError extends Error {
   constructor(message: string, params?: { cause?: Error | string }) {
     super(message, { cause: params?.cause });
   }

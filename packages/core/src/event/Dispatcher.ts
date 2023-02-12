@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters } from '../CommonTypes';
+import { UnknownParameters } from '../types';
 
 export type DispatcherListener = (data: UnknownParameters) => unknown;
 
@@ -13,7 +13,7 @@ export type DispatcherListener = (data: UnknownParameters) => unknown;
  * propagate events from controllers to UI components when modifying/passing
  * the state is impractical for any reason.
  */
-export default abstract class Dispatcher {
+export abstract class Dispatcher {
   /**
    * Deregisters all event listeners currently registered with this
    * dispatcher.

@@ -2,8 +2,8 @@
 
 import { toMockedInstance } from 'to-mock';
 
-import ClientWindow from '../../window/ClientWindow';
-import EventBus, { IMA_EVENT } from '../EventBusImpl';
+import { ClientWindow } from '../../window/ClientWindow';
+import { EventBusImpl, IMA_EVENT } from '../EventBusImpl';
 
 describe('ima.core.event.EventBusImpl', () => {
   const listeners = {
@@ -29,11 +29,11 @@ describe('ima.core.event.EventBusImpl', () => {
   };
 
   let windowInterface: ClientWindow;
-  let eventBus: EventBus;
+  let eventBus: EventBusImpl;
 
   beforeEach(() => {
     windowInterface = toMockedInstance(ClientWindow);
-    eventBus = new EventBus(windowInterface);
+    eventBus = new EventBusImpl(windowInterface);
   });
 
   describe('listen method', () => {

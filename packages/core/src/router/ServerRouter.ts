@@ -1,18 +1,18 @@
 /* @if client **
-export default class ServerRouter {};
+export class ServerRouter {};
 /* @else */
-import AbstractRouter from './AbstractRouter';
-import Request from './Request';
-import Response from './Response';
-import RouteFactory from './RouteFactory';
-import { UnknownParameters } from '../CommonTypes';
-import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
+import { AbstractRouter } from './AbstractRouter';
+import { Request } from './Request';
+import { Response } from './Response';
+import { RouteFactory } from './RouteFactory';
+import { Dispatcher } from '../event/Dispatcher';
+import { PageManager } from '../page/manager/PageManager';
+import { UnknownParameters } from '../types';
 
 /**
  * The server-side implementation of the {@link Router} interface.
  */
-export default class ServerRouter extends AbstractRouter {
+export class ServerRouter extends AbstractRouter {
   protected _request: Request;
   protected _response: Response;
 

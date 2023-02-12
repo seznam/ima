@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { UnknownParameters } from '../types';
+
 export type EventBusListener = (event: CustomEvent) => unknown;
+
+export type EventBusEventHandler = (data?: UnknownParameters) => void;
 
 export type NativeListener = (event: CustomEvent | Event) => unknown;
 
@@ -23,7 +27,7 @@ export type EventBusOptions = {
  * and capture of all fired events. The actual event name is always consistent
  * by the implementation.
  */
-export default abstract class EventBus {
+export abstract class EventBus {
   /**
    * Fires a new custom event of the specified name, carrying the provided
    * data.
