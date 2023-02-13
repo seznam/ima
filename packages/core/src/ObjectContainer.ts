@@ -3,7 +3,7 @@ import { UnknownParameters } from './types';
 
 ns.namespace('ima.core');
 
-type Options = {
+type DependencyOptions = {
   optional: boolean;
 };
 
@@ -31,7 +31,9 @@ type Dependency =
   | UnknownNonConstructable
   | FactoryFunction;
 
-export type DependencyWithOptions = Dependency | [Dependency, Options];
+export type DependencyWithOptions =
+  | Dependency
+  | [Dependency, DependencyOptions];
 
 export type Dependencies = (
   | InstanceType<UnknownConstructable>
