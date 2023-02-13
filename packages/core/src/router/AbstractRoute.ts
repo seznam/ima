@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { RoutePathExpression } from './DynamicRoute';
-import { RouteOptions } from './Router';
+import { RouteFactoryOptions } from './Router';
 import { Controller, IController } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
@@ -48,7 +48,7 @@ export abstract class AbstractRoute {
   /**
    * The route additional options.
    */
-  protected _options: RouteOptions;
+  protected _options: RouteFactoryOptions;
   protected _cachedController: unknown;
   protected _cachedView: unknown;
 
@@ -202,7 +202,7 @@ export abstract class AbstractRoute {
     pathExpression: RoutePathExpression | string,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options?: Partial<RouteOptions>
+    options?: Partial<RouteFactoryOptions>
   ) {
     this._name = name;
     this._pathExpression = pathExpression;

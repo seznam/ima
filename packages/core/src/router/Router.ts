@@ -26,16 +26,17 @@ export type RouterMiddleware = (
   next?: (result: UnknownParameters) => void
 ) => UnknownParameters | void | Promise<UnknownParameters | void>;
 
-export interface RouteOptions {
+export interface RouteFactoryOptions {
   autoScroll: boolean;
   documentView: null | unknown;
   managedRootView: null | unknown;
   onlyUpdate: boolean | ((controller: IController, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  // TODO add defaults
   extensions?: IExtension[];
-  // TODO what ->>
+}
+
+export interface RouteOptions extends RouteFactoryOptions {
   headers?: UnknownParameters;
   httpStatus?: number;
 }

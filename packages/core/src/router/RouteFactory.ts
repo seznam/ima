@@ -1,5 +1,5 @@
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
-import { RouteOptions } from './Router';
+import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
 import { Controller, IController } from '../controller/Controller';
 
@@ -34,7 +34,7 @@ export class RouteFactory {
     pathExpression: string | RoutePathExpression,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options?: Partial<RouteOptions>
+    options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,
