@@ -16,6 +16,7 @@ import { Controller, IController } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
+import { HttpStatusCode } from '../http/HttpStatusCode';
 import { PageManager } from '../page/manager/PageManager';
 import { StringParameters, UnknownParameters } from '../types';
 
@@ -412,7 +413,7 @@ export abstract class AbstractRouter extends Router {
           `a non-matching route because no not found page route has ` +
           `been configured. Add new route named ` +
           `'${RouteNames.NOT_FOUND}'.`,
-        params
+        { ...params, status: HttpStatusCode.TIMEOUT }
       );
 
       return Promise.reject(error);
