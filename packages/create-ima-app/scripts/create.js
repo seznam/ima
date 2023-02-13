@@ -1,8 +1,10 @@
+import { spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawnSync } from 'child_process';
-import fs from 'fs-extra';
+
 import chalk from 'chalk';
+import fs from 'fs-extra';
+
 import { info, error } from './utils.js';
 
 (async () => {

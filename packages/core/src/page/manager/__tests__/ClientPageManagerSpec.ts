@@ -7,22 +7,23 @@
 /* eslint-disable jest/no-conditional-expect */
 
 import { toMockedInstance } from 'to-mock';
-import AbstractController from '../../../controller/AbstractController';
-import ClientPageManager from '../ClientPageManager';
-import ClientWindow from '../../../window/ClientWindow';
-import Controller, { IController } from '../../../controller/Controller';
-import ControllerDecorator from '../../../controller/ControllerDecorator';
-import DynamicRoute from '../../../router/DynamicRoute';
-import EventBusImpl from '../../../event/EventBusImpl';
-import Extension from '../../../extension/Extension';
-import PageFactory from '../../../page/PageFactory';
-import PageHandlerRegistry from '../../../page/handler/PageHandlerRegistry';
-import PageRenderer from '../../../page/renderer/PageRenderer';
-import PageStateManager from '../../../page/state/PageStateManager';
-import RouteFactory from '../../../router/RouteFactory';
-import StaticRoute from '../../../router/StaticRoute';
-import Window from '../../../window/Window';
-import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
+
+import { AbstractController } from '../../../controller/AbstractController';
+import { Controller, IController } from '../../../controller/Controller';
+import { ControllerDecorator } from '../../../controller/ControllerDecorator';
+import { EventBusImpl } from '../../../event/EventBusImpl';
+import { Extension } from '../../../extension/Extension';
+import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
+import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
+import { PageFactory } from '../../../page/PageFactory';
+import { PageRenderer } from '../../../page/renderer/PageRenderer';
+import { PageStateManager } from '../../../page/state/PageStateManager';
+import { DynamicRoute } from '../../../router/DynamicRoute';
+import { RouteFactory } from '../../../router/RouteFactory';
+import { StaticRoute } from '../../../router/StaticRoute';
+import { ClientWindow } from '../../../window/ClientWindow';
+import { Window } from '../../../window/Window';
+import { ClientPageManager } from '../ClientPageManager';
 
 class AbstractControllerTest extends AbstractController {
   dependency: unknown;

@@ -1,12 +1,12 @@
-import React from 'react';
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
   ServerPageRenderer,
   AbstractPureComponent,
 } from '@ima/react-page-renderer';
-import Response from '../router/Response';
 import { Response as ExpressResponse } from 'express';
+import React from 'react';
+
 import {
   AbstractController,
   bootClientApp,
@@ -19,6 +19,7 @@ import {
   PageRenderer,
   Router,
 } from '../index';
+import { Response } from '../router/Response';
 
 jest.mock('fs');
 jest.mock('path', () => {

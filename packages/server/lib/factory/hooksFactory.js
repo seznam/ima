@@ -1,4 +1,5 @@
 const { RouteNames } = require('@ima/core');
+
 const { Event } = require('../emitter.js');
 
 module.exports = function hooksFactory({
@@ -281,7 +282,8 @@ module.exports = function hooksFactory({
       event.context.response.content = processContent(event);
     });
 
-    emitter.on(Event.Response, async ({ res, context }) => {
+    emitter.on(Event.Response, async event => {
+      const { res, context } = event;
       if (res.headersSent || !context.response) {
         return;
       }

@@ -1,13 +1,13 @@
 import * as helpers from '@ima/helpers';
-import { Module } from 'module';
-import { UnknownParameters } from './CommonTypes';
-import ns, { Namespace } from './Namespace';
-import ObjectContainer from './ObjectContainer';
-import Router from './router/Router';
+
+import { Namespace, ns } from './Namespace';
+import { ObjectContainer } from './ObjectContainer';
+import { Router } from './router/Router';
+import { UnknownParameters } from './types';
 
 ns.namespace('ima.core');
 
-export type Module = {
+export type PluginConfigFunctions = {
   initServices?: (
     ns: Namespace,
     oc: ObjectContainer,
@@ -53,7 +53,7 @@ export type Config = {
   initBindIma: (...args: unknown[]) => unknown;
   initServicesIma: (...args: unknown[]) => unknown;
   initSettings: (...args: unknown[]) => unknown;
-  plugins: { name: string; module: Module }[];
+  plugins: { name: string; plugin: PluginConfigFunctions }[];
   routes: UnknownParameters;
   services: UnknownParameters;
   settings: UnknownParameters;
@@ -64,7 +64,7 @@ export type Config = {
  * Application bootstrap used to initialize the environment and the application
  * itself.
  */
-export default class Bootstrap {
+export class Bootstrap {
   protected _oc: ObjectContainer;
   protected _config: Config;
   /**
@@ -114,16 +114,16 @@ export default class Bootstrap {
    * within the Plugin Loader instance.
    *
    * @param name Plugin name.
-   * @param module Plugin interface (object with init functions).
+   * @param plugin Plugin interface (object with init functions).
    */
-  initPlugin(name: string, module?: Module) {
-    if (!module) {
+  initPlugin(name: string, plugin?: PluginConfigFunctions) {
+    if (!plugin) {
       return;
     }
 
-    this._initPluginSettings(name, module);
-    this._bindPluginDependencies(name, module);
-    this._initPluginServices(module);
+    this._initPluginSettings(name, plugin);
+    this._bindPluginDependencies(name, plugin);
+    this._initPluginServices(plugin);
   }
 
   /**
@@ -138,14 +138,14 @@ export default class Bootstrap {
     const plugins = this._config.plugins.concat([
       {
         name: ObjectContainer.APP_BINDING_STATE,
-        module: this._config as unknown as Module,
+        plugin: this._config as unknown as PluginConfigFunctions,
       },
     ]);
 
     plugins
-      .filter(({ module }) => typeof module.initSettings === 'function')
-      .forEach(({ name, module }) => {
-        const allPluginSettings = module.initSettings!(
+      .filter(({ plugin }) => typeof plugin.initSettings === 'function')
+      .forEach(({ name, plugin }) => {
+        const allPluginSettings = plugin.initSettings!(
           ns,
           this._oc,
           this._config.settings,
@@ -175,15 +175,15 @@ export default class Bootstrap {
    * are prioritized over the default plugin settings.
    *
    * @param name Plugin name.
-   * @param module Plugin interface (object with init functions).
+   * @param plugin Plugin interface (object with init functions).
    */
-  _initPluginSettings(name: string, module: Module) {
-    if (typeof module?.initSettings !== 'function') {
+  _initPluginSettings(name: string, plugin: PluginConfigFunctions) {
+    if (typeof plugin?.initSettings !== 'function') {
       return;
     }
 
     const newApplicationSettings = {};
-    const allPluginSettings = module.initSettings(
+    const allPluginSettings = plugin.initSettings(
       ns,
       this._oc,
       this._config.settings,
@@ -220,10 +220,10 @@ export default class Bootstrap {
     );
 
     this._config.plugins
-      .filter(({ module }) => typeof module.initBind === 'function')
-      .forEach(({ name, module }) => {
+      .filter(({ plugin }) => typeof plugin.initBind === 'function')
+      .forEach(({ name, plugin }) => {
         this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
-        module.initBind!(ns, this._oc, this._config.bind, false);
+        plugin.initBind!(ns, this._oc, this._config.bind, false);
       });
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
@@ -240,16 +240,16 @@ export default class Bootstrap {
    * object container for dynamically imported plugins.
    *
    * @param name Plugin name.
-   * @param module Plugin interface (object with init functions).
+   * @param plugin Plugin interface (object with init functions).
    */
-  _bindPluginDependencies(name: string, module: Module) {
-    if (typeof module.initBind !== 'function') {
+  _bindPluginDependencies(name: string, plugin: PluginConfigFunctions) {
+    if (typeof plugin.initBind !== 'function') {
       return;
     }
 
     this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
 
-    module.initBind(ns, this._oc, this._config.bind, true, name);
+    plugin.initBind(ns, this._oc, this._config.bind, true, name);
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
   }
@@ -269,9 +269,9 @@ export default class Bootstrap {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
     this._config.plugins
-      .filter(({ module }) => typeof module.initServices === 'function')
-      .forEach(({ module }) => {
-        module.initServices!(ns, this._oc, this._config.services, false);
+      .filter(({ plugin }) => typeof plugin.initServices === 'function')
+      .forEach(({ plugin }) => {
+        plugin.initServices!(ns, this._oc, this._config.services, false);
       });
 
     this._config.initServicesApp(ns, this._oc, this._config.services);
@@ -280,14 +280,14 @@ export default class Bootstrap {
   /**
    * Service initialization for the dynamically loaded plugins.
    *
-   * @param module Plugin interface (object with init functions).
+   * @param plugin Plugin interface (object with init functions).
    */
-  _initPluginServices(module: Module) {
-    if (typeof module.initServices !== 'function') {
+  _initPluginServices(plugin: PluginConfigFunctions) {
+    if (typeof plugin.initServices !== 'function') {
       return;
     }
 
-    module.initServices(ns, this._oc, this._config.services, true);
+    plugin.initServices(ns, this._oc, this._config.services, true);
   }
 }
 

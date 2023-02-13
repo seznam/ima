@@ -1,22 +1,21 @@
 /* @if server **
-export default class ClientPageManager {};
+export class ClientPageManager {};
 /* @else */
-import AbstractPageManager from './AbstractPageManager';
-import PageFactory from '../PageFactory';
-import PageRenderer from '../renderer/PageRenderer';
-import PageStateManager from '../state/PageStateManager';
-import EventBus from '../../event/EventBus';
-import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import ImaWindow from '../../window/Window';
-import Controller from '../../controller/Controller';
-import { UnknownParameters } from '../../CommonTypes';
-import { EventHandler } from '../PageTypes';
+import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
+import { Controller } from '../../controller/Controller';
+import { EventBus, EventBusEventHandler } from '../../event/EventBus';
+import { UnknownParameters } from '../../types';
+import { Window as ImaWindow } from '../../window/Window';
+import { PageHandlerRegistry } from '../handler/PageHandlerRegistry';
+import { PageFactory } from '../PageFactory';
+import { PageRenderer } from '../renderer/PageRenderer';
+import { PageStateManager } from '../state/PageStateManager';
 
 /**
  * Page manager for controller on the client side.
  */
-export default class ClientPageManager extends AbstractPageManager {
+export class ClientPageManager extends AbstractPageManager {
   /**
    * The utility for manipulating the global context and global
    * client-side-specific APIs.
@@ -205,7 +204,9 @@ export default class ClientPageManager extends AbstractPageManager {
     const controllerInstance = this._managedPage.controllerInstance;
 
     if (typeof (controllerInstance as Controller)[method] === 'function') {
-      ((controllerInstance as Controller)[method] as EventHandler)(data);
+      ((controllerInstance as Controller)[method] as EventBusEventHandler)(
+        data
+      );
 
       return true;
     }
@@ -232,7 +233,7 @@ export default class ClientPageManager extends AbstractPageManager {
 
     for (const extension of extensions) {
       if (typeof extension[method] === 'function') {
-        (extension[method] as EventHandler)(data);
+        (extension[method] as EventBusEventHandler)(data);
 
         return true;
       }

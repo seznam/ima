@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import Controller, { IController } from '../controller/Controller';
-import AbstractRoute, { RouteParams } from './AbstractRoute';
-import GenericError from '../error/GenericError';
-import { IExtension } from '../extension/Extension';
-import { UnknownParameters } from '../CommonTypes';
-import IMAError from '../error/Error';
+import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
+import { Controller, IController } from '../controller/Controller';
+import { IMAError } from '../error/Error';
+import { GenericError } from '../error/GenericError';
+import { IExtension } from '../extension/Extension';
+import { UnknownParameters } from '../types';
 
 export interface RouteAction {
   type?: ActionTypes;
@@ -44,7 +44,7 @@ export interface RouteOptions {
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  */
-export default abstract class Router {
+export abstract class Router {
   /**
    * Initializes the router with the provided configuration.
    *

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters } from '../../CommonTypes';
+import { UnknownParameters } from '../../types';
 
 /**
  * Manager of the current page state and state history.
  */
-export default abstract class PageStateManager {
+export abstract class PageStateManager {
   onChange?: (newState: UnknownParameters) => void;
 
   /**

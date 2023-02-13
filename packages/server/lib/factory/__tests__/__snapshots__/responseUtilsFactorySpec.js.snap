@@ -398,6 +398,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;
@@ -421,6 +422,7 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;
@@ -441,6 +443,7 @@ exports[`responseUtilsFactory processContent should interpolate revival scripts 
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;

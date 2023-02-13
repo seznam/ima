@@ -1,5 +1,4 @@
 import { AbstractController } from '@ima/core';
-
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Events constants, which is firing to app.
  */
-enum Events {
+export enum RendererEvents {
   /**
    * PageRenderer fires event `$IMA.$PageRenderer.mounted` after
    * current page view is mounted to the DOM. Event's data contain
@@ -35,5 +35,3 @@ enum Events {
    */
   HYDRATE_ERROR = '$IMA.$PageRenderer.hydrateError',
 }
-
-export default Events;

@@ -1,7 +1,7 @@
-import Controller, { IController } from '../controller/Controller';
-import GenericError from '../error/GenericError';
-import AbstractRoute, { RouteParams } from './AbstractRoute';
+import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { RouteOptions } from './Router';
+import { Controller, IController } from '../controller/Controller';
+import { GenericError } from '../error/GenericError';
 
 /**
  * Path expression type used for router routes definition.
@@ -32,7 +32,7 @@ export type ExtractPathFunction = (path?: string) => Record<string, string>;
  *
  * @extends AbstractRoute
  */
-export default class DynamicRoute extends AbstractRoute {
+export class DynamicRoute extends AbstractRoute {
   protected _matcher: RegExp;
   protected _toPath: (params: RouteParams) => string;
   protected _extractParameters: (path?: string) => RouteParams;

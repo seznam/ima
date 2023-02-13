@@ -1,14 +1,17 @@
-import GenericError from '../../error/GenericError';
-import DispatcherImpl from '../../event/DispatcherImpl';
-import PageManager from '../../page/manager/PageManager';
-import AbstractRouter from '../AbstractRouter';
-import AbstractRoute from '../AbstractRoute';
-import { ActionTypes } from '../ActionTypes';
-import RouteEvents from '../Events';
-import RouteFactory from '../RouteFactory';
-import RouteNames from '../RouteNames';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable jest/no-conditional-expect */
 import { toMockedInstance } from 'to-mock';
+
+import { GenericError } from '../../error/GenericError';
+import { DispatcherImpl } from '../../event/DispatcherImpl';
+import { PageManager } from '../../page/manager/PageManager';
+import { AbstractRoute } from '../AbstractRoute';
+import { AbstractRouter } from '../AbstractRouter';
+import { ActionTypes } from '../ActionTypes';
+import { RouteFactory } from '../RouteFactory';
+import { RouteNames } from '../RouteNames';
 import { RouteAction } from '../Router';
+import { RouterEvents } from '../RouterEvents';
 
 class MockedAbstractRouter extends AbstractRouter {
   getPath = jest.fn();
@@ -564,7 +567,7 @@ describe('ima.core.router.AbstractRouter', () => {
       router._handle(route, params, options);
 
       expect(dispatcher.fire).toHaveBeenCalledWith(
-        RouteEvents.BEFORE_HANDLE_ROUTE,
+        RouterEvents.BEFORE_HANDLE_ROUTE,
         data,
         true
       );
@@ -590,7 +593,7 @@ describe('ima.core.router.AbstractRouter', () => {
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
-          RouteEvents.AFTER_HANDLE_ROUTE,
+          RouterEvents.AFTER_HANDLE_ROUTE,
           data,
           true
         );
@@ -617,7 +620,7 @@ describe('ima.core.router.AbstractRouter', () => {
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
-          RouteEvents.AFTER_HANDLE_ROUTE,
+          RouterEvents.AFTER_HANDLE_ROUTE,
           data,
           true
         );

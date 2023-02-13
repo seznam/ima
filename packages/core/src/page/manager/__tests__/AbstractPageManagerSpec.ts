@@ -1,19 +1,24 @@
-import Controller, { IController } from '../../../controller/Controller';
-import Extension from '../../../extension/Extension';
-import PageNavigationHandler from '../../../page/handler/PageNavigationHandler';
-import PageHandlerRegistry from '../../../page/handler/PageHandlerRegistry';
-import AbstractPageManager from '../AbstractPageManager';
-import PageRenderer from '../../../page/renderer/PageRenderer';
-import PageStateManager from '../../../page/state/PageStateManager';
-import RouteFactory from '../../../router/RouteFactory';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jest/no-conditional-expect */
+
 import { toMockedInstance } from 'to-mock';
-import AbstractController from '../../../controller/AbstractController';
-import { UnknownParameters } from '../../../CommonTypes';
-import PageFactory from '../../../page/PageFactory';
-import DynamicRoute from '../../../router/DynamicRoute';
-import StaticRoute from '../../../router/StaticRoute';
-import ControllerDecorator from '../../..//controller/ControllerDecorator';
-import { RouteOptions } from '../../..';
+
+import { ControllerDecorator } from '../../..//controller/ControllerDecorator';
+import { AbstractController } from '../../../controller/AbstractController';
+import { Controller, IController } from '../../../controller/Controller';
+import { Extension } from '../../../extension/Extension';
+import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
+import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
+import { PageFactory } from '../../../page/PageFactory';
+import { PageRenderer } from '../../../page/renderer/PageRenderer';
+import { PageStateManager } from '../../../page/state/PageStateManager';
+import { DynamicRoute } from '../../../router/DynamicRoute';
+import { RouteFactory } from '../../../router/RouteFactory';
+import { RouteOptions } from '../../../router/Router';
+import { StaticRoute } from '../../../router/StaticRoute';
+import { UnknownParameters } from '../../../types';
+import { AbstractPageManager } from '../AbstractPageManager';
 
 class AbstractControllerTest extends AbstractController {
   dependency: unknown;

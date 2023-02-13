@@ -1,6 +1,6 @@
-import { StringParameters } from '../../CommonTypes';
+import { StringParameters } from '../../types';
 import { RouteOptions } from '../Router';
-import StaticRoute from '../StaticRoute';
+import { StaticRoute } from '../StaticRoute';
 
 type toPathParam = { [key: string]: string | number };
 

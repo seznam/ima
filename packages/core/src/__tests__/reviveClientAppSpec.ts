@@ -2,13 +2,14 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
 import {
   AbstractPureComponent,
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/renderer/ClientPageRenderer';
+import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
+import React from 'react';
+
 import {
   AbstractController,
   getNamespace,

@@ -1,12 +1,12 @@
-import PageStateManager from './PageStateManager';
-import GenericError from '../../error/GenericError';
-import { UnknownParameters } from '../../CommonTypes';
+import { PageStateManager } from './PageStateManager';
+import { GenericError } from '../../error/GenericError';
+import { UnknownParameters } from '../../types';
 
 /**
  * Decorator for page state manager, which add logic for limiting Extension
  * competence.
  */
-export default class PageStateManagerDecorator extends PageStateManager {
+export class PageStateManagerDecorator extends PageStateManager {
   /**
    * The current page state manager.
    */

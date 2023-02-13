@@ -1,9 +1,9 @@
-import PageFactory from '../PageFactory';
-import ObjectContainer from '../../ObjectContainer';
-import ns from '../../Namespace';
-import AbstractController from '../../controller/AbstractController';
-import Extension, { IExtension } from '../../extension/Extension';
-import { RouteOptions } from '../..';
+import { AbstractController } from '../../controller/AbstractController';
+import { Extension, IExtension } from '../../extension/Extension';
+import { ns } from '../../Namespace';
+import { ObjectContainer } from '../../ObjectContainer';
+import { RouteOptions } from '../../router/Router';
+import { PageFactory } from '../PageFactory';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;

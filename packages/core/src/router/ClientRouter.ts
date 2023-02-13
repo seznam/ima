@@ -1,16 +1,16 @@
 /* @if server **
-export default class ClientRouter {};
+export class ClientRouter {};
 /* @else */
-import AbstractRouter from './AbstractRouter';
-import { ActionTypes } from './ActionTypes';
-import RouteFactory from './RouteFactory';
-import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
-import Window from '../window/Window';
-import { GenericError, RouteOptions } from '..';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
-import { RouteAction, RouteLocals } from './Router';
 import { RouteParams } from './AbstractRoute';
+import { AbstractRouter } from './AbstractRouter';
+import { ActionTypes } from './ActionTypes';
+import { RouteFactory } from './RouteFactory';
+import { RouteAction, RouteLocals, RouteOptions } from './Router';
+import { GenericError } from '../error/GenericError';
+import { Dispatcher } from '../event/Dispatcher';
+import { PageManager } from '../page/manager/PageManager';
+import { StringParameters, UnknownParameters } from '../types';
+import { Window } from '../window/Window';
 
 /**
  * Names of the DOM events the router responds to.
@@ -37,7 +37,7 @@ const MOUSE_LEFT_BUTTON = 0;
 /**
  * The client-side implementation of the {@link Router} interface.
  */
-export default class ClientRouter extends AbstractRouter {
+export class ClientRouter extends AbstractRouter {
   protected _window: Window;
   protected _boundHandleClick = (event: Event) =>
     this._handleClick(event as MouseEvent);

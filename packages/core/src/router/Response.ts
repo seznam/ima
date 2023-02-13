@@ -1,15 +1,16 @@
 /* @if client **
-export default class Response {};
+export class Response {};
 /* @else */
-import GenericError from '../error/GenericError';
 import { Response as ExpressResponse, CookieOptions } from 'express';
-import { UnknownParameters } from '../CommonTypes';
+
 import { RouteOptions } from './Router';
+import { GenericError } from '../error/GenericError';
+import { UnknownParameters } from '../types';
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
-export default class Response {
+export class Response {
   /**
    * The ExpressJS response object, or `undefined` if running at the
    * client side.

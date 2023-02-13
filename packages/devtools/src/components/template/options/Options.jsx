@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-target-blank */
+import { getSettings, setSettings } from '@/utils';
 import uid from 'easy-uid';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -6,7 +7,6 @@ import React from 'react';
 import { Button } from '@/components/atom';
 import { HookEntryContainer } from '@/components/molecule';
 import { PresetsModalContainer } from '@/components/organism';
-import { getSettings, setSettings } from '@/utils';
 
 import styles from './options.module.less';
 

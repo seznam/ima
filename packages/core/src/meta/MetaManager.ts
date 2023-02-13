@@ -25,7 +25,7 @@ export type MetaManagerRecord<K extends MetaManagerRecordKeys> = {
  *     elements with the `property` attribute, for example the OG meta
  *     tags (`og:type`, `og:image`, etc.).
  */
-export default abstract class MetaManager {
+export abstract class MetaManager {
   /**
    * Sets the page title.
    *

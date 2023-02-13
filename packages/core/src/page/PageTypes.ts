@@ -1,8 +1,8 @@
+import { Controller, IController } from '../controller/Controller';
+import { ControllerDecorator } from '../controller/ControllerDecorator';
+import { AbstractRoute } from '../router/AbstractRoute';
 import { RouteAction, RouteOptions } from '../router/Router';
-import { UnknownParameters } from '../CommonTypes';
-import Controller, { IController } from '../controller/Controller';
-import ControllerDecorator from '../controller/ControllerDecorator';
-import AbstractRoute from '../router/AbstractRoute';
+import { UnknownParameters } from '../types';
 
 // FIXME most of these types are probably always defined
 export type ManagedPage = {
@@ -33,5 +33,3 @@ export interface PageAction extends RouteAction {
 export type PageData = {
   status: number;
 } & UnknownParameters;
-
-export type EventHandler = (data?: UnknownParameters) => void;

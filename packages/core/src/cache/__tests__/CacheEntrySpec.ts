@@ -1,4 +1,4 @@
-import CacheEntry from '../CacheEntry';
+import { CacheEntry } from '../CacheEntry';
 
 describe('ima.core.cache.CacheEntry', () => {
   let cacheEntry: CacheEntry<number>;

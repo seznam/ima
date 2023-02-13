@@ -1,4 +1,4 @@
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 

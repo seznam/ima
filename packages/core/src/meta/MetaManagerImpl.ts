@@ -1,4 +1,5 @@
-import MetaManager, {
+import {
+  MetaManager,
   MetaAttributes,
   MetaManagerRecord,
   MetaValue,
@@ -7,7 +8,7 @@ import MetaManager, {
 /**
  * Default implementation of the {@link MetaManager} interface.
  */
-export default class MetaManagerImpl extends MetaManager {
+export class MetaManagerImpl extends MetaManager {
   protected _title: string;
   protected _metaName: Map<string, MetaManagerRecord<'content'>>;
   protected _metaProperty: Map<string, MetaManagerRecord<'property'>>;

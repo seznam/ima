@@ -1,10 +1,9 @@
-import type { UnknownParameters } from '@ima/core';
+import type { UnknownParameters, Utils } from '@ima/core';
 import memoizeOne from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
-import ErrorBoundary from './ErrorBoundary';
-import PageContext from '../PageContext';
-import { Utils } from '../types';
+import { ErrorBoundary } from './ErrorBoundary';
+import { PageContext } from '../PageContext';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -22,7 +21,7 @@ interface State {
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
-export default class ViewAdapter extends Component<ViewAdapterProps, State> {
+export class ViewAdapter extends Component<ViewAdapterProps, State> {
   private _getContextValue: (
     props: ViewAdapterProps,
     state: State
@@ -56,8 +55,9 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
     /**
      * The memoized context value.
      */
-    this._getContextValue = memoizeOne((props, state) =>
-      this.getContextValue(props, state)
+    this._getContextValue = memoizeOne(
+      (props: ViewAdapterProps, state: State) =>
+        this.getContextValue(props, state)
     );
 
     /**
@@ -98,7 +98,7 @@ export default class ViewAdapter extends Component<ViewAdapterProps, State> {
 
     return this.createContext(
       props.$Utils,
-      Object.assign.apply(null, [{}, ...selectedValues])
+      Object.assign.apply(null, [{}, ...selectedValues]) as UnknownParameters
     );
   }
 
