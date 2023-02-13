@@ -17,9 +17,6 @@
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
   "typedocMain": "./src/index.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/server/index.js",
-  "browser": "./dist/esm/client/index.js",
   "exports": {
     ".": {
       "types": "./dist/esm/client/index.d.ts",
@@ -43,13 +40,8 @@
         "require": "./dist/cjs/renderer/*.js"
       }
     },
-    "./hook/*": "./dist/hook/*.js",
-    "./*": {
-      "types": "./*.d.ts",
-      "default": "./*.js"
-    }
+    "./hook/*": "./dist/hook/*.js"
   },
-  "types": "./dist/esm/client/index.js",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",

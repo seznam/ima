@@ -34,10 +34,19 @@
     }
   ],
   "typedocMain": "./src/index.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/server/index.js",
-  "browser": "./dist/esm/client/index.js",
-  "types": "./dist/esm/client/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/client/index.d.ts",
+      "node": {
+        "import": "./dist/esm/server/index.js",
+        "require": "./dist/cjs/index.js"
+      },
+      "default": {
+        "import": "./dist/esm/client/index.js",
+        "require": "./dist/cjs/index.js"
+      }
+    }
+  },
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
