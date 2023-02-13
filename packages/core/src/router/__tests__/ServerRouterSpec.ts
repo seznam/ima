@@ -31,7 +31,8 @@ describe('ima.core.router.ServerRouter', () => {
       routeFactory,
       dispatcher,
       request,
-      response
+      response,
+      30000
     );
     router.init(routerConfig);
   });

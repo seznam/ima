@@ -1,11 +1,12 @@
 /* @if server **
 export class ClientRouter {};
 /* @else */
+import { RouteParams } from './AbstractRoute';
 import { AbstractRouter } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
-import { RouteOptions } from './Router';
-import { GenericError } from '..';
+import { RouteAction, RouteLocals, RouteOptions } from './Router';
+import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
 import { PageManager } from '../page/manager/PageManager';
 import { StringParameters, UnknownParameters } from '../types';
@@ -44,7 +45,13 @@ export class ClientRouter extends AbstractRouter {
     this._handlePopState(event as PopStateEvent);
 
   static get $dependencies() {
-    return [PageManager, RouteFactory, Dispatcher, Window];
+    return [
+      PageManager,
+      RouteFactory,
+      Dispatcher,
+      Window,
+      '?$Settings.$Router.middlewareTimeout',
+    ];
   }
 
   /**
@@ -55,14 +62,16 @@ export class ClientRouter extends AbstractRouter {
    * @param factory Factory for routes.
    * @param dispatcher Dispatcher fires events to app.
    * @param window The current global client-side APIs provider.
+   * @param middlewareTimeout Middleware timeout value in ms.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
-    window: Window
+    window: Window,
+    middlewareTimeout: number | undefined
   ) {
-    super(pageManager, factory, dispatcher);
+    super(pageManager, factory, dispatcher, middlewareTimeout);
 
     /**
      * Helper for accessing the native client-side APIs.
@@ -145,23 +154,28 @@ export class ClientRouter extends AbstractRouter {
    * @inheritDoc
    */
   redirect(
-    redirectUrl = '',
-    options = {},
-    {
-      type = ActionTypes.REDIRECT as string,
-      event = undefined,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      url = '',
-    } = {} as { type?: string; event?: Event; url?: string },
-    locals = {}
-  ) {
-    if (this._isSameDomain(redirectUrl)) {
-      let path = redirectUrl.replace(this.getDomain(), '');
+    url: string,
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
+  ): void {
+    if (this._isSameDomain(url)) {
+      let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
-      this.route(path, options, { type, event, url: redirectUrl }, locals);
+      this.route(
+        path,
+        options,
+        {
+          type: ActionTypes.REDIRECT,
+          event: undefined,
+          ...action,
+          url,
+        },
+        locals ?? {}
+      );
     } else {
-      this._window.redirect(redirectUrl);
+      this._window.redirect(url);
     }
   }
 
@@ -170,22 +184,22 @@ export class ClientRouter extends AbstractRouter {
    */
   async route(
     path: string,
-    options = {},
-    {
-      event = undefined,
-      type = ActionTypes.REDIRECT as string,
-      url = '',
-    } = {} as { type?: string; event?: Event; url?: string },
-    locals = {}
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
-    const action = {
-      event,
-      type,
-      url: url || this.getBaseUrl() + path,
-    };
-
     return super
-      .route(path, options, action, locals)
+      .route(
+        path,
+        options,
+        {
+          event: undefined,
+          type: ActionTypes.REDIRECT,
+          ...action,
+          url: this.getBaseUrl() + path,
+        },
+        locals
+      )
       .catch(error => this.handleError({ error }, {}, locals))
       .then(params => {
         // Hide error overlay
@@ -203,11 +217,13 @@ export class ClientRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  async handleError(
-    params: { [key: string]: GenericError | string },
-    options: Record<string, unknown> = {},
-    locals: Record<string, unknown> = {}
+  handleError(
+    params: RouteParams,
+    options?: Partial<RouteOptions>,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
+    options = options ?? {};
+
     if ($Debug) {
       console.error(params.error);
 
@@ -254,11 +270,9 @@ export class ClientRouter extends AbstractRouter {
       });
     }
 
-    return super
-      .handleError(params, options as RouteOptions, locals)
-      .catch((error: Error) => {
-        this._handleFatalError(error);
-      });
+    return super.handleError(params, options, locals).catch((error: Error) => {
+      this._handleFatalError(error);
+    });
   }
 
   /**
@@ -277,11 +291,7 @@ export class ClientRouter extends AbstractRouter {
    * @param error
    */
   _handleFatalError(error: Error) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     if ($IMA && typeof $IMA.fatalErrorHandler === 'function') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       $IMA.fatalErrorHandler(error);
     } else {
       if ($Debug) {

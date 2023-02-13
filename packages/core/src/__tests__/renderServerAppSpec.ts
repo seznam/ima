@@ -74,7 +74,6 @@ describe('render server application', () => {
   const options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: DocumentView,
   };
 
@@ -162,6 +161,9 @@ describe('render server application', () => {
           settings: {
             $Http: {
               cacheOptions: {},
+            },
+            $Router: {
+              middlewareTimeout: 30000,
             },
             $Page: {
               $Render: {

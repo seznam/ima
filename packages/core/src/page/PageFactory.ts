@@ -30,10 +30,7 @@ export class PageFactory {
   /**
    * Create new instance of {@link Controller}.
    */
-  createController(
-    controller: string | IController,
-    options: RouteOptions = {}
-  ) {
+  createController(controller: string | IController, options: RouteOptions) {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (

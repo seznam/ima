@@ -1,5 +1,5 @@
 import { AbstractRoute, RouteParams } from './AbstractRoute';
-import { RouteOptions } from './Router';
+import { RouteFactoryOptions } from './Router';
 import { Controller, IController } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
@@ -48,7 +48,7 @@ export class DynamicRoute extends AbstractRoute {
     pathExpression: RoutePathExpression,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options: RouteOptions
+    options?: Partial<RouteFactoryOptions>
   ) {
     super(name, pathExpression, controller, view, options);
 
@@ -61,7 +61,9 @@ export class DynamicRoute extends AbstractRoute {
     const { matcher, toPath, extractParameters } = pathExpression;
 
     if (!matcher || !(matcher instanceof RegExp)) {
-      throw new GenericError(`The pathExpression.matcher must be a RegExp.`);
+      throw new GenericError(`The pathExpression.matcher must be a RegExp.`, {
+        matcher,
+      });
     }
 
     /**

@@ -102,7 +102,14 @@ export { Request } from './router/Request';
 export { Response } from './router/Response';
 export { RouteFactory } from './router/RouteFactory';
 export { RouteNames } from './router/RouteNames';
-export { Router, type RouteOptions } from './router/Router';
+export {
+  Router,
+  type RouteOptions,
+  type RouteFactoryOptions,
+  type RouteAction,
+  type RouteLocals,
+  type RouterMiddleware,
+} from './router/Router';
 export { ServerRouter } from './router/ServerRouter';
 export { StaticRoute } from './router/StaticRoute';
 export {
