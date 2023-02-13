@@ -1,11 +1,12 @@
-import AbstractRoute, {
+import {
+  AbstractRoute,
   LOOSE_SLASHES_REGEXP,
-  ParamValue,
+  RouteParamValue,
   RouteParams,
 } from './AbstractRoute';
 import { RouteOptions } from './Router';
-import { StringParameters } from '../CommonTypes';
-import Controller, { IController } from '../controller/Controller';
+import { Controller, IController } from '../controller/Controller';
+import { StringParameters } from '../types';
 
 /**
  * Regular expression matching all control characters used in regular
@@ -80,7 +81,7 @@ const PARAMS_REGEXP_OPT =
  * router's configuration using string representation of the path expression
  * with special param fields identified by `:paramName` prefix.
  */
-export default class StaticRoute extends AbstractRoute {
+export class StaticRoute extends AbstractRoute {
   protected _trimmedPathExpression: string;
   protected _parameterNames: string[];
   protected _hasParameters: boolean;
@@ -137,13 +138,13 @@ export default class StaticRoute extends AbstractRoute {
         path = this._substituteRequiredParamInPath(
           path as string,
           paramName,
-          params[paramName] as ParamValue
+          params[paramName] as RouteParamValue
         );
       } else if (this._isOptionalParamInPath(path as string, paramName)) {
         path = this._substituteOptionalParamInPath(
           path as string,
           paramName,
-          params[paramName] as ParamValue
+          params[paramName] as RouteParamValue
         );
       } else {
         queryPairs.push([paramName, params[paramName]]);
@@ -182,7 +183,7 @@ export default class StaticRoute extends AbstractRoute {
   _substituteRequiredParamInPath(
     path: string,
     paramName: string,
-    paramValue: ParamValue
+    paramValue: RouteParamValue
   ) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
@@ -196,7 +197,7 @@ export default class StaticRoute extends AbstractRoute {
   _substituteOptionalParamInPath(
     path: string,
     paramName: string,
-    paramValue: ParamValue
+    paramValue: RouteParamValue
   ) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(

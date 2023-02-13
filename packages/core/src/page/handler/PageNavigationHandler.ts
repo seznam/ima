@@ -1,10 +1,10 @@
-import PageHandler from './PageHandler';
-import ActionTypes from '../../router/ActionTypes';
+import { PageHandler } from './PageHandler';
+import { ActionTypes } from '../../router/ActionTypes';
 import { RouteOptions } from '../../router/Router';
-import Window from '../../window/Window';
+import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
 
-export default class PageNavigationHandler extends PageHandler {
+export class PageNavigationHandler extends PageHandler {
   private _window: Window;
 
   static get $dependencies() {

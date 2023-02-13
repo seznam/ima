@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
-import { EventHandler } from '../page/PageTypes';
-import PageStateManager from '../page/state/PageStateManager';
+import { EventBusEventHandler } from '../event/EventBus';
+import { PageStateManager } from '../page/state/PageStateManager';
+import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IExtension {}
@@ -22,9 +22,9 @@ export interface IExtension {}
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  */
-export default abstract class Extension implements IExtension {
+export abstract class Extension implements IExtension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: PropertyKey]: any | EventHandler;
+  [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * Callback for initializing the controller extension after the route

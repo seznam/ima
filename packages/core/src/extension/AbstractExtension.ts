@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
-import Extension from './Extension';
-import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
-import GenericError from '../error/GenericError';
-import { EventHandler } from '../page/PageTypes';
-import PageStateManager from '../page/state/PageStateManager';
+import { Extension } from './Extension';
+import { GenericError } from '../error/GenericError';
+import { EventBusEventHandler } from '../event/EventBus';
+import { PageStateManager } from '../page/state/PageStateManager';
+import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**
  * Abstract extension
  */
-export default abstract class AbstractExtension implements Extension {
+export abstract class AbstractExtension implements Extension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: PropertyKey]: any | EventHandler | UnknownParameters;
+  [key: PropertyKey]: any | EventBusEventHandler | UnknownParameters;
 
   /**
    * State manager.

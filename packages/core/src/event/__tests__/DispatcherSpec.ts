@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import Dispatcher from '../DispatcherImpl';
+import { DispatcherImpl } from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {
   const handlers = {
@@ -18,9 +18,9 @@ describe('ima.core.event.DispatcherImpl', () => {
     data: 'data',
   };
 
-  let dispatcher: Dispatcher;
+  let dispatcher: DispatcherImpl;
   beforeEach(() => {
-    dispatcher = new Dispatcher();
+    dispatcher = new DispatcherImpl();
   });
   afterEach(() => {
     jest.clearAllMocks();

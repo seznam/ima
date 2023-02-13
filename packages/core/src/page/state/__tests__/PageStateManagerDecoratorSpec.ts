@@ -1,8 +1,8 @@
 import { toMockedInstance } from 'to-mock';
 
-import DispatcherImpl from '../../../event/DispatcherImpl';
-import PageStateManagerDecorator from '../PageStateManagerDecorator';
-import PageStateManagerImpl from '../PageStateManagerImpl';
+import { DispatcherImpl } from '../../../event/DispatcherImpl';
+import { PageStateManagerDecorator } from '../PageStateManagerDecorator';
+import { PageStateManagerImpl } from '../PageStateManagerImpl';
 
 describe('ima.core.page.state.PageStateManagerDecorator', () => {
   const dispatcher: DispatcherImpl = toMockedInstance(DispatcherImpl);

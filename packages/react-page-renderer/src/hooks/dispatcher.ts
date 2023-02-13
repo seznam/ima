@@ -1,4 +1,4 @@
-import { Dispatcher, type Listener } from '@ima/core';
+import type { Dispatcher, DispatcherListener } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -33,7 +33,7 @@ export interface useDispatcherType {
  */
 export function useDispatcher(
   event?: string,
-  callback?: Listener
+  callback?: DispatcherListener
 ): useDispatcherType {
   const { $Dispatcher } = useComponentUtils();
 

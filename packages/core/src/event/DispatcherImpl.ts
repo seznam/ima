@@ -1,6 +1,6 @@
-import Dispatcher, { DispatcherListener } from './Dispatcher';
-import { UnknownParameters } from '../CommonTypes';
-import GenericError from '../error/GenericError';
+import { Dispatcher, DispatcherListener } from './Dispatcher';
+import { GenericError } from '../error/GenericError';
+import { UnknownParameters } from '../types';
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -18,7 +18,7 @@ const EMPTY_SET = Object.freeze(new Set());
 /**
  * Default implementation of the {@link Dispatcher} interface.
  */
-export default class DispatcherImpl extends Dispatcher {
+export class DispatcherImpl extends Dispatcher {
   protected _eventListeners: Map<string, Map<DispatcherListener, Set<unknown>>>;
 
   static get $dependencies() {

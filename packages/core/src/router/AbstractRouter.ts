@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import AbstractRoute, { RouteParams } from './AbstractRoute';
-import ActionTypes from './ActionTypes';
-import Events from './Events';
-import RouteFactory from './RouteFactory';
-import RouteNames from './RouteNames';
-import Router, { RouteOptions } from './Router';
-import RouterMiddleware from './RouterMiddleware';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
-import Controller, { IController } from '../controller/Controller';
-import IMAError from '../error/Error';
-import GenericError from '../error/GenericError';
-import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
+import { AbstractRoute, RouteParams } from './AbstractRoute';
+import { ActionTypes } from './ActionTypes';
+import { RouteFactory } from './RouteFactory';
+import { RouteNames } from './RouteNames';
+import { Router, RouteOptions } from './Router';
+import { RouterEvents } from './RouterEvents';
+import { RouterMiddleware } from './RouterMiddleware';
+import { Controller, IController } from '../controller/Controller';
+import { IMAError } from '../error/Error';
+import { GenericError } from '../error/GenericError';
+import { Dispatcher } from '../event/Dispatcher';
+import { PageManager } from '../page/manager/PageManager';
+import { StringParameters, UnknownParameters } from '../types';
 
 /**
  * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
  */
-export default abstract class AbstractRouter extends Router {
+export abstract class AbstractRouter extends Router {
   /**
    * The page manager handling UI rendering, and transitions between
    * pages if at the client side.
@@ -488,7 +488,7 @@ export default abstract class AbstractRouter extends Router {
       action,
     };
 
-    this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
+    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
     // Pre-fetch view and controller which can be async
     const [controller, view] = await Promise.all([
@@ -514,7 +514,7 @@ export default abstract class AbstractRouter extends Router {
 
         eventData.response = response;
 
-        this._dispatcher.fire(Events.AFTER_HANDLE_ROUTE, eventData, true);
+        this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response as void | StringParameters;
       });

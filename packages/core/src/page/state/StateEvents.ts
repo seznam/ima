@@ -1,7 +1,7 @@
 /**
  * Events constants, which is firing to app.
  */
-enum Events {
+export enum StateEvents {
   /**
    * PateStateManager fire event `$IMA.$PageStateManager.beforeChangeState` before
    * state is patched. Event's data contain
@@ -16,5 +16,3 @@ enum Events {
    */
   AFTER_CHANGE_STATE = '$IMA.$PageStateManager.afterChangeState',
 }
-
-export default Events;

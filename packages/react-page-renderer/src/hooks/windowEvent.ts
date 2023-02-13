@@ -1,4 +1,4 @@
-import type { UnknownParameters, ListenerOptions } from '@ima/core';
+import type { CaptureOptions, UnknownParameters } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -20,7 +20,7 @@ import { useComponentUtils } from './componentUtils';
  *
  * // Using custom event target
  * const { dispatchEvent } = useWindowEvent({
- * 	event: 'click',
+ * 	event: 'click',npm
  * 	eventTarget: window.getElementById('page'),
  * 	callback: () => windowEventCallback(a, b),
  * 	useCapture: false,
@@ -58,7 +58,7 @@ export function useWindowEvent({
   eventTarget?: EventTarget;
   event?: string;
   callback?: (event: Event) => void;
-  useCapture?: boolean | ListenerOptions;
+  useCapture?: boolean | CaptureOptions;
 } = {}) {
   const { $Window } = useComponentUtils();
   const window = $Window.getWindow();

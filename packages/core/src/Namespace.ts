@@ -125,4 +125,8 @@ export class Namespace {
   }
 }
 
-export default new Namespace();
+export const ns = new Namespace();
+
+export function getNamespace() {
+  return ns;
+}

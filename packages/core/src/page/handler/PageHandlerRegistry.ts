@@ -1,10 +1,10 @@
-import PageHandler from './PageHandler';
-import GenericError from '../../error/GenericError';
-import Execution from '../../execution/Execution';
-import SerialBatch from '../../execution/SerialBatch';
+import { PageHandler } from './PageHandler';
+import { GenericError } from '../../error/GenericError';
+import { Execution } from '../../execution/Execution';
+import { SerialBatch } from '../../execution/SerialBatch';
 import { ManagedPage, PageAction } from '../PageTypes';
 
-export default class PageHandlerRegistry extends PageHandler {
+export class PageHandlerRegistry extends PageHandler {
   protected _pageHandlers: PageHandler[];
   protected _preManageHandlers?: Execution;
   protected _postManageHandlers?: Execution;

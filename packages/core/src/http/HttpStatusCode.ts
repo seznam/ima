@@ -6,7 +6,7 @@
  * @const
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
-const StatusCode = Object.freeze({
+export const HttpStatusCode = Object.freeze({
   OK: 200,
   NO_CONTENT: 204,
   BAD_REQUEST: 400,
@@ -16,5 +16,3 @@ const StatusCode = Object.freeze({
   TIMEOUT: 408,
   SERVER_ERROR: 500,
 });
-
-export default StatusCode;

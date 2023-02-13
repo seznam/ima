@@ -1,9 +1,9 @@
-import { UnknownParameters } from './CommonTypes';
-import ns, { Namespace } from './Namespace';
+import { ns, Namespace } from './Namespace';
+import { UnknownParameters } from './types';
 
 ns.namespace('ima.core');
 
-type Options = {
+type DependencyOptions = {
   optional: boolean;
 };
 
@@ -25,17 +25,19 @@ export type UnknownNonConstructable = NonConstructable<unknown>;
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export type FactoryFunction = (...args: any[]) => unknown;
 
-type EntryName =
+type Dependency =
   | string
   | UnknownConstructable
   | UnknownNonConstructable
   | FactoryFunction;
 
-export type EntryNameWithOptions = EntryName | [EntryName, Options];
+export type DependencyWithOptions =
+  | Dependency
+  | [Dependency, DependencyOptions];
 
 export type Dependencies = (
   | InstanceType<UnknownConstructable>
-  | EntryNameWithOptions
+  | DependencyWithOptions
 )[];
 
 const SPREAD_RE = /^\.../;
@@ -45,7 +47,7 @@ const OPTIONAL_RE = /^(...)?\?/;
  * aliases and constants, and allowing to reference classes in the application
  * namespace by specifying their fully qualified names.
  */
-export default class ObjectContainer {
+export class ObjectContainer {
   /**
    * The current binding state.
    *
@@ -60,7 +62,7 @@ export default class ObjectContainer {
    * object container binding state only by the bootstrap script.
    */
   private _bindingPlugin?: string;
-  private _entries: Map<EntryName, Entry> = new Map();
+  private _entries: Map<Dependency, Entry> = new Map();
   /**
    * The namespace container, used to access classes and values using
    * their fully qualified names.
@@ -401,7 +403,7 @@ export default class ObjectContainer {
    *        factory function.
    * @return The shared instance or value.
    */
-  get(name: EntryNameWithOptions) {
+  get(name: DependencyWithOptions) {
     const entry = this._getEntry(name);
 
     if (entry?.sharedInstance === null) {
@@ -433,7 +435,7 @@ export default class ObjectContainer {
    * @return `true` if the specified object, class or
    *         resource is registered with this object container.
    */
-  has(name: EntryName) {
+  has(name: Dependency) {
     return (
       this._entries.has(name) ||
       !!this._getEntryFromConstant(name) ||
@@ -458,7 +460,7 @@ export default class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  create(name: EntryNameWithOptions, dependencies: Dependencies = []) {
+  create(name: DependencyWithOptions, dependencies: Dependencies = []) {
     const entry = this._getEntry(name);
 
     return this._createInstanceFromEntry(entry as Entry, dependencies);
@@ -518,7 +520,7 @@ export default class ObjectContainer {
    * @throws If no such constant, alias, registry, interface
    *         implementation is known to this object container.
    */
-  _getEntry(name: EntryNameWithOptions) {
+  _getEntry(name: DependencyWithOptions) {
     let entryName = Array.isArray(name) ? name[0] : name;
 
     // Remove all meta symbols from the start of the alias
@@ -577,7 +579,7 @@ export default class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isOptional(name: EntryNameWithOptions) {
+  _isOptional(name: DependencyWithOptions) {
     return (
       (Array.isArray(name) && name[1]?.optional) ||
       (typeof name === 'string' && OPTIONAL_RE.test(name))
@@ -591,7 +593,7 @@ export default class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isSpread(name: EntryNameWithOptions) {
+  _isSpread(name: DependencyWithOptions) {
     const normalizedName = Array.isArray(name) ? name[0] : name;
 
     return typeof normalizedName === 'string' && SPREAD_RE.test(normalizedName);
@@ -683,15 +685,15 @@ export default class ObjectContainer {
           Array.isArray(dependency)
         ) {
           const retrievedDependency = this.get(
-            dependency as EntryNameWithOptions
+            dependency as DependencyWithOptions
           );
           if (
             Array.isArray(retrievedDependency) &&
-            this._isSpread(dependency as EntryNameWithOptions)
+            this._isSpread(dependency as DependencyWithOptions)
           ) {
             dependencies.push(...retrievedDependency);
           } else {
-            dependencies.push(retrievedDependency as EntryName);
+            dependencies.push(retrievedDependency as Dependency);
           }
         } else {
           dependencies.push(dependency);
@@ -718,7 +720,7 @@ export default class ObjectContainer {
    *         composition name in the constants. The method returns `null`
    *         if the specified composition name does not exist in the constants.
    */
-  _getEntryFromConstant(compositionName: EntryName) {
+  _getEntryFromConstant(compositionName: Dependency) {
     //TODO entries must be
     if (typeof compositionName !== 'string') {
       return null;
@@ -772,7 +774,7 @@ export default class ObjectContainer {
    *         specified path in the namespace. The method returns `null`
    *         if the specified path does not exist in the namespace.
    */
-  _getEntryFromNamespace(path: EntryName) {
+  _getEntryFromNamespace(path: Dependency) {
     if (typeof path !== 'string' || !this._namespace.has(path)) {
       return null;
     }
@@ -810,7 +812,7 @@ export default class ObjectContainer {
    *         if the specified classConstructor does not have defined
    *         `$dependencies`.
    */
-  _getEntryFromClassConstructor(classConstructor: EntryName) {
+  _getEntryFromClassConstructor(classConstructor: Dependency) {
     if (typeof classConstructor !== 'function') {
       return null;
     }
@@ -841,7 +843,7 @@ export default class ObjectContainer {
    * Formats name, function, class constructor to more compact
    * name/message to allow for cleaner debug Error messages.
    */
-  _getDebugName(name: EntryNameWithOptions) {
+  _getDebugName(name: DependencyWithOptions) {
     return `<strong>${
       name?.toString().split('\n').slice(0, 5).join('\n') ?? name
     }</strong>`;

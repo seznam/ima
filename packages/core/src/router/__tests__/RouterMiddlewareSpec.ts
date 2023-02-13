@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { toMockedInstance } from 'to-mock';
 
-import GenericError from '../../error/GenericError';
-import RouterMiddleware from '../RouterMiddleware';
+import { GenericError } from '../../error/GenericError';
+import { RouterMiddleware } from '../RouterMiddleware';
 
 describe('ima.core.router.RouterMiddleware', () => {
   const middlewareMock = jest.fn();
