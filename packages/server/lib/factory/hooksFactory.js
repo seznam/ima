@@ -118,9 +118,13 @@ module.exports = function hooksFactory({
         .get('$Router')
         .handleError({ error })
         .catch(e => {
+          e.cause = error;
+
           return renderStaticServerErrorPage({ ...event, error: e });
         });
     } catch (e) {
+      e.cause = event.error;
+
       return renderStaticServerErrorPage({ ...event, error: e });
     }
   }
@@ -135,6 +139,8 @@ module.exports = function hooksFactory({
       const router = context.app.oc.get('$Router');
 
       return router.handleNotFound({ error }).catch(e => {
+        e.cause = error;
+
         if (router.isRedirection(e)) {
           return _applyRedirect({ ...event, error: e });
         }
@@ -142,6 +148,8 @@ module.exports = function hooksFactory({
         return _applyError({ ...event, error: e });
       });
     } catch (e) {
+      e.cause = event.error;
+
       return _applyError({ ...event, error: e });
     }
   }
@@ -156,6 +164,8 @@ module.exports = function hooksFactory({
         url: error.getParams().url,
       };
     } catch (e) {
+      e.cause = event.error;
+
       return _applyError({ ...event, error: e });
     }
   }
@@ -179,6 +189,8 @@ module.exports = function hooksFactory({
           return _applyError(event);
         }
       } catch (e) {
+        e.cause = event.error;
+
         return renderStaticServerErrorPage({ ...event, error: e });
       }
     }
