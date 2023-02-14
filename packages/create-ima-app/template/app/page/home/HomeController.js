@@ -1,5 +1,4 @@
 import { HttpAgent } from '@ima/core';
-
 import AbstractPageController from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 

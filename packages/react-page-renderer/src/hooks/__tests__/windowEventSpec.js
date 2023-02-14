@@ -35,11 +35,15 @@ describe('useWindowEvent', () => {
         callback: jest.fn(),
       });
 
-      expect(result).toEqual({
-        window: windowMock,
-        dispatchEvent: windowMock.dispatchEvent,
-        createCustomEvent: contextMock.$Utils.$Window.createCustomEvent,
-      });
+      expect(result).toMatchInlineSnapshot(`
+        {
+          "createCustomEvent": [Function],
+          "dispatchEvent": [Function],
+          "window": {
+            "dispatchEvent": [MockFunction],
+          },
+        }
+      `);
     }, contextMock);
   });
 

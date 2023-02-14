@@ -1,3 +1,4 @@
+import { Dictionary } from '@ima/core';
 import { useCallback } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -7,12 +8,11 @@ import { useComponentUtils } from './componentUtils';
  *
  * @example
  * const localize = useLocalize();
- * @returns {function(string, Object<string, *>): string} Dictionary.get
+ *
+ * @returns Localized string.
  */
-function useLocalize() {
+export function useLocalize(): InstanceType<typeof Dictionary>['get'] {
   const { $Dictionary } = useComponentUtils();
 
   return useCallback((...params) => $Dictionary.get(...params), [$Dictionary]);
 }
-
-export { useLocalize };

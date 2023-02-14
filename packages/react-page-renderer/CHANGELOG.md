@@ -1,5 +1,20 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 28660d902: Fire method arguments are now in correct order.
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
 ## 19.0.0-rc.0
 
 ### Major Changes

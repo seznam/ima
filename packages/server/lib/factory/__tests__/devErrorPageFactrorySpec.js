@@ -1,7 +1,8 @@
 'use strict';
 
-const devErrorPageFactory = require('../devErrorPageFactory.js');
 const { toMock } = require('to-mock');
+
+const devErrorPageFactory = require('../devErrorPageFactory.js');
 
 jest.mock('fs', () => {
   const { toMockedInstance } = jest.requireActual('to-mock');

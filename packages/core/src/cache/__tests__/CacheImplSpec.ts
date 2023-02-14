@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
-import CacheFactory from '../CacheFactory';
-import Cache from '../CacheImpl';
-import MapStorage from '../../storage/MapStorage';
-import CacheEntry from '../CacheEntry';
+
+import { MapStorage } from '../../storage/MapStorage';
+import { CacheEntry } from '../CacheEntry';
+import { CacheFactory } from '../CacheFactory';
+import { CacheImpl } from '../CacheImpl';
 
 describe('ima.core.cache.CacheImpl', () => {
-  let cache: Cache<unknown>;
+  let cache: CacheImpl<unknown>;
   let cacheStorage: MapStorage<CacheEntry<unknown>>;
   let cacheFactory: CacheFactory<unknown>;
   const helper = {
@@ -16,7 +17,7 @@ describe('ima.core.cache.CacheImpl', () => {
   beforeEach(() => {
     cacheStorage = new MapStorage();
     cacheFactory = new CacheFactory();
-    cache = new Cache(cacheStorage, cacheFactory, helper, {
+    cache = new CacheImpl(cacheStorage, cacheFactory, helper, {
       enabled: true,
       ttl: 1000,
     });

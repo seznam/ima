@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time, printTime } from '@ima/dev-utils/dist/logger';
+import { logger, time, printTime } from '@ima/dev-utils/logger';
 import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';

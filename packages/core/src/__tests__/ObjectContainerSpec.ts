@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import ObjectContainer, { Entry } from '../ObjectContainer';
-import ns from '../Namespace';
-import { UnknownParameters } from '../CommonTypes';
+import { ns } from '../Namespace';
+import { ObjectContainer, Entry } from '../ObjectContainer';
+import { UnknownParameters } from '../types';
 
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;

@@ -1,6 +1,7 @@
 'use strict';
 
 const responseUtilsFactory = require('../responseUtilsFactory.js');
+
 const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('crypto', () => ({

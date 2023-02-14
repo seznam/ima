@@ -1,4 +1,4 @@
-import WeakMapStorage from '../WeakMapStorage';
+import { WeakMapStorage } from '../WeakMapStorage';
 
 describe('ima.storage.WeakMapStorage', () => {
   let map: WeakMapStorage;

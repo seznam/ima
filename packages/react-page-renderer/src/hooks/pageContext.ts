@@ -1,17 +1,18 @@
 import { GenericError } from '@ima/core';
 import { useContext } from 'react';
 
-import PageContext from '../PageContext';
+import { PageContext, PageContextType } from '../PageContext';
 
 /**
  * Provides direct access to IMA Page context.
  *
  * @example
  * const pageContext = usePageContext();
- * @returns {React.Consumer} IMA.js PageContext
+ *
+ * @returns App page context.
  */
-function usePageContext() {
-  const context = useContext(PageContext);
+export function usePageContext(): PageContextType {
+  const context = useContext<PageContextType>(PageContext);
 
   if (typeof context === 'undefined') {
     throw new GenericError(
@@ -21,5 +22,3 @@ function usePageContext() {
 
   return context;
 }
-
-export { usePageContext };

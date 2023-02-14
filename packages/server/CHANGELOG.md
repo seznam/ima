@@ -1,5 +1,21 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 021c103fa: add new metric concurrent requests to monitoring. Update dependency esmj/monitor to 0.4.0.
+
+### Minor Changes
+
+- 6510a25f6: Add information about error cause in places, where we used to throw away this information.
+
+### Patch Changes
+
+- 90d0121f2: Fixed IMA@18 and IMA@19 todos
+- 1a8d16890: Added `X-Request-ID` to revival settings. Can be accesed through $IMA.$RequestID
+- 804a51612: Added XSS protection to host and protocol in revival settings
+
 ## 19.0.0-rc.0
 
 ### Major Changes

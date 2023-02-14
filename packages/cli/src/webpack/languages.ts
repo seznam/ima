@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,
@@ -70,7 +70,7 @@ export function getLanguageEntryPoints(
     const modulePath = getLanguageModulePath(locale, rootDir);
 
     let content = `
-      import message from '${modulePath}';
+      import message from './${path.basename(modulePath)}';
 
       (function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
         $IMA.i18n = message;
@@ -82,7 +82,7 @@ export function getLanguageEntryPoints(
     if (useHMR) {
       content += `
       if (module.hot) {
-        module.hot.accept('${modulePath}', () => {
+        module.hot.accept('./${path.basename(modulePath)}', () => {
           $IMA.i18n = message;
 
           window.__IMA_HMR.emitter.emit('update', { type: 'languages' })

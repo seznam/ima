@@ -1,4 +1,4 @@
-export default (ns, oc, config) => {
+export const initServices = (ns, oc, config) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
 

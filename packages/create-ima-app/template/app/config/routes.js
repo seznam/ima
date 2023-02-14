@@ -1,8 +1,8 @@
 import { RouteNames } from '@ima/core';
-import HomeController from 'app/page/home/HomeController';
-import HomeView from 'app/page/home/HomeView';
 import ErrorController from 'app/page/error/ErrorController';
 import ErrorView from 'app/page/error/ErrorView';
+import HomeController from 'app/page/home/HomeController';
+import HomeView from 'app/page/home/HomeView';
 import NotFoundController from 'app/page/notFound/NotFoundController';
 import NotFoundView from 'app/page/notFound/NotFoundView';
 

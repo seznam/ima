@@ -4,14 +4,15 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jest/no-conditional-expect */
-import HttpProxy from '../HttpProxy';
-import StatusCode from '../StatusCode';
-import UrlTransformer from '../UrlTransformer';
 import { toMockedInstance } from 'to-mock';
-import Window from '../../window/ClientWindow';
-import GenericError from '../../error/GenericError';
+
+import { GenericError } from '../../error/GenericError';
+import { UnknownParameters } from '../../types';
+import { ClientWindow } from '../../window/ClientWindow';
 import { HttpAgentRequestOptions } from '../HttpAgent';
-import { UnknownParameters } from '../../CommonTypes';
+import { HttpProxy } from '../HttpProxy';
+import { HttpStatusCode } from '../HttpStatusCode';
+import { UrlTransformer } from '../UrlTransformer';
 
 describe('ima.core.http.HttpProxy', () => {
   jest.useFakeTimers();
@@ -24,10 +25,10 @@ describe('ima.core.http.HttpProxy', () => {
   const mockedUrlTransformer = toMockedInstance(UrlTransformer, {
     transform: (url: string) => url,
   });
-  const mockedWindowHelper = new Window();
+  const mockedWindowHelper = new ClientWindow();
 
   const TIMEOUT_ERROR = new GenericError('The HTTP request timed out', {
-    status: StatusCode.TIMEOUT,
+    status: HttpStatusCode.TIMEOUT,
   });
 
   let defaultOptions: HttpAgentRequestOptions;
@@ -93,7 +94,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should return a "body" field in error object, when promise is rejected', async () => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
-            status: StatusCode.TIMEOUT,
+            status: HttpStatusCode.TIMEOUT,
           })
         );
 
@@ -108,7 +109,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Timeout error', async () => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
-            status: StatusCode.TIMEOUT,
+            status: HttpStatusCode.TIMEOUT,
           })
         );
 
@@ -117,7 +118,7 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.TIMEOUT
+            HttpStatusCode.TIMEOUT
           );
         }
       });
@@ -129,7 +130,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, defaultOptions);
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.TIMEOUT
+            HttpStatusCode.TIMEOUT
           );
         }
       });
@@ -137,7 +138,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Forbidden', async () => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.FORBIDDEN,
+          status: HttpStatusCode.FORBIDDEN,
         });
 
         try {
@@ -145,7 +146,7 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.FORBIDDEN
+            HttpStatusCode.FORBIDDEN
           );
         }
       });
@@ -153,7 +154,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Not found', async () => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.NOT_FOUND,
+          status: HttpStatusCode.NOT_FOUND,
         });
 
         try {
@@ -161,7 +162,7 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.NOT_FOUND
+            HttpStatusCode.NOT_FOUND
           );
         }
       });
@@ -169,7 +170,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Internal Server Error', async () => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.SERVER_ERROR,
+          status: HttpStatusCode.SERVER_ERROR,
         });
 
         try {
@@ -177,7 +178,7 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.SERVER_ERROR
+            HttpStatusCode.SERVER_ERROR
           );
         }
       });
@@ -193,7 +194,7 @@ describe('ima.core.http.HttpProxy', () => {
           expect(false).toBeTruthy();
         } catch (error) {
           expect((error as GenericError).getParams().status).toBe(
-            StatusCode.SERVER_ERROR
+            HttpStatusCode.SERVER_ERROR
           );
         }
       });
@@ -267,7 +268,9 @@ describe('ima.core.http.HttpProxy', () => {
       }
 
       it('should return null body for HTTP status NO_CONTENT', async () => {
-        response = Object.assign(response, { status: StatusCode.NO_CONTENT });
+        response = Object.assign(response, {
+          status: HttpStatusCode.NO_CONTENT,
+        });
         const result = (await proxy.request(
           method,
           API_URL,

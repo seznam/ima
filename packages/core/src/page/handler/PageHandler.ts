@@ -2,7 +2,7 @@
 
 import { ManagedPage, PageAction } from '../PageTypes';
 
-export default abstract class PageHandler {
+export abstract class PageHandler {
   /**
    * Initializes the page handler.
    */

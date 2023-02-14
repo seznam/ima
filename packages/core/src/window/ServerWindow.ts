@@ -1,14 +1,14 @@
 /* @if client **
-export default class ServerWindow {};
+export class ServerWindow {};
 /* @else */
-import Window from './Window';
-import GenericError from '../error/GenericError';
-import { UnknownParameters } from '../CommonTypes';
+import { Window } from './Window';
+import { GenericError } from '../error/GenericError';
+import { UnknownParameters } from '../types';
 
 /**
  * Server-side implementation of the `Window` utility API.
  */
-export default class ServerWindow extends Window {
+export class ServerWindow extends Window {
   static get $dependencies() {
     return [];
   }

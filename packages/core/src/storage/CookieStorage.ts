@@ -1,10 +1,11 @@
 import memoizeOne from 'memoize-one';
-import GenericError from '../error/GenericError';
+
+import { Storage } from './Storage';
+import { GenericError } from '../error/GenericError';
 import { Dependencies } from '../ObjectContainer';
-import Request from '../router/Request';
-import Response from '../router/Response';
-import Window from '../window/Window';
-import Storage from './Storage';
+import { Request } from '../router/Request';
+import { Response } from '../router/Response';
+import { Window } from '../window/Window';
 
 /**
  * Implementation note: This is the largest possible safe value that has been
@@ -18,7 +19,7 @@ const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
  */
 const COOKIE_SEPARATOR = '; ';
 
-export type Options = {
+export type CookieOptions = {
   domain?: string;
   expires?: number | Date;
   httpOnly?: boolean;
@@ -29,7 +30,7 @@ export type Options = {
 };
 
 export type Cookie = {
-  options: Options;
+  options: CookieOptions;
   value: string | number | boolean | Date | undefined;
 };
 
@@ -38,7 +39,7 @@ export type Cookie = {
  * at the server side and the `document.cookie` property at the client
  * side. The storage caches the cookies internally.
  */
-export default class CookieStorage extends Storage<Cookie['value']> {
+export class CookieStorage extends Storage<Cookie['value']> {
   /**
    * The window utility used to determine whether the IMA is being run
    * at the client or at the server.
@@ -63,7 +64,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
   /**
    * The overriding cookie attribute values.
    */
-  private _options: Options = {
+  private _options: CookieOptions = {
     path: '/',
     expires: undefined,
     maxAge: undefined,
@@ -116,7 +117,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
   /**
    * @inheritDoc
    */
-  init(options: Options = {}, transformFunction = {}): this {
+  init(options: CookieOptions = {}, transformFunction = {}): this {
     this._transformFunction = Object.assign(
       this._transformFunction,
       transformFunction
@@ -157,7 +158,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    *        `httpOnly` and `secure` flags set the flags of the
    *        same name of the cookie.
    */
-  set(name: string, value: Cookie['value'], options: Options = {}): this {
+  set(name: string, value: Cookie['value'], options: CookieOptions = {}): this {
     options = Object.assign({}, this._options, options);
 
     if (value === undefined) {
@@ -191,7 +192,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    *        same name of the cookie.
    * @return This storage.
    */
-  delete(name: string, options: Options = {}): this {
+  delete(name: string, options: CookieOptions = {}): this {
     if (this._storage.has(name)) {
       this.set(name, undefined, options);
       this._storage.delete(name);
@@ -344,7 +345,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    *        and full list of cookie attributes see
    *        http://tools.ietf.org/html/rfc2965#page-5
    */
-  recomputeCookieMaxAgeAndExpires(options: Options): void {
+  recomputeCookieMaxAgeAndExpires(options: CookieOptions): void {
     if (options.maxAge || options.expires) {
       options.expires = this.getExpirationAsDate(
         (options.maxAge || options.expires) as number | string | Date
@@ -450,7 +451,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
   #generateCookieString(
     name: string,
     value: Cookie['value'],
-    options: Options
+    options: CookieOptions
   ): string {
     let cookieString =
       name + '=' + this._transformFunction.encode(value as string);
@@ -475,7 +476,7 @@ export default class CookieStorage extends Storage<Cookie['value']> {
    *        header.
    */
   #extractCookie(cookieString: string): Cookie & { name?: string } {
-    const cookieOptions: Options = {};
+    const cookieOptions: CookieOptions = {};
     let cookieName;
     let cookieValue;
 

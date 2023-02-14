@@ -1,6 +1,8 @@
+/* eslint-disable import/order */
 import { shallow } from 'enzyme';
 
 import { Actions } from '@/constants';
+
 jest.mock('@/utils');
 import * as utils from '@/utils';
 

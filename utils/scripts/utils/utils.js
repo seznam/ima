@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 const child = require('child_process');
-const chalk = require('chalk');
-const fs = require('fs-extra');
 const path = require('path');
+
+const chalk = require('chalk');
 const chokidar = require('chokidar');
+const fs = require('fs-extra');
 
 const IGNORED = [
   '.DS_Store',

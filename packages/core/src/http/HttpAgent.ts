@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { StringParameters, UnknownParameters } from '../CommonTypes';
 import { HttpProxyRequestParams } from './HttpProxy';
+import { StringParameters, UnknownParameters } from '../types';
 
 /**
  * Options for a request sent using the HTTP agent.
@@ -63,7 +63,7 @@ export type HttpAgentResponse = {
  * The {@link HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  */
-export default abstract class HttpAgent {
+export abstract class HttpAgent {
   /**
    * Sends an HTTP GET request to the specified URL, sending the provided
    * data as query parameters.

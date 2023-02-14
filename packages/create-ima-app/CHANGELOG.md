@@ -1,5 +1,24 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+
 ## 19.0.0-rc.0
 
 ### Major Changes

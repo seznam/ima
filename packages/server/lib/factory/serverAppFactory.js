@@ -1,12 +1,11 @@
 'use strict';
 
-const { Event } = require('../emitter.js');
-
-const staticPageFactory = require('./staticPageFactory.js');
-const IMAInternalFactory = require('./IMAInternalFactory.js');
-const hooksFactory = require('./hooksFactory.js');
 const devErrorPageFactory = require('./devErrorPageFactory.js');
+const hooksFactory = require('./hooksFactory.js');
+const IMAInternalFactory = require('./IMAInternalFactory.js');
 const responseUtilsFactory = require('./responseUtilsFactory.js');
+const staticPageFactory = require('./staticPageFactory.js');
+const { Event } = require('../emitter.js');
 
 module.exports = function serverAppFactory({
   environment,
