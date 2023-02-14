@@ -1,14 +1,15 @@
-import MetaManager, {
+import { PageHandler } from './PageHandler';
+import {
+  MetaManager,
   MetaManagerRecord,
   MetaManagerRecordKeys,
   MetaValue,
 } from '../../meta/MetaManager';
-import Window from '../../window/Window';
-import PageHandler from './PageHandler';
+import { Window } from '../../window/Window';
 
 export const IMA_META_DATA_ATTR = 'data-ima-meta';
 
-export default class PageMetaHandler extends PageHandler {
+export class PageMetaHandler extends PageHandler {
   #window: Window;
   #metaManager: MetaManager;
   #managed = false;

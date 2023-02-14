@@ -1,4 +1,4 @@
-import Error from './Error';
+import { IMAError } from './Error';
 
 /**
  * Implementation of the {@link Error} interface, providing more advanced
@@ -6,8 +6,12 @@ import Error from './Error';
  *
  * @extends Error
  */
-export default class GenericError extends Error {
-  protected _params: { status?: number; [key: string]: unknown };
+export class GenericError extends IMAError {
+  protected _params: {
+    cause?: Error | string;
+    status?: number;
+    [key: string]: unknown;
+  };
 
   /**
    * Initializes the generic IMA error.
@@ -17,14 +21,9 @@ export default class GenericError extends Error {
    *        details related to the error. It is recommended to set the
    *        `status` field to the HTTP response code that should be sent
    *        to the client.
-   * @param dropInternalStackFrames Whether or not the call stack
-   *        frames referring to the constructors of the custom errors should
-   *        be excluded from the stack of this error (just like the native
-   *        platform call stack frames are dropped by the JS engine).
-   *        This flag is enabled by default.
    */
-  constructor(message: string, params = {}, dropInternalStackFrames = true) {
-    super(message, dropInternalStackFrames);
+  constructor(message: string, params = {}) {
+    super(message, params);
 
     /**
      * The data providing additional details related to this error.
@@ -36,7 +35,7 @@ export default class GenericError extends Error {
    * @inheritDoc
    */
   getHttpStatus(): number {
-    return this._params.status || 500;
+    return this._params.status || super.getHttpStatus();
   }
 
   /**
@@ -44,5 +43,19 @@ export default class GenericError extends Error {
    */
   getParams() {
     return this._params;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  isClientError(): boolean {
+    return this.getHttpStatus() >= 400 && this.getHttpStatus() < 500;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  isRedirection(): boolean {
+    return this.getHttpStatus() >= 300 && this.getHttpStatus() < 400;
   }
 }

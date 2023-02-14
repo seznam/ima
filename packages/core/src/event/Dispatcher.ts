@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters } from '../CommonTypes';
+import { UnknownParameters } from '../types';
 
-export type Listener = (data: UnknownParameters) => unknown;
+export type DispatcherListener = (data: UnknownParameters) => unknown;
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -13,7 +13,7 @@ export type Listener = (data: UnknownParameters) => unknown;
  * propagate events from controllers to UI components when modifying/passing
  * the state is impractical for any reason.
  */
-export default abstract class Dispatcher {
+export abstract class Dispatcher {
   /**
    * Deregisters all event listeners currently registered with this
    * dispatcher.
@@ -39,7 +39,7 @@ export default abstract class Dispatcher {
    *        will be bound in the event listener.
    * @return This dispatcher.
    */
-  listen(event: string, listener: Listener, scope?: unknown) {
+  listen(event: string, listener: DispatcherListener, scope?: unknown) {
     return this;
   }
 
@@ -54,7 +54,7 @@ export default abstract class Dispatcher {
    *        would be bound in the event listener.
    * @return This dispatcher.
    */
-  unlisten(event: string, listener: Listener, scope?: unknown) {
+  unlisten(event: string, listener: DispatcherListener, scope?: unknown) {
     return this;
   }
 

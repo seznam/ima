@@ -1,13 +1,13 @@
 /* @if server **
-export default class ClientWindow {};
+export class ClientWindow {};
 /* @else */
-import { UnknownParameters } from '../CommonTypes';
-import Window, { ListenerOptions } from './Window';
+import { Window, CaptureOptions } from './Window';
+import { UnknownParameters } from '../types';
 
 /**
  * Client-side implementation of the {@link Window} utility API.
  */
-export default class ClientWindow extends Window {
+export class ClientWindow extends Window {
   private _scopedListeners = new WeakMap();
 
   static get $dependencies() {
@@ -306,7 +306,7 @@ export default class ClientWindow extends Window {
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
-    useCapture: boolean | ListenerOptions,
+    useCapture: boolean | CaptureOptions,
     scope: unknown,
     remove = false
   ) {

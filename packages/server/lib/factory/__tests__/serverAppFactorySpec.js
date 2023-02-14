@@ -1,3 +1,4 @@
+const { createMonitoring } = require('@esmj/monitor');
 const {
   GenericError,
   ServerRouter,
@@ -5,11 +6,12 @@ const {
   PageStateManager,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
-const serverAppFactory = require('../serverAppFactory.js');
+
 const { Emitter, Event } = require('../../emitter.js');
-const { createMonitoring } = require('@esmj/monitor');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
+const serverAppFactory = require('../serverAppFactory.js');
+
 const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('fs', () => {
@@ -138,7 +140,6 @@ describe('Server App Factory', () => {
                 run: jest.fn(),
               },
               oc: {
-                // TODO IMA@18+ change for imports from @ima/core
                 get(name) {
                   if (name === '$Router') {
                     return router;
@@ -500,20 +501,6 @@ describe('Server App Factory', () => {
     });
 
     it('should render static error page for non $Debug mode without initialized app in context', async () => {
-      environment.$Debug = false;
-      const error = new Error('Custom');
-
-      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.status).toBe(500);
-      expect(response.cache).toBeFalsy();
-      expect(response.static).toBeTruthy();
-      expect(response.content).toBe('read file content');
-      expect(response.error).toEqual(error);
-    });
-
-    it('should render static error page for overloaded server', async () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 

@@ -1,4 +1,4 @@
-export default (ns, oc, config) => {
+export const initServices = (ns, oc, config) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
 
@@ -41,5 +41,21 @@ export default (ns, oc, config) => {
       },
       true
     );
+  }
+
+  /**
+   * HMR event handler to handle HMR ima app updates
+   */
+  if ($Debug && typeof window !== 'undefined') {
+    window.__IMA_HMR?.emitter?.on('update', ({ type }) => {
+      if (type === 'languages') {
+        oc.get('$Dictionary').init({
+          ...config.dictionary,
+          dictionary: window.$IMA.i18n,
+        });
+
+        oc.get('$Router').route(window.location.pathname);
+      }
+    });
   }
 };

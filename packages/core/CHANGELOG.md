@@ -1,5 +1,70 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 73ae7af1e: Added missing TS exports.
+  All internal modules now use named exports.
+
+  #### Breaking change
+
+  `StatusCode` has been renamed to `HttpStatusCode`
+
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+- 7b5c19ba1: Router middlewares now support `next` callback, which when defined, has to be called, otherwise the middleware will eventually timeout and not proceed any further. This enables some additional features, where you are able to stop route processing by not calling the next functio if desired.
+  Middlewares can now return object value, which will be merged to the locals object, received as a second argument in middleware function
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- 464d307ae: Removed `ExtensibleError`
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 2f789cdae: Add new methods `isClientError` and `isRedirection` to `GenericError`.
+- ceb4cbd12: Added new `onRun` event to IMA runner
+- 961d65688: MetaManager set\* methods now return `this`, this means that set methods can be chained
+
+### Patch Changes
+
+- Updated dependencies [c0fe68ef3]
+  - @ima/helpers@19.0.0-rc.0
+
+## 18.1.0
+
+### Minor Changes
+
+- a7de413a2: Replaced locale-loader with custom compilation process of language files, this fixes an issue where newly added language files are not visible by the webpack compile and requires restart with forced cache clear.
+  Implemented custom solution for hot module replacement API for language files (HMR for language files should be much faster and only )
+
 ## 18.0.3
 
 ### Patch Changes

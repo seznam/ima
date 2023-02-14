@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as Helper from '@ima/helpers';
-
-import Cache from '../../cache/CacheImpl';
-import GenericError from '../../error/GenericError';
-import HttpAgentImpl from '../HttpAgentImpl';
-import { HttpAgentResponse } from '../HttpAgent';
-import HttpAgentProxy from '../HttpProxy';
-import CookieStorage from '../../storage/CookieStorage';
 import { toMockedInstance } from 'to-mock';
+
+import { CacheImpl } from '../../cache/CacheImpl';
+import { GenericError } from '../../error/GenericError';
+import { CookieStorage } from '../../storage/CookieStorage';
+import { HttpAgentResponse } from '../HttpAgent';
+import { HttpAgentImpl } from '../HttpAgentImpl';
+import { HttpProxy } from '../HttpProxy';
 
 describe('ima.core.http.HttpAgentImpl', () => {
   let http: HttpAgentImpl;
-  const proxy = toMockedInstance(HttpAgentProxy);
-  const cache = toMockedInstance(Cache);
+  const proxy = toMockedInstance(HttpProxy);
+  const cache = toMockedInstance(CacheImpl);
   const cookie = toMockedInstance(CookieStorage);
   let options = null;
   let data: HttpAgentResponse;

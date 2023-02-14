@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 

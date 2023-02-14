@@ -1,5 +1,5 @@
-import { StringParameters } from '../../CommonTypes';
-import AbstractRoute from '../AbstractRoute';
+import { StringParameters } from '../../types';
+import { AbstractRoute } from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 
 class MockedAbstractRoute extends AbstractRoute {

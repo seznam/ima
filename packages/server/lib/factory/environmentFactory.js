@@ -1,5 +1,6 @@
-const helpers = require('@ima/helpers');
 const path = require('path');
+
+const helpers = require('@ima/helpers');
 
 const prod = 'prod';
 const dev = 'dev';

@@ -23,6 +23,13 @@ export default (ns, oc, config) => {
           prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
         },
       },
+      $Router: {
+        /**
+         * Middleware execution timeout, see https://imajs.io/basic-features/routing/middlewares#execution-timeout
+         * for more information.
+         */
+        middlewareTimeout: 30000,
+      },
       $Cache: {
         enabled: true, //Turn on/off cache for all application.
         ttl: 60000, // Default time to live for cached value in ms.

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import { formatError, parseError } from '@ima/dev-utils/dist/cliUtils';
-import { logger } from '@ima/dev-utils/dist/logger';
+import { formatError, parseError } from '@ima/dev-utils/cliUtils';
+import { logger } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';

@@ -1,6 +1,6 @@
-import MapStorage from '../MapStorage';
-import SessionMapStorage from '../SessionMapStorage';
-import SessionStorage from '../SessionStorage';
+import { MapStorage } from '../MapStorage';
+import { SessionMapStorage } from '../SessionMapStorage';
+import { SessionStorage } from '../SessionStorage';
 
 describe('ima.storage.SessionMapStorage', () => {
   let sessionMap: SessionMapStorage<unknown>;

@@ -35,6 +35,6 @@ describe('useSettings', () => {
       result = useSettings('invalid.settings.path');
     }, contextMock);
 
-    expect(result).toStrictEqual({});
+    expect(result).toBeUndefined();
   });
 });

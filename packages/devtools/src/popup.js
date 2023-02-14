@@ -1,6 +1,7 @@
 import './assets/less/popup.module.less';
-import { Actions, State } from '@/constants';
 import { getSettings, setSettings, getCurrentTab, toggleClass } from '@/utils';
+
+import { Actions, State } from '@/constants';
 
 /**
  * Shows alert message based on passed state attribute and hides the others.

@@ -1,3 +1,4 @@
+import { getCurrentTab } from '@/utils';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -5,7 +6,6 @@ import React from 'react';
 import { Loader } from '@/components/atom';
 import { SplitPane } from '@/components/organism';
 import { Actions } from '@/constants';
-import { getCurrentTab } from '@/utils';
 
 import styles from './panel.module.less';
 

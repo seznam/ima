@@ -1,13 +1,13 @@
-import PageStateManager from '../page/state/PageStateManager';
-import Controller from './Controller';
-import Extension, { IExtension } from '../extension/Extension';
-import { UnknownParameters } from '../CommonTypes';
+import { Controller } from './Controller';
+import { Extension, IExtension } from '../extension/Extension';
+import { PageStateManager } from '../page/state/PageStateManager';
+import { UnknownParameters } from '../types';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
  * default implementation of the most of the API.
  */
-export default abstract class AbstractController extends Controller {
+export class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
   protected _extensions: Map<Extension | IExtension, Extension> = new Map();
   /**

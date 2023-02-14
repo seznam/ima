@@ -4,10 +4,10 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import PageNavigationHandler from '../PageNavigationHandler';
-import ClientWindow from '../../../window/ClientWindow';
-import ActionTypes from '../../../router/ActionTypes';
+import { ActionTypes } from '../../../router/ActionTypes';
+import { ClientWindow } from '../../../window/ClientWindow';
 import { ManagedPage, PageAction } from '../../PageTypes';
+import { PageNavigationHandler } from '../PageNavigationHandler';
 
 window.scrollTo = jest.fn();
 
@@ -47,9 +47,13 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
-      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {
-        url: 'http://localhost/',
-      } as PageAction);
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage as ManagedPage,
+        {
+          url: 'http://localhost/',
+        } as PageAction
+      );
 
       expect(replaceStateMock).toHaveBeenCalled();
       expect(pushStateMock).toHaveBeenCalled();
@@ -62,10 +66,14 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
 
-      handler.handlePreManagedState({} as ManagedPage, nextManagedPage, {
-        url: 'http://localhost/final_url',
-        type: ActionTypes.REDIRECT,
-      } as PageAction);
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage as ManagedPage,
+        {
+          url: 'http://localhost/final_url',
+          type: ActionTypes.REDIRECT,
+        } as PageAction
+      );
 
       expect(replaceStateMock).toHaveBeenCalled();
       expect(pushStateMock).not.toHaveBeenCalled();
@@ -80,7 +88,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState(
         undefined as unknown as ManagedPage,
-        nextManagedPage,
+        nextManagedPage as ManagedPage,
         {
           url: 'http://localhost/',
         } as PageAction
@@ -99,7 +107,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState(
         undefined as unknown as ManagedPage,
-        nextManagedPage,
+        nextManagedPage as ManagedPage,
         {
           url: 'http://localhost/',
           action: ActionTypes.POP_STATE,
@@ -118,7 +126,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState(
         {} as ManagedPage,
-        nextManagedPage,
+        nextManagedPage as ManagedPage,
         {} as PageAction
       );
 
@@ -132,7 +140,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState(
         {} as ManagedPage,
-        nextManagedPage,
+        nextManagedPage as ManagedPage,
         {} as PageAction
       );
 
@@ -149,7 +157,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const scroll = { x: 0, y: 340 };
 
       handler.handlePostManagedState(
-        managedPage,
+        managedPage as ManagedPage,
         {} as ManagedPage,
         {
           event: { state: { scroll } },
@@ -166,7 +174,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const managedPage = { options: { autoScroll: true } };
 
       handler.handlePostManagedState(
-        managedPage,
+        managedPage as ManagedPage,
         {} as ManagedPage,
         {} as PageAction
       );
@@ -182,7 +190,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const scroll = { x: 0, y: 340 };
 
       handler.handlePostManagedState(
-        managedPage,
+        managedPage as ManagedPage,
         {} as ManagedPage,
         {
           event: { state: { scroll } },

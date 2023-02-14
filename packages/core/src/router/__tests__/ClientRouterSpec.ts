@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 
-import Dispatcher from '../../event/Dispatcher';
-import PageManager from '../../page/manager/PageManager';
-import ActionTypes from '../ActionTypes';
-import ClientRouter from '../ClientRouter';
-import RouteFactory from '../RouteFactory';
-import ClientWindow from '../../window/ClientWindow';
-
 import { toMockedInstance } from 'to-mock';
+
+import { Dispatcher } from '../../event/Dispatcher';
+import { PageManager } from '../../page/manager/PageManager';
+import { ClientWindow } from '../../window/ClientWindow';
+import { ActionTypes } from '../ActionTypes';
+import { ClientRouter } from '../ClientRouter';
+import { RouteFactory } from '../RouteFactory';
 
 describe('ima.core.router.ClientRouter', () => {
   let router: ClientRouter;
@@ -27,7 +27,13 @@ describe('ima.core.router.ClientRouter', () => {
   };
 
   beforeEach(() => {
-    router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
+    router = new ClientRouter(
+      pageRenderer,
+      routeFactory,
+      dispatcher,
+      window,
+      30000
+    );
 
     jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
 

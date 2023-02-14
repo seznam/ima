@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
@@ -16,6 +16,7 @@ import {
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
+import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
   createDevServerConfig,
@@ -125,6 +126,11 @@ const dev: HandlerFn = async args => {
 
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
+
+    // Compile language files
+    logger.info(`Compiling language files...`, { trackTime: true });
+    await compileLanguages(imaConfig, args.rootDir, true);
+    logger.endTracking();
 
     // Generate webpack config
     const config = await createWebpackConfig(args, imaConfig);

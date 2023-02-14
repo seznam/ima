@@ -1,7 +1,7 @@
 import {
   parseCompileError,
   resolveErrorType,
-} from '@ima/dev-utils/dist/compileErrorParser';
+} from '@ima/dev-utils/compileErrorParser';
 import { useContext, useEffect, useState } from 'react';
 import { StatsError } from 'webpack';
 
