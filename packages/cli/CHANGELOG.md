@@ -1,5 +1,18 @@
 # Change Log
 
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/error-overlay@19.0.0-rc.2
+  - @ima/hmr-client@19.0.0-rc.1
+  - @ima/dev-utils@19.0.0-rc.2
+
 ## 19.0.0-rc.1
 
 ### Minor Changes
