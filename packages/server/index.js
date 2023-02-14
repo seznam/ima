@@ -35,13 +35,18 @@ module.exports = function createIMAServer({
     return manifestRequire(`server/locale/${language}.js`).default;
   }
 
-  performance = performance || createMonitoring();
-  performance.monitor.start();
-
   emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
   logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
+
+  const concurrentRequestsMetric =
+    require('./lib/metric/concurrentRequestsMetricFactory.js')({
+      instanceRecycler,
+    });
+  performance = performance || createMonitoring();
+  performance.monitor.add(concurrentRequestsMetric);
+  performance.monitor.start();
 
   const urlParser = require('./lib/middlewares/urlParserMiddlewareFactory.js')({
     environment,
