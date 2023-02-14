@@ -38,22 +38,29 @@ const ErrorParams: FunctionComponent<ErrorParamsProps> = ({ params }) => {
     return null;
   }
 
+  let stringParams = '';
+  let parsedParams = {};
+
+  try {
+    // Make sure the params are parse-able
+    stringParams = typeof params !== 'string' ? JSON.stringify(params) : params;
+    parsedParams = JSON.parse(stringParams);
+  } catch (error) {
+    return null;
+  }
+
   return (
     <div className='ima-error-params'>
       <div className='ima-error-params__title'>
         <div>Error params:</div>
         <div className='ima-error-params__size'>
-          {
-            (typeof params !== 'string' ? JSON.stringify(params) : params)
-              .length
-          }{' '}
-          chars
+          {stringParams.length} chars
         </div>
       </div>
       <div className='ima-error-params__json-tree'>
         <JSONTree
           hideRoot={true}
-          data={typeof params === 'string' ? JSON.parse(params) : params}
+          data={parsedParams}
           shouldExpandNode={(keyPath, data, level) => level < 5}
           invertTheme={false}
           theme={{ extend: THEME }}
