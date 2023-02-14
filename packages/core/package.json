@@ -47,7 +47,8 @@
         "import": "./dist/esm/client/index.js",
         "require": "./dist/cjs/index.js"
       }
-    }
+    },
+    "./setupJest.js": "./setupJest.js"
   },
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
