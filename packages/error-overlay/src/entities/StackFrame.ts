@@ -1,4 +1,4 @@
-import { FragmentLine } from '@ima/dev-utils/dist/sourceFragment';
+import { FragmentLine } from '@ima/dev-utils/sourceFragment';
 
 /**
  * StackFrame entity. It contains information about parsed stack frame

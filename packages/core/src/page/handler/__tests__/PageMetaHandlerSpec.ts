@@ -3,7 +3,7 @@
  */
 
 import { ClientWindow, MetaManager, MetaManagerImpl, Window } from '../../../';
-import PageMetaHandler, { IMA_META_DATA_ATTR } from '../PageMetaHandler';
+import { PageMetaHandler, IMA_META_DATA_ATTR } from '../PageMetaHandler';
 
 describe('PageMetaHandlerSpec', () => {
   let metaManager: MetaManager,

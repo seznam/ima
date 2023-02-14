@@ -14,8 +14,9 @@ export interface PreprocessLoaderOptions {
 const PreprocessLoader: LoaderDefinitionFunction<PreprocessLoaderOptions> =
   function (source) {
     const { context } = this.getOptions();
+    const done = this.async();
 
-    return preprocess(source, context, 'js');
+    done(null, preprocess(source, context, 'js'));
   };
 
 export default PreprocessLoader;

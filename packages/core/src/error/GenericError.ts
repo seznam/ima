@@ -1,4 +1,4 @@
-import IMAError from './Error';
+import { IMAError } from './Error';
 
 /**
  * Implementation of the {@link Error} interface, providing more advanced
@@ -6,7 +6,7 @@ import IMAError from './Error';
  *
  * @extends Error
  */
-export default class GenericError extends IMAError {
+export class GenericError extends IMAError {
   protected _params: {
     cause?: Error | string;
     status?: number;

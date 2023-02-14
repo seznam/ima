@@ -1,7 +1,7 @@
 /**
  * Events constants, which is firing to app.
  */
-enum Types {
+export enum RendererTypes {
   /**
    * The RENDER type is set if mounting use React.render method.
    */
@@ -15,5 +15,3 @@ enum Types {
    */
   UNMOUNT = '$IMA.$PageRenderer.type.unmount',
 }
-
-export default Types;

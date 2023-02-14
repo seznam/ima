@@ -1,9 +1,9 @@
-import HttpStatusCode from './StatusCode';
 import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
-import UrlTransformer from './UrlTransformer';
-import GenericError from '../error/GenericError';
-import Window from '../window/Window';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
+import { HttpStatusCode } from './HttpStatusCode';
+import { UrlTransformer } from './UrlTransformer';
+import { GenericError } from '../error/GenericError';
+import { StringParameters, UnknownParameters } from '../types';
+import { Window } from '../window/Window';
 
 /**
  * An object representing the complete request parameters used to create and
@@ -56,7 +56,7 @@ export type HttpProxyErrorParams = {
  * {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API Fetch API},
  * providing a Promise-oriented API for sending requests.
  */
-export default class HttpProxy {
+export class HttpProxy {
   protected _transformer: UrlTransformer;
   protected _window: Window;
   protected _defaultHeaders: Map<string, string>;

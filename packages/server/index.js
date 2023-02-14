@@ -1,9 +1,11 @@
 'use strict';
 
 const path = require('path');
+
 const applicationFolder = path.resolve('.');
-const { Emitter, Event } = require('./lib/emitter.js');
 const { createMonitoring } = require('@esmj/monitor');
+
+const { Emitter, Event } = require('./lib/emitter.js');
 
 module.exports = function createIMAServer({
   environment,

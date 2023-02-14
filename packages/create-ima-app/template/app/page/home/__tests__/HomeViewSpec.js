@@ -1,4 +1,5 @@
 import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
+
 import cards from '../../../public/cards.json';
 
 describe('Home page', () => {

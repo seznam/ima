@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
 import { Configuration } from 'webpack';

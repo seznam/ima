@@ -1,10 +1,11 @@
-import { StringParameters, UnknownParameters } from '../../CommonTypes';
-import ObjectContainer, {
+import {
+  ObjectContainer,
   FactoryFunction,
   UnknownConstructable,
 } from '../../ObjectContainer';
+import { StringParameters, Utils } from '../../types';
 
-export default class ComponentUtils {
+export class ComponentUtils {
   /**
    * The application's dependency injector - the object container.
    */
@@ -18,7 +19,7 @@ export default class ComponentUtils {
   /**
    * Map of instantiated utilities
    */
-  private _utilities?: UnknownParameters;
+  private _utilities?: Utils;
 
   /**
    * Map of referrers to utilities
@@ -86,12 +87,12 @@ export default class ComponentUtils {
   /**
    * Returns object containing all registered utilities
    */
-  getUtils() {
+  getUtils(): Utils {
     if (this._utilities) {
       return this._utilities;
     }
 
-    this._utilities = {};
+    this._utilities = {} as Utils;
 
     // create instance of each utility class
     for (const alias of Object.keys(this._utilityClasses)) {
@@ -114,7 +115,8 @@ export default class ComponentUtils {
     alias: string,
     utilityClass: UnknownConstructable | FactoryFunction
   ) {
-    return ((this._utilities as UnknownParameters)[alias] =
+    // @ts-expect-error needs complete type rewrite...
+    return ((this._utilities as Utils)[alias as keyof Utils] =
       this._oc.get(utilityClass));
   }
 }

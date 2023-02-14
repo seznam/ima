@@ -22,6 +22,12 @@
   - @ima/error-overlay@19.0.0-rc.0
   - @ima/hmr-client@19.0.0-rc.0
 
+## 18.3.1
+
+### Patch Changes
+
+- f51fe1f63: Fixed issue with invalid paths in language modules on windows machines
+
 ## 18.3.0
 
 ### Minor Changes

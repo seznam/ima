@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { URLSearchParams } from 'url';
 
-import { formatError, ParsedErrorData } from '@ima/dev-utils/dist/cliUtils';
-import { logger } from '@ima/dev-utils/dist/logger';
+import { formatError, ParsedErrorData } from '@ima/dev-utils/cliUtils';
+import { logger } from '@ima/dev-utils/logger';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { ParserConfig } from '@swc/core';
 import CompressionPlugin from 'compression-webpack-plugin';

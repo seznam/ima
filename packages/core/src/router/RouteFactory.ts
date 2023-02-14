@@ -1,13 +1,12 @@
-import DynamicRoute from './DynamicRoute';
-import StaticRoute from './StaticRoute';
-import { RouteOptions } from './Router';
-import { RoutePathExpression } from './DynamicRoute';
-import Controller, { IController } from '../controller/Controller';
+import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
+import { RouteFactoryOptions } from './Router';
+import { StaticRoute } from './StaticRoute';
+import { Controller, IController } from '../controller/Controller';
 
 /**
  * Utility factory used by router to create routes.
  */
-export default class RouteFactory {
+export class RouteFactory {
   static get $dependencies() {
     return [];
   }
@@ -35,7 +34,7 @@ export default class RouteFactory {
     pathExpression: string | RoutePathExpression,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
-    options?: RouteOptions
+    options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,

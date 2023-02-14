@@ -1,18 +1,19 @@
-import PageStateManager from '../PageStateManagerImpl';
-import Dispatcher from '../../../event/DispatcherImpl';
-import Events from '../Events';
 import { toMockedInstance } from 'to-mock';
 
+import { DispatcherImpl } from '../../../event/DispatcherImpl';
+import { PageStateManagerImpl } from '../PageStateManagerImpl';
+import { StateEvents } from '../StateEvents';
+
 describe('ima.core.page.state.PageStateManagerImpl', () => {
-  let stateManager: PageStateManager;
+  let stateManager: PageStateManagerImpl;
   const defaultState = { state: 'state', patch: null };
   const patchState = { patch: 'patch' };
   const queuedPatchState1 = { lazy: 'patch' };
   const queuedPatchState2 = { queued: 'patch', lazy: 'overriden' };
-  const dispatcher = toMockedInstance(Dispatcher);
+  const dispatcher = toMockedInstance(DispatcherImpl);
 
   beforeEach(() => {
-    stateManager = new PageStateManager(dispatcher);
+    stateManager = new PageStateManagerImpl(dispatcher);
 
     stateManager._pushToHistory(defaultState);
   });
@@ -60,13 +61,13 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(newState);
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
-        Events.BEFORE_CHANGE_STATE,
+        StateEvents.BEFORE_CHANGE_STATE,
         { newState, patchState, oldState: defaultState },
         true
       );
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         2,
-        Events.AFTER_CHANGE_STATE,
+        StateEvents.AFTER_CHANGE_STATE,
         { newState },
         true
       );

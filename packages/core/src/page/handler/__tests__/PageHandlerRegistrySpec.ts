@@ -1,8 +1,9 @@
-import PageHandler from '../PageHandler';
-import PageHandlerRegistry from '../PageHandlerRegistry';
-import SerialBatch from '../../../execution/SerialBatch';
 import { toMockedInstance } from 'to-mock';
+
+import { SerialBatch } from '../../../execution/SerialBatch';
 import { ManagedPage, PageAction } from '../../PageTypes';
+import { PageHandler } from '../PageHandler';
+import { PageHandlerRegistry } from '../PageHandlerRegistry';
 
 describe('ima.core.page.handler.PageHandlerRegistry', () => {
   let registry: PageHandlerRegistry;

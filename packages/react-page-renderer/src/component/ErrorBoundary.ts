@@ -1,10 +1,10 @@
 import { PureComponent, ReactElement } from 'react';
 
-export interface Props {
+export interface ErrorBoundaryProps {
   children?: ReactElement;
 }
 
-interface State {
+export interface ErrorBoundaryState {
   hasError: boolean;
 }
 
@@ -12,8 +12,11 @@ interface State {
  * Error boundary wrapper which connects the IMA application to the
  * dev HMR api and handles error reporting.
  */
-export default class ErrorBoundary extends PureComponent<Props, State> {
-  constructor(props: Props) {
+export class ErrorBoundary extends PureComponent<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
 
     this.state = {

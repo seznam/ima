@@ -1,7 +1,7 @@
 /**
  * Events constants, which is firing to app.
  */
-enum Events {
+export enum RouterEvents {
   /**
    * Router fire event `$IMA.$Router.beforeHandleRoute` before page
    * manager handle the route. Event's data contain
@@ -25,5 +25,3 @@ enum Events {
    */
   AFTER_HANDLE_ROUTE = '$IMA.$Router.afterHandleRoute',
 }
-
-export default Events;

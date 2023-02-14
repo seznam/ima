@@ -1,6 +1,6 @@
-import { StringParameters } from '../../CommonTypes';
+import { StringParameters } from '../../types';
 import { RouteOptions } from '../Router';
-import StaticRoute from '../StaticRoute';
+import { StaticRoute } from '../StaticRoute';
 
 type toPathParam = { [key: string]: string | number };
 
@@ -820,8 +820,7 @@ describe('ima.core.router.StaticRoute', function () {
         const keys = Object.keys(value.params);
 
         keys.forEach(key => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+          // @ts-expect-error
           expect(routeParams[key]).toBe(value.params[key]);
         });
       });

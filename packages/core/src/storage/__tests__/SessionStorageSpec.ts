@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import SessionStorage from '../SessionStorage';
-import ClientWindow from '../../window/ClientWindow';
+import { ClientWindow } from '../../window/ClientWindow';
+import { SessionStorage } from '../SessionStorage';
 
 describe('ima.storage.SessionStorage', () => {
   let session: SessionStorage<unknown>;

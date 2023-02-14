@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
