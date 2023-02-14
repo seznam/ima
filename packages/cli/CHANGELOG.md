@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+
+### Patch Changes
+
+- 010f5d872: Fix support for pnpm
+
 ## 19.0.0-rc.0
 
 ### Major Changes

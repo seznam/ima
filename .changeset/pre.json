@@ -17,18 +17,29 @@
     "@ima/docs": "0.0.0"
   },
   "changesets": [
+    "big-pumpkins-tell",
+    "chatty-spoons-glow",
     "curly-plants-knock",
-    "eight-keys-happen",
+    "dry-hornets-smile",
+    "empty-cats-drum",
     "empty-pets-sell",
+    "famous-cobras-exercise",
     "gentle-snakes-speak",
+    "honest-fireants-invite",
+    "little-sloths-refuse",
     "long-bikes-sparkle",
+    "long-cups-destroy",
     "modern-forks-join",
     "polite-wasps-protect",
     "rich-ducks-bathe",
     "selfish-eels-call",
     "shaggy-toys-accept",
+    "silly-garlics-call",
     "smooth-goats-float",
     "soft-snails-warn",
-    "spicy-cheetahs-notice"
+    "spicy-cheetahs-notice",
+    "stale-boats-wash",
+    "tiny-adults-look",
+    "two-mirrors-bow"
   ]
 }
