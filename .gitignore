@@ -15,4 +15,3 @@ website/.turbo
 *.tgz
 .vscode
 yarn.lock
-package-lock.json
