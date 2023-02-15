@@ -45,9 +45,9 @@ export function parseOptions(resourceQuery: string): HMROptions {
     timeout: parseInt(queryEntries['timeout']) || 3000,
     noInfo: queryEntries['noInfo'] ? queryEntries['noInfo'] === 'true' : false,
     reload: queryEntries['reload'] ? queryEntries['reload'] === 'true' : true,
-    port: 3101,
-    hostname: 'localhost',
-    publicUrl: 'http://localhost:3101',
+    port: parseInt(queryEntries['port']) ?? 3101,
+    hostname: queryEntries['hostname'] ?? 'localhost',
+    publicUrl: queryEntries['publicUrl'] ?? 'http://localhost:3101',
     reactRefresh: queryEntries['reactRefresh']
       ? queryEntries['reactRefresh'] === 'true'
       : true,
