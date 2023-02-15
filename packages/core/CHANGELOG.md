@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- d084c840c: Fixed dictionary.get types, second argument should be optional
+
 ## 19.0.0-rc.2
 
 ### Major Changes
