@@ -1,5 +1,16 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/dev-utils@19.0.0-rc.2
+
 ## 19.0.0-rc.0
 
 ### Major Changes

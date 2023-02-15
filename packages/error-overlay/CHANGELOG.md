@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+## 19.0.0-rc.1
+
+### Patch Changes
+
+- 95af45a42: Fixed issue when displaying error params with circular dependencies
+
 ## 19.0.0-rc.0
 
 ### Major Changes

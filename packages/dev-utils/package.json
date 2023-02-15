@@ -1,6 +1,6 @@
 {
   "name": "@ima/dev-utils",
-  "version": "19.0.0-rc.0",
+  "version": "19.0.0-rc.2",
   "description": "IMA.js dev utils used used mainly in @ima/cli and other dev-related utilities.",
   "keywords": [
     "IMA.js",

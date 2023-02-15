@@ -86,7 +86,7 @@ export class MessageFormatDictionary extends Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: ObjectParameters = {}) {
+  get(key: string, parameters?: ObjectParameters) {
     const scope = this._getScope(key);
 
     if (!scope) {
@@ -97,7 +97,7 @@ export class MessageFormatDictionary extends Dictionary {
       );
     }
 
-    return scope(parameters);
+    return scope(parameters ?? {});
   }
 
   /**
