@@ -61,7 +61,7 @@ const ErrorParams: FunctionComponent<ErrorParamsProps> = ({ params }) => {
         <JSONTree
           hideRoot={true}
           data={parsedParams}
-          shouldExpandNode={(keyPath, data, level) => level < 5}
+          shouldExpandNodeInitially={(keyPath, data, level) => level < 3}
           invertTheme={false}
           theme={{ extend: THEME }}
         />

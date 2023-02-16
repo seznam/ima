@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import type { IncomingHttpHeaders } from 'http2';
+
 import { HttpProxyRequestParams } from './HttpProxy';
 import { StringParameters, UnknownParameters } from '../types';
 
@@ -30,12 +32,14 @@ export type HttpAgentRequestOptions = {
   timeout: number;
   ttl: number;
   repeatRequest: number;
-  headers: StringParameters;
+  headers: IncomingHttpHeaders;
   fetchOptions: Omit<RequestInit, 'body'>;
   cache: boolean;
   withCredentials: boolean;
   listeners?: { progress: (event: Event) => unknown };
-  postProcessor?: (response: HttpAgentResponse) => HttpAgentResponse;
+  postProcessor?: <B = unknown>(
+    response: HttpAgentResponse<B>
+  ) => HttpAgentResponse<B>;
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;
 };
@@ -50,9 +54,9 @@ export type HttpAgentRequestOptions = {
  * @property cached Whether or not the response has been cached.
  */
 
-export type HttpAgentResponse = {
+export type HttpAgentResponse<B> = {
   status: number;
-  body: unknown;
+  body: B;
   params: HttpProxyRequestParams;
   headers: StringParameters;
   headersRaw?: Headers;
@@ -75,11 +79,11 @@ export abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  get(
+  get<B = unknown>(
     url: string,
     data: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -96,11 +100,11 @@ export abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  post(
+  post<B = unknown>(
     url: string,
     data: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -117,11 +121,11 @@ export abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  put(
+  put<B = unknown>(
     url: string,
     data: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -138,11 +142,11 @@ export abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  patch(
+  patch<B = unknown>(
     url: string,
     data: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -159,11 +163,11 @@ export abstract class HttpAgent {
    * @return A promise that resolves to the
    *         response.
    */
-  delete(
+  delete<B = unknown>(
     url: string,
     data: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
   }
 
@@ -179,7 +183,7 @@ export abstract class HttpAgent {
    * @return The key to use for identifying such a request in the
    *         cache.
    */
-  getCacheKey(method: string, url: string, data: StringParameters) {
+  getCacheKey(method: string, url: string, data: StringParameters): string {
     return '';
   }
 
@@ -193,7 +197,7 @@ export abstract class HttpAgent {
    *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
    * @return This HTTP agent.
    */
-  setDefaultHeader(header: string, value: string) {
+  setDefaultHeader(header: string, value: string): this {
     return this;
   }
 
@@ -202,7 +206,7 @@ export abstract class HttpAgent {
    *
    * @return This HTTP agent.
    */
-  clearDefaultHeaders() {
+  clearDefaultHeaders(): this {
     return this;
   }
 }
