@@ -53,6 +53,12 @@
   - @ima/error-overlay@19.0.0-rc.0
   - @ima/hmr-client@19.0.0-rc.0
 
+## 18.3.2
+
+### Patch Changes
+
+- 9c786a117: Fix react refresh config
+
 ## 18.3.1
 
 ### Patch Changes

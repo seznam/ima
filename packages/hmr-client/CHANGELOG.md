@@ -12,6 +12,12 @@
 
 - c0fe68ef3: IMA 19 Release
 
+## 18.1.1
+
+### Patch Changes
+
+- 24afaeba4: Fixed an issue where HMR client ignored custom dev server settings
+
 ## 18.1.0
 
 ### Minor Changes
