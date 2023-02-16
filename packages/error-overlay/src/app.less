@@ -1,8 +1,11 @@
 /* stylelint-disable no-invalid-position-at-import-rule */
 :host {
   /* Fonts */
-  --ima-font-sans: ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --ima-font-mono: ui-monospace, sfmono-regular, menlo, monaco, consolas, "Liberation Mono", "Courier New", monospace;
+  --ima-font-sans: ui-sans-serif, system-ui, -apple-system, blinkmacsystemfont,
+    'Segoe UI', roboto, 'Helvetica Neue', arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --ima-font-mono: ui-monospace, sfmono-regular, menlo, monaco, consolas,
+    'Liberation Mono', 'Courier New', monospace;
 
   position: fixed;
   left: 0;
@@ -19,12 +22,12 @@
 }
 
 /* These styles are injected to the shadow dom of ima-error-overlay */
-@import "./components/overlay/overlay.less";
-@import "./components/header/header.less";
-@import "./components/runtimeError/runtimeError.less";
-@import "./components/frame/frame.less";
-@import "./components/frame/frameHeader.less";
-@import "./components/frame/prismjs.less";
-@import "./components/icon/icon.less";
-@import "./components/close/close.less";
-@import "./components/errorParams/errorParams.less";
+@import './components/overlay/overlay.less';
+@import './components/header/header.less';
+@import './components/runtimeError/runtimeError.less';
+@import './components/frame/frame.less';
+@import './components/frame/frameHeader.less';
+@import './components/frame/prismjs.less';
+@import './components/icon/icon.less';
+@import './components/close/close.less';
+@import './components/errorParams/errorParams.less';

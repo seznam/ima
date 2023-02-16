@@ -16,18 +16,22 @@ module.exports = {
   plugins: [
     'stylelint-declaration-block-no-ignored-properties',
     'stylelint-order',
+    'stylelint-prettier'
   ],
   rules: {
-    indentation: 2,
+    'prettier/prettier': [
+      true,
+      {
+        singleQuote: true,
+      },
+    ],
     'no-empty-source': null,
     'declaration-empty-line-before': null,
     'no-duplicate-selectors': null,
     'no-descending-specificity': null,
-    'string-quotes': 'double',
     'declaration-no-important': [true, { severity: 'warning' }],
     'keyframe-declaration-no-important': [true, { severity: 'warning' }],
     'selector-max-id': 2,
-    'max-line-length': null,
     'import-notation': null,
     'selector-class-pattern': null,
     'keyframes-name-pattern': null,
