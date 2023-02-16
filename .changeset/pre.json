@@ -17,6 +17,7 @@
     "@ima/docs": "0.0.0"
   },
   "changesets": [
+    "afraid-gifts-shout",
     "big-pumpkins-tell",
     "chatty-spoons-glow",
     "curly-plants-knock",
@@ -31,7 +32,9 @@
     "little-sloths-refuse",
     "long-bikes-sparkle",
     "long-cups-destroy",
+    "lucky-maps-promise",
     "modern-forks-join",
+    "nervous-lions-return",
     "polite-wasps-protect",
     "rich-ducks-bathe",
     "selfish-eels-call",
@@ -43,6 +46,8 @@
     "soft-snails-warn",
     "spicy-cheetahs-notice",
     "stale-boats-wash",
+    "thin-lobsters-invite",
+    "thirty-rocks-arrive",
     "tiny-adults-look",
     "two-mirrors-bow"
   ]

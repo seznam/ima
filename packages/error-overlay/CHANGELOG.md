@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- 0526618ad: Reduced number of levels that are expanded by default in ErrorOverlay error params view
+- 0526618ad: Updated dependencies
+
 ## 19.0.0-rc.2
 
 ### Major Changes

@@ -1,5 +1,16 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Major Changes
+
+- 299b87c3d: IMA HttpAgent remove by default all headers from request and response which is stored in Cache. You can turn off this behaviour with `keepSensitiveHeaders` option but it is not recommended.
+
+### Minor Changes
+
+- 0526618ad: Updated HttpAgent and HttpProxy types - added option to set body type using generics.
+- 4ca573b83: `getRouteHandlersByPath` method on `AbstractRouter` is now public
+
 ## 19.0.0-rc.3
 
 ### Patch Changes
