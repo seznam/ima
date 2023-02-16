@@ -23,6 +23,7 @@ import { RouteFactory } from '../../../router/RouteFactory';
 import { StaticRoute } from '../../../router/StaticRoute';
 import { ClientWindow } from '../../../window/ClientWindow';
 import { Window } from '../../../window/Window';
+import { AbstractPageManager } from '../AbstractPageManager';
 import { ClientPageManager } from '../ClientPageManager';
 
 class AbstractControllerTest extends AbstractController {
@@ -252,7 +253,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         .spyOn(pageManager, '_activatePageSource' as never)
         .mockImplementation();
       jest
-        .spyOn(pageManager, 'manage')
+        .spyOn(AbstractPageManager.prototype, 'manage')
         .mockReturnValue(Promise.resolve({ status: 200 }));
 
       await pageManager
@@ -264,9 +265,6 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         })
         .then(() => {
           expect(pageManager['_activatePageSource']).toHaveBeenCalled();
-        })
-        .catch(error => {
-          console.error('ima.core.page.manager.Client: CATCH ERROR: ', error);
         });
     });
   });

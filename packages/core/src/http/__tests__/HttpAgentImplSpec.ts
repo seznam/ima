@@ -34,7 +34,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
           'Accept-Language': 'en',
         },
         cache: true,
-        postProcessor: (agentResponse: Response) => agentResponse,
+        fetchOptions: {},
+        withCredentials: true,
+        postProcessor: (agentResponse: HttpAgentResponse) => agentResponse,
+        keepSensitiveHeaders: false,
       },
       cacheOptions: {
         prefix: 'http.',
@@ -42,25 +45,17 @@ describe('ima.core.http.HttpAgentImpl', () => {
     };
     http = new HttpAgentImpl(proxy, cache, cookie, httpConfig, helper);
 
-    options = {
-      ttl: httpConfig.defaultRequestOptions.ttl,
-      timeout: httpConfig.defaultRequestOptions.timeout,
-      repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
-      headers: {},
-      cache: true,
-      fetchOptions: {},
-      withCredentials: true,
-      // @ts-ignore
-      language: httpConfig.defaultRequestOptions.language,
-    };
+    options = { ...httpConfig.defaultRequestOptions };
 
     data = {
       status: 200,
       body: 111,
       params: {
         url: 'url',
+        transformedUrl: 'url',
+        method: 'get',
         data: {},
-        options: options,
+        options,
       },
       headers: {
         // @ts-ignore
@@ -98,24 +93,26 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        )
-          .then((response: HttpAgentResponse) => {
-            const agentResponse = {
-              status: data.status,
-              params: data.params,
-              body: data.body,
-              headers: data.headers,
-              headersRaw: data.headersRaw,
-              cached: false,
-            };
+        ).then((response: HttpAgentResponse) => {
+          const { postProcessor, ...restOptions } = data.params.options;
+          const agentResponse = {
+            status: data.status,
+            params: {
+              ...data.params,
+              options: {
+                ...restOptions,
 
-            // eslint-disable-next-line jest/no-conditional-expect
-            expect(response).toStrictEqual(agentResponse);
-          })
-          // @ts-ignore
-          .catch(e => {
-            console.error(e.message, e.stack);
-          });
+                headers: {},
+              },
+            },
+            body: data.body,
+            headers: {},
+            cached: false,
+          };
+
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(response).toStrictEqual(agentResponse);
+        });
       });
 
       it('should be rejected with error', async () => {
@@ -145,7 +142,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.options.abortController = new AbortController();
 
         jest.spyOn(proxy, 'request').mockImplementation(() => {
-          data.params.options.abortController.abort();
+          data.params.options?.abortController?.abort();
 
           return Promise.reject(new GenericError('', data.params));
         });
