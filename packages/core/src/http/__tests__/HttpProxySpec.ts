@@ -329,7 +329,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         // Check for presence of auto-created AbortController
         expect(options.abortController).toBeInstanceOf(AbortController);
-        expect(options.abortController.signal.aborted).toBeTruthy();
+        expect(options.abortController?.signal?.aborted).toBeTruthy();
       });
 
       it('should redefine abort controller if repeatRequest is > 0', async () => {
@@ -353,7 +353,7 @@ describe('ima.core.http.HttpProxy', () => {
         }).rejects.toThrow(TIMEOUT_ERROR);
 
         expect(options.abortController).toBeInstanceOf(AbortController);
-        expect(options.abortController.signal.aborted).toBeFalsy();
+        expect(options.abortController?.signal?.aborted).toBeFalsy();
         options.repeatRequest--;
 
         // expect(options.repeatRequest).toBe(0);
@@ -373,7 +373,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         // This time it should abort
         expect(options.repeatRequest).toBe(0);
-        expect(options.abortController.signal.aborted).toBeTruthy();
+        expect(options.abortController?.signal?.aborted).toBeTruthy();
       });
 
       it('should throw Abort error when aborted externally; with other reason', async () => {
