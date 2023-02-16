@@ -234,7 +234,7 @@ export abstract class AbstractRouter extends Router {
    */
   getCurrentRouteInfo() {
     const path = this.getPath();
-    let { route } = this._getRouteHandlersByPath(path);
+    let { route } = this.getRouteHandlersByPath(path);
 
     if (!route) {
       route = this._routeHandlers.get(RouteNames.NOT_FOUND) as AbstractRoute;
@@ -323,7 +323,7 @@ export abstract class AbstractRouter extends Router {
     this._currentlyRoutedPath = path;
 
     let params: RouteParams = {};
-    const { route, middlewares } = this._getRouteHandlersByPath(path);
+    const { route, middlewares } = this.getRouteHandlersByPath(path);
 
     locals = {
       ...locals,
@@ -550,7 +550,7 @@ export abstract class AbstractRouter extends Router {
    *         matching the path and middlewares preceding it or `{}`
    *         (empty object) if no such route exists.
    */
-  _getRouteHandlersByPath(path: string): {
+  getRouteHandlersByPath(path: string): {
     route?: AbstractRoute;
     middlewares: RouterMiddleware[];
   } {
@@ -670,7 +670,7 @@ export abstract class AbstractRouter extends Router {
    */
   #addParamsFromOriginalRoute(params: RouteParams) {
     const originalPath = this._getCurrentlyRoutedPath();
-    const { route } = this._getRouteHandlersByPath(originalPath);
+    const { route } = this.getRouteHandlersByPath(originalPath);
 
     if (!route) {
       // try to at least extract query string params from path
