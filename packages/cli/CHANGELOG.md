@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.3.2
+
+### Patch Changes
+
+- 9c786a117: Fix react refresh config
+
 ## 18.3.1
 
 ### Patch Changes
