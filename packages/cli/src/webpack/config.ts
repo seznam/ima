@@ -642,15 +642,8 @@ export default async (
               new ReactRefreshWebpackPlugin({
                 esModule: true,
                 overlay: false,
-                include: [
-                  /@ima/,
-                  appDir,
-                  ...(imaConfig.transformVendorPaths?.include ?? []),
-                ],
-                exclude: [
-                  /node_modules/,
-                  ...(imaConfig.transformVendorPaths?.exclude ?? []),
-                ],
+                include: [/\.(jsx|tsx)$/],
+                exclude: [/node_modules/],
               }),
           ]),
 
