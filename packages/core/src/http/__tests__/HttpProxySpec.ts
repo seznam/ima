@@ -26,10 +26,7 @@ describe('ima.core.http.HttpProxy', () => {
     transform: (url: string) => url,
   });
   const mockedWindowHelper = new ClientWindow();
-
-  const TIMEOUT_ERROR = new GenericError('The HTTP request timed out', {
-    status: HttpStatusCode.TIMEOUT,
-  });
+  const TIMEOUT_ERROR = 'The HTTP request timed out';
 
   let defaultOptions: HttpAgentRequestOptions;
   let proxy: HttpProxy;
