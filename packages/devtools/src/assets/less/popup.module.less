@@ -1,4 +1,4 @@
-@import "./config.module.less";
+@import './config.module.less';
 
 :global {
   html,
@@ -87,11 +87,12 @@
     width: 24px;
     height: 24px;
 
-    background: url("../../public/images/icon-alive-48.png") no-repeat center top;
+    background: url('../../public/images/icon-alive-48.png') no-repeat center
+      top;
     background-size: 18px 18px;
   }
 
-  .switch input[type="checkbox"] {
+  .switch input[type='checkbox'] {
     display: none;
 
     visibility: hidden;
@@ -128,18 +129,18 @@
     width: 18px;
     height: 18px;
 
-    content: "";
+    content: '';
 
     background-color: var(--color-white);
   }
 
-  .switch input[type="checkbox"]:checked + .switcher {
+  .switch input[type='checkbox']:checked + .switcher {
     background-color: var(--color-white);
 
     box-shadow: 0 0 0 20px var(--oc-green-4) inset;
   }
 
-  .switch input[type="checkbox"]:checked + .switcher::before {
+  .switch input[type='checkbox']:checked + .switcher::before {
     right: 100%;
 
     margin-left: 18px;
@@ -147,15 +148,15 @@
     background-color: var(--color-white);
   }
 
-  .switch [disabled]:not([disabled="false"]) + .switcher {
+  .switch [disabled]:not([disabled='false']) + .switcher {
     transition: none;
   }
 
-  .switch [disabled]:not([disabled="false"]) + .switcher:active::before {
+  .switch [disabled]:not([disabled='false']) + .switcher:active::before {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   }
 
-  .switch [disabled]:not([disabled="false"]) + .switcher::before {
+  .switch [disabled]:not([disabled='false']) + .switcher::before {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
     transition: none;
   }

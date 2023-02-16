@@ -117,7 +117,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.mjs', '.json'],
       },
       typescript: {
-        project: 'packages/*/tsconfig.json',
+        project: './packages/*/tsconfig.json',
       },
     },
   },

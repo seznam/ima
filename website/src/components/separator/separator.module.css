@@ -46,7 +46,7 @@
   width: 100%;
   height: 1px;
 
-  content: "";
+  content: '';
 
   background-color: var(--ifm-hr-background-color);
 }

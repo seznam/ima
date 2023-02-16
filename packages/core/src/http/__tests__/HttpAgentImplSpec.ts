@@ -5,7 +5,7 @@ import { toMockedInstance } from 'to-mock';
 import { CacheImpl } from '../../cache/CacheImpl';
 import { GenericError } from '../../error/GenericError';
 import { CookieStorage } from '../../storage/CookieStorage';
-import { HttpAgentResponse } from '../HttpAgent';
+import { HttpAgentRequestOptions, HttpAgentResponse } from '../HttpAgent';
 import { HttpAgentImpl } from '../HttpAgentImpl';
 import { HttpProxy } from '../HttpProxy';
 
@@ -15,7 +15,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const cache = toMockedInstance(CacheImpl);
   const cookie = toMockedInstance(CookieStorage);
   let options = null;
-  let data: HttpAgentResponse;
+  let data: HttpAgentResponse<unknown>;
   // @ts-ignore
   let httpConfig = null;
   const helper = {
@@ -36,9 +36,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
         cache: true,
         fetchOptions: {},
         withCredentials: true,
-        postProcessor: (agentResponse: HttpAgentResponse) => agentResponse,
+        postProcessor: (agentResponse: HttpAgentResponse<unknown>) =>
+          agentResponse,
         keepSensitiveHeaders: false,
-      },
+      } as HttpAgentRequestOptions,
       cacheOptions: {
         prefix: 'http.',
       },
@@ -95,7 +96,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        ).then((response: HttpAgentResponse) => {
+        ).then((response: HttpAgentResponse<unknown>) => {
           const { postProcessor, ...restOptions } = data.params.options;
           const agentResponse = {
             status: data.status,
@@ -222,7 +223,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        ).then((response: HttpAgentResponse) => {
+        ).then((response: HttpAgentResponse<unknown>) => {
           expect(response.params.options.abortController).toBeUndefined();
           expect(response.params.options.postProcessor).toBeUndefined();
         });

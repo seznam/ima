@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@ima/helpers": "^19.0.0-rc.1",
+    "@types/node": "^18.13.0",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },

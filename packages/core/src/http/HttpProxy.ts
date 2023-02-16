@@ -1,3 +1,5 @@
+import type { IncomingHttpHeaders } from 'http2';
+
 import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
 import { HttpStatusCode } from './HttpStatusCode';
 import { UrlTransformer } from './UrlTransformer';
@@ -102,12 +104,12 @@ export class HttpProxy {
    * @return A promise that resolves to the server
    *         response.
    */
-  request(
+  request<B>(
     method: string,
     url: string,
     data: UnknownParameters,
     options: HttpAgentRequestOptions
-  ) {
+  ): Promise<HttpAgentResponse<B>> {
     const requestParams = this._composeRequestParams(
       method,
       url,
@@ -128,7 +130,7 @@ export class HttpProxy {
       options.abortController = new AbortController();
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise<HttpAgentResponse<B>>((resolve, reject) => {
       if (options.timeout) {
         requestTimeoutId = setTimeout(() => {
           options.abortController?.abort();
@@ -171,7 +173,7 @@ export class HttpProxy {
           }
         })
         .then(([response, responseBody]) =>
-          this._processResponse(requestParams, response, responseBody)
+          this._processResponse<B>(requestParams, response, responseBody)
         )
         .then(resolve, reject);
     }).catch(fetchError => {
@@ -187,16 +189,23 @@ export class HttpProxy {
    *
    * @param header A header name.
    * @param value A header value.
+   * @returns this
    */
-  setDefaultHeader(header: string, value: string) {
+  setDefaultHeader(header: string, value: string): this {
     this._defaultHeaders.set(header, value);
+
+    return this;
   }
 
   /**
    * Clears all defaults headers sent with all requests.
+   *
+   * @returns this
    */
-  clearDefaultHeaders() {
+  clearDefaultHeaders(): this {
     this._defaultHeaders.clear();
+
+    return this;
   }
 
   /**
@@ -276,7 +285,7 @@ export class HttpProxy {
    *         the environment and have to be handled manually by parsing
    *         response headers and setting request headers, otherwise `false`.
    */
-  haveToSetCookiesManually() {
+  haveToSetCookiesManually(): boolean {
     return !this._window.isClient();
   }
 
@@ -291,11 +300,11 @@ export class HttpProxy {
    * @return The server's response along with all related
    *         metadata.
    */
-  _processResponse(
+  _processResponse<B>(
     requestParams: HttpProxyRequestParams,
     response: Response,
-    responseBody: unknown
-  ): HttpAgentResponse {
+    responseBody: B
+  ): HttpAgentResponse<B> {
     if (response.ok) {
       return {
         status: response.status,
@@ -319,7 +328,7 @@ export class HttpProxy {
    * @param headers The headers to convert.
    * @return Converted headers.
    */
-  _headersToPlainObject(headers: Headers) {
+  _headersToPlainObject(headers: Headers): StringParameters {
     const plainHeaders: StringParameters = {};
 
     for (const [key, value] of headers as unknown as Iterable<
@@ -344,7 +353,7 @@ export class HttpProxy {
   _processError(
     fetchError: GenericError | Error,
     requestParams: HttpProxyRequestParams
-  ) {
+  ): GenericError {
     const errorParams =
       fetchError instanceof GenericError ? fetchError.getParams() : {};
 
@@ -372,7 +381,7 @@ export class HttpProxy {
     requestParams: HttpProxyRequestParams,
     status: number,
     responseBody: unknown = null
-  ) {
+  ): GenericError {
     return new GenericError(
       cause.message,
       this.getErrorParams(
@@ -541,7 +550,7 @@ export class HttpProxy {
    *        agent.
    * @private
    */
-  _transformRequestBody(data: UnknownParameters, headers: StringParameters) {
+  _transformRequestBody(data: UnknownParameters, headers: IncomingHttpHeaders) {
     switch (headers['Content-Type']) {
       case 'application/json':
         return JSON.stringify(data);
