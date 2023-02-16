@@ -350,7 +350,7 @@ export class HttpAgentImpl extends HttpAgent {
     const { postProcessor, cache } = agentResponse.params.options;
 
     if (typeof postProcessor === 'function') {
-      agentResponse = postProcessor(agentResponse);
+      agentResponse = postProcessor<B>(agentResponse);
     }
 
     const pureResponse = this._cleanResponse(agentResponse);

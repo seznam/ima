@@ -28,7 +28,7 @@ import { StringParameters, UnknownParameters } from '../types';
  *           cache and returned.
  */
 
-export type HttpAgentRequestOptions = {
+export interface HttpAgentRequestOptions {
   timeout: number;
   ttl: number;
   repeatRequest: number;
@@ -37,12 +37,10 @@ export type HttpAgentRequestOptions = {
   cache: boolean;
   withCredentials: boolean;
   listeners?: { progress: (event: Event) => unknown };
-  postProcessor?: <B = unknown>(
-    response: HttpAgentResponse<B>
-  ) => HttpAgentResponse<B>;
+  postProcessor?: <B>(response: HttpAgentResponse<B>) => HttpAgentResponse<B>;
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;
-};
+}
 
 /**
  * A response from the server.
