@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- dc8d4b7ea: Fixed once hook parametr type
+
 ## 19.0.0-rc.2
 
 ### Major Changes
