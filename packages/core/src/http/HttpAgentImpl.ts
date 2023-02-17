@@ -418,6 +418,9 @@ export class HttpAgentImpl extends HttpAgent {
   _prepareOptions(
     options?: Partial<HttpAgentRequestOptions>
   ): HttpAgentRequestOptions {
+    if (options.withCredentials === true || options.withCredentials === false) {
+      options.fetchOptions = { credentials: options.withCredentials ? 'include' : 'same-origin', ...options.fetchOptions }
+    }
     const composedOptions = {
       ...this._defaultRequestOptions,
       ...options,

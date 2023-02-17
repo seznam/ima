@@ -452,7 +452,6 @@ export class HttpProxy {
     const requestInit: { body?: unknown; [key: string]: unknown } = {
       method: method.toUpperCase(),
       headers: options.headers,
-      credentials: options.withCredentials ? 'include' : 'same-origin',
       redirect: 'follow',
     };
 
