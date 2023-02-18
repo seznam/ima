@@ -130,9 +130,7 @@ export function routeClientApp(app: {
     });
 }
 
-export async function reviveClientApp(
-  initialAppConfigFunctions: AppConfigFunctions
-) {
+export function reviveClientApp(initialAppConfigFunctions: AppConfigFunctions) {
   const root = _getRoot();
 
   root.$Debug = !!root.$IMA.$Debug;

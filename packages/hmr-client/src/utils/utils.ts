@@ -1,4 +1,4 @@
-import { Emitter } from '@esmj/emitter';
+import { Emitter, EventData } from '@esmj/emitter';
 import { StatsError } from 'webpack';
 
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
@@ -70,6 +70,27 @@ export function init(resourceQuery: string) {
     emitter: getEmitter(),
     logger,
   };
+
+  /**
+   * Store errors that are sent before the overlay is intialized
+   * and re-send it to overlay after initialization.
+   *
+   * This can happen when error occurs right after bootup
+   * when error-overlay is not yet initialized.
+   */
+  let lastErrorData: null | EventData = null;
+  const lastErrorListener = (data: EventData) => {
+    lastErrorData = data;
+  };
+
+  instances.emitter.on('error', lastErrorListener);
+  instances.emitter.once('error-overlay-connected', () => {
+    if (lastErrorData) {
+      instances.emitter.emit('error', lastErrorData);
+    }
+
+    instances.emitter.off('error', lastErrorListener);
+  });
 
   // Init ErrorOverlay
   overlayScriptEl.setAttribute(
