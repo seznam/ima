@@ -71,6 +71,7 @@ Now create `tsconfig.json` file (that may look something like this):
 ```json title=./tsconfig.json
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "ES2022",
     "lib": [
       "ES2022",
