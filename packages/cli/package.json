@@ -67,6 +67,7 @@
     "pretty-ms": "7.0.1",
     "react-refresh": "^0.14.0",
     "schema-utils": "4.0.0",
+    "source-map-loader": "^4.0.1",
     "swc-loader": "^0.2.1",
     "webpack": "^5.75.0",
     "webpack-dev-middleware": "^6.0.1",

@@ -534,6 +534,15 @@ export default async (
             fullySpecified: false,
           },
         },
+        /**
+         * Extracts source maps from existing source files (from their sourceMappingURL),
+         * this is usefull mainly for node_modules.
+         */
+        useSourceMaps && {
+          enforce: 'pre',
+          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          loader: require.resolve('source-map-loader'),
+        },
       ].filter(Boolean) as RuleSetRule[],
     },
     plugins: [
