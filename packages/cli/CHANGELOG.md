@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 3b14b4b24: Added additional CLI output info when `forcedLegacy` and `writeToDisk` args are used
+
 ## 19.0.0-rc.3
 
 ### Patch Changes

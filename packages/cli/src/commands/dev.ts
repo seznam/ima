@@ -137,7 +137,11 @@ const dev: HandlerFn = async args => {
 
     logger.info(
       `Running webpack watch compiler${
-        args.legacy ? ` ${chalk.black.bgCyan('in legacy mode')}` : ''
+        args.legacy
+          ? ` ${chalk.black.bgCyan(
+              `in${args.forceLegacy ? ' forced' : ''} legacy mode`
+            )}`
+          : ''
       }...`
     );
 

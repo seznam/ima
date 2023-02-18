@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "19.0.0-rc.3",
+  "version": "19.0.0-rc.4",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -67,6 +67,7 @@
     "pretty-ms": "7.0.1",
     "react-refresh": "^0.14.0",
     "schema-utils": "4.0.0",
+    "source-map-loader": "^4.0.1",
     "swc-loader": "^0.2.1",
     "webpack": "^5.75.0",
     "webpack-dev-middleware": "^6.0.1",
