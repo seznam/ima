@@ -121,7 +121,7 @@ export function cssClasses(
  */
 export function defaultCssClasses(
   classRules: classnames.Argument,
-  component: string | ComponentType
+  component?: string | ComponentType
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;
 
