@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+
 ## 19.0.0-rc.4
 
 ### Minor Changes
