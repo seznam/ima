@@ -18,6 +18,7 @@
   },
   "changesets": [
     "afraid-gifts-shout",
+    "angry-moose-refuse",
     "big-pumpkins-tell",
     "brave-games-breathe",
     "chatty-spoons-glow",
@@ -27,9 +28,13 @@
     "empty-pets-sell",
     "famous-cobras-exercise",
     "friendly-garlics-approve",
+    "gentle-onions-laugh",
     "gentle-snakes-speak",
     "honest-fireants-invite",
+    "itchy-kiwis-arrive",
     "itchy-waves-reflect",
+    "kind-paws-press",
+    "lazy-queens-jog",
     "little-sloths-refuse",
     "long-bikes-sparkle",
     "long-cups-destroy",
@@ -40,6 +45,7 @@
     "polite-wasps-protect",
     "rich-ducks-bathe",
     "rotten-rats-work",
+    "rude-goats-kick",
     "selfish-eels-call",
     "shaggy-toys-accept",
     "shy-masks-care",
@@ -52,6 +58,7 @@
     "thin-lobsters-invite",
     "thirty-rocks-arrive",
     "tiny-adults-look",
-    "two-mirrors-bow"
+    "two-mirrors-bow",
+    "wet-points-love"
   ]
 }

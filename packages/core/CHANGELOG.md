@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- 1bd52f08c: Fixed an issue where boot erros did not bubble up to the root promise catch
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
 ## 19.0.0-rc.4
 
 ### Major Changes

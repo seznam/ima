@@ -1,5 +1,16 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
 ## 19.0.0-rc.3
 
 ### Patch Changes
