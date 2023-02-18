@@ -52,6 +52,7 @@ Options:
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --open            Opens browser window after server has been started  [boolean] [default: true]
+  --openUrl         Custom URL used when opening browser window  [string]
   --legacy          Runs application in legacy mode  [boolean] [default: false]
   --forceLegacy     Forces runner.js to execute legacy client code  [boolean] [default: false]
   --forceSPA        Forces application to run in SPA mode  [boolean] [default: false]
@@ -141,6 +142,20 @@ Enable/disable auto opening of app URL in the browser window on startup.
 :::tip
 
 If you find this option annoying, you can completely **disable this feature across all IMA.js applications** by putting `IMA_CLI_OPEN=false` in your environment.
+
+:::
+
+### --openUrl
+
+> `boolean = true`
+
+Allows you to customize URL which is opened when the server starts in development mode.
+
+:::tip
+
+You can also use `IMA_CLI_OPEN_URL='http://ima.dev:3001'` env variable to set this option.
+
+This is usefull when you have project-specific URLs. You can then set this environment variable in application's `ima.config.js` and don't have to worry about using `--openUrl` CLI argument everytime you're starting the application in dev mode.
 
 :::
 
