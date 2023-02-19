@@ -99,7 +99,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   get<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>('get', url, data, options);
@@ -110,7 +110,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   post<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -126,7 +126,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   put<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -142,7 +142,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   patch<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -158,7 +158,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   delete<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -172,7 +172,7 @@ export class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  getCacheKey(method: string, url: string, data: UnknownParameters): string {
+  getCacheKey(method: string, url: string, data?: UnknownParameters): string {
     return (
       this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data)
     );
@@ -229,7 +229,7 @@ export class HttpAgentImpl extends HttpAgent {
   _requestWithCheckCache<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     const optionsWithDefault = this._prepareOptions(options);
@@ -264,7 +264,7 @@ export class HttpAgentImpl extends HttpAgent {
   _getCachedData<B>(
     method: string,
     url: string,
-    data: UnknownParameters
+    data?: UnknownParameters
   ): Promise<HttpAgentResponse<B>> | null {
     const cacheKey = this.getCacheKey(method, url, data);
 
@@ -300,7 +300,7 @@ export class HttpAgentImpl extends HttpAgent {
   _request<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse<B>> {
     const cacheKey = this.getCacheKey(method, url, data);
@@ -451,7 +451,7 @@ export class HttpAgentImpl extends HttpAgent {
   _getCacheKeySuffix(
     method: string,
     url: string,
-    data: UnknownParameters
+    data?: UnknownParameters
   ): string {
     let dataQuery = '';
     if (data) {

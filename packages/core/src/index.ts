@@ -1,5 +1,10 @@
 export { Namespace, getNamespace, ns } from './Namespace';
-export { Bootstrap, type PluginConfigFunctions } from './Bootstrap';
+export {
+  Bootstrap,
+  type PluginConfigFunctions,
+  type AppConfigFunctions,
+  type Config,
+} from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
 export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
