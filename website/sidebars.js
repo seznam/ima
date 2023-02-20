@@ -112,6 +112,7 @@ const sidebars = {
         'migration/migration-0.16.0',
         'migration/migration-17.0.0',
         'migration/migration-18.0.0',
+        'migration/migration-19.0.0',
       ],
     },
     {
