@@ -48,7 +48,7 @@ export let init = (ns, oc, config) => {
       toPath: params => {
         const { category, subcategory, itemId, ...restParams } = params;
 
-        return [category, subcategory, itemId].filter(i => !!i).join('/') +
+        return [category, subcategory, 'post', itemId].filter(i => !!i).join('/') +
           AbstractRoute.paramsToQuery(restParams);
       }
     },
