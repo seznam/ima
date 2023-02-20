@@ -22,16 +22,18 @@ export function createSwcTransformer({
   syntax,
   development,
   jsxRuntime,
+  sourceMaps,
 }: {
   type: ModuleConfig['type'];
   target: JscTarget;
   syntax?: ParserConfig['syntax'];
   development?: boolean;
   jsxRuntime: ReactConfig['runtime'];
+  sourceMaps?: boolean;
 }) {
   return swcTransformer({
     isModule: true,
-    sourceMaps: true,
+    sourceMaps: sourceMaps ?? true,
     module: {
       type: type ?? 'es6',
     },

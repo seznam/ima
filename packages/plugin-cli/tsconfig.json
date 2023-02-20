@@ -5,6 +5,7 @@
       "ES2022",
     ],
     "outDir": "dist",
+    "sourceMap": true,
     "types": ["preprocess"]
   },
   "include": [
