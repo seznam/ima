@@ -300,7 +300,7 @@ export class HttpAgentImpl extends HttpAgent {
   _request<B>(
     method: string,
     url: string,
-    data?: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse<B>> {
     const cacheKey = this.getCacheKey(method, url, data);
