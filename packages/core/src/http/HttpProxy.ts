@@ -439,24 +439,25 @@ export class HttpProxy {
     data: UnknownParameters,
     options: HttpAgentRequestOptions
   ): RequestInit {
-    const contentType = this._getContentType(method, data, options);
-
-    if (contentType) {
-      options.headers['Content-Type'] = contentType;
-    }
-
-    for (const [headerName, headerValue] of this._defaultHeaders) {
-      options.headers[headerName] = headerValue;
-    }
-
     const requestInit: { body?: unknown; [key: string]: unknown } = {
       method: method.toUpperCase(),
-      headers: options.headers,
       redirect: 'follow',
     };
 
+    const headers: IncomingHttpHeaders = {};
+    const contentType = this._getContentType(method, data, headers);
+    if (contentType) {
+      headers['Content-Type'] = contentType;
+    }
+
+    for (const [headerName, headerValue] of this._defaultHeaders) {
+      headers[headerName] = headerValue;
+    }
+
+    requestInit.headers = headers;
+
     if (this._shouldRequestHaveBody(method, data)) {
-      requestInit.body = this._transformRequestBody(data, options.headers);
+      requestInit.body = this._transformRequestBody(data, headers);
     }
 
     // Re-assign signal from abort controller to fetch options
@@ -486,13 +487,13 @@ export class HttpProxy {
   _getContentType(
     method: string,
     data: UnknownParameters,
-    options: HttpAgentRequestOptions
-  ) {
+    headers: IncomingHttpHeaders
+  ): string | null {
     if (
-      options.headers['Content-Type'] &&
-      typeof options.headers['Content-Type'] === 'string'
+      headers['Content-Type'] &&
+      typeof headers['Content-Type'] === 'string'
     ) {
-      return options.headers['Content-Type'];
+      return headers['Content-Type'];
     }
 
     if (this._shouldRequestHaveBody(method, data)) {

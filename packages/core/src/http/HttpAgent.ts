@@ -32,10 +32,8 @@ export interface HttpAgentRequestOptions {
   timeout: number;
   ttl: number;
   repeatRequest: number;
-  headers: IncomingHttpHeaders;
   fetchOptions: Omit<RequestInit, 'body'>;
   cache: boolean;
-  withCredentials: boolean;
   listeners?: { progress: (event: Event) => unknown };
   postProcessor?: <B>(response: HttpAgentResponse<B>) => HttpAgentResponse<B>;
   abortController?: AbortController;
