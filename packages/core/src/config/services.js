@@ -30,17 +30,14 @@ export const initServices = (ns, oc, config) => {
    * before creating new one.
    */
   if ($Debug && typeof window !== 'undefined') {
-    window.__IMA_HMR?.emitter?.on(
-      'destroy',
-      () => {
-        oc.get('$Router').unlisten();
-        oc.get('$EventBus').unlistenAll();
-        oc.get('$PageManager').destroy();
-        oc.get('$PageRenderer').unmount();
-        oc.get('$Dispatcher').clear();
-      },
-      true
-    );
+    window.__IMA_HMR?.emitter?.once('destroy', async () => {
+      oc.get('$Dispatcher').clear();
+      oc.get('$Router').unlisten();
+      // FIXME this actually doesn't do anything without arguments. Not sure if there's currently a way to clear all EventBus events.
+      // oc.get('$EventBus').unlistenAll();
+      oc.get('$PageRenderer').unmount();
+      await oc.get('$PageManager').destroy();
+    });
   }
 
   /**
