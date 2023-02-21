@@ -421,16 +421,16 @@ describe('ima.core.http.HttpProxy', () => {
       expect(typeof queryString).toBe('string');
 
       // testKey
-      expect(queryString.substr(12, 3)).toBe('%20');
-      expect(queryString.substr(19, 3)).toBe('%2F');
-      expect(queryString.substr(26, 3)).toBe('%7C');
-      expect(queryString.substr(33, 3)).toBe('%3F');
+      expect(queryString?.substr(12, 3)).toBe('%20');
+      expect(queryString?.substr(19, 3)).toBe('%2F');
+      expect(queryString?.substr(26, 3)).toBe('%7C');
+      expect(queryString?.substr(33, 3)).toBe('%3F');
 
       // testKey2
-      expect(queryString.substr(54, 3)).toBe('%23');
-      expect(queryString.substr(61, 3)).toBe('%24');
-      expect(queryString.substr(68, 3)).toBe('%5E');
-      expect(queryString.substr(75, 3)).toBe('%7B');
+      expect(queryString?.substr(54, 3)).toBe('%23');
+      expect(queryString?.substr(61, 3)).toBe('%24');
+      expect(queryString?.substr(68, 3)).toBe('%5E');
+      expect(queryString?.substr(75, 3)).toBe('%7B');
     });
   });
 
@@ -477,7 +477,7 @@ describe('ima.core.http.HttpProxy', () => {
       expect(proxy._shouldRequestHaveBody('', {})).toBeFalsy();
       expect(proxy._shouldRequestHaveBody('', undefined)).toBeFalsy();
       expect(proxy._shouldRequestHaveBody('GET', { data: 'foo' })).toBeFalsy();
-      expect(proxy._shouldRequestHaveBody('HEAD')).toBeFalsy();
+      expect(proxy._shouldRequestHaveBody('HEAD', undefined)).toBeFalsy();
     });
 
     it('should return true for valid data and supported methods', () => {
