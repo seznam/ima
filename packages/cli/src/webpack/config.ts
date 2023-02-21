@@ -69,15 +69,15 @@ export default async (
 
   // es2018 targets (taken from 'browserslist-generator')
   const targets = [
-    'and_chr >= 63',
-    'chrome >= 63',
+    'and_chr >= 66',
+    'chrome >= 66',
     'and_ff >= 58',
     'android >= 103',
     'edge >= 79',
-    'samsung >= 8.2',
+    'samsung >= 9.2',
     'safari >= 11.1',
     'ios_saf >= 11.4',
-    'opera >= 50',
+    'opera >= 53',
     'firefox >= 58',
   ];
 
@@ -533,6 +533,15 @@ export default async (
           resolve: {
             fullySpecified: false,
           },
+        },
+        /**
+         * Extracts source maps from existing source files (from their sourceMappingURL),
+         * this is usefull mainly for node_modules.
+         */
+        useSourceMaps && {
+          enforce: 'pre',
+          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          loader: require.resolve('source-map-loader'),
         },
       ].filter(Boolean) as RuleSetRule[],
     },

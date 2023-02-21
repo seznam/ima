@@ -28,7 +28,7 @@ export type HttpProxyRequestParams = {
   method: string;
   url: string;
   transformedUrl: string;
-  data: UnknownParameters;
+  data?: UnknownParameters;
   options: HttpAgentRequestOptions;
 };
 
@@ -109,7 +109,7 @@ export class HttpProxy {
   request<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse<B>> {
     const requestParams = this._composeRequestParams(
@@ -230,7 +230,7 @@ export class HttpProxy {
   getErrorParams(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions,
     status: number,
     body: unknown,
@@ -413,7 +413,7 @@ export class HttpProxy {
   _composeRequestParams(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): HttpProxyRequestParams {
     return {
@@ -438,7 +438,7 @@ export class HttpProxy {
    */
   _composeRequestInit(
     method: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): ImaRequestInit {
     const requestInit: {
@@ -490,7 +490,7 @@ export class HttpProxy {
    */
   _getContentType(
     method: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     headers: Record<string, string>
   ): string | null {
     if (
@@ -516,7 +516,7 @@ export class HttpProxy {
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */
-  _composeRequestUrl(url: string, data: UnknownParameters) {
+  _composeRequestUrl(url: string, data: UnknownParameters | undefined) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimiter = queryString
@@ -537,7 +537,7 @@ export class HttpProxy {
    *        be send with a request.
    * @return `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(method: string, data?: UnknownParameters) {
+  _shouldRequestHaveBody(method: string, data: UnknownParameters | undefined) {
     return !!(
       method &&
       data &&
@@ -555,7 +555,7 @@ export class HttpProxy {
    * @private
    */
   _transformRequestBody(
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     headers: Record<string, string>
   ) {
     switch (headers['Content-Type']) {
@@ -578,7 +578,11 @@ export class HttpProxy {
    * @returns Query string representation of the given object
    * @private
    */
-  _convertObjectToQueryString(object: UnknownParameters) {
+  _convertObjectToQueryString(object: UnknownParameters | undefined) {
+    if (!object) {
+      return undefined;
+    }
+
     return Object.keys(object)
       .map(key =>
         [key, object[key]]
@@ -598,9 +602,12 @@ export class HttpProxy {
    * @returns
    * @private
    */
-  _convertObjectToFormData(object: UnknownParameters) {
-    const window = this._window.getWindow();
+  _convertObjectToFormData(object: UnknownParameters | undefined) {
+    if (!object) {
+      return undefined;
+    }
 
+    const window = this._window.getWindow();
     if (!window || !FormData) {
       return object;
     }

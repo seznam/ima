@@ -22,15 +22,18 @@ export function createSwcTransformer({
   syntax,
   development,
   jsxRuntime,
+  sourceMaps,
 }: {
   type: ModuleConfig['type'];
   target: JscTarget;
   syntax?: ParserConfig['syntax'];
   development?: boolean;
   jsxRuntime: ReactConfig['runtime'];
+  sourceMaps?: boolean;
 }) {
   return swcTransformer({
     isModule: true,
+    sourceMaps: sourceMaps ?? true,
     module: {
       type: type ?? 'es6',
     },
@@ -54,9 +57,14 @@ export function createSwcTransformer({
 }
 
 export function swcTransformer(options: SWCTransformerOptions): Transformer {
-  return async ({ source }) => {
-    const { code, map } = await transform(source.code, options);
-    const newFilename = source.fileName.replace(EXTENSION_TRANSFORM_RE, '.js');
+  return async ({ source, context }) => {
+    const newFilename = context.fileName.replace(EXTENSION_TRANSFORM_RE, '.js');
+    const { code, map } = await transform(source.code, {
+      ...options,
+      filename: newFilename,
+      sourceFileName: newFilename,
+      inputSourceMap: source.map,
+    });
 
     return {
       fileName: newFilename,

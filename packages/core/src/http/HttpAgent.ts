@@ -81,7 +81,7 @@ export abstract class HttpAgent {
    */
   get<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -102,7 +102,7 @@ export abstract class HttpAgent {
    */
   post<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -123,7 +123,7 @@ export abstract class HttpAgent {
    */
   put<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -144,7 +144,7 @@ export abstract class HttpAgent {
    */
   patch<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -165,7 +165,7 @@ export abstract class HttpAgent {
    */
   delete<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();

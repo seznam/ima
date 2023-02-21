@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.2
+
+### Patch Changes
+
+- 1bd52f08c: Fixed an issue where if application produces error before the error-ovleray is initialize, it is not displayed in the overlay.
+
 ## 19.0.0-rc.1
 
 ### Major Changes

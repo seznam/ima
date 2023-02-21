@@ -1,5 +1,22 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Major Changes
+
+- e4656c192: **BREAKING CHANGE** Bumped browserslist targets definition a little bit to browsers supporting AbortController. Added AbortController to es2018 test script to runner.ejs. While technically not breaking change, since it's pretty minor bump, it is something however you should be aware of.
+
+### Minor Changes
+
+- 6a6b996d4: Added support for 3rd party source maps, this is usefull especially in error overlay.
+- 0327da69d: Added ability to customize open URL using `--openUrl` CLI argument or `IMA_CLI_OPEN_URL` environment variable.
+
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 3b14b4b24: Added additional CLI output info when `forcedLegacy` and `writeToDisk` args are used
+
 ## 19.0.0-rc.3
 
 ### Patch Changes
