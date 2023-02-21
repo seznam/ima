@@ -22,7 +22,6 @@ import { StringParameters, UnknownParameters } from '../types';
  * @property withCredentials Flag that indicates whether the
  *           request should be made using credentials such as cookies or
  *           authorization headers.
- * @property listeners Listeners for request events.
  * @property postProcessor Response
  *           post-processor applied just before the response is stored in the
  *           cache and returned.
@@ -38,7 +37,6 @@ export interface HttpAgentRequestOptions {
   repeatRequest: number;
   fetchOptions: ImaRequestInit;
   cache: boolean;
-  listeners?: { progress: (event: Event) => unknown };
   postProcessor?: <B>(response: HttpAgentResponse<B>) => HttpAgentResponse<B>;
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;

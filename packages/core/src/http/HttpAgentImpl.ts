@@ -45,7 +45,6 @@ export class HttpAgentImpl extends HttpAgent {
    *              timeout: 2000,
    *              accept: 'application/json',
    *              language: 'en',
-   *              listeners: { 'progress': callbackFunction }
    *          })
    *          .then((response) => {
    *              //resolve
