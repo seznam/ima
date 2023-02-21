@@ -42,6 +42,11 @@ export type Dependencies = (
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
+
+type CreateInstanceType<T> = T extends abstract new (...args: any) => any
+  ? InstanceType<T>
+  : T;
+
 /**
  * The Object Container is an enhanced dependency injector with support for
  * aliases and constants, and allowing to reference classes in the application
@@ -403,15 +408,15 @@ export class ObjectContainer {
    *        factory function.
    * @return The shared instance or value.
    */
-  get(name: DependencyWithOptions) {
-    const entry = this._getEntry(name);
+  get<T>(name: T | string) {
+    const entry = this._getEntry(name as DependencyWithOptions);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
-    //Optional entries can be null if they are not found in the OC
-    return entry?.sharedInstance;
+    // Optional entries can be null if they are not found in the OC
+    return entry?.sharedInstance as CreateInstanceType<T>;
   }
 
   /**

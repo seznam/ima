@@ -1,12 +1,104 @@
-import { AppConfigFunctions, Bootstrap, Config } from './Bootstrap';
+import {
+  AppConfigFunctions,
+  BootSettings,
+  Bootstrap,
+  BootConfig,
+} from './Bootstrap';
 import { Cache, SerializedData } from './cache/Cache';
 import { initBind as initBindIma } from './config/bind';
 import { initServices as initServicesIma } from './config/services';
 import { GenericError } from './error/GenericError';
-import { ns } from './Namespace';
+import { HttpAgentRequestOptions } from './http/HttpAgent';
+import { HttpAgentImplCacheOptions } from './http/HttpAgentImpl';
+import { Namespace, ns } from './Namespace';
 import { ObjectContainer } from './ObjectContainer';
 import { pluginLoader } from './pluginLoader';
 import { AbstractRouter } from './router/AbstractRouter';
+
+/**
+ * App environment for single env key.
+ */
+export interface Environment {
+  [key: string]: unknown;
+  $Debug: BootSettings['$Version'];
+  $Language: Record<string, string>;
+  $Version: BootSettings['$Version'];
+  $App: BootSettings['$App'];
+  $Resources: BootSettings['$Resources'];
+  $Server: {
+    protocol?: string;
+    host?: string;
+    port: number;
+    staticPath: string;
+    concurrency: number;
+    staticConcurrency: number;
+    overloadConcurrency: number;
+    clusters: null | number;
+    serveSPA: {
+      allow: boolean;
+      blackList?: (userAgent: string) => boolean;
+    };
+    cache: {
+      enabled: boolean | ((req: Express.Request) => boolean);
+      cacheKeyGenerator?: (req: Express.Request) => string;
+      entryTtl: number;
+      unusedEntryTtl: number;
+      maxEntries: number;
+    };
+    logger: {
+      formatting: 'simple' | 'dev' | 'JSON';
+    };
+  };
+}
+
+/**
+ * App Environment structure, used in ./server/config/environment.js
+ */
+export interface AppEnvironment {
+  [key: string]: Partial<Environment>;
+  prod: Environment;
+  dev: Partial<Environment>;
+}
+
+/**
+ * App settings for single env key.
+ */
+export interface Settings {
+  [key: string]: unknown;
+  $Version: string;
+  $Http: {
+    defaultRequestOptions: HttpAgentRequestOptions;
+    cacheOptions: HttpAgentImplCacheOptions;
+  };
+  $Router?: {
+    middlewareTimeout?: number;
+  };
+  $Cache?: {
+    ttl?: number;
+    enable?: number;
+  };
+  $Page: {
+    $Render: {
+      masterElementId: string;
+      documentView: unknown;
+      managedRootView?: unknown;
+      viewAdapter?: unknown;
+    };
+  };
+}
+
+/**
+ * App settings function, used in ./app/config/settings.js
+ */
+export type AppSettings = (
+  ns: Namespace,
+  oc: ObjectContainer,
+  config: BootSettings
+) => {
+  [key: string]: Partial<Settings>;
+  prod: Settings;
+  dev: Partial<Settings>;
+};
 
 export function getInitialImaConfigFunctions() {
   return { initBindIma, initServicesIma };
@@ -34,7 +126,7 @@ export function createImaApp() {
 
 export function getClientBootConfig(
   initialAppConfigFunctions: AppConfigFunctions
-): Config {
+): BootConfig {
   const root = _getRoot();
 
   if ($Debug && _isClient()) {
@@ -57,7 +149,7 @@ export function getClientBootConfig(
 
   const bootConfig = {
     services: {
-      respond: null,
+      response: null,
       request: null,
       $IMA: $IMA,
       dictionary: {
@@ -92,7 +184,7 @@ export function getClientBootConfig(
     initialAppConfigFunctions,
     getInitialPluginConfig(),
     getInitialImaConfigFunctions()
-  ) as unknown as Config;
+  ) as unknown as BootConfig;
 }
 
 export function bootClientApp(
@@ -100,11 +192,11 @@ export function bootClientApp(
     bootstrap: Bootstrap;
     oc: ObjectContainer;
   },
-  bootConfig: Config
+  bootConfig: BootConfig
 ) {
   app.bootstrap.run(bootConfig);
 
-  const cache = app.oc.get('$Cache') as Cache;
+  const cache = app.oc.get<Cache>('$Cache');
   cache.deserialize(($IMA.Cache || {}) as SerializedData);
 
   return app;
@@ -114,7 +206,7 @@ export function routeClientApp(app: {
   bootstrap: Bootstrap;
   oc: ObjectContainer;
 }) {
-  const router = app.oc.get('$Router') as AbstractRouter;
+  const router = app.oc.get<AbstractRouter>('$Router');
 
   return router
     .listen()

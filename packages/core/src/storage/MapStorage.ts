@@ -5,7 +5,7 @@ import { Dependencies } from '../ObjectContainer';
  * Implementation of the `link Storage` interface that relies on the
  * native `Map` for storage.
  */
-export class MapStorage<V> extends Storage<V> {
+export class MapStorage<V = unknown> extends Storage<V> {
   /**
    * The internal storage of entries.
    */

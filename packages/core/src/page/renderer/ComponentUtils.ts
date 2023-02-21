@@ -39,12 +39,12 @@ export class ComponentUtils {
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
    */
-  register(
+  register<V>(
     name:
       | string
       | UnknownConstructable
       | FactoryFunction
-      | { [key: string]: string | UnknownConstructable | FactoryFunction },
+      | { [key: string]: string | UnknownConstructable | FactoryFunction | V },
     componentUtilityClass?: UnknownConstructable | FactoryFunction,
     referrer?: string
   ) {

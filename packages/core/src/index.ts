@@ -3,7 +3,12 @@ export {
   Bootstrap,
   type PluginConfigFunctions,
   type AppConfigFunctions,
-  type Config,
+  type BootSettings,
+  type Manifest,
+  type ManifestAsset,
+  type Resource,
+  type Resources,
+  type BootConfig,
 } from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
 export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
@@ -139,6 +144,10 @@ export {
   routeClientApp,
   reviveClientApp,
   onLoad,
+  type AppEnvironment,
+  type Environment,
+  type AppSettings,
+  type Settings,
 } from './boot';
 export {
   type Utils,

@@ -1,5 +1,8 @@
 import DocumentView from 'app/document/DocumentView';
 
+/**
+ * @type import('@ima/core').AppSettings
+ */
 export default (ns, oc, config) => {
   return {
     prod: {

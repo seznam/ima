@@ -1,5 +1,11 @@
 import * as helpers from '@ima/helpers';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
+import { AssetInfo } from 'webpack';
 
+import { DictionaryConfig } from './dictionary/Dictionary';
 import { Namespace, ns } from './Namespace';
 import { ObjectContainer } from './ObjectContainer';
 import { Router } from './router/Router';
@@ -7,29 +13,76 @@ import { UnknownParameters } from './types';
 
 ns.namespace('ima.core');
 
-export type PluginConfigFunctions = {
+export interface ManifestAsset extends AssetInfo {
+  name: string;
+}
+
+export interface Manifest {
+  assets: Record<string, ManifestAsset>;
+  assetsByCompiler: Record<
+    'server' | 'client' | 'client.es',
+    Record<string, ManifestAsset>
+  >;
+  publicPath: string;
+}
+
+export type Resource =
+  | string
+  | [
+      string,
+      {
+        [attribute: string]: unknown;
+        fallback: boolean;
+      }
+    ];
+
+export interface Resources {
+  styles: Resource[];
+  scripts: Resource[];
+  esScripts: Resource[];
+}
+
+export interface BootSettings {
+  $Debug: boolean;
+  $Env: string;
+  $Version: string;
+  $App: Record<string, unknown>;
+  $Resources?: (
+    response: unknown,
+    manifest: Manifest,
+    defaultResources: Resources
+  ) => Resources;
+  $Protocol: string;
+  $Language: string;
+  $Host: string;
+  $Path: string;
+  $Root: string;
+  $LanguagePartPath: string;
+}
+
+export interface PluginConfigFunctions {
   initServices?: (
     ns: Namespace,
     oc: ObjectContainer,
-    settings: Config['services'],
+    settings: BootConfig['services'],
     isDynamicallyLoaded: boolean
-  ) => Config['settings'];
+  ) => BootConfig['settings'];
   initBind?: (
     ns: Namespace,
     oc: ObjectContainer,
-    settings: Config['bind'],
+    settings: BootConfig['bind'],
     isDynamicallyLoaded: boolean,
     name?: string
   ) => void;
   initSettings?: (
     ns: Namespace,
     oc: ObjectContainer,
-    settings: Config['settings'],
+    settings: BootConfig['settings'],
     isDynamicallyLoaded: boolean
   ) => void;
-};
+}
 
-export type AppConfigFunctions = {
+export interface AppConfigFunctions {
   initBindApp: (
     ns: Namespace,
     oc: ObjectContainer,
@@ -47,18 +100,30 @@ export type AppConfigFunctions = {
     oc: ObjectContainer,
     services?: UnknownParameters
   ) => void;
-};
+}
 
-export type Config = {
+export interface BootConfig {
   initBindIma: (...args: unknown[]) => unknown;
   initServicesIma: (...args: unknown[]) => unknown;
   initSettings: (...args: unknown[]) => unknown;
-  plugins: { name: string; plugin: PluginConfigFunctions }[];
   routes: UnknownParameters;
-  services: UnknownParameters;
-  settings: UnknownParameters;
   bind: UnknownParameters;
-} & AppConfigFunctions;
+  plugins: { name: string; plugin: PluginConfigFunctions }[];
+  services: {
+    response: ExpressResponse;
+    request: ExpressRequest;
+    $IMA: Window['$IMA'];
+    dictionary: DictionaryConfig;
+    router: {
+      $Protocol: string;
+      $Host: string;
+      $Path: string;
+      $Root: string;
+      $LanguagePartPath: string;
+    };
+  };
+  settings: BootSettings;
+}
 
 /**
  * Application bootstrap used to initialize the environment and the application
@@ -66,7 +131,7 @@ export type Config = {
  */
 export class Bootstrap {
   protected _oc: ObjectContainer;
-  protected _config: Config;
+  protected _config: BootConfig;
   /**
    * Initializes the bootstrap.
    *
@@ -100,7 +165,7 @@ export class Bootstrap {
    * @param config The application environment
    *        configuration for the current environment.
    */
-  run(config: Config) {
+  run(config: BootConfig) {
     this._config = config;
 
     this._initSettings();

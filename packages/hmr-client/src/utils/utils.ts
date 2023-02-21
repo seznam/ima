@@ -139,7 +139,7 @@ export const isUpToDate = (() => {
   };
 })();
 
-export function processUpdatedModules({
+export async function processUpdatedModules({
   updatedModules,
   logger,
   options,
@@ -149,7 +149,7 @@ export function processUpdatedModules({
   options: HMROptions;
   logger: Logger;
   emitter: Emitter;
-}): void {
+}): Promise<void> {
   // Language files have their own HMR handler, no need to kill ima APP
   if (
     updatedModules.every(
@@ -170,7 +170,7 @@ export function processUpdatedModules({
       ))
   ) {
     logger.info('cross', 'Destroying IMA app');
-    emitter.emit('destroy');
+    await emitter.emit('destroy');
   }
 }
 
@@ -209,7 +209,7 @@ export async function processUpdate({
      * Process updated modules and do some additional updates
      * before applying new changes if necessary.
      */
-    processUpdatedModules({
+    await processUpdatedModules({
       logger,
       options,
       updatedModules,

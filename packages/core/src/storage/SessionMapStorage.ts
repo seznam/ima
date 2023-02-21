@@ -9,7 +9,7 @@ import { Dependencies } from '../ObjectContainer';
  * `link Storage` interface acting as a synchronization proxy between
  * the underlying map storage and the `sessionStorage` DOM storage.
  */
-export class SessionMapStorage<V> extends Storage<V> {
+export class SessionMapStorage<V = unknown> extends Storage<V> {
   /**
    * The map storage, synced with the session storage.
    */

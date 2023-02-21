@@ -8,7 +8,7 @@ import { Window } from '../window/Window';
  * Implementation of the `link Storage` interface that relies on the
  * native `sessionStorage` DOM storage for storing its entries.
  */
-export class SessionStorage<V> extends ImaStorage<V> {
+export class SessionStorage<V = unknown> extends ImaStorage<V> {
   /**
    * The DOM storage providing the actual storage of the entries.
    */

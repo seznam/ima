@@ -1,5 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
+import { BootConfig } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -18,6 +19,8 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { UrlTransformer } from '../http/UrlTransformer';
 import { MetaManager } from '../meta/MetaManager';
 import { MetaManagerImpl } from '../meta/MetaManagerImpl';
+import { Namespace } from '../Namespace';
+import { ObjectContainer } from '../ObjectContainer';
 import { PageHandlerRegistry } from '../page/handler/PageHandlerRegistry';
 import { PageMetaHandler } from '../page/handler/PageMetaHandler';
 import { PageNavigationHandler } from '../page/handler/PageNavigationHandler';
@@ -46,7 +49,11 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
-export const initBind = (ns, oc, config) => {
+export const initBind = (
+  ns: Namespace,
+  oc: ObjectContainer,
+  config: BootConfig['bind']
+) => {
   //**************START VENDORS**************
   oc.constant('$Helper', $Helper);
 
@@ -83,8 +90,8 @@ export const initBind = (ns, oc, config) => {
 
   //Storage
   oc.constant('$CookieTransformFunction', {
-    encode: s => s,
-    decode: s => s,
+    encode: (s: unknown) => s,
+    decode: (s: unknown) => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {

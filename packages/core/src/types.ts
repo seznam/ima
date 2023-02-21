@@ -1,6 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
-import { Dictionary } from './dictionary/Dictionary';
+import { Dictionary, DictionaryConfig } from './dictionary/Dictionary';
 import { Dispatcher } from './event/Dispatcher';
 import { EventBus } from './event/EventBus';
 import { HttpAgent } from './http/HttpAgent';
@@ -47,6 +47,7 @@ declare global {
     $IMA?: {
       SPA: boolean;
       $PublicPath: string;
+      $RequestID: string;
       $Language: string;
       $Env: string;
       $Debug: boolean;
@@ -57,9 +58,10 @@ declare global {
       $Path: string;
       $Root: string;
       $LanguagePartPath: string;
-      Runner: string;
-      Cache: object;
-      i18n?: object;
+      Runner: object;
+      fatalErrorHandler?: (error: Error) => void;
+      Cache?: object;
+      i18n?: DictionaryConfig;
     };
   }
 }

@@ -18,8 +18,7 @@ function renderStyles(styles) {
       return acc;
     }
 
-    const [href, { fallback = null, preload, rel = 'stylesheet', ...options }] =
-      cur;
+    const [href, { fallback = null, rel = 'stylesheet', ...options }] = cur;
     let link = `<link href="${href}" rel="${rel}"`;
 
     // Generate fallback handler
@@ -98,10 +97,7 @@ function _prepareSources(manifest, language) {
     name.includes(`locale/${language}.js`);
 
   return {
-    styles: buildResources('client.es', cssFilter, {
-      rel: 'stylesheet',
-      preload: true,
-    }),
+    styles: buildResources('client.es', cssFilter),
     scripts: buildResources('client', jsFilter, {
       async: true,
       crossorigin: 'anonymous',
