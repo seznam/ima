@@ -806,6 +806,11 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/something/param1/user1',
         params: {},
       },
+      {
+        pathExpression: '/test/:?param1/:?param2',
+        path: '/test/xxx',
+        params: { param1: 'xxx', param2: undefined },
+      },
     ].forEach(value => {
       it(value.pathExpression, function () {
         const localStaticRoute = new StaticRoute(

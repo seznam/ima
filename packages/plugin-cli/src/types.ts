@@ -61,6 +61,8 @@ export interface ImaPluginConfig {
   exclude?: WatchOptions['ignored'];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
+  transformers?: TransformerDefinition[] | '...';
+  sourceMaps?: boolean;
   additionalWatchPaths?: string[];
 }
 
