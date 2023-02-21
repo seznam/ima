@@ -28,11 +28,15 @@ import { StringParameters, UnknownParameters } from '../types';
  *           cache and returned.
  */
 
+export interface ImaRequestInit extends Omit<RequestInit, 'body'> {
+  headers?: Record<string, string>;
+}
+
 export interface HttpAgentRequestOptions {
   timeout: number;
   ttl: number;
   repeatRequest: number;
-  fetchOptions: Omit<RequestInit, 'body'>;
+  fetchOptions: ImaRequestInit;
   cache: boolean;
   listeners?: { progress: (event: Event) => unknown };
   postProcessor?: <B>(response: HttpAgentResponse<B>) => HttpAgentResponse<B>;
