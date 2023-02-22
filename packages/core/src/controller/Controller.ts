@@ -18,7 +18,7 @@ export interface IController {}
  * on the page (or other input).
  */
 export abstract class Controller implements IController {
-  eventBusMethodPrefix = '';
+  eventBusMethodPrefix?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler;
