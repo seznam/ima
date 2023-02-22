@@ -1,4 +1,5 @@
 import * as Helpers from '@ima/helpers';
+import mergeDeep from 'merge-deep';
 
 import {
   HttpAgent,
@@ -415,13 +416,9 @@ export class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options?: Partial<HttpAgentRequestOptions>
+    options: Partial<HttpAgentRequestOptions> = {}
   ): HttpAgentRequestOptions {
-    const composedOptions = Helpers.assignRecursively(
-      {},
-      this._defaultRequestOptions,
-      options
-    );
+    const composedOptions = mergeDeep(this._defaultRequestOptions, options);
 
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending auth cookie)

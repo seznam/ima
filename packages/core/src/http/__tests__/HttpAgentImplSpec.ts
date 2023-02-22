@@ -188,6 +188,50 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
+      it('should compose fetchOptions correctly from defaults and options', async () => {
+        const proxyMock = jest
+          .spyOn(proxy, 'request')
+          .mockImplementation(() => {
+            return Promise.resolve(data);
+          });
+
+        jest
+          .spyOn(cookie, 'getCookiesStringForCookieHeader')
+          .mockImplementation(() => 'someCookie=value');
+
+        const customOptions = {
+          ...data.params.options,
+          fetchOptions: {
+            mode: 'cors',
+            referrerPolicy: 'no-referrer-when-downgrade',
+            headers: {
+              'Accept-Language': 'cs',
+              Cookie: 'cok1=hello; cok2=hello2',
+            },
+          },
+        };
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          customOptions
+        ).then(() => {
+          const mockCall = proxyMock.mock.lastCall || [];
+          expect(mockCall[3]).toMatchObject({
+            fetchOptions: {
+              credentials: 'include',
+              referrerPolicy: 'no-referrer-when-downgrade',
+              headers: {
+                'Accept-Language': 'cs',
+                Cookie: 'cok1=hello; cok2=hello2',
+              },
+              mode: 'cors',
+            },
+          });
+        });
+      });
+
       it('should call postProcessor function', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
