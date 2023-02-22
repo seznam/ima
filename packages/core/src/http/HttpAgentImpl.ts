@@ -417,16 +417,16 @@ export class HttpAgentImpl extends HttpAgent {
   _prepareOptions(
     options?: Partial<HttpAgentRequestOptions>
   ): HttpAgentRequestOptions {
-    const composedOptions = {
-      ...this._defaultRequestOptions,
-      ...options,
-    };
+    const composedOptions = Helpers.assignRecursively(
+      {},
+      this._defaultRequestOptions,
+      options
+    );
 
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending auth cookie)
-      composedOptions.fetchOptions.headers =
-        composedOptions.fetchOptions.headers || {};
-      composedOptions.fetchOptions.headers.Cookie =
+      composedOptions.fetchOptions.headers ??= {};
+      composedOptions.fetchOptions.headers.Cookie ??=
         this._cookie.getCookiesStringForCookieHeader();
     }
 
@@ -518,10 +518,8 @@ export class HttpAgentImpl extends HttpAgent {
 
     if (pureResponse.params.options.keepSensitiveHeaders !== true) {
       pureResponse.headers = {};
+      pureResponse.params.options.fetchOptions.headers = {};
       delete pureResponse.headersRaw;
-      if (pureResponse.params.options.fetchOptions) {
-        pureResponse.params.options.fetchOptions.headers = {};
-      }
     }
 
     return pureResponse;
