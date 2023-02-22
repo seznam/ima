@@ -257,11 +257,17 @@ The `publicPath` option is used to specify base path for all asses within the ap
 
 Use this option to change base public path for static served files, for example when uploading static files to CDN.
 
-Additionally, **if the CDN url is not known before building the application**, you can use `IMA_PUBLIC_PATH` env variable, when starting the application server. This variable takes preference before the ima config `publicPath` option.
+#### Runtime public path
+
+When you want to **change public path during runtime**, you can use `IMA_PUBLIC_PATH` env variable, when starting the application server. This variable takes preference before the ima config `publicPath` option.
 
 ```bash
 IMA_PUBLIC_PATH="https://cdn.basePath/cd_F/" node ./server/server.js
 ```
+
+Additionally, when used, runner.js injected scripts and styles have defined fallback to local static files, in case the runtime public path assets are not available (CDN is down for example).
+
+#### Default settings
 
 If you want to serve your static files on a different route (default is `/static`), customize the `staticPath` option in `./server/config/environment.js` file and change `publicPath` option accordingly:
 

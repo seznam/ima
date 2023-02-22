@@ -116,7 +116,7 @@ app
   .use(
     environment.$Server.staticPath,
     memStaticProxy,
-    expressStaticGzip(path.resolve(path.join(__dirname, '../build/static')), {
+    expressStaticGzip(path.resolve(path.join(__dirname, '../build')), {
       enableBrotli: true,
       index: false,
       orderPreference: ['br'],
