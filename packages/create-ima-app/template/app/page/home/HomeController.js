@@ -52,7 +52,7 @@ export default class HomeController extends AbstractPageController {
      * on server isomorphically.
      */
     const cardsPromise = this._httpAgent
-      .get('http://localhost:3001/static/public/cards.json')
+      .get('http://localhost:3001/static/static/public/cards.json')
       .then(response => response.body);
 
     return {
