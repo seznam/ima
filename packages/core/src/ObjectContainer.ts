@@ -47,35 +47,9 @@ type CreateInstanceType<T> = T extends abstract new (...args: any) => any
   ? InstanceType<T>
   : T;
 
-/**
- * The Object Container is an enhanced dependency injector with support for
- * aliases and constants, and allowing to reference classes in the application
- * namespace by specifying their fully qualified names.
- */
-export class ObjectContainer {
+export enum BindingState {
   /**
-   * The current binding state.
-   *
-   * The {@link setBindingState()} method may be called for changing
-   * object container binding state only by the bootstrap script.
-   */
-  private _bindingState?: string;
-  /**
-   * The current plugin binding to OC.
-   *
-   * The {@link setBindingState()} method may be called for changing
-   * object container binding state only by the bootstrap script.
-   */
-  private _bindingPlugin?: string;
-  private _entries: Map<Dependency, Entry> = new Map();
-  /**
-   * The namespace container, used to access classes and values using
-   * their fully qualified names.
-   */
-  private _namespace: Namespace;
-
-  /**
-   * Returns constant for plugin binding state.
+   * Constant for plugin binding state.
    *
    * When the object container is in plugin binding state, it is impossible
    * to register new aliases using the {@link bind()} method and register
@@ -92,15 +66,10 @@ export class ObjectContainer {
    *
    * The application itself has always access to the unlocked object
    * container.
-   *
-   * @return The plugin binding state.
    */
-  static get PLUGIN_BINDING_STATE() {
-    return 'plugin';
-  }
-
+  Plugin = 'plugin',
   /**
-   * Returns constant for IMA binding state.
+   * Constant for IMA binding state.
    *
    * When the object container is in ima binding state, it is possible
    * to register new aliases using the {@link bind()} method and register
@@ -112,12 +81,9 @@ export class ObjectContainer {
    *
    * @return The IMA binding state.
    */
-  static get IMA_BINDING_STATE() {
-    return 'ima.core';
-  }
-
+  IMA = 'ima.core',
   /**
-   * Returns constant for app binding state.
+   * Constant for app binding state.
    *
    * When the object container is in app binding state, it is possible
    * to register new aliases using the {@link bind()} method and register
@@ -126,12 +92,36 @@ export class ObjectContainer {
    * {@link inject()} method (classes that were not configured yet may be
    * configured using the {@link inject()} method or {@link provide()}
    * method).
-   *
-   * @return The app binding state.
    */
-  static get APP_BINDING_STATE() {
-    return 'app';
-  }
+  App = 'app',
+}
+
+/**
+ * The Object Container is an enhanced dependency injector with support for
+ * aliases and constants, and allowing to reference classes in the application
+ * namespace by specifying their fully qualified names.
+ */
+export class ObjectContainer {
+  /**
+   * The current binding state.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
+  private _bindingState?: BindingState;
+  /**
+   * The current plugin binding to OC.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
+  private _bindingPlugin?: string;
+  private _entries: Map<Dependency, Entry> = new Map();
+  /**
+   * The namespace container, used to access classes and values using
+   * their fully qualified names.
+   */
+  private _namespace: Namespace;
 
   /**
    * Initializes the object container.
@@ -173,7 +163,7 @@ export class ObjectContainer {
   ) {
     if ($Debug) {
       if (
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE &&
+        this._bindingState === BindingState.Plugin &&
         typeof name === 'string' &&
         name[0] !== '$'
       ) {
@@ -242,7 +232,7 @@ export class ObjectContainer {
         );
       }
 
-      if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
+      if (this._bindingState === BindingState.Plugin) {
         throw new Error(
           `ima.core.ObjectContainer:constant The ${this._getDebugName(name)} ` +
             `constant can't be declared in plugin. ` +
@@ -288,7 +278,7 @@ export class ObjectContainer {
 
       if (
         this._entries.has(classConstructor) &&
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+        this._bindingState === BindingState.Plugin
       ) {
         throw new Error(
           `ima.core.ObjectContainer:inject The ` +
@@ -347,7 +337,7 @@ export class ObjectContainer {
     if ($Debug) {
       if (
         this._entries.has(interfaceConstructor) &&
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+        this._bindingState === BindingState.Plugin
       ) {
         throw new Error(
           'ima.core.ObjectContainer:provide The ' +
@@ -485,10 +475,10 @@ export class ObjectContainer {
     return this;
   }
 
-  setBindingState(bindingState: string, bindingPluginName?: string) {
+  setBindingState(bindingState: BindingState, bindingPluginName?: string) {
     if (
-      this._bindingState === ObjectContainer.APP_BINDING_STATE &&
-      bindingState !== ObjectContainer.PLUGIN_BINDING_STATE
+      this._bindingState === BindingState.App &&
+      bindingState !== BindingState.Plugin
     ) {
       throw new Error(
         `ima.core.ObjectContainer:setBindingState The setBindingState() ` +
@@ -499,9 +489,7 @@ export class ObjectContainer {
 
     this._bindingState = bindingState;
     this._bindingPlugin =
-      bindingState === ObjectContainer.PLUGIN_BINDING_STATE
-        ? bindingPluginName
-        : undefined;
+      bindingState === BindingState.Plugin ? bindingPluginName : undefined;
   }
 
   /**
@@ -584,7 +572,7 @@ export class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isOptional(name: DependencyWithOptions) {
+  private _isOptional(name: DependencyWithOptions) {
     return (
       (Array.isArray(name) && name[1]?.optional) ||
       (typeof name === 'string' && OPTIONAL_RE.test(name))
@@ -598,7 +586,7 @@ export class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isSpread(name: DependencyWithOptions) {
+  private _isSpread(name: DependencyWithOptions) {
     const normalizedName = Array.isArray(name) ? name[0] : name;
 
     return typeof normalizedName === 'string' && SPREAD_RE.test(normalizedName);
@@ -656,9 +644,9 @@ export class ObjectContainer {
       dependencies = (classConstructor as WithDependencies).$dependencies;
     }
 
-    let referrer = this._bindingState;
+    let referrer = this._bindingState?.toString();
 
-    if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
+    if (this._bindingState === BindingState.Plugin) {
       referrer = this._bindingPlugin;
     }
 

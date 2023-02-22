@@ -3,7 +3,9 @@ import {
   BootSettings,
   Bootstrap,
   BootConfig,
+  ImaConfigFunctions,
 } from './Bootstrap';
+import { AssetInfo } from 'webpack';
 import { Cache, SerializedData } from './cache/Cache';
 import { initBind as initBindIma } from './config/bind';
 import { initServices as initServicesIma } from './config/services';
@@ -14,17 +16,52 @@ import { Namespace, ns } from './Namespace';
 import { ObjectContainer } from './ObjectContainer';
 import { pluginLoader } from './pluginLoader';
 import { AbstractRouter } from './router/AbstractRouter';
+import { GlobalImaObject } from './types';
+
+
+export interface ManifestAsset extends AssetInfo {
+  name: string;
+}
+
+export interface Manifest {
+  assets: Record<string, ManifestAsset>;
+  assetsByCompiler: Record<
+    'server' | 'client' | 'client.es',
+    Record<string, ManifestAsset>
+  >;
+  publicPath: string;
+}
+
+export type Resource =
+  | string
+  | [
+      string,
+      {
+        [attribute: string]: unknown;
+        fallback: boolean;
+      }
+    ];
+
+export interface Resources {
+  styles: Resource[];
+  scripts: Resource[];
+  esScripts: Resource[];
+}
 
 /**
  * App environment for single env key.
  */
 export interface Environment {
   [key: string]: unknown;
-  $Debug: BootSettings['$Version'];
+  $Debug: GlobalImaObject['$Version'];
   $Language: Record<string, string>;
-  $Version: BootSettings['$Version'];
-  $App: BootSettings['$App'];
-  $Resources: BootSettings['$Resources'];
+  $Version: GlobalImaObject['$Version'];
+  $App: GlobalImaObject['$App'];
+  $Resources?: (
+    response: unknown,
+    manifest: Manifest,
+    defaultResources: Resources
+  ) => Resources;
   $Server: {
     protocol?: string;
     host?: string;
@@ -55,9 +92,10 @@ export interface Environment {
  * App Environment structure, used in ./server/config/environment.js
  */
 export interface AppEnvironment {
-  [key: string]: Partial<Environment>;
   prod: Environment;
-  dev: Partial<Environment>;
+  dev?: Partial<Environment>;
+  test?: Partial<Environment>;
+  regression?: Partial<Environment>;
 }
 
 /**
@@ -95,12 +133,13 @@ export type AppSettings = (
   oc: ObjectContainer,
   config: BootSettings
 ) => {
-  [key: string]: Partial<Settings>;
   prod: Settings;
-  dev: Partial<Settings>;
+  dev?: Partial<Settings>;
+  test?: Partial<Settings>;
+  regression?: Partial<Settings>;
 };
 
-export function getInitialImaConfigFunctions() {
+export function getInitialImaConfigFunctions(): ImaConfigFunctions {
   return { initBindIma, initServicesIma };
 }
 
@@ -147,10 +186,10 @@ export function getClientBootConfig(
     }
   }
 
-  const bootConfig = {
+  return {
     services: {
-      response: null,
       request: null,
+      response: null,
       $IMA: $IMA,
       dictionary: {
         $Language: $IMA.$Language,
@@ -169,7 +208,6 @@ export function getClientBootConfig(
       $Env: $IMA.$Env,
       $Version: $IMA.$Version,
       $App: $IMA.$App,
-      $Resources: $IMA.$Resources,
       $Protocol: $IMA.$Protocol,
       $Language: $IMA.$Language,
       $Host: $IMA.$Host,
@@ -177,14 +215,10 @@ export function getClientBootConfig(
       $Root: $IMA.$Root,
       $LanguagePartPath: $IMA.$LanguagePartPath,
     },
+    ...initialAppConfigFunctions,
+    ...getInitialPluginConfig(),
+    ...getInitialImaConfigFunctions(),
   };
-
-  return Object.assign(
-    bootConfig,
-    initialAppConfigFunctions,
-    getInitialPluginConfig(),
-    getInitialImaConfigFunctions()
-  ) as unknown as BootConfig;
 }
 
 export function bootClientApp(
@@ -223,6 +257,8 @@ export function routeClientApp(app: {
 }
 
 export function reviveClientApp(initialAppConfigFunctions: AppConfigFunctions) {
+  console.error('revive');
+
   const root = _getRoot();
 
   root.$Debug = !!root.$IMA.$Debug;

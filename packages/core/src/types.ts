@@ -1,4 +1,5 @@
 import * as $Helper from '@ima/helpers';
+import { AppEnvironment } from '.';
 
 import { Dictionary, DictionaryConfig } from './dictionary/Dictionary';
 import { Dispatcher } from './event/Dispatcher';
@@ -35,33 +36,35 @@ export interface Utils {
   $Window: Window;
 }
 
+
+export interface GlobalImaObject {
+  $Env: keyof AppEnvironment;
+  $Version: string;
+  $App: Record<string, unknown>;
+  $Language: string;
+  $Debug: boolean;
+  $Protocol: string;
+  $Host: string;
+  $Path: string;
+  $Root: string;
+  $LanguagePartPath: string;
+  Runner: object;
+  SPA: boolean;
+  $IMA: GlobalImaObject;
+  $RequestID: string;
+  $PublicPath: string;
+  i18n: DictionaryConfig['dictionary'];
+  fatalErrorHandler?: (error: Error) => void;
+  Cache?: object;
+}
+
 declare global {
   /* eslint-disable no-var */
   var $Debug: boolean;
-  var $IMA: Record<string, unknown>;
-  // Test Functions
-  var using: (values: unknown[], func: object) => void;
-  var extend: (ChildClass: object, ParentClass: object) => void;
+  var $IMA: GlobalImaObject;
+  /* eslint-enable no-var */
 
   interface Window {
-    $IMA?: {
-      SPA: boolean;
-      $PublicPath: string;
-      $RequestID: string;
-      $Language: string;
-      $Env: string;
-      $Debug: boolean;
-      $Version: string;
-      $App: string;
-      $Protocol: string;
-      $Host: string;
-      $Path: string;
-      $Root: string;
-      $LanguagePartPath: string;
-      Runner: object;
-      fatalErrorHandler?: (error: Error) => void;
-      Cache?: object;
-      i18n?: DictionaryConfig;
-    };
+    $IMA: GlobalImaObject;
   }
 }

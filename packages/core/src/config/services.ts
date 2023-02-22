@@ -1,9 +1,7 @@
-import { BootConfig } from '../Bootstrap';
+import { InitServices } from '../Bootstrap';
 import { Dictionary } from '../dictionary/Dictionary';
 import { Dispatcher } from '../event/Dispatcher';
 import { UrlTransformer } from '../http/UrlTransformer';
-import { Namespace } from '../Namespace';
-import { ObjectContainer } from '../ObjectContainer';
 import { PageManager } from '../page/manager/PageManager';
 import { PageRenderer } from '../page/renderer/PageRenderer';
 import { PageStateManager } from '../page/state/PageStateManager';
@@ -15,11 +13,7 @@ import { SessionMapStorage } from '../storage/SessionMapStorage';
 import { SessionStorage } from '../storage/SessionStorage';
 import { Window } from '../window/Window';
 
-export const initServices = (
-  ns: Namespace,
-  oc: ObjectContainer,
-  config: BootConfig['services']
-) => {
+export const initServices: InitServices = (ns, oc, config) => {
   oc.get<Dictionary>('$Dictionary').init(config.dictionary);
   oc.get<Dispatcher>('$Dispatcher').clear();
 

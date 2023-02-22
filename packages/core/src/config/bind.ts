@@ -1,6 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
-import { BootConfig } from '../Bootstrap';
+import { InitBind } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -49,11 +49,7 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
-export const initBind = (
-  ns: Namespace,
-  oc: ObjectContainer,
-  config: BootConfig['bind']
-) => {
+export const initBind: InitBind = (ns, oc, config) => {
   //**************START VENDORS**************
   oc.constant('$Helper', $Helper);
 

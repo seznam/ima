@@ -211,6 +211,11 @@ module.exports = function IMAInternalFactory({
       },
     };
 
+    console.log(
+      event.context.bootConfig,
+      Object.keys(event.context.bootConfig)
+    );
+
     event = emitter.emit(Event.CreateBootConfig, event);
 
     if (event.result) {
