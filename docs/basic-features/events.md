@@ -109,7 +109,7 @@ onExpand({ expandableId }) {
 }
 ```
 
-You can restrict the controller/extension to specific events with setting `eventBusMethodPrefix` field
+You can restrict the controller/extension to specific events by setting the `eventBusMethodPrefix` field
 on the controller/extension class. Events with this specific prefix are then applied only to
 this controller/extension.
 
