@@ -36,6 +36,8 @@ export class PageStateManagerImpl extends PageStateManager {
   clear() {
     this._states = [];
     this._cursor = -1;
+
+    this.cancelTransaction();
   }
 
   /**
