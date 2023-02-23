@@ -5,11 +5,9 @@ import { RouteFactoryOptions } from './Router';
 import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
-export type RouteParams = {
-  [key: string]: string | number | boolean;
-} & {
-  error?: Error;
-};
+type RouteErrorParam = { error?: Error };
+type RouteOtherParams = Record<string, string | number | boolean>;
+export type RouteParams = RouteErrorParam & RouteOtherParams;
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -65,7 +63,9 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * @return Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
-  static pairsToQuery(pairs: Array<Array<unknown>> = []): string {
+  static pairsToQuery(
+    pairs: [string, boolean | string | number][] = []
+  ): string {
     if (!pairs || !pairs.length) {
       return '';
     }
@@ -77,11 +77,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
           pair.length === 2 &&
           pair.every(v => ['boolean', 'string', 'number'].includes(typeof v))
       )
-      .map(pair =>
-        (pair as (string | number | boolean)[])
-          .map(encodeURIComponent)
-          .join('=')
-      )
+      .map(pair => pair.map(encodeURIComponent).join('='))
       .join('&');
 
     return query.length ? `?${query}` : '';

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
 import { RoutePathExpression } from './DynamicRoute';
@@ -34,7 +33,7 @@ export interface RouteFactoryOptions {
   onlyUpdate: boolean | ((controller: Controller, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  extensions?: Extension[];
+  extensions?: (typeof Extension)[];
 }
 
 export interface RouteOptions extends RouteFactoryOptions {
@@ -110,7 +109,7 @@ export abstract class Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller,
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteOptions>
   ): this {

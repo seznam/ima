@@ -9,7 +9,7 @@ import { UnknownParameters } from '../types';
  */
 export class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
-  protected _extensions: Map<Extension, Extension> = new Map();
+  protected _extensions: Map<typeof Extension, Extension> = new Map();
   /**
    * The HTTP response code to send to the client.
    */
@@ -71,30 +71,30 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  addExtension(extension: Extension, extensionInstance?: Extension) {
+  addExtension(
+    extension: typeof Extension,
+    extensionInstance: Extension
+  ): void {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
       );
     }
 
-    this._extensions.set(
-      extension,
-      extensionInstance ? extensionInstance : (extension as Extension)
-    );
+    this._extensions.set(extension, extensionInstance);
   }
 
   /**
    * @inheritDoc
    */
-  getExtension(extension: Extension) {
+  getExtension(extension: typeof Extension): Extension | undefined {
     return this._extensions.get(extension);
   }
 
   /**
    * @inheritDoc
    */
-  getExtensions() {
+  getExtensions(): (Extension | undefined)[] {
     return Array.from(this._extensions.values());
   }
 

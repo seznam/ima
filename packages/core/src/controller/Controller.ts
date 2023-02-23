@@ -212,7 +212,10 @@ export abstract class Controller {
    * added to the controller before the {@link Controller#init} method is
    * invoked.
    */
-  addExtension(extension: Extension, extensionInstance?: Extension): void {
+  addExtension(
+    extension: typeof Extension,
+    extensionInstance: Extension
+  ): void {
     return;
   }
 
@@ -221,7 +224,7 @@ export abstract class Controller {
    *
    * @return {Extension} The extensions added to this controller.
    */
-  getExtension(extension: Extension): Extension | undefined {
+  getExtension(extension: typeof Extension): Extension | undefined {
     return undefined;
   }
 
@@ -230,7 +233,7 @@ export abstract class Controller {
    *
    * @return {Extension[]} The extensions added to this controller.
    */
-  getExtensions(): Extension[] {
+  getExtensions(): (Extension | undefined)[] {
     return [];
   }
 

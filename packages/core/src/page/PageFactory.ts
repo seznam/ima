@@ -61,7 +61,10 @@ export class PageFactory {
       if (Array.isArray(loadedExtension)) {
         // Spread support handling
         for (const extensionInstance of loadedExtension) {
-          controllerInstance.addExtension(extensionInstance);
+          controllerInstance.addExtension(
+            extensionInstance.constructor,
+            extensionInstance
+          );
         }
       } else {
         controllerInstance.addExtension(extension, loadedExtension);

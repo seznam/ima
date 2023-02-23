@@ -133,6 +133,10 @@ export class StaticRoute extends AbstractRoute<string> {
     const queryPairs = [];
 
     for (const paramName of Object.keys(params)) {
+      if (paramName === 'error' && params?.error instanceof Error) {
+        continue;
+      }
+
       if (this._isRequiredParamInPath(path, paramName)) {
         path = this._substituteRequiredParamInPath(
           path,

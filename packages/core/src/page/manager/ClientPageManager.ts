@@ -232,7 +232,7 @@ export class ClientPageManager extends AbstractPageManager {
     const extensions = (controllerInstance as Controller).getExtensions();
 
     for (const extension of extensions) {
-      if (typeof extension[method] === 'function') {
+      if (extension && typeof extension[method] === 'function') {
         (extension[method] as EventBusEventHandler)(data);
 
         return true;

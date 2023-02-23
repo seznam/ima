@@ -133,7 +133,7 @@ export abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller,
+    controller: string | Controller,
     view: object | string | (() => unknown),
     options?: Partial<RouteOptions>
   ): this {
@@ -376,7 +376,7 @@ export abstract class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    params = this.#addParamsFromOriginalRoute(params as StringParameters);
+    params = this.#addParamsFromOriginalRoute(params);
 
     const action = {
       url: this.getUrl(),
@@ -392,7 +392,7 @@ export abstract class AbstractRouter extends Router {
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
-        ...(errorRoute.getOptions().middlewares as RouterMiddleware[]),
+        ...errorRoute.getOptions().middlewares,
       ],
       params,
       locals
@@ -499,12 +499,7 @@ export abstract class AbstractRouter extends Router {
     options?: Partial<RouteOptions>,
     action?: RouteAction
   ): Promise<void | UnknownParameters> {
-    const routeOptions = Object.assign(
-      {},
-      route.getOptions(),
-      options
-    ) as RouteOptions;
-
+    const routeOptions = Object.assign({}, route.getOptions(), options);
     const eventData: Record<string, unknown> = {
       route,
       params,

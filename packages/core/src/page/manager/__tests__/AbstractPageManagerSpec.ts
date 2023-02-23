@@ -6,7 +6,7 @@ import { toMockedInstance } from 'to-mock';
 
 import { ControllerDecorator } from '../../..//controller/ControllerDecorator';
 import { AbstractController } from '../../../controller/AbstractController';
-import { Controller, IController } from '../../../controller/Controller';
+import { Controller } from '../../../controller/Controller';
 import { Extension } from '../../../extension/Extension';
 import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
 import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
@@ -886,7 +886,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       newOptions.onlyUpdate = mockSpyWrapper;
 
       expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
+        pageManager['_hasOnlyUpdate'](AbstractControllerTest, View, newOptions)
       ).toBeTruthy();
       expect(spy).toHaveBeenCalledWith(Controller, View);
     });
@@ -895,7 +895,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       const newOptions = Object.assign({}, options, { onlyUpdate: true });
 
       expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
+        pageManager['_hasOnlyUpdate'](AbstractControllerTest, View, newOptions)
       ).toBeTruthy();
     });
 
@@ -904,7 +904,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       pageManager['_managedPage'].controller = undefined;
 
       expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
+        pageManager['_hasOnlyUpdate'](AbstractControllerTest, View, newOptions)
       ).toBeFalsy();
     });
   });

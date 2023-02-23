@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable jest/no-conditional-expect */
 import { toMockedInstance } from 'to-mock';
 
+import { AbstractController } from '../../controller/AbstractController';
 import { GenericError } from '../../error/GenericError';
 import { DispatcherImpl } from '../../event/DispatcherImpl';
 import { PageManager } from '../../page/manager/PageManager';
@@ -55,9 +54,7 @@ describe('ima.core.router.AbstractRouter', () => {
     url: 'http://www.domain.com/root/currentRoutePath',
   };
   const currentRoutePath = '/currentRoutePath';
-  const Controller = function Controller() {
-    return {};
-  };
+  const Controller = new AbstractController();
   const View = function View() {
     return {};
   };
@@ -111,7 +108,9 @@ describe('ima.core.router.AbstractRouter', () => {
   it('should return route and middlewares in line for defined path', () => {
     const { route, middlewares } = router.getRouteHandlersByPath('/');
 
-    expect((route as AbstractRoute).getName()).toBe('home');
+    expect((route as InstanceType<typeof AbstractRoute>).getName()).toBe(
+      'home'
+    );
     expect(middlewares).toHaveLength(1);
   });
 
@@ -153,7 +152,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('getCurrentRouteInfo method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: AbstractRoute<string>;
     const params = {};
 
     beforeEach(() => {
@@ -220,7 +219,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('route method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: AbstractRoute<string>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -294,8 +293,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleError method', () => {
     const path = '/error';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: AbstractRoute<string>;
+    let originalRoute: AbstractRoute<string>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -350,7 +349,6 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             errorAction
           );
-          // @ts-expect-error
           expect(response.error).toStrictEqual(params.error);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [globalMiddleware, routeMiddleware],
@@ -379,8 +377,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleNotFound method', () => {
     const path = '/not-found';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: AbstractRoute<string>;
+    let originalRoute: AbstractRoute<string>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -435,7 +433,6 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             redirectAction
           );
-          // @ts-expect-error
           expect(response.error instanceof GenericError).toBeTruthy();
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [globalMiddleware, routeMiddleware],
@@ -515,7 +512,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('_handle method', () => {
     const routeName = 'routeName';
     const routePath = '/routePath';
-    let route: AbstractRoute;
+    let route: AbstractRoute<string>;
 
     beforeEach(() => {
       route = routeFactory.createRoute(

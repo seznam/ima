@@ -143,7 +143,7 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  addExtension(extension: Extension, extensionInstance?: Extension) {
+  addExtension(extension: typeof Extension, extensionInstance: Extension) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;
