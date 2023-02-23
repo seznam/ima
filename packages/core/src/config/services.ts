@@ -1,4 +1,4 @@
-import { InitServices } from '../Bootstrap';
+import { InitServicesFunction } from '../Bootstrap';
 import { Dictionary } from '../dictionary/Dictionary';
 import { Dispatcher } from '../event/Dispatcher';
 import { UrlTransformer } from '../http/UrlTransformer';
@@ -13,14 +13,14 @@ import { SessionMapStorage } from '../storage/SessionMapStorage';
 import { SessionStorage } from '../storage/SessionStorage';
 import { Window } from '../window/Window';
 
-export const initServices: InitServices = (ns, oc, config) => {
+export const initServicesIma: InitServicesFunction = (ns, oc, config) => {
   oc.get<Dictionary>('$Dictionary').init(config.dictionary);
   oc.get<Dispatcher>('$Dispatcher').clear();
 
   if (!oc.get<Window>('$Window').isClient()) {
-    oc.get<Request>('$Request').init(config.request);
+    oc.get<Request>('$Request').init(config.request!);
     oc.get<Response>('$Response').init(
-      config.response,
+      config.response!,
       oc.get('$CookieTransformFunction')
     );
     oc.get<CookieStorage>('$CookieStorage').clear();

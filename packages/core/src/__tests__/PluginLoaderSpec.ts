@@ -1,4 +1,4 @@
-import { Bootstrap, Config, PluginConfigFunctions } from '../Bootstrap';
+import { Bootstrap, Config, InitPluginConfig } from '../Bootstrap';
 import { ns } from '../Namespace';
 import { ObjectContainer } from '../ObjectContainer';
 import { PluginLoader } from '../pluginLoader';
@@ -39,7 +39,7 @@ describe('pluginLoader', () => {
     });
 
     it('should dynamically load plugins if the app is already bootstrapped', () => {
-      const pluginInterface = {} as PluginConfigFunctions;
+      const pluginInterface = {} as InitPluginConfig;
       const registerFunction = jest.fn(() => pluginInterface);
 
       pluginLoader.init(bootstrap);

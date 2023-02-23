@@ -1,14 +1,15 @@
+import { AssetInfo } from 'webpack';
+
 import {
-  AppConfigFunctions,
+  InitAppConfig,
   BootSettings,
   Bootstrap,
   BootConfig,
-  ImaConfigFunctions,
+  InitImaConfig,
 } from './Bootstrap';
-import { AssetInfo } from 'webpack';
 import { Cache, SerializedData } from './cache/Cache';
-import { initBind as initBindIma } from './config/bind';
-import { initServices as initServicesIma } from './config/services';
+import { initBindIma } from './config/bind';
+import { initServicesIma } from './config/services';
 import { GenericError } from './error/GenericError';
 import { HttpAgentRequestOptions } from './http/HttpAgent';
 import { HttpAgentImplCacheOptions } from './http/HttpAgentImpl';
@@ -17,7 +18,6 @@ import { ObjectContainer } from './ObjectContainer';
 import { pluginLoader } from './pluginLoader';
 import { AbstractRouter } from './router/AbstractRouter';
 import { GlobalImaObject } from './types';
-
 
 export interface ManifestAsset extends AssetInfo {
   name: string;
@@ -139,7 +139,7 @@ export type AppSettings = (
   regression?: Partial<Settings>;
 };
 
-export function getInitialImaConfigFunctions(): ImaConfigFunctions {
+export function getInitialImaConfigFunctions(): InitImaConfig {
   return { initBindIma, initServicesIma };
 }
 
@@ -164,7 +164,7 @@ export function createImaApp() {
 }
 
 export function getClientBootConfig(
-  initialAppConfigFunctions: AppConfigFunctions
+  initialAppConfigFunctions: InitAppConfig
 ): BootConfig {
   const root = _getRoot();
 
@@ -256,7 +256,7 @@ export function routeClientApp(app: {
     });
 }
 
-export function reviveClientApp(initialAppConfigFunctions: AppConfigFunctions) {
+export function reviveClientApp(initialAppConfigFunctions: InitAppConfig) {
   console.error('revive');
 
   const root = _getRoot();

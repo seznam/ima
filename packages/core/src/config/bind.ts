@@ -1,6 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
-import { InitBind } from '../Bootstrap';
+import { InitBindFunction } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -19,8 +19,6 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { UrlTransformer } from '../http/UrlTransformer';
 import { MetaManager } from '../meta/MetaManager';
 import { MetaManagerImpl } from '../meta/MetaManagerImpl';
-import { Namespace } from '../Namespace';
-import { ObjectContainer } from '../ObjectContainer';
 import { PageHandlerRegistry } from '../page/handler/PageHandlerRegistry';
 import { PageMetaHandler } from '../page/handler/PageMetaHandler';
 import { PageNavigationHandler } from '../page/handler/PageNavigationHandler';
@@ -49,7 +47,7 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
-export const initBind: InitBind = (ns, oc, config) => {
+export const initBindIma: InitBindFunction = (ns, oc, config) => {
   //**************START VENDORS**************
   oc.constant('$Helper', $Helper);
 

@@ -1,13 +1,9 @@
 export { Namespace, getNamespace, ns } from './Namespace';
 export {
   Bootstrap,
-  type PluginConfigFunctions,
-  type AppConfigFunctions,
+  type InitPluginConfig as PluginConfigFunctions,
+  type InitAppConfig as AppConfigFunctions,
   type BootSettings,
-  type Manifest,
-  type ManifestAsset,
-  type Resource,
-  type Resources,
   type BootConfig,
 } from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
@@ -148,6 +144,10 @@ export {
   type Environment,
   type AppSettings,
   type Settings,
+  type Manifest,
+  type ManifestAsset,
+  type Resource,
+  type Resources,
 } from './boot';
 export {
   type Utils,

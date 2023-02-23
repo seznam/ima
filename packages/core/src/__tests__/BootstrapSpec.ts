@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Bootstrap, PluginConfigFunctions, Config } from '../Bootstrap';
+import { Bootstrap, InitPluginConfig, Config } from '../Bootstrap';
 import { ns } from '../Namespace';
 import { ObjectContainer } from '../ObjectContainer';
 import { UnknownParameters } from '../types';
@@ -9,7 +9,7 @@ describe('bootstrap', () => {
   let bootstrap: Bootstrap;
   let objectContainer: ObjectContainer;
   let environments: UnknownParameters;
-  let plugin: PluginConfigFunctions;
+  let plugin: InitPluginConfig;
   let bootConfig: Config;
 
   beforeEach(() => {
@@ -77,7 +77,7 @@ describe('bootstrap', () => {
   });
 
   describe('initPlugin method', () => {
-    let plugin: PluginConfigFunctions;
+    let plugin: InitPluginConfig;
 
     beforeEach(() => {
       jest.spyOn(bootstrap, '_initPluginSettings').mockImplementation();

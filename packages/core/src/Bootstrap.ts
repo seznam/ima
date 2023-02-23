@@ -4,7 +4,7 @@ import {
   Response as ExpressResponse,
 } from 'express';
 
-import { AppEnvironment, AppSettings, Settings } from './boot';
+import { AppSettings, Settings } from './boot';
 import { DictionaryConfig } from './dictionary/Dictionary';
 import { Namespace, ns } from './Namespace';
 import { BindingState, ObjectContainer } from './ObjectContainer';
@@ -13,33 +13,33 @@ import { GlobalImaObject, UnknownParameters } from './types';
 
 ns.namespace('ima.core');
 
-export type InitBind = (
+export type InitBindFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['bind'],
   state: BindingState
 ) => void;
 
-export type InitRoutes = (
+export type InitRoutesFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   routes: UnknownParameters | undefined,
   router: Router
 ) => void;
 
-export type InitServices = (
+export type InitServicesFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['services']
 ) => void;
 
-export type InitSettings = (
+export type InitSettingsFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['settings']
 ) => AppSettings;
 
-export type PluginInitBind = (
+export type PluginInitBindFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['bind'],
@@ -47,39 +47,51 @@ export type PluginInitBind = (
   name?: string
 ) => void;
 
-export type PluginInitServices = (
+export type PluginInitServicesFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['services'],
   isDynamicallyLoaded: boolean
 ) => void;
 
-export type PluginInitSettings = (
+export type PluginInitSettingsFunction = (
   ns: Namespace,
   oc: ObjectContainer,
   config: BootConfig['settings'],
   isDynamicallyLoaded: boolean
 ) => AppSettings;
 
-export interface PluginConfigFunctions {
-  initServices?: PluginInitServices;
-  initBind?: PluginInitBind;
-  initSettings?: PluginInitSettings;
+export interface InitPluginConfig {
+  initServices?: PluginInitServicesFunction;
+  initBind?: PluginInitBindFunction;
+  initSettings?: PluginInitSettingsFunction;
 }
 
-export interface AppConfigFunctions {
-  initBindApp: InitBind;
-  initRoutes: InitRoutes;
-  initServicesApp: InitServices;
-  initSettings: InitSettings;
+export interface InitAppConfig {
+  initBindApp: InitBindFunction;
+  initRoutes: InitRoutesFunction;
+  initServicesApp: InitServicesFunction;
+  initSettings: InitSettingsFunction;
 }
 
-export interface ImaConfigFunctions {
-  initBindIma: InitBind;
-  initServicesIma: InitServices;
+export interface InitImaConfig {
+  initBindIma: InitBindFunction;
+  initServicesIma: InitServicesFunction;
 }
 
-export type BootSettings = Pick<GlobalImaObject, '$Debug' | '$Env' | '$Version' | '$App' | '$Protocol' | '$Language' | '$Host' | '$Path' | '$Root' | '$LanguagePartPath'>;
+export type BootSettings = Pick<
+  GlobalImaObject,
+  | '$Debug'
+  | '$Env'
+  | '$Version'
+  | '$App'
+  | '$Protocol'
+  | '$Language'
+  | '$Host'
+  | '$Path'
+  | '$Root'
+  | '$LanguagePartPath'
+>;
 export interface BootServices {
   response: ExpressResponse | null;
   request: ExpressRequest | null;
@@ -94,10 +106,10 @@ export interface BootServices {
   };
 }
 
-export interface BootConfig extends ImaConfigFunctions, AppConfigFunctions {
+export interface BootConfig extends InitImaConfig, InitAppConfig {
   routes?: UnknownParameters;
-  bind: Settings;
-  plugins: { name: string; plugin: PluginConfigFunctions; }[];
+  bind?: Settings;
+  plugins: { name: string; plugin: InitPluginConfig }[];
   services: BootServices;
   settings: BootSettings;
 }
@@ -158,7 +170,7 @@ export class Bootstrap {
    * @param name Plugin name.
    * @param plugin Plugin interface (object with init functions).
    */
-  initPlugin(name: string, plugin?: PluginConfigFunctions) {
+  initPlugin(name: string, plugin?: InitPluginConfig) {
     if (!plugin) {
       return;
     }
@@ -180,7 +192,7 @@ export class Bootstrap {
     const plugins = this._config.plugins.concat([
       {
         name: BindingState.App,
-        plugin: this._config as unknown as PluginConfigFunctions,
+        plugin: this._config as unknown as InitPluginConfig,
       },
     ]);
 
@@ -203,6 +215,8 @@ export class Bootstrap {
         );
       });
 
+    // FIXME
+    // @ts-expect-error
     this._config.bind = Object.assign(
       this._config.bind || {},
       currentApplicationSettings,
@@ -219,7 +233,7 @@ export class Bootstrap {
    * @param name Plugin name.
    * @param plugin Plugin interface (object with init functions).
    */
-  _initPluginSettings(name: string, plugin: PluginConfigFunctions) {
+  _initPluginSettings(name: string, plugin: InitPluginConfig) {
     if (typeof plugin?.initSettings !== 'function') {
       return;
     }
@@ -245,6 +259,8 @@ export class Bootstrap {
       this._config.bind
     );
 
+    // FIXME
+    // @ts-expect-error
     Object.assign(this._config.bind, newApplicationSettings);
   }
 
@@ -253,6 +269,8 @@ export class Bootstrap {
    * object container.
    */
   _bindDependencies() {
+    console.log(this._config.bind);
+
     this._oc.setBindingState(BindingState.IMA);
     this._config.initBindIma(ns, this._oc, this._config.bind, BindingState.IMA);
 
@@ -274,7 +292,7 @@ export class Bootstrap {
    * @param name Plugin name.
    * @param plugin Plugin interface (object with init functions).
    */
-  _bindPluginDependencies(name: string, plugin: PluginConfigFunctions) {
+  _bindPluginDependencies(name: string, plugin: InitPluginConfig) {
     if (typeof plugin.initBind !== 'function') {
       return;
     }
@@ -314,7 +332,7 @@ export class Bootstrap {
    *
    * @param plugin Plugin interface (object with init functions).
    */
-  _initPluginServices(plugin: PluginConfigFunctions) {
+  _initPluginServices(plugin: InitPluginConfig) {
     if (typeof plugin.initServices !== 'function') {
       return;
     }
