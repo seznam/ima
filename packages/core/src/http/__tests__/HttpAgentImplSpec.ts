@@ -37,8 +37,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
           },
           credentials: 'include',
         },
-        postProcessor: (agentResponse: HttpAgentResponse<unknown>) =>
-          agentResponse,
+        postProcessors: [
+          jest
+            .fn()
+            .mockImplementation(
+              (agentResponse: HttpAgentResponse<unknown>) => agentResponse
+            ),
+        ],
         keepSensitiveHeaders: false,
       } as HttpAgentRequestOptions,
       cacheOptions: {
@@ -98,7 +103,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then((response: HttpAgentResponse<unknown>) => {
-          const { postProcessor, ...restOptions } = data.params.options;
+          const { postProcessors, ...restOptions } = data.params.options;
           restOptions.fetchOptions.headers = {}; // HttpAgentImpl._cleanResponse() removes headers
           const agentResponse = {
             status: data.status,
@@ -232,15 +237,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should call postProcessor function', async () => {
+      it('should call postProcessors function', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        data.params.options.postProcessor =
+        data.params.options.postProcessors =
           // @ts-ignore
-          httpConfig.defaultRequestOptions.postProcessor;
-        jest.spyOn(data.params.options, 'postProcessor');
+          httpConfig.defaultRequestOptions.postProcessors;
 
         // @ts-ignore
         await http[method](
@@ -248,18 +252,18 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(data.params.options.postProcessor).toHaveBeenCalled();
+          expect(data.params.options.postProcessors?.[0]).toHaveBeenCalled();
         });
       });
 
-      it('should call clear response from postProcessor and abortController', async () => {
+      it('should call clear response from postProcessors and abortController', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        data.params.options.postProcessor =
+        data.params.options.postProcessors =
           // @ts-ignore
-          httpConfig.defaultRequestOptions.postProcessor;
+          httpConfig.defaultRequestOptions.postProcessors;
         data.params.options.abortController = new AbortController();
 
         // @ts-ignore
@@ -269,7 +273,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then((response: HttpAgentResponse<unknown>) => {
           expect(response.params.options.abortController).toBeUndefined();
-          expect(response.params.options.postProcessor).toBeUndefined();
+          expect(response.params.options.postProcessors).toBeUndefined();
         });
       });
 

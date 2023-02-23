@@ -45,7 +45,7 @@ export class HttpAgentImpl extends HttpAgent {
    *              withCredentials: true,
    *              timeout: 2000,
    *              accept: 'application/json',
-   *              language: 'en',
+   *              language: 'en'
    *          })
    *          .then((response) => {
    *              //resolve
@@ -347,10 +347,12 @@ export class HttpAgentImpl extends HttpAgent {
       this._setCookiesFromResponse(agentResponse);
     }
 
-    const { postProcessor, cache } = agentResponse.params.options;
+    const { postProcessors, cache } = agentResponse.params.options;
 
-    if (typeof postProcessor === 'function') {
-      agentResponse = postProcessor<B>(agentResponse);
+    if (Array.isArray(postProcessors)) {
+      for (const postProcessor of postProcessors) {
+        agentResponse = postProcessor<B>(agentResponse);
+      }
     }
 
     const pureResponse = this._cleanResponse(agentResponse);
@@ -494,17 +496,17 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Cleans cache response from data (abort controller, postProcessor), that cannot be persisted,
+   * Cleans cache response from data (abort controller, postProcessors), that cannot be persisted,
    * before saving the data to the cache.
    */
   _cleanResponse<B>(response: HttpAgentResponse<B>): HttpAgentResponse<B> {
     /**
-     * Create copy of agentResponse without AbortController and AbortController signal and postProcessor.
-     * Setting agentResponse with AbortController or signal or postProcessor into cache would result in crash.
+     * Create copy of agentResponse without AbortController and AbortController signal and postProcessors.
+     * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crash.
      */
     const { signal, ...fetchOptions } =
       response.params.options.fetchOptions || {};
-    const { abortController, postProcessor, ...options } =
+    const { abortController, postProcessors, ...options } =
       response.params.options || {};
     options.fetchOptions = fetchOptions;
 
