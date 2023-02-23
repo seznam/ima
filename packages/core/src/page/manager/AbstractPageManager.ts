@@ -45,6 +45,8 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected _pageHandlerRegistry: PageHandlerRegistry;
 
+  protected _manageChain: Promise<any>;
+
   /**
    * Initializes the page manager.
    *
@@ -72,6 +74,8 @@ export abstract class AbstractPageManager extends PageManager {
     this._pageStateManager = pageStateManager;
 
     this._pageHandlerRegistry = pageHandlerRegistry;
+
+    this._manageChain = Promise.resolve();
   }
 
   /**
@@ -93,58 +97,62 @@ export abstract class AbstractPageManager extends PageManager {
     params = {},
     action = {},
   }: ManageArgs) {
-    this._storeManagedPageSnapshot();
+    this._manageChain = this._manageChain.then(async () => {
+      this._storeManagedPageSnapshot();
 
-    if (this._hasOnlyUpdate(controller, view, options)) {
-      this._managedPage.params = params;
+      if (this._hasOnlyUpdate(controller, view, options)) {
+        this._managedPage.params = params;
 
-      await this._runPreManageHandlers(this._managedPage, action);
-      const response = await this._updatePageSource();
+        await this._runPreManageHandlers(this._managedPage, action);
+        const response = await this._updatePageSource();
+        await this._runPostManageHandlers(this._previousManagedPage, action);
+
+        return response;
+      }
+
+      // Construct new managedPage value
+      const pageFactory = this._pageFactory;
+      const controllerInstance = pageFactory.createController(
+        controller,
+        options
+      );
+      const decoratedController =
+        pageFactory.decorateController(controllerInstance);
+      const viewInstance = pageFactory.createView(view);
+      const newManagedPage = this._constructManagedPageValue(
+        controller,
+        view,
+        route,
+        options,
+        params,
+        controllerInstance,
+        decoratedController,
+        viewInstance
+      );
+
+      // Run pre-manage handlers before affecting anything
+      await this._runPreManageHandlers(newManagedPage, action);
+
+      // Deactivate the old instances and clearing state
+      await this._deactivatePageSource();
+      await this._destroyPageSource();
+
+      this._pageStateManager.clear();
+      this._clearComponentState(options);
+      this._clearManagedPageValue();
+
+      // Store the new managedPage object and initialize controllers and
+      // extensions
+      this._managedPage = newManagedPage;
+      await this._initPageSource();
+
+      const response = await this._loadPageSource();
       await this._runPostManageHandlers(this._previousManagedPage, action);
 
       return response;
-    }
+    });
 
-    // Construct new managedPage value
-    const pageFactory = this._pageFactory;
-    const controllerInstance = pageFactory.createController(
-      controller,
-      options
-    );
-    const decoratedController =
-      pageFactory.decorateController(controllerInstance);
-    const viewInstance = pageFactory.createView(view);
-    const newManagedPage = this._constructManagedPageValue(
-      controller,
-      view,
-      route,
-      options,
-      params,
-      controllerInstance,
-      decoratedController,
-      viewInstance
-    );
-
-    // Run pre-manage handlers before affecting anything
-    await this._runPreManageHandlers(newManagedPage, action);
-
-    // Deactivate the old instances and clearing state
-    await this._deactivatePageSource();
-    await this._destroyPageSource();
-
-    this._pageStateManager.clear();
-    this._clearComponentState(options);
-    this._clearManagedPageValue();
-
-    // Store the new managedPage object and initialize controllers and
-    // extensions
-    this._managedPage = newManagedPage;
-    await this._initPageSource();
-
-    const response = await this._loadPageSource();
-    await this._runPostManageHandlers(this._previousManagedPage, action);
-
-    return response;
+    return this._manageChain;
   }
 
   /**
