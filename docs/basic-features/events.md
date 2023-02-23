@@ -109,14 +109,14 @@ onExpand({ expandableId }) {
 }
 ```
 
-You can restrict the controller/extension to specific events by setting the `eventBusMethodPrefix` field
+You can restrict the controller/extension to specific events by setting the `$name` static field
 on the controller/extension class. Events with this specific prefix are then applied only to
 this controller/extension.
 
 ```javascript
 // app/page/article/ArticleController.js
 
-eventBusMethodPrefix = 'fireEventPrefix';
+static $name = 'fireEventPrefix';
 
 onExpand({ expandableId }) {
   // Event never reaches this point because we issued

@@ -5,6 +5,7 @@ import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
 import { Controller } from '../../controller/Controller';
 import { EventBus, EventBusEventHandler } from '../../event/EventBus';
+import { Extension } from '../../extension/Extension';
 import { UnknownParameters } from '../../types';
 import { Window as ImaWindow } from '../../window/Window';
 import { PageHandlerRegistry } from '../handler/PageHandlerRegistry';
@@ -214,7 +215,8 @@ export class ClientPageManager extends AbstractPageManager {
       .controllerInstance as Controller;
 
     if (
-      (controllerInstance?.eventBusMethodPrefix ?? '') === prefix &&
+      ((controllerInstance?.constructor as typeof Controller).$name ?? '') ===
+        prefix &&
       typeof controllerInstance[method] === 'function'
     ) {
       ((controllerInstance as Controller)[method] as EventBusEventHandler)(
@@ -250,7 +252,7 @@ export class ClientPageManager extends AbstractPageManager {
 
     for (const extension of extensions) {
       if (
-        (extension.eventBusMethodPrefix ?? '') === prefix &&
+        ((extension.constructor as typeof Extension).$name ?? '') === prefix &&
         typeof extension[method] === 'function'
       ) {
         (extension[method] as EventBusEventHandler)(data);

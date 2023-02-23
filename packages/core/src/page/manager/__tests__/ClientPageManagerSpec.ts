@@ -277,6 +277,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   describe('_handleEventWithController method', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      Object.prototype.constructor.$name = undefined;
+    });
+
     it('should return false for undefined method on controller', () => {
       expect(
         pageManager._handleEventWithController('', 'onMethod', {})
@@ -286,11 +291,14 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     it('should return false for undefined method on controller with prefix', () => {
       // @ts-ignore
       pageManager['_managedPage'].controllerInstance = {
-        eventBusMethodPrefix: 'CustomController',
         onMethod: () => {
           return;
         },
       };
+      (
+        pageManager['_managedPage'].controllerInstance!
+          .constructor as typeof Controller
+      ).$name = 'CustomController';
 
       expect(
         pageManager._handleEventWithController('', 'onMethod', {})
@@ -322,11 +330,14 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     it('should call method on controller with prefix and return true', () => {
       // @ts-ignore
       pageManager['_managedPage'].controllerInstance = {
-        eventBusMethodPrefix: 'CustomController',
         onMethod: () => {
           return;
         },
       };
+      (
+        pageManager['_managedPage'].controllerInstance!
+          .constructor as typeof Controller
+      ).$name = 'CustomController';
 
       jest
         // @ts-ignore
@@ -348,6 +359,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   describe('_handleEventWithExtensions method', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      Object.prototype.constructor.$name = undefined;
+    });
+
     it('should return false for undefined method on extensions', () => {
       expect(
         pageManager._handleEventWithExtensions('', 'onMethod', {})
@@ -381,12 +397,14 @@ describe('ima.core.page.manager.ClientPageManager', () => {
           return;
         },
       };
-      const dumpExtensionInstanceWithPrefix = {
-        eventBusMethodPrefix: 'CustomExtension',
-        onMethod: () => {
+      const dumpExtensionInstanceWithPrefix = new (class {
+        static $name = 'CustomExtension';
+
+        onMethod() {
           return;
-        },
-      };
+        }
+      })();
+
       pageManager['_managedPage'].controllerInstance = {
         // @ts-ignore
         getExtensions: () => {
