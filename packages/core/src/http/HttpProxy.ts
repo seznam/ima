@@ -474,7 +474,7 @@ export class HttpProxy {
 
     Object.assign(requestInit, options.fetchOptions || {});
 
-    return requestInit as ImaRequestInit;
+    return requestInit;
   }
 
   /**
