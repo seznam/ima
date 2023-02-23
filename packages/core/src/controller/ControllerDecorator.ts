@@ -1,6 +1,6 @@
 import { Controller } from './Controller';
 import { Dictionary } from '../dictionary/Dictionary';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { Router } from '../router/Router';
@@ -143,10 +143,7 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
-  ) {
+  addExtension(extension: Extension, extensionInstance?: Extension) {
     this._controller.addExtension(extension, extensionInstance);
 
     return this;

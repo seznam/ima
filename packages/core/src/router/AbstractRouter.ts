@@ -12,7 +12,7 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
@@ -59,8 +59,10 @@ export abstract class AbstractRouter extends Router {
   /**
    * Storage of all known routes and middlewares. The key are their names.
    */
-  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware> =
-    new Map();
+  protected _routeHandlers: Map<
+    string,
+    InstanceType<typeof AbstractRoute> | RouterMiddleware
+  > = new Map();
   /**
    * Middleware ID counter which is used to auto-generate unique middleware
    * names when adding them to routeHandlers map.
@@ -131,10 +133,10 @@ export abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | typeof Controller,
     view: object | string | (() => unknown),
     options?: Partial<RouteOptions>
-  ) {
+  ): this {
     if (this._routeHandlers.has(name)) {
       throw new GenericError(
         `ima.core.router.AbstractRouter.add: The route with name ${name} ` +
@@ -160,7 +162,7 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  use(middleware: RouterMiddleware) {
+  use(middleware: RouterMiddleware): this {
     this._routeHandlers.set(
       `middleware-${this._currentMiddlewareId++}`,
       middleware
@@ -172,7 +174,7 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  remove(name: string) {
+  remove(name: string): this {
     this._routeHandlers.delete(name);
 
     return this;
@@ -197,55 +199,61 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  getUrl() {
+  getUrl(): string {
     return this.getBaseUrl() + this.getPath();
   }
 
   /**
    * @inheritDoc
    */
-  getBaseUrl() {
+  getBaseUrl(): string {
     return this.getDomain() + this._root + this._languagePartPath;
   }
 
   /**
    * @inheritDoc
    */
-  getDomain() {
+  getDomain(): string {
     return this._protocol + '//' + this._host;
   }
 
   /**
    * @inheritDoc
    */
-  getHost() {
+  getHost(): string {
     return this._host;
   }
 
   /**
    * @inheritDoc
    */
-  getProtocol() {
+  getProtocol(): string {
     return this._protocol;
   }
 
   /**
    * @inheritDoc
    */
-  getCurrentRouteInfo() {
+  getCurrentRouteInfo(): {
+    route: InstanceType<typeof AbstractRoute>;
+    params: RouteParams;
+    path: string;
+  } {
     const path = this.getPath();
     let { route } = this.getRouteHandlersByPath(path);
 
     if (!route) {
-      route = this._routeHandlers.get(RouteNames.NOT_FOUND) as AbstractRoute;
+      const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
-      if (!route) {
+      if (!notFoundRoute || !(notFoundRoute instanceof AbstractRoute)) {
         throw new GenericError(
           `ima.core.router.AbstractRouter.getCurrentRouteInfo: The route ` +
             `for path ${path} is not defined.`,
           { path }
         );
       }
+
+      route = notFoundRoute;
     }
 
     const params = route.extractParameters(path);
@@ -298,9 +306,9 @@ export abstract class AbstractRouter extends Router {
    * @inheritDoc
    */
   link(routeName: string, params: RouteParams) {
-    const route = this._routeHandlers.get(routeName) as AbstractRoute;
+    const route = this._routeHandlers.get(routeName);
 
-    if (!route) {
+    if (!route || !(route instanceof AbstractRoute)) {
       throw new GenericError(
         `ima.core.router.AbstractRouter:link has undefined route with ` +
           `name ${routeName}. Add new route with that name.`,
@@ -355,11 +363,9 @@ export abstract class AbstractRouter extends Router {
     options?: Partial<RouteOptions>,
     locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
-    const errorRoute = this._routeHandlers.get(
-      RouteNames.ERROR
-    ) as AbstractRoute;
+    const errorRoute = this._routeHandlers.get(RouteNames.ERROR);
 
-    if (!errorRoute) {
+    if (!errorRoute || !(errorRoute instanceof AbstractRoute)) {
       const error = new GenericError(
         `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
@@ -403,11 +409,9 @@ export abstract class AbstractRouter extends Router {
     options?: Partial<RouteOptions>,
     locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
-    const notFoundRoute = this._routeHandlers.get(
-      RouteNames.NOT_FOUND
-    ) as AbstractRoute;
+    const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
-    if (!notFoundRoute) {
+    if (!notFoundRoute || !(notFoundRoute instanceof AbstractRoute)) {
       const error = new GenericError(
         `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
@@ -490,7 +494,7 @@ export abstract class AbstractRouter extends Router {
    *         displayed if used at the client side.
    */
   async _handle(
-    route: AbstractRoute,
+    route: InstanceType<typeof AbstractRoute>,
     params: RouteParams,
     options?: Partial<RouteOptions>,
     action?: RouteAction
@@ -513,14 +517,14 @@ export abstract class AbstractRouter extends Router {
 
     // Pre-fetch view and controller which can be async
     const [controller, view] = await Promise.all([
-      route.getController(),
+      route.getController() as Controller,
       route.getView(),
     ]);
 
     return this._pageManager
       .manage({
         route,
-        controller: controller as IController,
+        controller,
         view,
         options: routeOptions,
         params,
@@ -551,7 +555,7 @@ export abstract class AbstractRouter extends Router {
    *         (empty object) if no such route exists.
    */
   getRouteHandlersByPath(path: string): {
-    route?: AbstractRoute;
+    route?: InstanceType<typeof AbstractRoute>;
     middlewares: RouterMiddleware[];
   } {
     const middlewares = [];
@@ -577,7 +581,7 @@ export abstract class AbstractRouter extends Router {
   /**
    * Returns middlewares preceding given route name.
    */
-  _getMiddlewaresForRoute(routeName: string) {
+  _getMiddlewaresForRoute(routeName: string): RouterMiddleware[] {
     const middlewares = [];
 
     for (const routeHandler of this._routeHandlers.values()) {
@@ -599,7 +603,7 @@ export abstract class AbstractRouter extends Router {
    * Returns path that is stored in private property when a `route`
    * method is called.
    */
-  _getCurrentlyRoutedPath() {
+  _getCurrentlyRoutedPath(): string {
     return this._currentlyRoutedPath;
   }
 
@@ -668,7 +672,7 @@ export abstract class AbstractRouter extends Router {
    * @returns Provided params merged with params
    *        from original route
    */
-  #addParamsFromOriginalRoute(params: RouteParams) {
+  #addParamsFromOriginalRoute(params: RouteParams): RouteParams {
     const originalPath = this._getCurrentlyRoutedPath();
     const { route } = this.getRouteHandlersByPath(originalPath);
 

@@ -1,8 +1,8 @@
-import { StringParameters } from '../../types';
-import { AbstractRoute } from '../AbstractRoute';
+import { AbstractController } from '../../controller/AbstractController';
+import { AbstractRoute, RouteParams } from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 
-class MockedAbstractRoute extends AbstractRoute {
+class MockedAbstractRoute extends AbstractRoute<string> {
   toPath() {
     return '';
   }
@@ -19,9 +19,7 @@ class MockedAbstractRoute extends AbstractRoute {
 describe('ima.core.router.AbstractRoute', function () {
   let route: MockedAbstractRoute;
   const name = 'home';
-  const controller = function () {
-    return {};
-  };
+  const controller = new AbstractController();
   const view = function () {
     return {};
   };
@@ -70,7 +68,7 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should return and cache async route controller', async () => {
-    route['_controller'] = async () => controller;
+    route['_controller'] = new AbstractController();
     const result = await route.getController();
 
     expect(result).toStrictEqual(controller);
@@ -96,16 +94,15 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should preload async view and controller', async () => {
-    const asyncController = async () =>
-      Promise.resolve({ default: controller });
+    const asyncController = async () => Promise.resolve({ controller });
     const asyncView = async () => Promise.resolve({ default: view });
 
     route = new MockedAbstractRoute(
       name,
       pathExpression,
-      asyncController,
+      asyncController as unknown as AbstractController,
       asyncView,
-      options as unknown as RouteOptions
+      options
     );
 
     jest.spyOn(route, 'getView');
@@ -185,9 +182,9 @@ describe('ima.core.router.AbstractRoute', function () {
       ],
       [[[]], ''],
     ])('should parse %j into "%s"', (pairs, result) => {
-      expect(
-        AbstractRoute.paramsToQuery(pairs as unknown as StringParameters)
-      ).toBe(result);
+      expect(AbstractRoute.paramsToQuery(pairs as unknown as RouteParams)).toBe(
+        result
+      );
     });
   });
 

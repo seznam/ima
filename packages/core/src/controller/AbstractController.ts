@@ -1,5 +1,5 @@
 import { Controller } from './Controller';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { UnknownParameters } from '../types';
 
@@ -9,7 +9,7 @@ import { UnknownParameters } from '../types';
  */
 export class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
-  protected _extensions: Map<Extension | IExtension, Extension> = new Map();
+  protected _extensions: Map<Extension, Extension> = new Map();
   /**
    * The HTTP response code to send to the client.
    */
@@ -20,10 +20,6 @@ export class AbstractController extends Controller {
    * {@link Controller#update} method is called.
    */
   params: UnknownParameters = {};
-
-  static get $extensions(): IExtension[] {
-    return [];
-  }
 
   /**
    * @inheritDoc
@@ -75,10 +71,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
-  ) {
+  addExtension(extension: Extension, extensionInstance?: Extension) {
     if (!extensionInstance && typeof extension !== 'object') {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
@@ -94,7 +87,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  getExtension(extension: IExtension) {
+  getExtension(extension: Extension) {
     return this._extensions.get(extension);
   }
 

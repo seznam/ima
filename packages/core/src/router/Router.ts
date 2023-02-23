@@ -2,10 +2,11 @@
 
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
-import { Controller, IController } from '../controller/Controller';
+import { RoutePathExpression } from './DynamicRoute';
+import { Controller } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
-import { IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { UnknownParameters } from '../types';
 
 export interface RouteAction {
@@ -17,7 +18,7 @@ export interface RouteAction {
 export interface RouteLocals {
   [key: string]: unknown;
   action?: RouteAction;
-  route?: AbstractRoute;
+  route?: InstanceType<typeof AbstractRoute>;
 }
 
 export type RouterMiddleware = (
@@ -30,10 +31,10 @@ export interface RouteFactoryOptions {
   autoScroll: boolean;
   documentView: null | unknown;
   managedRootView: null | unknown;
-  onlyUpdate: boolean | ((controller: IController, view: unknown) => boolean);
+  onlyUpdate: boolean | ((controller: Controller, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  extensions?: IExtension[];
+  extensions?: Extension[];
 }
 
 export interface RouteOptions extends RouteFactoryOptions {
@@ -109,10 +110,10 @@ export abstract class Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteOptions>
-  ) {
+  ): this {
     return this;
   }
 
@@ -126,7 +127,7 @@ export abstract class Router {
    * @return This router.
    * @throws Thrown if a middleware with the same name already exists.
    */
-  use(middleware: RouterMiddleware) {
+  use(middleware: RouterMiddleware): this {
     return this;
   }
 
@@ -136,7 +137,7 @@ export abstract class Router {
    * @param name The route's unique name, identifying the route to remove.
    * @return This router.
    */
-  remove(name: string) {
+  remove(name: string): this {
     return this;
   }
 
@@ -146,8 +147,34 @@ export abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  getRouteHandler(name: string): undefined | AbstractRoute | RouterMiddleware {
+  getRouteHandler(
+    name: string
+  ): undefined | InstanceType<typeof AbstractRoute> | RouterMiddleware {
     return undefined;
+  }
+
+  /**
+   * Returns Map of all registered route handlers (including middlewares).
+   */
+  getRouteHandlers(): Map<
+    string,
+    RouterMiddleware | AbstractRoute<string | RoutePathExpression>
+  > {
+    return new Map();
+  }
+
+  /**
+   * Returns the route matching the provided URL path part (the path may
+   * contain a query) and all middlewares preceding this route definition.
+   *
+   * @param path The URL path.
+   * @return The route matching the path and middlewares preceding it.
+   */
+  getRouteHandlersByPath(path: string): {
+    route?: AbstractRoute<string | RoutePathExpression> | undefined;
+    middlewares: RouterMiddleware[];
+  } {
+    return { middlewares: [] };
   }
 
   /**
@@ -156,7 +183,7 @@ export abstract class Router {
    *
    * @return The path and query parts of the current URL.
    */
-  getPath() {
+  getPath(): string {
     return '';
   }
 
@@ -165,7 +192,7 @@ export abstract class Router {
    *
    * @return The current absolute URL.
    */
-  getUrl() {
+  getUrl(): string {
     return '';
   }
 
@@ -175,7 +202,7 @@ export abstract class Router {
    *
    * @return The application's base URL.
    */
-  getBaseUrl() {
+  getBaseUrl(): string {
     return '';
   }
 
@@ -185,7 +212,7 @@ export abstract class Router {
    *
    * @return The current application's domain.
    */
-  getDomain() {
+  getDomain(): string {
     return '';
   }
 
@@ -194,7 +221,7 @@ export abstract class Router {
    *
    * @return The current application's host.
    */
-  getHost() {
+  getHost(): string {
     return '';
   }
 
@@ -205,7 +232,7 @@ export abstract class Router {
    * @return The current application protocol used to access the
    *         application.
    */
-  getProtocol() {
+  getProtocol(): string {
     return '';
   }
 
@@ -214,7 +241,7 @@ export abstract class Router {
    * @throws Thrown if a route is not define for current path.
    */
   getCurrentRouteInfo(): {
-    route: AbstractRoute;
+    route: InstanceType<typeof AbstractRoute>;
     params: RouteParams;
     path: string;
   } {
@@ -240,7 +267,7 @@ export abstract class Router {
    *
    * @return This router.
    */
-  listen() {
+  listen(): this {
     return this;
   }
 
@@ -261,7 +288,7 @@ export abstract class Router {
    *
    * @return This router.
    */
-  unlisten() {
+  unlisten(): this {
     return this;
   }
 
@@ -292,7 +319,7 @@ export abstract class Router {
     options?: Partial<RouteOptions>,
     action?: RouteAction,
     locals?: RouteLocals
-  ) {
+  ): void {
     return;
   }
 
@@ -308,7 +335,7 @@ export abstract class Router {
    *        URL query.
    * @return An absolute URL for the specified route and parameters.
    */
-  link(routeName: string, params: RouteParams) {
+  link(routeName: string, params: RouteParams): string {
     return '';
   }
 
@@ -389,7 +416,7 @@ export abstract class Router {
    * @return `true` if the error was caused the action of the
    *         client.
    */
-  isClientError(reason: IMAError | Error) {
+  isClientError(reason: IMAError | Error): boolean {
     return false;
   }
 
@@ -400,7 +427,7 @@ export abstract class Router {
    * @return `true` if the error was caused the action of the
    *         redirection.
    */
-  isRedirection(reason: IMAError | Error) {
+  isRedirection(reason: IMAError | Error): boolean {
     return false;
   }
 }

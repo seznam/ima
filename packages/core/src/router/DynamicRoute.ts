@@ -1,6 +1,6 @@
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
 /**
@@ -19,10 +19,11 @@ import { GenericError } from '../error/GenericError';
 export type RoutePathExpression = {
   matcher: RegExp;
   toPath: (params: RouteParams) => string;
-  extractParameters: ExtractPathFunction;
+  extractParameters: (
+    trimmedPath: string,
+    additionalData: { query: RouteParams; path: string }
+  ) => RouteParams;
 };
-
-export type ExtractPathFunction = (path?: string) => Record<string, string>;
 
 /**
  * Utility for representing and manipulating a single dynamic route in the
@@ -32,10 +33,10 @@ export type ExtractPathFunction = (path?: string) => Record<string, string>;
  *
  * @extends AbstractRoute
  */
-export class DynamicRoute extends AbstractRoute {
-  protected _matcher: RegExp;
-  protected _toPath: (params: RouteParams) => string;
-  protected _extractParameters: (path?: string) => RouteParams;
+export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
+  #matcher: RoutePathExpression['matcher'];
+  #toPath: RoutePathExpression['toPath'];
+  #extractParameters: RoutePathExpression['extractParameters'];
 
   /**
    * Initializes the route.
@@ -46,7 +47,7 @@ export class DynamicRoute extends AbstractRoute {
   constructor(
     name: string,
     pathExpression: RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {
@@ -69,7 +70,7 @@ export class DynamicRoute extends AbstractRoute {
     /**
      * RegExp use in router for path matching to current route.
      */
-    this._matcher = matcher;
+    this.#matcher = matcher;
 
     if (!toPath || typeof toPath !== 'function') {
       throw new GenericError(
@@ -80,7 +81,7 @@ export class DynamicRoute extends AbstractRoute {
     /**
      * Function that generates valid path from current route and passed route params.
      */
-    this._toPath = toPath;
+    this.#toPath = toPath;
 
     if (!extractParameters || typeof extractParameters !== 'function') {
       throw new GenericError(
@@ -93,32 +94,38 @@ export class DynamicRoute extends AbstractRoute {
      * It returns object of key/value pairs which correspond to expected path url
      * params and their values.
      */
-    this._extractParameters = extractParameters;
+    this.#extractParameters = extractParameters;
   }
 
   /**
    * @inheritDoc
    */
-  toPath(params = {}) {
-    return AbstractRoute.getTrimmedPath(this._toPath(params));
+  toPath(params = {}): string {
+    return AbstractRoute.getTrimmedPath(this.#toPath(params));
   }
 
   /**
    * @inheritDoc
    */
-  matches(path: string) {
+  matches(path: string): boolean {
     const trimmedPath = AbstractRoute.getTrimmedPath(path);
 
-    return this._matcher.test(trimmedPath);
+    return this.#matcher.test(trimmedPath);
   }
 
   /**
    * @inheritDoc
    */
-  extractParameters(path?: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
-    const parameters = this._extractParameters(trimmedPath.split('?').shift());
+  extractParameters(path: string): RouteParams {
+    const trimmedPath = AbstractRoute.getTrimmedPath(path);
     const query = AbstractRoute.getQuery(trimmedPath);
+    const parameters = this.#extractParameters(
+      trimmedPath.split('?').shift() ?? '',
+      {
+        query,
+        path,
+      }
+    );
 
     return Object.assign({}, parameters, query);
   }

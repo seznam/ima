@@ -2,14 +2,11 @@
 
 import { Dictionary } from '../dictionary/Dictionary';
 import { EventBusEventHandler } from '../event/EventBus';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { Router } from '../router/Router';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IController {}
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -17,9 +14,18 @@ export interface IController {}
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export abstract class Controller implements IController {
+export abstract class Controller {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler;
+
+  // FIXME
+  static get $dependencies(): unknown[] {
+    return [];
+  }
+
+  static get $extensions(): Extension[] {
+    return [];
+  }
 
   /**
    * Callback for initializing the controller after the route parameters have
@@ -206,11 +212,17 @@ export abstract class Controller implements IController {
    * added to the controller before the {@link Controller#init} method is
    * invoked.
    */
-  addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
-  ): void {
+  addExtension(extension: Extension, extensionInstance?: Extension): void {
     return;
+  }
+
+  /**
+   * Returns the controller's extension.
+   *
+   * @return {Extension} The extensions added to this controller.
+   */
+  getExtension(extension: Extension): Extension | undefined {
+    return undefined;
   }
 
   /**

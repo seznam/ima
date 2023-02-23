@@ -1,13 +1,16 @@
 import { PageStateManager } from './state/PageStateManager';
 import { PageStateManagerDecorator } from './state/PageStateManagerDecorator';
-import { AbstractController } from '../controller/AbstractController';
-import { IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { ControllerDecorator } from '../controller/ControllerDecorator';
 import { Dictionary } from '../dictionary/Dictionary';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
-import { ObjectContainer, UnknownConstructable } from '../ObjectContainer';
+import {
+  Dependency,
+  ObjectContainer,
+  UnknownConstructable,
+} from '../ObjectContainer';
 import { Router, RouteOptions } from '../router/Router';
 import { UnknownParameters } from '../types';
 
@@ -30,40 +33,38 @@ export class PageFactory {
   /**
    * Create new instance of {@link Controller}.
    */
-  createController(controller: string | IController, options: RouteOptions) {
+  createController(controller: string | Controller, options: RouteOptions) {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (
-      Array.isArray((controller as typeof AbstractController)?.$extensions) &&
-      (controller as typeof AbstractController).$extensions.length
+      controller instanceof Controller &&
+      Array.isArray(controller?.$extensions) &&
+      controller.$extensions.length
     ) {
-      mergedExtensions = mergedExtensions.concat(
-        (controller as typeof AbstractController).$extensions
-      );
+      mergedExtensions = mergedExtensions.concat(controller.$extensions);
     }
 
     const controllerInstance = this._oc.create(
-      controller as typeof AbstractController
-    ) as AbstractController;
+      controller as unknown as Dependency
+    ) as Controller;
 
     for (const extension of mergedExtensions) {
-      const loadedExtension = this._oc.get(extension as typeof Extension);
+      const loadedExtension = this._oc.get(
+        extension as unknown as Dependency
+      ) as Extension;
+
+      // Optional extension handling
       if (!loadedExtension) {
-        // Optional extension handling
         continue;
       }
+
       if (Array.isArray(loadedExtension)) {
         // Spread support handling
         for (const extensionInstance of loadedExtension) {
-          (controllerInstance as AbstractController).addExtension(
-            extensionInstance
-          );
+          controllerInstance.addExtension(extensionInstance);
         }
       } else {
-        (controllerInstance as AbstractController).addExtension(
-          extension as typeof Extension,
-          loadedExtension as Extension
-        );
+        controllerInstance.addExtension(extension, loadedExtension);
       }
     }
 
@@ -99,7 +100,7 @@ export class PageFactory {
   /**
    * Returns decorated controller for ease setting seo params in controller.
    */
-  decorateController(controller: IController) {
+  decorateController(controller: Controller) {
     const metaManager = this._oc.get('$MetaManager') as MetaManager;
     const router = this._oc.get('$Router') as Router;
     const dictionary = this._oc.get('$Dictionary') as Dictionary;

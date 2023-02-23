@@ -2,13 +2,13 @@
 
 import { RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
-export type RouteParamValue = string | number | boolean;
-
 export type RouteParams = {
-  [key: string]: RouteParamValue | Error;
+  [key: string]: string | number | boolean;
+} & {
+  error?: Error;
 };
 
 /**
@@ -24,7 +24,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
-export abstract class AbstractRoute {
+export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   /**
    * The unique name of this route, identifying it among the rest of the
    * routes in the application.
@@ -34,12 +34,12 @@ export abstract class AbstractRoute {
    * Path expression used in route matching, to generate valid path with
    * provided params and parsing params from current path.
    */
-  protected _pathExpression: RoutePathExpression | string;
+  protected _pathExpression: T;
   /**
    * The full name of Object Container alias identifying the controller
    * associated with this route.
    */
-  protected _controller: string | typeof Controller | (() => IController);
+  protected _controller: string | Controller;
   /**
    * The full name or Object Container alias identifying the view class
    * associated with this route.
@@ -53,8 +53,6 @@ export abstract class AbstractRoute {
   protected _cachedView: unknown;
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Converts array of pairs (tuples) into valid URI query component.
    * Filters out invalid inputs (undefined, null, object, array, non-pair).
    *
@@ -67,7 +65,7 @@ export abstract class AbstractRoute {
    * @return Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
-  static pairsToQuery(pairs: Array<Array<unknown>> = []) {
+  static pairsToQuery(pairs: Array<Array<unknown>> = []): string {
     if (!pairs || !pairs.length) {
       return '';
     }
@@ -90,12 +88,10 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
    */
-  static paramsToQuery(params: RouteParams = {}) {
+  static paramsToQuery(params: RouteParams = {}): string {
     if (
       !params ||
       typeof params !== 'object' ||
@@ -110,16 +106,15 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Extracts and decodes the query parameters from the provided URL path and
-   * query.
+   * query. Parses key-value string params from query, where true value
+   * represents query params that are defined but have no value.
    *
    * @param path The URL path, including the optional query string
    *        (if any).
    * @return Parsed query parameters.
    */
-  static getQuery(path: string) {
+  static getQuery(path: string): RouteParams {
     const query: RouteParams = {};
     const queryStart = path.indexOf('?');
 
@@ -146,7 +141,7 @@ export abstract class AbstractRoute {
           }
         }
 
-        query[AbstractRoute.decodeURIParameter(pair[0]) as string] =
+        query[AbstractRoute.decodeURIParameter(pair[0])] =
           pair.length > 1
             ? AbstractRoute.decodeURIParameter(pair[1]) || ''
             : true;
@@ -157,14 +152,12 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Decoding parameters.
    *
    * @param parameterValue
    * @return decodedValue
    */
-  static decodeURIParameter(parameterValue: string) {
+  static decodeURIParameter(parameterValue: string): string {
     try {
       return decodeURIComponent(parameterValue);
     } catch (_) {
@@ -173,14 +166,12 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Trims the trailing forward slash from the provided URL path.
    *
    * @param path The path to trim.
    * @return Trimmed path.
    */
-  static getTrimmedPath(path: string) {
+  static getTrimmedPath(path: string): string {
     return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 
@@ -199,8 +190,8 @@ export abstract class AbstractRoute {
    */
   constructor(
     name: string,
-    pathExpression: RoutePathExpression | string,
-    controller: string | typeof Controller | (() => IController),
+    pathExpression: T,
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {
@@ -230,7 +221,7 @@ export abstract class AbstractRoute {
    *
    * @return The name of the route, identifying it.
    */
-  getName() {
+  getName(): string {
     return this._name;
   }
 
@@ -242,7 +233,7 @@ export abstract class AbstractRoute {
    *
    * @return The Controller class/alias/constant.
    */
-  getController() {
+  getController(): unknown {
     if (!this._cachedController) {
       this._cachedController = this._getAsyncModule(this._controller);
     }
@@ -258,7 +249,7 @@ export abstract class AbstractRoute {
    *
    * @return The View class/alias/constant.
    */
-  getView() {
+  getView(): unknown {
     if (!this._cachedView) {
       this._cachedView = this._getAsyncModule(this._view);
     }
@@ -340,7 +331,7 @@ export abstract class AbstractRoute {
    * @return Map of parameter names to parameter
    *         values.
    */
-  extractParameters(path?: string): RouteParams {
+  extractParameters(path: string): RouteParams {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
         'and must be overridden',

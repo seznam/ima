@@ -9,7 +9,7 @@ import { UnknownParameters, UnknownPromiseParameters } from '../types';
 /**
  * Abstract extension
  */
-export abstract class AbstractExtension implements Extension {
+export abstract class AbstractExtension extends Extension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler | UnknownParameters;
 

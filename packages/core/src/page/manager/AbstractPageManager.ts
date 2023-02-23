@@ -1,6 +1,5 @@
 import { PageManager, ManageArgs } from './PageManager';
-import { AbstractController } from '../../controller/AbstractController';
-import { Controller, IController } from '../../controller/Controller';
+import { Controller } from '../../controller/Controller';
 import { ControllerDecorator } from '../../controller/ControllerDecorator';
 import { Extension } from '../../extension/Extension';
 import { AbstractRoute } from '../../router/AbstractRoute';
@@ -163,12 +162,12 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   protected _constructManagedPageValue(
-    controller: IController,
+    controller: Controller,
     view: unknown,
-    route: AbstractRoute,
+    route: InstanceType<typeof AbstractRoute>,
     options: RouteOptions,
     params: UnknownParameters,
-    controllerInstance: AbstractController,
+    controllerInstance: InstanceType<typeof Controller>,
     decoratedController: ControllerDecorator,
     viewInstance: unknown
   ) {
@@ -580,13 +579,16 @@ export abstract class AbstractPageManager extends PageManager {
    * Return true if manager has to update last managed controller and view.
    */
   protected _hasOnlyUpdate(
-    controller: IController,
+    controller: Controller,
     view: unknown,
     options: RouteOptions
   ) {
-    if (typeof options.onlyUpdate === 'function') {
+    if (
+      typeof options.onlyUpdate === 'function' &&
+      this._managedPage.controller
+    ) {
       return options.onlyUpdate(
-        this._managedPage.controller as Controller,
+        this._managedPage.controller,
         this._managedPage.view
       );
     }

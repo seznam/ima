@@ -1,7 +1,7 @@
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 
 /**
  * Utility factory used by router to create routes.
@@ -32,7 +32,7 @@ export class RouteFactory {
   createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {

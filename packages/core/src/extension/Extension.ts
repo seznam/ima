@@ -4,9 +4,6 @@ import { EventBusEventHandler } from '../event/EventBus';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IExtension {}
-
 /**
  * Extensions provide means of extending the page controllers with additional
  * managed state and logic.
@@ -22,9 +19,14 @@ export interface IExtension {}
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  */
-export abstract class Extension implements IExtension {
+export abstract class Extension {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler;
+
+  // FIXME
+  static get $dependencies(): unknown[] {
+    return [];
+  }
 
   /**
    * Callback for initializing the controller extension after the route

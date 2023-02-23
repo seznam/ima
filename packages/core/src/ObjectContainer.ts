@@ -25,7 +25,7 @@ export type UnknownNonConstructable = NonConstructable<unknown>;
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export type FactoryFunction = (...args: any[]) => unknown;
 
-type Dependency =
+export type Dependency =
   | string
   | UnknownConstructable
   | UnknownNonConstructable
