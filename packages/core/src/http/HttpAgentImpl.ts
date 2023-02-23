@@ -1,5 +1,4 @@
 import * as Helpers from '@ima/helpers';
-import mergeDeep from 'merge-deep';
 
 import {
   HttpAgent,
@@ -9,7 +8,7 @@ import {
 import { HttpProxy } from './HttpProxy';
 import { Cache } from '../cache/Cache';
 import { GenericError } from '../error/GenericError';
-import { CookieStorage } from '../storage/CookieStorage';
+import { CookieStorage, COOKIE_SEPARATOR } from '../storage/CookieStorage';
 import { StringParameters, UnknownParameters } from '../types';
 
 /**
@@ -420,14 +419,45 @@ export class HttpAgentImpl extends HttpAgent {
   _prepareOptions(
     options: Partial<HttpAgentRequestOptions> = {}
   ): HttpAgentRequestOptions {
-    const composedOptions = mergeDeep(this._defaultRequestOptions, options);
+    const composedOptions = {
+      ...this._defaultRequestOptions,
+      ...options,
+      postProcessors: [
+        ...(this._defaultRequestOptions?.postProcessors || []),
+        ...(options?.postProcessors || []),
+      ],
+      fetchOptions: {
+        ...this._defaultRequestOptions?.fetchOptions,
+        ...options?.fetchOptions,
+        headers: {
+          ...this._defaultRequestOptions?.fetchOptions?.headers,
+          ...options?.fetchOptions?.headers,
+        },
+      },
+    };
+
+    const splitCookieString = (cookieString = ''): Array<string> => {
+      return cookieString.split(COOKIE_SEPARATOR);
+    };
+
+    const defaultCookies = splitCookieString(
+      this._defaultRequestOptions?.fetchOptions?.headers?.Cookie
+    );
+    const optionCookies = splitCookieString(
+      options?.fetchOptions?.headers?.Cookie
+    );
+
+    const allCookies = defaultCookies
+      .concat(optionCookies)
+      .filter(item => item);
 
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending auth cookie)
-      composedOptions.fetchOptions.headers ??= {};
-      composedOptions.fetchOptions.headers.Cookie ??=
-        this._cookie.getCookiesStringForCookieHeader();
+      allCookies.push(this._cookie.getCookiesStringForCookieHeader());
     }
+
+    composedOptions.fetchOptions.headers.Cookie =
+      allCookies.join(COOKIE_SEPARATOR);
 
     return composedOptions;
   }

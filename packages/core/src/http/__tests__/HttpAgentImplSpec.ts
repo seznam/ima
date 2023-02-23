@@ -229,7 +229,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
               referrerPolicy: 'no-referrer-when-downgrade',
               headers: {
                 'Accept-Language': 'cs',
-                Cookie: 'cok1=hello; cok2=hello2',
+                Cookie: 'cok1=hello; cok2=hello2; someCookie=value',
               },
               mode: 'cors',
             },

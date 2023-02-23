@@ -17,7 +17,7 @@ const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
  * Separator used to separate cookie declarations in the `Cookie` HTTP
  * header or the return value of the `document.cookie` property.
  */
-const COOKIE_SEPARATOR = '; ';
+export const COOKIE_SEPARATOR = '; ';
 
 export type CookieOptions = {
   domain?: string;
