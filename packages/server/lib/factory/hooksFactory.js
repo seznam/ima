@@ -107,6 +107,18 @@ module.exports = function hooksFactory({
     return isBadRequest && _hasToServeStatic(event);
   }
 
+  function _hasToServeStaticServerError(event) {
+    const { req, res } = event;
+    const routeInfo = _getRouteInfo({ req, res });
+
+    const isServerError =
+      routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
+
+    // TODO IMA@18 documentation badRequestConcurrency
+    // TODO IMA@18 update for better performance check
+    return isServerError && _hasToServeStatic(event);
+  }
+
   async function _applyError(event) {
     if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticServerErrorPage(event);
@@ -224,6 +236,16 @@ module.exports = function hooksFactory({
       if (_hasToServeStaticBadRequest(event)) {
         event.stopPropagation();
         return renderStaticClientErrorPage(event);
+      }
+
+      if (_hasToServeStaticServerError(event)) {
+        event.stopPropagation();
+        return renderStaticServerErrorPage({
+          ...event,
+          error:
+            event.error ??
+            new Error('The App error route exceed static thresholds.'),
+        });
       }
     });
   }
