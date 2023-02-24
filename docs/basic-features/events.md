@@ -116,7 +116,7 @@ this controller/extension.
 ```javascript
 // app/page/article/ArticleController.js
 
-static $name = 'fireEventPrefix';
+static $name = 'ArticleController';
 
 onExpand({ expandableId }) {
   // Event never reaches this point because we issued
@@ -127,7 +127,7 @@ onExpand({ expandableId }) {
 
 onClick(event) {
   const { expandableId } = this.props;
-  this.fire('fireEventPrefix.expand', { expandableId });
+  this.fire('ArticleController.expand', { expandableId });
 }
 ```
 
