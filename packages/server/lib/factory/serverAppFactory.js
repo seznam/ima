@@ -161,16 +161,18 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
+      error.cause = event.error;
+
       event.context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
     }
 
     try {
       event = await responseHandler(event);
     } catch (error) {
+      error.cause = event.error;
       const { res, context } = event;
 
       if (context.app) {
@@ -184,8 +186,7 @@ module.exports = function serverAppFactory({
 
       context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
 
       res.status(context.response.status);

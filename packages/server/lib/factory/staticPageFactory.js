@@ -56,14 +56,14 @@ module.exports = function staticTemplateFactory({
         ...error500,
         content,
         error: event.error,
-        cause: event.cause,
       };
     } catch (error) {
+      error.cause = event.error;
+
       return {
         ...error500,
         content: 'Internal Server Error',
         error,
-        cause: event.error,
       };
     }
   }
