@@ -32,4 +32,5 @@ export interface PageAction extends RouteAction {
 
 export type PageData = {
   status: number;
+  cancelled?: boolean;
 } & UnknownParameters;

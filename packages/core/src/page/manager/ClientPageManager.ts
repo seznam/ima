@@ -108,7 +108,9 @@ export class ClientPageManager extends AbstractPageManager {
       params,
       action,
     });
-    await this._activatePageSource();
+    if (!response?.cancelled) {
+      await this._activatePageSource();
+    }
 
     return response;
   }

@@ -142,7 +142,13 @@ export abstract class AbstractPageManager extends PageManager {
     await this._initPageSource();
 
     const response = await this._loadPageSource();
-    await this._runPostManageHandlers(this._previousManagedPage, action);
+    if (response && this._managedPage !== newManagedPage) {
+      response.cancelled = true;
+    }
+
+    if (!response?.cancelled) {
+      await this._runPostManageHandlers(this._previousManagedPage, action);
+    }
 
     return response;
   }
