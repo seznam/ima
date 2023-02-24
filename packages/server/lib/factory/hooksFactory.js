@@ -102,8 +102,7 @@ module.exports = function hooksFactory({
     const isBadRequest =
       routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
 
-    // TODO IMA@18 documentation badRequestConcurrency
-    // TODO IMA@18 update for better performance check
+    // TODO IMA@19 documentation badRequestConcurrency
     return isBadRequest && _hasToServeStatic(event);
   }
 
@@ -114,8 +113,6 @@ module.exports = function hooksFactory({
     const isServerError =
       routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
 
-    // TODO IMA@18 documentation badRequestConcurrency
-    // TODO IMA@18 update for better performance check
     return isServerError && _hasToServeStatic(event);
   }
 
