@@ -37,6 +37,11 @@ const cliArgs = yargs
     description:
       'Force reinstall of the application if the directory already exist.',
   })
+  .option('typescript', {
+    alias: 'f',
+    type: 'boolean',
+    description: 'Generate typescript version of create-ima-app aplication.',
+  })
   .option('build', {
     alias: 'b',
     type: 'array',

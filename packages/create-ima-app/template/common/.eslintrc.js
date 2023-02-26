@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   ignorePatterns: ['node_modules', 'build'],
   extends: [
     'eslint:recommended',
@@ -57,4 +58,39 @@ module.exports = {
     extend: true,
     spyOn: true,
   },
+  overrides: [
+    {
+      files: ['**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json'],
+      },
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+      plugins: ['@typescript-eslint'],
+      rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/ban-ts-comment': [
+          'error',
+          { 'ts-expect-error': 'off' },
+        ],
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            destructuredArrayIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+          },
+        ],
+        '@typescript-eslint/no-namespace': [
+          'error',
+          { allowDeclarations: true },
+        ],
+      },
+    },
+  ],
 };

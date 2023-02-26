@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "chalk": "^5.0.1",
+    "deepmerge": "^4.3.0",
     "fs-extra": "^11.1.0"
   },
   "publishConfig": {
