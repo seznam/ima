@@ -19,7 +19,6 @@ class MockedAbstractRoute extends AbstractRoute<string> {
 describe('ima.core.router.AbstractRoute', function () {
   let route: MockedAbstractRoute;
   const name = 'home';
-  const controller = new AbstractController();
   const view = function () {
     return {};
   };
@@ -37,7 +36,7 @@ describe('ima.core.router.AbstractRoute', function () {
     route = new MockedAbstractRoute(
       name,
       pathExpression,
-      controller,
+      AbstractController,
       view,
       options as unknown as RouteOptions
     );
@@ -58,7 +57,7 @@ describe('ima.core.router.AbstractRoute', function () {
   it('should return route controller', () => {
     const result = route.getController();
 
-    expect(result).toStrictEqual(controller);
+    expect(result).toStrictEqual(AbstractController);
   });
 
   it('should return route view', () => {
@@ -68,10 +67,10 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should return and cache async route controller', async () => {
-    route['_controller'] = new AbstractController();
+    route['_controller'] = AbstractController;
     const result = await route.getController();
 
-    expect(result).toStrictEqual(controller);
+    expect(result).toStrictEqual(AbstractController);
     await expect(route['_cachedController']).resolves.toStrictEqual(result);
   });
 
@@ -94,13 +93,13 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   it('should preload async view and controller', async () => {
-    const asyncController = async () => Promise.resolve({ controller });
+    const asyncController = async () => ({ default: AbstractController });
     const asyncView = async () => Promise.resolve({ default: view });
 
     route = new MockedAbstractRoute(
       name,
       pathExpression,
-      asyncController as unknown as AbstractController,
+      asyncController,
       asyncView,
       options
     );
@@ -113,7 +112,7 @@ describe('ima.core.router.AbstractRoute', function () {
     expect(route.getView).toHaveBeenCalledTimes(1);
     expect(route.getController).toHaveBeenCalledTimes(1);
     expect(resultView).toStrictEqual(view);
-    expect(resultController).toStrictEqual(controller);
+    expect(resultController).toStrictEqual(AbstractController);
   });
 
   describe('pairsToQuery() static method', () => {
@@ -149,6 +148,7 @@ describe('ima.core.router.AbstractRoute', function () {
       ],
       [[[]], ''],
     ])('should parse query pairs %j into "%s"', (pairs, result) => {
+      // @ts-expect-error intentional type error for test
       expect(AbstractRoute.pairsToQuery(pairs)).toBe(result);
     });
   });
@@ -189,6 +189,8 @@ describe('ima.core.router.AbstractRoute', function () {
   });
 
   describe('_getAsyncModule() method', () => {
+    const controller = new AbstractController();
+
     it('should return promise resolving to default export for async import', async () => {
       const asyncController = async () =>
         Promise.resolve({ default: controller });

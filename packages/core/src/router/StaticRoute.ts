@@ -96,7 +96,7 @@ export class StaticRoute extends AbstractRoute<string> {
   constructor(
     name: string,
     pathExpression: string,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {
@@ -130,7 +130,7 @@ export class StaticRoute extends AbstractRoute<string> {
    */
   toPath(params: RouteParams = {}) {
     let path = this._pathExpression;
-    const queryPairs = [];
+    const queryPairs: [string, boolean | string | number][] = [];
 
     for (const paramName of Object.keys(params)) {
       if (paramName === 'error' && params?.error instanceof Error) {

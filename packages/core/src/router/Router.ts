@@ -109,7 +109,7 @@ export abstract class Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteOptions>
   ): this {

@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
   setupFiles: ['<rootDir>/setupJest.js'],
-  testRegex: '(/__tests__/).*Spec\\.jsx?$',
+  testRegex: '(/__tests__/).*Spec\\.(t|j)sx?$',
   transform: {
     '^.+\\.(js|jsx)$': [
       '@swc/jest',

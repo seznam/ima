@@ -1,10 +1,11 @@
+/* eslint-disable jest/no-conditional-expect */
 import { toMockedInstance } from 'to-mock';
 
 import { AbstractController } from '../../controller/AbstractController';
 import { GenericError } from '../../error/GenericError';
 import { DispatcherImpl } from '../../event/DispatcherImpl';
 import { PageManager } from '../../page/manager/PageManager';
-import { AbstractRoute } from '../AbstractRoute';
+import { AbstractRoute, RouteParams } from '../AbstractRoute';
 import { AbstractRouter } from '../AbstractRouter';
 import { ActionTypes } from '../ActionTypes';
 import { RouteFactory } from '../RouteFactory';
@@ -77,10 +78,10 @@ describe('ima.core.router.AbstractRouter', () => {
     router.init(config);
 
     router.use(globalMiddleware);
-    router.add('home', '/', Controller, View, {
+    router.add('home', '/', AbstractController, View, {
       middlewares: [homeRouteMiddleware],
     });
-    router.add('contact', '/contact', Controller, View, options);
+    router.add('contact', '/contact', AbstractController, View, options);
   });
 
   afterEach(() => {
@@ -117,19 +118,25 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('add method', () => {
     it('should be throw error if you try add route with exists name', () => {
       expect(() => {
-        router.add('home', '/home', Controller, View, options);
+        router.add('home', '/home', AbstractController, View, options);
       }).toThrow();
     });
 
     it('should create new ima.core.Route', () => {
       jest.spyOn(routeFactory, 'createRoute');
 
-      router.add('routeName', '/newRoutePath', Controller, View, options);
+      router.add(
+        'routeName',
+        '/newRoutePath',
+        AbstractController,
+        View,
+        options
+      );
 
       expect(routeFactory.createRoute).toHaveBeenCalledWith(
         'routeName',
         '/newRoutePath',
-        Controller,
+        AbstractController,
         View,
         options
       );
@@ -194,7 +201,7 @@ describe('ima.core.router.AbstractRouter', () => {
     const baseUrl = 'baseUrl';
 
     beforeEach(() => {
-      router.add(routeName, path, Controller, View, options);
+      router.add(routeName, path, AbstractController, View, options);
     });
 
     afterEach(() => {
@@ -599,7 +606,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', async () => {
       const response = { content: null, status: 200 };
-      const params = { error: new Error('test') };
+      const params: RouteParams = { error: new Error('test') };
 
       router.getPath.mockReturnValue(routePath);
       jest

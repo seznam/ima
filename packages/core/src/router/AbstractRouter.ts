@@ -133,7 +133,7 @@ export abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: object | string | (() => unknown),
     options?: Partial<RouteOptions>
   ): this {

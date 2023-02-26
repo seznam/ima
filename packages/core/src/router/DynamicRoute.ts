@@ -47,7 +47,7 @@ export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
   constructor(
     name: string,
     pathExpression: RoutePathExpression,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {

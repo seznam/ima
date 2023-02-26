@@ -1,5 +1,5 @@
 import { AbstractController } from '../../controller/AbstractController';
-import { Extension, IExtension } from '../../extension/Extension';
+import { Extension } from '../../extension/Extension';
 import { ns } from '../../Namespace';
 import { ObjectContainer } from '../../ObjectContainer';
 import { RouteOptions } from '../../router/Router';
@@ -27,7 +27,7 @@ describe('ima.core.PageFactory', () => {
     }
   }
 
-  class MockExtension2 extends MockExtension {}
+  class MockExtension2 extends Extension {}
 
   class ClassConstructor extends AbstractController {
     dependency: unknown;
@@ -50,7 +50,7 @@ describe('ima.core.PageFactory', () => {
       return [];
     }
 
-    static extensionsTest: IExtension[] = [MockExtension];
+    static extensionsTest: (typeof Extension)[] = [MockExtension];
 
     static get $extensions() {
       return ClassConstructorWithExtensions.extensionsTest;

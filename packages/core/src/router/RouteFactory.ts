@@ -32,7 +32,7 @@ export class RouteFactory {
   createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {

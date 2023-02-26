@@ -37,7 +37,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * The full name of Object Container alias identifying the controller
    * associated with this route.
    */
-  protected _controller: string | Controller;
+  protected _controller: string | typeof Controller;
   /**
    * The full name or Object Container alias identifying the view class
    * associated with this route.
@@ -187,7 +187,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   constructor(
     name: string,
     pathExpression: T,
-    controller: string | Controller,
+    controller: string | typeof Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {
