@@ -8,32 +8,30 @@ export class AbstractPageController extends AbstractController {
   /**
    * Set seo params.
    *
-   * @param {Object<string, *>} loadedResources
-   * @param {MetaManager} metaManager
-   * @param {Router} router
-   * @param {Dictionary} dictionary
-   * @param {Object<string, *>} settings
+   * @param {import('@ima/core').UnknownParameters} loadedResources
+   * @param {import('@ima/core').MetaManager} metaManager
+   * @param {import('@ima/core').Router} router
+   * @param {import('@ima/core').Dictionary} dictionary
+   * @param {import('@ima/core').UnknownParameters} settings
    */
   setMetaParams(loadedResources, metaManager, router) {
-    let title = 'IMA.js';
-    let description;
-    description = 'IMA.js is isomorphic javascript application framework.';
+    const title = 'IMA.js';
+    const description =
+      'IMA.js is isomorphic javascript application framework.';
 
-    let url = router.getUrl();
-    let domain = router.getDomain();
-    let image = `${domain}/${IMAjsShareImg}`;
+    const url = router.getUrl();
+    const domain = router.getDomain();
+    const image = `${domain}/${IMAjsShareImg}`;
 
-    metaManager.setTitle(title);
     metaManager
+      .setTitle(title)
       .setMetaName('description', description)
-      .setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
-    metaManager
+      .setMetaName('keywords', 'IMA.js, isomorphic application, javascript')
       .setMetaName('twitter:title', title)
       .setMetaName('twitter:description', description)
       .setMetaName('twitter:card', 'summary')
       .setMetaName('twitter:image', image)
-      .setMetaName('twitter:url', url);
-    metaManager
+      .setMetaName('twitter:url', url)
       .setMetaProperty('og:title', title)
       .setMetaProperty('og:description', description)
       .setMetaProperty('og:type', 'website')

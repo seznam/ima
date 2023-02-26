@@ -28,7 +28,11 @@ export async function create(projDir, useTS) {
 
   if (!fs.existsSync(projDir)) {
     try {
-      info(`Creating basic directory structure...`);
+      info(
+        `Creating basic directory structure${
+          useTS ? chalk.blue(' for TypeScript template') : ''
+        }...`
+      );
 
       // Copy base "common" template
       await fsExtra.copy(tplRoot, appRoot);

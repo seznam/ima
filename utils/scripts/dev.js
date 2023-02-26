@@ -38,9 +38,10 @@ const cliArgs = yargs
       'Force reinstall of the application if the directory already exist.',
   })
   .option('typescript', {
-    alias: 'f',
+    alias: 't',
     type: 'boolean',
-    description: 'Generate typescript version of create-ima-app aplication.',
+    description: 'Generate typescript version of create-ima-app application.',
+    default: false,
   })
   .option('build', {
     alias: 'b',
@@ -52,7 +53,8 @@ const cliArgs = yargs
     type: 'array',
     description: 'Package names, which are watched and copied on changes.',
   })
-  .version(false)
+  .version()
+  .help()
   .parse();
 
 function pkgFilter(paths, needles) {
