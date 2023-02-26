@@ -1,5 +1,5 @@
 import { useSettings, useLocalize } from '@ima/react-page-renderer';
-import Card from 'app/component/card/Card';
+import { Card } from 'app/component/card/Card';
 import { useState, useEffect } from 'react';
 import './homeView.less';
 
@@ -9,7 +9,7 @@ import './homeView.less';
  * data are passed all at once, as soon as all promises resolve
  * (in case of SSR) or one by one as the promises are being resolved.
  */
-export default function HomeView({ message, name, cards }) {
+export function HomeView({ message, name, cards }) {
   const links = useSettings('links');
   const localize = useLocalize();
   const [mounted, setMounted] = useState(false);

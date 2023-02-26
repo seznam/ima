@@ -1,6 +1,6 @@
-import AbstractPageController from 'app/page/AbstractPageController';
+import { AbstractPageController } from 'app/page/AbstractPageController';
 
-export default class ErrorController extends AbstractPageController {
+export class ErrorController extends AbstractPageController {
   static get $dependencies() {
     return [];
   }

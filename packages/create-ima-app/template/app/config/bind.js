@@ -7,7 +7,7 @@ import {
 import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
 
 //eslint-disable-next-line no-unused-vars
-export default (ns, oc, config) => {
+export const initBindApp = (ns, oc, config) => {
   // UI components
   oc.bind('$CssClasses', function () {
     return cssClassNameProcessor;

@@ -1,6 +1,6 @@
-import AbstractPageController from 'app/page/AbstractPageController';
+import { AbstractPageController } from 'app/page/AbstractPageController';
 
-export default class NotFoundController extends AbstractPageController {
+export class NotFoundController extends AbstractPageController {
   static get $dependencies() {
     return [];
   }

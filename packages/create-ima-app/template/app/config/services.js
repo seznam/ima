@@ -1,6 +1,6 @@
 import { Router, Window } from '@ima/core';
 
-export default (ns, oc, config) => {
+export const initServicesApp = (ns, oc, config) => {
   let $window = oc.get(Window);
   let $router = oc.get(Router);
 
