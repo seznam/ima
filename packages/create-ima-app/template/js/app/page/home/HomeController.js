@@ -40,7 +40,7 @@ export class HomeController extends AbstractPageController {
    * object.
    *
    * @override
-   * @return {Object<string, (Promise|*)>} A map object of promises
+   * @return {Record<string, Promise<any> | any} A map object of promises
    *         resolved when all resources the controller requires are ready. The
    *         resolved values will be pushed to the controller's state.
    */
@@ -71,14 +71,14 @@ export class HomeController extends AbstractPageController {
    * controller has been provided with the rendered view.
    *
    * @override
-   * @param {Object<string, *>} _loadedResources Map of resource names to
+   * @param {import('@ima/core').UnknownParameters} _loadedResources Map of resource names to
    *        resources loaded by the {@link load} method. This is the same
    *        object as the one passed to the {@link setState} method when
    *        the Promises returned by the {@link load} method were resolved.
-   * @param {MetaManager} metaManager Meta attributes manager to configure.
-   * @param {Router} router The current application router.
-   * @param {Dictionary} dictionary The current localization dictionary.
-   * @param {Object<string, *>} settings The application settings for the
+   * @param {import('@ima/core').MetaManager} metaManager Meta attributes manager to configure.
+   * @param {import('@ima/core').Router} router The current application router.
+   * @param {import('@ima/core').Dictionary} dictionary The current localization dictionary.
+   * @param {import('@ima/core').UnknownParameters} settings The application settings for the
    *        current application environment.
    */
   // eslint-disable-next-line no-unused-vars
