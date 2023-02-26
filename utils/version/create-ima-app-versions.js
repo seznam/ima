@@ -4,7 +4,7 @@ const path = require('path');
 const PACKAGES_DIR = path.resolve(process.cwd(), 'packages');
 const CIA_TEMPLATE_PACKAGE_JSON = path.resolve(
   PACKAGES_DIR,
-  'create-ima-app/template/package.json'
+  'create-ima-app/template/common/package.json'
 );
 
 if (!fs.existsSync(CIA_TEMPLATE_PACKAGE_JSON)) {

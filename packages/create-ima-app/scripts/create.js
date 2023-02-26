@@ -36,11 +36,18 @@ export async function create(projDir, useTS) {
       // Copy JS/TS specific files
       await fsExtra.copy(tplTypeRoot, appRoot, {
         overwrite: false,
-        filter: filePath => !filePath.endsWith('/package.json'),
+        filter: filePath =>
+          !filePath.includes('package.json') && !filePath.includes('.eslintrc'),
       });
 
       // Merge pkgJson files
       await mergePkgJson(tplRoot, tplTypeRoot, appRoot);
+
+      // Copy eslintrc.js file
+      await fsExtra.copy(
+        path.join(tplTypeRoot, '.eslintrc.template.js'),
+        path.join(appRoot, '.eslintrc.js')
+      );
     } catch (err) {
       error(err.message);
       process.exit(1);

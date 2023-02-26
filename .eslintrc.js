@@ -7,6 +7,7 @@ module.exports = {
     '**/docs/**',
     '**/.docusaurus/**',
     '**/coverage/**',
+    'packages/create-ima-app/**/.eslintrc.js',
     'packages/create-ima-app/examples/todos/assets/**',
   ],
   extends: [
