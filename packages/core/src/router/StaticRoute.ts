@@ -81,7 +81,7 @@ const PARAMS_REGEXP_OPT =
  * router's configuration using string representation of the path expression
  * with special param fields identified by `:paramName` prefix.
  */
-export class StaticRoute extends AbstractRoute {
+export class StaticRoute extends AbstractRoute<string> {
   protected _trimmedPathExpression: string;
   protected _parameterNames: string[];
   protected _hasParameters: boolean;

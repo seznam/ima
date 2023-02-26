@@ -97,11 +97,7 @@ export {
 export { AbstractRouter } from './router/AbstractRouter';
 export { ActionTypes } from './router/ActionTypes';
 export { ClientRouter } from './router/ClientRouter';
-export {
-  DynamicRoute,
-  type ExtractPathFunction,
-  type RoutePathExpression,
-} from './router/DynamicRoute';
+export { DynamicRoute, type RoutePathExpression } from './router/DynamicRoute';
 export { RouterEvents } from './router/RouterEvents';
 export { Request } from './router/Request';
 export { Response } from './router/Response';

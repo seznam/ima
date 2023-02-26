@@ -165,7 +165,7 @@ export abstract class AbstractPageManager extends PageManager {
   protected _constructManagedPageValue(
     controller: IController,
     view: unknown,
-    route: AbstractRoute,
+    route: InstanceType<typeof AbstractRoute>,
     options: RouteOptions,
     params: UnknownParameters,
     controllerInstance: AbstractController,
