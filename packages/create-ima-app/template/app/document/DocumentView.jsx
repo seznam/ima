@@ -1,4 +1,4 @@
-export default function DocumentView({ page, $Utils }) {
+export function DocumentView({ page, $Utils }) {
   /**
    * #{...} Represents variables that are injected before sending the response
    * to client from server. These are defined in event.response.content.contentVariables.

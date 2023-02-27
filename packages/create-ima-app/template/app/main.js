@@ -1,10 +1,10 @@
 import './less/app.less';
 
 import * as ima from '@ima/core';
-import initBindApp from 'app/config/bind';
-import initRoutes from 'app/config/routes';
-import initServicesApp from 'app/config/services';
-import initSettings from 'app/config/settings';
+import { initBindApp } from 'app/config/bind';
+import { initRoutes } from 'app/config/routes';
+import { initServicesApp } from 'app/config/services';
+import { initSettings } from 'app/config/settings';
 
 let getInitialAppConfigFunctions = () => {
   return { initBindApp, initRoutes, initServicesApp, initSettings };

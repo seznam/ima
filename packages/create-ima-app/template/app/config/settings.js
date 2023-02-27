@@ -1,6 +1,6 @@
-import DocumentView from 'app/document/DocumentView';
+import { DocumentView } from 'app/document/DocumentView';
 
-export default (ns, oc, config) => {
+export const initSettings = (ns, oc, config) => {
   return {
     prod: {
       $Version: config.$Version,

@@ -4,7 +4,7 @@ import IMAjsShareImg from 'app/public/imajs-share.png';
 /**
  * Basic page controller.
  */
-export default class AbstractPageController extends AbstractController {
+export class AbstractPageController extends AbstractController {
   /**
    * Set seo params.
    *

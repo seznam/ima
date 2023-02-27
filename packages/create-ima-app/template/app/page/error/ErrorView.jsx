@@ -1,6 +1,6 @@
 import './errorView.less';
 
-export default function ErrorView({ error }) {
+export function ErrorView({ error }) {
   const message = error.message || '';
   const stack = error.stack || '';
 
