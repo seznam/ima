@@ -238,7 +238,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
     `${path.resolve(
       __dirname,
       '../../../packages/create-ima-app/bin/create-ima-app.js'
-    )} ${destDir}`
+    )} ${destDir}${cliArgs.typescript ? ' --typescript' : ''}`
   );
 
   // Build, pack and install packages in the target directory.

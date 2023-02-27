@@ -44,7 +44,7 @@
     "test:all": "jest --colors",
     "test:create-ima-app": "utils/tests/testRunner.sh",
     "test:size": "npm run test:size --workspaces --if-present",
-    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
+    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/common/package.json"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,mjs}": "eslint",
