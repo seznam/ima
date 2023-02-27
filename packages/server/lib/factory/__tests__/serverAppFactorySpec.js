@@ -4,6 +4,7 @@ const {
   ServerRouter,
   Cache,
   PageStateManager,
+  RouteNames,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
 
@@ -113,7 +114,7 @@ describe('Server App Factory', () => {
         return {
           route: {
             getName() {
-              return 'notFound';
+              return RouteNames.NOT_FOUND;
             },
           },
         };
@@ -316,6 +317,26 @@ describe('Server App Factory', () => {
       expect(response.SPA).toBeFalsy();
       expect(response.static).toBeTruthy();
       expect(response.status).toBe(500);
+      expect(response.content).toBe('read file content');
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 500 static page for ima app route ERROR which exceeds static thresholds', async () => {
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return RouteNames.ERROR;
+          },
+        },
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(500);
+      expect(response.error).toBeInstanceOf(Error);
       expect(response.content).toBe('read file content');
       expect(response.cache).toBeFalsy();
     });
