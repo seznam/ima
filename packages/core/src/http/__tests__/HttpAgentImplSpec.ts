@@ -29,13 +29,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
         timeout: 7000,
         repeatRequest: 1,
         ttl: 0,
-        headers: {
-          Accept: 'application/json',
-          'Accept-Language': 'en',
-        },
         cache: true,
-        fetchOptions: {},
-        withCredentials: true,
+        fetchOptions: {
+          headers: {
+            Accept: 'application/json',
+            'Accept-Language': 'en',
+          },
+          credentials: 'include',
+        },
         postProcessors: [
           jest
             .fn()
@@ -89,7 +90,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.method = method;
       });
 
-      it('should be return resolved promise with data', async () => {
+      it('should return resolved promise with data', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -103,14 +104,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then((response: HttpAgentResponse<unknown>) => {
           const { postProcessors, ...restOptions } = data.params.options;
+          restOptions.fetchOptions.headers = {}; // HttpAgentImpl._cleanResponse() removes headers
           const agentResponse = {
             status: data.status,
             params: {
               ...data.params,
               options: {
                 ...restOptions,
-
-                headers: {},
               },
             },
             body: data.body,
@@ -173,7 +173,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       // eslint-disable-next-line jest/no-focused-tests
-      it('should be set cookie to response', async () => {
+      it('should set cookie to response', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -190,6 +190,49 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then(() => {
           expect(cookie.parseFromSetCookieHeader).toHaveBeenCalled();
+        });
+      });
+
+      it('should compose fetchOptions correctly from defaults and options', async () => {
+        const proxyMock = jest
+          .spyOn(proxy, 'request')
+          .mockImplementation(() => {
+            return Promise.resolve(data);
+          });
+
+        jest
+          .spyOn(cookie, 'getCookiesStringForCookieHeader')
+          .mockImplementation(() => 'someCookie=value');
+
+        const customOptions = {
+          ...data.params.options,
+          fetchOptions: {
+            mode: 'cors',
+            referrerPolicy: 'no-referrer-when-downgrade',
+            headers: {
+              'Accept-Language': 'cs',
+            },
+          },
+        };
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          customOptions
+        ).then(() => {
+          const mockCall = proxyMock.mock.lastCall || [];
+          expect(mockCall[3]).toMatchObject({
+            fetchOptions: {
+              credentials: 'include',
+              referrerPolicy: 'no-referrer-when-downgrade',
+              headers: {
+                'Accept-Language': 'cs',
+                Cookie: 'someCookie=value',
+              },
+              mode: 'cors',
+            },
+          });
         });
       });
 
@@ -233,7 +276,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should not set Cookie header only for request with withCredentials option set to false', async () => {
+      it('should not set Cookie header if request fetchOptions.credentials is not "include"', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -243,7 +286,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
         await http[method](
           data.params.url,
           data.params.data,
-          Object.assign({}, data.params.options, { withCredentials: false })
+          Object.assign({}, data.params.options, {
+            fetchOptions: { credentials: 'omit' },
+          })
         ).then(() => {
           expect(cookie.getCookiesStringForCookieHeader).not.toHaveBeenCalled();
         });

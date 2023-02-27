@@ -1,6 +1,8 @@
-import type { IncomingHttpHeaders } from 'http2';
-
-import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
+import {
+  ImaRequestInit,
+  HttpAgentRequestOptions,
+  HttpAgentResponse,
+} from './HttpAgent';
 import { HttpStatusCode } from './HttpStatusCode';
 import { UrlTransformer } from './UrlTransformer';
 import { GenericError } from '../error/GenericError';
@@ -432,32 +434,34 @@ export class HttpProxy {
    *        be send with a request.
    * @param options Options provided by the HTTP
    *        agent.
-   * @return {RequestInit} A `RequestInit` object of the Fetch API.
+   * @return {ImaRequestInit} An `ImaRequestInit` object (extended from `RequestInit` of the Fetch API).
    */
   _composeRequestInit(
     method: string,
     data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
-  ): RequestInit {
-    const contentType = this._getContentType(method, data, options);
+  ): ImaRequestInit {
+    const requestInit: {
+      body?: unknown;
+      headers: Record<string, string>;
+      [key: string]: unknown;
+    } = {
+      method: method.toUpperCase(),
+      redirect: 'follow',
+      headers: options.fetchOptions?.headers || {},
+    };
 
+    const contentType = this._getContentType(method, data, requestInit.headers);
     if (contentType) {
-      options.headers['Content-Type'] = contentType;
+      requestInit.headers['Content-Type'] = contentType;
     }
 
     for (const [headerName, headerValue] of this._defaultHeaders) {
-      options.headers[headerName] = headerValue;
+      requestInit.headers[headerName] = headerValue;
     }
 
-    const requestInit: { body?: unknown; [key: string]: unknown } = {
-      method: method.toUpperCase(),
-      headers: options.headers,
-      credentials: options.withCredentials ? 'include' : 'same-origin',
-      redirect: 'follow',
-    };
-
     if (this._shouldRequestHaveBody(method, data)) {
-      requestInit.body = this._transformRequestBody(data, options.headers);
+      requestInit.body = this._transformRequestBody(data, requestInit.headers);
     }
 
     // Re-assign signal from abort controller to fetch options
@@ -470,7 +474,7 @@ export class HttpProxy {
 
     Object.assign(requestInit, options.fetchOptions || {});
 
-    return requestInit as RequestInit;
+    return requestInit;
   }
 
   /**
@@ -487,13 +491,13 @@ export class HttpProxy {
   _getContentType(
     method: string,
     data: UnknownParameters | undefined,
-    options: HttpAgentRequestOptions
-  ) {
+    headers: Record<string, string>
+  ): string | null {
     if (
-      options.headers['Content-Type'] &&
-      typeof options.headers['Content-Type'] === 'string'
+      headers['Content-Type'] &&
+      typeof headers['Content-Type'] === 'string'
     ) {
-      return options.headers['Content-Type'];
+      return headers['Content-Type'];
     }
 
     if (this._shouldRequestHaveBody(method, data)) {
@@ -552,7 +556,7 @@ export class HttpProxy {
    */
   _transformRequestBody(
     data: UnknownParameters | undefined,
-    headers: IncomingHttpHeaders
+    headers: Record<string, string>
   ) {
     switch (headers['Content-Type']) {
       case 'application/json':

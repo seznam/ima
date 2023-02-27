@@ -417,24 +417,30 @@ export class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options?: Partial<HttpAgentRequestOptions>
+    options: Partial<HttpAgentRequestOptions> = {}
   ): HttpAgentRequestOptions {
     const composedOptions = {
       ...this._defaultRequestOptions,
       ...options,
+      postProcessors: [
+        ...(this._defaultRequestOptions?.postProcessors || []),
+        ...(options?.postProcessors || []),
+      ],
+      fetchOptions: {
+        ...this._defaultRequestOptions?.fetchOptions,
+        ...options?.fetchOptions,
+        headers: {
+          ...this._defaultRequestOptions?.fetchOptions?.headers,
+          ...options?.fetchOptions?.headers,
+        },
+      },
     };
-    let cookieHeader = {};
 
-    if (composedOptions.withCredentials) {
-      cookieHeader = { Cookie: this._cookie.getCookiesStringForCookieHeader() };
+    if (composedOptions.fetchOptions?.credentials === 'include') {
+      // mock default browser behavior for server-side (sending cookie with a fetch request)
+      composedOptions.fetchOptions.headers.Cookie =
+        this._cookie.getCookiesStringForCookieHeader();
     }
-
-    composedOptions.headers = {
-      ...cookieHeader,
-      ...this._defaultRequestOptions.headers,
-      ...(options?.headers ?? {}),
-    };
-
     return composedOptions;
   }
 
@@ -523,8 +529,8 @@ export class HttpAgentImpl extends HttpAgent {
 
     if (pureResponse.params.options.keepSensitiveHeaders !== true) {
       pureResponse.headers = {};
+      pureResponse.params.options.fetchOptions.headers = {};
       delete pureResponse.headersRaw;
-      pureResponse.params.options.headers = {};
     }
 
     return pureResponse;
