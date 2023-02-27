@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Patch Changes
+
+- 5919b93d7: The App error route is protected for exceeding static thresholds.
+- bfb1f48bb: The Emitter event.cause is removed. The error cause is set in event.error.cause.
+
 ## 19.0.0-rc.3
 
 ### Patch Changes

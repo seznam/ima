@@ -1,5 +1,32 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Major Changes
+
+- 432f6bb55: `extractParameters()` function in `DynamicRoute` now receives additional object argument, containing `query` and `path` (not modified path) for more control over extracted parameters.
+  **BREAKING CHANGE** the router now uses params returned from `extractParameters()` directly. It no longer automatically merges query params into the resulting object. If you want to preserve this behavior, merge the extracted route params with `query` object provided in the second argument.
+- 24ed8e07f: Removed support for `HttpAgent` options.listener (these were used mainly in plugin-xhr, which is now unsupported)
+  **BREAKING CHANGE**: You can now define multiple `postProcessors[]` in `HttpAgent` options, this however presents a breaking change, since if you are already using any `postProcessor`, you need to update your options to `postProcessors` and make sure to pass an array to this option.
+- b55415fdb: Remove older, conflicting settings of `HttpAgent`, `withCredentials`, `headers`, and `listeners`. The first two now conflict with the newer `options.fetchOptions`, the last one is no longer used for anything.
+
+  #### Breaking changes
+
+  `options.withCredentials` and `options.headers` are no longer followed. Use `options.fetchOptions.credentials` and `options.fetchOptions.headers` instead. For definition, see the native Fetch API. **Note**: for simplicity, `options.fetchOptions.headers` only accepts headers defined by an object, not a tuple or an instance of `Headers`.
+
+  `options.listeners` no longer supported.
+
+### Minor Changes
+
+- c0abf3082: Controller and Extension event bus methods can be targeted with prefix. Prefix is set by static field in controller/extension class e.g. `$name = 'ArticleController';`. Event is then `ArticleController.eventName`.
+
+### Patch Changes
+
+- a7bd5bb87: Fix missing optional parameters in static router are evaluated as 'undefined' instead of undefined.
+- a3e8b5d2e: Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
+- 5578d8f40: Add clear for transaction in PageStateManager
+- f2e1a5df2: Fixed HttpAgent types -> data in method arguments should be optional
+
 ## 19.0.0-rc.5
 
 ### Minor Changes

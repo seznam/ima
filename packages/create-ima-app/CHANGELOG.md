@@ -1,5 +1,16 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Major Changes
+
+- 9aff57e3a: Added typescript template (use --typescript argument to generate a new TS-compatible template)
+
+### Patch Changes
+
+- 74a51dee8: Migrated to named exports in preparation for TS template
+- 5ea0c6735: Fixed default static path and public path settings.
+
 ## 19.0.0-rc.2
 
 ### Major Changes

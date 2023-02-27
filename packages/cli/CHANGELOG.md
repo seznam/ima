@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- fc0a978cd: CSS files generated to Manifest are only from static/css/ folder.
+
 ## 19.0.0-rc.5
 
 ### Major Changes

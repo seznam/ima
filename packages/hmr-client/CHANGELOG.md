@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- a3e8b5d2e: Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
+
 ## 19.0.0-rc.2
 
 ### Patch Changes
