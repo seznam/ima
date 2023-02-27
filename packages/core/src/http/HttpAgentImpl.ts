@@ -8,7 +8,7 @@ import {
 import { HttpProxy } from './HttpProxy';
 import { Cache } from '../cache/Cache';
 import { GenericError } from '../error/GenericError';
-import { CookieStorage, COOKIE_SEPARATOR } from '../storage/CookieStorage';
+import { CookieStorage } from '../storage/CookieStorage';
 import { StringParameters, UnknownParameters } from '../types';
 
 /**
@@ -436,29 +436,11 @@ export class HttpAgentImpl extends HttpAgent {
       },
     };
 
-    const splitCookieString = (cookieString = ''): Array<string> => {
-      return cookieString.split(COOKIE_SEPARATOR);
-    };
-
-    const defaultCookies = splitCookieString(
-      this._defaultRequestOptions?.fetchOptions?.headers?.Cookie
-    );
-    const optionCookies = splitCookieString(
-      options?.fetchOptions?.headers?.Cookie
-    );
-
-    const allCookies = defaultCookies
-      .concat(optionCookies)
-      .filter(item => item);
-
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending cookie with a fetch request)
-      allCookies.push(this._cookie.getCookiesStringForCookieHeader());
+      composedOptions.fetchOptions.headers.Cookie =
+        this._cookie.getCookiesStringForCookieHeader();
     }
-
-    composedOptions.fetchOptions.headers.Cookie =
-      allCookies.join(COOKIE_SEPARATOR);
-
     return composedOptions;
   }
 
