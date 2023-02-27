@@ -380,7 +380,7 @@ export abstract class AbstractRouter extends Router {
 
     if (!(errorRoute instanceof AbstractRoute)) {
       throw new GenericError(
-        `ima.core.router.AbstractRouter:handleNotFound '${RouteNames.ERROR}' is,` +
+        `ima.core.router.AbstractRouter:handleError '${RouteNames.ERROR}' is,` +
           ` not instance of AbstractRoute, please check your configuration.`,
         { errorRoute, params, options, locals }
       );
