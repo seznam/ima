@@ -452,7 +452,7 @@ export class HttpAgentImpl extends HttpAgent {
       .filter(item => item);
 
     if (composedOptions.fetchOptions?.credentials === 'include') {
-      // mock default browser behavior for server-side (sending auth cookie)
+      // mock default browser behavior for server-side (sending cookie with a fetch request)
       allCookies.push(this._cookie.getCookiesStringForCookieHeader());
     }
 
