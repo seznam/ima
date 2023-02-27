@@ -24,7 +24,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
-export abstract class AbstractRoute {
+export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   /**
    * The unique name of this route, identifying it among the rest of the
    * routes in the application.
@@ -34,7 +34,7 @@ export abstract class AbstractRoute {
    * Path expression used in route matching, to generate valid path with
    * provided params and parsing params from current path.
    */
-  protected _pathExpression: RoutePathExpression | string;
+  protected _pathExpression: T;
   /**
    * The full name of Object Container alias identifying the controller
    * associated with this route.
@@ -53,8 +53,6 @@ export abstract class AbstractRoute {
   protected _cachedView: unknown;
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Converts array of pairs (tuples) into valid URI query component.
    * Filters out invalid inputs (undefined, null, object, array, non-pair).
    *
@@ -90,8 +88,6 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
    */
@@ -110,8 +106,6 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Extracts and decodes the query parameters from the provided URL path and
    * query.
    *
@@ -157,8 +151,6 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Decoding parameters.
    *
    * @param parameterValue
@@ -173,8 +165,6 @@ export abstract class AbstractRoute {
   }
 
   /**
-   * TODO IMA@18 remove static method
-   *
    * Trims the trailing forward slash from the provided URL path.
    *
    * @param path The path to trim.
@@ -199,7 +189,7 @@ export abstract class AbstractRoute {
    */
   constructor(
     name: string,
-    pathExpression: RoutePathExpression | string,
+    pathExpression: T,
     controller: string | typeof Controller | (() => IController),
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
@@ -340,7 +330,7 @@ export abstract class AbstractRoute {
    * @return Map of parameter names to parameter
    *         values.
    */
-  extractParameters(path?: string): RouteParams {
+  extractParameters(path: string): RouteParams {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
         'and must be overridden',

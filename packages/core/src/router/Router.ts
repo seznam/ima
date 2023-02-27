@@ -17,7 +17,7 @@ export interface RouteAction {
 export interface RouteLocals {
   [key: string]: unknown;
   action?: RouteAction;
-  route?: AbstractRoute;
+  route?: InstanceType<typeof AbstractRoute>;
 }
 
 export type RouterMiddleware = (
@@ -146,7 +146,9 @@ export abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  getRouteHandler(name: string): undefined | AbstractRoute | RouterMiddleware {
+  getRouteHandler(
+    name: string
+  ): undefined | InstanceType<typeof AbstractRoute> | RouterMiddleware {
     return undefined;
   }
 
@@ -214,7 +216,7 @@ export abstract class Router {
    * @throws Thrown if a route is not define for current path.
    */
   getCurrentRouteInfo(): {
-    route: AbstractRoute;
+    route: InstanceType<typeof AbstractRoute>;
     params: RouteParams;
     path: string;
   } {

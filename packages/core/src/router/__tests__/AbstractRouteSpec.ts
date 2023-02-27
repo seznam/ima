@@ -2,7 +2,7 @@ import { StringParameters } from '../../types';
 import { AbstractRoute } from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 
-class MockedAbstractRoute extends AbstractRoute {
+class MockedAbstractRoute extends AbstractRoute<string> {
   toPath() {
     return '';
   }

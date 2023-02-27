@@ -11,7 +11,7 @@ export type ManagedPage = {
   decoratedController?: ControllerDecorator;
   options?: RouteOptions;
   params?: UnknownParameters;
-  route?: AbstractRoute;
+  route?: InstanceType<typeof AbstractRoute>;
   view?: unknown;
   viewInstance?: unknown;
   state?: {
