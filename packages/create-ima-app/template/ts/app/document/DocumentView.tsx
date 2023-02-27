@@ -1,11 +1,11 @@
 import { Utils } from '@ima/core';
 
-export interface CardProps {
+export interface DocumentViewProps {
   page: string;
   $Utils: Utils;
 }
 
-export function DocumentView({ page, $Utils }: CardProps) {
+export function DocumentView({ page, $Utils }: DocumentViewProps) {
   /**
    * #{...} Represents variables that are injected before sending the response
    * to client from server. These are defined in event.response.content.contentVariables.
