@@ -19,7 +19,9 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
 
  - Added support for **3rd party source maps** using `source-loader`, this is usefull especially in error overlay.
  - Added ability to customize open URL using `--openUrl` CLI argument or `IMA_CLI_OPEN_URL` environment variable. For more information see [--openUrl](../cli/cli.md#–openurl).
+ - **Performance improvement** when building CSS/LESS files (except CSS modules), on `server` and `client` bundles. This can add up to 25% built speed improvement depending on the amount of CSS files your project is using.
  - Added additional CLI output information when `forcedLegacy` and `writeToDisk` options are used.
+ - Fixed manifest CSS files regexp, only files from static/css/ folder are now included in final manifest.json file.
 
 <div class="text--center">
 
@@ -34,6 +36,11 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
 
 ### @ima/plugin-cli
  - **Added support for source-maps**, now all files transformed using `swc` (JS/TS) also produce `.map` files alongside transformed files.
+ - Added ability to enable/disable source maps generation using `sourceMaps` option in `ima-plugin.config.js` configuration file.
+ - Added ability to add new custom transformers using `transformers` option in` ima-plugin.config.js` configuration file.
+
+### @ima/hmr-client
+ - Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
 
 ### @ima/core
  - Package source files now include source map files.
@@ -41,7 +48,30 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
  - Added multiple new **TS types**, while also fixing existing types. Since rewriting IMA.js to typescript has been huge task, there may still be some type inconsistencies which we will try to fix in following releases to further improve TS experience in IMA.js ecosystem.
  - Added new `onRun` event to `window.$IMA.Runner`.
  - Add new methods `isClientError()` and `isRedirection()` to `GenericError`.
- - `getRouteHandlersByPath()` method on `AbstractRouter` is now public. Use this
+ - `getRouteHandlersByPath()` method on `AbstractRouter` is now public. This return's middlewares and route for given path.
+ - Fixed HttpAgent types -> data in method arguments should be optional
+ - Fixed missing transaction cleanup in PageStateManager
+ - Fix missing optional parameters in static router that were evaluated as undefined instead of 'undefined'.
+ - Controller and Extension event bus methods can be targeted with prefix. Prefix is set by static field in controller/extension class e.g. `$name = 'ArticleController'`;. Event is then `ArticleController.eventName`:
+
+```javascript title="./app/page/article/ArticleController.js"
+class ArticleController {
+  static $name = 'ArticleController';
+
+  onExpand({ expandableId }) {
+    console.log(expandableId);
+  }
+}
+```
+
+```javascript title="./app/component/expandable/ExpandLink.jsx"
+function ExpandLink() {
+  onClick(event) {
+    const { expandableId } = this.props;
+    this.fire('ArticleController.expand', { expandableId });
+  }
+}
+```
 
 #### Router changes
  - Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings.
@@ -76,6 +106,14 @@ router.use(async (params, locals, next) => {
  - Added **XSS protection** to **host** and **protocol** in revival settings.
  - Add support for Client Errors and Redirects when serving static error pages.
  - Added option to **force app host** and **protocol**, using `$Server.host` and `$Server.protocol` settings in the `environment.js`.
+ - The App error route is protected for exceeding static thresholds.
+ - The Emitter `event.cause` is removed. The error cause is set in `event.error.cause`.
+
+### create-ima-app
+ - Added new **typescript template**, use `--typescript` option when generating new application.
+ - Migrated from default to named exports.
+ - Fixed default static path and public path settings.
+ - Updated environment.js and settings.js to support new IMA19 features.
 
 ## Breaking Changes
 
@@ -87,7 +125,13 @@ router.use(async (params, locals, next) => {
  - `StatusCode` has been renamed to `HttpStatusCode`.
  - `$Source` environment.js variable has been renamed to `$Resources`.
  - Removed deprecated package **entry points**, this includes all imports directly referencing files from `./dist/` directory. Please update your imports to the new [exports fields](https://github.com/seznam/ima/blob/master/packages/core/package.json#L39).
+ - `extractParameters()` function in `DynamicRoute` now receives additional object argument, containing `query` and `path` (not modified path) for more control over extracted parameters. **The router now uses params returned from `extractParameters()` directly**. It no longer automatically merges query params into the resulting object. If you want to preserve this behavior, merge the extracted route params with query object provided in the second argument.
+
+#### HttpAgent changes
  - `IMA HttpAgent` now removes by default all headers from request and response which is stored in Cache. You can turn off this behavior with `keepSensitiveHeaders` option but **it is not recommended**.
+ - Removed support for HttpAgent options.listener (these were used mainly in plugin-xhr, which is now unsupported)
+ - You can now define multiple `postProcessors[]` in `HttpAgent` options. This replaces old `postProcessor` option, if you are using any post processor you need to update your options to postProcessors and make sure to wrap this post processor in an array.
+ - Remove older, conflicting settings of `HttpAgent`, `withCredentials`, `headers`, and `listeners`. The first two now conflict with the newer `options.fetchOptions`, the last one (`listeners`) has been removed completely. `options.withCredentials` and `options.headers` are no longer followed. Use `options.fetchOptions.credentials` and `options.fetchOptions.headers` instead. For definition, see the native Fetch API (note: for simplicity, `options.fetchOptions.headers` only accepts headers defined by an object, not a tuple or an instance of Headers).
 
 #### MetaManager changes
  - Rewritten meta tag management in SPA mode, **all MetaManager managed tags are removed between pages while new page contains only those currently defined using setMetaParams function in app controller**. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
