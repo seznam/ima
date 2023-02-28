@@ -92,28 +92,28 @@ export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
    * @inheritDoc
    */
   toPath(params = {}) {
-    return AbstractRoute.getTrimmedPath(this._pathExpression.toPath(params));
+    return this.getTrimmedPath(this._pathExpression.toPath(params));
   }
 
   /**
    * @inheritDoc
    */
   matches(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path);
-
-    return this._pathExpression.matcher.test(trimmedPath);
+    return this._pathExpression.matcher.test(this.getTrimmedPath(path));
   }
 
   /**
    * @inheritDoc
    */
-  extractParameters(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
-    const query = AbstractRoute.getQuery(trimmedPath);
+  extractParameters(path: string, url: string) {
+    const parsedUrl = new URL(url);
 
     return this._pathExpression.extractParameters(
-      trimmedPath.split('?').shift() ?? '',
-      { path, query }
+      this.getTrimmedPath(parsedUrl.pathname),
+      {
+        path,
+        query: Object.fromEntries(parsedUrl.searchParams),
+      }
     );
   }
 }

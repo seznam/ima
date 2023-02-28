@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { URLSearchParams } from 'url';
 
 import { formatError, ParsedErrorData } from '@ima/dev-utils/cliUtils';
 import { logger } from '@ima/dev-utils/logger';

@@ -89,11 +89,7 @@ export { PageStateManager } from './page/state/PageStateManager';
 export { PageStateManagerDecorator } from './page/state/PageStateManagerDecorator';
 export { PageStateManagerImpl } from './page/state/PageStateManagerImpl';
 export { pluginLoader, PluginLoader } from './pluginLoader';
-export {
-  AbstractRoute,
-  type RouteParamValue,
-  type RouteParams,
-} from './router/AbstractRoute';
+export { AbstractRoute, type RouteParams } from './router/AbstractRoute';
 export { AbstractRouter } from './router/AbstractRouter';
 export { ActionTypes } from './router/ActionTypes';
 export { ClientRouter } from './router/ClientRouter';
