@@ -12,26 +12,27 @@ module.exports = function createIMAServer({
   logger,
   emitter,
   performance,
-  manifestRequire = require('./lib/factory/devUtilsFactory.js')(),
+  devUtils,
 } = {}) {
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({ applicationFolder });
+  devUtils = require('./lib/factory/devUtilsFactory.js')();
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
   function appFactory() {
-    manifestRequire('server/vendors.js', {
+    devUtils.manifestRequire('server/vendors.js', {
       optional: true,
       dependencies: ['server/app.server.js'],
     });
 
-    return manifestRequire('server/app.server.js');
+    return devUtils.manifestRequire('server/app.server.js');
   }
 
   function languageLoader(language) {
-    return manifestRequire(`server/locale/${language}.js`).default;
+    return devUtils.manifestRequire(`server/locale/${language}.js`).default;
   }
 
   emitter = emitter || new Emitter({ logger, debug: false });
