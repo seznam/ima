@@ -18,17 +18,18 @@ describe('ima.core.router.DynamicRoute', function () {
   const matcher = /^\/([\w-]+)?\/?([\w-]+)?\/article\/(\w+-\d+)$/i;
   const toPath = (params: StringParameters) => {
     const { section, subsection, slug, ...restParams } = params;
+
     const query = new URLSearchParams(restParams).toString();
 
     if (!slug || !section) {
       return 'invalid-route';
     }
 
-    return [section, subsection, 'article', slug]
-      .filter(v => !['object', 'undefined'].includes(typeof v))
-      .join('/') + query
-      ? `?${query}`
-      : '';
+    return (
+      [section, subsection, 'article', slug]
+        .filter(v => !['object', 'undefined'].includes(typeof v))
+        .join('/') + (query ? `?${query}` : '')
+    );
   };
   const extractParameters = (path: string) => {
     const parsedPath = matcher.exec(path);
@@ -129,7 +130,9 @@ describe('ima.core.router.DynamicRoute', function () {
       ],
       [{}, '/article/article-145'],
     ])(`should return "%j" after parsing "%s" path`, (result, path) => {
-      expect(route.extractParameters(path)).toStrictEqual(result);
+      expect(
+        route.extractParameters(path, 'https://imajs.io' + path)
+      ).toStrictEqual(result);
     });
   });
 

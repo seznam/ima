@@ -821,7 +821,10 @@ describe('ima.core.router.StaticRoute', function () {
           options
         );
 
-        const routeParams = localStaticRoute.extractParameters(value.path);
+        const routeParams = localStaticRoute.extractParameters(
+          value.path,
+          'https://imajs.io' + value.path
+        );
         const keys = Object.keys(value.params);
 
         keys.forEach(key => {
