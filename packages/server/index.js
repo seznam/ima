@@ -12,6 +12,7 @@ module.exports = function createIMAServer({
   logger,
   emitter,
   performance,
+  manifestRequire = require('./lib/factory/devUtilsFactory.js')(),
 } = {}) {
   environment =
     environment ||
@@ -19,8 +20,6 @@ module.exports = function createIMAServer({
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
-
-  const manifestRequire = require('./lib/factory/devUtilsFactory.js')();
 
   function appFactory() {
     manifestRequire('server/vendors.js', {
