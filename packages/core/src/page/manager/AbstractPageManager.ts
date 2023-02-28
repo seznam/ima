@@ -93,14 +93,18 @@ export abstract class AbstractPageManager extends PageManager {
     params = {},
     action = {},
   }: ManageArgs) {
-    this._storeManagedPageSnapshot();
+    const previousManagedPage = this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {
       this._managedPage.params = params;
 
       await this._runPreManageHandlers(this._managedPage, action);
       const response = await this._updatePageSource();
-      await this._runPostManageHandlers(this._previousManagedPage, action);
+      await this._runPostManageHandlers(
+        this._managedPage,
+        this._previousManagedPage,
+        action
+      );
 
       return response;
     }
@@ -146,9 +150,11 @@ export abstract class AbstractPageManager extends PageManager {
       response.cancelled = true;
     }
 
-    if (!response?.cancelled) {
-      await this._runPostManageHandlers(this._previousManagedPage, action);
-    }
+    await this._runPostManageHandlers(
+      newManagedPage,
+      previousManagedPage,
+      action
+    );
 
     return response;
   }
@@ -618,12 +624,13 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   protected async _runPostManageHandlers(
+    managedPage: ManagedPage,
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
     return this._pageHandlerRegistry.handlePostManagedState(
-      this._managedPage.controller
-        ? this._stripManagedPageValueForPublic(this._managedPage)
+      managedPage.controller
+        ? this._stripManagedPageValueForPublic(managedPage)
         : null,
       this._stripManagedPageValueForPublic(previousManagedPage) || null,
       action
