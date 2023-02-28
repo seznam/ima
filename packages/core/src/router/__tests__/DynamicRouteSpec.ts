@@ -18,7 +18,6 @@ describe('ima.core.router.DynamicRoute', function () {
   const matcher = /^\/([\w-]+)?\/?([\w-]+)?\/article\/(\w+-\d+)$/i;
   const toPath = (params: StringParameters) => {
     const { section, subsection, slug, ...restParams } = params;
-
     const query = new URLSearchParams(restParams).toString();
 
     if (!slug || !section) {

@@ -48,9 +48,10 @@ export let init = (ns, oc, config) => {
       },
       toPath: params => {
         const { category, subcategory, itemId, ...restParams } = params;
+        const query = new URLSearchParams(restParams).toString();
 
         return [category, subcategory, itemId].filter(i => !!i).join('/') +
-          AbstractRoute.paramsToQuery(restParams);
+          (query ? `?${query}` : '');
       }
     },
     PostController,

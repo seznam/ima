@@ -363,8 +363,7 @@ describe('ima.core.router.StaticRoute', function () {
           value.userId +
           '/something/' +
           value.somethingId +
-          '?query1=query&query2=' +
-          encodeURIComponent(value.query2)
+          '?query1=query&query2=text+for+you'
       );
     });
   });
@@ -1559,7 +1558,7 @@ describe('ima.core.router.StaticRoute', function () {
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
-        foo: true,
+        foo: '',
       });
 
       expect(route.matches('/abc/def?foo&bar')).toBeTruthy();
@@ -1570,9 +1569,9 @@ describe('ima.core.router.StaticRoute', function () {
         )
       ).toStrictEqual({
         first: 'abc',
-        second: true,
-        foo: true,
-        bar: true,
+        second: '',
+        foo: '',
+        bar: '',
       });
     });
 
@@ -1589,11 +1588,8 @@ describe('ima.core.router.StaticRoute', function () {
         first: 'abc',
         second: 'def',
         foo: 'xy',
-        bar: 'zz',
-        giz: 'mo',
-        stuff: true,
-        geez: true,
-        huff: true,
+        bar: 'zz;giz=mo;stuff;geez',
+        huff: '',
       });
     });
 
@@ -1674,7 +1670,7 @@ describe('ima.core.router.StaticRoute', function () {
         second: 'def',
         stuff: 'value',
         other: 'value=with=equal=signs==',
-        thirdParam: true,
+        thirdParam: '',
       });
     });
   });
