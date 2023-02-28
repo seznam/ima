@@ -8,6 +8,7 @@ const ignorePaths = /(node_modules\/(?!@ima).*)/;
  * @type import('@ima/cli').ImaConfig
  */
 module.exports = {
+  publicPath: '/static/',
   watchOptions: {
     ignored: ignorePaths,
   },

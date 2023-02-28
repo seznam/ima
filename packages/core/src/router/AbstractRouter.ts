@@ -59,8 +59,10 @@ export abstract class AbstractRouter extends Router {
   /**
    * Storage of all known routes and middlewares. The key are their names.
    */
-  protected _routeHandlers: Map<string, AbstractRoute | RouterMiddleware> =
-    new Map();
+  protected _routeHandlers: Map<
+    string,
+    InstanceType<typeof AbstractRoute> | RouterMiddleware
+  > = new Map();
   /**
    * Middleware ID counter which is used to auto-generate unique middleware
    * names when adding them to routeHandlers map.
@@ -237,15 +239,17 @@ export abstract class AbstractRouter extends Router {
     let { route } = this.getRouteHandlersByPath(path);
 
     if (!route) {
-      route = this._routeHandlers.get(RouteNames.NOT_FOUND) as AbstractRoute;
+      const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
-      if (!route) {
+      if (!notFoundRoute || !(notFoundRoute instanceof AbstractRoute)) {
         throw new GenericError(
           `ima.core.router.AbstractRouter.getCurrentRouteInfo: The route ` +
-            `for path ${path} is not defined.`,
-          { path }
+            `for path ${path} is not defined, or it's not instance of AbstractRoute.`,
+          { route: notFoundRoute, path }
         );
       }
+
+      route = notFoundRoute;
     }
 
     const params = route.extractParameters(path);
@@ -298,13 +302,21 @@ export abstract class AbstractRouter extends Router {
    * @inheritDoc
    */
   link(routeName: string, params: RouteParams) {
-    const route = this._routeHandlers.get(routeName) as AbstractRoute;
+    const route = this._routeHandlers.get(routeName);
 
     if (!route) {
       throw new GenericError(
         `ima.core.router.AbstractRouter:link has undefined route with ` +
           `name ${routeName}. Add new route with that name.`,
         { routeName, params }
+      );
+    }
+
+    if (!(route instanceof AbstractRoute)) {
+      throw new GenericError(
+        `ima.core.router.AbstractRouter:link Unable to create link to ${routeName}, ` +
+          `since it's likely a middleware.`,
+        { routeName, params, route }
       );
     }
 
@@ -355,19 +367,23 @@ export abstract class AbstractRouter extends Router {
     options?: Partial<RouteOptions>,
     locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
-    const errorRoute = this._routeHandlers.get(
-      RouteNames.ERROR
-    ) as AbstractRoute;
+    const errorRoute = this._routeHandlers.get(RouteNames.ERROR);
 
     if (!errorRoute) {
-      const error = new GenericError(
+      throw new GenericError(
         `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
           `a new route named '${RouteNames.ERROR}'.`,
         params
       );
+    }
 
-      return Promise.reject(error);
+    if (!(errorRoute instanceof AbstractRoute)) {
+      throw new GenericError(
+        `ima.core.router.AbstractRouter:handleError '${RouteNames.ERROR}' is,` +
+          ` not instance of AbstractRoute, please check your configuration.`,
+        { errorRoute, params, options, locals }
+      );
     }
 
     params = this.#addParamsFromOriginalRoute(params as StringParameters);
@@ -403,20 +419,24 @@ export abstract class AbstractRouter extends Router {
     options?: Partial<RouteOptions>,
     locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
-    const notFoundRoute = this._routeHandlers.get(
-      RouteNames.NOT_FOUND
-    ) as AbstractRoute;
+    const notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
     if (!notFoundRoute) {
-      const error = new GenericError(
+      throw new GenericError(
         `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
           `been configured. Add new route named ` +
           `'${RouteNames.NOT_FOUND}'.`,
         { ...params, status: HttpStatusCode.TIMEOUT }
       );
+    }
 
-      return Promise.reject(error);
+    if (!(notFoundRoute instanceof AbstractRoute)) {
+      throw new GenericError(
+        `ima.core.router.AbstractRouter:handleNotFound '${RouteNames.NOT_FOUND}' is,` +
+          ` not instance of AbstractRoute, please check your configuration.`,
+        { notFoundRoute, params, options, locals }
+      );
     }
 
     params = this.#addParamsFromOriginalRoute(params);
@@ -490,7 +510,7 @@ export abstract class AbstractRouter extends Router {
    *         displayed if used at the client side.
    */
   async _handle(
-    route: AbstractRoute,
+    route: InstanceType<typeof AbstractRoute>,
     params: RouteParams,
     options?: Partial<RouteOptions>,
     action?: RouteAction
@@ -551,7 +571,7 @@ export abstract class AbstractRouter extends Router {
    *         (empty object) if no such route exists.
    */
   getRouteHandlersByPath(path: string): {
-    route?: AbstractRoute;
+    route?: InstanceType<typeof AbstractRoute>;
     middlewares: RouterMiddleware[];
   } {
     const middlewares = [];

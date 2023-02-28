@@ -160,6 +160,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   it('should return parsed custom event', () => {
     expect(pageManager._parseCustomEvent(event as CustomEvent)).toStrictEqual({
+      prefix: '',
       method: 'onMethod',
       eventName: 'method',
       data: data,
@@ -179,6 +180,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('_onCustomEventHandler method', () => {
     const parsedCustomEvent = {
+      prefix: '',
       method: 'onMethod',
       data: {},
       eventName: 'method',
@@ -209,10 +211,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
       expect(console.warn).not.toHaveBeenCalled();
       expect(pageManager._handleEventWithExtensions).not.toHaveBeenCalledWith(
+        parsedCustomEvent.prefix,
         parsedCustomEvent.method,
         parsedCustomEvent.data
       );
       expect(pageManager._handleEventWithController).toHaveBeenCalledWith(
+        parsedCustomEvent.prefix,
         parsedCustomEvent.method,
         parsedCustomEvent.data
       );
@@ -231,10 +235,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
       expect(console.warn).not.toHaveBeenCalled();
       expect(pageManager._handleEventWithExtensions).toHaveBeenCalledWith(
+        parsedCustomEvent.prefix,
         parsedCustomEvent.method,
         parsedCustomEvent.data
       );
       expect(pageManager._handleEventWithController).toHaveBeenCalledWith(
+        parsedCustomEvent.prefix,
         parsedCustomEvent.method,
         parsedCustomEvent.data
       );
@@ -271,9 +277,31 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   describe('_handleEventWithController method', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      Object.prototype.constructor.$name = undefined;
+    });
+
     it('should return false for undefined method on controller', () => {
       expect(
-        pageManager._handleEventWithController('onMethod', {})
+        pageManager._handleEventWithController('', 'onMethod', {})
+      ).toBeFalsy();
+    });
+
+    it('should return false for undefined method on controller with prefix', () => {
+      // @ts-ignore
+      pageManager['_managedPage'].controllerInstance = {
+        onMethod: () => {
+          return;
+        },
+      };
+      (
+        pageManager['_managedPage'].controllerInstance!
+          .constructor as typeof Controller
+      ).$name = 'CustomController';
+
+      expect(
+        pageManager._handleEventWithController('', 'onMethod', {})
       ).toBeFalsy();
     });
 
@@ -292,7 +320,37 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         .mockImplementation();
 
       expect(
-        pageManager._handleEventWithController('onMethod', data)
+        pageManager._handleEventWithController('', 'onMethod', data)
+      ).toBeTruthy();
+      expect(
+        (pageManager['_managedPage'].controllerInstance as Controller).onMethod
+      ).toHaveBeenCalledWith(data);
+    });
+
+    it('should call method on controller with prefix and return true', () => {
+      // @ts-ignore
+      pageManager['_managedPage'].controllerInstance = {
+        onMethod: () => {
+          return;
+        },
+      };
+      (
+        pageManager['_managedPage'].controllerInstance!
+          .constructor as typeof Controller
+      ).$name = 'CustomController';
+
+      jest
+        // @ts-ignore
+        .spyOn(pageManager['_managedPage'].controllerInstance, 'onMethod')
+        // @ts-ignore
+        .mockImplementation();
+
+      expect(
+        pageManager._handleEventWithController(
+          'CustomController',
+          'onMethod',
+          data
+        )
       ).toBeTruthy();
       expect(
         (pageManager['_managedPage'].controllerInstance as Controller).onMethod
@@ -301,9 +359,14 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   describe('_handleEventWithExtensions method', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      Object.prototype.constructor.$name = undefined;
+    });
+
     it('should return false for undefined method on extensions', () => {
       expect(
-        pageManager._handleEventWithExtensions('onMethod', {})
+        pageManager._handleEventWithExtensions('', 'onMethod', {})
       ).toBeFalsy();
     });
 
@@ -323,9 +386,48 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
 
       expect(
-        pageManager._handleEventWithExtensions('onMethod', data)
+        pageManager._handleEventWithExtensions('', 'onMethod', data)
       ).toBeTruthy();
       expect(dumpExtensionInstance.onMethod).toHaveBeenCalledWith(data);
+    });
+
+    it('should call method on extension with prefix and return true', () => {
+      const dumpExtensionInstance = {
+        onMethod: () => {
+          return;
+        },
+      };
+      const dumpExtensionInstanceWithPrefix = new (class {
+        static $name = 'CustomExtension';
+
+        onMethod() {
+          return;
+        }
+      })();
+
+      pageManager['_managedPage'].controllerInstance = {
+        // @ts-ignore
+        getExtensions: () => {
+          return [dumpExtensionInstance, dumpExtensionInstanceWithPrefix];
+        },
+      };
+
+      jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
+      jest
+        .spyOn(dumpExtensionInstanceWithPrefix, 'onMethod')
+        .mockImplementation();
+
+      expect(
+        pageManager._handleEventWithExtensions(
+          'CustomExtension',
+          'onMethod',
+          data
+        )
+      ).toBeTruthy();
+      expect(dumpExtensionInstance.onMethod).not.toHaveBeenCalled();
+      expect(dumpExtensionInstanceWithPrefix.onMethod).toHaveBeenCalledWith(
+        data
+      );
     });
   });
 

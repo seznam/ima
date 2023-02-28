@@ -23,6 +23,8 @@ export interface IExtension {}
  * through the same lifecycle as the controller.
  */
 export abstract class Extension implements IExtension {
+  static $name?: string;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler;
 

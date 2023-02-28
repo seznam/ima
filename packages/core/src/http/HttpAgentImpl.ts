@@ -44,8 +44,7 @@ export class HttpAgentImpl extends HttpAgent {
    *              withCredentials: true,
    *              timeout: 2000,
    *              accept: 'application/json',
-   *              language: 'en',
-   *              listeners: { 'progress': callbackFunction }
+   *              language: 'en'
    *          })
    *          .then((response) => {
    *              //resolve
@@ -99,7 +98,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   get<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>('get', url, data, options);
@@ -110,7 +109,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   post<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -126,7 +125,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   put<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -142,7 +141,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   patch<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -158,7 +157,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   delete<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return this._requestWithCheckCache<B>(
@@ -172,7 +171,7 @@ export class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  getCacheKey(method: string, url: string, data: UnknownParameters): string {
+  getCacheKey(method: string, url: string, data?: UnknownParameters): string {
     return (
       this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data)
     );
@@ -229,7 +228,7 @@ export class HttpAgentImpl extends HttpAgent {
   _requestWithCheckCache<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     const optionsWithDefault = this._prepareOptions(options);
@@ -264,7 +263,7 @@ export class HttpAgentImpl extends HttpAgent {
   _getCachedData<B>(
     method: string,
     url: string,
-    data: UnknownParameters
+    data?: UnknownParameters
   ): Promise<HttpAgentResponse<B>> | null {
     const cacheKey = this.getCacheKey(method, url, data);
 
@@ -300,7 +299,7 @@ export class HttpAgentImpl extends HttpAgent {
   _request<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse<B>> {
     const cacheKey = this.getCacheKey(method, url, data);
@@ -347,10 +346,12 @@ export class HttpAgentImpl extends HttpAgent {
       this._setCookiesFromResponse(agentResponse);
     }
 
-    const { postProcessor, cache } = agentResponse.params.options;
+    const { postProcessors, cache } = agentResponse.params.options;
 
-    if (typeof postProcessor === 'function') {
-      agentResponse = postProcessor<B>(agentResponse);
+    if (Array.isArray(postProcessors)) {
+      for (const postProcessor of postProcessors) {
+        agentResponse = postProcessor<B>(agentResponse);
+      }
     }
 
     const pureResponse = this._cleanResponse(agentResponse);
@@ -416,24 +417,30 @@ export class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options?: Partial<HttpAgentRequestOptions>
+    options: Partial<HttpAgentRequestOptions> = {}
   ): HttpAgentRequestOptions {
     const composedOptions = {
       ...this._defaultRequestOptions,
       ...options,
+      postProcessors: [
+        ...(this._defaultRequestOptions?.postProcessors || []),
+        ...(options?.postProcessors || []),
+      ],
+      fetchOptions: {
+        ...this._defaultRequestOptions?.fetchOptions,
+        ...options?.fetchOptions,
+        headers: {
+          ...this._defaultRequestOptions?.fetchOptions?.headers,
+          ...options?.fetchOptions?.headers,
+        },
+      },
     };
-    let cookieHeader = {};
 
-    if (composedOptions.withCredentials) {
-      cookieHeader = { Cookie: this._cookie.getCookiesStringForCookieHeader() };
+    if (composedOptions.fetchOptions?.credentials === 'include') {
+      // mock default browser behavior for server-side (sending cookie with a fetch request)
+      composedOptions.fetchOptions.headers.Cookie =
+        this._cookie.getCookiesStringForCookieHeader();
     }
-
-    composedOptions.headers = {
-      ...cookieHeader,
-      ...this._defaultRequestOptions.headers,
-      ...(options?.headers ?? {}),
-    };
-
     return composedOptions;
   }
 
@@ -451,7 +458,7 @@ export class HttpAgentImpl extends HttpAgent {
   _getCacheKeySuffix(
     method: string,
     url: string,
-    data: UnknownParameters
+    data?: UnknownParameters
   ): string {
     let dataQuery = '';
     if (data) {
@@ -501,17 +508,17 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Cleans cache response from data (abort controller, postProcessor), that cannot be persisted,
+   * Cleans cache response from data (abort controller, postProcessors), that cannot be persisted,
    * before saving the data to the cache.
    */
   _cleanResponse<B>(response: HttpAgentResponse<B>): HttpAgentResponse<B> {
     /**
-     * Create copy of agentResponse without AbortController and AbortController signal and postProcessor.
-     * Setting agentResponse with AbortController or signal or postProcessor into cache would result in crash.
+     * Create copy of agentResponse without AbortController and AbortController signal and postProcessors.
+     * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crash.
      */
     const { signal, ...fetchOptions } =
       response.params.options.fetchOptions || {};
-    const { abortController, postProcessor, ...options } =
+    const { abortController, postProcessors, ...options } =
       response.params.options || {};
     options.fetchOptions = fetchOptions;
 
@@ -522,8 +529,8 @@ export class HttpAgentImpl extends HttpAgent {
 
     if (pureResponse.params.options.keepSensitiveHeaders !== true) {
       pureResponse.headers = {};
+      pureResponse.params.options.fetchOptions.headers = {};
       delete pureResponse.headersRaw;
-      pureResponse.params.options.headers = {};
     }
 
     return pureResponse;

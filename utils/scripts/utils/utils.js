@@ -216,54 +216,54 @@ function initApp(destDir, pkgDirs, cliArgs) {
   const exists = fs.existsSync(destDir);
 
   if (exists && !cliArgs.force) {
-    console.log(
+    return console.log(
       chalk.yellow(
         'The app destination folder already exists, skipping initialization...\n' +
           'Use --force cli argument to overwrite the destination folder.'
       )
     );
-  } else {
-    // Delete folder before init
-    if (exists) {
-      fs.rmSync(destDir, { recursive: true, force: true });
+  }
 
-      console.log(
-        chalk.yellow(
-          'The app destination folder already exists, overwriting...'
-        )
-      );
-    }
+  // Delete folder before init
+  if (exists) {
+    fs.rmSync(destDir, { recursive: true, force: true });
 
-    // Run create-ima-app script
-    shell(
-      `${path.resolve(
-        __dirname,
-        '../../../packages/create-ima-app/bin/create-ima-app.js'
-      )} ${destDir}`
+    console.log(
+      chalk.yellow('The app destination folder already exists, overwriting...')
     );
   }
 
+  // Run create-ima-app script
+  shell(
+    `${path.resolve(
+      __dirname,
+      '../../../packages/create-ima-app/bin/create-ima-app.js'
+    )} ${destDir}${cliArgs.typescript ? ' --typescript' : ''}`
+  );
+
   // Build, pack and install packages in the target directory.
-  if (cliArgs.init) {
-    let packFiles = [];
+  let packFiles = [];
 
-    pkgDirs.forEach(pkgDir => {
-      const pkgJson = require(path.join(pkgDir, 'package.json'));
+  pkgDirs.forEach(pkgDir => {
+    const pkgJson = require(path.join(pkgDir, 'package.json'));
 
-      pkgJson.scripts.build && shell('npm run build', pkgDir);
-      shell('npm pack', pkgDir);
+    pkgJson.scripts.build && shell('npm run build', pkgDir);
+    shell('npm pack', pkgDir);
 
-      // eslint-disable-next-line no-unused-vars
-      const [prefix, name] = pkgJson.name.split('/');
-      const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
-      const packFilePath = path.join(pkgDir, packFileName);
+    // eslint-disable-next-line no-unused-vars
+    const [prefix, name] = pkgJson.name.split('/');
+    const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
+    const packFilePath = path.join(pkgDir, packFileName);
 
-      shell(`npm install ${packFilePath} --force`, destDir);
-      packFiles.push(packFilePath);
-    });
+    shell(`npm install ${packFilePath} --force`, destDir);
+    packFiles.push(packFilePath);
+  });
 
-    packFiles.forEach(packFilePath => fs.rmSync(packFilePath));
-  }
+  packFiles.forEach(packFilePath => fs.rmSync(packFilePath));
+
+  // Copy "dev" ima config into the application, if it doesn't have any
+  const imaConfigPath = path.join(destDir, 'ima.config.js');
+  fs.copyFileSync(path.join(__dirname, './ima.config.js'), imaConfigPath);
 }
 
 /**

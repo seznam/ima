@@ -1,6 +1,8 @@
-import type { IncomingHttpHeaders } from 'http2';
-
-import { HttpAgentRequestOptions, HttpAgentResponse } from './HttpAgent';
+import {
+  ImaRequestInit,
+  HttpAgentRequestOptions,
+  HttpAgentResponse,
+} from './HttpAgent';
 import { HttpStatusCode } from './HttpStatusCode';
 import { UrlTransformer } from './UrlTransformer';
 import { GenericError } from '../error/GenericError';
@@ -26,7 +28,7 @@ export type HttpProxyRequestParams = {
   method: string;
   url: string;
   transformedUrl: string;
-  data: UnknownParameters;
+  data?: UnknownParameters;
   options: HttpAgentRequestOptions;
 };
 
@@ -107,7 +109,7 @@ export class HttpProxy {
   request<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): Promise<HttpAgentResponse<B>> {
     const requestParams = this._composeRequestParams(
@@ -228,7 +230,7 @@ export class HttpProxy {
   getErrorParams(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions,
     status: number,
     body: unknown,
@@ -411,7 +413,7 @@ export class HttpProxy {
   _composeRequestParams(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
   ): HttpProxyRequestParams {
     return {
@@ -432,32 +434,34 @@ export class HttpProxy {
    *        be send with a request.
    * @param options Options provided by the HTTP
    *        agent.
-   * @return {RequestInit} A `RequestInit` object of the Fetch API.
+   * @return {ImaRequestInit} An `ImaRequestInit` object (extended from `RequestInit` of the Fetch API).
    */
   _composeRequestInit(
     method: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
-  ): RequestInit {
-    const contentType = this._getContentType(method, data, options);
+  ): ImaRequestInit {
+    const requestInit: {
+      body?: unknown;
+      headers: Record<string, string>;
+      [key: string]: unknown;
+    } = {
+      method: method.toUpperCase(),
+      redirect: 'follow',
+      headers: options.fetchOptions?.headers || {},
+    };
 
+    const contentType = this._getContentType(method, data, requestInit.headers);
     if (contentType) {
-      options.headers['Content-Type'] = contentType;
+      requestInit.headers['Content-Type'] = contentType;
     }
 
     for (const [headerName, headerValue] of this._defaultHeaders) {
-      options.headers[headerName] = headerValue;
+      requestInit.headers[headerName] = headerValue;
     }
 
-    const requestInit: { body?: unknown; [key: string]: unknown } = {
-      method: method.toUpperCase(),
-      headers: options.headers,
-      credentials: options.withCredentials ? 'include' : 'same-origin',
-      redirect: 'follow',
-    };
-
     if (this._shouldRequestHaveBody(method, data)) {
-      requestInit.body = this._transformRequestBody(data, options.headers);
+      requestInit.body = this._transformRequestBody(data, requestInit.headers);
     }
 
     // Re-assign signal from abort controller to fetch options
@@ -470,7 +474,7 @@ export class HttpProxy {
 
     Object.assign(requestInit, options.fetchOptions || {});
 
-    return requestInit as RequestInit;
+    return requestInit;
   }
 
   /**
@@ -486,14 +490,14 @@ export class HttpProxy {
    */
   _getContentType(
     method: string,
-    data: UnknownParameters,
-    options: HttpAgentRequestOptions
-  ) {
+    data: UnknownParameters | undefined,
+    headers: Record<string, string>
+  ): string | null {
     if (
-      options.headers['Content-Type'] &&
-      typeof options.headers['Content-Type'] === 'string'
+      headers['Content-Type'] &&
+      typeof headers['Content-Type'] === 'string'
     ) {
-      return options.headers['Content-Type'];
+      return headers['Content-Type'];
     }
 
     if (this._shouldRequestHaveBody(method, data)) {
@@ -512,7 +516,7 @@ export class HttpProxy {
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */
-  _composeRequestUrl(url: string, data: UnknownParameters) {
+  _composeRequestUrl(url: string, data: UnknownParameters | undefined) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimiter = queryString
@@ -533,7 +537,7 @@ export class HttpProxy {
    *        be send with a request.
    * @return `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(method: string, data?: UnknownParameters) {
+  _shouldRequestHaveBody(method: string, data: UnknownParameters | undefined) {
     return !!(
       method &&
       data &&
@@ -550,7 +554,10 @@ export class HttpProxy {
    *        agent.
    * @private
    */
-  _transformRequestBody(data: UnknownParameters, headers: IncomingHttpHeaders) {
+  _transformRequestBody(
+    data: UnknownParameters | undefined,
+    headers: Record<string, string>
+  ) {
     switch (headers['Content-Type']) {
       case 'application/json':
         return JSON.stringify(data);
@@ -571,7 +578,11 @@ export class HttpProxy {
    * @returns Query string representation of the given object
    * @private
    */
-  _convertObjectToQueryString(object: UnknownParameters) {
+  _convertObjectToQueryString(object: UnknownParameters | undefined) {
+    if (!object) {
+      return undefined;
+    }
+
     return Object.keys(object)
       .map(key =>
         [key, object[key]]
@@ -591,9 +602,12 @@ export class HttpProxy {
    * @returns
    * @private
    */
-  _convertObjectToFormData(object: UnknownParameters) {
-    const window = this._window.getWindow();
+  _convertObjectToFormData(object: UnknownParameters | undefined) {
+    if (!object) {
+      return undefined;
+    }
 
+    const window = this._window.getWindow();
     if (!window || !FormData) {
       return object;
     }

@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "19.0.0-rc.5",
+  "version": "19.0.0-rc.6",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -68,9 +68,10 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^19.0.0-rc.2",
+    "@ima/plugin-cli": "^19.0.0-rc.3",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.2.2",
+    "@types/merge-deep": "^3.0.0",
     "@types/multer": "^1.4.7",
     "jscodeshift": "^0.14.0"
   },

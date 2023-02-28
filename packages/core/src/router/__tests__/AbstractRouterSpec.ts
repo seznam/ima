@@ -111,7 +111,9 @@ describe('ima.core.router.AbstractRouter', () => {
   it('should return route and middlewares in line for defined path', () => {
     const { route, middlewares } = router.getRouteHandlersByPath('/');
 
-    expect((route as AbstractRoute).getName()).toBe('home');
+    expect((route as InstanceType<typeof AbstractRoute>).getName()).toBe(
+      'home'
+    );
     expect(middlewares).toHaveLength(1);
   });
 
@@ -153,7 +155,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('getCurrentRouteInfo method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
     const params = {};
 
     beforeEach(() => {
@@ -220,7 +222,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('route method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -294,8 +296,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleError method', () => {
     const path = '/error';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
+    let originalRoute: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -379,8 +381,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleNotFound method', () => {
     const path = '/not-found';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
+    let originalRoute: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -515,7 +517,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('_handle method', () => {
     const routeName = 'routeName';
     const routePath = '/routePath';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
 
     beforeEach(() => {
       route = routeFactory.createRoute(

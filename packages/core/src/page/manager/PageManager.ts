@@ -7,7 +7,7 @@ import { UnknownParameters } from '../../types';
 import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
-  route: AbstractRoute;
+  route: InstanceType<typeof AbstractRoute>;
   controller: IController;
   view: unknown;
   options: RouteOptions;

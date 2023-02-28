@@ -22,22 +22,24 @@ import { StringParameters, UnknownParameters } from '../types';
  * @property withCredentials Flag that indicates whether the
  *           request should be made using credentials such as cookies or
  *           authorization headers.
- * @property listeners Listeners for request events.
- * @property postProcessor Response
- *           post-processor applied just before the response is stored in the
+ * @property postProcessors Response
+ *           post-processors applied just before the response is stored in the
  *           cache and returned.
  */
+
+export interface ImaRequestInit extends Omit<RequestInit, 'body'> {
+  headers?: Record<string, string>;
+}
 
 export interface HttpAgentRequestOptions {
   timeout: number;
   ttl: number;
   repeatRequest: number;
-  headers: IncomingHttpHeaders;
-  fetchOptions: Omit<RequestInit, 'body'>;
+  fetchOptions: ImaRequestInit;
   cache: boolean;
-  withCredentials: boolean;
-  listeners?: { progress: (event: Event) => unknown };
-  postProcessor?: <B>(response: HttpAgentResponse<B>) => HttpAgentResponse<B>;
+  postProcessors?: (<B>(
+    response: HttpAgentResponse<B>
+  ) => HttpAgentResponse<B>)[];
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;
 }
@@ -79,7 +81,7 @@ export abstract class HttpAgent {
    */
   get<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -100,7 +102,7 @@ export abstract class HttpAgent {
    */
   post<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -121,7 +123,7 @@ export abstract class HttpAgent {
    */
   put<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -142,7 +144,7 @@ export abstract class HttpAgent {
    */
   patch<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();
@@ -163,7 +165,7 @@ export abstract class HttpAgent {
    */
   delete<B = unknown>(
     url: string,
-    data: UnknownParameters,
+    data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
     return Promise.reject();

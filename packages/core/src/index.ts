@@ -1,5 +1,10 @@
 export { Namespace, getNamespace, ns } from './Namespace';
-export { Bootstrap, type PluginConfigFunctions } from './Bootstrap';
+export {
+  Bootstrap,
+  type PluginConfigFunctions,
+  type AppConfigFunctions,
+  type Config,
+} from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
 export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
@@ -92,11 +97,7 @@ export {
 export { AbstractRouter } from './router/AbstractRouter';
 export { ActionTypes } from './router/ActionTypes';
 export { ClientRouter } from './router/ClientRouter';
-export {
-  DynamicRoute,
-  type ExtractPathFunction,
-  type RoutePathExpression,
-} from './router/DynamicRoute';
+export { DynamicRoute, type RoutePathExpression } from './router/DynamicRoute';
 export { RouterEvents } from './router/RouterEvents';
 export { Request } from './router/Request';
 export { Response } from './router/Response';

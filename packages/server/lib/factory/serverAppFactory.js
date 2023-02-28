@@ -88,10 +88,10 @@ module.exports = function serverAppFactory({
     cache: false,
   };
 
-  // TODO IMA@18 need performance test for usefulness
-  // TODO IMA@18@performance refactor
-  // TODO IMA@18@performance documentation environment.$Server.serveSPA.cache
-  // TODO IMA@18performance test rendering SPA for random url
+  // TODO IMA@19 need performance test for usefulness
+  // TODO IMA@19@performance refactor
+  // TODO IMA@19@performance documentation environment.$Server.serveSPA.cache
+  // TODO IMA@19performance test rendering SPA for random url
   // const spaCache = new Cache(
   //   Object.assign(
   //     {},
@@ -161,16 +161,18 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
+      error.cause = event.error;
+
       event.context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
     }
 
     try {
       event = await responseHandler(event);
     } catch (error) {
+      error.cause = event.error;
       const { res, context } = event;
 
       if (context.app) {
@@ -184,8 +186,7 @@ module.exports = function serverAppFactory({
 
       context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
 
       res.status(context.response.status);

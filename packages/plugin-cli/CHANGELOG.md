@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Minor Changes
+
+- 168fa6d6a: Added ability to enable/disable soure maps generation using `sourceMaps` option in `ima-plugin.config.js` configuration file.
+  Added ability to add new custom transformers using `transformers` option in `ima-plugin.config.js` configuration file.
+
 ## 19.0.0-rc.2
 
 ### Minor Changes
