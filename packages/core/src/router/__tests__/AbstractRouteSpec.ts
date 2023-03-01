@@ -1,4 +1,3 @@
-import { StringParameters } from '../../types';
 import { AbstractRoute } from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 
@@ -85,16 +84,6 @@ describe('ima.core.router.AbstractRoute', function () {
     await expect(route['_cachedView']).resolves.toStrictEqual(result);
   });
 
-  it('should parse query', function () {
-    expect(
-      AbstractRoute.decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
-    ).toBe('á/b?č#d:ě%25');
-  });
-
-  it('should return empty string for query that cant be parsed', function () {
-    expect(AbstractRoute.decodeURIParameter('p%F8%EDrodn%ED')).toBe('');
-  });
-
   it('should preload async view and controller', async () => {
     const asyncController = async () =>
       Promise.resolve({ default: controller });
@@ -117,78 +106,6 @@ describe('ima.core.router.AbstractRoute', function () {
     expect(route.getController).toHaveBeenCalledTimes(1);
     expect(resultView).toStrictEqual(view);
     expect(resultController).toStrictEqual(controller);
-  });
-
-  describe('pairsToQuery() static method', () => {
-    it.each([
-      [
-        [
-          [1, true],
-          ['hello', 'world'],
-        ],
-        '?1=true&hello=world',
-      ],
-      [
-        [
-          [{}, []],
-          [
-            'test',
-            () => {
-              return;
-            },
-          ],
-          [null, 'world'],
-          ['str', 123],
-        ],
-        '?str=123',
-      ],
-      [
-        [
-          [2, undefined],
-          ['p', null],
-          ['š+', -1],
-        ],
-        '?%C5%A1%2B=-1',
-      ],
-      [[[]], ''],
-    ])('should parse query pairs %j into "%s"', (pairs, result) => {
-      expect(AbstractRoute.pairsToQuery(pairs)).toBe(result);
-    });
-  });
-
-  describe('paramsToQuery() static method', () => {
-    it.each([
-      [
-        {
-          1: true,
-          hello: 'world',
-        },
-        '?1=true&hello=world',
-      ],
-      [
-        {
-          test: () => {
-            return;
-          },
-          key: null,
-          str: 123,
-        },
-        '?str=123',
-      ],
-      [
-        {
-          2: undefined,
-          p: null,
-          'š+': -1,
-        },
-        '?%C5%A1%2B=-1',
-      ],
-      [[[]], ''],
-    ])('should parse %j into "%s"', (pairs, result) => {
-      expect(
-        AbstractRoute.paramsToQuery(pairs as unknown as StringParameters)
-      ).toBe(result);
-    });
   });
 
   describe('_getAsyncModule() method', () => {

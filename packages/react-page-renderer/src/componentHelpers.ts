@@ -68,7 +68,7 @@ export function localize(
 export function link(
   component: AbstractComponent | AbstractPureComponent,
   name: string,
-  params: { [key: string]: string | number }
+  params: { [key: string]: string }
 ): string {
   return component.utils.$Router.link(name, params);
 }

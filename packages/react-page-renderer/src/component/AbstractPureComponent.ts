@@ -59,7 +59,7 @@ export abstract class AbstractPureComponent<
    *        extraneous parameters to add to the URL as a query string.
    * @return The generated URL.
    */
-  link(name: string, params: { [key: string]: string | number } = {}): string {
+  link(name: string, params: { [key: string]: string } = {}): string {
     return helpers.link(this, name, params);
   }
 

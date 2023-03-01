@@ -252,7 +252,7 @@ export abstract class AbstractRouter extends Router {
       route = notFoundRoute;
     }
 
-    const params = route.extractParameters(path);
+    const params = route.extractParameters(path, this.getUrl());
 
     return { route, params, path };
   }
@@ -344,6 +344,7 @@ export abstract class AbstractRouter extends Router {
     };
 
     if (!route) {
+      // @ts-expect-error fix RouteParams in the future
       params.error = new GenericError(
         `Route for path '${path}' is not configured.`,
         { status: 404 }
@@ -353,7 +354,10 @@ export abstract class AbstractRouter extends Router {
     }
 
     await this._runMiddlewares(middlewares, params, locals);
-    params = Object.assign(params, route.extractParameters(path));
+    params = Object.assign(
+      params,
+      route.extractParameters(path, this.getUrl())
+    );
     await this._runMiddlewares(route.getOptions().middlewares, params, locals);
 
     return this._handle(route, params, options, action);
@@ -386,7 +390,7 @@ export abstract class AbstractRouter extends Router {
       );
     }
 
-    params = this.#addParamsFromOriginalRoute(params as StringParameters);
+    params = this.#addParamsFromOriginalRoute(params);
 
     const action = {
       url: this.getUrl(),
@@ -549,7 +553,8 @@ export abstract class AbstractRouter extends Router {
       .then(response => {
         response = response || {};
 
-        if (params.error && params.error instanceof Error) {
+        // @ts-expect-error fix RouteParams in the future
+        if (params?.error instanceof Error) {
           (response as Record<string, unknown>).error = params.error;
         }
 
@@ -694,13 +699,15 @@ export abstract class AbstractRouter extends Router {
 
     if (!route) {
       // try to at least extract query string params from path
-      const queryParams = AbstractRoute.getQuery(
-        AbstractRoute.getTrimmedPath(originalPath)
-      );
-
-      return Object.assign({}, queryParams, params);
+      return {
+        ...Object.fromEntries(new URL(this.getUrl()).searchParams),
+        ...params,
+      };
     }
 
-    return Object.assign({}, route.extractParameters(originalPath), params);
+    return {
+      ...route.extractParameters(originalPath, this.getUrl()),
+      ...params,
+    };
   }
 }
