@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.1.1
+
+### Patch Changes
+
+- 3be28045d: Fixed windows specific errors in package building
+
 ## 18.1.0
 
 ### Minor Changes
