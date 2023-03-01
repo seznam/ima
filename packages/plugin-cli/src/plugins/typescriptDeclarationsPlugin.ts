@@ -47,6 +47,7 @@ export function typescriptDeclarationsPlugin(
         {
           stdio: 'inherit',
           cwd: context.cwd,
+          shell: true,
         }
       )
         .on('close', () => {
