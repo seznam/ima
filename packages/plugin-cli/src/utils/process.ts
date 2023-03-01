@@ -49,7 +49,11 @@ export async function parseConfigFile(
 
   // Override with custom configuration
   if (configFile) {
-    loadedConfig = (await import(path.join(configDir, configFile))).default;
+    let configPath = path.join(configDir, configFile);
+    if (!configPath.startsWith('/')) {
+      configPath = 'file:///' + configPath.replace(/\\/g, '/');
+    }
+    loadedConfig = (await import(configPath)).default;
     loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
   }
 
