@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
-    "@ima/cli": "^18.0.0",
+    "@ima/cli": "rc",
     "@ima/plugin-testing-integration": "^3.0.0",
     "@swc/jest": "^0.2.20",
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
@@ -34,9 +34,9 @@
     "prettier": "^2.6.0"
   },
   "dependencies": {
-    "@ima/core": "^18.0.0",
-    "@ima/react-page-renderer": "^18.0.0",
-    "@ima/server": "^18.0.0",
+    "@ima/core": "rc",
+    "@ima/react-page-renderer": "rc",
+    "@ima/server": "rc",
     "compression": "1.7.4",
     "connect-timeout": "1.9.0",
     "cookie-parser": "^1.4.6",
@@ -48,5 +48,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-favicon": "^2.5.0"
+  },
+  "overrides": {
+    "@ima/cli": "rc",
+    "@ima/core": "rc",
+    "@ima/helpers": "rc",
+    "@ima/react-page-renderer": "rc",
+    "@ima/server": "rc"
   }
 }
