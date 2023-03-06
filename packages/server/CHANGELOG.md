@@ -1,5 +1,13 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- eee60ef09: Add option to use custom manifestRequire
+- cd8af3a1b: fix devutils default value
+- 552d4e17f: Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings
+
 ## 19.0.0-rc.4
 
 ### Patch Changes

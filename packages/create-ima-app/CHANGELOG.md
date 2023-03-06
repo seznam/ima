@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Patch Changes
+
+- cd8af3a1b: integration tests run in SPA mode
+  ima RC versions override
+
 ## 19.0.0-rc.3
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.7
+
+### Minor Changes
+
+- b1e29d200: Performance improvement while building non-module CSS/LESS (\*.module.css) files on bundles that don't process CSS (server and client). In this cases the CSS imports are completely ignored which improves build performance merginally, depending on the amount of CSS files you app is using
+
 ## 19.0.0-rc.6
 
 ### Patch Changes
