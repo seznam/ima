@@ -508,7 +508,7 @@ export default class StaticRoute extends AbstractRoute {
 
       if (currentCoreName) {
         const value = AbstractRoute.decodeURIParameter(rawValue) as string;
-        parameters[currentCoreName] = value;
+        parameters[currentCoreName] = rawValue ? value : rawValue;
       }
     }
 
