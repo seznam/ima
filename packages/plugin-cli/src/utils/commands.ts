@@ -114,9 +114,12 @@ export async function build(args: Arguments) {
       await cleanOutput(config, cwd);
 
       // Get file paths at input directory
-      let files = await globby(path.join(inputDir, './**/*'), {
-        cwd,
-      });
+      let files = await globby(
+        path.posix.join(inputDir.replace(/\\/g, '/'), './**/*'),
+        {
+          cwd: cwd.replace(/\\/g, '/'),
+        }
+      );
 
       // Filter files using exclude settings
       if (config?.exclude) {

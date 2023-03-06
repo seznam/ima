@@ -36,6 +36,12 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
 
+## 18.1.1
+
+### Patch Changes
+
+- 3be28045d: Fixed windows specific errors in package building
+
 ## 18.1.0
 
 ### Minor Changes

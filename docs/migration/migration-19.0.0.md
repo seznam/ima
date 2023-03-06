@@ -108,6 +108,7 @@ router.use(async (params, locals, next) => {
  - Added option to **force app host** and **protocol**, using `$Server.host` and `$Server.protocol` settings in the `environment.js`.
  - The App error route is protected for exceeding static thresholds.
  - The Emitter `event.cause` is removed. The error cause is set in `event.error.cause`.
+ - Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings.
 
 ### create-ima-app
  - Added new **typescript template**, use `--typescript` option when generating new application.
@@ -126,6 +127,13 @@ router.use(async (params, locals, next) => {
  - `$Source` environment.js variable has been renamed to `$Resources`.
  - Removed deprecated package **entry points**, this includes all imports directly referencing files from `./dist/` directory. Please update your imports to the new [exports fields](https://github.com/seznam/ima/blob/master/packages/core/package.json#L39).
  - `extractParameters()` function in `DynamicRoute` now receives additional object argument, containing `query` and `path` (not modified path) for more control over extracted parameters. **The router now uses params returned from `extractParameters()` directly**. It no longer automatically merges query params into the resulting object. If you want to preserve this behavior, merge the extracted route params with query object provided in the second argument.
+
+#### Router changes
+ - Replace custom URL parsing methods in `AbstractRoute`, `StaticRoute` and `DynamicRoute` with combination of native `URL` and `URLSearchParams`.
+ - Removed `pairsToQuery`, `paramsToQuery`, `getQuery`, `decodeURIParameter` static methods on `AbstractRoute`. These have been replaced with combination of native `URL` and `URLSearchParams` interfaces.
+ - `getTrimmedPath` static method in `AbstractRoute` is now instance method.
+ - Url query params with no value (`?param=`) are no longer extracted as `{ param: true }`, but as `{ param: '' }`. Please update your code to check for `key` presence in these cases rather than `true` value.
+ - Parsing of semi-colons inside query params is not supported (as a result of using `URLSearchParams`)
 
 #### HttpAgent changes
  - `IMA HttpAgent` now removes by default all headers from request and response which is stored in Cache. You can turn off this behavior with `keepSensitiveHeaders` option but **it is not recommended**.
