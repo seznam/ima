@@ -17,7 +17,7 @@ module.exports = function createIMAServer({
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({ applicationFolder });
-  devUtils = require('./lib/factory/devUtilsFactory.js')();
+  devUtils = devUtils || require('./lib/factory/devUtilsFactory.js')();
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
