@@ -138,6 +138,12 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/helpers@19.0.0-rc.0
 
+## 18.1.1
+
+### Patch Changes
+
+- e0708dd45: Backport fix from `next` - for missing optional parameters in static router that are evaluated as 'undefined' instead of undefined.
+
 ## 18.1.0
 
 ### Minor Changes

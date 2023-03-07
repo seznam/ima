@@ -82,6 +82,12 @@
   - @ima/error-overlay@19.0.0-rc.0
   - @ima/hmr-client@19.0.0-rc.0
 
+## 18.3.3
+
+### Patch Changes
+
+- ad1c47fe0: Fixed issue where ManifestPlugin produced manifest.json file without client assets. This could resolve in error where application loads without and JS and CSS assets and is not revived.
+
 ## 18.3.2
 
 ### Patch Changes
