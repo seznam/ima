@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- 5378e2485: Fixed issue with broken manifets.json files
+
 ## 19.0.0-rc.7
 
 ### Minor Changes
