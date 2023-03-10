@@ -572,6 +572,9 @@ export abstract class AbstractRouter extends Router {
 
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
+    /**
+     * Handle cancelation of running route handlers before proceeding further.
+     */
     if (this.#routeExecutor.isRunning()) {
       this._dispatcher.fire(
         RouterEvents.AFTER_HANDLE_ROUTE,
@@ -583,7 +586,7 @@ export abstract class AbstractRouter extends Router {
 
     this.#routeExecutor.reset();
 
-    const result = await this._pageManager
+    return this._pageManager
       .manage({
         routeExecutor: this.#routeExecutor,
         route,
@@ -608,8 +611,6 @@ export abstract class AbstractRouter extends Router {
 
         return response as void | StringParameters;
       });
-
-    return result;
   }
 
   /**
