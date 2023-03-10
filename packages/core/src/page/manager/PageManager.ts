@@ -1,18 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { IController } from '../../controller/Controller';
 import { AbstractRoute } from '../../router/AbstractRoute';
+import { RouteExecutor } from '../../router/AbstractRouter';
 import { RouteOptions } from '../../router/Router';
 import { UnknownParameters } from '../../types';
 import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
   route: InstanceType<typeof AbstractRoute>;
-  controller: IController;
-  view: unknown;
   options: RouteOptions;
   params?: UnknownParameters;
   action?: PageAction;
+  routeExecutor: RouteExecutor;
 };
 
 /**
@@ -46,6 +43,7 @@ export abstract class PageManager {
    *         client (at the server side) or determine the type of error page
    *         to navigate to (at the client side).
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   manage(args: ManageArgs): Promise<unknown> {
     return Promise.reject();
   }

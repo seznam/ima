@@ -20,11 +20,47 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { PageManager } from '../page/manager/PageManager';
 import { StringParameters, UnknownParameters } from '../types';
 
+export class RouteExecutor {
+  #resolve?: () => void;
+  #reject?: () => void;
+  #controlPromise: Promise<void> | null = null;
+  #resolved = false;
+
+  reset() {
+    this.#resolved = false;
+    this.#controlPromise = new Promise<void>((resolve, reject) => {
+      this.#resolve = () => {
+        this.#resolved = true;
+      };
+      this.#reject = () => reject('canceled');
+    });
+  }
+
+  async cancelable<T>(handler: T) {
+    return Promise.race([this.#controlPromise, handler()]);
+  }
+
+  cancel() {
+    this.#reject?.();
+  }
+
+  finish() {
+    this.#resolved = true;
+    this.#controlPromise = null;
+  }
+
+  isRunning(): boolean {
+    return !!(!this.#resolved && this.#controlPromise);
+  }
+}
+
 /**
  * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
  */
 export abstract class AbstractRouter extends Router {
+  #routeExecutor = new RouteExecutor();
+
   /**
    * The page manager handling UI rendering, and transitions between
    * pages if at the client side.
@@ -56,6 +92,7 @@ export abstract class AbstractRouter extends Router {
    * that specifies the current language.
    */
   protected _languagePartPath = '';
+
   /**
    * Storage of all known routes and middlewares. The key are their names.
    */
@@ -535,20 +572,27 @@ export abstract class AbstractRouter extends Router {
 
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
-    // Pre-fetch view and controller which can be async
-    const [controller, view] = await Promise.all([
-      route.getController(),
-      route.getView(),
-    ]);
+    if (this.#routeExecutor.isRunning()) {
+      this._dispatcher.fire(
+        RouterEvents.AFTER_HANDLE_ROUTE,
+        { ...eventData, cancelled: true },
+        true
+      );
+      this.#routeExecutor.cancel();
+    }
 
-    return this._pageManager
+    this.#routeExecutor.reset();
+
+    const result = await this._pageManager
       .manage({
+        routeExecutor: this.#routeExecutor,
         route,
-        controller: controller as IController,
-        view,
         options: routeOptions,
         params,
         action,
+      })
+      .catch(e => {
+        console.log(e);
       })
       .then(response => {
         response = response || {};
@@ -564,6 +608,8 @@ export abstract class AbstractRouter extends Router {
 
         return response as void | StringParameters;
       });
+
+    return result;
   }
 
   /**

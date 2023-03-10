@@ -87,13 +87,18 @@ export abstract class AbstractPageManager extends PageManager {
    */
   async manage({
     route,
-    controller,
-    view,
     options,
     params = {},
     action = {},
+    routeExecutor,
   }: ManageArgs) {
     this._storeManagedPageSnapshot();
+
+    // Pre-fetch view and controller which can be async
+    const [controller, view] = await routeExecutor.cancelable(() =>
+      Promise.all([route.getController(), route.getView()])
+    );
+    console.log('AFTER CONTROLER VIEW', route.getName());
 
     if (this._hasOnlyUpdate(controller, view, options)) {
       this._managedPage.params = params;
@@ -126,11 +131,16 @@ export abstract class AbstractPageManager extends PageManager {
     );
 
     // Run pre-manage handlers before affecting anything
-    await this._runPreManageHandlers(newManagedPage, action);
+    await routeExecutor.cancelable(() =>
+      this._runPreManageHandlers(newManagedPage, action)
+    );
+    console.log('_runPreManageHandlers', route.getName());
 
     // Deactivate the old instances and clearing state
-    await this._deactivatePageSource();
-    await this._destroyPageSource();
+    await routeExecutor.cancelable(() => this._destroyPageSource());
+    console.log('_destroyPageSource', route.getName());
+    await routeExecutor.cancelable(() => this._deactivatePageSource());
+    console.log('_deactivatePageSource', route.getName());
 
     this._pageStateManager.clear();
     this._clearComponentState(options);
@@ -139,11 +149,18 @@ export abstract class AbstractPageManager extends PageManager {
     // Store the new managedPage object and initialize controllers and
     // extensions
     this._managedPage = newManagedPage;
-    await this._initPageSource();
+    await routeExecutor.cancelable(() => this._initPageSource());
+    console.log('_initPageSource', route.getName());
 
-    const response = await this._loadPageSource();
-    await this._runPostManageHandlers(this._previousManagedPage, action);
+    const response = await routeExecutor.cancelable(() =>
+      this._loadPageSource()
+    );
+    await routeExecutor.cancelable(() =>
+      this._runPostManageHandlers(this._previousManagedPage, action)
+    );
+    console.log('_runPostManageHandlers', route.getName());
 
+    routeExecutor.finish();
     return response;
   }
 

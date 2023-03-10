@@ -95,20 +95,19 @@ export class ClientPageManager extends AbstractPageManager {
    */
   async manage({
     route,
-    controller,
-    view,
     options,
     params = {},
     action = {},
+    routeExecutor,
   }: ManageArgs) {
     const response = await super.manage({
       route,
-      controller,
-      view,
       options,
       params,
       action,
+      routeExecutor,
     });
+
     await this._activatePageSource();
 
     return response;
