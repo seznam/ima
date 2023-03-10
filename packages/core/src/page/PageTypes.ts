@@ -14,8 +14,16 @@ export type ManagedPage = {
   route?: InstanceType<typeof AbstractRoute>;
   view?: unknown;
   viewInstance?: unknown;
-  state?: {
+  state: {
     activated: boolean;
+    initialized: boolean;
+    cancelled: boolean;
+    executed: boolean;
+    page: {
+      promise: Promise<unknown>;
+      resolve: VoidFunction;
+      reject: VoidFunction;
+    };
   };
 };
 
