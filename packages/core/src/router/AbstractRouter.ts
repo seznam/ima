@@ -26,17 +26,19 @@ export class RouteExecutor {
   #controlPromise: Promise<void> | null = null;
   #resolved = false;
 
+  static CancelError = new Error('canceled');
+
   reset() {
     this.#resolved = false;
     this.#controlPromise = new Promise<void>((resolve, reject) => {
       this.#resolve = () => {
         this.#resolved = true;
       };
-      this.#reject = () => reject('canceled');
+      this.#reject = () => reject(RouteExecutor.CancelError);
     });
   }
 
-  async cancelable<T>(handler: T) {
+  async cancelable<T>(handler: () => T) {
     return Promise.race([this.#controlPromise, handler()]);
   }
 
@@ -595,7 +597,16 @@ export abstract class AbstractRouter extends Router {
         action,
       })
       .catch(e => {
-        console.log(e);
+        if (e === RouteExecutor.CancelError) {
+          if ($Debug) {
+            console.warn(
+              `ima.router.AbstractRouter: Cancelled handling of ${route.getName()} route`,
+              eventData
+            );
+          }
+        } else {
+          throw e;
+        }
       })
       .then(response => {
         response = response || {};
