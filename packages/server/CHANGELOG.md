@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.3.1
+
+### Patch Changes
+
+- a980951af: Fix missing `chalk` dependency
+
 ## 18.3.0
 
 ### Minor Changes

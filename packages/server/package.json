@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "18.3.0",
+  "version": "18.3.1",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
