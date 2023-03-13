@@ -533,19 +533,21 @@ export abstract class AbstractRouter extends Router {
       action,
     };
 
-    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
+    try {
+      // Call here
+      // Předat cancel do page rendereru, jinak by se taky spustil
+      console.log('running preManage 1');
+      await this._pageManager.preManage();
+      console.log('resolved');
+    } catch (error) {
+      debugger;
+    }
 
-    // Pre-fetch view and controller which can be async
-    const [controller, view] = await Promise.all([
-      route.getController(),
-      route.getView(),
-    ]);
+    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
       .manage({
         route,
-        controller: controller as IController,
-        view,
         options: routeOptions,
         params,
         action,

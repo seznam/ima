@@ -8,8 +8,6 @@ import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
   route: InstanceType<typeof AbstractRoute>;
-  controller: IController;
-  view: unknown;
   options: RouteOptions;
   params?: UnknownParameters;
   action?: PageAction;
@@ -26,6 +24,8 @@ export abstract class PageManager {
   init() {
     return;
   }
+
+  preManage() {}
 
   /**
    * Starts to manage the provided controller and its view. The manager

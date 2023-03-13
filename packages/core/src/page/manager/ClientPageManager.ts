@@ -93,18 +93,9 @@ export class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritDoc
    */
-  async manage({
-    route,
-    controller,
-    view,
-    options,
-    params = {},
-    action = {},
-  }: ManageArgs) {
+  async manage({ route, options, params = {}, action = {} }: ManageArgs) {
     const response = await super.manage({
       route,
-      controller,
-      view,
       options,
       params,
       action,

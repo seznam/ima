@@ -139,7 +139,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   });
 
   afterEach(() => {
-    pageManager['_clearManagedPageValue']();
+    pageManager['_getClearManagedPage']();
     jest.clearAllMocks();
   });
 
@@ -224,7 +224,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
           expect(pageManager._clearComponentState).toHaveBeenCalledWith(
             options
           );
-          expect(pageManager['_clearManagedPageValue']).toHaveBeenCalled();
+          expect(pageManager['_getClearManagedPage']).toHaveBeenCalled();
           expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
           expect(pageManager['_initPageSource']).toHaveBeenCalled();
           expect(pageManager['_loadPageSource']).toHaveBeenCalled();
@@ -244,7 +244,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       await pageManager.destroy();
 
-      expect(pageManager['_clearManagedPageValue']).toHaveBeenCalled();
+      expect(pageManager['_getClearManagedPage']).toHaveBeenCalled();
     });
 
     it('should remove listener for onChange event from page state manager', async () => {

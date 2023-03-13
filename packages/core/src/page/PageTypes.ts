@@ -11,7 +11,7 @@ export type ManagedPage = {
   decoratedController?: ControllerDecorator;
   options?: RouteOptions;
   params?: UnknownParameters;
-  route?: InstanceType<typeof AbstractRoute>;
+  route: InstanceType<typeof AbstractRoute>;
   view?: unknown;
   viewInstance?: unknown;
   state: {
@@ -20,7 +20,7 @@ export type ManagedPage = {
     cancelled: boolean;
     executed: boolean;
     page: {
-      promise: Promise<unknown>;
+      promise: Promise<void>;
       resolve: VoidFunction;
       reject: VoidFunction;
     };
