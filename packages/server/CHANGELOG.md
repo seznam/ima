@@ -77,6 +77,11 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
+## 18.3.1
+
+### Patch Changes
+
+- a980951af: Fix missing `chalk` dependency
 
 ## 18.3.0
 

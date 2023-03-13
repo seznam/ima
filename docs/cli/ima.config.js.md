@@ -251,7 +251,7 @@ The CLI arguments always take precedence over any other configurations.
 
 > `string = '/'`
 
-The `publicPath` option is used to specify base path for all asses within the application. (see more at [webpack public path](https://webpack.js.org/guides/public-path/)).
+The `publicPath` option is used to specify base path for all assets within the application. (see more at [webpack public path](https://webpack.js.org/guides/public-path/)).
 
 :::tip
 
