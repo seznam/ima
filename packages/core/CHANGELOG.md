@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- 89f3d2166: Used baseUrl + path for params parsing, instead of full current url. This fixes issue where path is already different (redirect) than currently routed URL, which results in invalid params.
+
 ## 19.0.0-rc.7
 
 ### Major Changes
