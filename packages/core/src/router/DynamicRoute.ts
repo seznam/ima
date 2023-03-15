@@ -105,8 +105,8 @@ export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
   /**
    * @inheritDoc
    */
-  extractParameters(path: string, url: string) {
-    const parsedUrl = new URL(url);
+  extractParameters(path: string, baseUrl: string) {
+    const parsedUrl = new URL(`${baseUrl}${path}`);
 
     return this._pathExpression.extractParameters(
       this.getTrimmedPath(parsedUrl.pathname),

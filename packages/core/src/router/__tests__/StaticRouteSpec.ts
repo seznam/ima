@@ -822,7 +822,7 @@ describe('ima.core.router.StaticRoute', function () {
 
         const routeParams = localStaticRoute.extractParameters(
           value.path,
-          'https://imajs.io' + value.path
+          'https://imajs.io'
         );
         const keys = Object.keys(value.params);
 
@@ -1524,7 +1524,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?stuff=value&second=override',
-          'https://domain.com/abc/def?stuff=value&second=override'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1537,10 +1537,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(route.matches('/abc/def?foo=bar')).toBeTruthy();
       expect(route.matches('/abc?foo=bar')).toBeFalsy();
       expect(
-        route.extractParameters(
-          '/abc/def?foo=bar',
-          'https://domain.com/abc/def?foo=bar'
-        )
+        route.extractParameters('/abc/def?foo=bar', 'https://domain.com')
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
@@ -1551,10 +1548,7 @@ describe('ima.core.router.StaticRoute', function () {
     it('should handle query without parameter value', function () {
       expect(route.matches('/abc/def?foo')).toBeTruthy();
       expect(
-        route.extractParameters(
-          '/abc/def?foo',
-          'https://domain.com/abc/def?foo'
-        )
+        route.extractParameters('/abc/def?foo', 'https://domain.com')
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
@@ -1563,10 +1557,7 @@ describe('ima.core.router.StaticRoute', function () {
 
       expect(route.matches('/abc/def?foo&bar')).toBeTruthy();
       expect(
-        route.extractParameters(
-          '/abc/def?foo&bar&second',
-          'https://domain.com/abc/def?foo&bar&second'
-        )
+        route.extractParameters('/abc/def?foo&bar&second', 'https://domain.com')
       ).toStrictEqual({
         first: 'abc',
         second: '',
@@ -1582,7 +1573,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff',
-          'https://domain.com/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1600,7 +1591,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?stuff=value&second=override',
-          'https://domain.com/abc/def?stuff=value&second=override'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1614,7 +1605,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def#hashParam=value',
-          'https://domain.com/abc/def#hashParam=value'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1629,7 +1620,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?stuff=value#hashParam=value',
-          'https://domain.com/abc/def?stuff=value#hashParam=value'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1645,7 +1636,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?stuff=#hashParam=value',
-          'https://domain.com/abc/def?stuff=#hashParam=value'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
@@ -1663,7 +1654,7 @@ describe('ima.core.router.StaticRoute', function () {
       expect(
         route.extractParameters(
           '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam',
-          'https://domain.com/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam'
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',

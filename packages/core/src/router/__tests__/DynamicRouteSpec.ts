@@ -129,9 +129,9 @@ describe('ima.core.router.DynamicRoute', function () {
       ],
       [{}, '/article/article-145'],
     ])(`should return "%j" after parsing "%s" path`, (result, path) => {
-      expect(
-        route.extractParameters(path, 'https://imajs.io' + path)
-      ).toStrictEqual(result);
+      expect(route.extractParameters(path, 'https://imajs.io')).toStrictEqual(
+        result
+      );
     });
   });
 
