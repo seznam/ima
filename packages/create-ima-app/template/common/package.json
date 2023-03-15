@@ -48,12 +48,5 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-favicon": "^2.5.0"
-  },
-  "overrides": {
-    "@ima/cli": "rc",
-    "@ima/core": "rc",
-    "@ima/helpers": "rc",
-    "@ima/react-page-renderer": "rc",
-    "@ima/server": "rc"
   }
 }

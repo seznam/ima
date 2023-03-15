@@ -211,15 +211,15 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * route.
    *
    * @param path Currently routed path.
-   * @param url Currently routed URL.
+   * @param baseUrl Currently routed baseUrl.
    * @return Map of parameter names to parameter
    *         values.
    */
-  extractParameters(path: string, url: string): RouteParams {
+  extractParameters(path: string, baseUrl: string): RouteParams {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
         'and must be overridden',
-      { path, url }
+      { path, baseUrl }
     );
   }
 

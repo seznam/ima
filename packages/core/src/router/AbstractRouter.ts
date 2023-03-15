@@ -252,7 +252,7 @@ export abstract class AbstractRouter extends Router {
       route = notFoundRoute;
     }
 
-    const params = route.extractParameters(path, this.getUrl());
+    const params = route.extractParameters(path, this.getBaseUrl());
 
     return { route, params, path };
   }
@@ -354,10 +354,10 @@ export abstract class AbstractRouter extends Router {
     }
 
     await this._runMiddlewares(middlewares, params, locals);
-    params = Object.assign(
-      params,
-      route.extractParameters(path, this.getUrl())
-    );
+    params = {
+      ...params,
+      ...route.extractParameters(path, this.getBaseUrl()),
+    };
     await this._runMiddlewares(route.getOptions().middlewares, params, locals);
 
     return this._handle(route, params, options, action);

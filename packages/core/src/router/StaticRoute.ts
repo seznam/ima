@@ -171,13 +171,13 @@ export class StaticRoute extends AbstractRoute<string> {
   /**
    * @inheritDoc
    */
-  extractParameters(path: string, url: string) {
+  extractParameters(path: string, baseUrl: string) {
     const trimmedPath = this.getTrimmedPath(path);
     const parameters = this._getParameters(trimmedPath);
 
     return {
       ...parameters,
-      ...Object.fromEntries(new URL(url).searchParams),
+      ...Object.fromEntries(new URL(`${baseUrl}${path}`).searchParams),
     };
   }
 
