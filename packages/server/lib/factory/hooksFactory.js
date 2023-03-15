@@ -180,7 +180,11 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
-    if (environment.$Debug && process.env.IMA_CLI_WATCH) {
+    if (
+      environment.$Debug &&
+      process.env.IMA_CLI_WATCH &&
+      !event.error.isRedirection?.()
+    ) {
       return devErrorPage(event);
     } else {
       try {
