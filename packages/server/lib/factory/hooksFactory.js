@@ -336,6 +336,14 @@ module.exports = function hooksFactory({
 
     emitter.on(Event.AfterResponse, async ({ context }) => {
       if (context.app) {
+        const { oc } = context.app;
+        oc.get('$Dispatcher').clear();
+        oc.get('$Cache').clear();
+
+        oc.get('$PageRenderer').unmount();
+        oc.get('$PageManager').destroy();
+        oc.clear();
+
         instanceRecycler.clearInstance(context.app);
         context.app = null;
       }
