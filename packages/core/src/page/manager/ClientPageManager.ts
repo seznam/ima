@@ -100,6 +100,7 @@ export class ClientPageManager extends AbstractPageManager {
       params,
       action,
     });
+
     await this._activatePageSource();
 
     return response;

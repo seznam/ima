@@ -19,10 +19,16 @@ export type ManagedPage = {
     initialized: boolean;
     cancelled: boolean;
     executed: boolean;
+    resolved: boolean;
+    abort?: {
+      promise: Promise<void>;
+      resolve: () => void;
+      reject: () => void;
+    };
     page: {
       promise: Promise<void>;
-      resolve: VoidFunction;
-      reject: VoidFunction;
+      resolve: () => void;
+      reject: () => void;
     };
   };
 };

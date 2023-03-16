@@ -123,7 +123,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       options
     );
 
-    pageManager['_getClearManagedPage']();
+    pageManager['_getInitialManagedPage']();
 
     pageManager['_managedPage'] = pageManager['_constructManagedPageValue'](
       Controller,

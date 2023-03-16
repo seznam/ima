@@ -80,8 +80,8 @@ export abstract class AbstractPageManager extends PageManager {
    * @inheritDoc
    */
   init() {
-    this._managedPage = this._getClearManagedPage();
-    this._previousManagedPage = this._getClearManagedPage();
+    this._managedPage = this._getInitialManagedPage();
+    this._previousManagedPage = this._getInitialManagedPage();
     this._pageHandlerRegistry.init();
   }
 
@@ -91,9 +91,9 @@ export abstract class AbstractPageManager extends PageManager {
     }
 
     this._managedPage.state.cancelled = true;
-    this._managedPage.state.abort.reject();
-
-    console.log(this._managedPage.state.abort);
+    console.error('rejecting', this._managedPage.state);
+    this._previousManagedPage.state.abort?.reject();
+    console.error('rejected', this._managedPage.state);
 
     return this._managedPage.state.page.promise;
   }
@@ -105,14 +105,12 @@ export abstract class AbstractPageManager extends PageManager {
     this._storeManagedPageSnapshot();
     let controller, view;
 
-    // TODO zabit hned, vratit 409
     try {
       const data = await this.getViewController(route);
       controller = data.controller;
       view = data.view;
     } catch (error) {
       if (error !== CancelError) {
-        debugger;
         throw error;
       }
 
@@ -139,7 +137,7 @@ export abstract class AbstractPageManager extends PageManager {
     const decoratedController =
       pageFactory.decorateController(controllerInstance);
     const viewInstance = pageFactory.createView(view);
-    const newManagedPage = this._constructManagedPageValue(
+    this._managedPage = this._constructManagedPageValue(
       controller,
       view,
       route,
@@ -149,10 +147,9 @@ export abstract class AbstractPageManager extends PageManager {
       decoratedController,
       viewInstance
     );
-    this._managedPage = newManagedPage;
 
     // Run pre-manage handlers before affecting anything
-    await this._runPreManageHandlers(newManagedPage, action);
+    await this._runPreManageHandlers(this._managedPage, action);
 
     // Deactivate the old instances and clearing state
     await this._deactivatePageSource();
@@ -161,16 +158,13 @@ export abstract class AbstractPageManager extends PageManager {
     this._pageStateManager.clear();
     this._clearComponentState(options);
 
-    // Store the new managedPage object and initialize controllers and
-    // extensions
-
+    // Store the new managedPage object and initialize controllers and extensions
     await this._initPageSource();
-    console.log('INIT', route.getName());
+    console.warn('INIT', route.getName());
 
     const response = await this._loadPageSource();
-    // TODO
     await this._runPostManageHandlers(this._previousManagedPage, action);
-    this._previousManagedPage = this._getClearManagedPage();
+    this._previousManagedPage = this._getInitialManagedPage();
 
     this._managedPage.state.page.resolve();
 
@@ -189,8 +183,8 @@ export abstract class AbstractPageManager extends PageManager {
 
     this._pageStateManager.clear();
 
-    this._managedPage = this._getClearManagedPage();
-    this._previousManagedPage = this._getClearManagedPage();
+    this._managedPage = this._getInitialManagedPage();
+    this._previousManagedPage = this._getInitialManagedPage();
   }
 
   protected _constructManagedPageValue(
@@ -202,7 +196,7 @@ export abstract class AbstractPageManager extends PageManager {
     controllerInstance: AbstractController,
     decoratedController: ControllerDecorator,
     viewInstance: unknown
-  ) {
+  ): ManagedPage {
     return {
       controller,
       controllerInstance,
@@ -218,21 +212,19 @@ export abstract class AbstractPageManager extends PageManager {
         cancelled: false,
         resolved: false,
         executed: false,
-        // TODO neni potreba můze se smazat
-        abort: {
-          promise: Promise.race([]),
-          reject: () => {},
-          resolve: () => {},
-        },
         page: (() => {
           let resolve, reject;
 
-          const promise = new Promise((res, rej) => {
+          const promise = new Promise<void>((res, rej) => {
             resolve = res;
             reject = rej;
           });
 
-          return { resolve, reject, promise };
+          return {
+            resolve: resolve as unknown as () => void,
+            reject: reject as unknown as () => void,
+            promise,
+          };
         })(),
       },
     };
@@ -246,10 +238,14 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected _storeManagedPageSnapshot() {
     this._previousManagedPage = { ...this._managedPage };
+
+    /**
+     * Create new abort promise used for aborting raced promises
+     * in canceled handlers.
+     */
     this._previousManagedPage.state.abort = (() => {
       let resolve, reject;
-
-      const promise = new Promise((res, rej) => {
+      const promise = new Promise<void>((res, rej) => {
         resolve = res;
         reject = () => {
           console.warn('ABORT');
@@ -258,7 +254,11 @@ export abstract class AbstractPageManager extends PageManager {
         };
       });
 
-      return { resolve, reject, promise };
+      return {
+        resolve: resolve as unknown as () => void,
+        reject: reject as unknown as () => void,
+        promise,
+      };
     })();
 
     return this._previousManagedPage;
@@ -267,14 +267,14 @@ export abstract class AbstractPageManager extends PageManager {
   /**
    * Clear value from managed page.
    */
-  protected _getClearManagedPage() {
+  protected _getInitialManagedPage(): ManagedPage {
     return {
       controller: undefined,
       controllerInstance: undefined,
       decoratedController: undefined,
       view: undefined,
       viewInstance: undefined,
-      route: undefined,
+      route: undefined as unknown as InstanceType<typeof AbstractRoute>,
       options: undefined,
       params: undefined,
       state: {
@@ -283,16 +283,10 @@ export abstract class AbstractPageManager extends PageManager {
         cancelled: false,
         resolved: true,
         executed: false,
-        // TODO neni potreba můze se smazat
-        abort: {
-          promise: Promise.race([]),
-          reject: () => {},
-          resolve: () => {},
-        },
         page: {
           promise: Promise.resolve(),
-          reject: () => {},
-          resolve: () => {},
+          reject: () => undefined,
+          resolve: () => undefined,
         },
       },
     };
@@ -430,16 +424,22 @@ export abstract class AbstractPageManager extends PageManager {
         throw CancelError;
       }
 
-      // TODO race
-      const response = await this._pageRenderer.mount(
-        this._managedPage.decoratedController as ControllerDecorator,
-        this._managedPage.viewInstance,
-        loadedPageState,
-        this._managedPage.options as RouteOptions
-      );
+      console.warn('loading');
+
+      const response = await Promise.race([
+        this._previousManagedPage.state.abort?.promise,
+        this._pageRenderer.mount(
+          this._managedPage.decoratedController as ControllerDecorator,
+          this._managedPage.viewInstance,
+          loadedPageState,
+          this._managedPage.options as RouteOptions
+        ),
+      ]);
 
       return response;
     } catch (e) {
+      console.warn('CANCELING');
+
       if (e === CancelError) {
         return { status: 409 };
       }
@@ -560,13 +560,15 @@ export abstract class AbstractPageManager extends PageManager {
         throw CancelError;
       }
 
-      // TODO opravit spis tady nez v rendereru (zase race)
-      const response = await this._pageRenderer.update(
-        this._managedPage.decoratedController as ControllerDecorator,
-        this._managedPage.viewInstance,
-        updatedPageState,
-        this._managedPage.options as RouteOptions
-      );
+      const response = await Promise.race([
+        this._previousManagedPage.state.abort?.promise,
+        this._pageRenderer.update(
+          this._managedPage.decoratedController as ControllerDecorator,
+          this._managedPage.viewInstance,
+          updatedPageState,
+          this._managedPage.options as RouteOptions
+        ),
+      ]);
 
       return response;
     } catch (e) {
@@ -757,9 +759,13 @@ export abstract class AbstractPageManager extends PageManager {
   ) {
     const result = this._pageHandlerRegistry.handlePreManagedState(
       this._managedPage.controller
-        ? this._stripManagedPageValueForPublic(this._managedPage)
+        ? (this._stripManagedPageValueForPublic(
+            this._managedPage
+          ) as unknown as ManagedPage)
         : null,
-      this._stripManagedPageValueForPublic(nextManagedPage) || null,
+      (this._stripManagedPageValueForPublic(
+        nextManagedPage
+      ) as unknown as ManagedPage) || null,
       action
     );
     nextManagedPage.state.executed = true;
@@ -778,9 +784,13 @@ export abstract class AbstractPageManager extends PageManager {
 
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
-        ? this._stripManagedPageValueForPublic(this._managedPage)
+        ? (this._stripManagedPageValueForPublic(
+            this._managedPage
+          ) as unknown as ManagedPage)
         : null,
-      this._stripManagedPageValueForPublic(previousManagedPage) || null,
+      (this._stripManagedPageValueForPublic(
+        previousManagedPage
+      ) as unknown as ManagedPage) || null,
       action
     );
   }
@@ -788,10 +798,9 @@ export abstract class AbstractPageManager extends PageManager {
   protected async getViewController(
     route: ManagedPage['route']
   ): Promise<{ controller: Controller; view: unknown }> {
-    console.log('route', route.getName(), this._previousManagedPage);
-
+    // @ts-expect-error fixme in the future
     const [controller, view] = await Promise.race([
-      this._previousManagedPage.state.abort.promise,
+      this._previousManagedPage.state.abort?.promise,
       Promise.all([route.getController(), route.getView()]),
     ]);
 
