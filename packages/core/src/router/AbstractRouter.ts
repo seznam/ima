@@ -533,15 +533,11 @@ export abstract class AbstractRouter extends Router {
       action,
     };
 
-    try {
-      // Call here
-      // Předat cancel do page rendereru, jinak by se taky spustil
-      console.log('running preManage 1');
-      await this._pageManager.preManage();
-      console.log('resolved');
-    } catch (error) {
-      debugger;
-    }
+    /**
+     * Call pre-manage to cancel/property kill previously managed
+     * route handler.
+     */
+    await this._pageManager.preManage();
 
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 

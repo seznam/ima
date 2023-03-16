@@ -73,7 +73,6 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     pageResources: { [key: string]: Promise<unknown> },
     routeOptions: RouteOptions
   ): Promise<void | PageData> {
-    // TODO cancel kdyz v page resources budu mit nejake dlouhe promisy, tak bych to měl abortnout nez cekat na nějaky dlouhy promise z load
     const { values: defaultPageState, promises: loadedPromises } =
       this._separatePromisesAndValues(pageResources);
 
@@ -126,7 +125,6 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     pageView: ComponentType,
     resourcesUpdate: UnknownPromiseParameters
   ): Promise<void | PageData> {
-    // TODO fix
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
 

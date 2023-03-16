@@ -91,9 +91,7 @@ export abstract class AbstractPageManager extends PageManager {
     }
 
     this._managedPage.state.cancelled = true;
-    console.error('rejecting', this._managedPage.state);
     this._previousManagedPage.state.abort?.reject();
-    console.error('rejected', this._managedPage.state);
 
     return this._managedPage.state.page.promise;
   }
@@ -160,7 +158,6 @@ export abstract class AbstractPageManager extends PageManager {
 
     // Store the new managedPage object and initialize controllers and extensions
     await this._initPageSource();
-    console.warn('INIT', route.getName());
 
     const response = await this._loadPageSource();
     await this._runPostManageHandlers(this._previousManagedPage, action);
@@ -247,11 +244,7 @@ export abstract class AbstractPageManager extends PageManager {
       let resolve, reject;
       const promise = new Promise<void>((res, rej) => {
         resolve = res;
-        reject = () => {
-          console.warn('ABORT');
-
-          return rej(CancelError);
-        };
+        reject = () => rej(CancelError);
       });
 
       return {
@@ -424,8 +417,6 @@ export abstract class AbstractPageManager extends PageManager {
         throw CancelError;
       }
 
-      console.warn('loading');
-
       const response = await Promise.race([
         this._previousManagedPage.state.abort?.promise,
         this._pageRenderer.mount(
@@ -438,8 +429,6 @@ export abstract class AbstractPageManager extends PageManager {
 
       return response;
     } catch (e) {
-      console.warn('CANCELING');
-
       if (e === CancelError) {
         return { status: 409 };
       }
