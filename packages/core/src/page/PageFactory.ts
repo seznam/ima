@@ -61,7 +61,7 @@ export default class PageFactory {
       if (Array.isArray(loadedExtension)) {
         for (const extensionInstance of loadedExtension) {
           (controllerInstance as AbstractController).addExtension(
-            extensionInstance?.constructor,
+            extensionInstance.constructor,
             extensionInstance
           );
         }
