@@ -51,14 +51,17 @@ export default class PageFactory {
 
     for (const extension of mergedExtensions) {
       const loadedExtension = this._oc.get(extension as typeof Extension);
+
+      // Optional extension handling
       if (!loadedExtension) {
-        // Optional extension handling
         continue;
       }
+
+      // Spread support handling
       if (Array.isArray(loadedExtension)) {
-        // Spread support handling
         for (const extensionInstance of loadedExtension) {
           (controllerInstance as AbstractController).addExtension(
+            extensionInstance.constructor,
             extensionInstance
           );
         }
