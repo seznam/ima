@@ -537,8 +537,11 @@ export abstract class AbstractRouter extends Router {
      * Call pre-manage to cancel/property kill previously managed
      * route handler.
      */
+
+    // TODO await mounted
     await this._pageManager.preManage();
 
+    console.error('BEFORE', route.getName());
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
@@ -558,6 +561,7 @@ export abstract class AbstractRouter extends Router {
 
         eventData.response = response;
 
+        console.warn('AFTER', route.getName());
         this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response as void | StringParameters;

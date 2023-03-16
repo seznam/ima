@@ -86,10 +86,6 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   preManage() {
-    if (this._managedPage.state.resolved) {
-      return Promise.resolve();
-    }
-
     this._managedPage.state.cancelled = true;
     this._previousManagedPage.state.abort?.reject();
 
@@ -111,6 +107,10 @@ export abstract class AbstractPageManager extends PageManager {
       if (error !== CancelError) {
         throw error;
       }
+
+      setTimeout(() => {
+        this._managedPage.state.page.resolve();
+      }, 0);
 
       return { status: 409 };
     }
@@ -163,7 +163,9 @@ export abstract class AbstractPageManager extends PageManager {
     await this._runPostManageHandlers(this._previousManagedPage, action);
     this._previousManagedPage = this._getInitialManagedPage();
 
-    this._managedPage.state.page.resolve();
+    setTimeout(() => {
+      this._managedPage.state.page.resolve();
+    }, 0);
 
     return response;
   }
@@ -207,7 +209,6 @@ export abstract class AbstractPageManager extends PageManager {
         activated: false,
         initialized: false,
         cancelled: false,
-        resolved: false,
         executed: false,
         page: (() => {
           let resolve, reject;
@@ -254,6 +255,21 @@ export abstract class AbstractPageManager extends PageManager {
       };
     })();
 
+    this._managedPage.state.page = (() => {
+      let resolve, reject;
+
+      const promise = new Promise<void>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+
+      return {
+        resolve: resolve as unknown as () => void,
+        reject: reject as unknown as () => void,
+        promise,
+      };
+    })();
+
     return this._previousManagedPage;
   }
 
@@ -274,7 +290,6 @@ export abstract class AbstractPageManager extends PageManager {
         activated: false,
         initialized: false,
         cancelled: false,
-        resolved: true,
         executed: false,
         page: {
           promise: Promise.resolve(),
@@ -749,8 +764,8 @@ export abstract class AbstractPageManager extends PageManager {
     const result = this._pageHandlerRegistry.handlePreManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
-            this._managedPage
-          ) as unknown as ManagedPage)
+          this._managedPage
+        ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
         nextManagedPage
@@ -774,8 +789,8 @@ export abstract class AbstractPageManager extends PageManager {
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
-            this._managedPage
-          ) as unknown as ManagedPage)
+          this._managedPage
+        ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
         previousManagedPage
@@ -786,7 +801,7 @@ export abstract class AbstractPageManager extends PageManager {
 
   protected async getViewController(
     route: ManagedPage['route']
-  ): Promise<{ controller: Controller; view: unknown }> {
+  ): Promise<{ controller: Controller; view: unknown; }> {
     // @ts-expect-error fixme in the future
     const [controller, view] = await Promise.race([
       this._previousManagedPage.state.abort?.promise,
