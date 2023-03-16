@@ -11,31 +11,50 @@ function renderStyles(styles) {
     return '';
   }
 
-  return styles.reduce((acc, cur) => {
-    if (typeof cur === 'string') {
-      acc += `<link rel="stylesheet" href="${cur}" />`;
+  return [
+    ...styles.reduce((acc, cur) => {
+      if (typeof cur === 'string') {
+        acc += `<link as="style" href="${cur}" rel="preload" type="text/css" />`;
+
+        return acc;
+      }
+
+      const [href, { preload = true }] = cur;
+
+      if (preload) {
+        acc += `<link as="style" href="${href}" rel="preload" type="text/css" />`;
+      }
 
       return acc;
-    }
+    }, ''),
+    ...styles.reduce((acc, cur) => {
+      if (typeof cur === 'string') {
+        acc += `<link rel="stylesheet" href="${cur}" />`;
 
-    const [href, { fallback = null, preload, rel = 'stylesheet', ...options }] =
-      cur;
-    let link = `<link href="${href}" rel="${rel}"`;
+        return acc;
+      }
 
-    // Generate fallback handler
-    if (fallback) {
-      link += ` onerror="this.onerror=null;this.href='${fallback}';"`;
-    }
+      const [
+        href,
+        { fallback = null, preload, rel = 'stylesheet', ...options },
+      ] = cur;
+      let link = `<link href="${href}" rel="${rel}"`;
 
-    // Generate other attributes
-    for (const [attr, value] of Object.entries(options)) {
-      link += ` ${attr}="${value}"`;
-    }
+      // Generate fallback handler
+      if (fallback) {
+        link += ` onerror="this.onerror=null;this.href='${fallback}';"`;
+      }
 
-    acc += link + ' />';
+      // Generate other attributes
+      for (const [attr, value] of Object.entries(options)) {
+        link += ` ${attr}="${value}"`;
+      }
 
-    return acc;
-  }, '');
+      acc += link + ' />';
+
+      return acc;
+    }, ''),
+  ].join('');
 }
 
 /**
