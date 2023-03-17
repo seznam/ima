@@ -37,7 +37,6 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   protected _controller: {
     resolved: boolean;
-    isAsync: boolean;
     controller: string | typeof Controller | (() => IController);
     cached: null | unknown;
   };
@@ -47,7 +46,6 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   protected _view: {
     resolved: boolean;
-    isAsync: boolean;
     view: string | unknown | (() => unknown);
     cached: null | unknown;
   };
@@ -81,13 +79,11 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
     this._pathExpression = pathExpression;
     this._controller = {
       resolved: !this.isAsync(controller),
-      isAsync: this.isAsync(controller),
       controller: controller,
       cached: null,
     };
     this._view = {
       resolved: !this.isAsync(view),
-      isAsync: this.isAsync(view),
       view: view,
       cached: null,
     };
@@ -121,7 +117,9 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * Checks if given argument is an async handler.
    */
   isAsync(module: string | unknown | (() => unknown)) {
-    return module?.constructor.name === 'AsyncFunction';
+    return (
+      module?.constructor.name === 'AsyncFunction' || module instanceof Promise
+    );
   }
 
   /**
@@ -134,7 +132,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   getController() {
     if (!this._controller.cached) {
-      this._controller.cached = this._controller.isAsync
+      this._controller.cached = !this._controller.resolved
         ? (
             this._controller.controller as () => Promise<
               Record<string, unknown>
@@ -159,13 +157,6 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   }
 
   /**
-   * Returns true if controller is an async handler.
-   */
-  isControllerAsync() {
-    return this._controller.isAsync;
-  }
-
-  /**
    * Returns View class/alias/constant associated with this route.
    * Internally caches async calls for dynamically imported views,
    * meaning that once they're loaded, you get the same promise for
@@ -175,7 +166,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   getView() {
     if (!this._view.cached) {
-      this._view.cached = this._view.isAsync
+      this._view.cached = !this._view.resolved
         ? (this._view.view as () => Promise<Record<string, unknown>>)().then(
             module => {
               this._view.resolved = true;
@@ -195,13 +186,6 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   isViewResolved() {
     return this._view.resolved;
-  }
-
-  /**
-   * Returns true if view is an async handler.
-   */
-  isViewAsync() {
-    return this._view.isAsync;
   }
 
   /**
