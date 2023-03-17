@@ -1,4 +1,4 @@
-import { Emitter } from '@esmj/emitter';
+import { Emitter, EventData } from '@esmj/emitter';
 import { StatsError } from 'webpack';
 
 import { getEventSource, HMRMessageData } from './EventSourceWrapper';
@@ -71,6 +71,27 @@ export function init(resourceQuery: string) {
     logger,
   };
 
+  /**
+   * Store errors that are sent before the overlay is intialized
+   * and re-send it to overlay after initialization.
+   *
+   * This can happen when error occurs right after bootup
+   * when error-overlay is not yet initialized.
+   */
+  let lastErrorData: null | EventData = null;
+  const lastErrorListener = (data: EventData) => {
+    lastErrorData = data;
+  };
+
+  instances.emitter.on('error', lastErrorListener);
+  instances.emitter.once('error-overlay-connected', () => {
+    if (lastErrorData) {
+      instances.emitter.emit('error', lastErrorData);
+    }
+
+    instances.emitter.off('error', lastErrorListener);
+  });
+
   // Init ErrorOverlay
   overlayScriptEl.setAttribute(
     'src',
@@ -118,7 +139,7 @@ export const isUpToDate = (() => {
   };
 })();
 
-export function processUpdatedModules({
+export async function processUpdatedModules({
   updatedModules,
   logger,
   options,
@@ -128,7 +149,7 @@ export function processUpdatedModules({
   options: HMROptions;
   logger: Logger;
   emitter: Emitter;
-}): void {
+}): Promise<void> {
   // Language files have their own HMR handler, no need to kill ima APP
   if (
     updatedModules.every(
@@ -139,7 +160,6 @@ export function processUpdatedModules({
     return;
   }
 
-  // TODO needs better solution
   // Kill ima app before hot reloading.
   if (
     !options.reactRefresh ||
@@ -149,7 +169,7 @@ export function processUpdatedModules({
       ))
   ) {
     logger.info('cross', 'Destroying IMA app');
-    emitter.emit('destroy');
+    await emitter.emit('destroy');
   }
 }
 
@@ -169,7 +189,7 @@ export async function processUpdate({
   options: HMROptions;
   logger: Logger;
   emitter: Emitter;
-}) {
+}): Promise<void | false> {
   try {
     // Check for updates
     const updatedModules = await module.hot?.check();
@@ -188,7 +208,7 @@ export async function processUpdate({
      * Process updated modules and do some additional updates
      * before applying new changes if necessary.
      */
-    processUpdatedModules({
+    await processUpdatedModules({
       logger,
       options,
       updatedModules,

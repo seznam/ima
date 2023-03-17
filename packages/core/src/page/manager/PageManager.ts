@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { PageAction } from '../PageTypes';
-import { RouteOptions } from '../../router/Router';
-import { UnknownParameters } from '../../CommonTypes';
-import AbstractRoute from '../../router/AbstractRoute';
 import { IController } from '../../controller/Controller';
+import { AbstractRoute } from '../../router/AbstractRoute';
+import { RouteOptions } from '../../router/Router';
+import { UnknownParameters } from '../../types';
+import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
-  route: AbstractRoute;
+  route: InstanceType<typeof AbstractRoute>;
   controller: IController;
   view: unknown;
   options: RouteOptions;
@@ -19,7 +19,7 @@ export type ManageArgs = {
  * The page manager is a utility for managing the current controller and its
  * view.
  */
-export default abstract class PageManager {
+export abstract class PageManager {
   /**
    * Initializes the page manager.
    */

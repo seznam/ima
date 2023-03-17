@@ -1,352 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`responseUtilsFactory _prepareSource deprecated: should add fallbacks when CDN_STATIC_ROOT_URL is defined 1`] = `
-{
-  "esScripts": [
-    [
-      "cdn://static/js.es/app.client.2106a34c6b8bbad8.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/app.client.2106a34c6b8bbad8.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/locale/en.371127fdbfbe93d2.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/locale/en.371127fdbfbe93d2.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/vendors.a873907f25297544.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/vendors.a873907f25297544.js",
-      },
-    ],
-  ],
-  "scripts": [
-    [
-      "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/app.client.8dc14fd2c9e52eef.js",
-      },
-    ],
-    [
-      "cdn://static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      },
-    ],
-    [
-      "cdn://static/js/vendors.0e456297851f0a3a.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/vendors.0e456297851f0a3a.js",
-      },
-    ],
-  ],
-  "styles": [
-    [
-      "cdn://static/css/app.d0ad44d05f82db5f.css",
-      {
-        "fallback": "/static/css/app.d0ad44d05f82db5f.css",
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
-}
-`;
-
-exports[`responseUtilsFactory _prepareSource should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
-{
-  "esScripts": [
-    [
-      "cdn://static/js.es/app.client.2106a34c6b8bbad8.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/app.client.2106a34c6b8bbad8.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/locale/en.371127fdbfbe93d2.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/locale/en.371127fdbfbe93d2.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/vendors.a873907f25297544.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js.es/vendors.a873907f25297544.js",
-      },
-    ],
-  ],
-  "scripts": [
-    [
-      "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/app.client.8dc14fd2c9e52eef.js",
-      },
-    ],
-    [
-      "cdn://static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      },
-    ],
-    [
-      "cdn://static/js/vendors.0e456297851f0a3a.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/static/js/vendors.0e456297851f0a3a.js",
-      },
-    ],
-  ],
-  "styles": [
-    [
-      "cdn://static/css/app.d0ad44d05f82db5f.css",
-      {
-        "fallback": "/static/css/app.d0ad44d05f82db5f.css",
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
-}
-`;
-
-exports[`responseUtilsFactory _prepareSource should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath 1`] = `
-{
-  "esScripts": [
-    [
-      "cdn://static/js.es/app.client.2106a34c6b8bbad8.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js.es/app.client.2106a34c6b8bbad8.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/locale/en.371127fdbfbe93d2.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js.es/locale/en.371127fdbfbe93d2.js",
-      },
-    ],
-    [
-      "cdn://static/js.es/vendors.a873907f25297544.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js.es/vendors.a873907f25297544.js",
-      },
-    ],
-  ],
-  "scripts": [
-    [
-      "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js/app.client.8dc14fd2c9e52eef.js",
-      },
-    ],
-    [
-      "cdn://static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      },
-    ],
-    [
-      "cdn://static/js/vendors.0e456297851f0a3a.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-        "fallback": "/pro/static/static/js/vendors.0e456297851f0a3a.js",
-      },
-    ],
-  ],
-  "styles": [
-    [
-      "cdn://static/css/app.d0ad44d05f82db5f.css",
-      {
-        "fallback": "/pro/static/static/css/app.d0ad44d05f82db5f.css",
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
-}
-`;
-
-exports[`responseUtilsFactory _prepareSource should prepare default sources structure from provided manifest file 1`] = `
-{
-  "esScripts": [
-    [
-      "/static/js.es/app.client.2106a34c6b8bbad8.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js.es/locale/en.371127fdbfbe93d2.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js.es/vendors.a873907f25297544.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-  ],
-  "scripts": [
-    [
-      "/static/js/app.client.8dc14fd2c9e52eef.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js/vendors.0e456297851f0a3a.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-  ],
-  "styles": [
-    [
-      "/static/css/app.d0ad44d05f82db5f.css",
-      {
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
-}
-`;
-
-exports[`responseUtilsFactory _prepareSource should skip compilations without assets 1`] = `
-{
-  "esScripts": [
-    [
-      "/static/js.es/app.client.2106a34c6b8bbad8.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js.es/locale/en.371127fdbfbe93d2.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-    [
-      "/static/js.es/vendors.a873907f25297544.js",
-      {
-        "async": true,
-        "crossorigin": "anonymous",
-      },
-    ],
-  ],
-  "scripts": [],
-  "styles": [
-    [
-      "/static/css/app.d0ad44d05f82db5f.css",
-      {
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
-}
-`;
-
 exports[`responseUtilsFactory createContentVariables should generate base set of content variables 1`] = `
 {
-  "$RevivalCache": "<script id="ima-revival-cache">(function (root) {
-      root.$IMA = root.$IMA || {};
-      $IMA.Cache = {};
-    })(typeof window !== 'undefined' && window !== null ? window : global);
-    </script>",
-  "$RevivalSettings": "<script id="ima-revival-settings">(function (root) {
-      root.$Debug = true;
-      root.$IMA = root.$IMA || {};
-      $IMA.SPA = false;
-      $IMA.$PublicPath = "";
-      $IMA.$Language = "en";
-      $IMA.$Env = "undefined";
-      $IMA.$Debug = true;
-      $IMA.$Version = "undefined";
-      $IMA.$App = undefined;
-      $IMA.$Protocol = "undefined";
-      $IMA.$Host = "undefined";
-      $IMA.$Path = "undefined";
-      $IMA.$Root = "undefined";
-      $IMA.$LanguagePartPath = "undefined";
-    })(typeof window !== 'undefined' && window !== null ? window : global);
-    </script>",
-  "$Runner": "<script id="ima-runner">runner#{source}</script>",
-  "$Scripts": "<script id="ima-revival-settings">(function (root) {
-      root.$Debug = true;
-      root.$IMA = root.$IMA || {};
-      $IMA.SPA = false;
-      $IMA.$PublicPath = "";
-      $IMA.$Language = "en";
-      $IMA.$Env = "undefined";
-      $IMA.$Debug = true;
-      $IMA.$Version = "undefined";
-      $IMA.$App = undefined;
-      $IMA.$Protocol = "undefined";
-      $IMA.$Host = "undefined";
-      $IMA.$Path = "undefined";
-      $IMA.$Root = "undefined";
-      $IMA.$LanguagePartPath = "undefined";
-    })(typeof window !== 'undefined' && window !== null ? window : global);
-    </script><script id="ima-runner">runner#{source}</script><script id="ima-revival-cache">(function (root) {
-      root.$IMA = root.$IMA || {};
-      $IMA.Cache = {};
-    })(typeof window !== 'undefined' && window !== null ? window : global);
-    </script>",
-  "$Source": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
-  "$Styles": "<link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
   "_": {
     "manifest": {
       "assets": {
@@ -673,7 +328,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       },
       "publicPath": "/",
     },
-    "sourceScripts": {
+    "scripts": {
       "esScripts": [
         [
           "/static/js.es/app.client.2106a34c6b8bbad8.js",
@@ -721,7 +376,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
         ],
       ],
     },
-    "sourceStyles": [
+    "styles": [
       [
         "/static/css/app.d0ad44d05f82db5f.css",
         {
@@ -731,6 +386,8 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       ],
     ],
   },
+  "meta": "",
+  "resources": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
   "revivalCache": "<script id="ima-revival-cache">(function (root) {
       root.$IMA = root.$IMA || {};
       $IMA.Cache = {};
@@ -741,6 +398,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;
@@ -753,9 +411,8 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
     </script>",
-  "runner": "<script id="ima-runner">runner#{source}</script>",
-  "source": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
-  "styles": "<link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
+  "runner": "<script id="ima-runner">runner#{resources}</script>",
+  "styles": "<link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
 }
 `;
 
@@ -765,6 +422,7 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;
@@ -780,11 +438,12 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
 `;
 
 exports[`responseUtilsFactory processContent should interpolate revival scripts into page content 1`] = `
-"<html><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-settings">(function (root) {
+"<html><link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;
       $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-UUID";
       $IMA.$Language = "en";
       $IMA.$Env = "undefined";
       $IMA.$Debug = true;

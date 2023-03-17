@@ -1,11 +1,11 @@
-import Storage from './Storage';
+import { Storage } from './Storage';
 
 /**
  * A specialization of the `link MapStorage` storage mimicking the native
  * `WeakMap` using its internal garbage collector used once the size of
  * the storage reaches the configured threshold.
  */
-export default class WeakMapStorage<V = object> extends Storage<V> {
+export class WeakMapStorage<V = object> extends Storage<V> {
   /**
    * The time-to-live of a storage entry in milliseconds.
    */

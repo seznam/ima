@@ -7,6 +7,7 @@ module.exports = {
     '**/docs/**',
     '**/.docusaurus/**',
     '**/coverage/**',
+    'packages/create-ima-app/**/.eslintrc.js',
     'packages/create-ima-app/examples/todos/assets/**',
   ],
   extends: [
@@ -16,6 +17,7 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
+    'plugin:import/recommended',
   ],
   rules: {
     'no-console': [
@@ -63,10 +65,61 @@ module.exports = {
 
     // React plugin overrides
     'react/prop-types': 'off',
+
+    // Import plugin
+    'import/no-unresolved': [
+      'warn',
+      {
+        ignore: [
+          '^@\\/', // ignore @/* aliases
+          '@(docusaurus|theme)',
+        ],
+      },
+    ],
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal'],
+        pathGroups: [
+          {
+            pattern: '{preact|react|svelte|docusaurus|theme}{/**,**}',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '@/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
+            group: 'object',
+            patternOptions: { matchBase: true },
+            position: 'after',
+          },
+        ],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
   settings: {
     react: {
       version: 'detect',
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.mjs', '.json'],
+      },
+      typescript: {
+        project: './packages/*/tsconfig.json',
+      },
     },
   },
   parser: '@babel/eslint-parser',
@@ -87,82 +140,21 @@ module.exports = {
     $IMA: true,
   },
   overrides: [
-    // TODO IMA@18 Enable repo-wide when merged to master
-    // Import plugin
-    {
-      files: [
-        'website/**',
-        'packages/cli/**',
-        'packages/plugin-cli/**',
-        'packages/devtools/**',
-        'packages/devtools-scripts/**',
-        'packages/hmr-client/**',
-        'packages/error-overlay/**',
-        'packages/dev-utils/**',
-        'packages/react-page-renderer/**',
-      ],
-      extends: ['plugin:import/recommended'],
-      rules: {
-        'import/no-unresolved': [
-          'warn',
-          {
-            ignore: [
-              '^@\\/', // ignore @/* aliases
-              '@(docusaurus|theme)',
-            ],
-          },
-        ],
-        'import/order': [
-          'error',
-          {
-            groups: ['builtin', 'external', 'internal'],
-            pathGroups: [
-              {
-                pattern: '{preact|react|svelte|docusaurus|theme}{/**,**}',
-                group: 'external',
-                position: 'before',
-              },
-              {
-                pattern: '@/**',
-                group: 'internal',
-                position: 'after',
-              },
-              {
-                pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
-                group: 'object',
-                patternOptions: { matchBase: true },
-                position: 'after',
-              },
-            ],
-            'newlines-between': 'always',
-            alphabetize: {
-              order: 'asc',
-              caseInsensitive: true,
-            },
-          },
-        ],
-      },
-      settings: {
-        'import/resolver': {
-          node: {
-            extensions: ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.json'],
-          },
-        },
-      },
-    },
     // Typescript support
     {
       files: ['**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
       },
       extends: ['plugin:@typescript-eslint/recommended'],
+      plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
-          { 'ts-expect-error': 'allow-with-description' },
+          { 'ts-expect-error': 'off' },
         ],
         '@typescript-eslint/no-unused-vars': [
           'error',
@@ -178,6 +170,14 @@ module.exports = {
           { allowDeclarations: true },
         ],
       },
+    },
+    // Type-checkd Typescript support
+    // TODO gradually enable everywhere
+    {
+      files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
+      extends: [
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
     },
     // Website/docs overrides
     {

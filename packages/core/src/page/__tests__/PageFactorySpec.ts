@@ -1,12 +1,14 @@
-import PageFactory from '../PageFactory';
-import ObjectContainer from '../../ObjectContainer';
-import ns from '../../Namespace';
-import AbstractController from '../../controller/AbstractController';
-import Extension, { IExtension } from '../../extension/Extension';
+import { AbstractController } from '../../controller/AbstractController';
+import { Extension, IExtension } from '../../extension/Extension';
+import { ns } from '../../Namespace';
+import { ObjectContainer } from '../../ObjectContainer';
+import { RouteOptions } from '../../router/Router';
+import { PageFactory } from '../PageFactory';
 
 describe('ima.core.PageFactory', () => {
   let oc: ObjectContainer;
   let pageFactory: PageFactory;
+  let routeOptions: RouteOptions;
 
   const namespacePathUnit = 'test.unit';
   ns.namespace(namespacePathUnit);
@@ -64,12 +66,21 @@ describe('ima.core.PageFactory', () => {
   beforeEach(() => {
     oc = new ObjectContainer(ns);
     pageFactory = new PageFactory(oc);
+    routeOptions = {
+      autoScroll: true,
+      documentView: null,
+      managedRootView: null,
+      onlyUpdate: false,
+      viewAdapter: null,
+      middlewares: [],
+    };
   });
 
   describe('createController method', () => {
     it('should create controller with extension', () => {
       const controller = pageFactory.createController(
-        ClassConstructorWithExtensions
+        ClassConstructorWithExtensions,
+        routeOptions
       );
 
       expect(controller.getExtensions()).toHaveLength(1);
@@ -80,6 +91,7 @@ describe('ima.core.PageFactory', () => {
 
     it('should create controller with extension in routes', () => {
       const controller = pageFactory.createController(ClassConstructor, {
+        ...routeOptions,
         extensions: [MockExtension2],
       });
 
@@ -92,7 +104,10 @@ describe('ima.core.PageFactory', () => {
     it('should create controller with own extension and extension in route', () => {
       const controller = pageFactory.createController(
         ClassConstructorWithExtensions,
-        { extensions: [MockExtension2] }
+        {
+          ...routeOptions,
+          extensions: [MockExtension2],
+        }
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
@@ -111,7 +126,8 @@ describe('ima.core.PageFactory', () => {
 
       ClassConstructorWithExtensions.extensionsTest = ['...$mockedExtensions'];
       const controller = pageFactory.createController(
-        ClassConstructorWithExtensions
+        ClassConstructorWithExtensions,
+        routeOptions
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
@@ -126,6 +142,7 @@ describe('ima.core.PageFactory', () => {
       oc.constant('$mockedExtensions', [MockExtension, MockExtension2]);
 
       const controller = pageFactory.createController(ClassConstructor, {
+        ...routeOptions,
         extensions: ['...$mockedExtensions'],
       });
 
@@ -141,7 +158,8 @@ describe('ima.core.PageFactory', () => {
 
       ClassConstructorWithExtensions.extensionsTest = extensions;
       const controller = pageFactory.createController(
-        ClassConstructorWithExtensions
+        ClassConstructorWithExtensions,
+        routeOptions
       );
 
       expect(controller.getExtensions()).toHaveLength(2);
@@ -154,6 +172,7 @@ describe('ima.core.PageFactory', () => {
       const extensions = [MockExtension, MockExtension2];
 
       const controller = pageFactory.createController(ClassConstructor, {
+        ...routeOptions,
         extensions,
       });
 
@@ -167,7 +186,10 @@ describe('ima.core.PageFactory', () => {
 
       ClassConstructorWithExtensions.extensionsTest = ['$mockedExtensions'];
       expect(() =>
-        pageFactory.createController(ClassConstructorWithExtensions)
+        pageFactory.createController(
+          ClassConstructorWithExtensions,
+          routeOptions
+        )
       ).toThrow(
         'ima.core.AbstractController:addExtension: Expected instance of an extension, got function.'
       );

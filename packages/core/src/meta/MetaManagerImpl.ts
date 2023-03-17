@@ -1,13 +1,18 @@
-import MetaManager from './MetaManager';
+import {
+  MetaManager,
+  MetaAttributes,
+  MetaManagerRecord,
+  MetaValue,
+} from './MetaManager';
 
 /**
  * Default implementation of the {@link MetaManager} interface.
  */
-export default class MetaManagerImpl extends MetaManager {
+export class MetaManagerImpl extends MetaManager {
   protected _title: string;
-  protected _metaName: Map<string, string>;
-  protected _metaProperty: Map<string, string>;
-  protected _link: Map<string, string>;
+  protected _metaName: Map<string, MetaManagerRecord<'content'>>;
+  protected _metaProperty: Map<string, MetaManagerRecord<'property'>>;
+  protected _link: Map<string, MetaManagerRecord<'href'>>;
 
   static get $dependencies() {
     return [];
@@ -43,77 +48,133 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setTitle(title: string) {
+  setTitle(title: string): MetaManager {
     this._title = title;
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getTitle() {
+  getTitle(): string {
     return this._title;
   }
 
   /**
    * @inheritDoc
    */
-  setMetaName(name: string, value: string) {
-    this._metaName.set(name, value);
+  setMetaName(
+    name: string,
+    content: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
+    this._metaName.set(name, { content, ...attr });
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getMetaName(name: string) {
-    return this._metaName.get(name) || '';
+  getMetaName(name: string): MetaManagerRecord<'content'> {
+    return this._metaName.get(name) || super.getMetaName(name);
   }
 
   /**
    * @inheritDoc
    */
-  getMetaNames() {
+  getMetaNames(): string[] {
     return Array.from(this._metaName.keys());
   }
 
   /**
    * @inheritDoc
    */
-  setMetaProperty(name: string, value: string) {
-    this._metaProperty.set(name, value);
+  getMetaNamesIterator(): IterableIterator<
+    [string, MetaManagerRecord<'content'>]
+  > {
+    return this._metaName.entries();
   }
 
   /**
    * @inheritDoc
    */
-  getMetaProperty(name: string) {
-    return this._metaProperty.get(name) || '';
+  setMetaProperty(
+    name: string,
+    property: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
+    this._metaProperty.set(name, { property, ...attr });
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getMetaProperties() {
+  getMetaProperty(name: string): MetaManagerRecord<'property'> {
+    return this._metaProperty.get(name) || super.getMetaProperty(name);
+  }
+
+  /**
+   * @inheritDoc
+   */
+
+  getMetaProperties(): string[] {
     return Array.from(this._metaProperty.keys());
   }
 
   /**
    * @inheritDoc
    */
-  setLink(relation: string, value: string) {
-    this._link.set(relation, value);
+  getMetaPropertiesIterator(): IterableIterator<
+    [string, MetaManagerRecord<'property'>]
+  > {
+    return this._metaProperty.entries();
   }
 
   /**
    * @inheritDoc
    */
-  getLink(relation: string) {
-    return this._link.get(relation) || '';
+  setLink(
+    relation: string,
+    href: MetaValue,
+    attr?: MetaAttributes
+  ): MetaManager {
+    this._link.set(relation, { href, ...attr });
+
+    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getLinks() {
+  getLink(relation: string): MetaManagerRecord<'href'> {
+    return this._link.get(relation) || super.getLink(relation);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getLinks(): string[] {
     return Array.from(this._link.keys());
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getLinksIterator(): IterableIterator<[string, MetaManagerRecord<'href'>]> {
+    return this._link.entries();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  clearMetaAttributes(): void {
+    this._title = '';
+    this._metaProperty.clear();
+    this._metaName.clear();
+    this._link.clear();
   }
 }

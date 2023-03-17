@@ -1,4 +1,4 @@
-import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
+import { extractSourceMappingUrl } from '@ima/dev-utils/sourceMapUtils';
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js';
 
 interface SourceStorageEntry {

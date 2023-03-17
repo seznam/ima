@@ -1,14 +1,16 @@
-import { Bootstrap } from '.';
-import ns, { Namespace } from './Namespace';
-import { Module } from './Bootstrap';
+import { PluginConfigFunctions, Bootstrap } from './Bootstrap';
+import { ns, Namespace } from './Namespace';
 
 /**
  * Plugin loader utility used to register external IMA.js plugins. This
  * adds ability for external packages to automatically hook into several
  * IMA.js application parts and automatically bootstrap certain settings.
  */
-class PluginLoader {
-  protected _plugins: Record<string, { name: string; module: Module }>;
+export class PluginLoader {
+  protected _plugins: Record<
+    string,
+    { name: string; plugin: PluginConfigFunctions }
+  >;
   protected _bootstrap?: Bootstrap;
   /**
    * Initializes the plugin loader.
@@ -52,7 +54,10 @@ class PluginLoader {
    * @param {string} name Plugin name.
    * @param {function} registerFn Plugin initialization function.
    */
-  register(name: string, registerFn: (ns?: Namespace) => Module | undefined) {
+  register(
+    name: string,
+    registerFn: (ns?: Namespace) => PluginConfigFunctions | undefined
+  ) {
     if (typeof name !== 'string') {
       throw new Error(
         `ima.core.pluginLoader:register moduleName is not a string, '${typeof name}' was given.`
@@ -65,14 +70,14 @@ class PluginLoader {
       );
     }
 
-    const module = registerFn(ns);
+    const plugin = registerFn(ns);
 
     // Bootstrap plugin if imported dynamically (only if it's not already loaded)
     if (this._bootstrap && !this._plugins[name]) {
-      this._bootstrap.initPlugin(name, module);
+      this._bootstrap.initPlugin(name, plugin);
     }
 
-    this._plugins[name] = { name, module: module || {} };
+    this._plugins[name] = { name, plugin: plugin || {} };
   }
 
   /**
@@ -85,5 +90,4 @@ class PluginLoader {
   }
 }
 
-export { PluginLoader };
-export default new PluginLoader();
+export const pluginLoader = new PluginLoader();

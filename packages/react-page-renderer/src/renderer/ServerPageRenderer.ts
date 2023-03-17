@@ -1,5 +1,5 @@
 /* @if client **
-export default class ServerPageRenderer {};
+export class ServerPageRenderer {};
 /* @else */
 import type {
   UnknownParameters,
@@ -11,15 +11,15 @@ import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
+import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
+import { PageRendererFactory } from './PageRendererFactory';
 import { Settings } from '../types';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
  */
-export default class ServerPageRenderer extends AbstractPageRenderer {
+export class ServerPageRenderer extends AbstractPageRenderer {
   /**
    * Initializes the server-side page renderer.
    *

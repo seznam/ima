@@ -1,17 +1,16 @@
-import { Dictionary, EventBus, Router } from '@ima/core';
 import { ComponentType } from 'react';
 
-import AbstractComponent from './component/AbstractComponent';
-import AbstractPureComponent from './component/AbstractPureComponent';
+import { defaultCssClasses } from './componentHelpers';
 
-export type Settings = {
-  $App: unknown;
-  $Debug: unknown;
-  $Env: unknown;
-  $Host: unknown;
-  $Language: unknown;
-  $LanguagePartPath: unknown;
-  $Path: unknown;
+export interface Settings {
+  [key: string]: unknown;
+  $App: object;
+  $Debug: boolean;
+  $Env: 'prod' | 'dev';
+  $Host: string;
+  $Language: string;
+  $LanguagePartPath: string;
+  $Path: string;
   $Page: {
     $Render: {
       batchResolve?: boolean;
@@ -21,17 +20,14 @@ export type Settings = {
       viewAdapter?: ComponentType;
     };
   };
-  $Protocol: unknown;
-  $Root: unknown;
-  $Version: unknown;
-};
+  $Protocol: string;
+  $Root: string;
+  $Version: string;
+}
 
-export type Utils = {
-  $CssClasses(
-    classRules: string | object,
-    component: AbstractComponent | AbstractPureComponent | ''
-  ): string;
-  $Dictionary: Dictionary;
-  $EventBus: EventBus;
-  $Router: Router;
-};
+declare module '@ima/core' {
+  interface Utils {
+    $Settings: Settings;
+    $CssClasses: typeof defaultCssClasses;
+  }
+}

@@ -1,10 +1,10 @@
+import { CacheEntry } from './CacheEntry';
 import { Dependencies } from '../ObjectContainer';
-import CacheEntry from './CacheEntry';
 
 /**
  * Factory for creating instances of {@link CacheEntry}.
  */
-export default class CacheFactory<V> {
+export class CacheFactory<V> {
   static get $dependencies(): Dependencies {
     return [];
   }

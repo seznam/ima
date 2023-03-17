@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { UnknownParameters } from '../CommonTypes';
+import { UnknownParameters } from '../types';
 
-export type ListenerOptions = {
+export type CaptureOptions = {
   capture?: boolean;
   once?: boolean;
   passive?: boolean;
@@ -14,7 +14,7 @@ export type ListenerOptions = {
  * cross-environment usage of various low-level client-side JavaScript APIs
  * available through various global objects.
  */
-export default abstract class Window {
+export abstract class Window {
   /**
    * @return `true` if invoked at the client side.
    */
@@ -267,13 +267,13 @@ export default abstract class Window {
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
-    useCapture?: boolean | ListenerOptions
+    useCapture?: boolean | CaptureOptions
   ) {
     return;
   }
 
   /**
-   * Deregisters the provided event listener, so it will no longer we
+   * Deregister the provided event listener, so it will no longer we
    * executed when the specified event occurs on the specified event target.
    *
    * The method has no effect if the provided event listener is not
@@ -289,7 +289,7 @@ export default abstract class Window {
     eventTarget: EventTarget,
     event: string,
     listener: (event: Event) => void,
-    useCapture?: boolean | ListenerOptions
+    useCapture?: boolean | CaptureOptions
   ) {
     return;
   }

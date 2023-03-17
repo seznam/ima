@@ -15,7 +15,7 @@ that naturally propagate through the DOM tree representing the tree of your UI
 components.
 
 This is used to notify the parent components of user interaction with
-custom controls in your UI, or to notify the page Controller itself.
+custom controls in your UI, or to notify the page Controller/Extension itself.
 
 The custom events may have any name and carry arbitrary data that are not
 restricted to JSON-serializable values.
@@ -87,18 +87,18 @@ render() {
 }
 ```
 
-Furthermore, the Controllers can easily listen for the events dispatched using
+Furthermore, the Controllers and Extensions can easily listen for the events dispatched using
 the `EventBus` *(unless the propagation of the event is stopped by a component
 half the way)* by declaring event listener methods.
 
-An event listener method is a method of a controller named by the **first-letter
+An event listener method is a method of a controller/extension named by the **first-letter
 capitalized event name with the `on` prefix**, for example the `formSubmitted`
 event can be listened for by defining the `onFormSubmitted()` method on your
 controller.
 
-The first argument passed into the controller's event listener method will be
+The first argument passed into the controller's or extension's event listener method will be
 the event data, **not the event object itself**, as manipulating the event object
-once it reaches the controller is pointless.
+once it reaches the controller/extension is pointless.
 
 ```javascript
 // app/page/article/ArticleController.js
@@ -106,6 +106,28 @@ once it reaches the controller is pointless.
 onExpand({ expandableId }) {
   // Event never reaches this point because we issued
   // event.stopPropagation() in ExpandableWrapper.jsx
+}
+```
+
+You can restrict the controller/extension to specific events by setting the `$name` static field
+on the controller/extension class. Events with this specific prefix are then applied only to
+this controller/extension.
+
+```javascript
+// app/page/article/ArticleController.js
+
+static $name = 'ArticleController';
+
+onExpand({ expandableId }) {
+  // Event never reaches this point because we issued
+  // event.stopPropagation() in ExpandableWrapper.jsx
+}
+
+// app/component/expandable/ExpandLink.jsx
+
+onClick(event) {
+  const { expandableId } = this.props;
+  this.fire('ArticleController.expand', { expandableId });
 }
 ```
 

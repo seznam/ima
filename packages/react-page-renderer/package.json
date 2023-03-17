@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "18.2.0",
+  "version": "19.0.0-rc.5",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -18,8 +18,7 @@
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
   "typedocMain": "./src/index.ts",
   "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/server/index.js",
-  "browser": "./dist/esm/client/index.js",
+  "types": "./dist/esm/client/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/esm/client/index.d.ts",
@@ -43,13 +42,8 @@
         "require": "./dist/cjs/renderer/*.js"
       }
     },
-    "./hook/*": "./dist/hook/*.js",
-    "./*": {
-      "types": "./*.d.ts",
-      "default": "./*.js"
-    }
+    "./hook/*": "./dist/hook/*.js"
   },
-  "types": "./dist/esm/client/index.js",
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
@@ -65,13 +59,13 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@ima/helpers": "^18.0.0",
+    "@ima/helpers": "^19.0.0-rc.2",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
-    "@esmj/emitter": "^0.2.1",
+    "@esmj/emitter": "^0.3.0",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -79,7 +73,7 @@
     "to-mock": "^1.6.2"
   },
   "peerDependencies": {
-    "@ima/core": ">=18.0.0",
+    "@ima/core": ">=19.0.0-rc.0",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

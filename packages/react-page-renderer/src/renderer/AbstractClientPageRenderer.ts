@@ -1,32 +1,29 @@
 /* @if server **
-export default class AbstractClientPageRenderer {};
+export class AbstractClientPageRenderer {};
 /* @else */
 import {
   Controller,
   ControllerDecorator,
   Dispatcher,
-  MetaManager,
   RendererEvents,
   RendererTypes,
   Window,
-} from '@ima/core';
-import type {
-  UnknownParameters,
-  UnknownPromiseParameters,
-  RouteOptions,
+  type UnknownParameters,
+  type UnknownPromiseParameters,
+  type RouteOptions,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
-import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
+import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
+import { PageRendererFactory } from './PageRendererFactory';
 import { Settings } from '../types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  */
-export default abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
+export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   private _hydrated = false;
   private _mounted = this._createMountedPromise();
   /**
@@ -101,9 +98,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
 
           const isViewContainerEmpty =
             !this._viewContainer || !this._viewContainer.children.length;
-
           isViewContainerEmpty && controller.setState(pageState);
-
           controller.setMetaParams(pageState);
 
           isViewContainerEmpty &&
@@ -112,8 +107,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
               pageView,
               routeOptions
             ));
-
-          this._updateMetaAttributes(controller.getMetaManager());
 
           return {
             pageState: controller.getState(),
@@ -147,7 +140,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
         .allPromiseHash(updatedPromises)
         .then(() => {
           controller.setMetaParams(controller.getState());
-          this._updateMetaAttributes(controller.getMetaManager());
 
           return {
             pageState: controller.getState(),
@@ -230,7 +222,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
             [resourceName]: resource,
           });
         })
-        .catch(error => this._handleError(error));
+        .catch(error => this._handleError(error as Error));
     }
   }
 
@@ -259,10 +251,13 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
       callback: IdleRequestCallback,
       options?: IdleRequestOptions | undefined
     ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
+
     if (Window && Window['requestIdleCallback']) {
-      requestIdleCallback = Window.requestIdleCallback;
+      requestIdleCallback = (callback, options) =>
+        Window.requestIdleCallback(callback, options);
     }
-    const handler = (resolve: any) => () => {
+
+    const handler = (resolve: () => void) => () => {
       controller.commitStateTransaction();
 
       if (!hasResourcesLoaded) {
@@ -276,7 +271,7 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     };
 
     controller.beginStateTransaction();
-    const batchPromise = new Promise(resolve => {
+    const batchPromise = new Promise<void>(resolve => {
       requestIdleCallback(handler(resolve), options);
     });
 
@@ -320,7 +315,9 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     if (!this._viewContainer) {
       const errorMessage =
         `ima.core.page.renderer.ClientPageRenderer:_renderPageViewToDOM: ` +
-        `Element with ID "${masterElementId}" was not found in the DOM. ` +
+        `Element with ID "${
+          masterElementId || 'unknown'
+        }" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 
       this._dispatcher.fire(
@@ -369,74 +366,6 @@ export default abstract class AbstractClientPageRenderer extends AbstractPageRen
     }
 
     return { promises, values };
-  }
-
-  /**
-   * Updates the title and the contents of the meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaAttributes(metaManager: MetaManager) {
-    this._window.setTitle(metaManager.getTitle());
-
-    this._updateMetaNameAttributes(metaManager);
-    this._updateMetaPropertyAttributes(metaManager);
-    this._updateMetaLinkAttributes(metaManager);
-  }
-
-  /**
-   * Updates the contents of the generic meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaNameAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaNames()) {
-      const metaTag = this._window.querySelector(
-        `meta[name="${metaTagKey}"]`
-      ) as HTMLMetaElement;
-
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaName(metaTagKey);
-      }
-    }
-  }
-
-  /**
-   * Updates the contents of the specialized meta elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaPropertyAttributes(metaManager: MetaManager) {
-    for (const metaTagKey of metaManager.getMetaProperties()) {
-      const metaTag = this._window.querySelector(
-        `meta[property="${metaTagKey}"]`
-      ) as HTMLMetaElement;
-
-      if (metaTag) {
-        metaTag.content = metaManager.getMetaProperty(metaTagKey);
-      }
-    }
-  }
-
-  /**
-   * Updates the href of the specialized link elements used for SEO.
-   *
-   * @param metaManager meta attributes storage providing the
-   *        new values for page meta elements and title.
-   */
-  private _updateMetaLinkAttributes(metaManager: MetaManager) {
-    for (const linkTagKey of metaManager.getLinks()) {
-      const linkTag = this._window.querySelector(
-        `link[rel="${linkTagKey}"]`
-      ) as HTMLLinkElement;
-
-      if (linkTag && linkTag.href) {
-        linkTag.href = metaManager.getLink(linkTagKey);
-      }
-    }
   }
 }
 /* @endif */

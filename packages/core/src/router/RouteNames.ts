@@ -2,7 +2,7 @@
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
  */
-enum RouteNames {
+export enum RouteNames {
   /**
    * The internal route name used for the "not found" error page (the 4XX
    * HTTP status code error page).
@@ -15,5 +15,3 @@ enum RouteNames {
    */
   ERROR = 'error',
 }
-
-export default RouteNames;

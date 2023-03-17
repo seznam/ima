@@ -1,5 +1,5 @@
-import { CompileError } from '@ima/dev-utils/dist/compileErrorParser';
-import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
+import { CompileError } from '@ima/dev-utils/compileErrorParser';
+import { createSourceFragment } from '@ima/dev-utils/sourceFragment';
 import * as stackTraceParser from 'stacktrace-parser';
 
 import { SourceStorage, StackFrame } from '@/entities';

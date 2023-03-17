@@ -1,11 +1,11 @@
-import Dispatcher from '../../event/Dispatcher';
-import PageManager from '../../page/manager/PageManager';
-import Request from '../Request';
-import Response from '../Response';
-import RouteFactory from '../RouteFactory';
-import ServerRouter from '../ServerRouter';
-
 import { toMockedInstance } from 'to-mock';
+
+import { Dispatcher } from '../../event/Dispatcher';
+import { PageManager } from '../../page/manager/PageManager';
+import { Request } from '../Request';
+import { Response } from '../Response';
+import { RouteFactory } from '../RouteFactory';
+import { ServerRouter } from '../ServerRouter';
 
 describe('ima.core.router.ServerRouter', () => {
   let router: ServerRouter;
@@ -31,7 +31,8 @@ describe('ima.core.router.ServerRouter', () => {
       routeFactory,
       dispatcher,
       request,
-      response
+      response,
+      30000
     );
     router.init(routerConfig);
   });

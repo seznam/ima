@@ -1,9 +1,10 @@
-import Cache from './Cache';
-import CacheEntry, { SerializedCacheEntry } from './CacheEntry';
-import CacheFactory from './CacheFactory';
-import Storage from '../storage/Storage';
 import * as Helpers from '@ima/helpers';
-import { UnknownParameters } from '../CommonTypes';
+
+import { Cache } from './Cache';
+import { CacheEntry, SerializedCacheEntry } from './CacheEntry';
+import { CacheFactory } from './CacheFactory';
+import { Storage } from '../storage/Storage';
+import { UnknownParameters } from '../types';
 
 /**
  * Configurable generic implementation of the {@link Cache} interface.
@@ -17,7 +18,7 @@ import { UnknownParameters } from '../CommonTypes';
  *   cache.set('model.articles', articles, 60 * 60 * 1000);
  * }
  */
-export default class CacheImpl<V> extends Cache<V> {
+export class CacheImpl<V> extends Cache<V> {
   protected _cache: Storage<CacheEntry<V>>;
   protected _factory: CacheFactory<V>;
   protected _Helper: typeof Helpers;

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import GenericError from '../error/GenericError';
-import Execution, { Job } from './Execution';
+import { Execution, ExecutionJob } from './Execution';
+import { GenericError } from '../error/GenericError';
 
 const CLASS_REGEX = /^\s*class\b/;
 
@@ -9,10 +9,10 @@ const CLASS_REGEX = /^\s*class\b/;
  * Basic implementation of the {@link Execution} interface. Provides the basic
  * functionality for appending and validating jobs.
  */
-export default abstract class AbstractExecution extends Execution {
-  protected _jobs: Job[];
+export abstract class AbstractExecution extends Execution {
+  protected _jobs: ExecutionJob[];
 
-  constructor(jobs: Job[] = []) {
+  constructor(jobs: ExecutionJob[] = []) {
     super();
 
     this._jobs = jobs.filter(this._validateJob);
@@ -21,7 +21,7 @@ export default abstract class AbstractExecution extends Execution {
   /**
    * @inheritDoc
    */
-  append(jobs: Job[] | Job) {
+  append(jobs: ExecutionJob[] | ExecutionJob) {
     if (!Array.isArray(jobs)) {
       jobs = [jobs];
     }
@@ -35,14 +35,15 @@ export default abstract class AbstractExecution extends Execution {
   execute(...args: unknown[]): Promise<unknown> {
     throw new GenericError(
       'The ima.core.execution.AbstractExecution.execute method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { ...args }
     );
   }
 
   /**
    * Return `true` if the given job can be executed
    */
-  _validateJob(job: Job): boolean {
+  _validateJob(job: ExecutionJob): boolean {
     if (typeof job === 'function') {
       if (!CLASS_REGEX.test(job.toString())) {
         return true;

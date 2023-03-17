@@ -1,5 +1,36 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Patch Changes
+
+- 1bd52f08c: Fixed an issue where if application produces error before the error-ovleray is initialize, it is not displayed in the overlay.
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- 0526618ad: Reduced number of levels that are expanded by default in ErrorOverlay error params view
+- 0526618ad: Updated dependencies
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+## 19.0.0-rc.1
+
+### Patch Changes
+
+- 95af45a42: Fixed issue when displaying error params with circular dependencies
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
 ## 18.0.0
 
 ### Major Changes

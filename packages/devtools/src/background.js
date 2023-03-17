@@ -1,5 +1,6 @@
-import { TabConnection } from '@/models';
 import { getSettings, extractDomainFromUrl } from '@/utils';
+
+import { TabConnection } from '@/models';
 
 const PORT_NAMES = ['panel', 'contentScript', 'devtools', 'popup'];
 const connections = {};

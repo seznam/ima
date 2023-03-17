@@ -1,5 +1,23 @@
 # Change Log
 
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 95af45a42: Package now uses exports field for package exports definition
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
 ## 18.0.1
 
 ### Patch Changes

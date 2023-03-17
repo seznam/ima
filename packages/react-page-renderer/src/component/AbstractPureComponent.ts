@@ -1,13 +1,17 @@
+import type { Utils } from '@ima/core';
 import { PureComponent, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
-import PageContext from '../PageContext';
-import { Utils } from '../types';
+import { PageContext } from '../PageContext';
 
 /**
  * The base class for all view components.
  */
-export default abstract class AbstractPureComponent extends PureComponent {
+export abstract class AbstractPureComponent<
+  P = unknown,
+  S = unknown,
+  SS = unknown
+> extends PureComponent<P, S, SS> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;
 
@@ -24,7 +28,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
       this._utils = helpers.getUtils(this.props, this.context);
     }
 
-    return this._utils as Utils;
+    return this._utils!;
   }
 
   /**
@@ -37,7 +41,10 @@ export default abstract class AbstractPureComponent extends PureComponent {
    *        the placeholders in the localization phrase.
    * @return Localized phrase.
    */
-  localize(key: string, params: { [key: string]: string | number } = {}) {
+  localize(
+    key: string,
+    params: { [key: string]: string | number } = {}
+  ): string {
     return helpers.localize(this, key, params);
   }
 
@@ -52,7 +59,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
    *        extraneous parameters to add to the URL as a query string.
    * @return The generated URL.
    */
-  link(name: string, params: { [key: string]: string | number } = {}) {
+  link(name: string, params: { [key: string]: string } = {}): string {
     return helpers.link(this, name, params);
   }
 
@@ -79,7 +86,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
   cssClasses(
     classRules: string | { [key: string]: boolean },
     includeComponentClassName = false
-  ) {
+  ): string {
     return helpers.cssClasses(this, classRules, includeComponentClassName);
   }
 
@@ -87,11 +94,11 @@ export default abstract class AbstractPureComponent extends PureComponent {
    * Creates and sends a new IMA.js DOM custom event from this component.
    *
    * @param eventName The name of the event.
-   * @param target EventTarget compatible node.
+   * @param eventTarget EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventName: string, target: EventTarget, data = undefined) {
-    helpers.fire(this, eventName, target, data);
+  fire(eventTarget: EventTarget, eventName: string, data = undefined): void {
+    helpers.fire(this, eventTarget, eventName, data);
   }
 
   /**
@@ -108,7 +115,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
     eventTarget: EventTarget,
     eventName: string,
     listener: (event: Event) => void
-  ) {
+  ): void {
     helpers.listen(this, eventTarget, eventName, listener);
   }
 
@@ -125,7 +132,7 @@ export default abstract class AbstractPureComponent extends PureComponent {
     eventTarget: EventTarget,
     eventName: string,
     listener: (event: Event) => void
-  ) {
+  ): void {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }

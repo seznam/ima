@@ -1,22 +1,22 @@
 /* @if server **
-export default class ClientPageManager {};
+export class ClientPageManager {};
 /* @else */
-import AbstractPageManager from './AbstractPageManager';
-import PageFactory from '../PageFactory';
-import PageRenderer from '../renderer/PageRenderer';
-import PageStateManager from '../state/PageStateManager';
-import EventBus from '../../event/EventBus';
-import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import ImaWindow from '../../window/Window';
-import Controller from '../../controller/Controller';
-import { UnknownParameters } from '../../CommonTypes';
-import { EventHandler } from '../PageTypes';
+import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
+import { Controller } from '../../controller/Controller';
+import { EventBus, EventBusEventHandler } from '../../event/EventBus';
+import { Extension } from '../../extension/Extension';
+import { UnknownParameters } from '../../types';
+import { Window as ImaWindow } from '../../window/Window';
+import { PageHandlerRegistry } from '../handler/PageHandlerRegistry';
+import { PageFactory } from '../PageFactory';
+import { PageRenderer } from '../renderer/PageRenderer';
+import { PageStateManager } from '../state/PageStateManager';
 
 /**
  * Page manager for controller on the client side.
  */
-export default class ClientPageManager extends AbstractPageManager {
+export class ClientPageManager extends AbstractPageManager {
   /**
    * The utility for manipulating the global context and global
    * client-side-specific APIs.
@@ -143,14 +143,14 @@ export default class ClientPageManager extends AbstractPageManager {
    * @param event The encountered event bus DOM event.
    */
   _onCustomEventHandler(event: CustomEvent) {
-    const { method, data, eventName } = this._parseCustomEvent(event);
+    const { prefix, method, data, eventName } = this._parseCustomEvent(event);
     const controllerInstance = this._managedPage.controllerInstance;
 
     if (controllerInstance) {
-      let handled = this._handleEventWithController(method, data);
+      let handled = this._handleEventWithController(prefix, method, data);
 
       if (!handled) {
-        handled = this._handleEventWithExtensions(method, data);
+        handled = this._handleEventWithExtensions(prefix, method, data);
       }
 
       if ($Debug) {
@@ -181,11 +181,16 @@ export default class ClientPageManager extends AbstractPageManager {
    */
   _parseCustomEvent(event: CustomEvent) {
     const eventName: string = event.detail.eventName;
-    const method =
-      'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
+    const splitEventName = eventName.split('.');
+
+    let method = splitEventName.pop() as string;
+    method = 'on' + method.charAt(0).toUpperCase() + eventName.slice(1);
+
+    const prefix = splitEventName.pop() ?? '';
+
     const data = event.detail.data;
 
-    return { method, data, eventName };
+    return { prefix, method, data, eventName };
   }
 
   /**
@@ -201,11 +206,22 @@ export default class ClientPageManager extends AbstractPageManager {
    *         controller, `false` if the controller does not have a
    *         method for processing the event.
    */
-  _handleEventWithController(method: string, data: UnknownParameters) {
-    const controllerInstance = this._managedPage.controllerInstance;
+  _handleEventWithController(
+    prefix: string,
+    method: string,
+    data: UnknownParameters
+  ) {
+    const controllerInstance = this._managedPage
+      .controllerInstance as Controller;
 
-    if (typeof (controllerInstance as Controller)[method] === 'function') {
-      ((controllerInstance as Controller)[method] as EventHandler)(data);
+    if (
+      ((controllerInstance?.constructor as typeof Controller).$name ?? '') ===
+        prefix &&
+      typeof controllerInstance[method] === 'function'
+    ) {
+      ((controllerInstance as Controller)[method] as EventBusEventHandler)(
+        data
+      );
 
       return true;
     }
@@ -226,13 +242,20 @@ export default class ClientPageManager extends AbstractPageManager {
    *         the controller's extensions, `false` if none of the
    *         controller's extensions has a method for processing the event.
    */
-  _handleEventWithExtensions(method: string, data: UnknownParameters) {
+  _handleEventWithExtensions(
+    prefix: string,
+    method: string,
+    data: UnknownParameters
+  ) {
     const controllerInstance = this._managedPage.controllerInstance;
     const extensions = (controllerInstance as Controller).getExtensions();
 
     for (const extension of extensions) {
-      if (typeof extension[method] === 'function') {
-        (extension[method] as EventHandler)(data);
+      if (
+        ((extension.constructor as typeof Extension).$name ?? '') === prefix &&
+        typeof extension[method] === 'function'
+      ) {
+        (extension[method] as EventBusEventHandler)(data);
 
         return true;
       }

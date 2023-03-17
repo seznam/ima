@@ -1,21 +1,21 @@
-import { ManagedPage, PageAction } from '../PageTypes';
+import { PageManager, ManageArgs } from './PageManager';
+import { AbstractController } from '../../controller/AbstractController';
+import { Controller, IController } from '../../controller/Controller';
+import { ControllerDecorator } from '../../controller/ControllerDecorator';
+import { Extension } from '../../extension/Extension';
+import { AbstractRoute } from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
-import { StringParameters, UnknownParameters } from '../../CommonTypes';
-import AbstractController from '../../controller/AbstractController';
-import AbstractRoute from '../../router/AbstractRoute';
-import ControllerDecorator from '../../controller/ControllerDecorator';
-import PageFactory from '../PageFactory';
-import PageHandlerRegistry from '../handler/PageHandlerRegistry';
-import PageManager, { ManageArgs } from './PageManager';
-import PageRenderer from '../renderer/PageRenderer';
-import PageStateManager from '../state/PageStateManager';
-import Extension from '../../extension/Extension';
-import Controller, { IController } from '../../controller/Controller';
+import { StringParameters, UnknownParameters } from '../../types';
+import { PageHandlerRegistry } from '../handler/PageHandlerRegistry';
+import { PageFactory } from '../PageFactory';
+import { ManagedPage, PageAction } from '../PageTypes';
+import { PageRenderer } from '../renderer/PageRenderer';
+import { PageStateManager } from '../state/PageStateManager';
 
 /**
  * Page manager for controller.
  */
-export default abstract class AbstractPageManager extends PageManager {
+export abstract class AbstractPageManager extends PageManager {
   /**
    * Snapshot of the previously managed page before it was replaced with
    * a new one
@@ -165,7 +165,7 @@ export default abstract class AbstractPageManager extends PageManager {
   protected _constructManagedPageValue(
     controller: IController,
     view: unknown,
-    route: AbstractRoute,
+    route: InstanceType<typeof AbstractRoute>,
     options: RouteOptions,
     params: UnknownParameters,
     controllerInstance: AbstractController,

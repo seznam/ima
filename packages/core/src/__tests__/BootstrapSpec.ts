@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import Bootstrap, { Module, Config } from '../Bootstrap';
-import ObjectContainer from '../ObjectContainer';
-import namespace from '../Namespace';
-import { UnknownParameters } from '../CommonTypes';
+import { Bootstrap, PluginConfigFunctions, Config } from '../Bootstrap';
+import { ns } from '../Namespace';
+import { ObjectContainer } from '../ObjectContainer';
+import { UnknownParameters } from '../types';
 
 describe('bootstrap', () => {
   let bootstrap: Bootstrap;
   let objectContainer: ObjectContainer;
   let environments: UnknownParameters;
-  let plugin: Module;
+  let plugin: PluginConfigFunctions;
   let bootConfig: Config;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('bootstrap', () => {
       settings: {
         $Env: 'prod',
       },
-      plugins: [{ name: 'test-plugin', module: plugin }],
+      plugins: [{ name: 'test-plugin', plugin: plugin }],
       initSettings: () => environments,
       initBindIma: () => {},
       initBindApp: () => {},
@@ -43,7 +43,7 @@ describe('bootstrap', () => {
       services: {},
     };
 
-    objectContainer = new ObjectContainer(namespace);
+    objectContainer = new ObjectContainer(ns);
     bootstrap = new Bootstrap(objectContainer);
 
     bootstrap['_config'] = bootConfig;
@@ -77,7 +77,7 @@ describe('bootstrap', () => {
   });
 
   describe('initPlugin method', () => {
-    let module: Module;
+    let plugin: PluginConfigFunctions;
 
     beforeEach(() => {
       jest.spyOn(bootstrap, '_initPluginSettings').mockImplementation();
@@ -85,26 +85,26 @@ describe('bootstrap', () => {
       jest.spyOn(bootstrap, '_initPluginServices').mockImplementation();
 
       // @ts-ignore
-      module = jest.fn(() => {});
-      bootstrap.initPlugin('plugin-name', module);
+      plugin = jest.fn(() => {});
+      bootstrap.initPlugin('plugin-name', plugin);
     });
 
     it('should initialize plugin settings', () => {
       expect(bootstrap._initPluginSettings).toHaveBeenCalledWith(
         'plugin-name',
-        module
+        plugin
       );
     });
 
     it('should bind plugin', () => {
       expect(bootstrap._bindPluginDependencies).toHaveBeenCalledWith(
         'plugin-name',
-        module
+        plugin
       );
     });
 
     it('should initialize plugin services', () => {
-      expect(bootstrap._initPluginServices).toHaveBeenCalledWith(module);
+      expect(bootstrap._initPluginServices).toHaveBeenCalledWith(plugin);
     });
   });
 
@@ -131,7 +131,7 @@ describe('bootstrap', () => {
       bootstrap._initPluginSettings('plugin-name', plugin);
 
       expect(plugin.initSettings).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         { $Env: 'prod' },
         true
@@ -145,7 +145,7 @@ describe('bootstrap', () => {
       });
     });
 
-    it('should ignore invalid module interfaces', () => {
+    it('should ignore invalid plugin interfaces', () => {
       expect(bootstrap['_config'].bind).toStrictEqual({});
 
       // @ts-ignore
@@ -197,7 +197,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(bootConfig.initBindIma).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         {},
         'ima.core'
@@ -208,7 +208,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(plugin.initBind).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         {},
         false
@@ -221,7 +221,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(bootConfig.initBindApp).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         {},
         'app'
@@ -247,7 +247,7 @@ describe('bootstrap', () => {
       bootstrap._bindPluginDependencies('plugin-name', plugin);
 
       expect(plugin.initBind).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         {},
         true,
@@ -279,7 +279,7 @@ describe('bootstrap', () => {
       bootstrap._initRoutes();
 
       expect(bootConfig.initRoutes).toHaveBeenCalledWith(
-        namespace,
+        ns,
         objectContainer,
         bootConfig.routes,
         router

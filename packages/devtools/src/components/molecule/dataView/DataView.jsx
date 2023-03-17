@@ -1,8 +1,8 @@
+import { EntryType } from '@/utils';
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 import { JsonView } from '@/components/atom';
-import { EntryType } from '@/utils';
 
 import styles from './dataView.module.less';
 

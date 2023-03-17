@@ -1,5 +1,73 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- dc8d4b7ea: Fixed once hook parametr type
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/helpers@19.0.0-rc.1
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 28660d902: Fire method arguments are now in correct order.
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- Updated dependencies [2f789cdae]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [464d307ae]
+- Updated dependencies [961d65688]
+- Updated dependencies [c0fe68ef3]
+  - @ima/core@19.0.0-rc.0
+  - @ima/helpers@19.0.0-rc.0
+
 ## 18.2.0
 
 ### Minor Changes

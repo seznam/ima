@@ -1,9 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { URLSearchParams } from 'url';
 
-import { formatError, ParsedErrorData } from '@ima/dev-utils/dist/cliUtils';
-import { logger } from '@ima/dev-utils/dist/logger';
+import { formatError, ParsedErrorData } from '@ima/dev-utils/cliUtils';
+import { logger } from '@ima/dev-utils/logger';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { ParserConfig } from '@swc/core';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -69,15 +68,15 @@ export default async (
 
   // es2018 targets (taken from 'browserslist-generator')
   const targets = [
-    'and_chr >= 63',
-    'chrome >= 63',
+    'and_chr >= 66',
+    'chrome >= 66',
     'and_ff >= 58',
     'android >= 103',
     'edge >= 79',
-    'samsung >= 8.2',
+    'samsung >= 9.2',
     'safari >= 11.1',
     'ios_saf >= 11.4',
-    'opera >= 50',
+    'opera >= 53',
     'firefox >= 58',
   ];
 
@@ -136,8 +135,18 @@ export default async (
    * and optional less loaders.
    */
   const getStyleLoaders = async (
-    useLessLoader = false
+    useCssModules = false
   ): Promise<RuleSetUseItem[]> => {
+    /**
+     * Return null-loader in contexts that don't process styles while
+     * not using css-modules, since we don't need to compile the styles at all.
+     * This improves build performance significantly in applications with
+     * large amounts of style files.
+     */
+    if (!useCssModules && !processCss) {
+      return [{ loader: 'null-loader' }];
+    }
+
     return [
       ...(!imaConfig.experiments?.css
         ? [
@@ -147,13 +156,14 @@ export default async (
             {
               loader: require.resolve('css-loader'),
               options: {
-                modules: {
-                  auto: true,
-                  exportOnlyLocals: !processCss,
-                  localIdentName: isDevEnv
-                    ? '[path][name]__[local]--[hash:base64:5]'
-                    : '[hash:base64]',
-                },
+                ...(useCssModules && {
+                  modules: {
+                    exportOnlyLocals: !processCss,
+                    localIdentName: isDevEnv
+                      ? '[path][name]__[local]--[hash:base64:5]'
+                      : '[hash:base64]',
+                  },
+                }),
                 sourceMap: useSourceMaps,
               },
             },
@@ -189,7 +199,7 @@ export default async (
           ctx
         ),
       },
-      useLessLoader && {
+      {
         loader: require.resolve('less-loader'),
         options: {
           webpackImporter: false,
@@ -232,7 +242,7 @@ export default async (
               publicPathEntry,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client?${new URLSearchParams({
+                `${require.resolve('@ima/hmr-client')}?${new URLSearchParams({
                   name,
                   noInfo: 'false',
                   reload: 'true',
@@ -486,13 +496,13 @@ export default async (
              * CSS & LESS loaders, both have the exact same capabilities
              */
             {
-              test: /\.less$/,
+              test: /\.module\.(c|le)ss$/,
               sideEffects: true,
               use: await getStyleLoaders(true),
               ...(imaConfig.experiments?.css && { type: 'css' }),
             },
             {
-              test: /\.css$/,
+              test: /\.(c|le)ss$/,
               sideEffects: true,
               use: await getStyleLoaders(),
               ...(imaConfig.experiments?.css && { type: 'css' }),
@@ -533,6 +543,15 @@ export default async (
           resolve: {
             fullySpecified: false,
           },
+        },
+        /**
+         * Extracts source maps from existing source files (from their sourceMappingURL),
+         * this is usefull mainly for node_modules.
+         */
+        useSourceMaps && {
+          enforce: 'pre',
+          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          loader: require.resolve('source-map-loader'),
         },
       ].filter(Boolean) as RuleSetRule[],
     },

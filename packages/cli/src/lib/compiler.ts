@@ -1,4 +1,4 @@
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import { MultiCompiler } from 'webpack';
 
 import {

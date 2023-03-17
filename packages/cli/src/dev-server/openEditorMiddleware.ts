@@ -1,4 +1,4 @@
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 import envEditor from 'env-editor';
 import { Request, Response } from 'express';

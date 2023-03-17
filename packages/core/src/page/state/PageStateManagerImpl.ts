@@ -1,14 +1,14 @@
-import Events from './Events';
-import PageStateManager from './PageStateManager';
-import Dispatcher from '../../event/Dispatcher';
-import { UnknownParameters } from '../../CommonTypes';
+import { PageStateManager } from './PageStateManager';
+import { StateEvents } from './StateEvents';
+import { Dispatcher } from '../../event/Dispatcher';
+import { UnknownParameters } from '../../types';
 
 const MAX_HISTORY_LIMIT = 10;
 
 /**
  * The implementation of the {@link PageStateManager} interface.
  */
-export default class PageStateManagerImpl extends PageStateManager {
+export class PageStateManagerImpl extends PageStateManager {
   private _cursor = -1;
   private _dispatcher: Dispatcher;
   private _ongoingTransaction = false;
@@ -36,6 +36,8 @@ export default class PageStateManagerImpl extends PageStateManager {
   clear() {
     this._states = [];
     this._cursor = -1;
+
+    this.cancelTransaction();
   }
 
   /**
@@ -51,7 +53,7 @@ export default class PageStateManagerImpl extends PageStateManager {
 
     if (this._dispatcher) {
       this._dispatcher.fire(
-        Events.BEFORE_CHANGE_STATE,
+        StateEvents.BEFORE_CHANGE_STATE,
         { newState, oldState, patchState },
         true
       );
@@ -161,7 +163,7 @@ export default class PageStateManagerImpl extends PageStateManager {
     }
 
     if (this._dispatcher) {
-      this._dispatcher.fire(Events.AFTER_CHANGE_STATE, { newState }, true);
+      this._dispatcher.fire(StateEvents.AFTER_CHANGE_STATE, { newState }, true);
     }
   }
 }

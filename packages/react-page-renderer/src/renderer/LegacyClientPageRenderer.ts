@@ -1,16 +1,16 @@
 /* @if server **
-export default class LegacyClientPageRenderer {};
+export class LegacyClientPageRenderer {};
 /* @else */
 import { ReactElement } from 'react';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
-import AbstractClientPageRenderer from './AbstractClientPageRenderer';
+import { AbstractClientPageRenderer } from './AbstractClientPageRenderer';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  */
-export default class LegacyClientPageRenderer extends AbstractClientPageRenderer {
+export class LegacyClientPageRenderer extends AbstractClientPageRenderer {
   unmount() {
     if (this._viewContainer && unmountComponentAtNode(this._viewContainer)) {
       this._runUnmountCallback();

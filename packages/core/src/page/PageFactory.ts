@@ -1,20 +1,20 @@
-import ObjectContainer, { UnknownConstructable } from '../ObjectContainer';
-import GenericError from '../error/GenericError';
-import AbstractController from '../controller/AbstractController';
+import { PageStateManager } from './state/PageStateManager';
+import { PageStateManagerDecorator } from './state/PageStateManagerDecorator';
+import { AbstractController } from '../controller/AbstractController';
 import { IController } from '../controller/Controller';
-import Router, { RouteOptions } from '../router/Router';
-import Extension from '../extension/Extension';
-import PageStateManager from './state/PageStateManager';
-import ControllerDecorator from '../controller/ControllerDecorator';
-import MetaManager from '../meta/MetaManager';
-import Dictionary from '../dictionary/Dictionary';
-import PageStateManagerDecorator from './state/PageStateManagerDecorator';
-import { UnknownParameters } from '../CommonTypes';
+import { ControllerDecorator } from '../controller/ControllerDecorator';
+import { Dictionary } from '../dictionary/Dictionary';
+import { GenericError } from '../error/GenericError';
+import { Extension } from '../extension/Extension';
+import { MetaManager } from '../meta/MetaManager';
+import { ObjectContainer, UnknownConstructable } from '../ObjectContainer';
+import { Router, RouteOptions } from '../router/Router';
+import { UnknownParameters } from '../types';
 
 /**
  * Factory for page.
  */
-export default class PageFactory {
+export class PageFactory {
   /**
    * The current application object container.
    */
@@ -30,10 +30,7 @@ export default class PageFactory {
   /**
    * Create new instance of {@link Controller}.
    */
-  createController(
-    controller: string | IController,
-    options: RouteOptions = {}
-  ) {
+  createController(controller: string | IController, options: RouteOptions) {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
     if (

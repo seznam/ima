@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,

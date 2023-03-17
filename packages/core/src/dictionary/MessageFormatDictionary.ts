@@ -1,6 +1,11 @@
-import GenericError from '../error/GenericError';
-import Dictionary, { Config, Fields, LocalizationFunction } from './Dictionary';
-import { ObjectParameters } from '../CommonTypes';
+import {
+  Dictionary,
+  DictionaryConfig,
+  DictionaryData,
+  LocalizationFunction,
+} from './Dictionary';
+import { GenericError } from '../error/GenericError';
+import { ObjectParameters } from '../types';
 
 /**
  * Implementation of the {@link Dictionary} interface that relies on
@@ -8,9 +13,9 @@ import { ObjectParameters } from '../CommonTypes';
  *
  * @extends Dictionary
  */
-export default class MessageFormatDictionary extends Dictionary {
+export class MessageFormatDictionary extends Dictionary {
   protected _language: string;
-  protected _dictionary: Fields;
+  protected _dictionary: DictionaryData;
 
   static get $dependencies() {
     return [];
@@ -53,7 +58,7 @@ export default class MessageFormatDictionary extends Dictionary {
    *        produces the localization phrase with its placeholders evaluated
    *        using the provided placeholder values.
    */
-  init(config: Config) {
+  init(config: DictionaryConfig) {
     this._language = config.$Language;
     this._dictionary = config.dictionary;
   }
@@ -81,7 +86,7 @@ export default class MessageFormatDictionary extends Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: ObjectParameters = {}) {
+  get(key: string, parameters?: ObjectParameters) {
     const scope = this._getScope(key);
 
     if (!scope) {
@@ -92,7 +97,7 @@ export default class MessageFormatDictionary extends Dictionary {
       );
     }
 
-    return scope(parameters);
+    return scope(parameters ?? {});
   }
 
   /**
@@ -135,14 +140,14 @@ export default class MessageFormatDictionary extends Dictionary {
    */
   _getScope(key: string) {
     const path = key.split('.');
-    let scope: Fields | LocalizationFunction = this._dictionary;
+    let scope: DictionaryData | LocalizationFunction = this._dictionary;
 
     for (const scopeKey of path) {
-      if (!(scope as Fields)[scopeKey]) {
+      if (!(scope as DictionaryData)[scopeKey]) {
         return null;
       }
 
-      scope = (scope as Fields)[scopeKey];
+      scope = (scope as DictionaryData)[scopeKey];
     }
 
     return scope as LocalizationFunction;

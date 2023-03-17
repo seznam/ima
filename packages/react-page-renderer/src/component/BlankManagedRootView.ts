@@ -8,7 +8,7 @@ import { ViewAdapterProps } from './ViewAdapter';
  *
  * This is the default managed root view.
  */
-export default class BlankManagedRootView extends Component<ViewAdapterProps> {
+export class BlankManagedRootView extends Component<ViewAdapterProps> {
   static get defaultProps() {
     return {
       pageView: null,

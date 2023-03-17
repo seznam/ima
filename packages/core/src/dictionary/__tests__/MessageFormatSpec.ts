@@ -1,4 +1,4 @@
-import MessageFormatDictionary from '../MessageFormatDictionary';
+import { MessageFormatDictionary } from '../MessageFormatDictionary';
 
 describe('ima.core.dictionary.MessageFormatDictionary', () => {
   let dictionary: MessageFormatDictionary;

@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export type Listener = (event: CustomEvent) => unknown;
+import { UnknownParameters } from '../types';
+
+export type EventBusListener = (event: CustomEvent) => unknown;
+
+export type EventBusEventHandler = (data?: UnknownParameters) => void;
 
 export type NativeListener = (event: CustomEvent | Event) => unknown;
 
-export type Options = {
+export type EventBusOptions = {
   bubbles?: boolean;
   cancelable?: boolean;
   composed?: boolean;
@@ -23,7 +27,7 @@ export type Options = {
  * and capture of all fired events. The actual event name is always consistent
  * by the implementation.
  */
-export default abstract class EventBus {
+export abstract class EventBus {
   /**
    * Fires a new custom event of the specified name, carrying the provided
    * data.
@@ -55,7 +59,7 @@ export default abstract class EventBus {
     eventTarget: EventTarget,
     eventName: string,
     data: unknown,
-    options?: Options
+    options?: EventBusOptions
   ) {
     return this;
   }
@@ -77,7 +81,7 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-  listenAll(eventTarget: EventTarget, listener: Listener) {
+  listenAll(eventTarget: EventTarget, listener: EventBusListener) {
     return this;
   }
 
@@ -99,7 +103,11 @@ export default abstract class EventBus {
    *        register.
    * @return This event bus.
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     return this;
   }
 
@@ -117,7 +125,7 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-  unlistenAll(eventTarget: EventTarget, listener: Listener) {
+  unlistenAll(eventTarget: EventTarget, listener: EventBusListener) {
     return this;
   }
 
@@ -136,7 +144,11 @@ export default abstract class EventBus {
    *        deregister.
    * @return This event bus.
    */
-  unlisten(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  unlisten(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     return this;
   }
 }

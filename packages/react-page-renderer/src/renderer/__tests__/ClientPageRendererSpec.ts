@@ -4,19 +4,20 @@ import {
   DispatcherImpl,
   MetaManager,
   RendererEvents,
+  type Utils,
+  type RouteOptions,
   Window,
 } from '@ima/core';
-import type { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
 
-import AbstractPureComponent from '../../component/AbstractPureComponent';
-import BlankManagedRootView from '../../component/BlankManagedRootView';
+import { AbstractPureComponent } from '../../component/AbstractPureComponent';
+import { BlankManagedRootView } from '../../component/BlankManagedRootView';
 import { Settings } from '../../types';
-import AbstractClientPageRenderer from '../AbstractClientPageRenderer';
-import PageRendererFactory from '../PageRendererFactory';
+import { AbstractClientPageRenderer } from '../AbstractClientPageRenderer';
+import { PageRendererFactory } from '../PageRendererFactory';
 
 class ClientPageRenderer extends AbstractClientPageRenderer {
   unmount(): void {
@@ -49,10 +50,14 @@ class DocumentView extends AbstractPureComponent {
   }
 }
 
-const routeOptions = {
-  autoScroll: false,
-  allowSPA: false,
-} as RouteOptions;
+const routeOptions: RouteOptions = {
+  autoScroll: true,
+  documentView: null,
+  managedRootView: null,
+  onlyUpdate: false,
+  viewAdapter: null,
+  middlewares: [],
+};
 
 const settings = {
   $App: undefined,
@@ -71,7 +76,7 @@ const settings = {
   $Protocol: undefined,
   $Root: undefined,
   $Version: undefined,
-} as Settings;
+} as unknown as Settings;
 
 const param1 = 'param1';
 const param2 = 'param2';
@@ -171,16 +176,6 @@ describe('ClientPageRenderer', () => {
       expect(controller.setMetaParams).toHaveBeenCalledWith(pageState);
     });
 
-    it('should update page meta attributes', async () => {
-      jest
-        .spyOn(pageRenderer, '_updateMetaAttributes' as never)
-        .mockImplementation();
-
-      await pageRenderer.mount(controller, () => null, {}, routeOptions);
-
-      expect(pageRenderer['_updateMetaAttributes']).toHaveBeenCalled();
-    });
-
     it('should return resolved promise with object of property status and pageState', async () => {
       jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
       jest.spyOn(controller, 'getState').mockReturnValue(params);
@@ -209,10 +204,6 @@ describe('ClientPageRenderer', () => {
           values: { param1: params.param1 },
           promises: { param2: params.param2 },
         } as never);
-
-      jest
-        .spyOn(pageRenderer, '_updateMetaAttributes' as never)
-        .mockImplementation(() => ({} as never));
     });
 
     it('should set default page state values', async () => {
@@ -247,12 +238,6 @@ describe('ClientPageRenderer', () => {
       await pageRenderer.update(controller, () => null, params);
 
       expect(controller.setMetaParams).toHaveBeenCalledWith(params);
-    });
-
-    it('should update page meta attributes', async () => {
-      await pageRenderer.update(controller, () => null, params);
-
-      expect(pageRenderer['_updateMetaAttributes']).toHaveBeenCalled();
     });
 
     it('should return resolved promise with object of property status and pageState', async () => {
@@ -307,7 +292,7 @@ describe('ClientPageRenderer', () => {
   });
 
   describe('_prepareViewAdapter method', () => {
-    const utils = { router: 'router' };
+    const utils = { router: 'router' } as unknown as Utils;
     const state = { state: 'state', pageView: () => null };
 
     beforeEach(() => {

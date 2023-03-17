@@ -1,5 +1,5 @@
-import SerialBatch from '../SerialBatch';
-import { Job } from '../Execution';
+import { ExecutionJob } from '../Execution';
+import { SerialBatch } from '../SerialBatch';
 
 describe('ima.core.execution.SerialBatch', () => {
   let serialBatch: SerialBatch;
@@ -36,7 +36,7 @@ describe('ima.core.execution.SerialBatch', () => {
 
       const argument = { oldProp: 'value' };
 
-      serialBatch.append(mutatingFunction as Job);
+      serialBatch.append(mutatingFunction as ExecutionJob);
 
       await serialBatch.execute(argument).then(result => {
         expect(result).toStrictEqual([argument, argument, argument]);

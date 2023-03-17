@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import Dictionary from '../dictionary/Dictionary';
-import Extension, { IExtension } from '../extension/Extension';
-import MetaManager from '../meta/MetaManager';
-import Router from '../router/Router';
-import PageStateManager from '../page/state/PageStateManager';
-import { UnknownParameters, UnknownPromiseParameters } from '../CommonTypes';
-import { EventHandler } from '../page/PageTypes';
+import { Dictionary } from '../dictionary/Dictionary';
+import { EventBusEventHandler } from '../event/EventBus';
+import { Extension, IExtension } from '../extension/Extension';
+import { MetaManager } from '../meta/MetaManager';
+import { PageStateManager } from '../page/state/PageStateManager';
+import { Router } from '../router/Router';
+import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IController {}
@@ -17,9 +17,11 @@ export interface IController {}
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export default abstract class Controller implements IController {
+export abstract class Controller implements IController {
+  static $name?: string;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: PropertyKey]: any | EventHandler;
+  [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * Callback for initializing the controller after the route parameters have

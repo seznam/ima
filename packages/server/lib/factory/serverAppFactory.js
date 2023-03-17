@@ -1,12 +1,11 @@
 'use strict';
 
-const { Event } = require('../emitter.js');
-
-const staticPageFactory = require('./staticPageFactory.js');
-const IMAInternalFactory = require('./IMAInternalFactory.js');
-const hooksFactory = require('./hooksFactory.js');
 const devErrorPageFactory = require('./devErrorPageFactory.js');
+const hooksFactory = require('./hooksFactory.js');
+const IMAInternalFactory = require('./IMAInternalFactory.js');
 const responseUtilsFactory = require('./responseUtilsFactory.js');
+const staticPageFactory = require('./staticPageFactory.js');
+const { Event } = require('../emitter.js');
 
 module.exports = function serverAppFactory({
   environment,
@@ -89,10 +88,10 @@ module.exports = function serverAppFactory({
     cache: false,
   };
 
-  // TODO IMA@18 need performance test for usefulness
-  // TODO IMA@18@performance refactor
-  // TODO IMA@18@performance documentation environment.$Server.serveSPA.cache
-  // TODO IMA@18performance test rendering SPA for random url
+  // TODO IMA@19 need performance test for usefulness
+  // TODO IMA@19@performance refactor
+  // TODO IMA@19@performance documentation environment.$Server.serveSPA.cache
+  // TODO IMA@19performance test rendering SPA for random url
   // const spaCache = new Cache(
   //   Object.assign(
   //     {},
@@ -117,13 +116,14 @@ module.exports = function serverAppFactory({
 
       if (!event.defaultPrevented) {
         event = await emitter.emit(Event.Request, event);
-        event.context.response = event.result;
       }
 
       event.context.response = {
         ...defaultResponse,
         ...event.context.response,
+        ...event.result,
       };
+
       event = await emitter.emit(Event.AfterRequest, event);
 
       event = await responseHandler(event);
@@ -152,25 +152,27 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.BeforeError, event);
       event = await emitter.emit(Event.Error, event);
-      event.context.response = event.result;
 
       event.context.response = {
         ...defaultResponse,
         ...event.context.response,
+        ...event.result,
       };
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
+      error.cause = event.error;
+
       event.context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
     }
 
     try {
       event = await responseHandler(event);
     } catch (error) {
+      error.cause = event.error;
       const { res, context } = event;
 
       if (context.app) {
@@ -184,8 +186,7 @@ module.exports = function serverAppFactory({
 
       context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
 
       res.status(context.response.status);

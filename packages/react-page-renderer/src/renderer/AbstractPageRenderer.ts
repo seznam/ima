@@ -1,24 +1,28 @@
-import { Controller, Dispatcher, MetaManager, PageRenderer } from '@ima/core';
-import type {
-  UnknownParameters,
-  UnknownPromiseParameters,
-  PageData as BasePageData,
-  RouteOptions,
+import {
+  Controller,
+  Dispatcher,
+  MetaManager,
+  PageRenderer,
+  type Utils,
+  type UnknownParameters,
+  type UnknownPromiseParameters,
+  type PageData as BasePageData,
+  type RouteOptions,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import PageRendererFactory from './PageRendererFactory';
-import BlankManagedRootView from '../component/BlankManagedRootView';
-import ViewAdapter, { ViewAdapterProps } from '../component/ViewAdapter';
-import { Settings, Utils } from '../types';
+import { PageRendererFactory } from './PageRendererFactory';
+import { BlankManagedRootView } from '../component/BlankManagedRootView';
+import { ViewAdapter, ViewAdapterProps } from '../component/ViewAdapter';
+import { Settings } from '../types';
 
 export type PageData = {
   documentView?: ComponentType;
   documentViewProps?: {
-    $Utils: UnknownParameters;
+    $Utils: Utils;
     metaManager: MetaManager;
   };
   react?: typeof react;
@@ -29,7 +33,7 @@ export type PageData = {
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
-export default abstract class AbstractPageRenderer extends PageRenderer {
+export abstract class AbstractPageRenderer extends PageRenderer {
   protected _dispatcher: Dispatcher;
   protected _factory: PageRendererFactory;
   protected _helpers: typeof Helpers;
@@ -127,7 +131,7 @@ export default abstract class AbstractPageRenderer extends PageRenderer {
     state: UnknownParameters = {}
   ): ViewAdapterProps {
     const props = {
-      $Utils: this._factory.getUtils() as Utils,
+      $Utils: this._factory.getUtils(),
       managedRootView,
       pageView,
       state,

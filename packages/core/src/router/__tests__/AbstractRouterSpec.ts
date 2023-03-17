@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jest/no-conditional-expect */
-import GenericError from '../../error/GenericError';
-import DispatcherImpl from '../../event/DispatcherImpl';
-import PageManager from '../../page/manager/PageManager';
-import AbstractRouter from '../AbstractRouter';
-import AbstractRoute from '../AbstractRoute';
-import ActionTypes from '../ActionTypes';
-import RouteEvents from '../Events';
-import RouteFactory from '../RouteFactory';
-import RouteNames from '../RouteNames';
-import RouterMiddleware from '../RouterMiddleware';
 import { toMockedInstance } from 'to-mock';
+
+import { GenericError } from '../../error/GenericError';
+import { DispatcherImpl } from '../../event/DispatcherImpl';
+import { PageManager } from '../../page/manager/PageManager';
+import { AbstractRoute } from '../AbstractRoute';
+import { AbstractRouter } from '../AbstractRouter';
+import { ActionTypes } from '../ActionTypes';
+import { RouteFactory } from '../RouteFactory';
+import { RouteNames } from '../RouteNames';
+import { RouteAction } from '../Router';
+import { RouterEvents } from '../RouterEvents';
 
 class MockedAbstractRouter extends AbstractRouter {
   getPath = jest.fn();
@@ -46,9 +47,8 @@ describe('ima.core.router.AbstractRouter', () => {
   };
   const globalMiddleware = jest.fn();
   const homeRouteMiddleware = jest.fn();
-  const action: { type: string; route?: AbstractRoute } = {
+  const action: RouteAction = {
     type: ActionTypes.REDIRECT,
-    route: undefined,
   };
   const errorAction = {
     type: ActionTypes.ERROR,
@@ -68,7 +68,12 @@ describe('ima.core.router.AbstractRouter', () => {
 
   beforeEach(() => {
     routeFactory = new RouteFactory();
-    router = new MockedAbstractRouter(pageManager, routeFactory, dispatcher);
+    router = new MockedAbstractRouter(
+      pageManager,
+      routeFactory,
+      dispatcher,
+      30000
+    );
 
     jest.spyOn(router, 'getPath').mockReturnValue(currentRoutePath);
 
@@ -104,9 +109,11 @@ describe('ima.core.router.AbstractRouter', () => {
   });
 
   it('should return route and middlewares in line for defined path', () => {
-    const { route, middlewares } = router._getRouteHandlersByPath('/');
+    const { route, middlewares } = router.getRouteHandlersByPath('/');
 
-    expect((route as AbstractRoute).getName()).toBe('home');
+    expect((route as InstanceType<typeof AbstractRoute>).getName()).toBe(
+      'home'
+    );
     expect(middlewares).toHaveLength(1);
   });
 
@@ -140,7 +147,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       expect(router['_routeHandlers'].set).toHaveBeenCalledWith(
         'middleware-1',
-        new RouterMiddleware(globalMiddleware)
+        globalMiddleware
       );
     });
   });
@@ -148,7 +155,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('getCurrentRouteInfo method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
     const params = {};
 
     beforeEach(() => {
@@ -172,7 +179,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return current route information', () => {
       router.getPath.mockReturnValue(path);
       jest
-        .spyOn(router, '_getRouteHandlersByPath')
+        .spyOn(router, 'getRouteHandlersByPath')
         .mockReturnValue({ route, middlewares: [] });
       jest.spyOn(route, 'extractParameters').mockReturnValue(params);
 
@@ -215,18 +222,17 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('route method', () => {
     const routeName = 'link';
     const path = '/link';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(routeName, path, Controller, View, {
         middlewares: [routeMiddleware],
       });
-      action.route = route;
     });
 
     it('should handle valid route path', async () => {
-      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route,
         middlewares: [],
       });
@@ -243,8 +249,8 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should handle valid route path with middlewares', async () => {
-      const middlewaresMock = [new RouterMiddleware(globalMiddleware)];
-      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
+      const middlewaresMock = [globalMiddleware];
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route,
         middlewares: middlewaresMock,
       });
@@ -267,22 +273,22 @@ describe('ima.core.router.AbstractRouter', () => {
       );
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         2,
-        [new RouterMiddleware(routeMiddleware)],
+        [routeMiddleware],
         {},
         { route, action }
       );
     });
 
     it('should handle "not-found" route', async () => {
-      // @ts-ignore
-      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({});
+      // @ts-expect-error
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({});
 
       jest.spyOn(router, 'handleNotFound').mockImplementation(params => {
         return Promise.resolve(params);
       });
 
       await router.route(path).then(params => {
-        // @ts-ignore
+        // @ts-expect-error
         expect(params.error instanceof GenericError).toBe(true);
       });
     });
@@ -290,8 +296,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleError method', () => {
     const path = '/error';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
+    let originalRoute: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -320,7 +326,7 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
-      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
         middlewares: [],
       });
@@ -346,13 +352,10 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             errorAction
           );
-          // @ts-ignore
+          // @ts-expect-error
           expect(response.error).toStrictEqual(params.error);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [
-              new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware),
-            ],
+            [globalMiddleware, routeMiddleware],
             expect.objectContaining({
               ...params,
               userId: '2345',
@@ -378,8 +381,8 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('handleNotFound method', () => {
     const path = '/not-found';
-    let route: AbstractRoute;
-    let originalRoute: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
+    let originalRoute: InstanceType<typeof AbstractRoute>;
     const routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -408,7 +411,7 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
-      jest.spyOn(router, '_getRouteHandlersByPath').mockReturnValue({
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
         middlewares: [],
       });
@@ -423,7 +426,6 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
-        // @ts-ignore
         .handleNotFound(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -435,13 +437,10 @@ describe('ima.core.router.AbstractRouter', () => {
             options,
             redirectAction
           );
-          // @ts-ignore
+          // @ts-expect-error
           expect(response.error instanceof GenericError).toBeTruthy();
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [
-              new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware),
-            ],
+            [globalMiddleware, routeMiddleware],
             expect.objectContaining({
               ...params,
               userId: '2345',
@@ -458,7 +457,6 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
-      // @ts-ignore
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
@@ -519,7 +517,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('_handle method', () => {
     const routeName = 'routeName';
     const routePath = '/routePath';
-    let route: AbstractRoute;
+    let route: InstanceType<typeof AbstractRoute>;
 
     beforeEach(() => {
       route = routeFactory.createRoute(
@@ -560,7 +558,6 @@ describe('ima.core.router.AbstractRouter', () => {
         params: params,
         path: routePath,
         options: options,
-        action: {},
       };
 
       router.getPath.mockReturnValue(routePath);
@@ -572,7 +569,7 @@ describe('ima.core.router.AbstractRouter', () => {
       router._handle(route, params, options);
 
       expect(dispatcher.fire).toHaveBeenCalledWith(
-        RouteEvents.BEFORE_HANDLE_ROUTE,
+        RouterEvents.BEFORE_HANDLE_ROUTE,
         data,
         true
       );
@@ -595,11 +592,10 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: response,
           options: options,
-          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
-          RouteEvents.AFTER_HANDLE_ROUTE,
+          RouterEvents.AFTER_HANDLE_ROUTE,
           data,
           true
         );
@@ -623,11 +619,10 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: Object.assign({}, response, params),
           options: options,
-          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
-          RouteEvents.AFTER_HANDLE_ROUTE,
+          RouterEvents.AFTER_HANDLE_ROUTE,
           data,
           true
         );
@@ -673,7 +668,12 @@ describe('ima.core.router.AbstractRouter', () => {
     const path = '/path';
 
     beforeEach(() => {
-      router = new MockedAbstractRouter(pageManager, routeFactory, dispatcher);
+      router = new MockedAbstractRouter(
+        pageManager,
+        routeFactory,
+        dispatcher,
+        30000
+      );
       jest.spyOn(router, 'getPath').mockReturnValue(path);
     });
 
@@ -706,7 +706,7 @@ describe('ima.core.router.AbstractRouter', () => {
     });
   });
 
-  describe('_getRouteHandlersByPath method', () => {
+  describe('getRouteHandlersByPath method', () => {
     const endMiddleware = jest.fn();
     const afterHomeMiddleware = jest.fn();
     let middlewareRouter: MockedAbstractRouter;
@@ -715,7 +715,8 @@ describe('ima.core.router.AbstractRouter', () => {
       middlewareRouter = new MockedAbstractRouter(
         pageManager,
         routeFactory,
-        dispatcher
+        dispatcher,
+        30000
       );
 
       jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
@@ -733,15 +734,12 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(middlewareRouter['_routeHandlers'].size).toBe(5);
 
       expect(
-        middlewareRouter._getRouteHandlersByPath('/').middlewares
-      ).toStrictEqual([new RouterMiddleware(globalMiddleware)]);
+        middlewareRouter.getRouteHandlersByPath('/').middlewares
+      ).toStrictEqual([globalMiddleware]);
 
       expect(
-        middlewareRouter._getRouteHandlersByPath('/contact').middlewares
-      ).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware),
-      ]);
+        middlewareRouter.getRouteHandlersByPath('/contact').middlewares
+      ).toStrictEqual([globalMiddleware, afterHomeMiddleware]);
     });
   });
 
@@ -754,7 +752,8 @@ describe('ima.core.router.AbstractRouter', () => {
       middlewareRouter = new MockedAbstractRouter(
         pageManager,
         routeFactory,
-        dispatcher
+        dispatcher,
+        30000
       );
 
       jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
@@ -773,81 +772,125 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(middlewareRouter['_routeHandlers'].size).toBe(6);
 
       expect(middlewareRouter._getMiddlewaresForRoute('home')).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
+        globalMiddleware,
       ]);
 
       expect(middlewareRouter._getMiddlewaresForRoute('contact')).toStrictEqual(
-        [
-          new RouterMiddleware(globalMiddleware),
-          new RouterMiddleware(afterHomeMiddleware),
-        ]
+        [globalMiddleware, afterHomeMiddleware]
       );
 
       expect(
         middlewareRouter._getMiddlewaresForRoute(RouteNames.ERROR)
-      ).toStrictEqual([
-        new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware),
-        new RouterMiddleware(endMiddleware),
-      ]);
+      ).toStrictEqual([globalMiddleware, afterHomeMiddleware, endMiddleware]);
     });
   });
 
   describe('_runMiddlewares method', () => {
     it('should not break when middlewares are not a valid array', async () => {
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares([])).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares()).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares(null)).resolves.toBeUndefined();
-      // @ts-ignore
+      // @ts-expect-error
       await expect(router._runMiddlewares({})).resolves.toBeUndefined();
     });
 
     it('should run middlewares in sequence', async () => {
       const middlewareLocals = { middleware: 'locals' };
+      const results: { middleware: string; locals: unknown }[] = [];
 
-      const results: string[] = [];
-      const m1 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m1');
-          // @ts-ignore
-          locals.m1 = true;
-        })
-      );
-      const m2 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m2');
-          // @ts-ignore
-          locals.m2 = true;
-        })
-      );
-      const m3 = new RouterMiddleware(
-        jest.fn((params, locals) => {
-          results.push('m3');
-          // @ts-ignore
-          locals.m3 = true;
-        })
-      );
+      const m1 = jest.fn((params, locals) => {
+        results.push({
+          middleware: 'm1',
+          locals: { ...locals },
+        });
 
-      // @ts-ignore
-      await router._runMiddlewares([m1, m2, m3], 'params', middlewareLocals);
-
-      // @ts-ignore
-      expect(m1._middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(m2._middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(m3._middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      // @ts-ignore
-      expect(results).toStrictEqual(['m1', 'm2', 'm3']);
-      expect(middlewareLocals).toStrictEqual({
-        middleware: 'locals',
-        m1: true,
-        m2: true,
-        m3: true,
+        return { m1: true };
       });
+      const m2 = jest.fn().mockImplementation(async (params, locals) => {
+        results.push({
+          middleware: 'm2',
+          locals: { ...locals },
+        });
+
+        return { m2: true };
+      });
+      const m3 = jest.fn((params, locals, next) => {
+        results.push({
+          middleware: 'm3',
+          locals: { ...locals },
+        });
+
+        next({ m3: true });
+      });
+
+      await router._runMiddlewares(
+        [m1, m2, m3],
+        { params: 'params' },
+        middlewareLocals
+      );
+
+      expect(m1).toHaveBeenCalledWith(
+        { params: 'params' },
+        { middleware: 'locals' }
+      );
+      expect(m2).toHaveBeenCalledWith(
+        { params: 'params' },
+        { m1: true, middleware: 'locals' }
+      );
+      expect(m3).toHaveBeenCalledWith(
+        { params: 'params' },
+        { m1: true, m2: true, middleware: 'locals' },
+        expect.any(Function)
+      );
+      expect(results).toMatchInlineSnapshot(`
+        [
+          {
+            "locals": {
+              "middleware": "locals",
+            },
+            "middleware": "m1",
+          },
+          {
+            "locals": {
+              "m1": true,
+              "middleware": "locals",
+            },
+            "middleware": "m2",
+          },
+          {
+            "locals": {
+              "m1": true,
+              "m2": true,
+              "middleware": "locals",
+            },
+            "middleware": "m3",
+          },
+        ]
+      `);
+    });
+
+    it('should timeout when there are long promises still running', async () => {
+      jest.useFakeTimers();
+
+      const m1 = jest.fn(async () => {
+        new Promise<void>(resolve => {
+          setTimeout(() => {
+            resolve();
+          }, 100_000);
+        });
+
+        return { m1: true };
+      });
+
+      const middlewaresPromise = router._runMiddlewares([m1], {}, {});
+      jest.advanceTimersByTime(50_000);
+
+      await expect(middlewaresPromise).rejects.toBeInstanceOf(GenericError);
+
+      jest.useRealTimers();
     });
   });
 });

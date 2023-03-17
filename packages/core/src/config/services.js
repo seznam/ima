@@ -1,4 +1,4 @@
-export default (ns, oc, config) => {
+export const initServices = (ns, oc, config) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
 
@@ -30,17 +30,12 @@ export default (ns, oc, config) => {
    * before creating new one.
    */
   if ($Debug && typeof window !== 'undefined') {
-    window.__IMA_HMR?.emitter?.on(
-      'destroy',
-      () => {
-        oc.get('$Router').unlisten();
-        oc.get('$EventBus').unlistenAll();
-        oc.get('$PageManager').destroy();
-        oc.get('$PageRenderer').unmount();
-        oc.get('$Dispatcher').clear();
-      },
-      true
-    );
+    window.__IMA_HMR?.emitter?.once('destroy', async () => {
+      oc.get('$Dispatcher').clear();
+      oc.get('$Router').unlisten();
+      oc.get('$PageRenderer').unmount();
+      await oc.get('$PageManager').destroy();
+    });
   }
 
   /**

@@ -2,13 +2,14 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
 import {
   AbstractPureComponent,
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
 } from '@ima/react-page-renderer';
-import ClientPageRenderer from '@ima/react-page-renderer/renderer/ClientPageRenderer';
+import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
+import React from 'react';
+
 import {
   AbstractController,
   getNamespace,
@@ -74,7 +75,6 @@ describe('revive client application', () => {
   const options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: DocumentView,
   };
 
@@ -90,6 +90,7 @@ describe('revive client application', () => {
       $Version: 1,
     });
 
+    // @ts-expect-error
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
 
@@ -112,6 +113,9 @@ describe('revive client application', () => {
           return {
             prod: {
               $Http: {},
+              $Router: {
+                middlewareTimeout: 30000,
+              },
               $Page: {
                 $Render: {
                   masterElementId: MASTER_ELEMENT_ID,

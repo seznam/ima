@@ -1,15 +1,18 @@
+const { createMonitoring } = require('@esmj/monitor');
 const {
   GenericError,
   ServerRouter,
   Cache,
   PageStateManager,
+  RouteNames,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
-const serverAppFactory = require('../serverAppFactory.js');
+
 const { Emitter, Event } = require('../../emitter.js');
-const { createMonitoring } = require('@esmj/monitor');
 const instanceRecycler = require('../../instanceRecycler.js');
 const serverGlobal = require('../../serverGlobal.js');
+const serverAppFactory = require('../serverAppFactory.js');
+
 const manifestMock = require('../__mocks__/manifest.json');
 
 jest.mock('fs', () => {
@@ -111,7 +114,7 @@ describe('Server App Factory', () => {
         return {
           route: {
             getName() {
-              return 'notFound';
+              return RouteNames.NOT_FOUND;
             },
           },
         };
@@ -138,7 +141,6 @@ describe('Server App Factory', () => {
                 run: jest.fn(),
               },
               oc: {
-                // TODO IMA@18+ change for imports from @ima/core
                 get(name) {
                   if (name === '$Router') {
                     return router;
@@ -315,6 +317,26 @@ describe('Server App Factory', () => {
       expect(response.SPA).toBeFalsy();
       expect(response.static).toBeTruthy();
       expect(response.status).toBe(500);
+      expect(response.content).toBe('read file content');
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 500 static page for ima app route ERROR which exceeds static thresholds', async () => {
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return RouteNames.ERROR;
+          },
+        },
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(500);
+      expect(response.error).toBeInstanceOf(Error);
       expect(response.content).toBe('read file content');
       expect(response.cache).toBeFalsy();
     });
@@ -500,20 +522,6 @@ describe('Server App Factory', () => {
     });
 
     it('should render static error page for non $Debug mode without initialized app in context', async () => {
-      environment.$Debug = false;
-      const error = new Error('Custom');
-
-      const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.status).toBe(500);
-      expect(response.cache).toBeFalsy();
-      expect(response.static).toBeTruthy();
-      expect(response.content).toBe('read file content');
-      expect(response.error).toEqual(error);
-    });
-
-    it('should render static error page for overloaded server', async () => {
       environment.$Debug = false;
       const error = new Error('Custom');
 

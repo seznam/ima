@@ -1,15 +1,15 @@
 /* @if client **
-export default class ServerPageManager {};
+export class ServerPageManager {};
 /* @else */
-import PageFactory from '../PageFactory';
-import PageRenderer from '../renderer/PageRenderer';
-import PageStateManager from '../state/PageStateManager';
-import AbstractPageManager from './AbstractPageManager';
+import { AbstractPageManager } from './AbstractPageManager';
+import { PageFactory } from '../PageFactory';
+import { PageRenderer } from '../renderer/PageRenderer';
+import { PageStateManager } from '../state/PageStateManager';
 
 /**
  * Page manager for controller on the server side.
  */
-export default class ServerPageManager extends AbstractPageManager {
+export class ServerPageManager extends AbstractPageManager {
   static get $dependencies() {
     return [
       PageFactory,

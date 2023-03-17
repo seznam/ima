@@ -1,47 +1,54 @@
 'use strict';
 
 const path = require('path');
+
 const applicationFolder = path.resolve('.');
-const { Emitter, Event } = require('./lib/emitter.js');
 const { createMonitoring } = require('@esmj/monitor');
+
+const { Emitter, Event } = require('./lib/emitter.js');
 
 module.exports = function createIMAServer({
   environment,
   logger,
   emitter,
   performance,
+  devUtils,
 } = {}) {
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({ applicationFolder });
+  devUtils = devUtils || require('./lib/factory/devUtilsFactory.js')();
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
-  const manifestRequire = require('./lib/factory/devUtilsFactory.js')();
-
   function appFactory() {
-    manifestRequire('server/vendors.js', {
+    devUtils.manifestRequire('server/vendors.js', {
       optional: true,
       dependencies: ['server/app.server.js'],
     });
 
-    return manifestRequire('server/app.server.js');
+    return devUtils.manifestRequire('server/app.server.js');
   }
 
   function languageLoader(language) {
-    return manifestRequire(`server/locale/${language}.js`).default;
+    return devUtils.manifestRequire(`server/locale/${language}.js`).default;
   }
-
-  performance = performance || createMonitoring();
-  performance.monitor.start();
 
   emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
   logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
 
-  const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
+  const concurrentRequestsMetric =
+    require('./lib/metric/concurrentRequestsMetricFactory.js')({
+      instanceRecycler,
+    });
+  performance = performance || createMonitoring();
+  performance.monitor.add(concurrentRequestsMetric);
+  performance.monitor.start();
+
+  const urlParser = require('./lib/middlewares/urlParserMiddlewareFactory.js')({
     environment,
     applicationFolder,
   });
@@ -57,7 +64,7 @@ module.exports = function createIMAServer({
     serverGlobal,
   });
   const memStaticProxy =
-    require('./lib/factory/memStaticProxyMiddlewareFactory')();
+    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
 

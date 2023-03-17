@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import { formatError, parseError } from '@ima/dev-utils/dist/cliUtils';
-import { logger } from '@ima/dev-utils/dist/logger';
+import { formatError, parseError } from '@ima/dev-utils/cliUtils';
+import { logger } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';
@@ -162,7 +162,7 @@ function printAssetInfo(
     .filter(({ fullPath }) => fs.existsSync(fullPath))
     .forEach(({ fileName, fullPath }) => {
       result += '\n';
-      result += chalk.gray(isLastItem ? '     ' : ' |   ');
+      result += chalk.gray(isLastItem ? '     ' : ' ǀ   ');
       result += fileName;
       result += chalk.yellow(
         ` ${prettyBytes(fs.statSync(path.join(fullPath)).size)}`
@@ -216,6 +216,14 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
       'successful'
     )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
   );
+  args.command === 'dev' &&
+    logger.info(
+      `Client assets are served from ${
+        args.writeToDisk
+          ? chalk.blueBright('disk')
+          : chalk.yellowBright('memory')
+      }`
+    );
   logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
   // Print info about emitted assets
