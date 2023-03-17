@@ -47,7 +47,12 @@ export default class PageNavigationHandler extends PageHandler {
   ) {
     const { options } = nextManagedPage;
 
-    if (managedPage && action && action.type !== ActionTypes.POP_STATE) {
+    if (
+      managedPage &&
+      action &&
+      action.type !== ActionTypes.POP_STATE &&
+      action.type !== ActionTypes.ERROR
+    ) {
       const isRedirection = action.type === ActionTypes.REDIRECT;
 
       if (!isRedirection) {
