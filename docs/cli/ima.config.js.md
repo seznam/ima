@@ -93,6 +93,12 @@ module.exports = {
 };
 ```
 
+:::Note
+
+Since this function can be implemented in `ima.config.js` and also CLI plugins, the resolve order is following `default @ima/cli config` -> `CLI plugin configs` -> `ima.config.js`.
+
+:::
+
 ### swc
 > `async function(swcLoaderOptions, ctx): swcLoaderOptions`
 
