@@ -24,13 +24,13 @@ export abstract class AbstractPageManager extends PageManager {
    * Snapshot of the previously managed page before it was replaced with
    * a new one
    */
-  private _previousManagedPage: ManagedPage = {} as ManagedPage;
+  protected _previousManagedPage: ManagedPage = {} as ManagedPage;
   /**
    * Factory used by the page manager to create instances of the
    * controller for the current route, and decorate the controllers and
    * page state managers.
    */
-  private _pageFactory: PageFactory;
+  protected _pageFactory: PageFactory;
 
   /**
    * Details of the currently managed page.

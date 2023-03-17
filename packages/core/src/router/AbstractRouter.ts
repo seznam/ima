@@ -496,6 +496,13 @@ export abstract class AbstractRouter extends Router {
   }
 
   /**
+   * Handles preManage calls for current pageManager.
+   */
+  async preManage(): Promise<unknown> {
+    return this._pageManager.preManage();
+  }
+
+  /**
    * Handles the provided route and parameters by initializing the route's
    * controller and rendering its state via the route's view.
    *
@@ -562,10 +569,6 @@ export abstract class AbstractRouter extends Router {
 
         return response as void | StringParameters;
       });
-  }
-
-  async preManage(): Promise<unknown> {
-    return this._pageManager.preManage();
   }
 
   /**

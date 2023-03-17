@@ -11,6 +11,8 @@ import { toMockedInstance } from 'to-mock';
 import { AbstractController } from '../../../controller/AbstractController';
 import { Controller, IController } from '../../../controller/Controller';
 import { ControllerDecorator } from '../../../controller/ControllerDecorator';
+import { Dispatcher } from '../../../event/Dispatcher';
+import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { EventBusImpl } from '../../../event/EventBusImpl';
 import { Extension } from '../../../extension/Extension';
 import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
@@ -64,6 +66,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   let handlerRegistry: PageHandlerRegistry;
   let route: StaticRoute | DynamicRoute;
   let routeFactory: RouteFactory;
+  let dispatcher: Dispatcher;
 
   const View = () => {
     return;
@@ -105,12 +108,14 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     eventBusInterface = new EventBusImpl(windowInterface);
     handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
     routeFactory = new RouteFactory();
+    dispatcher = new DispatcherImpl();
 
     pageManager = new ClientPageManager(
       pageFactory as unknown as PageFactory,
       pageRenderer,
       pageStateManager,
       handlerRegistry,
+      dispatcher,
       windowInterface,
       eventBusInterface
     );
@@ -123,8 +128,8 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       options
     );
 
-    pageManager['_getInitialManagedPage']();
-
+    pageManager['_previousManagedPage'] =
+      pageManager['_getInitialManagedPage']();
     pageManager['_managedPage'] = pageManager['_constructManagedPageValue'](
       Controller,
       View,
@@ -266,8 +271,6 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       await pageManager
         .manage({
           route,
-          controller: controllerInstance,
-          view: viewInstance,
           options,
         })
         .then(() => {

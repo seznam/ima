@@ -116,6 +116,24 @@ describe('ima.core.router.ClientRouter', () => {
     });
   });
 
+  describe('preManage', () => {
+    it('should await mounted promise after first manage call to prevent hydrate error', async () => {
+      expect(router['_mountedPromise']).toBeNull();
+      await router.preManage();
+
+      // Should create promise after first call
+      expect(router['_mountedPromise']?.promise).toBeInstanceOf(Promise);
+
+      router['_mountedPromise'] = {
+        // @ts-expect-error
+        promise: Promise.resolve('mounted'),
+      };
+
+      // Should await promise
+      await expect(router.preManage()).resolves.toEqual([undefined, 'mounted']);
+    });
+  });
+
   describe('handleNotFound method', () => {
     it('should be call router.handleError function for throwing error', async () => {
       jest
