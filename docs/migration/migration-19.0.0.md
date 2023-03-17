@@ -99,6 +99,7 @@ router.use(async (params, locals, next) => {
  - Reduced number of levels that are expanded by default in error overlay error params view.
 
 ### @ima/server
+ - Style content variable now automatically generates preload links for app styles.
  - Added new metric - **concurrent requests** to monitoring.
  - Add information about error cause in places, where we used to throw away this information.
  - Add routeName key to res.locals instead of res.$IMA, since res.$IMA should not be used anymore.
