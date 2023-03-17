@@ -12,6 +12,7 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
+import { RendererEvents } from '..';
 import { Controller, IController } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
@@ -537,11 +538,8 @@ export abstract class AbstractRouter extends Router {
      * Call pre-manage to cancel/property kill previously managed
      * route handler.
      */
+    await this.preManage();
 
-    // TODO await mounted
-    await this._pageManager.preManage();
-
-    console.error('BEFORE', route.getName());
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
@@ -560,12 +558,14 @@ export abstract class AbstractRouter extends Router {
         }
 
         eventData.response = response;
-
-        console.warn('AFTER', route.getName());
         this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response as void | StringParameters;
       });
+  }
+
+  async preManage(): Promise<unknown> {
+    return this._pageManager.preManage();
   }
 
   /**

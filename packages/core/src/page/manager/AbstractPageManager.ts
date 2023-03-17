@@ -2,9 +2,11 @@ import { PageManager, ManageArgs } from './PageManager';
 import { AbstractController } from '../../controller/AbstractController';
 import { Controller, IController } from '../../controller/Controller';
 import { ControllerDecorator } from '../../controller/ControllerDecorator';
+import { Dispatcher } from '../../event/Dispatcher';
 import { Extension } from '../../extension/Extension';
 import { AbstractRoute } from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
+import { RouterEvents } from '../../router/RouterEvents';
 import { StringParameters, UnknownParameters } from '../../types';
 import { PageHandlerRegistry } from '../handler/PageHandlerRegistry';
 import { PageFactory } from '../PageFactory';
@@ -46,6 +48,7 @@ export abstract class AbstractPageManager extends PageManager {
    * A registry that holds a list of pre-manage and post-manage handlers.
    */
   protected _pageHandlerRegistry: PageHandlerRegistry;
+  protected _dispatcher: Dispatcher;
 
   /**
    * Initializes the page manager.
@@ -63,17 +66,16 @@ export abstract class AbstractPageManager extends PageManager {
     pageFactory: PageFactory,
     pageRenderer: PageRenderer,
     pageStateManager: PageStateManager,
-    pageHandlerRegistry: PageHandlerRegistry
+    pageHandlerRegistry: PageHandlerRegistry,
+    dispatcher: Dispatcher
   ) {
     super();
 
     this._pageFactory = pageFactory;
-
     this._pageRenderer = pageRenderer;
-
     this._pageStateManager = pageStateManager;
-
     this._pageHandlerRegistry = pageHandlerRegistry;
+    this._dispatcher = dispatcher;
   }
 
   /**
@@ -85,6 +87,9 @@ export abstract class AbstractPageManager extends PageManager {
     this._pageHandlerRegistry.init();
   }
 
+  /**
+   * @inheritDoc
+   */
   preManage() {
     this._managedPage.state.cancelled = true;
     this._previousManagedPage.state.abort?.reject();
@@ -97,9 +102,16 @@ export abstract class AbstractPageManager extends PageManager {
    */
   async manage({ route, options, params = {}, action = {} }: ManageArgs) {
     this._storeManagedPageSnapshot();
+
     let controller, view;
+    const isControllerViewResolved =
+      route.isControllerResolved() && route.isViewResolved();
 
     try {
+      if (!isControllerViewResolved) {
+        this._dispatcher.fire(RouterEvents.BEFORE_ASYNC_ROUTE, { route }, true);
+      }
+
       const data = await this.getViewController(route);
       controller = data.controller;
       view = data.view;
@@ -113,6 +125,10 @@ export abstract class AbstractPageManager extends PageManager {
       }, 0);
 
       return { status: 409 };
+    } finally {
+      if (!isControllerViewResolved) {
+        this._dispatcher.fire(RouterEvents.AFTER_ASYNC_ROUTE, { route }, true);
+      }
     }
 
     if (this._hasOnlyUpdate(controller, view, options)) {
@@ -540,6 +556,7 @@ export abstract class AbstractPageManager extends PageManager {
       if (this._managedPage.state.cancelled) {
         throw CancelError;
       }
+
       await extension.activate();
     }
   }
@@ -764,8 +781,8 @@ export abstract class AbstractPageManager extends PageManager {
     const result = this._pageHandlerRegistry.handlePreManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
-          this._managedPage
-        ) as unknown as ManagedPage)
+            this._managedPage
+          ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
         nextManagedPage
@@ -789,8 +806,8 @@ export abstract class AbstractPageManager extends PageManager {
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
-          this._managedPage
-        ) as unknown as ManagedPage)
+            this._managedPage
+          ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
         previousManagedPage
@@ -801,7 +818,7 @@ export abstract class AbstractPageManager extends PageManager {
 
   protected async getViewController(
     route: ManagedPage['route']
-  ): Promise<{ controller: Controller; view: unknown; }> {
+  ): Promise<{ controller: Controller; view: unknown }> {
     // @ts-expect-error fixme in the future
     const [controller, view] = await Promise.race([
       this._previousManagedPage.state.abort?.promise,

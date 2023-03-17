@@ -9,6 +9,7 @@ import { RouteAction, RouteLocals, RouteOptions } from './Router';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
 import { PageManager } from '../page/manager/PageManager';
+import { RendererEvents } from '../page/renderer/RendererEvents';
 import { StringParameters, UnknownParameters } from '../types';
 import { Window } from '../window/Window';
 
@@ -43,6 +44,15 @@ export class ClientRouter extends AbstractRouter {
     this._handleClick(event as MouseEvent);
   protected _boundHandlePopState = (event: Event) =>
     this._handlePopState(event as PopStateEvent);
+
+  /**
+   * Mounted promise to prevent routing until app is fully mounted.
+   */
+  protected _mountedPromise: {
+    promise: Promise<void>;
+    resolve: () => void;
+    reject: () => void;
+  } | null = null;
 
   static get $dependencies() {
     return [
@@ -90,8 +100,32 @@ export class ClientRouter extends AbstractRouter {
   }) {
     super.init(config);
     this._host = config.$Host || this._window.getHost();
+    this._dispatcher.listen(RendererEvents.MOUNTED, this.#handleMounted, this);
 
     return this;
+  }
+
+  async preManage() {
+    return Promise.all([
+      super.preManage().then(() => {
+        if (!this._mountedPromise?.promise) {
+          this._mountedPromise = (() => {
+            let resolve, reject;
+            const promise = new Promise<void>((res, rej) => {
+              resolve = res;
+              reject = rej;
+            });
+
+            return {
+              promise,
+              resolve: resolve as unknown as () => void,
+              reject: reject as unknown as () => void,
+            };
+          })();
+        }
+      }),
+      this._mountedPromise?.promise,
+    ]);
   }
 
   /**
@@ -440,6 +474,15 @@ export class ClientRouter extends AbstractRouter {
    */
   _isSameDomain(url = '') {
     return new RegExp('^' + this.getBaseUrl()).test(url);
+  }
+
+  #handleMounted() {
+    this._mountedPromise?.resolve();
+    this._dispatcher.unlisten(
+      RendererEvents.MOUNTED,
+      this.#handleMounted,
+      this
+    );
   }
 }
 // @endif

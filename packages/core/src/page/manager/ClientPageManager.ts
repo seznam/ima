@@ -4,6 +4,7 @@ export class ClientPageManager {};
 import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
 import { Controller } from '../../controller/Controller';
+import { Dispatcher } from '../../event/Dispatcher';
 import { EventBus, EventBusEventHandler } from '../../event/EventBus';
 import { Extension } from '../../extension/Extension';
 import { UnknownParameters } from '../../types';
@@ -41,6 +42,7 @@ export class ClientPageManager extends AbstractPageManager {
       PageRenderer,
       PageStateManager,
       '$PageHandlerRegistry',
+      Dispatcher,
       ImaWindow,
       EventBus,
     ];
@@ -58,6 +60,7 @@ export class ClientPageManager extends AbstractPageManager {
    *        holds a list of pre-manage and post-manage handlers.
    * @param window The utility for manipulating the global context
    *        and global client-side-specific APIs.
+   * @param dispatcher IMA Dispatcher.
    * @param eventBus The event bus for dispatching and listening
    *        for custom IMA events propagated through the DOM.
    */
@@ -66,10 +69,17 @@ export class ClientPageManager extends AbstractPageManager {
     pageRenderer: PageRenderer,
     pageStateManager: PageStateManager,
     handlerRegistry: PageHandlerRegistry,
+    dispatcher: Dispatcher,
     window: ImaWindow,
     eventBus: EventBus
   ) {
-    super(pageFactory, pageRenderer, pageStateManager, handlerRegistry);
+    super(
+      pageFactory,
+      pageRenderer,
+      pageStateManager,
+      handlerRegistry,
+      dispatcher
+    );
 
     this._window = window;
 

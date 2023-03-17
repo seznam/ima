@@ -26,15 +26,14 @@ export enum RouterEvents {
   AFTER_HANDLE_ROUTE = '$IMA.$Router.afterHandleRoute',
 
   /**
-   * This event is fired before router awaits loding of async route
-   * handlers. You can use this to react to these situations in your
-   * application to for example render a loader. This only applies
-   * to async route handlers when they are not already preloaded.
+   * Fired right before loading view and controller when either
+   * view or controller is async (or both).
    */
   BEFORE_ASYNC_ROUTE = '$IMA.$Router.beforeAsyncRoute',
 
   /**
-   * Event fired when router finishes loading of async route handlers.
+   * Event fired when router finishes loading of async view
+   * and controller. If both are sync this is never fired.
    */
   AFTER_ASYNC_ROUTE = '$IMA.$Router.afterAsyncRoute',
 }
