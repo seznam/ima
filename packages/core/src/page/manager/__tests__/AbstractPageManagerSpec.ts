@@ -4,9 +4,10 @@
 
 import { toMockedInstance } from 'to-mock';
 
-import { ControllerDecorator } from '../../..//controller/ControllerDecorator';
 import { AbstractController } from '../../../controller/AbstractController';
 import { Controller, IController } from '../../../controller/Controller';
+import { ControllerDecorator } from '../../../controller/ControllerDecorator';
+import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { Extension } from '../../../extension/Extension';
 import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
 import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
@@ -18,6 +19,7 @@ import { RouteFactory } from '../../../router/RouteFactory';
 import { RouteOptions } from '../../../router/Router';
 import { StaticRoute } from '../../../router/StaticRoute';
 import { UnknownParameters } from '../../../types';
+import { PageData } from '../../PageTypes';
 import { AbstractPageManager } from '../AbstractPageManager';
 
 class AbstractControllerTest extends AbstractController {
@@ -69,6 +71,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let pageManager: AbstractPageManager;
   let handlerRegistry: PageHandlerRegistry;
   let routeFactory: RouteFactory;
+  let dispatcher: DispatcherImpl;
 
   const View = () => {
     return;
@@ -97,12 +100,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     pageStateManager = new PageStateManagerMock();
     handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
     routeFactory = new RouteFactory();
+    dispatcher = new DispatcherImpl();
 
     pageManager = new PageManagerMock(
       pageFactory as unknown as PageFactory,
       pageRenderer,
       pageStateManager,
-      handlerRegistry
+      handlerRegistry,
+      dispatcher
     );
 
     options = {
@@ -126,7 +131,20 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       options
     );
 
+    pageManager.init();
     pageManager['_managedPage'] = pageManager['_constructManagedPageValue'](
+      Controller,
+      View,
+      route,
+      options,
+      params,
+      controllerInstance,
+      decoratedController as ControllerDecorator,
+      viewInstance
+    );
+    pageManager['_previousManagedPage'] = pageManager[
+      '_constructManagedPageValue'
+    ](
       Controller,
       View,
       route,
@@ -161,8 +179,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       await pageManager
         .manage({
           route,
-          controller: Controller,
-          view: View,
           options,
           params,
           action: {},
@@ -182,6 +198,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
         .mockReturnValue(false as never);
+      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
       jest
         .spyOn(pageManager, '_runPreManageHandlers' as never)
         .mockReturnValue(Promise.resolve() as never);
@@ -196,51 +213,39 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .mockImplementation();
       jest.spyOn(pageStateManager, 'clear').mockImplementation();
       jest.spyOn(pageManager, '_clearComponentState').mockImplementation();
-      jest
-        .spyOn(pageManager, '_clearManagedPageValue' as never)
-        .mockImplementation();
-      jest
-        .spyOn(pageManager, '_constructManagedPageValue' as never)
-        .mockImplementation();
+      jest.spyOn(pageManager, '_constructManagedPageValue' as never);
       jest.spyOn(pageManager, '_initPageSource' as never).mockImplementation();
       jest
         .spyOn(pageManager, '_loadPageSource' as never)
         .mockReturnValue(Promise.resolve() as never);
 
-      await pageManager
-        .manage({
-          route,
-          controller: Controller,
-          view: View,
-          options,
-          params,
-          action: {},
-        })
-        .then(() => {
-          expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
-          expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();
-          expect(pageManager['_destroyPageSource']).toHaveBeenCalled();
-          expect(pageStateManager.clear).toHaveBeenCalled();
-          expect(pageManager._clearComponentState).toHaveBeenCalledWith(
-            options
-          );
-          expect(pageManager['_getInitialManagedPage']).toHaveBeenCalled();
-          expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
-          expect(pageManager['_initPageSource']).toHaveBeenCalled();
-          expect(pageManager['_loadPageSource']).toHaveBeenCalled();
-          expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
-        })
-        .catch(error => {
-          console.error('ima.core.page.manager:manage', error.message);
-        });
+      jest.useFakeTimers();
+
+      await pageManager.manage({
+        route,
+        options,
+        params,
+        action: {},
+      });
+
+      jest.advanceTimersByTime(1000);
+
+      expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
+      expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();
+      expect(pageManager['_destroyPageSource']).toHaveBeenCalled();
+      expect(pageStateManager.clear).toHaveBeenCalled();
+      expect(pageManager._clearComponentState).toHaveBeenCalledWith(options);
+      expect(pageManager['_getInitialManagedPage']).toHaveBeenCalled();
+      expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
+      expect(pageManager['_initPageSource']).toHaveBeenCalled();
+      expect(pageManager['_loadPageSource']).toHaveBeenCalled();
+      expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
     });
   });
 
   describe('destroy method', () => {
     it('should clear managed page value', async () => {
-      jest
-        .spyOn(pageManager, '_clearManagedPageValue' as never)
-        .mockImplementation();
+      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
 
       await pageManager.destroy();
 
@@ -764,7 +769,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should activate controller and extensions', async () => {
-      (pageManager['_managedPage'].state as UnknownParameters).activated = true;
+      (
+        pageManager['_previousManagedPage'].state as UnknownParameters
+      ).activated = true;
 
       await pageManager['_deactivatePageSource']();
 
@@ -773,8 +780,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should not call method activate more times', async () => {
-      (pageManager['_managedPage'].state as UnknownParameters).activated =
-        false;
+      (
+        pageManager['_previousManagedPage'].state as UnknownParameters
+      ).activated = false;
 
       await pageManager['_deactivatePageSource']();
 
@@ -815,6 +823,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       jest
         .spyOn(pageManager, '_destroyExtensions' as never)
         .mockImplementation();
+
+      pageManager['_previousManagedPage'].state.initialized = true;
 
       await pageManager['_destroyPageSource']();
 

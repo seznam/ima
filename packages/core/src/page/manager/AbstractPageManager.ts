@@ -664,8 +664,7 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _deactivatePageSource() {
     const controller = this._previousManagedPage.controllerInstance;
-    const isActivated = (this._previousManagedPage.state as UnknownParameters)
-      .activated;
+    const isActivated = this._previousManagedPage.state.activated;
 
     if (controller && isActivated) {
       await this._deactivateExtensions();
