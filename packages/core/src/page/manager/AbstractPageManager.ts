@@ -138,19 +138,22 @@ export abstract class AbstractPageManager extends PageManager {
       const response = await this._updatePageSource();
       await this._runPostManageHandlers(this._previousManagedPage, action);
 
+      setTimeout(() => {
+        this._managedPage.state.page.resolve();
+      }, 0);
+
       return response;
     }
 
     // Construct new managedPage value
-    const pageFactory = this._pageFactory;
-    const controllerInstance = pageFactory.createController(
+    const controllerInstance = this._pageFactory.createController(
       controller,
       options
     );
-
     const decoratedController =
-      pageFactory.decorateController(controllerInstance);
-    const viewInstance = pageFactory.createView(view);
+      this._pageFactory.decorateController(controllerInstance);
+    const viewInstance = this._pageFactory.createView(view);
+
     this._managedPage = this._constructManagedPageValue(
       controller,
       view,
@@ -172,7 +175,7 @@ export abstract class AbstractPageManager extends PageManager {
     this._pageStateManager.clear();
     this._clearComponentState(options);
 
-    // Store the new managedPage object and initialize controllers and extensions
+    // Initialize controllers and extensions
     await this._initPageSource();
 
     const response = await this._loadPageSource();
@@ -250,7 +253,7 @@ export abstract class AbstractPageManager extends PageManager {
    * Snapshot is used in manager handlers to easily determine differences
    * between the current and the previous state.
    */
-  protected _storeManagedPageSnapshot() {
+  protected _storeManagedPageSnapshot(): void {
     this._previousManagedPage = { ...this._managedPage };
 
     /**
@@ -285,8 +288,6 @@ export abstract class AbstractPageManager extends PageManager {
         promise,
       };
     })();
-
-    return this._previousManagedPage;
   }
 
   /**
@@ -396,6 +397,7 @@ export abstract class AbstractPageManager extends PageManager {
     (controller as Controller).setRouteParams(
       this._managedPage.params as StringParameters
     );
+
     await (controller as Controller).init();
   }
 
