@@ -33,7 +33,7 @@
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky install",
     "release": "npm run release:prepare && npm run release:push",
-    "release:prepare": "[[ ! -z `git status . --porcelain` ]] && echo 'There are uncommitted changes. Aborting release.' && exit 1 || changeset version && npm i --package-lock-only --ignore-scripts",
+    "release:prepare": "test \"`git status . --porcelain`\" && echo 'There are uncommitted changes. Aborting release.' && exit 1 || changeset version && npm i --package-lock-only --ignore-scripts",
     "release:push": "git add . && git commit -m 'Publish' && changeset tag && git push --follow-tags",
     "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
     "release:graduate": "changeset pre exit && npm run release",
