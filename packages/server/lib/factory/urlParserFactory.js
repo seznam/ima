@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
 
-module.exports = function urlParserMiddlewareFactory({ environment }) {
+module.exports = function urlParserFactory({ environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
   function _getHost(req) {
@@ -107,7 +107,7 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
     );
   }
 
-  function parseUrl(req, res, next) {
+  function urlParser({ req, res }) {
     const parseUrlReg = /^.*\/\/([^/]*)((?:\/[^/:]+)*)?(\/:language)?$/;
 
     const currentProtocol = _getProtocol(req);
@@ -159,7 +159,7 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
               currentLanguagePartPath = '/' + environment.$Language[expression];
               currentLanguage = environment.$Language[expression];
 
-              // REDIRECT
+              // TODO handle redirect?
               res.redirect(
                 currentProtocol +
                   '//' +
@@ -167,6 +167,7 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
                   currentRoot +
                   currentLanguagePartPath
               );
+
               return;
             }
           } else {
@@ -190,9 +191,7 @@ module.exports = function urlParserMiddlewareFactory({ environment }) {
         `You have undefined language. Set current domain "//${currentHost}" or "//*:*" to attribute $Language in environment.js.`
       );
     }
-
-    next();
   }
 
-  return parseUrl;
+  return { urlParser };
 };

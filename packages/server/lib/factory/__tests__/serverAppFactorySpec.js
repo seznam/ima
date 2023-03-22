@@ -76,6 +76,9 @@ describe('Server App Factory', () => {
     logger = console;
     environment = {
       $Debug: true,
+      $Language: {
+        '//*:*': 'en',
+      },
       $Server: {
         concurrency: 1,
         staticConcurrency: 100,
@@ -189,6 +192,7 @@ describe('Server App Factory', () => {
       get() {
         return '';
       },
+      originalUrl: '/',
     };
     RES = {
       status: jest.fn(),

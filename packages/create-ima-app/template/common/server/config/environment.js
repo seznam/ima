@@ -39,7 +39,7 @@ module.exports = (() => {
       $Server: {
         /**
          * When defined it overrides any other protocol and
-         * host settings in the urlParserMiddleware.
+         * host settings in the urlParser hook.
          */
         // protocol: 'https',
         // host: 'localhost',
