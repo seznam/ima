@@ -1,6 +1,13 @@
-import { ClassAttributes, Component, createElement } from 'react';
+import {
+  ClassAttributes,
+  Component,
+  ComponentType,
+  createElement,
+} from 'react';
 
-import { ViewAdapterProps } from './ViewAdapter';
+export interface BlankManagedRootViewProps {
+  pageView?: ComponentType;
+}
 
 /**
  * Blank managed root view does not nothing except for rendering the current
@@ -8,7 +15,11 @@ import { ViewAdapterProps } from './ViewAdapter';
  *
  * This is the default managed root view.
  */
-export class BlankManagedRootView extends Component<ViewAdapterProps> {
+export class BlankManagedRootView<
+  P extends BlankManagedRootViewProps = BlankManagedRootViewProps,
+  S = unknown,
+  SS = unknown
+> extends Component<P, S, SS> {
   static get defaultProps() {
     return {
       pageView: null,
@@ -27,7 +38,7 @@ export class BlankManagedRootView extends Component<ViewAdapterProps> {
 
     return createElement(
       pageView,
-      restProps as ClassAttributes<ViewAdapterProps>
+      restProps as ClassAttributes<Omit<BlankManagedRootViewProps, 'pageView'>>
     );
   }
 }
