@@ -3,7 +3,10 @@ const {
   GenericError,
   ServerRouter,
   Cache,
+  Dispatcher,
+  PageManager,
   PageStateManager,
+  PageRenderer,
   RouteNames,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
@@ -68,7 +71,10 @@ describe('Server App Factory', () => {
 
   let router = null;
   let cache = null;
+  let dispatcher = null;
+  let pageManager = null;
   let pageStateManager = null;
+  let pageRenderer = null;
   let emitter = new Emitter();
   let performance = createMonitoring();
 
@@ -127,9 +133,13 @@ describe('Server App Factory', () => {
         .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
     });
 
+    dispatcher = toMockedInstance(Dispatcher);
+
+    pageManager = toMockedInstance(PageManager);
     pageStateManager = toMockedInstance(PageStateManager, {
       getState: jest.fn().mockReturnValue({ page: 'state' }),
     });
+    pageRenderer = toMockedInstance(PageRenderer);
 
     appFactory = jest.fn(() => {
       return {
@@ -170,6 +180,18 @@ describe('Server App Factory', () => {
 
                   if (name === '$PageStateManager') {
                     return pageStateManager;
+                  }
+
+                  if (name === '$PageRenderer') {
+                    return pageRenderer;
+                  }
+
+                  if (name === '$PageManager') {
+                    return pageManager;
+                  }
+
+                  if (name === '$Dispatcher') {
+                    return dispatcher;
                   }
                 },
                 clear() {},
