@@ -144,6 +144,12 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/helpers@19.0.0-rc.0
 
+## 18.1.2
+
+### Patch Changes
+
+- 22e68303b: Spreaded extensions are now correctly added to controller extensions map. This means that you can access those extensions using their constructor `this.getExtension(LoginExtension)` as you would while not using "spread" functionality.
+
 ## 18.1.1
 
 ### Patch Changes
