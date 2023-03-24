@@ -35,18 +35,25 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * The full name of Object Container alias identifying the controller
    * associated with this route.
    */
-  protected _controller: string | typeof Controller | (() => IController);
+  protected _controller: {
+    resolved: boolean;
+    controller: string | typeof Controller | (() => IController);
+    cached: null | unknown;
+  };
   /**
    * The full name or Object Container alias identifying the view class
    * associated with this route.
    */
-  protected _view: string | unknown | (() => unknown);
+  protected _view: {
+    resolved: boolean;
+    view: string | unknown | (() => unknown);
+    cached: null | unknown;
+  };
+
   /**
    * The route additional options.
    */
   protected _options: RouteFactoryOptions;
-  protected _cachedController: unknown;
-  protected _cachedView: unknown;
 
   /**
    * Initializes the route.
@@ -70,8 +77,16 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   ) {
     this._name = name;
     this._pathExpression = pathExpression;
-    this._controller = controller;
-    this._view = view;
+    this._controller = {
+      resolved: !this.isAsync(controller),
+      controller: controller,
+      cached: null,
+    };
+    this._view = {
+      resolved: !this.isAsync(view),
+      view: view,
+      cached: null,
+    };
 
     /**
      * Init options with defaults.
@@ -99,6 +114,15 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   }
 
   /**
+   * Checks if given argument is an async handler.
+   */
+  isAsync(module: string | unknown | (() => unknown)) {
+    return (
+      module?.constructor.name === 'AsyncFunction' || module instanceof Promise
+    );
+  }
+
+  /**
    * Returns Controller class/alias/constant associated with this route.
    * Internally caches async calls for dynamically imported controllers,
    * meaning that once they're loaded, you get the same promise for
@@ -107,11 +131,29 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * @return The Controller class/alias/constant.
    */
   getController() {
-    if (!this._cachedController) {
-      this._cachedController = this._getAsyncModule(this._controller);
+    if (!this._controller.cached) {
+      this._controller.cached = !this._controller.resolved
+        ? (
+            this._controller.controller as () => Promise<
+              Record<string, unknown>
+            >
+          )().then(module => {
+            this._controller.resolved = true;
+
+            return module.default ?? module;
+          })
+        : this._controller.controller;
     }
 
-    return this._cachedController;
+    return this._controller.cached;
+  }
+
+  /**
+   * Returns true for resolved controller. This is always true
+   * for sync route views.
+   */
+  isControllerResolved() {
+    return this._controller.resolved;
   }
 
   /**
@@ -123,11 +165,27 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * @return The View class/alias/constant.
    */
   getView() {
-    if (!this._cachedView) {
-      this._cachedView = this._getAsyncModule(this._view);
+    if (!this._view.cached) {
+      this._view.cached = !this._view.resolved
+        ? (this._view.view as () => Promise<Record<string, unknown>>)().then(
+            module => {
+              this._view.resolved = true;
+
+              return module.default ?? module;
+            }
+          )
+        : this._view.view;
     }
 
-    return this._cachedView;
+    return this._view.cached;
+  }
+
+  /**
+   * Returns true for resolved view. This is always true
+   * for sync route views.
+   */
+  isViewResolved() {
+    return this._view.resolved;
   }
 
   /**
@@ -221,21 +279,5 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
         'and must be overridden',
       { path, baseUrl }
     );
-  }
-
-  /**
-   * Helper method to pre-process view and controller which can be
-   * async functions in order to support dynamic async routing.
-   *
-   * @param module The module class/alias/constant.
-   * @return Module, or promise resolving to the actual view or controller
-   *  constructor function/class.
-   */
-  _getAsyncModule(module: string | unknown | (() => unknown)) {
-    return module?.constructor.name === 'AsyncFunction'
-      ? (module as () => Promise<Record<string, unknown>>)().then(
-          module => module.default ?? module
-        )
-      : module;
   }
 }

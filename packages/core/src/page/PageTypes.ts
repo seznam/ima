@@ -11,11 +11,24 @@ export type ManagedPage = {
   decoratedController?: ControllerDecorator;
   options?: RouteOptions;
   params?: UnknownParameters;
-  route?: InstanceType<typeof AbstractRoute>;
+  route: InstanceType<typeof AbstractRoute>;
   view?: unknown;
   viewInstance?: unknown;
-  state?: {
+  state: {
     activated: boolean;
+    initialized: boolean;
+    cancelled: boolean;
+    executed: boolean;
+    abort?: {
+      promise: Promise<void>;
+      resolve: () => void;
+      reject: () => void;
+    };
+    page: {
+      promise: Promise<void>;
+      resolve: () => void;
+      reject: () => void;
+    };
   };
 };
 

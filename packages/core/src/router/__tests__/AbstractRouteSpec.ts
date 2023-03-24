@@ -68,20 +68,48 @@ describe('ima.core.router.AbstractRoute', function () {
     expect(result).toStrictEqual(view);
   });
 
-  it('should return and cache async route controller', async () => {
-    route['_controller'] = async () => controller;
+  it('should return view.resolved', () => {
+    route['_view'].resolved = false;
+    expect(route.isViewResolved()).toBeFalsy();
+    route['_view'].resolved = true;
+    expect(route.isViewResolved()).toBeTruthy();
+  });
+
+  it('should return controller.resolved', () => {
+    route['_controller'].resolved = false;
+    expect(route.isControllerResolved()).toBeFalsy();
+    route['_controller'].resolved = true;
+    expect(route.isControllerResolved()).toBeTruthy();
+  });
+
+  it('should return and cached async route controller', async () => {
+    route = route = new MockedAbstractRoute(
+      name,
+      pathExpression,
+      async () => controller,
+      view,
+      options as unknown as RouteOptions
+    );
+
     const result = await route.getController();
 
     expect(result).toStrictEqual(controller);
-    await expect(route['_cachedController']).resolves.toStrictEqual(result);
+    await expect(route['_controller'].cached).resolves.toStrictEqual(result);
   });
 
   it('should return and cache async route view', async () => {
-    route['_view'] = async () => view;
+    route = new MockedAbstractRoute(
+      name,
+      pathExpression,
+      controller,
+      async () => view,
+      options as unknown as RouteOptions
+    );
+
     const result = await route.getView();
 
     expect(result).toStrictEqual(view);
-    await expect(route['_cachedView']).resolves.toStrictEqual(result);
+    await expect(route['_view'].cached).resolves.toStrictEqual(result);
   });
 
   it('should preload async view and controller', async () => {
@@ -108,26 +136,20 @@ describe('ima.core.router.AbstractRoute', function () {
     expect(resultController).toStrictEqual(controller);
   });
 
-  describe('_getAsyncModule() method', () => {
-    it('should return promise resolving to default export for async import', async () => {
+  describe('isAsync()', () => {
+    it('should return true for async modules', () => {
       const asyncController = async () =>
         Promise.resolve({ default: controller });
 
-      await expect(
-        route._getAsyncModule(asyncController)
-      ).resolves.toStrictEqual(controller);
+      expect(route.isAsync(asyncController)).toBeTruthy();
+      expect(route.isAsync(Promise.resolve())).toBeTruthy();
     });
 
-    it('should return promise resolving to async constructor', async () => {
-      const asyncController = async () => Promise.resolve(controller);
-
-      await expect(
-        route._getAsyncModule(asyncController)
-      ).resolves.toStrictEqual(controller);
-    });
-
-    it('should return constructor', () => {
-      expect(route._getAsyncModule(controller)).toStrictEqual(controller);
+    it('should return false for sync modules', () => {
+      expect(route.isAsync(controller)).toBeFalsy();
+      expect(route.isAsync(() => controller)).toBeFalsy();
+      expect(route.isAsync([])).toBeFalsy();
+      expect(route.isAsync({})).toBeFalsy();
     });
   });
 });
