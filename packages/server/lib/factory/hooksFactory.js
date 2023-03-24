@@ -7,6 +7,7 @@ module.exports = function hooksFactory({
   renderStaticSPAPage,
   renderStaticServerErrorPage,
   renderStaticClientErrorPage,
+  urlParser,
   _initApp,
   _importAppMainSync,
   _addImaToResponse,
@@ -266,6 +267,16 @@ module.exports = function hooksFactory({
     useIMAHandleRequestHook();
   }
 
+  function useBeforeRequestHook() {
+    useUrlParserBeforeRequestHook();
+  }
+
+  function useUrlParserBeforeRequestHook() {
+    emitter.on(Event.BeforeRequest, async event => {
+      urlParser(event);
+    });
+  }
+
   function useCreateContentVariablesHook() {
     emitter.on(Event.CreateContentVariables, async event => {
       if (!_isValidResponse(event)) {
@@ -357,6 +368,7 @@ module.exports = function hooksFactory({
   function useIMADefaultHook() {
     useCreateContentVariablesHook();
     userErrorHook();
+    useBeforeRequestHook();
     useRequestHook();
     useResponseHook();
   }
@@ -364,6 +376,7 @@ module.exports = function hooksFactory({
   return {
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,

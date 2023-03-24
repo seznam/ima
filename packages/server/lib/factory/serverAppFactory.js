@@ -5,6 +5,7 @@ const hooksFactory = require('./hooksFactory.js');
 const IMAInternalFactory = require('./IMAInternalFactory.js');
 const responseUtilsFactory = require('./responseUtilsFactory.js');
 const staticPageFactory = require('./staticPageFactory.js');
+const urlParserFactory = require('./urlParserFactory.js');
 const { Event } = require('../emitter.js');
 
 module.exports = function serverAppFactory({
@@ -21,6 +22,7 @@ module.exports = function serverAppFactory({
   const devErrorPage = devErrorPageFactory({ logger });
   const { processContent, createContentVariables, sendResponseHeaders } =
     responseUtilsFactory();
+
   const {
     _initApp,
     createBootConfig,
@@ -35,6 +37,7 @@ module.exports = function serverAppFactory({
     instanceRecycler,
     serverGlobal,
   });
+
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
@@ -47,9 +50,15 @@ module.exports = function serverAppFactory({
     environment,
   });
 
+  const { urlParser } = urlParserFactory({
+    environment,
+    applicationFolder,
+  });
+
   const {
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,
@@ -60,6 +69,7 @@ module.exports = function serverAppFactory({
     renderStaticSPAPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
+    urlParser,
     _initApp,
     _importAppMainSync,
     _addImaToResponse,
@@ -217,6 +227,7 @@ module.exports = function serverAppFactory({
     createBootConfig,
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,
