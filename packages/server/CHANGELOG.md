@@ -1,5 +1,22 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Major Changes
+
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+
+### Minor Changes
+
+- 7c9cf6997: Style content variable now automatically generates preload links for app styles.
+
+### Patch Changes
+
+- 1f636bbfb: Fixed issue where server redirect showed ErrorOverlay in debug mode
+- d2e426d75: The instances of $Dispatcher, $Cache, $PageRenderer and $PageManager is cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
+
 ## 19.0.0-rc.5
 
 ### Patch Changes
@@ -77,6 +94,7 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
+
 ## 18.3.1
 
 ### Patch Changes
