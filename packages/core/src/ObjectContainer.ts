@@ -1,76 +1,40 @@
+import { AbstractConstructor, Constructor } from 'type-fest';
+
+import { GenericError } from './error/GenericError';
 import { ns, Namespace } from './Namespace';
 import { UnknownParameters } from './types';
 
-ns.namespace('ima.core');
-
-type DependencyOptions = {
-  optional: boolean;
-};
-
 type WithDependencies = {
-  $dependencies?: Dependencies;
+  readonly $dependencies?: Dependencies;
 };
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-type Constructable<T> = (new (...args: any[]) => T) & WithDependencies;
+export type Constructable<T> =
+  | (Constructor<T> & WithDependencies)
+  | (Function & { prototype: T } & WithDependencies);
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-type NonConstructable<T> = (abstract new (...args: any[]) => T) &
-  WithDependencies;
+export type Injectable<T> =
+  | Constructable<T>
+  | (AbstractConstructor<T> & WithDependencies);
 
-export type UnknownConstructable = Constructable<unknown>;
-
-export type UnknownNonConstructable = NonConstructable<unknown>;
-
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export type FactoryFunction = (...args: any[]) => unknown;
-
-type Dependency =
+export type Dependencies = Dependency<any>[];
+export type Dependency<T> =
   | string
-  | UnknownConstructable
-  | UnknownNonConstructable
-  | FactoryFunction;
+  | Injectable<T>
+  | [
+      string | Injectable<T>,
+      {
+        optional?: boolean;
+      }
+    ];
 
-export type DependencyWithOptions =
-  | Dependency
-  | [Dependency, DependencyOptions];
-
-export type Dependencies = (
-  | InstanceType<UnknownConstructable>
-  | DependencyWithOptions
-)[];
+// Todo vyhledat cas as a pod
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
-/**
- * The Object Container is an enhanced dependency injector with support for
- * aliases and constants, and allowing to reference classes in the application
- * namespace by specifying their fully qualified names.
- */
-export class ObjectContainer {
-  /**
-   * The current binding state.
-   *
-   * The {@link setBindingState()} method may be called for changing
-   * object container binding state only by the bootstrap script.
-   */
-  private _bindingState?: string;
-  /**
-   * The current plugin binding to OC.
-   *
-   * The {@link setBindingState()} method may be called for changing
-   * object container binding state only by the bootstrap script.
-   */
-  private _bindingPlugin?: string;
-  private _entries: Map<Dependency, Entry> = new Map();
-  /**
-   * The namespace container, used to access classes and values using
-   * their fully qualified names.
-   */
-  private _namespace: Namespace;
 
+export enum BindingState {
   /**
-   * Returns constant for plugin binding state.
+   * Constant for plugin binding state.
    *
    * When the object container is in plugin binding state, it is impossible
    * to register new aliases using the {@link bind()} method and register
@@ -87,15 +51,11 @@ export class ObjectContainer {
    *
    * The application itself has always access to the unlocked object
    * container.
-   *
-   * @return The plugin binding state.
    */
-  static get PLUGIN_BINDING_STATE() {
-    return 'plugin';
-  }
+  Plugin = 'plugin',
 
   /**
-   * Returns constant for IMA binding state.
+   * Constant for IMA binding state.
    *
    * When the object container is in ima binding state, it is possible
    * to register new aliases using the {@link bind()} method and register
@@ -107,12 +67,10 @@ export class ObjectContainer {
    *
    * @return The IMA binding state.
    */
-  static get IMA_BINDING_STATE() {
-    return 'ima.core';
-  }
+  IMA = 'ima.core',
 
   /**
-   * Returns constant for app binding state.
+   * Constant for app binding state.
    *
    * When the object container is in app binding state, it is possible
    * to register new aliases using the {@link bind()} method and register
@@ -121,12 +79,38 @@ export class ObjectContainer {
    * {@link inject()} method (classes that were not configured yet may be
    * configured using the {@link inject()} method or {@link provide()}
    * method).
-   *
-   * @return The app binding state.
    */
-  static get APP_BINDING_STATE() {
-    return 'app';
-  }
+  App = 'app',
+}
+
+/**
+ * The Object Container is an enhanced dependency injector with support for
+ * aliases and constants, and allowing to reference classes in the application
+ * namespace by specifying their fully qualified names.
+ */
+export class ObjectContainer {
+  /**
+   * The current binding state.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
+  private _bindingState?: BindingState;
+
+  /**
+   * The current plugin binding to OC.
+   *
+   * The {@link setBindingState()} method may be called for changing
+   * object container binding state only by the bootstrap script.
+   */
+  private _bindingPlugin?: string;
+  private _entries: Map<Dependency<any>, Entry<any>> = new Map();
+
+  /**
+   * The namespace container, used to access classes and values using
+   * their fully qualified names.
+   */
+  private _namespace: Namespace;
 
   /**
    * Initializes the object container.
@@ -158,35 +142,42 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return This object container.
    */
-  bind(
+  bind<T>(
     name: string,
-    classConstructor:
-      | UnknownConstructable
-      | UnknownNonConstructable
-      | FactoryFunction,
+    classConstructor: Injectable<T>,
     dependencies?: Dependencies
-  ) {
+  ): this {
     if ($Debug) {
       if (
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE &&
+        this._bindingState === BindingState.Plugin &&
         typeof name === 'string' &&
         name[0] !== '$'
       ) {
-        throw new Error(
+        throw new GenericError(
           `ima.core.ObjectContainer:bind Object container ` +
             `is locked. You do not have the permission to ` +
-            `create a new alias named ${this._getDebugName(name)}.`
+            `create a new alias named ${name}.`,
+          {
+            name,
+            classConstructor: classConstructor?.toString(),
+            dependencies: dependencies?.toString(),
+          }
         );
       }
 
       if (typeof classConstructor !== 'function') {
-        throw new Error(
+        throw new GenericError(
           `ima.core.ObjectContainer:bind The second ` +
             `argument has to be a class constructor function, ` +
-            `but ${this._getDebugName(
+            `but ${this.#getDebugName(
               classConstructor
             )} was provided. Fix alias ` +
-            `${this._getDebugName(name)} for your bind.js file.`
+            `${this.#getDebugName(name)} for your bind.js file.`,
+          {
+            name,
+            classConstructor: classConstructor,
+            dependencies: dependencies?.toString(),
+          }
         );
       }
     }
@@ -195,6 +186,10 @@ export class ObjectContainer {
     const nameEntry = this._entries.get(name);
     const entry = classConstructorEntry || nameEntry;
 
+    /**
+     * Create instance using class constructor and dependencies and bind
+     * it given name.
+     */
     if (classConstructorEntry && !nameEntry && dependencies) {
       const entry = this._createEntry(classConstructor, dependencies);
       this._entries.set(name, entry);
@@ -203,12 +198,18 @@ export class ObjectContainer {
     }
 
     if (entry) {
+      // Update/set existing instance to new entry name
       this._entries.set(name, entry);
 
+      // Update dependencies of existing oc entry
       if (dependencies) {
         this._updateEntryValues(entry, classConstructor, dependencies);
       }
     } else {
+      /**
+       * If neither name entry or class constructor entry exist,
+       * we'll create both of them and add them to oc.
+       */
       const entry = this._createEntry(classConstructor, dependencies);
       this._entries.set(classConstructor, entry);
       this._entries.set(name, entry);
@@ -227,28 +228,31 @@ export class ObjectContainer {
    * @param value The constant value.
    * @return This object container.
    */
-  constant(name: string, value: unknown) {
+  constant<T>(name: string, value: T): this {
     if ($Debug) {
-      if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
-        throw new Error(
-          `ima.core.ObjectContainer:constant The ${this._getDebugName(name)} ` +
+      if (this._entries.has(name) || !!this._getEntryFromConstant<T>(name)) {
+        throw new GenericError(
+          `ima.core.ObjectContainer:constant The ${this.#getDebugName(name)} ` +
             `constant has already been declared and cannot be ` +
-            `redefined.`
+            `redefined.`,
+          { name, value: value?.toString() }
         );
       }
 
-      if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
-        throw new Error(
-          `ima.core.ObjectContainer:constant The ${this._getDebugName(name)} ` +
+      if (this._bindingState === BindingState.Plugin) {
+        throw new GenericError(
+          `ima.core.ObjectContainer:constant The ${this.#getDebugName(name)} ` +
             `constant can't be declared in plugin. ` +
-            `The constant must be define in app/config/bind.js file.`
+            `The constant must be define in app/config/bind.js file.`,
+          { name, value: value?.toString() }
         );
       }
     }
 
-    const constantEntry = this._createEntry(() => value, [], {
+    const constantEntry = this._createEntry<T>(() => value, [], {
       writeable: false,
     });
+
     constantEntry.sharedInstance = value;
     this._entries.set(name, constantEntry);
 
@@ -268,26 +272,33 @@ export class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  inject(classConstructor: UnknownConstructable, dependencies: Dependencies) {
+  inject<T>(
+    classConstructor: Constructable<T>,
+    dependencies: Dependencies
+  ): this {
     if ($Debug) {
       if (typeof classConstructor !== 'function') {
-        throw new Error(
+        throw new GenericError(
           `ima.core.ObjectContainer:inject The first ` +
             `argument has to be a class constructor function, ` +
-            `but ${this._getDebugName(
+            `but ${this.#getDebugName(
               classConstructor
             )} was provided. Fix your ` +
-            `bind.js file.`
+            `bind.js file.`,
+          {
+            classConstructor: classConstructor,
+            dependencies: dependencies?.toString(),
+          }
         );
       }
 
       if (
         this._entries.has(classConstructor) &&
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+        this._bindingState === BindingState.Plugin
       ) {
-        throw new Error(
+        throw new GenericError(
           `ima.core.ObjectContainer:inject The ` +
-            `${this._getDebugName(
+            `${this.#getDebugName(
               classConstructor.name
             )} has already had its ` +
             `default dependencies configured, and the object ` +
@@ -295,12 +306,17 @@ export class ObjectContainer {
             `dependency configuration cannot be override. The ` +
             `dependencies of the provided class must be ` +
             `overridden from the application's bind.js ` +
-            `configuration file.`
+            `configuration file.`,
+          {
+            classConstructor: classConstructor?.toString(),
+            dependencies: dependencies?.toString(),
+          }
         );
       }
     }
 
     let classConstructorEntry = this._entries.get(classConstructor);
+
     if (classConstructorEntry) {
       if (dependencies) {
         this._updateEntryValues(
@@ -334,41 +350,53 @@ export class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  provide(
-    interfaceConstructor: UnknownConstructable | UnknownNonConstructable,
-    implementationConstructor: UnknownConstructable,
+  provide<T>(
+    interfaceConstructor: Injectable<T>,
+    implementationConstructor: Constructable<T>,
     dependencies?: Dependencies
-  ) {
+  ): this {
     if ($Debug) {
       if (
         this._entries.has(interfaceConstructor) &&
-        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+        this._bindingState === BindingState.Plugin
       ) {
-        throw new Error(
+        throw new GenericError(
           'ima.core.ObjectContainer:provide The ' +
             'implementation of the provided interface ' +
-            `(${this._getDebugName(
+            `(${this.#getDebugName(
               interfaceConstructor.name
             )}) has already been ` +
-            `configured and cannot be overridden.`
+            `configured and cannot be overridden.`,
+          {
+            interfaceConstructor: interfaceConstructor?.toString(),
+            implementationConstructor: implementationConstructor?.toString(),
+            dependencies: dependencies?.toString(),
+          }
         );
       }
 
       // check that implementation really extends interface
       const prototype = implementationConstructor.prototype;
+
       if (!(prototype instanceof interfaceConstructor)) {
-        throw new Error(
+        throw new GenericError(
           'ima.core.ObjectContainer:provide The specified ' +
-            `class (${this._getDebugName(
+            `class (${this.#getDebugName(
               implementationConstructor.name
             )}) does not ` +
-            `implement the ${this._getDebugName(interfaceConstructor.name)} ` +
-            `interface.`
+            `implement the ${this.#getDebugName(interfaceConstructor.name)} ` +
+            `interface.`,
+          {
+            interfaceConstructor: interfaceConstructor?.toString(),
+            implementationConstructor: implementationConstructor?.toString(),
+            dependencies: dependencies?.toString(),
+          }
         );
       }
     }
 
     let classConstructorEntry = this._entries.get(implementationConstructor);
+
     if (classConstructorEntry) {
       this._entries.set(interfaceConstructor, classConstructorEntry);
 
@@ -403,14 +431,15 @@ export class ObjectContainer {
    *        factory function.
    * @return The shared instance or value.
    */
-  get(name: DependencyWithOptions) {
-    const entry = this._getEntry(name);
+  // TODO
+  get<T>(name: Dependency<T>) {
+    const entry = this._getEntry<T>(name);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
-    //Optional entries can be null if they are not found in the OC
+    // Optional entries can be null if they are not found in the OC
     return entry?.sharedInstance;
   }
 
@@ -421,10 +450,14 @@ export class ObjectContainer {
    *        is registered with this object container.
    * @return The constructor function.
    */
-  getConstructorOf(name: string | UnknownConstructable) {
+  getConstructorOf<T>(name: string | Constructable<T>): Injectable<T> | null {
     const entry = this._getEntry(name);
 
-    return (entry as Entry).classConstructor;
+    if (!entry) {
+      return null;
+    }
+
+    return entry.classConstructor;
   }
 
   /**
@@ -435,7 +468,7 @@ export class ObjectContainer {
    * @return `true` if the specified object, class or
    *         resource is registered with this object container.
    */
-  has(name: Dependency) {
+  has<T>(name: Dependency<T>): boolean {
     return (
       this._entries.has(name) ||
       !!this._getEntryFromConstant(name) ||
@@ -460,10 +493,20 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  create(name: DependencyWithOptions, dependencies: Dependencies = []) {
+  create<T>(
+    name: Dependency<T>,
+    dependencies: Dependencies = []
+  ): InstanceType<Constructor<T>> {
     const entry = this._getEntry(name);
 
-    return this._createInstanceFromEntry(entry as Entry, dependencies);
+    if (!entry) {
+      throw new Error(
+        'ima.core.ObjectContainer:create unable to create ' +
+          `entry with ${name}, as it is null`
+      );
+    }
+
+    return this._createInstanceFromEntry(entry, dependencies);
   }
 
   /**
@@ -472,7 +515,7 @@ export class ObjectContainer {
    *
    * @return This object container.
    */
-  clear() {
+  clear(): this {
     this._entries.clear();
     this._bindingState = undefined;
     this._bindingPlugin = undefined;
@@ -480,23 +523,25 @@ export class ObjectContainer {
     return this;
   }
 
-  setBindingState(bindingState: string, bindingPluginName?: string) {
+  setBindingState(
+    bindingState: BindingState,
+    bindingPluginName?: string
+  ): void {
     if (
-      this._bindingState === ObjectContainer.APP_BINDING_STATE &&
-      bindingState !== ObjectContainer.PLUGIN_BINDING_STATE
+      this._bindingState === BindingState.App &&
+      bindingState !== BindingState.Plugin
     ) {
-      throw new Error(
+      throw new GenericError(
         `ima.core.ObjectContainer:setBindingState The setBindingState() ` +
           `method  has to be called only by the bootstrap script. Other ` +
-          `calls are not allowed.`
+          `calls are not allowed.`,
+        { bindingState, bindingPluginName }
       );
     }
 
     this._bindingState = bindingState;
     this._bindingPlugin =
-      bindingState === ObjectContainer.PLUGIN_BINDING_STATE
-        ? bindingPluginName
-        : undefined;
+      bindingState === BindingState.Plugin ? bindingPluginName : undefined;
   }
 
   /**
@@ -520,7 +565,7 @@ export class ObjectContainer {
    * @throws If no such constant, alias, registry, interface
    *         implementation is known to this object container.
    */
-  _getEntry(name: DependencyWithOptions) {
+  _getEntry<T>(name: Dependency<T>): Entry<T> | null {
     let entryName = Array.isArray(name) ? name[0] : name;
 
     // Remove all meta symbols from the start of the alias
@@ -535,23 +580,23 @@ export class ObjectContainer {
       this._getEntryFromNamespace(entryName) ||
       this._getEntryFromClassConstructor(entryName);
 
-    if ($Debug && !entry && !this._isOptional(name)) {
+    if ($Debug && !entry && !this._isOptional<T>(name)) {
       throw new Error(
         `ima.core.ObjectContainer:_getEntry There is no constant, ` +
           `alias, registered class, registered interface with ` +
           `configured implementation or namespace entry ` +
-          `identified as: <strong>${this._getDebugName(name)}</strong>
+          `identified as: <strong>${this.#getDebugName(name)}</strong>
            Check your bind.js file for ` +
           `typos or register given entry with the object container.`
       );
     }
 
-    if (this._isSpread(name)) {
+    if (this._isSpread<T>(name)) {
       if (Array.isArray(entry?.sharedInstance)) {
-        const spreadEntry = Entry.from(entry as Entry);
+        const spreadEntry = Entry.from(entry as Entry<T>);
 
         spreadEntry.sharedInstance = (
-          (entry as NonNullable<Entry>).sharedInstance as NonNullable<
+          (entry as NonNullable<Entry<T>>).sharedInstance as NonNullable<
             Array<string>
           >
         ).map(sharedInstance => this.get(sharedInstance));
@@ -561,7 +606,7 @@ export class ObjectContainer {
 
       if ($Debug) {
         throw new Error(
-          `ima.core.ObjectContainer:_getEntry Invalid use of spread entry identified as: <strong>${this._getDebugName(
+          `ima.core.ObjectContainer:_getEntry Invalid use of spread entry identified as: <strong>${this.#getDebugName(
             name
           )}</strong> Check your bind.js file for ` +
             `typos or register given entry with the object container.`
@@ -579,7 +624,7 @@ export class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isOptional(name: DependencyWithOptions) {
+  _isOptional<T>(name: Dependency<T>): boolean {
     return (
       (Array.isArray(name) && name[1]?.optional) ||
       (typeof name === 'string' && OPTIONAL_RE.test(name))
@@ -593,7 +638,7 @@ export class ObjectContainer {
    *        factory function, class or interface constructor, or a fully
    *        qualified namespace path.
    */
-  _isSpread(name: DependencyWithOptions) {
+  _isSpread<T>(name: Dependency<T>): boolean {
     const normalizedName = Array.isArray(name) ? name[0] : name;
 
     return typeof normalizedName === 'string' && SPREAD_RE.test(normalizedName);
@@ -612,14 +657,11 @@ export class ObjectContainer {
    * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
    */
-  _updateEntryValues(
-    entry: Entry,
-    classConstructor:
-      | UnknownConstructable
-      | UnknownNonConstructable
-      | FactoryFunction,
+  _updateEntryValues<T>(
+    entry: Entry<T>,
+    classConstructor: Injectable<T>,
     dependencies: Dependencies
-  ) {
+  ): void {
     entry.classConstructor = classConstructor;
     entry.dependencies = dependencies;
   }
@@ -636,28 +678,26 @@ export class ObjectContainer {
    * @param options
    * @return Created instance or generated value.
    */
-  _createEntry(
-    classConstructor:
-      | UnknownConstructable
-      | UnknownNonConstructable
-      | FactoryFunction,
+  _createEntry<T>(
+    classConstructor: Injectable<T>,
     dependencies?: Dependencies,
     options?: EntryOptions
-  ) {
+  ): InstanceType<typeof Entry<T>> {
     if (
       (!dependencies || dependencies.length === 0) &&
-      Array.isArray((classConstructor as WithDependencies).$dependencies)
+      Array.isArray(classConstructor.$dependencies)
     ) {
-      dependencies = (classConstructor as WithDependencies).$dependencies;
+      dependencies = classConstructor.$dependencies;
     }
 
-    let referrer = this._bindingState;
-
-    if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
-      referrer = this._bindingPlugin;
-    }
-
-    return new Entry(classConstructor, dependencies, referrer, options);
+    return new Entry(
+      classConstructor,
+      dependencies,
+      this._bindingState === BindingState.Plugin
+        ? this._bindingPlugin
+        : this._bindingState?.toString(),
+      options
+    );
   }
 
   /**
@@ -675,7 +715,10 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  _createInstanceFromEntry(entry: Entry, dependencies: Dependencies = []) {
+  _createInstanceFromEntry<T>(
+    entry: Entry<Constructor<T>>,
+    dependencies: Dependencies = []
+  ): InstanceType<Constructor<T>> {
     if (dependencies.length === 0) {
       dependencies = [];
 
@@ -684,16 +727,15 @@ export class ObjectContainer {
           ['function', 'string'].indexOf(typeof dependency) > -1 ||
           Array.isArray(dependency)
         ) {
-          const retrievedDependency = this.get(
-            dependency as DependencyWithOptions
-          );
+          const retrievedDependency = this.get(dependency);
+
           if (
             Array.isArray(retrievedDependency) &&
-            this._isSpread(dependency as DependencyWithOptions)
+            this._isSpread(dependency)
           ) {
             dependencies.push(...retrievedDependency);
           } else {
-            dependencies.push(retrievedDependency as Dependency);
+            dependencies.push(retrievedDependency as Dependency<T>);
           }
         } else {
           dependencies.push(dependency);
@@ -701,8 +743,7 @@ export class ObjectContainer {
       }
     }
 
-    const constructor = entry.classConstructor;
-    return new (constructor as UnknownConstructable)(...dependencies);
+    return new (entry.classConstructor as Constructor<T>)(...dependencies);
   }
 
   /**
@@ -720,15 +761,16 @@ export class ObjectContainer {
    *         composition name in the constants. The method returns `null`
    *         if the specified composition name does not exist in the constants.
    */
-  _getEntryFromConstant(compositionName: Dependency) {
-    //TODO entries must be
+  _getEntryFromConstant<T>(
+    compositionName: Dependency<T>
+  ): Entry<() => T> | null {
     if (typeof compositionName !== 'string') {
       return null;
     }
 
     const objectProperties = compositionName.split('.');
     let constantValue = this._entries.has(objectProperties[0])
-      ? (this._entries.get(objectProperties[0]) as NonNullable<Entry>)
+      ? (this._entries.get(objectProperties[0]) as NonNullable<Entry<() => T>>)
           .sharedInstance
       : null;
 
@@ -737,9 +779,10 @@ export class ObjectContainer {
     }
 
     if (constantValue !== undefined && constantValue !== null) {
-      const entry = this._createEntry(() => constantValue, [], {
+      const entry = this._createEntry<() => T>(() => constantValue, [], {
         writeable: false,
       });
+
       entry.sharedInstance = constantValue;
 
       return entry;
@@ -774,7 +817,7 @@ export class ObjectContainer {
    *         specified path in the namespace. The method returns `null`
    *         if the specified path does not exist in the namespace.
    */
-  _getEntryFromNamespace(path: Dependency) {
+  _getEntryFromNamespace<T>(path: Dependency<T>): Entry<T> | null {
     if (typeof path !== 'string' || !this._namespace.has(path)) {
       return null;
     }
@@ -782,15 +825,15 @@ export class ObjectContainer {
     const namespaceValue = this._namespace.get(path);
 
     if (typeof namespaceValue === 'function') {
-      if (this._entries.has(namespaceValue as FactoryFunction)) {
-        return this._entries.get(namespaceValue as FactoryFunction);
+      if (this._entries.has(namespaceValue)) {
+        return this._entries.get(namespaceValue)!;
       }
 
-      return this._createEntry(namespaceValue as FactoryFunction);
+      return this._createEntry<T>(namespaceValue);
     }
 
-    const entry = this._createEntry(() => namespaceValue);
-    entry.sharedInstance = namespaceValue;
+    const entry = this._createEntry<T>(() => namespaceValue);
+    entry.sharedInstance = namespaceValue as T;
 
     return entry;
   }
@@ -812,15 +855,17 @@ export class ObjectContainer {
    *         if the specified classConstructor does not have defined
    *         `$dependencies`.
    */
-  _getEntryFromClassConstructor(classConstructor: Dependency) {
+  _getEntryFromClassConstructor<T>(
+    classConstructor: Dependency<T>
+  ): Entry<T> | null {
     if (typeof classConstructor !== 'function') {
       return null;
     }
 
-    if (!Array.isArray((classConstructor as WithDependencies).$dependencies)) {
+    if (!Array.isArray(classConstructor.$dependencies)) {
       if ($Debug) {
         throw new Error(
-          `The class constructor identified as: ${this._getDebugName(
+          `The class constructor identified as: ${this.#getDebugName(
             classConstructor
           )} is missing <b>static get $dependencies() {}</b> definition.`
         );
@@ -831,7 +876,7 @@ export class ObjectContainer {
 
     const entry = this._createEntry(
       classConstructor,
-      (classConstructor as WithDependencies).$dependencies
+      classConstructor.$dependencies
     );
 
     this._entries.set(classConstructor, entry);
@@ -843,50 +888,53 @@ export class ObjectContainer {
    * Formats name, function, class constructor to more compact
    * name/message to allow for cleaner debug Error messages.
    */
-  _getDebugName(name: DependencyWithOptions) {
+  #getDebugName<T>(name: Dependency<T>): string {
     return `<strong>${
       name?.toString().split('\n').slice(0, 5).join('\n') ?? name
     }</strong>`;
   }
 }
 
-ns.ima.core.ObjectContainer = ObjectContainer;
+ns.set('ns.ima.core.ObjectContainer', ObjectContainer);
 
 type EntryOptions = {
   writeable: boolean;
 };
 
+// TODO smazat a zjistit kde je potřeba
+// TODO private fields?
 /**
  * Object container entry, representing either a class, interface, constant or
  * an alias.
  */
-export class Entry {
+export class Entry<T> {
   /**
    * The constructor of the class represented by this entry, or the
    * getter of the value of the constant represented by this entry.
    */
-  classConstructor:
-    | UnknownConstructable
-    | UnknownNonConstructable
-    | FactoryFunction;
+  classConstructor: Injectable<T>;
+
   /**
    * The shared instance of the class represented by this entry.
    */
-  sharedInstance?: unknown = null;
+  sharedInstance?: InstanceType<Constructor<T>> | null = null;
 
   /**
    * Dependencies of the class constructor of the class represented by
    * this entry.
    */
   private _dependencies: Dependencies;
+
   /**
    * The Entry options.
    */
   private _options: EntryOptions;
+
   /**
    * The override counter
    */
   private _overrideCounter = 0;
+
   /**
    * Reference to part of application that created
    * this entry.
@@ -905,23 +953,17 @@ export class Entry {
    * @param options The Entry options.
    */
   constructor(
-    classConstructor:
-      | UnknownConstructable
-      | UnknownNonConstructable
-      | FactoryFunction,
+    classConstructor: Injectable<T>,
     dependencies?: Dependencies,
     referrer?: string,
     options?: EntryOptions
   ) {
     this.classConstructor = classConstructor;
-
+    this._referrer = referrer;
+    this._dependencies = dependencies || [];
     this._options = options || {
       writeable: true,
     };
-
-    this._referrer = referrer;
-
-    this._dependencies = dependencies || [];
   }
 
   set dependencies(dependencies) {
@@ -935,7 +977,7 @@ export class Entry {
 
       if (this._overrideCounter >= 1) {
         throw new Error(
-          `The dependencies entry can't be overrided more than once.` +
+          `The dependencies entry can't be overridden more than once.` +
             `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
         );
       }
@@ -957,7 +999,7 @@ export class Entry {
     return this._options.writeable;
   }
 
-  static from(entry: Entry) {
+  static from<TInfer>(entry: Entry<TInfer>) {
     return new Entry(
       entry.classConstructor,
       entry.dependencies,

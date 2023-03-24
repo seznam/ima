@@ -59,12 +59,12 @@ export {
 export { MetaManagerImpl } from './meta/MetaManagerImpl';
 export {
   ObjectContainer,
+  BindingState,
+  type Constructable,
+  type Dependency,
+  type Injectable,
   type Dependencies,
-  type DependencyWithOptions,
   Entry,
-  type FactoryFunction,
-  type UnknownConstructable,
-  type UnknownNonConstructable,
 } from './ObjectContainer';
 export { PageHandler } from './page/handler/PageHandler';
 export { PageHandlerRegistry } from './page/handler/PageHandlerRegistry';

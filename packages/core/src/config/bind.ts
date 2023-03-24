@@ -1,5 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
+import { Namespace, ObjectContainer } from '..';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -46,7 +47,7 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
-export const initBind = (ns, oc, config) => {
+export const initBind = (ns: Namespace, oc: ObjectContainer, config) => {
   //**************START VENDORS**************
   oc.constant('$Helper', $Helper);
 
@@ -112,7 +113,7 @@ export const initBind = (ns, oc, config) => {
   oc.provide(EventBus, EventBusImpl);
   oc.bind('$EventBus', EventBus);
 
-  //Cache
+  // Cache
   oc.constant('$CacheStorage', oc.get(MapStorage));
   oc.bind('$CacheFactory', CacheFactory);
   oc.provide(Cache, CacheImpl, [
@@ -121,15 +122,14 @@ export const initBind = (ns, oc, config) => {
     '$Helper',
     config.$Cache,
   ]);
-  oc.bind('$Cache', Cache);
 
-  //SEO
+  // SEO
   oc.provide(MetaManager, MetaManagerImpl);
   oc.bind('$MetaManager', MetaManager);
   oc.bind('$ControllerDecorator', ControllerDecorator);
   oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
-  //Page
+  // Page
   oc.provide(PageStateManager, PageStateManagerImpl);
   oc.bind('$PageStateManager', PageStateManager);
 
@@ -165,6 +165,9 @@ export const initBind = (ns, oc, config) => {
 
   //Router
   oc.bind('$RouteFactory', RouteFactory);
+
+  const a = oc.get(Router);
+  //    ^?
 
   if (oc.get(Window).isClient()) {
     oc.provide(Router, ClientRouter);

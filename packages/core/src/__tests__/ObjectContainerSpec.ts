@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { ns } from '../Namespace';
-import { ObjectContainer, Entry } from '../ObjectContainer';
+import { ObjectContainer, Entry, BindingState } from '../ObjectContainer';
 import { UnknownParameters } from '../types';
 
 describe('ima.core.ObjectContainer', () => {
@@ -90,7 +90,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error, if you want to set constatn in plugin', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.constant(constantObjectName, constantObjectValue);
@@ -123,7 +123,7 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should throw error, if ClassConstructor is registered and object container is locked for plugin', () => {
       oc.inject(ClassConstructor, dependencies);
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.inject(ClassConstructor, dependencies);
@@ -190,7 +190,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error if object container is locked', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.bind(alias, ClassConstructor, dependencies);
@@ -282,7 +282,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error if you call provide method more times for same interfaceConstructor in plugin', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
       oc.provide(ClassParent, ClassConstructor, dependencies);
 
       expect(() => {
