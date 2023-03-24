@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- accfd6a15: Fixed backwards compatibility check in addExtension method in AbstractController\
+
 ## 19.0.0-rc.9
 
 ### Major Changes
