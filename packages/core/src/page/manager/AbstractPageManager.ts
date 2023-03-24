@@ -2,6 +2,7 @@ import { PageManager, ManageArgs } from './PageManager';
 import { AbstractController } from '../../controller/AbstractController';
 import { Controller, IController } from '../../controller/Controller';
 import { ControllerDecorator } from '../../controller/ControllerDecorator';
+import { CancelError } from '../../error/CancelError';
 import { Dispatcher } from '../../event/Dispatcher';
 import { Extension } from '../../extension/Extension';
 import { AbstractRoute } from '../../router/AbstractRoute';
@@ -13,8 +14,6 @@ import { PageFactory } from '../PageFactory';
 import { ManagedPage, PageAction } from '../PageTypes';
 import { PageRenderer } from '../renderer/PageRenderer';
 import { PageStateManager } from '../state/PageStateManager';
-
-const CancelError = new Error('canceled');
 
 /**
  * Page manager for controller.
@@ -109,14 +108,18 @@ export abstract class AbstractPageManager extends PageManager {
 
     try {
       if (!isControllerViewResolved) {
-        this._dispatcher.fire(RouterEvents.BEFORE_ASYNC_ROUTE, { route }, true);
+        this._dispatcher.fire(
+          RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
+          { route },
+          true
+        );
       }
 
       const data = await this.getViewController(route);
       controller = data.controller;
       view = data.view;
     } catch (error) {
-      if (error !== CancelError) {
+      if (!(error instanceof CancelError)) {
         throw error;
       }
 
@@ -127,7 +130,11 @@ export abstract class AbstractPageManager extends PageManager {
       return { status: 409 };
     } finally {
       if (!isControllerViewResolved) {
-        this._dispatcher.fire(RouterEvents.AFTER_ASYNC_ROUTE, { route }, true);
+        this._dispatcher.fire(
+          RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
+          { route },
+          true
+        );
       }
     }
 
@@ -264,7 +271,7 @@ export abstract class AbstractPageManager extends PageManager {
       let resolve, reject;
       const promise = new Promise<void>((res, rej) => {
         resolve = res;
-        reject = () => rej(CancelError);
+        reject = () => rej(new CancelError());
       });
 
       return {
@@ -378,9 +385,9 @@ export abstract class AbstractPageManager extends PageManager {
       await this._initController();
       await this._initExtensions();
       this._managedPage.state.initialized = true;
-    } catch (e) {
-      if (e !== CancelError) {
-        throw e;
+    } catch (error) {
+      if (!(error instanceof CancelError)) {
+        throw error;
       }
     }
   }
@@ -390,7 +397,7 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _initController() {
     if (this._managedPage.state.cancelled) {
-      throw CancelError;
+      throw new CancelError();
     }
     const controller = this._managedPage.controllerInstance;
 
@@ -409,7 +416,7 @@ export abstract class AbstractPageManager extends PageManager {
     const controller = this._managedPage.controllerInstance;
     for (const extension of (controller as Controller).getExtensions()) {
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       extension.setRouteParams(this._managedPage.params as StringParameters);
@@ -447,7 +454,7 @@ export abstract class AbstractPageManager extends PageManager {
       );
 
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       const response = await Promise.race([
@@ -461,12 +468,12 @@ export abstract class AbstractPageManager extends PageManager {
       ]);
 
       return response;
-    } catch (e) {
-      if (e === CancelError) {
+    } catch (error) {
+      if (!(error instanceof CancelError)) {
         return { status: 409 };
       }
 
-      throw e;
+      throw error;
     }
   }
 
@@ -475,7 +482,7 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _getLoadedControllerState() {
     if (this._managedPage.state.cancelled) {
-      throw CancelError;
+      throw new CancelError();
     }
 
     const controller = this._managedPage.controllerInstance;
@@ -497,7 +504,7 @@ export abstract class AbstractPageManager extends PageManager {
 
     for (const extension of (controller as Controller).getExtensions()) {
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       extension.setPartialState(extensionsState);
@@ -528,9 +535,9 @@ export abstract class AbstractPageManager extends PageManager {
         await this._activateExtensions();
         (this._managedPage.state as UnknownParameters).activated = true;
       }
-    } catch (e) {
-      if (e !== CancelError) {
-        throw e;
+    } catch (error) {
+      if (!(error instanceof CancelError)) {
+        throw error;
       }
     }
   }
@@ -540,7 +547,7 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _activateController() {
     if (this._managedPage.state.cancelled) {
-      throw CancelError;
+      throw new CancelError();
     }
 
     const controller = this._managedPage.controllerInstance;
@@ -556,7 +563,7 @@ export abstract class AbstractPageManager extends PageManager {
 
     for (const extension of (controller as Controller).getExtensions()) {
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       await extension.activate();
@@ -580,7 +587,7 @@ export abstract class AbstractPageManager extends PageManager {
       );
 
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       const response = await Promise.race([
@@ -594,12 +601,12 @@ export abstract class AbstractPageManager extends PageManager {
       ]);
 
       return response;
-    } catch (e) {
-      if (e === CancelError) {
+    } catch (error) {
+      if (error instanceof CancelError) {
         return { status: 409 };
       }
 
-      throw e;
+      throw error;
     }
   }
 
@@ -608,7 +615,7 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected _getUpdatedControllerState() {
     if (this._managedPage.state.cancelled) {
-      throw CancelError;
+      throw new CancelError();
     }
 
     const controller = this._managedPage.controllerInstance;
@@ -637,7 +644,7 @@ export abstract class AbstractPageManager extends PageManager {
 
     for (const extension of (controller as Controller).getExtensions()) {
       if (this._managedPage.state.cancelled) {
-        throw CancelError;
+        throw new CancelError();
       }
 
       const lastRouteParams = extension.getRouteParams();

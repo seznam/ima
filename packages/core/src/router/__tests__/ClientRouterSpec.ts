@@ -119,7 +119,7 @@ describe('ima.core.router.ClientRouter', () => {
   describe('preManage', () => {
     it('should await mounted promise after first manage call to prevent hydrate error', async () => {
       expect(router['_mountedPromise']).toBeNull();
-      await router.preManage();
+      await router._preManage();
 
       // Should create promise after first call
       expect(router['_mountedPromise']?.promise).toBeInstanceOf(Promise);
@@ -130,7 +130,10 @@ describe('ima.core.router.ClientRouter', () => {
       };
 
       // Should await promise
-      await expect(router.preManage()).resolves.toEqual([undefined, 'mounted']);
+      await expect(router._preManage()).resolves.toEqual([
+        undefined,
+        'mounted',
+      ]);
     });
   });
 

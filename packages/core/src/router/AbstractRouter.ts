@@ -498,7 +498,7 @@ export abstract class AbstractRouter extends Router {
   /**
    * Handles preManage calls for current pageManager.
    */
-  async preManage(): Promise<unknown> {
+  async _preManage(): Promise<unknown> {
     return this._pageManager.preManage();
   }
 
@@ -545,7 +545,7 @@ export abstract class AbstractRouter extends Router {
      * Call pre-manage to cancel/property kill previously managed
      * route handler.
      */
-    await this.preManage();
+    await this._preManage();
 
     this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 

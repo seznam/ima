@@ -52,7 +52,7 @@ class PageStateManagerMock extends PageStateManager {}
 
 class PageManagerMock extends AbstractPageManager {}
 
-describe('ima.core.page.manager.AbstractPageManager2', () => {
+describe('ima.core.page.manager.AbstractPageManager', () => {
   let pageFactory: PageFactory;
   let pageRenderer: PageRenderer;
   let pageStateManager: PageStateManager;
@@ -316,13 +316,13 @@ describe('ima.core.page.manager.AbstractPageManager2', () => {
 
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
-        RouterEvents.BEFORE_ASYNC_ROUTE,
+        RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
         expect.objectContaining({ route: expect.anything() }),
         true
       );
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         2,
-        RouterEvents.AFTER_ASYNC_ROUTE,
+        RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
         expect.objectContaining({ route: expect.anything() }),
         true
       );

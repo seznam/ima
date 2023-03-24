@@ -29,11 +29,11 @@ export enum RouterEvents {
    * Fired right before loading view and controller when either
    * view or controller is async (or both).
    */
-  BEFORE_ASYNC_ROUTE = '$IMA.$Router.beforeAsyncRoute',
+  BEFORE_LOADING_ASYNC_ROUTE = '$IMA.$Router.beforeLoadingAsyncRoute',
 
   /**
    * Event fired when router finishes loading of async view
    * and controller. If both are sync this is never fired.
    */
-  AFTER_ASYNC_ROUTE = '$IMA.$Router.afterAsyncRoute',
+  AFTER_LOADING_ASYNC_ROUTE = '$IMA.$Router.afterLoadingAsyncRoute',
 }
