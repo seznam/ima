@@ -505,16 +505,22 @@ describe('urlParserFactory', () => {
 
       if (redirectTo) {
         it(`should redirect from ${fullUrl} to ${redirectTo}`, () => {
-          urlParser({
-            req: usedReq,
-            res: usedRes,
-          });
-          const result = usedRes.locals;
-          const redirectMock = usedRes.redirect.mock;
+          expect.assertions(2);
 
-          expect(redirectMock.calls).toHaveLength(1);
-          expect(redirectMock.calls[0][0]).toBe(redirectTo);
-          expect(result).toStrictEqual({});
+          try {
+            urlParser({
+              req: usedReq,
+              res: usedRes,
+            });
+          } catch (error) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(usedRes.locals).toStrictEqual({});
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(error.getParams()).toStrictEqual({
+              status: 302,
+              url: redirectTo,
+            });
+          }
         });
       } else {
         it(`should detect language for URL ${fullUrl}`, () => {

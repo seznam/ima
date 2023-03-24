@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
 
+const { GenericError } = require('@ima/core');
+
 module.exports = function urlParserFactory({ environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
@@ -159,16 +161,15 @@ module.exports = function urlParserFactory({ environment }) {
               currentLanguagePartPath = '/' + environment.$Language[expression];
               currentLanguage = environment.$Language[expression];
 
-              // TODO handle redirect?
-              res.redirect(
-                currentProtocol +
+              throw new GenericError('Language redirect', {
+                url:
+                  currentProtocol +
                   '//' +
                   currentHost +
                   currentRoot +
-                  currentLanguagePartPath
-              );
-
-              return;
+                  currentLanguagePartPath,
+                status: 302,
+              });
             }
           } else {
             currentLanguage = environment.$Language[expression];
