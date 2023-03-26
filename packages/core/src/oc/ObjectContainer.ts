@@ -1,87 +1,53 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
-import { GenericError } from './error/GenericError';
-import { ns, Namespace } from './Namespace';
-import { UnknownParameters } from './types';
+import { BindingState } from './BindingState';
+import { Entry, EntryOptions } from './Entry';
+import { OCAliasMap } from '../config/bind';
+import { GenericError } from '../error/GenericError';
+import { ns, Namespace } from '../Namespace';
 
 type WithDependencies = {
   readonly $dependencies?: Dependencies;
 };
 
-export type Constructable<T> =
-  | (Constructor<T> & WithDependencies)
+export type OCConstructable<T> = Constructor<T> & WithDependencies;
+export type OCInjectable<T> =
+  | OCConstructable<T>
+  | (AbstractConstructor<T> & WithDependencies)
   | (Function & { prototype: T } & WithDependencies);
-
-export type Injectable<T> =
-  | Constructable<T>
-  | (AbstractConstructor<T> & WithDependencies);
 
 export type Dependencies = Dependency<any>[];
 export type Dependency<T> =
   | string
-  | Injectable<T>
+  | OCInjectable<T>
   | [
-      string | Injectable<T>,
+      string | OCInjectable<T>,
       {
         optional?: boolean;
       }
     ];
 
-// Todo vyhledat cas as a pod
+export type OCInstanceConstrain<T = any> =
+  | keyof OCAliasMap
+  | Constructor<T>
+  | AbstractConstructor<T>
+  | (keyof OCAliasMap | Constructor<T> | AbstractConstructor<T>)[]
+  | [AbstractConstructor<T> | Constructor<T>, { optional: true }];
+
+export type OCInstance<T extends OCInstanceConstrain> =
+  T extends keyof OCAliasMap
+    ? OCAliasMap[T]
+    : T extends AbstractConstructor<any> | Constructor<any>
+    ? InstanceType<T>
+    : T extends [
+        AbstractConstructor<any> | Constructor<any>,
+        { optional: true }
+      ]
+    ? InstanceType<T[0]> | null
+    : T;
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;
-
-export enum BindingState {
-  /**
-   * Constant for plugin binding state.
-   *
-   * When the object container is in plugin binding state, it is impossible
-   * to register new aliases using the {@link bind()} method and register
-   * new constant using the {@link constant()} method, or override the
-   * default class dependencies of any already-configured class using the
-   * {@link inject()} method (classes that were not configured yet may be
-   * configured using the {@link inject()} method or {@link provide()}
-   * method).
-   *
-   * This prevents the unprivileged code (e.g. 3rd party plugins) from
-   * overriding the default dependency configuration provided by ima, or
-   * overriding the configuration of a 3rd party plugin by another 3rd party
-   * plugin.
-   *
-   * The application itself has always access to the unlocked object
-   * container.
-   */
-  Plugin = 'plugin',
-
-  /**
-   * Constant for IMA binding state.
-   *
-   * When the object container is in ima binding state, it is possible
-   * to register new aliases using the {@link bind()} method and register
-   * new constant using the {@link constant()} method, or override the
-   * default class dependencies of any already-configured class using the
-   * {@link inject()} method (classes that were not configured yet may be
-   * configured using the {@link inject()} method or {@link provide()}
-   * method).
-   *
-   * @return The IMA binding state.
-   */
-  IMA = 'ima.core',
-
-  /**
-   * Constant for app binding state.
-   *
-   * When the object container is in app binding state, it is possible
-   * to register new aliases using the {@link bind()} method and register
-   * new constant using the {@link constant()} method, or override the
-   * default class dependencies of any already-configured class using the
-   * {@link inject()} method (classes that were not configured yet may be
-   * configured using the {@link inject()} method or {@link provide()}
-   * method).
-   */
-  App = 'app',
-}
 
 /**
  * The Object Container is an enhanced dependency injector with support for
@@ -144,8 +110,8 @@ export class ObjectContainer {
    */
   bind<T>(
     name: string,
-    classConstructor: Injectable<T>,
-    dependencies?: Dependencies
+    classConstructor: OCInjectable<T>,
+    dependencies?: any[]
   ): this {
     if ($Debug) {
       if (
@@ -272,10 +238,7 @@ export class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  inject<T>(
-    classConstructor: Constructable<T>,
-    dependencies: Dependencies
-  ): this {
+  inject<T>(classConstructor: OCConstructable<T>, dependencies: any[]): this {
     if ($Debug) {
       if (typeof classConstructor !== 'function') {
         throw new GenericError(
@@ -350,10 +313,10 @@ export class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  provide<T>(
-    interfaceConstructor: Injectable<T>,
-    implementationConstructor: Constructable<T>,
-    dependencies?: Dependencies
+  provide<T, I>(
+    interfaceConstructor: Constructor<I> | AbstractConstructor<I>,
+    implementationConstructor: OCConstructable<T>,
+    dependencies?: any[]
   ): this {
     if ($Debug) {
       if (
@@ -431,16 +394,15 @@ export class ObjectContainer {
    *        factory function.
    * @return The shared instance or value.
    */
-  // TODO
-  get<T>(name: Dependency<T>) {
-    const entry = this._getEntry<T>(name);
+  get<T extends OCInstanceConstrain>(name: T): OCInstance<T> {
+    const entry = this._getEntry(name as Dependency<T>);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
     }
 
     // Optional entries can be null if they are not found in the OC
-    return entry?.sharedInstance;
+    return entry?.sharedInstance as OCInstance<T>;
   }
 
   /**
@@ -450,7 +412,9 @@ export class ObjectContainer {
    *        is registered with this object container.
    * @return The constructor function.
    */
-  getConstructorOf<T>(name: string | Constructable<T>): Injectable<T> | null {
+  getConstructorOf<T>(
+    name: string | OCConstructable<T>
+  ): OCInjectable<T> | null {
     const entry = this._getEntry(name);
 
     if (!entry) {
@@ -468,12 +432,12 @@ export class ObjectContainer {
    * @return `true` if the specified object, class or
    *         resource is registered with this object container.
    */
-  has<T>(name: Dependency<T>): boolean {
+  has<T>(name: string | OCInjectable<T>): boolean {
     return (
       this._entries.has(name) ||
-      !!this._getEntryFromConstant(name) ||
-      !!this._getEntryFromNamespace(name) ||
-      !!this._getEntryFromClassConstructor(name)
+      !!this._getEntryFromConstant(name as string) ||
+      !!this._getEntryFromNamespace(name as string) ||
+      !!this._getEntryFromClassConstructor(name as OCInjectable<T>)
     );
   }
 
@@ -493,11 +457,11 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  create<T>(
-    name: Dependency<T>,
-    dependencies: Dependencies = []
-  ): InstanceType<Constructor<T>> {
-    const entry = this._getEntry(name);
+  create<T extends OCInstanceConstrain>(
+    name: T,
+    dependencies: any[] = []
+  ): OCInstance<T> {
+    const entry = this._getEntry(name as Dependency<T>);
 
     if (!entry) {
       throw new Error(
@@ -506,7 +470,7 @@ export class ObjectContainer {
       );
     }
 
-    return this._createInstanceFromEntry(entry, dependencies);
+    return this._createInstanceFromEntry(entry as Entry<any>, dependencies);
   }
 
   /**
@@ -576,9 +540,9 @@ export class ObjectContainer {
 
     const entry =
       this._entries.get(entryName) ||
-      this._getEntryFromConstant(entryName) ||
-      this._getEntryFromNamespace(entryName) ||
-      this._getEntryFromClassConstructor(entryName);
+      this._getEntryFromConstant(entryName as string) ||
+      this._getEntryFromNamespace(entryName as string) ||
+      this._getEntryFromClassConstructor(entryName as OCInjectable<T>);
 
     if ($Debug && !entry && !this._isOptional<T>(name)) {
       throw new Error(
@@ -592,14 +556,12 @@ export class ObjectContainer {
     }
 
     if (this._isSpread<T>(name)) {
-      if (Array.isArray(entry?.sharedInstance)) {
-        const spreadEntry = Entry.from(entry as Entry<T>);
+      if (entry && Array.isArray(entry?.sharedInstance)) {
+        const spreadEntry = Entry.from(entry as Entry<any>);
 
-        spreadEntry.sharedInstance = (
-          (entry as NonNullable<Entry<T>>).sharedInstance as NonNullable<
-            Array<string>
-          >
-        ).map(sharedInstance => this.get(sharedInstance));
+        spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>
+          this.get(sharedInstance as OCInstanceConstrain<any>)
+        );
 
         return spreadEntry;
       }
@@ -657,10 +619,10 @@ export class ObjectContainer {
    * @param dependencies The dependencies to pass into the
    *        constructor or factory function.
    */
-  _updateEntryValues<T>(
-    entry: Entry<T>,
-    classConstructor: Injectable<T>,
-    dependencies: Dependencies
+  _updateEntryValues<T, E extends Entry<T>>(
+    entry: E,
+    classConstructor: OCInjectable<T>,
+    dependencies: any[]
   ): void {
     entry.classConstructor = classConstructor;
     entry.dependencies = dependencies;
@@ -679,8 +641,8 @@ export class ObjectContainer {
    * @return Created instance or generated value.
    */
   _createEntry<T>(
-    classConstructor: Injectable<T>,
-    dependencies?: Dependencies,
+    classConstructor: OCInjectable<T>,
+    dependencies?: any[],
     options?: EntryOptions
   ): InstanceType<typeof Entry<T>> {
     if (
@@ -715,16 +677,17 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return Created instance or generated value.
    */
-  _createInstanceFromEntry<T>(
-    entry: Entry<Constructor<T>>,
-    dependencies: Dependencies = []
+  _createInstanceFromEntry<T, E extends Entry<T>>(
+    entry: E,
+    dependencies: any[] = []
   ): InstanceType<Constructor<T>> {
     if (dependencies.length === 0) {
       dependencies = [];
 
       for (const dependency of entry.dependencies) {
+        // Optional and spread dependency handling
         if (
-          ['function', 'string'].indexOf(typeof dependency) > -1 ||
+          ['function', 'string'].indexOf(typeof dependency) !== -1 ||
           Array.isArray(dependency)
         ) {
           const retrievedDependency = this.get(dependency);
@@ -761,21 +724,18 @@ export class ObjectContainer {
    *         composition name in the constants. The method returns `null`
    *         if the specified composition name does not exist in the constants.
    */
-  _getEntryFromConstant<T>(
-    compositionName: Dependency<T>
-  ): Entry<() => T> | null {
+  _getEntryFromConstant<T>(compositionName: string): Entry<() => T> | null {
     if (typeof compositionName !== 'string') {
       return null;
     }
 
     const objectProperties = compositionName.split('.');
     let constantValue = this._entries.has(objectProperties[0])
-      ? (this._entries.get(objectProperties[0]) as NonNullable<Entry<() => T>>)
-          .sharedInstance
+      ? this._entries.get(objectProperties[0])!.sharedInstance
       : null;
 
     for (let i = 1; i < objectProperties.length && constantValue; i++) {
-      constantValue = (constantValue as UnknownParameters)[objectProperties[i]];
+      constantValue = constantValue[objectProperties[i]];
     }
 
     if (constantValue !== undefined && constantValue !== null) {
@@ -817,7 +777,7 @@ export class ObjectContainer {
    *         specified path in the namespace. The method returns `null`
    *         if the specified path does not exist in the namespace.
    */
-  _getEntryFromNamespace<T>(path: Dependency<T>): Entry<T> | null {
+  _getEntryFromNamespace<T>(path: string): Entry<T> | null {
     if (typeof path !== 'string' || !this._namespace.has(path)) {
       return null;
     }
@@ -856,7 +816,7 @@ export class ObjectContainer {
    *         `$dependencies`.
    */
   _getEntryFromClassConstructor<T>(
-    classConstructor: Dependency<T>
+    classConstructor: OCInjectable<T>
   ): Entry<T> | null {
     if (typeof classConstructor !== 'function') {
       return null;
@@ -896,115 +856,3 @@ export class ObjectContainer {
 }
 
 ns.set('ns.ima.core.ObjectContainer', ObjectContainer);
-
-type EntryOptions = {
-  writeable: boolean;
-};
-
-// TODO smazat a zjistit kde je potřeba
-// TODO private fields?
-/**
- * Object container entry, representing either a class, interface, constant or
- * an alias.
- */
-export class Entry<T> {
-  /**
-   * The constructor of the class represented by this entry, or the
-   * getter of the value of the constant represented by this entry.
-   */
-  classConstructor: Injectable<T>;
-
-  /**
-   * The shared instance of the class represented by this entry.
-   */
-  sharedInstance?: InstanceType<Constructor<T>> | null = null;
-
-  /**
-   * Dependencies of the class constructor of the class represented by
-   * this entry.
-   */
-  private _dependencies: Dependencies;
-
-  /**
-   * The Entry options.
-   */
-  private _options: EntryOptions;
-
-  /**
-   * The override counter
-   */
-  private _overrideCounter = 0;
-
-  /**
-   * Reference to part of application that created
-   * this entry.
-   */
-  private _referrer?: string;
-
-  /**
-   * Initializes the entry.
-   *
-   * @param classConstructor The
-   *        class constructor or constant value getter.
-   * @param dependencies The dependencies to pass into the
-   *        constructor function.
-   * @param referrer Reference to part of application that created
-   *        this entry.
-   * @param options The Entry options.
-   */
-  constructor(
-    classConstructor: Injectable<T>,
-    dependencies?: Dependencies,
-    referrer?: string,
-    options?: EntryOptions
-  ) {
-    this.classConstructor = classConstructor;
-    this._referrer = referrer;
-    this._dependencies = dependencies || [];
-    this._options = options || {
-      writeable: true,
-    };
-  }
-
-  set dependencies(dependencies) {
-    if ($Debug) {
-      if (!this.writeable) {
-        throw new Error(
-          `The entry is constant and you ` +
-            `can't redefined their dependencies ${dependencies}.`
-        );
-      }
-
-      if (this._overrideCounter >= 1) {
-        throw new Error(
-          `The dependencies entry can't be overridden more than once.` +
-            `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
-        );
-      }
-    }
-
-    this._dependencies = dependencies;
-    this._overrideCounter++;
-  }
-
-  get dependencies() {
-    return this._dependencies;
-  }
-
-  get referrer() {
-    return this._referrer;
-  }
-
-  get writeable() {
-    return this._options.writeable;
-  }
-
-  static from<TInfer>(entry: Entry<TInfer>) {
-    return new Entry(
-      entry.classConstructor,
-      entry.dependencies,
-      entry.referrer,
-      entry._options
-    );
-  }
-}

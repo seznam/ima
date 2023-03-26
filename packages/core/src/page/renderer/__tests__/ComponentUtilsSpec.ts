@@ -1,9 +1,6 @@
 import { toMockedInstance } from 'to-mock';
 
-import {
-  ObjectContainer,
-  UnknownConstructable,
-} from '../../../ObjectContainer';
+import { ObjectContainer } from '../../../oc/ObjectContainer';
 import { ComponentUtils } from '../ComponentUtils';
 
 class SomeMockHelper {}
@@ -52,9 +49,7 @@ describe('componentUtils', () => {
       jest
         .spyOn(oc, 'get')
         .mockImplementation(entity =>
-          typeof entity === 'function'
-            ? new (entity as UnknownConstructable)()
-            : entity
+          typeof entity === 'function' ? new entity() : entity
         );
 
       componentUtils.register({

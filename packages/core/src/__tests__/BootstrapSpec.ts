@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Bootstrap, PluginConfigFunctions, Config } from '../Bootstrap';
 import { ns } from '../Namespace';
-import { BindingState, ObjectContainer } from '../ObjectContainer';
+import { BindingState } from '../oc/BindingState';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { UnknownParameters } from '../types';
 
 describe('bootstrap', () => {

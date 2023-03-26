@@ -1,7 +1,8 @@
 import * as helpers from '@ima/helpers';
 
 import { Namespace, ns } from './Namespace';
-import { ObjectContainer, BindingState } from './ObjectContainer';
+import { BindingState } from './oc/BindingState';
+import { ObjectContainer } from './oc/ObjectContainer';
 import { Router } from './router/Router';
 import { UnknownParameters } from './types';
 
@@ -248,7 +249,7 @@ export class Bootstrap {
    * Initializes the routes.
    */
   _initRoutes() {
-    const router = this._oc.get(Router) as Router;
+    const router = this._oc.get(Router);
     this._config.initRoutes(ns, this._oc, this._config.routes, router);
   }
 

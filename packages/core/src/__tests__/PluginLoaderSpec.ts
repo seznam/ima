@@ -1,6 +1,6 @@
 import { Bootstrap, Config, PluginConfigFunctions } from '../Bootstrap';
 import { ns } from '../Namespace';
-import { ObjectContainer } from '../ObjectContainer';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { PluginLoader } from '../pluginLoader';
 
 describe('pluginLoader', () => {

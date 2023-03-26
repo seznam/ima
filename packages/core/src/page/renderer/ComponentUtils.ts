@@ -1,8 +1,4 @@
-import {
-  ObjectContainer,
-  FactoryFunction,
-  UnknownConstructable,
-} from '../../ObjectContainer';
+import { ObjectContainer, Dependency } from '../../oc/ObjectContainer';
 import { StringParameters, Utils } from '../../types';
 
 export class ComponentUtils {
@@ -14,7 +10,7 @@ export class ComponentUtils {
    * Map of registered utilities.
    */
   private _utilityClasses: {
-    [key: string]: UnknownConstructable | FactoryFunction;
+    [key: string]: Dependency<any>;
   } = {};
   /**
    * Map of instantiated utilities
@@ -39,13 +35,9 @@ export class ComponentUtils {
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
    */
-  register(
-    name:
-      | string
-      | UnknownConstructable
-      | FactoryFunction
-      | { [key: string]: string | UnknownConstructable | FactoryFunction },
-    componentUtilityClass?: UnknownConstructable | FactoryFunction,
+  register<T>(
+    name: string | Dependency<T> | { [key: string]: string | Dependency<any> },
+    componentUtilityClass?: Dependency<any>,
     referrer?: string
   ) {
     if (
@@ -68,6 +60,7 @@ export class ComponentUtils {
       name.constructor === Object
     ) {
       const utilityClasses = name;
+      // @ts-expect-error
       referrer = componentUtilityClass;
 
       for (const alias of Object.keys(utilityClasses)) {
@@ -75,11 +68,8 @@ export class ComponentUtils {
           continue;
         }
 
-        this.register(
-          alias,
-          utilityClasses[alias] as UnknownConstructable | FactoryFunction,
-          referrer
-        );
+        // @ts-expect-error
+        this.register(alias, utilityClasses[alias], referrer);
       }
     }
   }
@@ -111,12 +101,8 @@ export class ComponentUtils {
     return this._utilityReferrers;
   }
 
-  _createUtilityInstance(
-    alias: string,
-    utilityClass: UnknownConstructable | FactoryFunction
-  ) {
-    // @ts-expect-error needs complete type rewrite...
-    return ((this._utilities as Utils)[alias as keyof Utils] =
-      this._oc.get(utilityClass));
+  _createUtilityInstance(alias: string, utilityClass: Dependency<any>) {
+    // @ts-expect-error No way to handle this with current OC typing setup
+    return (this._utilities![alias] = this._oc.get(utilityClass));
   }
 }

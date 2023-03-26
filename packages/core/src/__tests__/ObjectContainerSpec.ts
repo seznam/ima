@@ -2,7 +2,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { ns } from '../Namespace';
-import { ObjectContainer, Entry, BindingState } from '../ObjectContainer';
+import { BindingState } from '../oc/BindingState';
+import { Entry } from '../oc/Entry';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { UnknownParameters } from '../types';
 
 describe('ima.core.ObjectContainer', () => {

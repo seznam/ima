@@ -7,6 +7,11 @@ import { RouteOptions } from './Router';
 import { GenericError } from '../error/GenericError';
 import { UnknownParameters } from '../types';
 
+export type CookieTransformFunction = {
+  encode: (value: string) => string;
+  decode: (value: string) => string;
+};
+
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
@@ -27,10 +32,7 @@ export class Response {
   /**
    * Transform function for cookie value.
    */
-  protected _cookieTransformFunction: {
-    encode: (value: string) => string;
-    decode: (value: string) => string;
-  } = {
+  protected _cookieTransformFunction: CookieTransformFunction = {
     encode: value => value,
     decode: value => value,
   };

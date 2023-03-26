@@ -113,6 +113,7 @@ export abstract class AbstractPageManager extends PageManager {
     );
     const decoratedController =
       pageFactory.decorateController(controllerInstance);
+    // @ts-expect-error fixme in the future
     const viewInstance = pageFactory.createView(view);
     const newManagedPage = this._constructManagedPageValue(
       controller,

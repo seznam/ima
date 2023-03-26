@@ -2,7 +2,7 @@ import { MapStorage } from './MapStorage';
 import { SessionStorage } from './SessionStorage';
 import { Storage } from './Storage';
 import { CacheEntry } from '../cache/CacheEntry';
-import { Dependencies } from '../ObjectContainer';
+import { Dependencies } from '../oc/ObjectContainer';
 
 /**
  * The `link SessionMap` storage is an implementation of the

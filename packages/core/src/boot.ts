@@ -1,12 +1,11 @@
 import { AppConfigFunctions, Bootstrap, Config } from './Bootstrap';
-import { Cache, SerializedData } from './cache/Cache';
+import { SerializedData } from './cache/Cache';
 import { initBind as initBindIma } from './config/bind';
 import { initServices as initServicesIma } from './config/services';
 import { GenericError } from './error/GenericError';
 import { ns } from './Namespace';
-import { ObjectContainer } from './ObjectContainer';
+import { ObjectContainer } from './oc/ObjectContainer';
 import { pluginLoader } from './pluginLoader';
-import { AbstractRouter } from './router/AbstractRouter';
 
 export function getInitialImaConfigFunctions() {
   return { initBindIma, initServicesIma };
@@ -104,7 +103,7 @@ export function bootClientApp(
 ) {
   app.bootstrap.run(bootConfig);
 
-  const cache = app.oc.get('$Cache') as Cache;
+  const cache = app.oc.get('$Cache');
   cache.deserialize(($IMA.Cache || {}) as SerializedData);
 
   return app;
@@ -114,7 +113,7 @@ export function routeClientApp(app: {
   bootstrap: Bootstrap;
   oc: ObjectContainer;
 }) {
-  const router = app.oc.get('$Router') as AbstractRouter;
+  const router = app.oc.get('$Router');
 
   return router
     .listen()
