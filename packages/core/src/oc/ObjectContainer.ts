@@ -108,9 +108,9 @@ export class ObjectContainer {
    *        constructor or factory function.
    * @return This object container.
    */
-  bind<T>(
-    name: string,
-    classConstructor: OCInjectable<T>,
+  bind<T extends keyof OCAliasMap, C>(
+    name: T,
+    classConstructor: OCInjectable<C>,
     dependencies?: any[]
   ): this {
     if ($Debug) {
@@ -194,9 +194,9 @@ export class ObjectContainer {
    * @param value The constant value.
    * @return This object container.
    */
-  constant<T>(name: string, value: T): this {
+  constant<T extends keyof OCAliasMap, V>(name: T, value: V): this {
     if ($Debug) {
-      if (this._entries.has(name) || !!this._getEntryFromConstant<T>(name)) {
+      if (this._entries.has(name) || !!this._getEntryFromConstant<V>(name)) {
         throw new GenericError(
           `ima.core.ObjectContainer:constant The ${this.#getDebugName(name)} ` +
             `constant has already been declared and cannot be ` +
@@ -215,7 +215,7 @@ export class ObjectContainer {
       }
     }
 
-    const constantEntry = this._createEntry<T>(() => value, [], {
+    const constantEntry = this._createEntry<V>(() => value, [], {
       writeable: false,
     });
 
@@ -556,7 +556,7 @@ export class ObjectContainer {
     }
 
     if (this._isSpread<T>(name)) {
-      if (entry && Array.isArray(entry?.sharedInstance)) {
+      if (entry && Array.isArray(entry.sharedInstance)) {
         const spreadEntry = Entry.from(entry as Entry<any>);
 
         spreadEntry.sharedInstance = entry.sharedInstance.map(sharedInstance =>

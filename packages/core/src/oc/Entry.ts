@@ -20,7 +20,7 @@ export class Entry<T> {
   /**
    * The shared instance of the class represented by this entry.
    */
-  sharedInstance?: InstanceType<Constructor<T>> | null = null;
+  sharedInstance: InstanceType<Constructor<T>> | null = null;
 
   /**
    * Dependencies of the class constructor of the class represented by
