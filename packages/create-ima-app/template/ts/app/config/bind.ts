@@ -1,4 +1,9 @@
-import { ComponentUtils, PageRenderer, Window } from '@ima/core';
+import {
+  ComponentUtils,
+  InitBindFunction,
+  PageRenderer,
+  Window,
+} from '@ima/core';
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
@@ -6,8 +11,14 @@ import {
 } from '@ima/react-page-renderer';
 import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
 
-//eslint-disable-next-line no-unused-vars
-export const initBindApp = (ns, oc, config) => {
+declare module '@ima/core' {
+  interface OCAliasMap {
+    $CssClasses: () => typeof cssClassNameProcessor;
+    $PageRendererFactory: PageRendererFactory;
+  }
+}
+
+export const initBindApp: InitBindFunction = (ns, oc) => {
   // UI components
   oc.bind('$CssClasses', function () {
     return cssClassNameProcessor;

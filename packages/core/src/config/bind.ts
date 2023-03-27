@@ -1,6 +1,13 @@
 import * as $Helper from '@ima/helpers';
 
-import { Namespace, ObjectContainer, PageRenderer, Utils } from '..';
+import {
+  ObjectContainer,
+  PageRenderer,
+  Settings,
+  Utils,
+  AppEnvironment,
+} from '..';
+import { InitBindFunction } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -43,6 +50,7 @@ import { MapStorage } from '../storage/MapStorage';
 import { SessionMapStorage } from '../storage/SessionMapStorage';
 import { SessionStorage } from '../storage/SessionStorage';
 import { WeakMapStorage } from '../storage/WeakMapStorage';
+import { GlobalImaObject } from '../types';
 import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
@@ -52,14 +60,12 @@ import { Window } from '../window/Window';
  * the ObjectContainer. This is used for typechecking and type
  * hinting of string OC arguments.
  */
-export type OCAliasMap = {
+export interface OCAliasMap {
   $Helper: typeof $Helper;
   $oc: ObjectContainer;
-  // TODO >>>
-  $Settings: any;
-  $Env: any;
-  $Protocol: any;
-  // TODO ^^^
+  $Settings: Settings;
+  $Env: keyof AppEnvironment;
+  $Protocol: GlobalImaObject['$Protocol'];
   $Secure: boolean;
   $Request: Request;
   $Response: Response;
@@ -97,9 +103,9 @@ export type OCAliasMap = {
   $Http: HttpAgent;
   $HttpStatusCode: typeof HttpStatusCode;
   $PageRenderer: PageRenderer;
-};
+}
 
-export const initBind = (ns: Namespace, oc: ObjectContainer, config: any) => {
+export const initBind: InitBindFunction = (ns, oc, config) => {
   oc.constant('$Helper', $Helper);
   oc.constant('$oc', oc);
   oc.constant('$Settings', config);

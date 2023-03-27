@@ -9,7 +9,16 @@ import { HttpProxy } from './HttpProxy';
 import { Cache } from '../cache/Cache';
 import { GenericError } from '../error/GenericError';
 import { CookieStorage } from '../storage/CookieStorage';
-import { StringParameters, UnknownParameters } from '../types';
+import { UnknownParameters } from '../types';
+
+export interface HttpAgentImplCacheOptions {
+  prefix: string;
+}
+
+export interface HttpAgentImplConfig {
+  cacheOptions: HttpAgentImplCacheOptions;
+  defaultRequestOptions: HttpAgentRequestOptions;
+}
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
@@ -19,7 +28,7 @@ export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
   protected _cache: Cache<HttpAgentResponse<unknown>>;
   protected _cookie: CookieStorage;
-  protected _cacheOptions: StringParameters;
+  protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
   protected _Helper: typeof Helpers;
   protected _internalCacheOfPromises = new Map();
@@ -61,7 +70,7 @@ export class HttpAgentImpl extends HttpAgent {
     proxy: HttpProxy,
     cache: Cache<HttpAgentResponse<unknown>>,
     cookie: CookieStorage,
-    config: UnknownParameters,
+    config: HttpAgentImplConfig,
     Helper: typeof Helpers
   ) {
     super();
@@ -81,11 +90,8 @@ export class HttpAgentImpl extends HttpAgent {
      * server and send them with the subsequent requests to the server.
      */
     this._cookie = cookie;
-
-    this._cacheOptions = config.cacheOptions as StringParameters;
-
-    this._defaultRequestOptions =
-      config.defaultRequestOptions as HttpAgentRequestOptions;
+    this._cacheOptions = config.cacheOptions;
+    this._defaultRequestOptions = config.defaultRequestOptions;
 
     /**
      * Tha IMA.js helper methods.
@@ -203,7 +209,7 @@ export class HttpAgentImpl extends HttpAgent {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  _clone<V = unknown>(value: V): V {
+  _clone<V>(value: V): V {
     if (
       value !== null &&
       typeof value === 'object' &&

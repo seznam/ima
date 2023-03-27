@@ -1,5 +1,8 @@
 import { Router, Window } from '@ima/core';
 
+/**
+ * @type import('@ima/core').InitServicesFunction
+ */
 export const initServicesApp = (ns, oc, config) => {
   let $window = oc.get(Window);
   let $router = oc.get(Router);

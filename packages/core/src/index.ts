@@ -1,9 +1,19 @@
 export { Namespace, getNamespace, ns } from './Namespace';
 export {
   Bootstrap,
-  type PluginConfigFunctions,
-  type AppConfigFunctions,
-  type Config,
+  type InitPluginConfig as PluginConfigFunctions,
+  type InitAppConfig as AppConfigFunctions,
+  type BootSettings,
+  type BootConfig,
+  type BootServices,
+  type InitBindFunction,
+  type InitImaConfig,
+  type InitRoutesFunction,
+  type InitServicesFunction,
+  type InitSettingsFunction,
+  type PluginInitBindFunction,
+  type PluginInitServicesFunction,
+  type PluginInitSettingsFunction,
 } from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
 export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
@@ -67,6 +77,7 @@ export {
   type OCInstance,
   type OCInstanceConstrain,
 } from './oc/ObjectContainer';
+export { type OCAliasMap } from './config/bind';
 export { BindingState } from './oc/BindingState';
 export { Entry, type EntryOptions } from './oc/Entry';
 export { PageHandler } from './page/handler/PageHandler';
@@ -134,6 +145,14 @@ export {
   routeClientApp,
   reviveClientApp,
   onLoad,
+  type AppEnvironment,
+  type Environment,
+  type AppSettings,
+  type Settings,
+  type Manifest,
+  type ManifestAsset,
+  type Resource,
+  type Resources,
 } from './boot';
 export {
   type Utils,
@@ -141,4 +160,5 @@ export {
   type UnknownParameters,
   type UnknownPromiseParameters,
   type ObjectParameters,
+  type GlobalImaObject,
 } from './types';

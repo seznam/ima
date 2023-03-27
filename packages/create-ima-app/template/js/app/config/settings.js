@@ -1,5 +1,8 @@
 import { DocumentView } from 'app/document/DocumentView';
 
+/**
+ * @type import('@ima/core').InitSettingsFunction
+ */
 export const initSettings = (ns, oc, config) => {
   return {
     prod: {
@@ -9,13 +12,13 @@ export const initSettings = (ns, oc, config) => {
           timeout: 7000, // Request timeout
           repeatRequest: 1, // Count of automatic repeated request after failing request.
           ttl: 60000, // Default time to live for cached request in ms.
-          headers: {
-            // Set default request headers
-            Accept: 'application/json',
-            'Accept-Language': config.$Language,
-          },
           fetchOptions: {
             mode: 'cors',
+            headers: {
+              // Set default request headers
+              Accept: 'application/json',
+              'Accept-Language': config.$Language,
+            },
           },
           cache: true, // if value exists in cache then returned it else make request to remote server.
         },
