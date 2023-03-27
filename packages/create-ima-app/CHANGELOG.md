@@ -1,5 +1,13 @@
 # Change Log
 
+## 19.0.0-rc.5
+
+### Major Changes
+
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+
 ## 19.0.0-rc.4
 
 ### Patch Changes

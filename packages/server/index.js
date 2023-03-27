@@ -48,10 +48,6 @@ module.exports = function createIMAServer({
   performance.monitor.add(concurrentRequestsMetric);
   performance.monitor.start();
 
-  const urlParser = require('./lib/middlewares/urlParserMiddlewareFactory.js')({
-    environment,
-    applicationFolder,
-  });
   const serverApp = require('./lib/factory/serverAppFactory.js')({
     environment,
     logger,
@@ -76,7 +72,6 @@ module.exports = function createIMAServer({
   return {
     environment,
     serverApp,
-    urlParser,
     logger,
     cache,
     instanceRecycler,

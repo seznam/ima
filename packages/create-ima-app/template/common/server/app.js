@@ -14,8 +14,7 @@ const helmet = require('helmet');
 const favicon = require('serve-favicon');
 
 reactPageRendererHook(imaServer);
-const { serverApp, urlParser, environment, logger, cache, memStaticProxy } =
-  imaServer;
+const { serverApp, environment, logger, cache, memStaticProxy } = imaServer;
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -131,7 +130,6 @@ app
     environment.$Proxy.path + '/',
     proxy(environment.$Proxy.server, environment.$Proxy.options || {})
   )
-  .use(urlParser)
   .use(renderApp)
   .use(renderError);
 

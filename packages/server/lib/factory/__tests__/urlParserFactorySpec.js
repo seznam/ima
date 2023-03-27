@@ -2,7 +2,7 @@ jest.mock('path', () => ({
   resolve: jest.fn().mockImplementation(() => './__mocks__/ima.config.js'),
 }));
 
-const urlParserMiddlewareFactory = require('../urlParserMiddlewareFactory.js');
+const urlParserFactory = require('../urlParserFactory.js');
 
 const HOST = 'local.domain.cz';
 const HOST2 = 'domain.cz';
@@ -25,8 +25,8 @@ const REQUEST_GET_BOOK = Object.freeze({
   host: HOST,
 });
 
-describe('urlParserMiddlewareFactory', () => {
-  let parseUrl = urlParserMiddlewareFactory({
+describe('urlParserFactory', () => {
+  let { urlParser } = urlParserFactory({
     environment: ENVIRONMENT,
     applicationFolder: '.',
   });
@@ -47,7 +47,6 @@ describe('urlParserMiddlewareFactory', () => {
     redirect: jest.fn(),
   });
 
-  const next = jest.fn();
   const defaultRes = Object.assign({}, RES);
 
   beforeEach(() => {
@@ -55,10 +54,6 @@ describe('urlParserMiddlewareFactory', () => {
   });
 
   describe("method's behavior", () => {
-    afterAll(() => {
-      next.mockReset();
-    });
-
     const expectedKeys = [
       'language',
       'languagePartPath',
@@ -73,17 +68,15 @@ describe('urlParserMiddlewareFactory', () => {
       get: getMethod.bind(null, { host: HOST3 }),
     });
 
-    parseUrl(usedReq, usedRes, next);
+    urlParser({
+      req: usedReq,
+      res: usedRes,
+    });
 
     expectedKeys.forEach(key => {
       it(`should create key '${key}' in results object`, () => {
         expect(typeof usedRes.locals[key]).toBe('string');
       });
-    });
-
-    it("should call 'next' callback", () => {
-      expect(next.mock.calls).toHaveLength(1);
-      expect(next.mock.calls[0][0]).toBe();
     });
   });
 
@@ -143,7 +136,10 @@ describe('urlParserMiddlewareFactory', () => {
         get: getMethod.bind(null, getCodeBook),
       });
 
-      parseUrl(usedReq, usedRes, next);
+      urlParser({
+        req: usedReq,
+        res: usedRes,
+      });
 
       return usedRes.locals.host;
     }
@@ -215,7 +211,10 @@ describe('urlParserMiddlewareFactory', () => {
         });
 
         try {
-          parseUrl(usedReq, usedRes, next);
+          urlParser({
+            req: usedReq,
+            res: usedRes,
+          });
         } catch (exception) {
           // eslint-disable-next-line jest/no-conditional-expect
           expect(exception.name).toMatch(/^TypeError/);
@@ -283,7 +282,10 @@ describe('urlParserMiddlewareFactory', () => {
 
       const result = usedRes.locals;
 
-      parseUrl(usedReq, usedRes, next);
+      urlParser({
+        req: usedReq,
+        res: usedRes,
+      });
 
       return result.protocol;
     }
@@ -351,7 +353,10 @@ describe('urlParserMiddlewareFactory', () => {
         get: getMethod.bind(null, getCodeBook),
       });
 
-      parseUrl(usedReq, usedRes, next);
+      urlParser({
+        req: usedReq,
+        res: usedRes,
+      });
 
       const result = usedRes.locals;
 
@@ -381,7 +386,6 @@ describe('urlParserMiddlewareFactory', () => {
     let usedRes = {};
 
     beforeEach(() => {
-      next.mockReset();
       usedRes = Object.assign({}, defaultRes);
     });
 
@@ -501,18 +505,29 @@ describe('urlParserMiddlewareFactory', () => {
 
       if (redirectTo) {
         it(`should redirect from ${fullUrl} to ${redirectTo}`, () => {
-          parseUrl(usedReq, usedRes, next);
-          const result = usedRes.locals;
-          const redirectMock = usedRes.redirect.mock;
+          expect.assertions(2);
 
-          expect(redirectMock.calls).toHaveLength(1);
-          expect(redirectMock.calls[0][0]).toBe(redirectTo);
-          expect(result).toStrictEqual({});
-          expect(next.mock.calls).toHaveLength(0);
+          try {
+            urlParser({
+              req: usedReq,
+              res: usedRes,
+            });
+          } catch (error) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(usedRes.locals).toStrictEqual({});
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(error.getParams()).toStrictEqual({
+              status: 302,
+              url: redirectTo,
+            });
+          }
         });
       } else {
         it(`should detect language for URL ${fullUrl}`, () => {
-          parseUrl(usedReq, usedRes, next);
+          urlParser({
+            req: usedReq,
+            res: usedRes,
+          });
           const result = usedRes.locals;
 
           expect(result.root).toBe(expected.root);
@@ -604,7 +619,10 @@ describe('urlParserMiddlewareFactory', () => {
           get: getMethod.bind(null, { host: HOST2 }),
         });
 
-        parseUrl(usedReq, usedRes, next);
+        urlParser({
+          req: usedReq,
+          res: usedRes,
+        });
 
         const result = usedRes.locals;
 

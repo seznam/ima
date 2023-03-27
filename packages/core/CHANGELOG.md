@@ -1,5 +1,24 @@
 # Change Log
 
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- accfd6a15: Fixed backwards compatibility check in addExtension method in AbstractController\
+
+## 19.0.0-rc.9
+
+### Major Changes
+
+- 4cdfac35a: Multiple changes in router route handling and page manager with a goal of implementing ability to cancel running handlers before handling a new ones. This results in much more stable routing specifically when using async routes. Each route should now be executed "sequentially" where BEFORE/AFTER_HANDLE_ROUTE router events should always fire in correct order. Also if you quickly move between different routes, without them finishing loading, the page manager is able to cancel it's executing mid handling and continue with a new route, which results in faster and more stable routing. While this change is essentially not a breaking change, since it only changes our internal API, it could possibly result in some new behaviour.
+  Added `BEFORE_ASYNC_ROUTE` and `AFTER_ASYNC_ROUTE` which you can use to implement custom loaders when routing between async routes (or use it for any other handling).
+  #### Breaking Changes
+  `AbstractRouter.manage` method no longer has controller and view properties in an object argument.
+
+### Patch Changes
+
+- d32ef1744: Fix window history for error action
+
 ## 19.0.0-rc.8
 
 ### Patch Changes
@@ -143,6 +162,12 @@
 
 - Updated dependencies [c0fe68ef3]
   - @ima/helpers@19.0.0-rc.0
+
+## 18.1.2
+
+### Patch Changes
+
+- 22e68303b: Spreaded extensions are now correctly added to controller extensions map. This means that you can access those extensions using their constructor `this.getExtension(LoginExtension)` as you would while not using "spread" functionality.
 
 ## 18.1.1
 

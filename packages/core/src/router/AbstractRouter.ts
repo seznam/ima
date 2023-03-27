@@ -12,6 +12,7 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
+import { RendererEvents } from '..';
 import { Controller, IController } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
@@ -495,6 +496,13 @@ export abstract class AbstractRouter extends Router {
   }
 
   /**
+   * Handles preManage calls for current pageManager.
+   */
+  async _preManage(): Promise<unknown> {
+    return this._pageManager.preManage();
+  }
+
+  /**
    * Handles the provided route and parameters by initializing the route's
    * controller and rendering its state via the route's view.
    *
@@ -533,19 +541,17 @@ export abstract class AbstractRouter extends Router {
       action,
     };
 
-    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
+    /**
+     * Call pre-manage to cancel/property kill previously managed
+     * route handler.
+     */
+    await this._preManage();
 
-    // Pre-fetch view and controller which can be async
-    const [controller, view] = await Promise.all([
-      route.getController(),
-      route.getView(),
-    ]);
+    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
       .manage({
         route,
-        controller: controller as IController,
-        view,
         options: routeOptions,
         params,
         action,
@@ -559,7 +565,6 @@ export abstract class AbstractRouter extends Router {
         }
 
         eventData.response = response;
-
         this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response as void | StringParameters;

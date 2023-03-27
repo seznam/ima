@@ -2,6 +2,7 @@
 export class ServerPageManager {};
 /* @else */
 import { AbstractPageManager } from './AbstractPageManager';
+import { Dispatcher } from '../../event/Dispatcher';
 import { PageFactory } from '../PageFactory';
 import { PageRenderer } from '../renderer/PageRenderer';
 import { PageStateManager } from '../state/PageStateManager';
@@ -16,6 +17,7 @@ export class ServerPageManager extends AbstractPageManager {
       PageRenderer,
       PageStateManager,
       '$PageHandlerRegistry',
+      Dispatcher,
     ];
   }
 }

@@ -341,6 +341,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
+        // @ts-expect-error error param is not typed properly
         .handleError(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -373,6 +374,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
+      // @ts-expect-error error param is not typed properly
       await router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
@@ -426,6 +428,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
+        // @ts-expect-error error param is not typed properly
         .handleNotFound(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -457,6 +460,8 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new GenericError('test') };
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
+
+      // @ts-expect-error error param is not typed properly
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
@@ -531,6 +536,24 @@ describe('ima.core.router.AbstractRouter', () => {
       jest.spyOn(router, '_getCurrentlyRoutedPath').mockReturnValue(routePath);
     });
 
+    it('should call preManage', async () => {
+      jest.spyOn(router, '_preManage');
+      jest
+        .spyOn(pageManager, 'manage')
+        .mockReturnValue(Promise.resolve({ content: null, status: 200 }));
+
+      await router._handle(route, {}, {}, action).then(() => {
+        expect(pageManager.manage).toHaveBeenCalledWith({
+          route,
+          options,
+          params: {},
+          action,
+        });
+      });
+
+      expect(router['_preManage']).toHaveBeenCalled();
+    });
+
     it('should call page manager', async () => {
       router.getPath.mockReturnValue(routePath);
       jest
@@ -541,8 +564,6 @@ describe('ima.core.router.AbstractRouter', () => {
       await router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith({
           route,
-          controller: Controller,
-          view: View,
           options,
           params: {},
           action,
@@ -550,14 +571,19 @@ describe('ima.core.router.AbstractRouter', () => {
       });
     });
 
-    it('should fire ns.ima.core.EVENTS.BEFORE_HANDLE_ROUTE', () => {
+    it('should fire ns.ima.core.EVENTS.BEFORE_HANDLE_ROUTE', async () => {
       const response = { content: null, status: 200 };
       const params = {};
       const data = {
         route: route,
         params: params,
+        action: undefined,
         path: routePath,
         options: options,
+        response: {
+          content: null,
+          status: 200,
+        },
       };
 
       router.getPath.mockReturnValue(routePath);
@@ -566,7 +592,7 @@ describe('ima.core.router.AbstractRouter', () => {
         .mockReturnValue(Promise.resolve(response));
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
-      router._handle(route, params, options);
+      await router._handle(route, params, options);
 
       expect(dispatcher.fire).toHaveBeenCalledWith(
         RouterEvents.BEFORE_HANDLE_ROUTE,
@@ -612,6 +638,7 @@ describe('ima.core.router.AbstractRouter', () => {
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
       jest.spyOn(dispatcher, 'fire').mockImplementation();
 
+      // @ts-expect-error error param is not typed properly
       await router._handle(route, params, options).then(() => {
         const data = {
           route: route,
@@ -653,6 +680,7 @@ describe('ima.core.router.AbstractRouter', () => {
         .spyOn(pageManager, 'manage')
         .mockReturnValue(Promise.resolve(Object.assign({}, response)));
 
+      // @ts-expect-error error param is not typed properly
       await router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toStrictEqual(
           Object.assign({}, response, params)

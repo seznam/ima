@@ -43,7 +43,10 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
  - Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
 
 ### @ima/core
+ - Added new `CancelError` used for canceling running route handlers.
+ - Fix window history for error action, error pages are now not added to window history.
  - Package source files now include source map files.
+ - Added `RouterEvents.BEFORE_LOADING_ASYNC_ROUTE` and `RouterEvents.AFTER_LOADING_ASYNC_ROUTE` dispatcher events, which you can use to implement custom loaders when routing between async routes (or use it for any other handling).
  - All exports now use **named exports** (this is technically only package-wide change and does not mean nothing for the end user).
  - Added multiple new **TS types**, while also fixing existing types. Since rewriting IMA.js to typescript has been huge task, there may still be some type inconsistencies which we will try to fix in following releases to further improve TS experience in IMA.js ecosystem.
  - Added new `onRun` event to `window.$IMA.Runner`.
@@ -110,6 +113,8 @@ router.use(async (params, locals, next) => {
  - The App error route is protected for exceeding static thresholds.
  - The Emitter `event.cause` is removed. The error cause is set in `event.error.cause`.
  - Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings.
+ - Fixed issue where server redirect showed ErrorOverlay in debug mode.
+ - The instances of `$Dispatcher`, `$Cache`, `$PageRenderer` and `$PageManager` are cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
 
 ### create-ima-app
  - Added new **typescript template**, use `--typescript` option when generating new application.
@@ -123,6 +128,8 @@ router.use(async (params, locals, next) => {
  - Bumped **browserslist targets definition** a little bit to browsers supporting `AbortController` -> Added `AbortController` to `es2018` test script to runner.ejs. This means that browsers not supporting `AbortController` will be served MPA version of IMA app. While technically not a breaking change, since it's pretty minor bump, it is something however you should be aware of.
 
 ### @ima/core
+ - `AbstractRouter.manage` method no longer has controller and view properties in an object argument.
+ - Multiple changes in router route handling and page manager with a goal of implementing ability to cancel running handlers before handling a new ones. This results in much more stable routing specifically when using async routes. Each route should now be executed "**sequentially**" where BEFORE/AFTER_HANDLE_ROUTE router events should always fire in correct order. Also if you quickly move between different routes, without them finishing loading, the page manager is able to cancel it's executing mid handling and continue with a new route, which results in faster and more stable routing. While this change is essentially not a breaking change, since it only changes our internal API, it could possibly result in some new behavior.
  - Removed `ExtensibleError`.
  - `StatusCode` has been renamed to `HttpStatusCode`.
  - `$Source` environment.js variable has been renamed to `$Resources`.
@@ -188,5 +195,6 @@ this.fire(event.target, 'fetchDataArticles', { data: true })
 
 ### @ima/server
  - Update @esmj/monitor to 0.5.0 with breaking change for returns value from subscribe method where returns subscription is object with unsubscribe method.
+ - Migrated urlParser middleware to ima server BeforeRequest hook. Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
  - Dropped support for direct `response.contentVariables` mutations, use `event.result` and return values in `CreateContentVariables` event.
  - Dropped support for `$Source`, `$RevivalSettings`, `$RevivalCache`, `$Runner`, `$Styles`, `$Scripts` content variables. These have been replaced by their lowerFirst counter-parts `resource` (now replaces `$Source`), `revivalSettings`, `revivalCache`, `runner`, `styles`, while `$Scripts` support have been dropped completely.

@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- 53adfb35a: Fixed BlankManagedRootView props
+
 ## 19.0.0-rc.5
 
 ### Patch Changes

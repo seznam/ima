@@ -21,6 +21,7 @@ export {
 export { MessageFormatDictionary } from './dictionary/MessageFormatDictionary';
 export { IMAError as Error } from './error/Error';
 export { GenericError } from './error/GenericError';
+export { CancelError } from './error/CancelError';
 export { Dispatcher, type DispatcherListener } from './event/Dispatcher';
 export { DispatcherImpl } from './event/DispatcherImpl';
 export {
