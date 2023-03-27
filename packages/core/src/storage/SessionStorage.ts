@@ -1,6 +1,6 @@
 import { Storage as ImaStorage } from './Storage';
 import { GenericError } from '../error/GenericError';
-import { Dependencies } from '../ObjectContainer';
+import { Dependencies } from '../oc/ObjectContainer';
 import { ClientWindow } from '../window/ClientWindow';
 import { Window } from '../window/Window';
 

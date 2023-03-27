@@ -1,7 +1,7 @@
 import { AbstractController } from '../../controller/AbstractController';
 import { Extension, IExtension } from '../../extension/Extension';
 import { ns } from '../../Namespace';
-import { ObjectContainer } from '../../ObjectContainer';
+import { ObjectContainer } from '../../oc/ObjectContainer';
 import { RouteOptions } from '../../router/Router';
 import { PageFactory } from '../PageFactory';
 

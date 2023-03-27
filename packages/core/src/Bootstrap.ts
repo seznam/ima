@@ -1,7 +1,8 @@
 import * as helpers from '@ima/helpers';
 
 import { Namespace, ns } from './Namespace';
-import { ObjectContainer } from './ObjectContainer';
+import { BindingState } from './oc/BindingState';
+import { ObjectContainer } from './oc/ObjectContainer';
 import { Router } from './router/Router';
 import { UnknownParameters } from './types';
 
@@ -137,7 +138,7 @@ export class Bootstrap {
     const currentApplicationSettings = {};
     const plugins = this._config.plugins.concat([
       {
-        name: ObjectContainer.APP_BINDING_STATE,
+        name: BindingState.App,
         plugin: this._config as unknown as PluginConfigFunctions,
       },
     ]);
@@ -198,7 +199,7 @@ export class Bootstrap {
       )
     );
 
-    helpers.assignRecursivelyWithTracking(ObjectContainer.APP_BINDING_STATE)(
+    helpers.assignRecursivelyWithTracking(BindingState.App)(
       newApplicationSettings,
       this._config.bind
     );
@@ -211,28 +212,18 @@ export class Bootstrap {
    * object container.
    */
   _bindDependencies() {
-    this._oc.setBindingState(ObjectContainer.IMA_BINDING_STATE);
-    this._config.initBindIma(
-      ns,
-      this._oc,
-      this._config.bind,
-      ObjectContainer.IMA_BINDING_STATE
-    );
+    this._oc.setBindingState(BindingState.IMA);
+    this._config.initBindIma(ns, this._oc, this._config.bind, BindingState.IMA);
 
     this._config.plugins
       .filter(({ plugin }) => typeof plugin.initBind === 'function')
       .forEach(({ name, plugin }) => {
-        this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
+        this._oc.setBindingState(BindingState.Plugin, name);
         plugin.initBind!(ns, this._oc, this._config.bind, false);
       });
 
-    this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
-    this._config.initBindApp(
-      ns,
-      this._oc,
-      this._config.bind,
-      ObjectContainer.APP_BINDING_STATE
-    );
+    this._oc.setBindingState(BindingState.App);
+    this._config.initBindApp(ns, this._oc, this._config.bind, BindingState.App);
   }
 
   /**
@@ -247,18 +238,18 @@ export class Bootstrap {
       return;
     }
 
-    this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
+    this._oc.setBindingState(BindingState.Plugin, name);
 
     plugin.initBind(ns, this._oc, this._config.bind, true, name);
 
-    this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
+    this._oc.setBindingState(BindingState.App);
   }
 
   /**
    * Initializes the routes.
    */
   _initRoutes() {
-    const router = this._oc.get(Router) as Router;
+    const router = this._oc.get(Router);
     this._config.initRoutes(ns, this._oc, this._config.routes, router);
   }
 

@@ -1,15 +1,12 @@
+import { Constructor } from 'type-fest';
+
 import { PageStateManager } from './state/PageStateManager';
-import { PageStateManagerDecorator } from './state/PageStateManagerDecorator';
 import { AbstractController } from '../controller/AbstractController';
 import { IController } from '../controller/Controller';
-import { ControllerDecorator } from '../controller/ControllerDecorator';
-import { Dictionary } from '../dictionary/Dictionary';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
-import { MetaManager } from '../meta/MetaManager';
-import { ObjectContainer, UnknownConstructable } from '../ObjectContainer';
-import { Router, RouteOptions } from '../router/Router';
-import { UnknownParameters } from '../types';
+import { ObjectContainer } from '../oc/ObjectContainer';
+import { RouteOptions } from '../router/Router';
 
 /**
  * Factory for page.
@@ -82,13 +79,12 @@ export class PageFactory {
    * @return The react component class
    *         constructor.
    */
-  createView(view: unknown) {
+  createView<T>(view: Constructor<T>) {
     if (typeof view === 'function') {
       return view;
     }
-    const classConstructor = this._oc.getConstructorOf(
-      view as UnknownConstructable
-    );
+
+    const classConstructor = this._oc.getConstructorOf(view);
 
     if (classConstructor) {
       return classConstructor;
@@ -103,11 +99,10 @@ export class PageFactory {
    * Returns decorated controller for ease setting seo params in controller.
    */
   decorateController(controller: IController) {
-    const metaManager = this._oc.get('$MetaManager') as MetaManager;
-    const router = this._oc.get('$Router') as Router;
-    const dictionary = this._oc.get('$Dictionary') as Dictionary;
-    const settings = this._oc.get('$Settings') as UnknownParameters;
-
+    const metaManager = this._oc.get('$MetaManager');
+    const router = this._oc.get('$Router');
+    const dictionary = this._oc.get('$Dictionary');
+    const settings = this._oc.get('$Settings');
     const decoratedController = this._oc.create('$ControllerDecorator', [
       controller,
       metaManager,
@@ -116,7 +111,7 @@ export class PageFactory {
       settings,
     ]);
 
-    return decoratedController as ControllerDecorator;
+    return decoratedController;
   }
 
   /**
@@ -131,6 +126,6 @@ export class PageFactory {
       [pageStateManager, allowedStateKeys]
     );
 
-    return decoratedPageStateManager as PageStateManagerDecorator;
+    return decoratedPageStateManager;
   }
 }

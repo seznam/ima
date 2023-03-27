@@ -1,4 +1,10 @@
-export const initServices = (ns, oc, config) => {
+import { Namespace, ObjectContainer } from '..';
+
+export const initServices = (
+  ns: Namespace,
+  oc: ObjectContainer,
+  config: any
+) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
 

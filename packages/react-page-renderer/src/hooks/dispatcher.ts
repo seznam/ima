@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useComponentUtils } from './componentUtils';
 
 export interface useDispatcherType {
-  fire: InstanceType<typeof Dispatcher>['fire'];
+  fire: Dispatcher['fire'];
 }
 
 /**

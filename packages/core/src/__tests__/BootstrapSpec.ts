@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Bootstrap, PluginConfigFunctions, Config } from '../Bootstrap';
 import { ns } from '../Namespace';
-import { ObjectContainer } from '../ObjectContainer';
+import { BindingState } from '../oc/BindingState';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { UnknownParameters } from '../types';
 
 describe('bootstrap', () => {
@@ -166,7 +167,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.IMA_BINDING_STATE
+        BindingState.IMA
       );
     });
 
@@ -176,7 +177,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.PLUGIN_BINDING_STATE,
+        BindingState.Plugin,
         'test-plugin'
       );
     });
@@ -187,7 +188,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.APP_BINDING_STATE
+        BindingState.App
       );
     });
 

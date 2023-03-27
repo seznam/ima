@@ -91,6 +91,11 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
             return;
           }
 
+          // Ignore TS files
+          if (filePath.endsWith('.ts') && !filePath.endsWith('.d.ts')) {
+            return;
+          }
+
           fs.copyFile(src, dest, err => {
             // Fix ima binary not being executable
             if (name === 'cli' && filePath.includes('bin/ima.js')) {

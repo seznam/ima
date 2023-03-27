@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { ns } from '../Namespace';
-import { ObjectContainer, Entry } from '../ObjectContainer';
-import { UnknownParameters } from '../types';
+import { ns } from '../../Namespace';
+import { UnknownParameters } from '../../types';
+import { BindingState } from '../BindingState';
+import { Entry } from '../Entry';
+import { ObjectContainer } from '../ObjectContainer';
 
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;
@@ -90,7 +92,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error, if you want to set constatn in plugin', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.constant(constantObjectName, constantObjectValue);
@@ -123,7 +125,7 @@ describe('ima.core.ObjectContainer', () => {
 
     it('should throw error, if ClassConstructor is registered and object container is locked for plugin', () => {
       oc.inject(ClassConstructor, dependencies);
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.inject(ClassConstructor, dependencies);
@@ -190,7 +192,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error if object container is locked', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
 
       expect(() => {
         oc.bind(alias, ClassConstructor, dependencies);
@@ -269,8 +271,8 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias2, ClassConstructor, []);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(1);
-      expect(oc['_entries'].get(alias2)).not.toStrictEqual(
-        oc['_entries'].get(ClassConstructor)
+      expect(oc['_entries'].get(alias2)!.dependencies).not.toStrictEqual(
+        oc['_entries'].get(ClassConstructor)!.dependencies
       );
       expect(oc['_entries'].get(alias2)!.dependencies).toStrictEqual([]);
     });
@@ -282,7 +284,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be throw Error if you call provide method more times for same interfaceConstructor in plugin', () => {
-      oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+      oc.setBindingState(BindingState.Plugin);
       oc.provide(ClassParent, ClassConstructor, dependencies);
 
       expect(() => {

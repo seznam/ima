@@ -1,5 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
+import { Namespace, ObjectContainer, PageRenderer, Utils } from '..';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -31,7 +32,7 @@ import { PageStateManagerDecorator } from '../page/state/PageStateManagerDecorat
 import { PageStateManagerImpl } from '../page/state/PageStateManagerImpl';
 import { ClientRouter } from '../router/ClientRouter';
 import { Request } from '../router/Request';
-import { Response } from '../router/Response';
+import { CookieTransformFunction, Response } from '../router/Response';
 import { RouteFactory } from '../router/RouteFactory';
 import { RouteNames } from '../router/RouteNames';
 import { Router } from '../router/Router';
@@ -46,45 +47,87 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
-export const initBind = (ns, oc, config) => {
-  //**************START VENDORS**************
+/**
+ * Map of IMA default string aliases and constants initialized in
+ * the ObjectContainer. This is used for typechecking and type
+ * hinting of string OC arguments.
+ */
+export type OCAliasMap = {
+  $Helper: typeof $Helper;
+  $oc: ObjectContainer;
+  // TODO >>>
+  $Settings: any;
+  $Env: any;
+  $Protocol: any;
+  // TODO ^^^
+  $Secure: boolean;
+  $Request: Request;
+  $Response: Response;
+  $Window: Window;
+  $Error: Dispatcher;
+  $Dictionary: Dictionary;
+  $CookieTransformFunction: CookieTransformFunction;
+  $CookieStorage: CookieStorage;
+  $SessionStorage:
+    | InstanceType<typeof SessionStorage>
+    | InstanceType<typeof MapStorage>;
+  $MapStorage: InstanceType<typeof MapStorage>;
+  $WeakMapStorage: WeakMapStorage;
+  $SessionMapStorage: InstanceType<typeof SessionMapStorage>;
+  $Dispatcher: Dispatcher;
+  $EventBus: EventBus;
+  $CacheStorage: OCAliasMap['$MapStorage'];
+  $CacheFactory: InstanceType<typeof CacheFactory>;
+  $Cache: Cache;
+  $MetaManager: MetaManager;
+  $ControllerDecorator: ControllerDecorator;
+  $PageStateManagerDecorator: PageStateManagerDecorator;
+  $PageStateManager: PageStateManager;
+  $PageFactory: PageFactory;
+  $ComponentUtils: ComponentUtils;
+  $Utils: Utils;
+  $PageHandlerRegistry: PageHandlerRegistry;
+  $PageManager: PageManager;
+  $RouteFactory: RouteFactory;
+  $Router: Router;
+  $RouteNames: RouteNames;
+  $RouterEvents: RouterEvents;
+  $HttpUrlTransformer: UrlTransformer;
+  $HttpAgentProxy: HttpProxy;
+  $Http: HttpAgent;
+  $HttpStatusCode: typeof HttpStatusCode;
+  $PageRenderer: PageRenderer;
+};
+
+export const initBind = (ns: Namespace, oc: ObjectContainer, config: any) => {
   oc.constant('$Helper', $Helper);
-
-  //*************END VENDORS*****************
-
-  //*************START CONSTANTS*****************
   oc.constant('$oc', oc);
   oc.constant('$Settings', config);
   oc.constant('$Env', config.$Env);
   oc.constant('$Protocol', config.$Protocol);
   oc.constant('$Secure', config.$Protocol === 'https:');
-  //*************END CONSTANTS*****************
 
-  //*************START IMA**************
-
-  //Request & Response
+  // Request & Response
   oc.bind('$Request', Request);
   oc.bind('$Response', Response);
 
-  //Window helper
+  // Window helper
   if (typeof window !== 'undefined' && window !== null) {
     oc.provide(Window, ClientWindow);
   } else {
     oc.provide(Window, ServerWindow);
   }
   oc.bind('$Window', Window);
-
-  //IMA Error
   oc.bind('$Error', GenericError);
 
-  //Dictionary
+  // Dictionary
   oc.provide(Dictionary, MessageFormatDictionary);
   oc.bind('$Dictionary', Dictionary);
 
-  //Storage
+  // Storage
   oc.constant('$CookieTransformFunction', {
-    encode: s => s,
-    decode: s => s,
+    encode: (s: string) => s,
+    decode: (s: string) => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {
@@ -112,7 +155,7 @@ export const initBind = (ns, oc, config) => {
   oc.provide(EventBus, EventBusImpl);
   oc.bind('$EventBus', EventBus);
 
-  //Cache
+  // Cache
   oc.constant('$CacheStorage', oc.get(MapStorage));
   oc.bind('$CacheFactory', CacheFactory);
   oc.provide(Cache, CacheImpl, [
@@ -123,13 +166,13 @@ export const initBind = (ns, oc, config) => {
   ]);
   oc.bind('$Cache', Cache);
 
-  //SEO
+  // SEO
   oc.provide(MetaManager, MetaManagerImpl);
   oc.bind('$MetaManager', MetaManager);
   oc.bind('$ControllerDecorator', ControllerDecorator);
   oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
-  //Page
+  // Page
   oc.provide(PageStateManager, PageStateManagerImpl);
   oc.bind('$PageStateManager', PageStateManager);
 
@@ -163,7 +206,7 @@ export const initBind = (ns, oc, config) => {
   }
   oc.bind('$PageManager', PageManager);
 
-  //Router
+  // Router
   oc.bind('$RouteFactory', RouteFactory);
 
   if (oc.get(Window).isClient()) {
@@ -175,7 +218,7 @@ export const initBind = (ns, oc, config) => {
   oc.constant('$RouteNames', RouteNames);
   oc.constant('$RouterEvents', RouterEvents);
 
-  //Http agent
+  // Http agent
   oc.bind('$HttpUrlTransformer', UrlTransformer);
   oc.bind('$HttpAgentProxy', HttpProxy, ['$HttpUrlTransformer', '$Window']);
   oc.provide(HttpAgent, HttpAgentImpl, [
@@ -187,6 +230,4 @@ export const initBind = (ns, oc, config) => {
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);
-
-  //*************END IMA****************
 };
