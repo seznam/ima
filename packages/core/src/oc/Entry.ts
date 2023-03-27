@@ -26,23 +26,23 @@ export class Entry<T> {
    * Dependencies of the class constructor of the class represented by
    * this entry.
    */
-  private _dependencies: any[];
+  _dependencies: any[];
 
   /**
    * The Entry options.
    */
-  private _options: EntryOptions;
+  #options: EntryOptions;
 
   /**
    * The override counter
    */
-  private _overrideCounter = 0;
+  #overrideCounter = 0;
 
   /**
    * Reference to part of application that created
    * this entry.
    */
-  private _referrer?: string;
+  #referrer?: string;
 
   /**
    * Initializes the entry.
@@ -62,9 +62,9 @@ export class Entry<T> {
     options?: EntryOptions
   ) {
     this.classConstructor = classConstructor;
-    this._referrer = referrer;
+    this.#referrer = referrer;
     this._dependencies = dependencies || [];
-    this._options = options || {
+    this.#options = options || {
       writeable: true,
     };
   }
@@ -78,7 +78,7 @@ export class Entry<T> {
         );
       }
 
-      if (this._overrideCounter >= 1) {
+      if (this.#overrideCounter >= 1) {
         throw new Error(
           `The dependencies entry can't be overridden more than once.` +
             `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
@@ -87,7 +87,7 @@ export class Entry<T> {
     }
 
     this._dependencies = dependencies;
-    this._overrideCounter++;
+    this.#overrideCounter++;
   }
 
   get dependencies() {
@@ -95,11 +95,15 @@ export class Entry<T> {
   }
 
   get referrer() {
-    return this._referrer;
+    return this.#referrer;
   }
 
   get writeable() {
-    return this._options.writeable;
+    return this.#options.writeable;
+  }
+
+  get options() {
+    return this.#options;
   }
 
   static from<TInfer>(entry: Entry<TInfer>) {
@@ -107,7 +111,7 @@ export class Entry<T> {
       entry.classConstructor,
       entry.dependencies,
       entry.referrer,
-      entry._options
+      entry.options
     );
   }
 }
