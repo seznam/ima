@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { ns } from '../Namespace';
-import { BindingState } from '../oc/BindingState';
-import { Entry } from '../oc/Entry';
-import { ObjectContainer } from '../oc/ObjectContainer';
-import { UnknownParameters } from '../types';
+import { ns } from '../../Namespace';
+import { UnknownParameters } from '../../types';
+import { BindingState } from '../BindingState';
+import { Entry } from '../Entry';
+import { ObjectContainer } from '../ObjectContainer';
 
 describe('ima.core.ObjectContainer', () => {
   let oc: ObjectContainer;
@@ -271,8 +271,8 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias2, ClassConstructor, []);
 
       expect(oc._createEntry).toHaveBeenCalledTimes(1);
-      expect(oc['_entries'].get(alias2)).not.toStrictEqual(
-        oc['_entries'].get(ClassConstructor)
+      expect(oc['_entries'].get(alias2)!.dependencies).not.toStrictEqual(
+        oc['_entries'].get(ClassConstructor)!.dependencies
       );
       expect(oc['_entries'].get(alias2)!.dependencies).toStrictEqual([]);
     });

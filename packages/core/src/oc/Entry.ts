@@ -26,7 +26,7 @@ export class Entry<T> {
    * Dependencies of the class constructor of the class represented by
    * this entry.
    */
-  _dependencies: any[];
+  #dependencies: any[];
 
   /**
    * The Entry options.
@@ -63,7 +63,7 @@ export class Entry<T> {
   ) {
     this.classConstructor = classConstructor;
     this.#referrer = referrer;
-    this._dependencies = dependencies || [];
+    this.#dependencies = dependencies || [];
     this.#options = options || {
       writeable: true,
     };
@@ -86,12 +86,12 @@ export class Entry<T> {
       }
     }
 
-    this._dependencies = dependencies;
+    this.#dependencies = dependencies;
     this.#overrideCounter++;
   }
 
   get dependencies() {
-    return this._dependencies;
+    return this.#dependencies;
   }
 
   get referrer() {
