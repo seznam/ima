@@ -77,18 +77,25 @@ export default abstract class AbstractController extends Controller {
    */
   addExtension(
     extension: Extension | IExtension,
-    extensionInstance?: Extension
+    extensionInstance?: InstanceType<typeof Extension>
   ) {
-    if (typeof extensionInstance !== 'object') {
+    if (
+      (!extensionInstance && typeof extension !== 'object') ||
+      (extensionInstance && typeof extensionInstance !== 'object')
+    ) {
       throw new Error(
         `ima.core.AbstractController:addExtension: Expected instance of an extension, got ${typeof extension}.`
       );
     }
 
-    this._extensions.set(
-      extension,
-      extensionInstance ? extensionInstance : (extension as Extension)
-    );
+    if (extensionInstance) {
+      this._extensions.set(extension, extensionInstance);
+    } else {
+      this._extensions.set(
+        extension?.constructor ?? extension,
+        extension as Extension
+      );
+    }
   }
 
   /**
