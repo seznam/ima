@@ -1,7 +1,9 @@
+import { Constructor } from 'type-fest';
+
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 
 /**
  * Utility factory used by router to create routes.
@@ -29,10 +31,10 @@ export class RouteFactory {
    * @param options The route additional options.
    * @return The constructed route.
    */
-  createRoute(
+  createRoute<C extends Constructor<Controller>>(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | C,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {

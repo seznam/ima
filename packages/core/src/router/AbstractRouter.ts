@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Constructor } from 'type-fest';
 
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
@@ -12,8 +12,7 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
-import { RendererEvents } from '..';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '..';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
@@ -131,10 +130,10 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  add(
+  add<C extends Constructor<Controller>>(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | C,
     view: object | string | (() => unknown),
     options?: Partial<RouteOptions>
   ) {

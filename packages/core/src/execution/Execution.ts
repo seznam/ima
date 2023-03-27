@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export type ExecutionJob = (...args: unknown[]) => Promise<unknown> | unknown;
 
 /**

@@ -1,10 +1,11 @@
 import { Controller } from './Controller';
+import { RouteParams, Settings } from '..';
 import { Dictionary } from '../dictionary/Dictionary';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { Router } from '../router/Router';
-import { UnknownParameters } from '../types';
+import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
@@ -31,7 +32,7 @@ export class ControllerDecorator extends Controller {
   /**
    * Application settings for the current application environment.
    */
-  protected _settings: UnknownParameters;
+  protected _settings: Settings;
 
   /**
    * Initializes the controller decorator.
@@ -48,95 +49,93 @@ export class ControllerDecorator extends Controller {
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: UnknownParameters
+    settings: Settings
   ) {
     super();
 
     this._controller = controller;
-
     this._metaManager = metaManager;
-
     this._router = router;
-
     this._dictionary = dictionary;
-
     this._settings = settings;
   }
 
   /**
    * @inheritDoc
    */
-  init() {
+  init(): Promise<void> | void {
     this._controller.init();
   }
 
   /**
    * @inheritDoc
    */
-  destroy() {
+  destroy(): Promise<void> | void {
     this._controller.destroy();
   }
 
   /**
    * @inheritDoc
    */
-  activate() {
+  activate(): Promise<void> | void {
     this._controller.activate();
   }
 
   /**
    * @inheritDoc
    */
-  deactivate() {
+  deactivate(): Promise<void> | void {
     this._controller.deactivate();
   }
 
   /**
    * @inheritDoc
    */
-  load() {
+  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
     return this._controller.load();
   }
 
   /**
    * @inheritDoc
    */
-  update(params = {}) {
-    return this._controller.update(params);
+  update(
+    prevParams: RouteParams = {}
+  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+    return this._controller.update(prevParams);
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters) {
+  setState(statePatch: UnknownParameters): void {
     this._controller.setState(statePatch);
   }
 
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): UnknownParameters {
     return this._controller.getState();
   }
 
   /**
    * @inheritDoc
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     this._controller.beginStateTransaction();
   }
 
   /**
    * @inheritDoc
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     this._controller.commitStateTransaction();
   }
 
   /**
    * @inheritDoc
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     this._controller.cancelStateTransaction();
   }
 
@@ -144,18 +143,25 @@ export class ControllerDecorator extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
-  ) {
+    extension: typeof Extension | InstanceType<typeof Extension>,
+    extensionInstance?: InstanceType<typeof Extension>
+  ): void {
     this._controller.addExtension(extension, extensionInstance);
-
-    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getExtensions() {
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
+    return this._controller.get(extension);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getExtensions(): Extension[] {
     return this._controller.getExtensions();
   }
 
@@ -175,28 +181,28 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  setRouteParams(params = {}) {
+  setRouteParams(params: RouteParams = {}): void {
     this._controller.setRouteParams(params);
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams() {
+  getRouteParams(): RouteParams {
     return this._controller.getRouteParams();
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager: PageStateManager) {
+  setPageStateManager(pageStateManager: PageStateManager): void {
     this._controller.setPageStateManager(pageStateManager);
   }
 
   /**
    * @inheritDoc
    */
-  getHttpStatus() {
+  getHttpStatus(): number {
     return this._controller.getHttpStatus();
   }
 
@@ -207,7 +213,7 @@ export class ControllerDecorator extends Controller {
    * @return The Meta attributes manager configured by the
    *         decorated controller.
    */
-  getMetaManager() {
+  getMetaManager(): MetaManager {
     return this._metaManager;
   }
 }

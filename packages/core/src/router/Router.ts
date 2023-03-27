@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Constructor } from 'type-fest';
 
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
-import { IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { UnknownParameters } from '../types';
 
 export interface RouteAction {
@@ -30,10 +30,10 @@ export interface RouteFactoryOptions {
   autoScroll: boolean;
   documentView: null | unknown;
   managedRootView: null | unknown;
-  onlyUpdate: boolean | ((controller: IController, view: unknown) => boolean);
+  onlyUpdate: boolean | ((controller: Controller, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  extensions?: IExtension[];
+  extensions?: Extension[];
 }
 
 export interface RouteOptions extends RouteFactoryOptions {
@@ -106,10 +106,10 @@ export abstract class Router {
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
-  add(
+  add<C extends Constructor<Controller>>(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | C,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteOptions>
   ) {

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Execution, ExecutionJob } from './Execution';
 import { GenericError } from '../error/GenericError';
 

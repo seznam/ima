@@ -1,19 +1,18 @@
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { ControllerDecorator } from '../controller/ControllerDecorator';
-import { AbstractRoute } from '../router/AbstractRoute';
+import { AbstractRoute, RouteParams } from '../router/AbstractRoute';
 import { RouteAction, RouteOptions } from '../router/Router';
 import { UnknownParameters } from '../types';
 
-// FIXME most of these types are probably always defined
 export type ManagedPage = {
-  controller?: IController;
-  controllerInstance?: Controller;
-  decoratedController?: ControllerDecorator;
-  options?: RouteOptions;
-  params?: UnknownParameters;
+  controller: Controller;
+  controllerInstance: InstanceType<typeof Controller>;
+  decoratedController: ControllerDecorator;
+  options: RouteOptions;
+  params: RouteParams;
   route: InstanceType<typeof AbstractRoute>;
-  view?: unknown;
-  viewInstance?: unknown;
+  view: unknown;
+  viewInstance: unknown;
   state: {
     activated: boolean;
     initialized: boolean;

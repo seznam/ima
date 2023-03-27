@@ -4,7 +4,7 @@ import {
   RouteParams,
 } from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '../controller/Controller';
 import { StringParameters } from '../types';
 
 /**
@@ -96,7 +96,7 @@ export class StaticRoute extends AbstractRoute<string> {
   constructor(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {

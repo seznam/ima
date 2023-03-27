@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import type { IncomingHttpHeaders } from 'http2';
-
 import { HttpProxyRequestParams } from './HttpProxy';
 import { StringParameters, UnknownParameters } from '../types';
 

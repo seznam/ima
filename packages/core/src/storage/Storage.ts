@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 /**
  * The {@link Storage} is an unordered collection of named values of any
  * type. Values in the storage are named using `string` keys. The storage

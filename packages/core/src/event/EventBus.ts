@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { UnknownParameters } from '../types';
 
 export type EventBusListener = (event: CustomEvent) => unknown;

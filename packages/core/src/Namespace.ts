@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
@@ -7,7 +5,6 @@
  * each other more easily than by using the ES6 import/export mechanism.
  */
 export class Namespace {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any;
 
   /**
@@ -22,8 +19,6 @@ export class Namespace {
    *        ns.namespace('ima.core');
    *        ns.has('ima.core');
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
 
   /**
    * Verifies that the specified path in namespace exists, creates it if it
@@ -40,6 +35,7 @@ export class Namespace {
    */
   namespace(path: string) {
     const levels = this._resolvePathLevels(path);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
     for (const levelName of levels) {
@@ -80,7 +76,7 @@ export class Namespace {
    */
   get(path: string): unknown {
     const levels = this._resolvePathLevels(path);
-
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
     for (const level of levels) {

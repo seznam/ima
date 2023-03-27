@@ -1,12 +1,11 @@
-import { AbstractRoute } from '../../router/AbstractRoute';
+import { AbstractRoute, RouteParams } from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
-import { UnknownParameters } from '../../types';
 import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
   route: InstanceType<typeof AbstractRoute>;
   options: RouteOptions;
-  params?: UnknownParameters;
+  params?: RouteParams;
   action?: PageAction;
 };
 
@@ -51,7 +50,6 @@ export abstract class PageManager {
    *         client (at the server side) or determine the type of error page
    *         to navigate to (at the client side).
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   manage(args: ManageArgs): Promise<unknown> {
     return Promise.reject();
   }

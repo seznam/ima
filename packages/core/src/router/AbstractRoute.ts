@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '..';
 import { GenericError } from '../error/GenericError';
 
 export type RouteParams = Record<string, string>;
@@ -37,7 +35,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   protected _controller: {
     resolved: boolean;
-    controller: string | typeof Controller | (() => IController);
+    controller: string | Controller | Promise<Controller>;
     cached: null | unknown;
   };
   /**
@@ -71,7 +69,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   constructor(
     name: string,
     pathExpression: T,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {
@@ -134,7 +132,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
     if (!this._controller.cached) {
       this._controller.cached = !this._controller.resolved
         ? (
-            this._controller.controller as () => Promise<
+            this._controller.controller as unknown as () => Promise<
               Record<string, unknown>
             >
           )().then(module => {

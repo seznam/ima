@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { ManagedPage, PageAction } from '../PageTypes';
 
 export abstract class PageHandler {

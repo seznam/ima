@@ -1,6 +1,6 @@
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { Controller } from '..';
 import { GenericError } from '../error/GenericError';
 
 /**
@@ -54,7 +54,7 @@ export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
   constructor(
     name: string,
     pathExpression: RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
+    controller: string | Controller,
     view: string | unknown | (() => unknown),
     options?: Partial<RouteFactoryOptions>
   ) {

@@ -20,7 +20,7 @@ export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
 export { CacheImpl } from './cache/CacheImpl';
 export { AbstractController } from './controller/AbstractController';
-export { Controller, type IController } from './controller/Controller';
+export { Controller } from './controller/Controller';
 export { ControllerDecorator } from './controller/ControllerDecorator';
 export {
   Dictionary,
@@ -46,7 +46,7 @@ export { AbstractExecution } from './execution/AbstractExecution';
 export { Execution, type ExecutionJob } from './execution/Execution';
 export { SerialBatch } from './execution/SerialBatch';
 export { AbstractExtension } from './extension/AbstractExtension';
-export { Extension, type IExtension } from './extension/Extension';
+export { Extension } from './extension/Extension';
 export {
   HttpAgent,
   type HttpAgentRequestOptions,
