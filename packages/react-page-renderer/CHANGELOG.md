@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.7
+
+### Patch Changes
+
+- 0d044e238: Typed ObjectContainer
+
 ## 19.0.0-rc.6
 
 ### Patch Changes
