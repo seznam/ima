@@ -11,7 +11,7 @@ import { useComponentUtils } from './componentUtils';
  *
  * @returns Localized string.
  */
-export function useLocalize(): InstanceType<typeof Dictionary>['get'] {
+export function useLocalize(): Dictionary['get'] {
   const { $Dictionary } = useComponentUtils();
 
   return useCallback((...params) => $Dictionary.get(...params), [$Dictionary]);

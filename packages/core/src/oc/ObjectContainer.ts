@@ -644,7 +644,7 @@ export class ObjectContainer {
     classConstructor: OCInjectable<T>,
     dependencies?: any[],
     options?: EntryOptions
-  ): InstanceType<typeof Entry<T>> {
+  ): Entry<T> {
     if (
       (!dependencies || dependencies.length === 0) &&
       Array.isArray(classConstructor.$dependencies)

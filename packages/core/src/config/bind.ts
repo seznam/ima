@@ -54,49 +54,49 @@ import { Window } from '../window/Window';
  */
 export type OCAliasMap = {
   $Helper: typeof $Helper;
-  $oc: InstanceType<typeof ObjectContainer>;
+  $oc: ObjectContainer;
   // TODO >>>
   $Settings: any;
   $Env: any;
   $Protocol: any;
   // TODO ^^^
   $Secure: boolean;
-  $Request: InstanceType<typeof Request>;
-  $Response: InstanceType<typeof Response>;
-  $Window: InstanceType<typeof Window>;
-  $Error: InstanceType<typeof Dispatcher>;
-  $Dictionary: InstanceType<typeof Dictionary>;
+  $Request: Request;
+  $Response: Response;
+  $Window: Window;
+  $Error: Dispatcher;
+  $Dictionary: Dictionary;
   $CookieTransformFunction: CookieTransformFunction;
-  $CookieStorage: InstanceType<typeof CookieStorage>;
+  $CookieStorage: CookieStorage;
   $SessionStorage:
     | InstanceType<typeof SessionStorage>
     | InstanceType<typeof MapStorage>;
   $MapStorage: InstanceType<typeof MapStorage>;
-  $WeakMapStorage: InstanceType<typeof WeakMapStorage>;
+  $WeakMapStorage: WeakMapStorage;
   $SessionMapStorage: InstanceType<typeof SessionMapStorage>;
-  $Dispatcher: InstanceType<typeof Dispatcher>;
-  $EventBus: InstanceType<typeof EventBus>;
+  $Dispatcher: Dispatcher;
+  $EventBus: EventBus;
   $CacheStorage: OCAliasMap['$MapStorage'];
   $CacheFactory: InstanceType<typeof CacheFactory>;
-  $Cache: InstanceType<typeof Cache>;
-  $MetaManager: InstanceType<typeof MetaManager>;
-  $ControllerDecorator: InstanceType<typeof ControllerDecorator>;
-  $PageStateManagerDecorator: InstanceType<typeof PageStateManagerDecorator>;
-  $PageStateManager: InstanceType<typeof PageStateManager>;
-  $PageFactory: InstanceType<typeof PageFactory>;
-  $ComponentUtils: InstanceType<typeof ComponentUtils>;
+  $Cache: Cache;
+  $MetaManager: MetaManager;
+  $ControllerDecorator: ControllerDecorator;
+  $PageStateManagerDecorator: PageStateManagerDecorator;
+  $PageStateManager: PageStateManager;
+  $PageFactory: PageFactory;
+  $ComponentUtils: ComponentUtils;
   $Utils: Utils;
-  $PageHandlerRegistry: InstanceType<typeof PageHandlerRegistry>;
-  $PageManager: InstanceType<typeof PageManager>;
-  $RouteFactory: InstanceType<typeof RouteFactory>;
-  $Router: InstanceType<typeof Router>;
+  $PageHandlerRegistry: PageHandlerRegistry;
+  $PageManager: PageManager;
+  $RouteFactory: RouteFactory;
+  $Router: Router;
   $RouteNames: RouteNames;
   $RouterEvents: RouterEvents;
-  $HttpUrlTransformer: InstanceType<typeof UrlTransformer>;
-  $HttpAgentProxy: InstanceType<typeof HttpProxy>;
-  $Http: InstanceType<typeof HttpAgent>;
+  $HttpUrlTransformer: UrlTransformer;
+  $HttpAgentProxy: HttpProxy;
+  $Http: HttpAgent;
   $HttpStatusCode: typeof HttpStatusCode;
-  $PageRenderer: InstanceType<typeof PageRenderer>;
+  $PageRenderer: PageRenderer;
 };
 
 export const initBind = (ns: Namespace, oc: ObjectContainer, config: any) => {

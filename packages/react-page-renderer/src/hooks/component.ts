@@ -7,11 +7,11 @@ import type { defaultCssClasses } from '../componentHelpers';
 export interface useComponentType {
   utils: Utils;
   cssClasses: typeof defaultCssClasses;
-  localize: InstanceType<typeof Dictionary>['get'];
-  link: InstanceType<typeof Router>['link'];
-  fire: InstanceType<typeof EventBus>['fire'];
-  listen: InstanceType<typeof EventBus>['listen'];
-  unlisten: InstanceType<typeof EventBus>['unlisten'];
+  localize: Dictionary['get'];
+  link: Router['link'];
+  fire: EventBus['fire'];
+  listen: EventBus['listen'];
+  unlisten: EventBus['unlisten'];
 }
 
 /**

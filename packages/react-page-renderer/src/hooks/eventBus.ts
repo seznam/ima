@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useComponentUtils } from './componentUtils';
 
 export interface useEventBusType {
-  fire: InstanceType<typeof EventBus>['fire'];
+  fire: EventBus['fire'];
 }
 
 /**
