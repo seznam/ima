@@ -2,6 +2,7 @@ import { Constructor } from 'type-fest';
 
 import { AbstractRoute, RouteParams } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
+import { OCAliasMap } from '..';
 import { Controller } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
@@ -106,11 +107,14 @@ export abstract class Router {
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
-  add<C extends Constructor<Controller>>(
+  add<
+    C extends Constructor<Controller> | keyof OCAliasMap,
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+  >(
     name: string,
     pathExpression: string,
-    controller: string | C,
-    view: string | unknown | (() => unknown),
+    controller: C,
+    view: V,
     options?: Partial<RouteOptions>
   ) {
     return this;

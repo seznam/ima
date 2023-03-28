@@ -80,7 +80,9 @@ export class PageFactory {
    * @return The react component class
    *         constructor.
    */
-  createView<T>(view: Constructor<T>) {
+  createView<V extends string | Constructor<any> | ((...args: any[]) => any)>(
+    view: V
+  ) {
     if (typeof view === 'function') {
       return view;
     }

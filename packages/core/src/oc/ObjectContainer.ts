@@ -412,16 +412,16 @@ export class ObjectContainer {
    *        is registered with this object container.
    * @return The constructor function.
    */
-  getConstructorOf<T>(
-    name: string | OCConstructable<T>
-  ): OCInjectable<T> | null {
-    const entry = this._getEntry(name);
+  getConstructorOf<T extends string | Constructor<any>>(
+    name: T
+  ): OCConstructable<T> | null {
+    const entry = this._getEntry<T>(name);
 
     if (!entry) {
       return null;
     }
 
-    return entry.classConstructor;
+    return entry.classConstructor as OCConstructable<T>;
   }
 
   /**

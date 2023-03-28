@@ -3,6 +3,7 @@ import { Constructor } from 'type-fest';
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
+import { OCAliasMap } from '..';
 import { Controller } from '../controller/Controller';
 
 /**
@@ -31,11 +32,14 @@ export class RouteFactory {
    * @param options The route additional options.
    * @return The constructed route.
    */
-  createRoute<C extends Constructor<Controller>>(
+  createRoute<
+    C extends Constructor<Controller> | keyof OCAliasMap,
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+  >(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string | C,
-    view: string | unknown | (() => unknown),
+    controller: C,
+    view: V,
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(
