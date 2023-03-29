@@ -15,6 +15,25 @@ import { ManagedPage, PageAction } from '../PageTypes';
 import { PageRenderer } from '../renderer/PageRenderer';
 import { PageStateManager } from '../state/PageStateManager';
 
+function createDeferred<RValue, EValue>(
+  resolveValue?: RValue,
+  rejectedValue?: EValue
+) {
+  return (() => {
+    let resolve, reject;
+    const promise = new Promise<RValue | undefined>((res, rej) => {
+      resolve = () => res(resolveValue);
+      reject = () => rej(rejectedValue);
+    });
+
+    return {
+      resolve: resolve as unknown as () => void,
+      reject: reject as unknown as () => void,
+      promise,
+    };
+  })();
+}
+
 /**
  * Page manager for controller.
  */
@@ -243,20 +262,7 @@ export abstract class AbstractPageManager extends PageManager {
         initialized: false,
         cancelled: false,
         executed: false,
-        page: (() => {
-          let resolve, reject;
-
-          const promise = new Promise<void>((res, rej) => {
-            resolve = res;
-            reject = rej;
-          });
-
-          return {
-            resolve: resolve as unknown as () => void,
-            reject: reject as unknown as () => void,
-            promise,
-          };
-        })(),
+        page: createDeferred(),
       },
     };
   }
@@ -274,34 +280,15 @@ export abstract class AbstractPageManager extends PageManager {
      * Create new abort promise used for aborting raced promises
      * in canceled handlers.
      */
-    this._previousManagedPage.state.abort = (() => {
-      let resolve, reject;
-      const promise = new Promise<void>((res, rej) => {
-        resolve = res;
-        reject = () => rej(new CancelError());
-      });
+    this._previousManagedPage.state.abort = createDeferred(
+      undefined,
+      new CancelError()
+    );
 
-      return {
-        resolve: resolve as unknown as () => void,
-        reject: reject as unknown as () => void,
-        promise,
-      };
-    })();
-
-    this._managedPage.state.page = (() => {
-      let resolve, reject;
-
-      const promise = new Promise<void>((res, rej) => {
-        resolve = res;
-        reject = rej;
-      });
-
-      return {
-        resolve: resolve as unknown as () => void,
-        reject: reject as unknown as () => void,
-        promise,
-      };
-    })();
+    /**
+     * Reseted managed state promise.
+     */
+    this._managedPage.state.page = createDeferred();
   }
 
   /**
