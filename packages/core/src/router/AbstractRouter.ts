@@ -568,7 +568,8 @@ export abstract class AbstractRouter extends Router {
         this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response as void | StringParameters;
-      });
+      })
+      .finally(() => this._pageManager.postManage());
   }
 
   /**

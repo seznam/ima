@@ -15,13 +15,10 @@ import { ManagedPage, PageAction } from '../PageTypes';
 import { PageRenderer } from '../renderer/PageRenderer';
 import { PageStateManager } from '../state/PageStateManager';
 
-function createDeferred<RValue, EValue>(
-  resolveValue?: RValue,
-  rejectedValue?: EValue
-) {
+function createDeferred<T, E>(resolveValue?: T, rejectedValue?: E) {
   return (() => {
     let resolve, reject;
-    const promise = new Promise<RValue | undefined>((res, rej) => {
+    const promise = new Promise<T | undefined>((res, rej) => {
       resolve = () => res(resolveValue);
       reject = () => rej(rejectedValue);
     });
@@ -108,7 +105,7 @@ export abstract class AbstractPageManager extends PageManager {
   /**
    * @inheritDoc
    */
-  preManage() {
+  async preManage() {
     this._managedPage.state.cancelled = true;
     this._previousManagedPage.state.abort?.reject();
 
@@ -126,100 +123,88 @@ export abstract class AbstractPageManager extends PageManager {
       route.isControllerResolved() && route.isViewResolved();
 
     try {
-      try {
-        if (!isControllerViewResolved) {
-          this._dispatcher.fire(
-            RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
-            { route },
-            true
-          );
-        }
-
-        const data = await this.getViewController(route);
-        controller = data.controller;
-        view = data.view;
-      } catch (error) {
-        if (!(error instanceof CancelError)) {
-          throw error;
-        }
-
-        setTimeout(() => {
-          this._managedPage.state.page.resolve();
-        }, 0);
-
-        return { status: 409 };
-      } finally {
-        if (!isControllerViewResolved) {
-          this._dispatcher.fire(
-            RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
-            { route },
-            true
-          );
-        }
+      if (!isControllerViewResolved) {
+        this._dispatcher.fire(
+          RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
+          { route },
+          true
+        );
       }
 
-      if (this._hasOnlyUpdate(controller, view, options)) {
-        this._managedPage.params = params;
-
-        await this._runPreManageHandlers(this._managedPage, action);
-        const response = await this._updatePageSource();
-        await this._runPostManageHandlers(this._previousManagedPage, action);
-
-        setTimeout(() => {
-          this._managedPage.state.page.resolve();
-        }, 0);
-
-        return response;
+      const data = await this.getViewController(route);
+      controller = data.controller;
+      view = data.view;
+    } catch (error) {
+      if (!(error instanceof CancelError)) {
+        throw error;
       }
 
-      // Construct new managedPage value
-      const controllerInstance = this._pageFactory.createController(
-        controller,
-        options
-      );
-      const decoratedController =
-        this._pageFactory.decorateController(controllerInstance);
-      // @ts-expect-error fixme in the future
-      const viewInstance = this._pageFactory.createView(view);
+      return { status: 409 };
+    } finally {
+      if (!isControllerViewResolved) {
+        this._dispatcher.fire(
+          RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
+          { route },
+          true
+        );
+      }
+    }
 
-      this._managedPage = this._constructManagedPageValue(
-        controller,
-        view,
-        route,
-        options,
-        params,
-        controllerInstance,
-        decoratedController,
-        viewInstance
-      );
+    if (this._hasOnlyUpdate(controller, view, options)) {
+      this._managedPage.params = params;
 
-      // Run pre-manage handlers before affecting anything
       await this._runPreManageHandlers(this._managedPage, action);
-
-      // Deactivate the old instances and clearing state
-      await this._deactivatePageSource();
-      await this._destroyPageSource();
-
-      this._pageStateManager.clear();
-      this._clearComponentState(options);
-
-      // Initialize controllers and extensions
-      await this._initPageSource();
-
-      const response = await this._loadPageSource();
+      const response = await this._updatePageSource();
       await this._runPostManageHandlers(this._previousManagedPage, action);
-      this._previousManagedPage = this._getInitialManagedPage();
-
-      setTimeout(() => {
-        this._managedPage.state.page.resolve();
-      }, 0);
 
       return response;
-    } catch (error) {
-      this._managedPage.state.page.resolve();
-
-      throw error;
     }
+
+    // Construct new managedPage value
+    const controllerInstance = this._pageFactory.createController(
+      controller,
+      options
+    );
+    const decoratedController =
+      this._pageFactory.decorateController(controllerInstance);
+    // @ts-expect-error fixme in the future
+    const viewInstance = this._pageFactory.createView(view);
+
+    this._managedPage = this._constructManagedPageValue(
+      controller,
+      view,
+      route,
+      options,
+      params,
+      controllerInstance,
+      decoratedController,
+      viewInstance
+    );
+
+    // Run pre-manage handlers before affecting anything
+    await this._runPreManageHandlers(this._managedPage, action);
+
+    // Deactivate the old instances and clearing state
+    await this._deactivatePageSource();
+    await this._destroyPageSource();
+
+    this._pageStateManager.clear();
+    this._clearComponentState(options);
+
+    // Initialize controllers and extensions
+    await this._initPageSource();
+
+    const response = await this._loadPageSource();
+    await this._runPostManageHandlers(this._previousManagedPage, action);
+    this._previousManagedPage = this._getInitialManagedPage();
+
+    return response;
+  }
+
+  postManage() {
+    setTimeout(() => {
+      this._managedPage.state.page.resolve();
+    }, 0);
   }
 
   /**

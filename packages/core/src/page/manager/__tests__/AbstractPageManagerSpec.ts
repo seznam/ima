@@ -8,7 +8,7 @@ import { AbstractController } from '../../../controller/AbstractController';
 import { Controller, IController } from '../../../controller/Controller';
 import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { AbstractExtension } from '../../../extension/AbstractExtension';
-import { ManageArgs, RouterEvents } from '../../../index';
+import { GenericError, ManageArgs, RouterEvents } from '../../../index';
 import { DynamicRoute } from '../../../router/DynamicRoute';
 import { RouteFactory } from '../../../router/RouteFactory';
 import { RouteOptions } from '../../../router/Router';
@@ -45,6 +45,10 @@ class ControllerMock extends AbstractController {
     super();
 
     this.dependency = dependency;
+  }
+
+  load() {
+    return {};
   }
 }
 
@@ -260,7 +264,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       const preManageOld = pageManager.preManage();
       const oldResponse = await oldPagePromise;
 
-      // Resolve page promise in timeout
+      pageManager.postManage();
       jest.runOnlyPendingTimers();
       await preManageOld;
 
@@ -312,6 +316,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       jest.advanceTimersByTime(10000);
       const response = await pagePromise;
+      pageManager.postManage();
       jest.runOnlyPendingTimers();
 
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
@@ -350,6 +355,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       // Resolve page promise in timeout
+      pageManager.postManage();
       jest.runOnlyPendingTimers();
 
       await expect(
@@ -380,6 +386,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         options,
       });
 
+      pageManager.postManage();
+
       // Resolve page promise in timeout
       jest.runOnlyPendingTimers();
       await pageManager.preManage();
@@ -408,6 +416,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       expect(pageManager['_previousManagedPage'].state.cancelled).toBeTruthy();
 
+      pageManager.postManage();
+
       // Resolve page promise in timeout
       jest.runOnlyPendingTimers();
       await preManageOld;
@@ -429,6 +439,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       // Resolve page promise in timeout
       const newPageResponse = await newPagePromise;
+      pageManager.postManage();
       jest.runOnlyPendingTimers();
 
       await expect(

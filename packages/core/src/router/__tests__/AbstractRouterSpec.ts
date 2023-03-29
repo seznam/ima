@@ -554,6 +554,25 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(router['_preManage']).toHaveBeenCalled();
     });
 
+    it('should call postManage', async () => {
+      jest.spyOn(router, '_preManage');
+      jest.spyOn(pageManager, 'postManage');
+      jest
+        .spyOn(pageManager, 'manage')
+        .mockReturnValue(Promise.resolve({ content: null, status: 409 }));
+
+      await router._handle(route, {}, {}, action).then(() => {
+        expect(pageManager.manage).toHaveBeenCalledWith({
+          route,
+          options,
+          params: {},
+          action,
+        });
+      });
+
+      expect(pageManager['postManage']).toHaveBeenCalled();
+    });
+
     it('should call page manager', async () => {
       router.getPath.mockReturnValue(routePath);
       jest
