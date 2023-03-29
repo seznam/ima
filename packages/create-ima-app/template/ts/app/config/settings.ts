@@ -1,6 +1,12 @@
 import { InitSettingsFunction } from '@ima/core';
 import { DocumentView } from 'app/document/DocumentView';
 
+declare module '@ima/core' {
+  interface Settings {
+    links: Record<'documentation' | 'tutorial' | 'plugins' | 'api', string>;
+  }
+}
+
 export const initSettings: InitSettingsFunction = (ns, oc, config) => {
   return {
     prod: {
