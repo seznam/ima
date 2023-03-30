@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import type { IncomingHttpHeaders } from 'http2';
-
 import { HttpProxyRequestParams } from './HttpProxy';
 import { StringParameters, UnknownParameters } from '../types';
 
@@ -37,7 +33,7 @@ export interface HttpAgentRequestOptions {
   repeatRequest: number;
   fetchOptions: ImaRequestInit;
   cache: boolean;
-  postProcessors?: (<B>(
+  postProcessors?: (<B = unknown>(
     response: HttpAgentResponse<B>
   ) => HttpAgentResponse<B>)[];
   abortController?: AbortController;
@@ -183,7 +179,7 @@ export abstract class HttpAgent {
    * @return The key to use for identifying such a request in the
    *         cache.
    */
-  getCacheKey(method: string, url: string, data: StringParameters): string {
+  getCacheKey(method: string, url: string, data: UnknownParameters): string {
     return '';
   }
 

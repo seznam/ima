@@ -18,8 +18,6 @@ const IGNORED = [
   'jest.config.js',
   'src',
   '**/*.tgz',
-  '**/*.ts',
-  '!**/*.d.ts',
   'tsconfig.build.tsbuildinfo',
   '**/node_modules/**',
   '**/typings/**',

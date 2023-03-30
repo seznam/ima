@@ -1,17 +1,19 @@
 import { IMAError } from './Error';
 
+export type GenericErrorParams = {
+  cause?: Error | string;
+  status?: number;
+  [key: string]: unknown;
+};
+
 /**
  * Implementation of the {@link Error} interface, providing more advanced
  * error API.
  *
  * @extends Error
  */
-export class GenericError extends IMAError {
-  protected _params: {
-    cause?: Error | string;
-    status?: number;
-    [key: string]: unknown;
-  };
+export class GenericError<T = unknown> extends IMAError {
+  protected _params: T & GenericErrorParams;
 
   /**
    * Initializes the generic IMA error.
@@ -22,13 +24,13 @@ export class GenericError extends IMAError {
    *        `status` field to the HTTP response code that should be sent
    *        to the client.
    */
-  constructor(message: string, params = {}) {
+  constructor(message: string, params?: T & GenericErrorParams) {
     super(message, params);
 
     /**
      * The data providing additional details related to this error.
      */
-    this._params = params;
+    this._params = params ?? ({} as T & GenericErrorParams);
   }
 
   /**
@@ -41,7 +43,7 @@ export class GenericError extends IMAError {
   /**
    * @inheritDoc
    */
-  getParams() {
+  getParams(): T & GenericErrorParams {
     return this._params;
   }
 
