@@ -105,29 +105,6 @@ export class ClientRouter extends AbstractRouter {
     return this;
   }
 
-  async _preManage() {
-    return Promise.all([
-      super._preManage().then(() => {
-        if (!this._mountedPromise?.promise) {
-          this._mountedPromise = (() => {
-            let resolve, reject;
-            const promise = new Promise<void>((res, rej) => {
-              resolve = res;
-              reject = rej;
-            });
-
-            return {
-              promise,
-              resolve: resolve as unknown as () => void,
-              reject: reject as unknown as () => void,
-            };
-          })();
-        }
-      }),
-      this._mountedPromise?.promise,
-    ]);
-  }
-
   /**
    * @inheritDoc
    */
