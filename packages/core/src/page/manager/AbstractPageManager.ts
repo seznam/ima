@@ -361,8 +361,8 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _initPageSource() {
     try {
-      await this._initController();
-      await this._initExtensions();
+      await this.#cancelable(this._initController());
+      await this.#cancelable(this._initExtensions());
       this._managedPage.state.initialized = true;
     } catch (error) {
       if (!(error instanceof CancelError)) {
@@ -422,9 +422,11 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _loadPageSource() {
     try {
-      const controllerState = await this._getLoadedControllerState();
-      const extensionsState = await this._getLoadedExtensionsState(
-        controllerState
+      const controllerState = await this.#cancelable(
+        this._getLoadedControllerState()
+      );
+      const extensionsState = await this.#cancelable(
+        this._getLoadedExtensionsState(controllerState)
       );
       const loadedPageState = Object.assign(
         {},
@@ -436,15 +438,14 @@ export abstract class AbstractPageManager extends PageManager {
         throw new CancelError();
       }
 
-      const response = await Promise.race([
-        this._previousManagedPage.state.abort?.promise,
+      const response = await this.#cancelable(
         this._pageRenderer.mount(
           this._managedPage.decoratedController as ControllerDecorator,
           this._managedPage.viewInstance,
           loadedPageState,
           this._managedPage.options as RouteOptions
-        ),
-      ]);
+        )
+      );
 
       return response;
     } catch (error) {
@@ -510,8 +511,8 @@ export abstract class AbstractPageManager extends PageManager {
         .activated;
 
       if (controller && isNotActivated) {
-        await this._activateController();
-        await this._activateExtensions();
+        await this.#cancelable(this._activateController());
+        await this.#cancelable(this._activateExtensions());
         (this._managedPage.state as UnknownParameters).activated = true;
       }
     } catch (error) {
@@ -555,10 +556,13 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected async _updatePageSource() {
     try {
-      const updatedControllerState = await this._getUpdatedControllerState();
-      const updatedExtensionState = await this._getUpdatedExtensionsState(
-        updatedControllerState
+      const updatedControllerState = await this.#cancelable(
+        this._getUpdatedControllerState()
       );
+      const updatedExtensionState = await this.#cancelable(
+        this._getUpdatedExtensionsState(updatedControllerState)
+      );
+
       const updatedPageState = Object.assign(
         {},
         updatedExtensionState,
@@ -569,15 +573,14 @@ export abstract class AbstractPageManager extends PageManager {
         throw new CancelError();
       }
 
-      const response = await Promise.race([
-        this._previousManagedPage.state.abort?.promise,
+      const response = await this.#cancelable(
         this._pageRenderer.update(
           this._managedPage.decoratedController as ControllerDecorator,
           this._managedPage.viewInstance,
           updatedPageState,
           this._managedPage.options as RouteOptions
-        ),
-      ]);
+        )
+      );
 
       return response;
     } catch (error) {
@@ -806,12 +809,17 @@ export abstract class AbstractPageManager extends PageManager {
   protected async getViewController(
     route: ManagedPage['route']
   ): Promise<{ controller: Controller; view: unknown }> {
-    // @ts-expect-error fixme in the future
-    const [controller, view] = await Promise.race([
-      this._previousManagedPage.state.abort?.promise,
-      Promise.all([route.getController(), route.getView()]),
-    ]);
+    const [controller, view] = await this.#cancelable(
+      Promise.all([route.getController(), route.getView()])
+    );
 
     return { controller: controller as Controller, view };
+  }
+
+  #cancelable<T>(promise: T): Promise<T | never> {
+    return Promise.race([
+      this._previousManagedPage.state.abort?.promise as never,
+      promise,
+    ]);
   }
 }

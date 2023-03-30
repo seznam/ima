@@ -838,7 +838,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       await runManage();
     });
 
-    it('should be merge state from controller and extensions to updated page state', async () => {
+    it('should merge state from controller and extensions to updated page state', async () => {
+      pageManager['_storeManagedPageSnapshot']();
       await pageManager['_updatePageSource']();
 
       expect(pageRenderer.update).toHaveBeenCalledWith(
