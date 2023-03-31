@@ -17,6 +17,7 @@ export {
   type DictionaryConfig,
   type DictionaryData,
   type LocalizationFunction,
+  type DictionaryMap,
 } from './dictionary/Dictionary';
 export { MessageFormatDictionary } from './dictionary/MessageFormatDictionary';
 export { IMAError as Error } from './error/Error';

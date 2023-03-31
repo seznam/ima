@@ -58,7 +58,7 @@ export class MessageFormatDictionary extends Dictionary {
    *        produces the localization phrase with its placeholders evaluated
    *        using the provided placeholder values.
    */
-  init(config: DictionaryConfig) {
+  init(config: DictionaryConfig): void {
     this._language = config.$Language;
     this._dictionary = config.dictionary;
   }
@@ -66,7 +66,7 @@ export class MessageFormatDictionary extends Dictionary {
   /**
    * @inheritDoc
    */
-  getLanguage() {
+  getLanguage(): string {
     return this._language;
   }
 
@@ -86,7 +86,7 @@ export class MessageFormatDictionary extends Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters?: ObjectParameters) {
+  get(key: string, parameters?: ObjectParameters): string {
     const scope = this._getScope(key);
 
     if (!scope) {
@@ -112,7 +112,7 @@ export class MessageFormatDictionary extends Dictionary {
    * @return `true` if the key exists and denotes a single
    *                   localization phrase, otherwise `false`.
    */
-  has(key: string) {
+  has(key: string): boolean {
     if (!/^[^.]+(\.[^.]+)+$/.test(key)) {
       throw new Error(
         `The provided key (${key}) is not a valid localization ` +
