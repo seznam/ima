@@ -91,7 +91,7 @@ Now create `tsconfig.json` file (that may look something like this):
       ],
     }
   },
-  "include": ["./app/**/*"],
+  "include": ["./app/**/*", "./build/tmp/types/**/*"],
   "exclude": ["./**/__tests__"]
 }
 ```
