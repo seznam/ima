@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.3.3
+
+### Patch Changes
+
+- 18e6cab06: Fix export of devUtilsFactory
+
 ## 18.3.2
 
 ### Patch Changes
