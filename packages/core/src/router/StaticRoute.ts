@@ -1,10 +1,11 @@
 import {
   AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
   LOOSE_SLASHES_REGEXP,
   RouteParams,
 } from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller } from '../controller/Controller';
 import { StringParameters } from '../types';
 
 /**
@@ -96,8 +97,8 @@ export class StaticRoute extends AbstractRoute<string> {
   constructor(
     name: string,
     pathExpression: string,
-    controller: string | Controller,
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ) {
     super(name, pathExpression, controller, view, options);

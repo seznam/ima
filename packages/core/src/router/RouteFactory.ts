@@ -1,10 +1,7 @@
-import { Constructor } from 'type-fest';
-
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
-import { OCAliasMap } from '..';
-import { Controller } from '../controller/Controller';
+import { AsyncRouteController, AsyncRouteView } from '..';
 
 /**
  * Utility factory used by router to create routes.
@@ -32,14 +29,11 @@ export class RouteFactory {
    * @param options The route additional options.
    * @return The constructed route.
    */
-  createRoute<
-    C extends Constructor<Controller> | keyof OCAliasMap,
-    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
-  >(
+  createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: C,
-    view: V,
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(

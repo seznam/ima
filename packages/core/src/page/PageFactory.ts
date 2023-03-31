@@ -1,7 +1,7 @@
-import { Constructor } from 'type-fest';
+import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { PageStateManager } from './state/PageStateManager';
-import { OCAliasMap } from '..';
+import { Extension, OCAliasMap } from '..';
 import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 import { ObjectContainer } from '../oc/ObjectContainer';
@@ -27,28 +27,28 @@ export class PageFactory {
    * Create new instance of {@link Controller}.
    */
   createController(
-    controller: keyof OCAliasMap | Controller,
+    controller:
+      | keyof OCAliasMap
+      | Constructor<Controller>
+      | AbstractConstructor<Controller>,
     options: RouteOptions
-  ) {
+  ): Controller {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
 
     if (
       typeof controller !== 'string' &&
+      controller instanceof Controller &&
       Array.isArray(controller?.$extensions) &&
       controller.$extensions.length
     ) {
       mergedExtensions = mergedExtensions.concat(controller.$extensions);
     }
 
-    // TODO
-    // @ts-expect-error
-    const controllerInstance = this._oc.create(controller);
+    const controllerInstance = this._oc.create(controller) as Controller;
 
     for (const extension of mergedExtensions) {
-      // TODO
-      // @ts-expect-error
-      const loadedExtension = this._oc.get(extension);
+      const loadedExtension = this._oc.get(extension) as Extension;
 
       // Optional extension handling
       if (!loadedExtension) {
@@ -64,7 +64,10 @@ export class PageFactory {
           );
         }
       } else {
-        controllerInstance.addExtension(extension, loadedExtension);
+        controllerInstance.addExtension(
+          extension as typeof Extension,
+          loadedExtension
+        );
       }
     }
 

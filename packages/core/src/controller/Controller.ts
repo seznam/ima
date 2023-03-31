@@ -1,4 +1,12 @@
-import { Dependencies, GenericError, RouteParams, Settings } from '..';
+import { AbstractConstructor, Constructor } from 'type-fest';
+
+import {
+  Dependencies,
+  GenericError,
+  OCAliasMap,
+  RouteParams,
+  Settings,
+} from '..';
 import { Dictionary } from '../dictionary/Dictionary';
 import { EventBusEventHandler } from '../event/EventBus';
 import { Extension } from '../extension/Extension';
@@ -206,7 +214,10 @@ export abstract class Controller {
    * invoked.
    */
   addExtension(
-    extension: typeof Extension | InstanceType<typeof Extension>,
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension>
+      | AbstractConstructor<Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
     return;

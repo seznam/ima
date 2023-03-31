@@ -1,12 +1,16 @@
 import { Controller } from '../controller/Controller';
 import { ControllerDecorator } from '../controller/ControllerDecorator';
-import { AbstractRoute, RouteParams } from '../router/AbstractRoute';
+import {
+  AbstractRoute,
+  RouteController,
+  RouteParams,
+} from '../router/AbstractRoute';
 import { RouteAction, RouteOptions } from '../router/Router';
 import { UnknownParameters } from '../types';
 
 export type ManagedPage = {
-  controller: Controller;
-  controllerInstance: InstanceType<typeof Controller>;
+  controller: RouteController;
+  controllerInstance: Controller;
   decoratedController: ControllerDecorator;
   options: RouteOptions;
   params: RouteParams;

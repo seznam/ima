@@ -1,6 +1,9 @@
-import { Constructor } from 'type-fest';
-
-import { AbstractRoute, RouteParams } from './AbstractRoute';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteParams,
+} from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteNames } from './RouteNames';
@@ -12,7 +15,6 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
-import { Controller, OCAliasMap } from '..';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
@@ -130,14 +132,11 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
-  add<
-    C extends Constructor<Controller> | keyof OCAliasMap,
-    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
-  >(
+  add(
     name: string,
     pathExpression: string,
-    controller: C,
-    view: V,
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteOptions>
   ) {
     if (this._routeHandlers.has(name)) {

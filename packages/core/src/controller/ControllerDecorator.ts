@@ -1,5 +1,7 @@
+import { AbstractConstructor, Constructor } from 'type-fest';
+
 import { Controller } from './Controller';
-import { RouteParams, Settings } from '..';
+import { OCAliasMap, RouteParams, Settings } from '..';
 import { Dictionary } from '../dictionary/Dictionary';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
@@ -143,7 +145,10 @@ export class ControllerDecorator extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: typeof Extension | InstanceType<typeof Extension>,
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension>
+      | AbstractConstructor<Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
     this._controller.addExtension(extension, extensionInstance);

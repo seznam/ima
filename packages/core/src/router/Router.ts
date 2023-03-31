@@ -1,9 +1,14 @@
-import { Constructor } from 'type-fest';
+import { AbstractConstructor, Constructor } from 'type-fest';
 
-import { AbstractRoute, RouteParams } from './AbstractRoute';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteController,
+  RouteParams,
+} from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
 import { OCAliasMap } from '..';
-import { Controller } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
@@ -31,10 +36,20 @@ export interface RouteFactoryOptions {
   autoScroll: boolean;
   documentView: null | unknown;
   managedRootView: null | unknown;
-  onlyUpdate: boolean | ((controller: Controller, view: unknown) => boolean);
+  onlyUpdate:
+    | boolean
+    | ((controller: RouteController, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  extensions?: Extension[];
+  extensions?: (
+    | keyof OCAliasMap
+    | Constructor<Extension>
+    | AbstractConstructor<Extension>
+    | [
+        AbstractConstructor<Extension> | Constructor<Extension>,
+        { optional: true }
+      ]
+  )[];
 }
 
 export interface RouteOptions extends RouteFactoryOptions {
@@ -107,14 +122,11 @@ export abstract class Router {
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
-  add<
-    C extends Constructor<Controller> | keyof OCAliasMap,
-    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
-  >(
+  add(
     name: string,
     pathExpression: string,
-    controller: C,
-    view: V,
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteOptions>
   ) {
     return this;

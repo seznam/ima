@@ -4,7 +4,12 @@ import { ControllerDecorator } from '../../controller/ControllerDecorator';
 import { CancelError } from '../../error/CancelError';
 import { Dispatcher } from '../../event/Dispatcher';
 import { Extension } from '../../extension/Extension';
-import { AbstractRoute, RouteParams } from '../../router/AbstractRoute';
+import {
+  AbstractRoute,
+  RouteController,
+  RouteParams,
+  RouteView,
+} from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
 import { RouterEvents } from '../../router/RouterEvents';
 import { UnknownParameters } from '../../types';
@@ -213,7 +218,7 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   protected _constructManagedPageValue(
-    controller: Controller,
+    controller: RouteController,
     view: unknown,
     route: InstanceType<typeof AbstractRoute>,
     options: RouteOptions,
@@ -302,14 +307,14 @@ export abstract class AbstractPageManager extends PageManager {
    */
   protected _getInitialManagedPage(): ManagedPage {
     return {
-      controller: undefined as unknown as Controller,
-      controllerInstance: undefined as unknown as Controller,
-      decoratedController: undefined as unknown as ControllerDecorator,
+      controller: undefined!,
+      controllerInstance: undefined!,
+      decoratedController: undefined!,
       view: undefined,
       viewInstance: undefined,
-      route: undefined as unknown as InstanceType<typeof AbstractRoute>,
-      options: undefined as unknown as RouteOptions,
-      params: undefined as unknown as RouteParams,
+      route: undefined!,
+      options: undefined!,
+      params: undefined!,
       state: {
         activated: false,
         initialized: false,
@@ -760,7 +765,7 @@ export abstract class AbstractPageManager extends PageManager {
    * Return true if manager has to update last managed controller and view.
    */
   protected _hasOnlyUpdate(
-    controller: Controller,
+    controller: RouteController,
     view: unknown,
     options: RouteOptions
   ) {
@@ -822,8 +827,8 @@ export abstract class AbstractPageManager extends PageManager {
 
   protected async getViewController(
     route: ManagedPage['route']
-  ): Promise<{ controller: Controller; view: unknown }> {
-    // @ts-expect-error fixme in the future
+  ): Promise<{ controller: RouteController; view: RouteView }> {
+    // @ts-expect-error ignore state.abort.promise value
     const [controller, view] = await Promise.race([
       this._previousManagedPage.state.abort?.promise,
       Promise.all([route.getController(), route.getView()]),

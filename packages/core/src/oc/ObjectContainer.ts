@@ -395,7 +395,7 @@ export class ObjectContainer {
    * @return The shared instance or value.
    */
   get<T extends OCInstanceConstrain>(name: T): OCInstance<T> {
-    const entry = this._getEntry(name as Dependency<T>);
+    const entry = this._getEntry<T>(name as Dependency<T>);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
@@ -461,7 +461,7 @@ export class ObjectContainer {
     name: T,
     dependencies: any[] = []
   ): OCInstance<T> {
-    const entry = this._getEntry(name as Dependency<T>);
+    const entry = this._getEntry<any>(name as Dependency<T>);
 
     if (!entry) {
       throw new Error(
@@ -470,7 +470,7 @@ export class ObjectContainer {
       );
     }
 
-    return this._createInstanceFromEntry(entry as Entry<any>, dependencies);
+    return this._createInstanceFromEntry(entry, dependencies);
   }
 
   /**

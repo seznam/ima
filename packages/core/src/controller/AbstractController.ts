@@ -1,5 +1,7 @@
+import { AbstractConstructor, Constructor } from 'type-fest';
+
 import { Controller } from './Controller';
-import { Dependencies, RouteParams } from '..';
+import { Dependencies, OCAliasMap, RouteParams } from '..';
 import { Extension } from '../extension/Extension';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { UnknownParameters } from '../types';
@@ -10,8 +12,10 @@ import { UnknownParameters } from '../types';
  */
 export class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
-  protected _extensions: Map<typeof Extension, InstanceType<typeof Extension>> =
-    new Map();
+  protected _extensions: Map<
+    keyof OCAliasMap | Constructor<Extension> | AbstractConstructor<Extension>,
+    InstanceType<typeof Extension>
+  > = new Map();
   /**
    * The HTTP response code to send to the client.
    */
@@ -78,7 +82,10 @@ export class AbstractController extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: typeof Extension | InstanceType<typeof Extension>,
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension>
+      | AbstractConstructor<Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
     if (
@@ -91,11 +98,11 @@ export class AbstractController extends Controller {
     }
 
     if (extensionInstance) {
-      this._extensions.set(extension as typeof Extension, extensionInstance);
+      this._extensions.set(extension, extensionInstance);
     } else {
       this._extensions.set(
-        (extension?.constructor ?? extension) as typeof Extension,
-        extension as InstanceType<typeof Extension>
+        (extension?.constructor as typeof Extension) ?? extension,
+        extension as unknown as InstanceType<typeof Extension>
       );
     }
   }

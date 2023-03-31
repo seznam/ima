@@ -5,7 +5,7 @@
 import { toMockedInstance } from 'to-mock';
 
 import { AbstractController } from '../../../controller/AbstractController';
-import { Controller, IController } from '../../../controller/Controller';
+import { Controller } from '../../../controller/Controller';
 import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { AbstractExtension } from '../../../extension/AbstractExtension';
 import { ManageArgs, RouterEvents } from '../../../index';
