@@ -90,6 +90,13 @@ module.exports = (() => {
       },
     },
 
+    test: {
+      $Server: {
+        // Run integration tests in SPA mode
+        concurrency: 0,
+      },
+    },
+
     dev: {
       $Debug: true,
       $Language: {
