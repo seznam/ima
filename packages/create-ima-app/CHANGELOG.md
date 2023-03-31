@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.4.1
+
+### Patch Changes
+
+- 33e7db7d7: add environment for integration tests - set SPA by default
+
 ## 18.4.0
 
 ### Minor Changes
