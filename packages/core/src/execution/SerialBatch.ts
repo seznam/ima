@@ -5,7 +5,7 @@ export class SerialBatch extends AbstractExecution {
   /**
    * @inheritDoc
    */
-  execute(...args: unknown[]) {
+  execute(...args: unknown[]): Promise<unknown> {
     const zeroStage = Promise.resolve([]);
 
     return this._jobs.reduce(
@@ -19,7 +19,7 @@ export class SerialBatch extends AbstractExecution {
     );
   }
 
-  _executeJob(stage: ExecutionJob, args: unknown[]) {
+  _executeJob(stage: ExecutionJob, args: unknown[]): Promise<unknown> {
     const result = stage(...args);
 
     return result instanceof Promise ? result : Promise.resolve(result);

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export type ExecutionJob = (...args: unknown[]) => Promise<unknown> | unknown;
 
 /**
@@ -24,7 +22,7 @@ export abstract class Execution {
    *
    * @param jobs The jobs to be executed.
    */
-  append(jobs: ExecutionJob[]) {
+  append(jobs: ExecutionJob[]): void {
     return;
   }
 
