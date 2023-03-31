@@ -23,5 +23,5 @@ module.exports = function devUtilsFactory() {
     ));
   }
 
-  return manifestRequire;
+  return { manifestRequire };
 };
