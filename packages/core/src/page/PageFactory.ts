@@ -38,11 +38,10 @@ export class PageFactory {
     let mergedExtensions = [...extensions];
 
     if (
-      typeof controller !== 'string' &&
-      controller instanceof Controller &&
-      Array.isArray(controller?.$extensions) &&
-      controller.$extensions.length
+      Array.isArray((controller as typeof Controller)?.$extensions) &&
+      (controller as typeof Controller).$extensions?.length
     ) {
+      // @ts-expect-error can't check static properties
       mergedExtensions = mergedExtensions.concat(controller.$extensions);
     }
 
