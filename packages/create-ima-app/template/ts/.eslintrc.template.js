@@ -72,6 +72,11 @@ module.exports = {
       ],
       plugins: ['@typescript-eslint'],
       rules: {
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/ban-types': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
@@ -84,6 +89,7 @@ module.exports = {
             varsIgnorePattern: '^_',
             destructuredArrayIgnorePattern: '^_',
             ignoreRestSiblings: true,
+            args: 'none',
           },
         ],
         '@typescript-eslint/no-namespace': [

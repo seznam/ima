@@ -1,19 +1,20 @@
-import { PageStateManager } from './PageStateManager';
+import { PageState, PageStateManager } from './PageStateManager';
 import { StateEvents } from './StateEvents';
 import { Dispatcher } from '../../event/Dispatcher';
-import { UnknownParameters } from '../../types';
 
 const MAX_HISTORY_LIMIT = 10;
 
 /**
  * The implementation of the {@link PageStateManager} interface.
  */
-export class PageStateManagerImpl extends PageStateManager {
+export class PageStateManagerImpl<
+  S extends PageState = {}
+> extends PageStateManager<S> {
   private _cursor = -1;
   private _dispatcher: Dispatcher;
   private _ongoingTransaction = false;
-  private _statePatchQueue: UnknownParameters[] = [];
-  private _states: UnknownParameters[] = [];
+  private _statePatchQueue: (Pick<S, any> | S | null)[] = [];
+  private _states: S[] = [];
 
   static get $dependencies() {
     return [Dispatcher];
@@ -33,7 +34,7 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritDoc
    */
-  clear() {
+  clear(): void {
     this._states = [];
     this._cursor = -1;
 
@@ -43,7 +44,9 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritDoc
    */
-  setState(patchState: UnknownParameters) {
+  setState<K extends keyof S>(
+    patchState: Pick<S, K> | S | null
+  ): void | number {
     if (this._ongoingTransaction) {
       return this._statePatchQueue.push(patchState);
     }
@@ -67,28 +70,28 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): S {
     return this._states[this._cursor] || {};
   }
 
   /**
    * @inheritDoc
    */
-  getAllStates() {
+  getAllStates(): S[] {
     return this._states;
   }
 
   /**
    * @inheritDoc
    */
-  getTransactionStatePatches() {
+  getTransactionStatePatches(): (Pick<S, any> | S | null)[] {
     return this._statePatchQueue;
   }
 
   /**
    * @inheritDoc
    */
-  beginTransaction() {
+  beginTransaction(): void {
     if ($Debug && this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.beginTransaction():' +
@@ -105,7 +108,7 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritDoc
    */
-  commitTransaction() {
+  commitTransaction(): void {
     if ($Debug && !this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.commitTransaction():' +
@@ -130,7 +133,7 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritDoc
    */
-  cancelTransaction() {
+  cancelTransaction(): void {
     this._ongoingTransaction = false;
     this._statePatchQueue = [];
   }
@@ -139,7 +142,7 @@ export class PageStateManagerImpl extends PageStateManager {
    * Erase the oldest state from storage only if it exceed max
    * defined size of history.
    */
-  _eraseExcessHistory() {
+  _eraseExcessHistory(): void {
     if (this._states.length > MAX_HISTORY_LIMIT) {
       this._states.shift();
       this._cursor -= 1;
@@ -149,7 +152,7 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * Push new state to history storage.
    */
-  _pushToHistory(newState: UnknownParameters) {
+  _pushToHistory(newState: S): void {
     this._states.push(newState);
     this._cursor += 1;
   }
@@ -157,7 +160,7 @@ export class PageStateManagerImpl extends PageStateManager {
   /**
    * Call registered callback function on (@link onChange) with newState.
    */
-  _callOnChangeCallback(newState: UnknownParameters) {
+  _callOnChangeCallback(newState: S): void {
     if (this.onChange && typeof this.onChange === 'function') {
       this.onChange(newState);
     }

@@ -243,7 +243,6 @@ export class ClientRouter extends AbstractRouter {
       // Show error overlay
       if (window.__IMA_HMR?.emitter) {
         window.__IMA_HMR.emitter.emit('error', {
-          // @ts-expect-error fix RouteParams in the future
           error: params.error as Error,
         });
 
@@ -255,7 +254,6 @@ export class ClientRouter extends AbstractRouter {
       }
     }
 
-    // @ts-expect-error fix RouteParams in the future
     const error = params.error as GenericError;
 
     if (this.isClientError(error)) {

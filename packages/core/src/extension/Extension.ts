@@ -1,8 +1,7 @@
 import { EventBusEventHandler } from '../event/EventBus';
 import { Dependencies } from '../oc/ObjectContainer';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
 import { RouteParams } from '../router/AbstractRoute';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -19,7 +18,10 @@ import { UnknownParameters, UnknownPromiseParameters } from '../types';
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  */
-export abstract class Extension {
+export abstract class Extension<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> {
   static $name?: string;
   static $dependencies: Dependencies;
 
@@ -104,8 +106,8 @@ export abstract class Extension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  load(): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -130,10 +132,8 @@ export abstract class Extension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(
-    prevParams: RouteParams
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -149,7 +149,7 @@ export abstract class Extension {
    *
    * @param statePatch Patch of the controller's state to apply.
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     return;
   }
 
@@ -158,8 +158,8 @@ export abstract class Extension {
    *
    * @return The current state of the controller.
    */
-  getState(): UnknownParameters {
-    return {};
+  getState(): S {
+    return {} as S;
   }
 
   /**
@@ -195,7 +195,7 @@ export abstract class Extension {
    *
    * @param partialStatePatch Patch of the controller's state to apply.
    */
-  setPartialState(partialStatePatch: UnknownParameters): void {
+  setPartialState(partialStatePatch: S): void {
     return;
   }
 
@@ -204,7 +204,7 @@ export abstract class Extension {
    *
    * @return The current partial state of the extension.
    */
-  getPartialState(): UnknownParameters {
+  getPartialState(): Partial<S> {
     return {};
   }
 
@@ -245,7 +245,7 @@ export abstract class Extension {
    *
    * @param params The current route parameters.
    */
-  setRouteParams(params: RouteParams): void {
+  setRouteParams(params: R): void {
     return;
   }
 
@@ -254,8 +254,8 @@ export abstract class Extension {
    *
    * @return The current route parameters.
    */
-  getRouteParams(): RouteParams {
-    return {};
+  getRouteParams(): R {
+    return {} as R;
   }
 
   /**
@@ -265,7 +265,7 @@ export abstract class Extension {
    * @return The names of the state fields that may be manipulated
    *         by this extension.
    */
-  getAllowedStateKeys(): string[] {
+  getAllowedStateKeys(): (keyof S)[] {
     return [];
   }
 }

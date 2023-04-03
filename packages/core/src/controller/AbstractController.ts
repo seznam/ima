@@ -4,18 +4,22 @@ import { Controller } from './Controller';
 import { OCAliasMap } from '../config/bind';
 import { Extension } from '../extension/Extension';
 import { Dependencies } from '../oc/ObjectContainer';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
 import { RouteParams } from '../router/AbstractRoute';
-import { UnknownParameters } from '../types';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
  * default implementation of the most of the API.
  */
-export class AbstractController extends Controller {
-  protected _pageStateManager?: PageStateManager;
+export class AbstractController<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> extends Controller<S, R> {
+  protected _pageStateManager?: PageStateManager<S>;
   protected _extensions: Map<
-    keyof OCAliasMap | Constructor<Extension> | AbstractConstructor<Extension>,
+    | keyof OCAliasMap
+    | Constructor<Extension<any, any>>
+    | AbstractConstructor<Extension<any, any>>,
     InstanceType<typeof Extension>
   > = new Map();
   /**
@@ -27,11 +31,11 @@ export class AbstractController extends Controller {
    * set externally by IMA right before the {@link Controller#init} or the
    * {@link Controller#update} method is called.
    */
-  params: RouteParams = {};
+  params: R = {} as R;
 
   static $name?: string;
   static $dependencies: Dependencies;
-  static $extensions?: Dependencies<Extension>;
+  static $extensions?: Dependencies<Extension<any, any>>;
 
   constructor() {
     super();
@@ -40,7 +44,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -49,11 +53,11 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  getState(): UnknownParameters {
+  getState(): S {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return {};
+      return {} as S;
     }
   }
 
@@ -90,8 +94,8 @@ export class AbstractController extends Controller {
   addExtension(
     extension:
       | keyof OCAliasMap
-      | Constructor<Extension>
-      | AbstractConstructor<Extension>
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
       | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
@@ -137,21 +141,21 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  setRouteParams(params: RouteParams = {}) {
+  setRouteParams(params: R = {} as R) {
     this.params = params;
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams(): RouteParams {
+  getRouteParams(): R {
     return this.params;
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
     this._pageStateManager = pageStateManager;
   }
 

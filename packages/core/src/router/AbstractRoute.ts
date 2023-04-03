@@ -6,12 +6,14 @@ import { OCAliasMap } from '../config/bind';
 import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
-export type RouteParams = Record<string, string>;
+export type RouteParams = {
+  [key: string]: string | GenericError;
+};
 
 export type RouteController =
   | keyof OCAliasMap
-  | Constructor<Controller>
-  | AbstractConstructor<Controller>;
+  | Constructor<Controller<any>>
+  | AbstractConstructor<Controller<any>>;
 
 export type RouteView =
   | keyof OCAliasMap

@@ -1,16 +1,24 @@
 import {
+  AbstractController,
+  CreateLoadedResources,
   Dependencies,
+  Dictionary,
   HttpAgent,
   MetaManager,
   Router,
-  UnknownParameters,
+  Settings,
 } from '@ima/core';
-import { AbstractPageController } from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export type CardData = typeof import('../../public/cards.json');
 
-export class HomeController extends AbstractPageController {
+export type HomeControllerState = {
+  cards: Promise<CardData>;
+  message: string;
+  name: string;
+};
+
+export class HomeController extends AbstractController<HomeControllerState> {
   #httpAgent: HttpAgent;
 
   static $dependencies: Dependencies = [HttpAgent];
@@ -19,6 +27,24 @@ export class HomeController extends AbstractPageController {
     super();
 
     this.#httpAgent = httpAgent;
+  }
+
+  load(): HomeControllerState {
+    /**
+     * Fetch cards data from static JSON file using IMA HttpAgent.
+     * HttpAgent is implementation based on native fetch api with some
+     * additional features. It handles fetching data on client but also
+     * on server isomorphically.
+     */
+    const cardsPromise = this.#httpAgent
+      .get<CardData>('http://localhost:3001/static/static/public/cards.json')
+      .then(response => response.body);
+
+    return {
+      cards: cardsPromise,
+      message: 'Welcome to ima',
+      name: 'Name',
+    };
   }
 
   /**
@@ -49,25 +75,6 @@ export class HomeController extends AbstractPageController {
    *         resolved when all resources the controller requires are ready. The
    *         resolved values will be pushed to the controller's state.
    */
-  load() {
-    /**
-     * Fetch cards data from static JSON file using IMA HttpAgent.
-     * HttpAgent is implementation based on native fetch api with some
-     * additional features. It handles fetching data on client but also
-     * on server isomorphically.
-     */
-    const cardsPromise = this.#httpAgent
-      .get<CardData>('http://localhost:3001/static/static/public/cards.json')
-      .then(response => response.body);
-
-    return {
-      // error: Promise.reject(new GenericError('Try error page.')),
-      // redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
-      cards: cardsPromise,
-      message: `Welcome to`,
-      name: `IMA.js`,
-    };
-  }
 
   /**
    * Callback used to configure the meta attribute manager. The method is called
@@ -76,9 +83,11 @@ export class HomeController extends AbstractPageController {
    * controller has been provided with the rendered view.
    */
   setMetaParams(
-    loadedResources: UnknownParameters,
+    loadedResources: CreateLoadedResources<HomeControllerState>,
     metaManager: MetaManager,
-    router: Router
+    router: Router,
+    dictionary: Dictionary,
+    settings: Settings
   ): void {
     const title = 'Isomorphic applications hello world - IMA.js';
     const description =

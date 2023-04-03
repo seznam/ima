@@ -1,4 +1,4 @@
-import { AbstractConstructor, Constructor } from 'type-fest';
+import { Constructor } from 'type-fest';
 
 import { PageStateManager } from './state/PageStateManager';
 import { OCAliasMap } from '../config/bind';
@@ -6,6 +6,7 @@ import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
 import { ObjectContainer } from '../oc/ObjectContainer';
+import { RouteController } from '../router/AbstractRoute';
 import { RouteOptions } from '../router/Router';
 
 /**
@@ -28,10 +29,7 @@ export class PageFactory {
    * Create new instance of {@link Controller}.
    */
   createController(
-    controller:
-      | keyof OCAliasMap
-      | Constructor<Controller>
-      | AbstractConstructor<Controller>,
+    controller: RouteController,
     options: RouteOptions
   ): Controller {
     const { extensions = [] } = options;

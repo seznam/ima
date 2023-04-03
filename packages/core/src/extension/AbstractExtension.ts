@@ -2,18 +2,20 @@ import { Extension } from './Extension';
 import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
 import { Dependencies } from '../oc/ObjectContainer';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
 import { RouteParams } from '../router/AbstractRoute';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**
  * Abstract extension
  */
-export abstract class AbstractExtension extends Extension {
+export abstract class AbstractExtension<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> extends Extension<S, R> {
   static $name?: string;
   static $dependencies: Dependencies;
 
-  [key: PropertyKey]: any | EventBusEventHandler | UnknownParameters;
+  [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * State manager.
@@ -33,7 +35,7 @@ export abstract class AbstractExtension extends Extension {
   /**
    * The route parameters extracted from the current route.
    */
-  params: RouteParams = {};
+  params: R = {} as R;
 
   /**
    * @inheritDoc
@@ -66,7 +68,7 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+  load(): Promise<S> | S {
     throw new GenericError(
       'The ima.core.extension.AbstractExtension.load method is abstract ' +
         'and must be overridden'
@@ -76,16 +78,14 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  update(
-    prevParams: RouteParams
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -94,9 +94,9 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  getState(): UnknownParameters {
+  getState(): S {
     if (this._usingStateManager && this._pageStateManager) {
-      return this._pageStateManager.getState();
+      return this._pageStateManager.getState() as S;
     } else {
       return this.getPartialState();
     }
@@ -132,7 +132,7 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  setPartialState(partialStatePatch: UnknownParameters): void {
+  setPartialState(partialStatePatch: S): void {
     const newPartialState = Object.assign(
       {},
       this[this._partialStateSymbol],
@@ -144,7 +144,7 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  getPartialState(): UnknownParameters {
+  getPartialState(): S {
     return this[this._partialStateSymbol] || {};
   }
 
@@ -158,14 +158,14 @@ export abstract class AbstractExtension extends Extension {
   /**
    * @inheritDoc
    */
-  setRouteParams(params: RouteParams = {}): void {
+  setRouteParams(params: R = {} as R): void {
     this.params = params;
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams(): RouteParams {
+  getRouteParams(): R {
     return this.params;
   }
 
@@ -200,7 +200,7 @@ export abstract class AbstractExtension extends Extension {
   /**
    * Returns array of allowed state keys for extension.
    */
-  getAllowedStateKeys(): string[] {
+  getAllowedStateKeys(): (keyof S)[] {
     return [];
   }
 }

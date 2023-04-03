@@ -138,13 +138,13 @@ export class StaticRoute extends AbstractRoute<string> {
         path = this._substituteRequiredParamInPath(
           path,
           paramName,
-          params[paramName]
+          params[paramName] as string
         );
       } else if (this._isOptionalParamInPath(path, paramName)) {
         path = this._substituteOptionalParamInPath(
           path,
           paramName,
-          params[paramName]
+          params[paramName] as string
         );
       } else {
         queryParams[paramName] = params[paramName];
@@ -154,7 +154,9 @@ export class StaticRoute extends AbstractRoute<string> {
     path = this._cleanUnusedOptionalParams(path);
 
     if (Object.keys(queryParams).length) {
-      path += `?${new URLSearchParams(queryParams).toString()}`;
+      path += `?${new URLSearchParams(
+        queryParams as unknown as string[][]
+      ).toString()}`;
     }
 
     return this.getTrimmedPath(path);

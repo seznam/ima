@@ -27,7 +27,7 @@ export type Dependency<T> =
   | [
       OCInjectable<T>,
       {
-        optional?: boolean;
+        optional: boolean;
       }
     ];
 

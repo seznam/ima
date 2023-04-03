@@ -1,8 +1,8 @@
 import './errorView.less';
 
-export interface ErrorViewProps {
+export type ErrorViewProps = {
   error: Error;
-}
+};
 
 export function ErrorView({ error }: ErrorViewProps) {
   const message = error.message ?? '';
