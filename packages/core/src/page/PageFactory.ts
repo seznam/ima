@@ -83,9 +83,9 @@ export class PageFactory {
    * @return The react component class
    *         constructor.
    */
-  createView<V extends string | Constructor<any> | ((...args: any[]) => any)>(
-    view: V
-  ) {
+  createView<
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+  >(view: V) {
     if (typeof view === 'function') {
       return view;
     }

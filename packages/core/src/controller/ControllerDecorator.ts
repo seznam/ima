@@ -148,7 +148,8 @@ export class ControllerDecorator extends Controller {
     extension:
       | keyof OCAliasMap
       | Constructor<Extension>
-      | AbstractConstructor<Extension>,
+      | AbstractConstructor<Extension>
+      | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
     this._controller.addExtension(extension, extensionInstance);

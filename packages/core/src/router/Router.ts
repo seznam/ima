@@ -8,7 +8,7 @@ import {
   RouteParams,
 } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
-import { OCAliasMap } from '..';
+import { DecoratedOCAliasMap } from '..';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
@@ -42,7 +42,7 @@ export interface RouteFactoryOptions {
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
   extensions?: (
-    | keyof OCAliasMap
+    | keyof DecoratedOCAliasMap
     | Constructor<Extension>
     | AbstractConstructor<Extension>
     | [

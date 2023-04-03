@@ -6,6 +6,7 @@ import { AbstractRouter } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteAction, RouteLocals, RouteOptions } from './Router';
+import { Dependencies } from '..';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
 import { PageManager } from '../page/manager/PageManager';
@@ -54,12 +55,13 @@ export class ClientRouter extends AbstractRouter {
     reject: () => void;
   } | null = null;
 
-  static get $dependencies() {
+  static get $dependencies(): Dependencies {
     return [
       PageManager,
       RouteFactory,
       Dispatcher,
       Window,
+      // @ts-expect-error `FIXME`
       '?$Settings.$Router.middlewareTimeout',
     ];
   }

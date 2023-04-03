@@ -55,6 +55,19 @@ import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
 
+type AddOCPrefixes<T, P extends string> = {
+  [K in keyof T as K extends string ? `${P}${K}` : never]: T[K] | null;
+};
+
+type WithOCOptional<T> = AddOCPrefixes<T, '?'>;
+type WithOCSpread<T> = AddOCPrefixes<T, '...'>;
+type WithOCOptionalSpread<T> = AddOCPrefixes<T, '...?'>;
+
+export type DecoratedOCAliasMap = OCAliasMap &
+  WithOCOptional<OCAliasMap> &
+  WithOCOptionalSpread<OCAliasMap> &
+  WithOCSpread<OCAliasMap>;
+
 /**
  * Map of IMA default string aliases and constants initialized in
  * the ObjectContainer. This is used for typechecking and type

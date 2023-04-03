@@ -29,7 +29,7 @@ export class AbstractController extends Controller {
 
   static $name?: string;
   static $dependencies: Dependencies;
-  static $extensions?: Dependencies;
+  static $extensions?: Dependencies<Extension>;
 
   /**
    * @inheritDoc
@@ -85,9 +85,11 @@ export class AbstractController extends Controller {
     extension:
       | keyof OCAliasMap
       | Constructor<Extension>
-      | AbstractConstructor<Extension>,
+      | AbstractConstructor<Extension>
+      | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
+    // FIXME IMA@20, remove backwards compatibility
     if (
       (!extensionInstance && typeof extension !== 'object') ||
       (extensionInstance && typeof extensionInstance !== 'object')
@@ -98,7 +100,10 @@ export class AbstractController extends Controller {
     }
 
     if (extensionInstance) {
-      this._extensions.set(extension, extensionInstance);
+      this._extensions.set(
+        extension as Constructor<Extension>,
+        extensionInstance
+      );
     } else {
       this._extensions.set(
         (extension?.constructor as typeof Extension) ?? extension,

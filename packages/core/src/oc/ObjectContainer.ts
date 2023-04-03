@@ -1,42 +1,45 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { BindingState } from './BindingState';
-import { Entry, EntryOptions } from './Entry';
-import { OCAliasMap } from '../config/bind';
+import {
+  Entry,
+  EntryConstructor,
+  EntryOptions,
+  EntrySharedInstance,
+} from './Entry';
+import { DecoratedOCAliasMap, OCAliasMap } from '../config/bind';
 import { GenericError } from '../error/GenericError';
 import { ns, Namespace } from '../Namespace';
 
 type WithDependencies = {
-  readonly $dependencies?: Dependencies;
+  readonly $dependencies: Dependencies;
 };
 
-export type OCConstructable<T> = Constructor<T> & WithDependencies;
 export type OCInjectable<T> =
-  | OCConstructable<T>
-  | (AbstractConstructor<T> & WithDependencies)
-  | (Function & { prototype: T } & WithDependencies);
+  | (Constructor<T> & WithDependencies)
+  | (AbstractConstructor<T> & Partial<WithDependencies>)
+  | (Function & { prototype: T } & Partial<WithDependencies>);
 
-export type Dependencies = Dependency<any>[];
+export type Dependencies<T = any> = Dependency<T>[];
 export type Dependency<T> =
-  | string
+  | keyof DecoratedOCAliasMap
   | OCInjectable<T>
   | [
-      string | OCInjectable<T>,
+      OCInjectable<T>,
       {
         optional?: boolean;
       }
     ];
 
 export type OCInstanceConstrain<T = any> =
-  | keyof OCAliasMap
+  | keyof DecoratedOCAliasMap
   | Constructor<T>
   | AbstractConstructor<T>
-  | (keyof OCAliasMap | Constructor<T> | AbstractConstructor<T>)[]
   | [AbstractConstructor<T> | Constructor<T>, { optional: true }];
 
 export type OCInstance<T extends OCInstanceConstrain> =
-  T extends keyof OCAliasMap
-    ? OCAliasMap[T]
+  T extends keyof DecoratedOCAliasMap
+    ? DecoratedOCAliasMap[T]
     : T extends AbstractConstructor<any> | Constructor<any>
     ? InstanceType<T>
     : T extends [
@@ -215,7 +218,7 @@ export class ObjectContainer {
       }
     }
 
-    const constantEntry = this._createEntry<V>(() => value, [], {
+    const constantEntry = this._createEntry(() => value, [], {
       writeable: false,
     });
 
@@ -238,7 +241,7 @@ export class ObjectContainer {
    *        constructor function.
    * @return This object container.
    */
-  inject<T>(classConstructor: OCConstructable<T>, dependencies: any[]): this {
+  inject<T>(classConstructor: Constructor<T>, dependencies: any[]): this {
     if ($Debug) {
       if (typeof classConstructor !== 'function') {
         throw new GenericError(
@@ -315,7 +318,7 @@ export class ObjectContainer {
    */
   provide<T, I>(
     interfaceConstructor: Constructor<I> | AbstractConstructor<I>,
-    implementationConstructor: OCConstructable<T>,
+    implementationConstructor: Constructor<T>,
     dependencies?: any[]
   ): this {
     if ($Debug) {
@@ -395,7 +398,7 @@ export class ObjectContainer {
    * @return The shared instance or value.
    */
   get<T extends OCInstanceConstrain>(name: T): OCInstance<T> {
-    const entry = this._getEntry<T>(name as Dependency<T>);
+    const entry = this._getEntry(name);
 
     if (entry?.sharedInstance === null) {
       entry.sharedInstance = this._createInstanceFromEntry(entry);
@@ -412,16 +415,16 @@ export class ObjectContainer {
    *        is registered with this object container.
    * @return The constructor function.
    */
-  getConstructorOf<T extends string | Constructor<any>>(
+  getConstructorOf<T extends keyof OCAliasMap | Constructor<any>>(
     name: T
-  ): OCConstructable<T> | null {
+  ): Constructor<T> | null {
     const entry = this._getEntry<T>(name);
 
     if (!entry) {
       return null;
     }
 
-    return entry.classConstructor as OCConstructable<T>;
+    return entry.classConstructor as Constructor<T>;
   }
 
   /**
@@ -432,7 +435,7 @@ export class ObjectContainer {
    * @return `true` if the specified object, class or
    *         resource is registered with this object container.
    */
-  has<T>(name: string | OCInjectable<T>): boolean {
+  has<T>(name: keyof OCAliasMap | OCInjectable<T>): boolean {
     return (
       this._entries.has(name) ||
       !!this._getEntryFromConstant(name as string) ||
@@ -461,7 +464,7 @@ export class ObjectContainer {
     name: T,
     dependencies: any[] = []
   ): OCInstance<T> {
-    const entry = this._getEntry<any>(name as Dependency<T>);
+    const entry = this._getEntry(name);
 
     if (!entry) {
       throw new Error(
@@ -534,8 +537,8 @@ export class ObjectContainer {
 
     // Remove all meta symbols from the start of the alias
     if (typeof entryName === 'string') {
-      entryName = entryName.replace(SPREAD_RE, '');
-      entryName = entryName.replace(OPTIONAL_RE, '');
+      entryName = entryName.replace(SPREAD_RE, '') as keyof OCAliasMap;
+      entryName = entryName.replace(OPTIONAL_RE, '') as keyof OCAliasMap;
     }
 
     const entry =
@@ -641,14 +644,16 @@ export class ObjectContainer {
    * @return Created instance or generated value.
    */
   _createEntry<T>(
-    classConstructor: OCInjectable<T>,
+    classConstructor: EntryConstructor<T>,
     dependencies?: any[],
     options?: EntryOptions
   ): Entry<T> {
     if (
       (!dependencies || dependencies.length === 0) &&
+      // @ts-expect-error fixme, () => T fails
       Array.isArray(classConstructor.$dependencies)
     ) {
+      // @ts-expect-error fixme, () => T fails
       dependencies = classConstructor.$dependencies;
     }
 
@@ -730,8 +735,11 @@ export class ObjectContainer {
     }
 
     const objectProperties = compositionName.split('.');
-    let constantValue = this._entries.has(objectProperties[0])
-      ? this._entries.get(objectProperties[0])!.sharedInstance
+    let constantValue = this._entries.has(
+      objectProperties[0] as Dependency<any>
+    )
+      ? this._entries.get(objectProperties[0] as Dependency<any>)!
+          .sharedInstance
       : null;
 
     for (let i = 1; i < objectProperties.length && constantValue; i++) {
@@ -793,7 +801,7 @@ export class ObjectContainer {
     }
 
     const entry = this._createEntry<T>(() => namespaceValue);
-    entry.sharedInstance = namespaceValue as T;
+    entry.sharedInstance = namespaceValue as EntrySharedInstance<T>;
 
     return entry;
   }
@@ -848,7 +856,7 @@ export class ObjectContainer {
    * Formats name, function, class constructor to more compact
    * name/message to allow for cleaner debug Error messages.
    */
-  #getDebugName<T>(name: Dependency<T>): string {
+  #getDebugName(name: any): string {
     return `<strong>${
       name?.toString().split('\n').slice(0, 5).join('\n') ?? name
     }</strong>`;

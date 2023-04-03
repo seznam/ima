@@ -72,12 +72,11 @@ export {
   ObjectContainer,
   type Dependency,
   type Dependencies,
-  type OCConstructable,
   type OCInjectable,
   type OCInstance,
   type OCInstanceConstrain,
 } from './oc/ObjectContainer';
-export { type OCAliasMap } from './config/bind';
+export { type OCAliasMap, type DecoratedOCAliasMap } from './config/bind';
 export { BindingState } from './oc/BindingState';
 export { Entry, type EntryOptions } from './oc/Entry';
 export { PageHandler } from './page/handler/PageHandler';

@@ -109,7 +109,7 @@ export interface BootServices {
 
 export interface BootConfig extends InitImaConfig, InitAppConfig {
   routes?: UnknownParameters;
-  bind?: Settings;
+  bind?: Settings & BootSettings;
   plugins: { name: string; plugin: InitPluginConfig }[];
   services: BootServices;
   settings: BootSettings;
@@ -253,7 +253,7 @@ export class Bootstrap {
     );
 
     this._config.bind = {
-      ...this._config.bind,
+      ...this._config.bind!,
       ...newApplicationSettings,
     };
   }

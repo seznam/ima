@@ -24,7 +24,7 @@ import { UnknownParameters, UnknownPromiseParameters } from '../types';
 export abstract class Controller {
   static $name?: string;
   static $dependencies: Dependencies;
-  static $extensions?: Dependencies;
+  static $extensions?: Dependencies<Extension>;
 
   [key: PropertyKey]: any | EventBusEventHandler;
 
@@ -217,7 +217,8 @@ export abstract class Controller {
     extension:
       | keyof OCAliasMap
       | Constructor<Extension>
-      | AbstractConstructor<Extension>,
+      | AbstractConstructor<Extension>
+      | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
     return;
