@@ -1,7 +1,10 @@
 const pkgJson = require('../../package.json');
 
 module.exports = (() => {
-  return {
+  /**
+   * @type import('@ima/core').AppEnvironment
+   */
+  const environment = {
     /**
      * The production environment is used as a base template for other
      * environment configurations. Meaning that all `dev` or `test` env
@@ -155,4 +158,6 @@ module.exports = (() => {
       },
     },
   };
+
+  return environment;
 })();

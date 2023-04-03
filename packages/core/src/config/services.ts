@@ -1,17 +1,13 @@
-import { Namespace, ObjectContainer } from '..';
+import { InitServicesFunction } from '../Bootstrap';
 
-export const initServices = (
-  ns: Namespace,
-  oc: ObjectContainer,
-  config: any
-) => {
+export const initServices: InitServicesFunction = (ns, oc, config) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
 
   if (!oc.get('$Window').isClient()) {
-    oc.get('$Request').init(config.request);
+    oc.get('$Request').init(config.request!);
     oc.get('$Response').init(
-      config.response,
+      config.response!,
       oc.get('$CookieTransformFunction')
     );
     oc.get('$CookieStorage').clear();

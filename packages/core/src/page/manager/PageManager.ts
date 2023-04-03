@@ -1,12 +1,11 @@
-import { AbstractRoute } from '../../router/AbstractRoute';
+import { AbstractRoute, RouteParams } from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
-import { UnknownParameters } from '../../types';
 import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
   route: InstanceType<typeof AbstractRoute>;
   options: RouteOptions;
-  params?: UnknownParameters;
+  params?: RouteParams;
   action?: PageAction;
 };
 

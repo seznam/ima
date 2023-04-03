@@ -1,6 +1,7 @@
 import * as $Helper from '@ima/helpers';
 
-import { Namespace, ObjectContainer, PageRenderer, Utils } from '..';
+import { AppEnvironment, Settings } from '../boot';
+import { InitBindFunction } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
 import { CacheImpl } from '../cache/CacheImpl';
@@ -19,6 +20,7 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { UrlTransformer } from '../http/UrlTransformer';
 import { MetaManager } from '../meta/MetaManager';
 import { MetaManagerImpl } from '../meta/MetaManagerImpl';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { PageHandlerRegistry } from '../page/handler/PageHandlerRegistry';
 import { PageMetaHandler } from '../page/handler/PageMetaHandler';
 import { PageNavigationHandler } from '../page/handler/PageNavigationHandler';
@@ -27,6 +29,7 @@ import { PageManager } from '../page/manager/PageManager';
 import { ServerPageManager } from '../page/manager/ServerPageManager';
 import { PageFactory } from '../page/PageFactory';
 import { ComponentUtils } from '../page/renderer/ComponentUtils';
+import { PageRenderer } from '../page/renderer/PageRenderer';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { PageStateManagerDecorator } from '../page/state/PageStateManagerDecorator';
 import { PageStateManagerImpl } from '../page/state/PageStateManagerImpl';
@@ -43,23 +46,35 @@ import { MapStorage } from '../storage/MapStorage';
 import { SessionMapStorage } from '../storage/SessionMapStorage';
 import { SessionStorage } from '../storage/SessionStorage';
 import { WeakMapStorage } from '../storage/WeakMapStorage';
+import { GlobalImaObject, Utils } from '../types';
 import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';
+
+type AddOCPrefixes<T, P extends string> = {
+  [K in keyof T as K extends string ? `${P}${K}` : never]: T[K] | null;
+};
+
+type WithOCOptional<T> = AddOCPrefixes<T, '?'>;
+type WithOCSpread<T> = AddOCPrefixes<T, '...'>;
+type WithOCOptionalSpread<T> = AddOCPrefixes<T, '...?'>;
+
+export type DecoratedOCAliasMap = OCAliasMap &
+  WithOCOptional<OCAliasMap> &
+  WithOCOptionalSpread<OCAliasMap> &
+  WithOCSpread<OCAliasMap>;
 
 /**
  * Map of IMA default string aliases and constants initialized in
  * the ObjectContainer. This is used for typechecking and type
  * hinting of string OC arguments.
  */
-export type OCAliasMap = {
+export interface OCAliasMap {
   $Helper: typeof $Helper;
   $oc: ObjectContainer;
-  // TODO >>>
-  $Settings: any;
-  $Env: any;
-  $Protocol: any;
-  // TODO ^^^
+  $Settings: Settings;
+  $Env: keyof AppEnvironment;
+  $Protocol: GlobalImaObject['$Protocol'];
   $Secure: boolean;
   $Request: Request;
   $Response: Response;
@@ -97,9 +112,9 @@ export type OCAliasMap = {
   $Http: HttpAgent;
   $HttpStatusCode: typeof HttpStatusCode;
   $PageRenderer: PageRenderer;
-};
+}
 
-export const initBind = (ns: Namespace, oc: ObjectContainer, config: any) => {
+export const initBind: InitBindFunction = (ns, oc, config) => {
   oc.constant('$Helper', $Helper);
   oc.constant('$oc', oc);
   oc.constant('$Settings', config);

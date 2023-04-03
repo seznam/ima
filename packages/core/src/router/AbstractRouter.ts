@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { AbstractRoute, RouteParams } from './AbstractRoute';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteParams,
+} from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteNames } from './RouteNames';
@@ -12,8 +15,6 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
-import { RendererEvents } from '..';
-import { Controller, IController } from '../controller/Controller';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
@@ -134,8 +135,8 @@ export abstract class AbstractRouter extends Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
-    view: object | string | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteOptions>
   ) {
     if (this._routeHandlers.has(name)) {

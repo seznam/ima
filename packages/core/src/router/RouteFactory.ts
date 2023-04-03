@@ -1,7 +1,7 @@
+import { AsyncRouteController, AsyncRouteView } from './AbstractRoute';
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
-import { Controller, IController } from '../controller/Controller';
 
 /**
  * Utility factory used by router to create routes.
@@ -32,8 +32,8 @@ export class RouteFactory {
   createRoute(
     name: string,
     pathExpression: string | RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ): StaticRoute | DynamicRoute {
     return Reflect.construct(

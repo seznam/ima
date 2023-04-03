@@ -18,7 +18,7 @@ const IGNORED = [
   'jest.config.js',
   'src',
   '**/*.tgz',
-  'tsconfig.build.tsbuildinfo',
+  '**/tsconfig.build.tsbuildinfo/**',
   '**/node_modules/**',
   '**/typings/**',
   '**/__mocks__/**',

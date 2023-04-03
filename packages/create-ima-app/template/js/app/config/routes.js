@@ -6,6 +6,9 @@ import { HomeView } from 'app/page/home/HomeView';
 import { NotFoundController } from 'app/page/notFound/NotFoundController';
 import { NotFoundView } from 'app/page/notFound/NotFoundView';
 
+/**
+ * @type import('@ima/core').InitRoutesFunction
+ */
 export const initRoutes = (ns, oc, routesConfig, router) =>
   router
     .add('home', '/', HomeController, HomeView)

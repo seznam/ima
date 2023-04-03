@@ -1,4 +1,10 @@
-import { HttpAgent, MetaManager, Router, UnknownParameters } from '@ima/core';
+import {
+  Dependencies,
+  HttpAgent,
+  MetaManager,
+  Router,
+  UnknownParameters,
+} from '@ima/core';
 import { AbstractPageController } from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
@@ -7,9 +13,7 @@ export type CardData = typeof import('../../public/cards.json');
 export class HomeController extends AbstractPageController {
   #httpAgent: HttpAgent;
 
-  static get $dependencies() {
-    return [HttpAgent];
-  }
+  static $dependencies: Dependencies = [HttpAgent];
 
   constructor(httpAgent: HttpAgent) {
     super();

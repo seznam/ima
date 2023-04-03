@@ -1,11 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
+import { OCAliasMap } from '../config/bind';
+import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
 export type RouteParams = Record<string, string>;
+
+export type RouteController =
+  | keyof OCAliasMap
+  | Constructor<Controller>
+  | AbstractConstructor<Controller>;
+
+export type RouteView =
+  | keyof OCAliasMap
+  | Constructor<any>
+  | AbstractConstructor<any>
+  | ((...args: any[]) => any);
+
+type WithAsync<T> = T | (() => Promise<T>);
+export type AsyncRouteController = WithAsync<RouteController>;
+export type AsyncRouteView = WithAsync<RouteView>;
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -37,8 +53,8 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   protected _controller: {
     resolved: boolean;
-    controller: string | typeof Controller | (() => IController);
-    cached: null | unknown;
+    controller: AsyncRouteController;
+    cached: null | RouteController | Promise<RouteController>;
   };
   /**
    * The full name or Object Container alias identifying the view class
@@ -46,8 +62,8 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    */
   protected _view: {
     resolved: boolean;
-    view: string | unknown | (() => unknown);
-    cached: null | unknown;
+    view: AsyncRouteView;
+    cached: null | RouteView | Promise<RouteView>;
   };
 
   /**
@@ -71,8 +87,8 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   constructor(
     name: string,
     pathExpression: T,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ) {
     this._name = name;
@@ -130,19 +146,17 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    *
    * @return The Controller class/alias/constant.
    */
-  getController() {
+  getController(): RouteController | Promise<RouteController> {
     if (!this._controller.cached) {
       this._controller.cached = !this._controller.resolved
-        ? (
-            this._controller.controller as () => Promise<
-              Record<string, unknown>
-            >
-          )().then(module => {
-            this._controller.resolved = true;
+        ? ((this._controller.controller as () => Promise<any>)().then(
+            module => {
+              this._controller.resolved = true;
 
-            return module.default ?? module;
-          })
-        : this._controller.controller;
+              return module.default ?? module;
+            }
+          ) as Promise<RouteController>)
+        : (this._controller.controller as RouteController);
     }
 
     return this._controller.cached;
@@ -152,7 +166,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * Returns true for resolved controller. This is always true
    * for sync route views.
    */
-  isControllerResolved() {
+  isControllerResolved(): boolean {
     return this._controller.resolved;
   }
 
@@ -164,17 +178,15 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    *
    * @return The View class/alias/constant.
    */
-  getView() {
+  getView(): RouteView | Promise<RouteView> {
     if (!this._view.cached) {
       this._view.cached = !this._view.resolved
-        ? (this._view.view as () => Promise<Record<string, unknown>>)().then(
-            module => {
-              this._view.resolved = true;
+        ? ((this._view.view as () => Promise<any>)().then(module => {
+            this._view.resolved = true;
 
-              return module.default ?? module;
-            }
-          )
-        : this._view.view;
+            return module.default ?? module;
+          }) as Promise<RouteView>)
+        : (this._view.view as RouteView);
     }
 
     return this._view.cached;
@@ -184,14 +196,14 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * Returns true for resolved view. This is always true
    * for sync route views.
    */
-  isViewResolved() {
+  isViewResolved(): boolean {
     return this._view.resolved;
   }
 
   /**
    * Return route additional options.
    */
-  getOptions() {
+  getOptions(): RouteFactoryOptions {
     return this._options;
   }
 
@@ -201,7 +213,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    *
    * @return The path expression.
    */
-  getPathExpression() {
+  getPathExpression(): T {
     return this._pathExpression;
   }
 
@@ -211,7 +223,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    * @param path The path to trim.
    * @return Trimmed path.
    */
-  getTrimmedPath(path: string) {
+  getTrimmedPath(path: string): string {
     return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 
@@ -220,7 +232,7 @@ export abstract class AbstractRoute<T extends string | RoutePathExpression> {
    *
    * @return Promise.All resolving to [view, controller] tuple.
    */
-  async preload() {
+  async preload(): Promise<[RouteController, RouteView]> {
     return Promise.all([this.getController(), this.getView()]);
   }
 

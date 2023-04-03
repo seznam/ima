@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Controller } from '../../controller/Controller';
 import { RouteOptions } from '../../router/Router';
 import { UnknownParameters, UnknownPromiseParameters } from '../../types';

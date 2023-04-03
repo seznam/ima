@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export type MetaValue = number | boolean | string | null | undefined;
 export type MetaAttributes = Record<string, MetaValue>;
 
@@ -203,5 +200,7 @@ export abstract class MetaManager {
   /**
    * Resets the stored meta names, properties and links.
    */
-  clearMetaAttributes(): void {}
+  clearMetaAttributes(): void {
+    return;
+  }
 }

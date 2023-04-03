@@ -3,6 +3,7 @@ export class ClientPageManager {};
 /* @else */
 import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
+import { Dependencies } from '../..';
 import { Controller } from '../../controller/Controller';
 import { Dispatcher } from '../../event/Dispatcher';
 import { EventBus, EventBusEventHandler } from '../../event/EventBus';
@@ -36,7 +37,7 @@ export class ClientPageManager extends AbstractPageManager {
     this._onCustomEventHandler(event);
   };
 
-  static get $dependencies() {
+  static get $dependencies(): Dependencies {
     return [
       PageFactory,
       PageRenderer,

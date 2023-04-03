@@ -1,16 +1,26 @@
 export { Namespace, getNamespace, ns } from './Namespace';
 export {
   Bootstrap,
-  type PluginConfigFunctions,
-  type AppConfigFunctions,
-  type Config,
+  type InitPluginConfig as PluginConfigFunctions,
+  type InitAppConfig as AppConfigFunctions,
+  type BootSettings,
+  type BootConfig,
+  type BootServices,
+  type InitBindFunction,
+  type InitImaConfig,
+  type InitRoutesFunction,
+  type InitServicesFunction,
+  type InitSettingsFunction,
+  type PluginInitBindFunction,
+  type PluginInitServicesFunction,
+  type PluginInitSettingsFunction,
 } from './Bootstrap';
 export { Cache, type SerializedData } from './cache/Cache';
 export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
 export { CacheImpl } from './cache/CacheImpl';
 export { AbstractController } from './controller/AbstractController';
-export { Controller, type IController } from './controller/Controller';
+export { Controller } from './controller/Controller';
 export { ControllerDecorator } from './controller/ControllerDecorator';
 export {
   Dictionary,
@@ -37,11 +47,12 @@ export { AbstractExecution } from './execution/AbstractExecution';
 export { Execution, type ExecutionJob } from './execution/Execution';
 export { SerialBatch } from './execution/SerialBatch';
 export { AbstractExtension } from './extension/AbstractExtension';
-export { Extension, type IExtension } from './extension/Extension';
+export { Extension } from './extension/Extension';
 export {
   HttpAgent,
   type HttpAgentRequestOptions,
   type HttpAgentResponse,
+  type ImaRequestInit,
 } from './http/HttpAgent';
 export { HttpAgentImpl } from './http/HttpAgentImpl';
 export {
@@ -63,11 +74,11 @@ export {
   ObjectContainer,
   type Dependency,
   type Dependencies,
-  type OCConstructable,
   type OCInjectable,
   type OCInstance,
   type OCInstanceConstrain,
 } from './oc/ObjectContainer';
+export { type OCAliasMap, type DecoratedOCAliasMap } from './config/bind';
 export { BindingState } from './oc/BindingState';
 export { Entry, type EntryOptions } from './oc/Entry';
 export { PageHandler } from './page/handler/PageHandler';
@@ -93,7 +104,14 @@ export { PageStateManager } from './page/state/PageStateManager';
 export { PageStateManagerDecorator } from './page/state/PageStateManagerDecorator';
 export { PageStateManagerImpl } from './page/state/PageStateManagerImpl';
 export { pluginLoader, PluginLoader } from './pluginLoader';
-export { AbstractRoute, type RouteParams } from './router/AbstractRoute';
+export {
+  AbstractRoute,
+  type RouteParams,
+  type RouteController,
+  type RouteView,
+  type AsyncRouteController,
+  type AsyncRouteView,
+} from './router/AbstractRoute';
 export { AbstractRouter } from './router/AbstractRouter';
 export { ActionTypes } from './router/ActionTypes';
 export { ClientRouter } from './router/ClientRouter';
@@ -135,6 +153,14 @@ export {
   routeClientApp,
   reviveClientApp,
   onLoad,
+  type AppEnvironment,
+  type Environment,
+  type AppSettings,
+  type Settings,
+  type Manifest,
+  type ManifestAsset,
+  type Resource,
+  type Resources,
 } from './boot';
 export {
   type Utils,
@@ -142,4 +168,5 @@ export {
   type UnknownParameters,
   type UnknownPromiseParameters,
   type ObjectParameters,
+  type GlobalImaObject,
 } from './types';

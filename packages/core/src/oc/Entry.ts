@@ -2,6 +2,8 @@ import { Constructor } from 'type-fest';
 
 import { OCInjectable } from './ObjectContainer';
 
+export type EntryConstructor<T> = OCInjectable<T> | (() => T);
+export type EntrySharedInstance<T> = T extends () => T ? T : Constructor<T>;
 export type EntryOptions = {
   writeable: boolean;
 };
@@ -10,17 +12,17 @@ export type EntryOptions = {
  * Object container entry, representing either a class, interface, constant or
  * an alias.
  */
-export class Entry<T> {
+export class Entry<T = any> {
   /**
    * The constructor of the class represented by this entry, or the
    * getter of the value of the constant represented by this entry.
    */
-  classConstructor: OCInjectable<T>;
+  classConstructor: EntryConstructor<T>;
 
   /**
    * The shared instance of the class represented by this entry.
    */
-  sharedInstance: InstanceType<Constructor<T>> | null = null;
+  sharedInstance: EntrySharedInstance<T> | null = null;
 
   /**
    * Dependencies of the class constructor of the class represented by
@@ -56,7 +58,7 @@ export class Entry<T> {
    * @param options The Entry options.
    */
   constructor(
-    classConstructor: OCInjectable<T>,
+    classConstructor: EntryConstructor<T>,
     dependencies?: any[],
     referrer?: string,
     options?: EntryOptions

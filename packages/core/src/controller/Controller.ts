@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
+import { Settings } from '../boot';
+import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
+import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IController {}
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -17,17 +19,18 @@ export interface IController {}
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export abstract class Controller implements IController {
+export abstract class Controller {
   static $name?: string;
+  static $dependencies: Dependencies;
+  static $extensions?: Dependencies<Extension>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
    */
-  init(): void {
+  init(): Promise<void> | void {
     return;
   }
 
@@ -44,7 +47,7 @@ export abstract class Controller implements IController {
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
    */
-  destroy(): void {
+  destroy(): Promise<void> | void {
     return;
   }
 
@@ -58,7 +61,7 @@ export abstract class Controller implements IController {
    * method. The controller may start receiving event bus event after this
    * method completes.
    */
-  activate(): void {
+  activate(): Promise<void> | void {
     return;
   }
 
@@ -73,7 +76,7 @@ export abstract class Controller implements IController {
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
    */
-  deactivate(): void {
+  deactivate(): Promise<void> | void {
     return;
   }
 
@@ -139,7 +142,7 @@ export abstract class Controller implements IController {
    *         controller's state.
    */
   update(
-    prevParams: UnknownParameters
+    prevParams: RouteParams = {}
   ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
     return {};
   }
@@ -209,10 +212,27 @@ export abstract class Controller implements IController {
    * invoked.
    */
   addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension>
+      | AbstractConstructor<Extension>
+      | InstanceType<typeof Extension>,
+    extensionInstance?: InstanceType<typeof Extension>
   ): void {
     return;
+  }
+
+  /**
+   * Returns extension instance defined by it's class constructor
+   * from controller's extension intance map.
+   */
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
+    throw new GenericError(
+      'The ima.core.controller.Controller.getExtension method is abstract ' +
+        'and must be overridden.'
+    );
   }
 
   /**
@@ -244,7 +264,7 @@ export abstract class Controller implements IController {
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: UnknownParameters
+    settings: Settings
   ): void {
     return;
   }
@@ -255,7 +275,7 @@ export abstract class Controller implements IController {
    *
    * @param params The current route parameters.
    */
-  setRouteParams(params: UnknownParameters): void {
+  setRouteParams(params: RouteParams = {}): void {
     return;
   }
 
@@ -264,7 +284,7 @@ export abstract class Controller implements IController {
    *
    * @return The current route parameters.
    */
-  getRouteParams(): UnknownParameters {
+  getRouteParams(): RouteParams {
     return {};
   }
 

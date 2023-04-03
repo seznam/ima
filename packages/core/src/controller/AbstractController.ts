@@ -1,6 +1,11 @@
+import { AbstractConstructor, Constructor } from 'type-fest';
+
 import { Controller } from './Controller';
-import { Extension, IExtension } from '../extension/Extension';
+import { OCAliasMap } from '../config/bind';
+import { Extension } from '../extension/Extension';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { UnknownParameters } from '../types';
 
 /**
@@ -9,7 +14,10 @@ import { UnknownParameters } from '../types';
  */
 export class AbstractController extends Controller {
   protected _pageStateManager?: PageStateManager;
-  protected _extensions: Map<Extension | IExtension, Extension> = new Map();
+  protected _extensions: Map<
+    keyof OCAliasMap | Constructor<Extension> | AbstractConstructor<Extension>,
+    InstanceType<typeof Extension>
+  > = new Map();
   /**
    * The HTTP response code to send to the client.
    */
@@ -19,16 +27,20 @@ export class AbstractController extends Controller {
    * set externally by IMA right before the {@link Controller#init} or the
    * {@link Controller#update} method is called.
    */
-  params: UnknownParameters = {};
+  params: RouteParams = {};
 
-  static get $extensions(): IExtension[] {
-    return [];
+  static $name?: string;
+  static $dependencies: Dependencies;
+  static $extensions?: Dependencies<Extension>;
+
+  constructor() {
+    super();
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters) {
+  setState(statePatch: UnknownParameters): void {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -37,7 +49,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): UnknownParameters {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
@@ -48,7 +60,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.beginTransaction();
     }
@@ -57,7 +69,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.commitTransaction();
     }
@@ -66,7 +78,7 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.cancelTransaction();
     }
@@ -76,9 +88,14 @@ export class AbstractController extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: Extension | IExtension,
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension>
+      | AbstractConstructor<Extension>
+      | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
-  ) {
+  ): void {
+    // FIXME IMA@20, remove backwards compatibility
     if (
       (!extensionInstance && typeof extension !== 'object') ||
       (extensionInstance && typeof extensionInstance !== 'object')
@@ -89,11 +106,14 @@ export class AbstractController extends Controller {
     }
 
     if (extensionInstance) {
-      this._extensions.set(extension, extensionInstance);
+      this._extensions.set(
+        extension as Constructor<Extension>,
+        extensionInstance
+      );
     } else {
       this._extensions.set(
-        extension?.constructor ?? extension,
-        extension as Extension
+        (extension?.constructor as typeof Extension) ?? extension,
+        extension as unknown as InstanceType<typeof Extension>
       );
     }
   }
@@ -101,42 +121,44 @@ export class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  getExtension(extension: IExtension) {
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
     return this._extensions.get(extension);
   }
 
   /**
    * @inheritDoc
    */
-  getExtensions() {
+  getExtensions(): Extension[] {
     return Array.from(this._extensions.values());
   }
 
   /**
    * @inheritDoc
    */
-  setRouteParams(params: UnknownParameters = {}) {
+  setRouteParams(params: RouteParams = {}) {
     this.params = params;
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams() {
+  getRouteParams(): RouteParams {
     return this.params;
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager): void {
     this._pageStateManager = pageStateManager;
   }
 
   /**
    * @inheritDoc
    */
-  getHttpStatus() {
+  getHttpStatus(): number {
     return this.status;
   }
 }

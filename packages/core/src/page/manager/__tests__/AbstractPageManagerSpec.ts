@@ -5,7 +5,7 @@
 import { toMockedInstance } from 'to-mock';
 
 import { AbstractController } from '../../../controller/AbstractController';
-import { Controller, IController } from '../../../controller/Controller';
+import { Controller } from '../../../controller/Controller';
 import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { AbstractExtension } from '../../../extension/AbstractExtension';
 import { GenericError, ManageArgs, RouterEvents } from '../../../index';
@@ -1094,7 +1094,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     beforeEach(async () => {
       jest
         .spyOn(extensionMock, 'getAllowedStateKeys')
-        // @ts-expect-error
         .mockReturnValue(allowedStateKeys);
 
       jest

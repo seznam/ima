@@ -1,8 +1,8 @@
-import { Constructor } from 'type-fest';
+import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { PageStateManager } from './state/PageStateManager';
-import { AbstractController } from '../controller/AbstractController';
-import { IController } from '../controller/Controller';
+import { OCAliasMap } from '../config/bind';
+import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';
 import { ObjectContainer } from '../oc/ObjectContainer';
@@ -27,24 +27,28 @@ export class PageFactory {
   /**
    * Create new instance of {@link Controller}.
    */
-  createController(controller: string | IController, options: RouteOptions) {
+  createController(
+    controller:
+      | keyof OCAliasMap
+      | Constructor<Controller>
+      | AbstractConstructor<Controller>,
+    options: RouteOptions
+  ): Controller {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
+
     if (
-      Array.isArray((controller as typeof AbstractController)?.$extensions) &&
-      (controller as typeof AbstractController).$extensions.length
+      Array.isArray((controller as typeof Controller)?.$extensions) &&
+      (controller as typeof Controller).$extensions?.length
     ) {
-      mergedExtensions = mergedExtensions.concat(
-        (controller as typeof AbstractController).$extensions
-      );
+      // @ts-expect-error can't check static properties
+      mergedExtensions = mergedExtensions.concat(controller.$extensions);
     }
 
-    const controllerInstance = this._oc.create(
-      controller as typeof AbstractController
-    ) as AbstractController;
+    const controllerInstance = this._oc.create(controller) as Controller;
 
     for (const extension of mergedExtensions) {
-      const loadedExtension = this._oc.get(extension as typeof Extension);
+      const loadedExtension = this._oc.get(extension) as Extension;
 
       // Optional extension handling
       if (!loadedExtension) {
@@ -54,15 +58,15 @@ export class PageFactory {
       // Spread support handling
       if (Array.isArray(loadedExtension)) {
         for (const extensionInstance of loadedExtension) {
-          (controllerInstance as AbstractController).addExtension(
+          controllerInstance.addExtension(
             extensionInstance.constructor,
             extensionInstance
           );
         }
       } else {
-        (controllerInstance as AbstractController).addExtension(
+        controllerInstance.addExtension(
           extension as typeof Extension,
-          loadedExtension as Extension
+          loadedExtension
         );
       }
     }
@@ -79,7 +83,9 @@ export class PageFactory {
    * @return The react component class
    *         constructor.
    */
-  createView<T>(view: Constructor<T>) {
+  createView<
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+  >(view: V) {
     if (typeof view === 'function') {
       return view;
     }
@@ -98,7 +104,7 @@ export class PageFactory {
   /**
    * Returns decorated controller for ease setting seo params in controller.
    */
-  decorateController(controller: IController) {
+  decorateController(controller: Controller) {
     const metaManager = this._oc.get('$MetaManager');
     const router = this._oc.get('$Router');
     const dictionary = this._oc.get('$Dictionary');

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export type SerializedData<V = unknown> = {
   [key: string]: { value: V; ttl: number };
 };
@@ -15,7 +12,9 @@ export abstract class Cache<V = unknown> {
   /**
    * Clears the cache by deleting all entries.
    */
-  clear(): void {}
+  clear(): void {
+    return;
+  }
 
   /**
    * Tests whether the cache contains a fresh entry for the specified key. A
@@ -67,7 +66,9 @@ export abstract class Cache<V = unknown> {
    *
    * @param key The identifier of the cache entry.
    */
-  delete(key: string): void {}
+  delete(key: string): void {
+    return;
+  }
 
   /**
    * Disables the cache, preventing the retrieval of any cached entries and
@@ -79,14 +80,18 @@ export abstract class Cache<V = unknown> {
    *
    * The method has no effect if the cache is already disabled.
    */
-  disable(): void {}
+  disable(): void {
+    return;
+  }
 
   /**
    * Enables the cache, allowing the retrieval of cache entries.
    *
    * The method has no effect if the cache is already enabled.
    */
-  enable(): void {}
+  enable(): void {
+    return;
+  }
 
   /**
    * Exports the state of this cache to an HTML-safe JSON string. The data
@@ -110,5 +115,7 @@ export abstract class Cache<V = unknown> {
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
-  deserialize(serializedData: SerializedData<V>): void {}
+  deserialize(serializedData: SerializedData<V>): void {
+    return;
+  }
 }
