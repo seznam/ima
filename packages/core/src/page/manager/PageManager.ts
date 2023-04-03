@@ -55,6 +55,13 @@ export abstract class PageManager {
   }
 
   /**
+   * Called by router after currently managed route is resolved.
+   */
+  postManage(): void {
+    return;
+  }
+
+  /**
    * Finalization callback, called when the page manager is being discarded.
    * This usually happens when the page is hot-reloaded at the client side.
    */

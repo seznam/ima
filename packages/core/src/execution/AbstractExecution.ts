@@ -19,7 +19,7 @@ export abstract class AbstractExecution extends Execution {
   /**
    * @inheritDoc
    */
-  append(jobs: ExecutionJob[] | ExecutionJob) {
+  append(jobs: ExecutionJob[] | ExecutionJob): void {
     if (!Array.isArray(jobs)) {
       jobs = [jobs];
     }

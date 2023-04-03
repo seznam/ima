@@ -537,7 +537,7 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should call preManage', async () => {
-      jest.spyOn(router, '_preManage');
+      jest.spyOn(pageManager, 'preManage');
       jest
         .spyOn(pageManager, 'manage')
         .mockReturnValue(Promise.resolve({ content: null, status: 200 }));
@@ -551,7 +551,26 @@ describe('ima.core.router.AbstractRouter', () => {
         });
       });
 
-      expect(router['_preManage']).toHaveBeenCalled();
+      expect(pageManager['preManage']).toHaveBeenCalled();
+    });
+
+    it('should call postManage', async () => {
+      jest.spyOn(pageManager, 'preManage');
+      jest.spyOn(pageManager, 'postManage');
+      jest
+        .spyOn(pageManager, 'manage')
+        .mockReturnValue(Promise.resolve({ content: null, status: 409 }));
+
+      await router._handle(route, {}, {}, action).then(() => {
+        expect(pageManager.manage).toHaveBeenCalledWith({
+          route,
+          options,
+          params: {},
+          action,
+        });
+      });
+
+      expect(pageManager['postManage']).toHaveBeenCalled();
     });
 
     it('should call page manager', async () => {

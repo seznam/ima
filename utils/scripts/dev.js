@@ -31,6 +31,13 @@ const cliArgs = yargs
     description:
       'Destination folder for the app generated using create-ima-app script.',
   })
+  .option('init', {
+    alias: 'i',
+    type: 'boolean',
+    description:
+      'Installs packages from current monorepo by packing them to zip and installing.',
+    default: false,
+  })
   .option('force', {
     alias: 'f',
     type: 'boolean',

@@ -1,4 +1,4 @@
-import type { Utils } from '@ima/core';
+import type { Utils, DictionaryMap } from '@ima/core';
 import { PureComponent, ContextType } from 'react';
 
 import * as helpers from '../componentHelpers';
@@ -42,7 +42,7 @@ export abstract class AbstractPureComponent<
    * @return Localized phrase.
    */
   localize(
-    key: string,
+    key: keyof DictionaryMap,
     params: { [key: string]: string | number } = {}
   ): string {
     return helpers.localize(this, key, params);

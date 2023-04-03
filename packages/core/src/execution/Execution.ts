@@ -22,7 +22,7 @@ export abstract class Execution {
    *
    * @param jobs The jobs to be executed.
    */
-  append(jobs: ExecutionJob[]) {
+  append(jobs: ExecutionJob[]): void {
     return;
   }
 

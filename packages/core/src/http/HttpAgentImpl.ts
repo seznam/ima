@@ -5,7 +5,7 @@ import {
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
-import { HttpProxy } from './HttpProxy';
+import { HttpProxy, HttpProxyErrorParams } from './HttpProxy';
 import { Cache } from '../cache/Cache';
 import { GenericError } from '../error/GenericError';
 import { CookieStorage } from '../storage/CookieStorage';
@@ -276,7 +276,7 @@ export class HttpAgentImpl extends HttpAgent {
     if (this._internalCacheOfPromises.has(cacheKey)) {
       return this._internalCacheOfPromises
         .get(cacheKey)
-        .then((data: unknown) => this._clone(data));
+        .then((data: UnknownParameters) => this._clone(data));
     }
 
     if (this._cache.has(cacheKey)) {
@@ -386,14 +386,14 @@ export class HttpAgentImpl extends HttpAgent {
    *         with an error containing details of the cause of the request's
    *         failure.
    */
-  _proxyRejected<B>(error: GenericError): Promise<HttpAgentResponse<B>> {
+  _proxyRejected<B>(
+    error: GenericError<HttpProxyErrorParams>
+  ): Promise<HttpAgentResponse<B>> {
     const errorParams = error.getParams();
-    const method = errorParams.method as string;
-    const url = errorParams.url as string;
-    const data = errorParams.data as {
-      [key: string]: string | number | boolean;
-    };
-    const options = errorParams.options as HttpAgentRequestOptions;
+    const method = errorParams.method;
+    const url = errorParams.url;
+    const data = errorParams.data;
+    const options = errorParams.options;
     const isAborted =
       options.fetchOptions?.signal?.aborted ||
       options.abortController?.signal.aborted;
@@ -409,6 +409,7 @@ export class HttpAgentImpl extends HttpAgent {
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
+
       return Promise.reject(agentError);
     }
   }
@@ -447,6 +448,7 @@ export class HttpAgentImpl extends HttpAgent {
       composedOptions.fetchOptions.headers.Cookie =
         this._cookie.getCookiesStringForCookieHeader();
     }
+
     return composedOptions;
   }
 
@@ -474,6 +476,7 @@ export class HttpAgentImpl extends HttpAgent {
         console.warn('The provided data does not have valid JSON format', data);
       }
     }
+
     return `${method}:${url}?${dataQuery}`;
   }
 
@@ -531,7 +534,7 @@ export class HttpAgentImpl extends HttpAgent {
     const pureResponse = {
       ...response,
       params: { ...response.params, options: { ...options } },
-    } as HttpAgentResponse<B>;
+    };
 
     if (pureResponse.params.options.keepSensitiveHeaders !== true) {
       pureResponse.headers = {};

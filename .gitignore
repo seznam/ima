@@ -4,7 +4,6 @@ out/
 .DS_Store
 .idea
 .history
-jsconfig.json
 ima-app
 utils/**/storage
 docs/api

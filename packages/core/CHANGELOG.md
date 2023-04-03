@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.12
+
+### Patch Changes
+
+- 8c1864320: Added route cancelation to init, activate and load methods
+- e5112f165: Fixed issues with newly introduced route cancelation
+
 ## 19.0.0-rc.11
 
 ### Patch Changes

@@ -48,10 +48,10 @@ export type HttpProxyRequestParams = {
  *           request.
  */
 
-export type HttpProxyErrorParams = {
+export type HttpProxyErrorParams<B = unknown> = {
   errorName: string;
   status: number;
-  body: unknown;
+  body: B;
   cause: Error;
 } & HttpProxyRequestParams;
 
@@ -154,7 +154,9 @@ export class HttpProxy {
       fetch(
         this._composeRequestUrl(
           url,
-          !this._shouldRequestHaveBody(method, data) ? data : {}
+          !this._shouldRequestHaveBody(method, data)
+            ? (data as StringParameters)
+            : {}
         ),
         this._composeRequestInit(method, data, options)
       )
@@ -227,20 +229,20 @@ export class HttpProxy {
    * @return An object containing both the details of
    *         the error and the request that lead to it.
    */
-  getErrorParams(
+  getErrorParams<B = unknown>(
     method: string,
     url: string,
     data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions,
     status: number,
-    body: unknown,
+    body: B | undefined,
     cause: Error
-  ): HttpProxyErrorParams {
+  ): HttpProxyErrorParams<B> {
     let errorName = '';
     const params = this._composeRequestParams(method, url, data, options);
 
     if (typeof body === 'undefined') {
-      body = {};
+      body = {} as B;
     }
 
     switch (status) {
@@ -316,12 +318,12 @@ export class HttpProxy {
         headersRaw: response.headers,
         cached: false,
       };
-    } else {
-      throw new GenericError('The request failed', {
-        status: response.status,
-        body: responseBody,
-      });
     }
+
+    throw new GenericError('The request failed', {
+      status: response.status,
+      body: responseBody,
+    });
   }
 
   /**
@@ -333,9 +335,7 @@ export class HttpProxy {
   _headersToPlainObject(headers: Headers): StringParameters {
     const plainHeaders: StringParameters = {};
 
-    for (const [key, value] of headers as unknown as Iterable<
-      [string, string]
-    >) {
+    for (const [key, value] of headers) {
       plainHeaders[key] = value;
     }
 
@@ -452,6 +452,7 @@ export class HttpProxy {
     };
 
     const contentType = this._getContentType(method, data, requestInit.headers);
+
     if (contentType) {
       requestInit.headers['Content-Type'] = contentType;
     }
@@ -516,7 +517,7 @@ export class HttpProxy {
    * @return The transformed URL with the provided data attached to
    *         its query string.
    */
-  _composeRequestUrl(url: string, data: UnknownParameters | undefined) {
+  _composeRequestUrl(url: string, data: StringParameters | undefined): string {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimiter = queryString
@@ -537,7 +538,10 @@ export class HttpProxy {
    *        be send with a request.
    * @return `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(method: string, data: UnknownParameters | undefined) {
+  _shouldRequestHaveBody(
+    method: string,
+    data: UnknownParameters | undefined
+  ): boolean {
     return !!(
       method &&
       data &&
@@ -557,14 +561,14 @@ export class HttpProxy {
   _transformRequestBody(
     data: UnknownParameters | undefined,
     headers: Record<string, string>
-  ) {
+  ): string | UnknownParameters | FormData | undefined {
     switch (headers['Content-Type']) {
       case 'application/json':
         return JSON.stringify(data);
       case 'application/x-www-form-urlencoded':
-        return this._convertObjectToQueryString(data);
+        return this._convertObjectToQueryString(data as StringParameters);
       case 'multipart/form-data':
-        return this._convertObjectToFormData(data);
+        return this._convertObjectToFormData(data as StringParameters);
       default:
         return data;
     }
@@ -578,7 +582,9 @@ export class HttpProxy {
    * @returns Query string representation of the given object
    * @private
    */
-  _convertObjectToQueryString(object: UnknownParameters | undefined) {
+  _convertObjectToQueryString<
+    T extends Record<string, string | number | boolean>
+  >(object: T | undefined): string | undefined {
     if (!object) {
       return undefined;
     }
@@ -587,7 +593,7 @@ export class HttpProxy {
       .map(key =>
         [key, object[key]]
           .map(value => {
-            return encodeURIComponent(value as string);
+            return encodeURIComponent(value);
           })
           .join('=')
       )
@@ -602,20 +608,21 @@ export class HttpProxy {
    * @returns
    * @private
    */
-  _convertObjectToFormData(object: UnknownParameters | undefined) {
+  _convertObjectToFormData<T extends Record<string, string | Blob>>(
+    object: T | undefined
+  ): T | FormData | undefined {
     if (!object) {
       return undefined;
     }
 
     const window = this._window.getWindow();
+
     if (!window || !FormData) {
       return object;
     }
 
     const formDataObject = new FormData();
-    Object.keys(object).forEach(key =>
-      formDataObject.append(key, object[key] as unknown as string)
-    );
+    Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
 
     return formDataObject;
   }
