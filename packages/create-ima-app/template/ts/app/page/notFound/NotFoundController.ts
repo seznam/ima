@@ -1,14 +1,14 @@
 import { Dependencies } from '@ima/core';
 import { AbstractPageController } from 'app/page/AbstractPageController';
 
-export class NotFoundController extends AbstractPageController {
+type NotFoundControllerState = {
+  status: number;
+};
+
+export class NotFoundController extends AbstractPageController<NotFoundControllerState> {
+  status = 404;
+
   static $dependencies: Dependencies = [];
-
-  constructor() {
-    super();
-
-    this.status = 404;
-  }
 
   load() {
     return {

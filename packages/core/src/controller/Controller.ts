@@ -8,10 +8,26 @@ import { EventBusEventHandler } from '../event/EventBus';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
 import { Dependencies } from '../oc/ObjectContainer';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
 import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
+
+type Intersection<A, B> = A & B extends infer U
+  ? { [P in keyof U]: Awaited<U[P]> }
+  : never;
+
+type Matching<T, Promise> = {
+  [K in keyof T]: T[K] extends Promise ? K : never;
+}[keyof T];
+
+type NonMatching<T, Promise> = {
+  [K in keyof T]: T[K] extends Promise ? never : K;
+}[keyof T];
+
+export type CreateLoadedResources<T> = Intersection<
+  Partial<Pick<T, Matching<T, Promise<any>>>>,
+  Required<Pick<T, NonMatching<T, Promise<any>>>>
+>;
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -19,7 +35,10 @@ import { UnknownParameters, UnknownPromiseParameters } from '../types';
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export abstract class Controller {
+export abstract class Controller<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> {
   static $name?: string;
   static $dependencies: Dependencies;
   static $extensions?: Dependencies<Extension>;
@@ -115,8 +134,8 @@ export abstract class Controller {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  load(): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -141,10 +160,8 @@ export abstract class Controller {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(
-    prevParams: RouteParams = {}
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -167,7 +184,7 @@ export abstract class Controller {
    * @param statePatch Patch of the controller's state to
    *        apply.
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     return;
   }
 
@@ -176,8 +193,8 @@ export abstract class Controller {
    *
    * @return The current state of this controller.
    */
-  getState(): UnknownParameters {
-    return {};
+  getState(): S {
+    return {} as S;
   }
 
   /**
@@ -214,8 +231,8 @@ export abstract class Controller {
   addExtension(
     extension:
       | keyof OCAliasMap
-      | Constructor<Extension>
-      | AbstractConstructor<Extension>
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
       | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
@@ -260,7 +277,7 @@ export abstract class Controller {
    *        current application environment.
    */
   setMetaParams(
-    loadedResources: UnknownParameters,
+    loadedResources: CreateLoadedResources<S>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
@@ -275,7 +292,7 @@ export abstract class Controller {
    *
    * @param params The current route parameters.
    */
-  setRouteParams(params: RouteParams = {}): void {
+  setRouteParams(params: R = {} as R): void {
     return;
   }
 
@@ -284,8 +301,8 @@ export abstract class Controller {
    *
    * @return The current route parameters.
    */
-  getRouteParams(): RouteParams {
-    return {};
+  getRouteParams(): R {
+    return {} as R;
   }
 
   /**
@@ -298,7 +315,7 @@ export abstract class Controller {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager?: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
     return;
   }
 

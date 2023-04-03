@@ -1,26 +1,28 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
-import { Controller } from './Controller';
+import { Controller, CreateLoadedResources } from './Controller';
 import { Settings } from '../boot';
 import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
 import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities so these can be easily provided to
  * the decorated page controller when needed.
  */
-export class ControllerDecorator extends Controller {
+export class ControllerDecorator<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> extends Controller<S, R> {
   /**
    * The controller being decorated.
    */
-  protected _controller: Controller;
+  protected _controller: Controller<S, R>;
   /**
    * The meta page attributes manager.
    */
@@ -49,7 +51,7 @@ export class ControllerDecorator extends Controller {
    *        current application environment.
    */
   constructor(
-    controller: Controller,
+    controller: Controller<S, R>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
@@ -95,30 +97,28 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+  load(): Promise<S> | S {
     return this._controller.load();
   }
 
   /**
    * @inheritDoc
    */
-  update(
-    prevParams: RouteParams = {}
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+  update(prevParams: R = {} as R): Promise<S> | S {
     return this._controller.update(prevParams);
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     this._controller.setState(statePatch);
   }
 
   /**
    * @inheritDoc
    */
-  getState(): UnknownParameters {
+  getState(): S {
     return this._controller.getState();
   }
 
@@ -149,8 +149,8 @@ export class ControllerDecorator extends Controller {
   addExtension(
     extension:
       | keyof OCAliasMap
-      | Constructor<Extension>
-      | AbstractConstructor<Extension>
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
       | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
   ): void {
@@ -176,7 +176,7 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  setMetaParams(loadedResources: UnknownParameters) {
+  setMetaParams(loadedResources: CreateLoadedResources<S>) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,
@@ -189,21 +189,21 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  setRouteParams(params: RouteParams = {}): void {
+  setRouteParams(params: R = {} as R): void {
     this._controller.setRouteParams(params);
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams(): RouteParams {
+  getRouteParams(): R {
     return this._controller.getRouteParams();
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
     this._controller.setPageStateManager(pageStateManager);
   }
 

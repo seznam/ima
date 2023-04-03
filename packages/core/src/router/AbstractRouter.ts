@@ -346,7 +346,6 @@ export abstract class AbstractRouter extends Router {
     };
 
     if (!route) {
-      // @ts-expect-error fix RouteParams in the future
       params.error = new GenericError(
         `Route for path '${path}' is not configured.`,
         { status: 404 }
@@ -553,7 +552,6 @@ export abstract class AbstractRouter extends Router {
       .then(response => {
         response = response || {};
 
-        // @ts-expect-error fix RouteParams in the future
         if (params?.error instanceof Error) {
           (response as Record<string, unknown>).error = params.error;
         }

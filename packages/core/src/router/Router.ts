@@ -43,10 +43,13 @@ export interface RouteFactoryOptions {
   middlewares: RouterMiddleware[];
   extensions?: (
     | keyof DecoratedOCAliasMap
-    | Constructor<Extension>
-    | AbstractConstructor<Extension>
+    | Constructor<Extension<any, any>>
+    | AbstractConstructor<Extension<any, any>>
     | [
-        AbstractConstructor<Extension> | Constructor<Extension>,
+        (
+          | AbstractConstructor<Extension<any, any>>
+          | Constructor<Extension<any, any>>
+        ),
         { optional: true }
       ]
   )[];

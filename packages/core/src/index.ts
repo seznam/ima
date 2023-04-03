@@ -20,7 +20,10 @@ export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
 export { CacheImpl } from './cache/CacheImpl';
 export { AbstractController } from './controller/AbstractController';
-export { Controller } from './controller/Controller';
+export {
+  Controller,
+  type CreateLoadedResources,
+} from './controller/Controller';
 export { ControllerDecorator } from './controller/ControllerDecorator';
 export {
   Dictionary,
@@ -100,7 +103,10 @@ export { RendererEvents } from './page/renderer/RendererEvents';
 export { PageRenderer } from './page/renderer/PageRenderer';
 export { RendererTypes } from './page/renderer/RendererTypes';
 export { StateEvents } from './page/state/StateEvents';
-export { PageStateManager } from './page/state/PageStateManager';
+export {
+  PageStateManager,
+  type PageState,
+} from './page/state/PageStateManager';
 export { PageStateManagerDecorator } from './page/state/PageStateManagerDecorator';
 export { PageStateManagerImpl } from './page/state/PageStateManagerImpl';
 export { pluginLoader, PluginLoader } from './pluginLoader';
