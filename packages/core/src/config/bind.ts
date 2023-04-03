@@ -1,12 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
-import {
-  ObjectContainer,
-  PageRenderer,
-  Settings,
-  Utils,
-  AppEnvironment,
-} from '..';
+import { AppEnvironment, Settings } from '../boot';
 import { InitBindFunction } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
@@ -26,6 +20,7 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { UrlTransformer } from '../http/UrlTransformer';
 import { MetaManager } from '../meta/MetaManager';
 import { MetaManagerImpl } from '../meta/MetaManagerImpl';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { PageHandlerRegistry } from '../page/handler/PageHandlerRegistry';
 import { PageMetaHandler } from '../page/handler/PageMetaHandler';
 import { PageNavigationHandler } from '../page/handler/PageNavigationHandler';
@@ -34,6 +29,7 @@ import { PageManager } from '../page/manager/PageManager';
 import { ServerPageManager } from '../page/manager/ServerPageManager';
 import { PageFactory } from '../page/PageFactory';
 import { ComponentUtils } from '../page/renderer/ComponentUtils';
+import { PageRenderer } from '../page/renderer/PageRenderer';
 import { PageStateManager } from '../page/state/PageStateManager';
 import { PageStateManagerDecorator } from '../page/state/PageStateManagerDecorator';
 import { PageStateManagerImpl } from '../page/state/PageStateManagerImpl';
@@ -50,7 +46,7 @@ import { MapStorage } from '../storage/MapStorage';
 import { SessionMapStorage } from '../storage/SessionMapStorage';
 import { SessionStorage } from '../storage/SessionStorage';
 import { WeakMapStorage } from '../storage/WeakMapStorage';
-import { GlobalImaObject } from '../types';
+import { GlobalImaObject, Utils } from '../types';
 import { ClientWindow } from '../window/ClientWindow';
 import { ServerWindow } from '../window/ServerWindow';
 import { Window } from '../window/Window';

@@ -5,8 +5,8 @@ import { AbstractRouter } from './AbstractRouter';
 import { Request } from './Request';
 import { Response } from './Response';
 import { RouteFactory } from './RouteFactory';
-import { Dependencies } from '..';
 import { Dispatcher } from '../event/Dispatcher';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageManager } from '../page/manager/PageManager';
 import { RouteOptions } from '../router/Router';
 

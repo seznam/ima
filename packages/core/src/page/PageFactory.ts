@@ -1,9 +1,10 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { PageStateManager } from './state/PageStateManager';
-import { Extension, OCAliasMap } from '..';
+import { OCAliasMap } from '../config/bind';
 import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
+import { Extension } from '../extension/Extension';
 import { ObjectContainer } from '../oc/ObjectContainer';
 import { RouteOptions } from '../router/Router';
 

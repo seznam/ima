@@ -1,8 +1,9 @@
 import { Extension } from './Extension';
-import { Dependencies, RouteParams } from '..';
 import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
 /**

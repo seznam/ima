@@ -1,9 +1,11 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { Controller } from './Controller';
-import { Dependencies, OCAliasMap, RouteParams } from '..';
+import { OCAliasMap } from '../config/bind';
 import { Extension } from '../extension/Extension';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { UnknownParameters } from '../types';
 
 /**
@@ -30,6 +32,10 @@ export class AbstractController extends Controller {
   static $name?: string;
   static $dependencies: Dependencies;
   static $extensions?: Dependencies<Extension>;
+
+  constructor() {
+    super();
+  }
 
   /**
    * @inheritDoc

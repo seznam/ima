@@ -1,17 +1,15 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
-import {
-  Dependencies,
-  GenericError,
-  OCAliasMap,
-  RouteParams,
-  Settings,
-} from '..';
+import { Settings } from '../boot';
+import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
+import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
 

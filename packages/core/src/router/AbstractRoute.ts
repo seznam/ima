@@ -2,7 +2,8 @@ import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, OCAliasMap } from '..';
+import { OCAliasMap } from '../config/bind';
+import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
 export type RouteParams = Record<string, string>;

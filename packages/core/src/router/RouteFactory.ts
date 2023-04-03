@@ -1,7 +1,7 @@
+import { AsyncRouteController, AsyncRouteView } from './AbstractRoute';
 import { DynamicRoute, RoutePathExpression } from './DynamicRoute';
 import { RouteFactoryOptions } from './Router';
 import { StaticRoute } from './StaticRoute';
-import { AsyncRouteController, AsyncRouteView } from '..';
 
 /**
  * Utility factory used by router to create routes.

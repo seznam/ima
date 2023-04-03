@@ -8,7 +8,7 @@ import {
   RouteParams,
 } from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
-import { DecoratedOCAliasMap } from '..';
+import { DecoratedOCAliasMap } from '../config/bind';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Extension } from '../extension/Extension';

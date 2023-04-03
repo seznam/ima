@@ -1,11 +1,13 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
 import { Controller } from './Controller';
-import { OCAliasMap, RouteParams, Settings } from '..';
+import { Settings } from '../boot';
+import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
 import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
 import { PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
 import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
