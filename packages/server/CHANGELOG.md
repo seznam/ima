@@ -95,6 +95,18 @@
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
 
+## 18.3.3
+
+### Patch Changes
+
+- 18e6cab06: Fix export of devUtilsFactory
+
+## 18.3.2
+
+### Patch Changes
+
+- 41d7d3b56: allow devUtils to be overriden in createIMAServer
+
 ## 18.3.1
 
 ### Patch Changes

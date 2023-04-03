@@ -176,6 +176,12 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/helpers@19.0.0-rc.0
 
+## 18.1.3
+
+### Patch Changes
+
+- df26b5c70: Fixed addExtension backwards compatibility
+
 ## 18.1.2
 
 ### Patch Changes

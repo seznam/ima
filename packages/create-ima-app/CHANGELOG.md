@@ -72,6 +72,12 @@
 
 - 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
 
+## 18.4.1
+
+### Patch Changes
+
+- 33e7db7d7: add environment for integration tests - set SPA by default
+
 ## 18.4.0
 
 ### Minor Changes
