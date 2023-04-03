@@ -1,3 +1,4 @@
+import { AbstractExtension } from '../..';
 import { AbstractController } from '../../controller/AbstractController';
 import { Extension } from '../../extension/Extension';
 import { ns } from '../../Namespace';
@@ -13,7 +14,7 @@ describe('ima.core.PageFactory', () => {
   const namespacePathUnit = 'test.unit';
   ns.namespace(namespacePathUnit);
 
-  class MockExtension extends Extension {
+  class MockExtension extends AbstractExtension {
     dependency: unknown;
 
     static get $dependencies() {
@@ -53,7 +54,7 @@ describe('ima.core.PageFactory', () => {
     static extensionsTest: Extension[] = [MockExtension];
 
     static get $extensions() {
-      return ClassConstructorWithExtensions.extensionsTest;
+      return [ClassConstructorWithExtensions.extensionsTest];
     }
 
     constructor(dependency: unknown) {

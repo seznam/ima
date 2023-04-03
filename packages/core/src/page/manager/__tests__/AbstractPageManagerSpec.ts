@@ -1082,7 +1082,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     beforeEach(async () => {
       jest
         .spyOn(extensionMock, 'getAllowedStateKeys')
-        // @ts-expect-error
         .mockReturnValue(allowedStateKeys);
 
       jest

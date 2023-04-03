@@ -51,6 +51,7 @@ export {
   HttpAgent,
   type HttpAgentRequestOptions,
   type HttpAgentResponse,
+  type ImaRequestInit,
 } from './http/HttpAgent';
 export { HttpAgentImpl } from './http/HttpAgentImpl';
 export {

@@ -53,7 +53,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   const routePath = '/link';
   const pageFactory = {
     createController: () => new AbstractControllerTest(null),
-    decorateController: (controller: IController) => controller,
+    decorateController: (controller: Controller) => controller,
     decoratePageStateManager: (pageStateManger: PageStateManager) =>
       pageStateManger,
     createView: (view: unknown) => view,

@@ -1,9 +1,8 @@
+import { Dependencies } from '@ima/core';
 import { AbstractPageController } from 'app/page/AbstractPageController';
 
 export class ErrorController extends AbstractPageController {
-  static get $dependencies() {
-    return [];
-  }
+  static $dependencies: Dependencies = [];
 
   constructor() {
     super();
