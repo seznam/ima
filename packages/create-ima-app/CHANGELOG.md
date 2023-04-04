@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- d6f7654a2: Added support for typing controller, extension state and route params
+- 2a5dcc6d0: Added Bootstrap settings, config and env types
+
 ## 19.0.0-rc.5
 
 ### Major Changes

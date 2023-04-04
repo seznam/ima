@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.0.0-rc.13
+
+### Patch Changes
+
+- d6f7654a2: Added support for typing controller, extension state and route params
+- 2a5dcc6d0: Added Bootstrap settings, config and env types
+- 75f54c9b1: Added autocompletion support for language file keys in localization functions. This is done by generating the language keys interface during built-time.
+- bb08c5c2b: Minor HttpAgent type enhancements
+  Added generics to GenericError params types
+
 ## 19.0.0-rc.12
 
 ### Patch Changes
