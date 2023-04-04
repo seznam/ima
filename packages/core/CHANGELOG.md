@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.14
+
+### Patch Changes
+
+- c3cb36a66: Fixed SWC dependency
+
 ## 19.0.0-rc.13
 
 ### Patch Changes
