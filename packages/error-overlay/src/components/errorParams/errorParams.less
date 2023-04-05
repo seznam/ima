@@ -14,8 +14,13 @@
     &title {
       display: flex;
 
+      box-sizing: border-box;
+
+      border: none;
       border-bottom: 1px solid #475569;
       padding: 12px 16px;
+
+      width: 100%;
 
       justify-content: space-between;
 
@@ -29,7 +34,51 @@
       box-shadow: rgba(30, 41, 59, 0.25) 0 8px 12px;
     }
 
+    &separator {
+      margin-left: 18px;
+      width: 2px;
+      height: 20px;
+
+      background-color: #475569;
+    }
+
+    &button {
+      display: inline-flex;
+
+      margin-left: 10px;
+      border: none;
+      padding: 0 6px;
+
+      justify-content: center;
+
+      align-items: center;
+
+      color: #f8fafc;
+
+      background-color: #334155;
+
+      transform: scale(0.9);
+      cursor: pointer;
+
+      &:hover {
+        .ima-error-params__icon {
+          color: #cbd5e1;
+        }
+      }
+    }
+
+    &icon {
+      color: #64748b;
+
+      transform: rotate(90deg);
+      transition: all 0.15s ease-in-out;
+    }
+
     &size {
+      display: flex;
+
+      align-items: center;
+
       color: #64748b;
     }
 
@@ -39,6 +88,14 @@
       font-family: var(--ima-font-mono);
       font-size: 13px;
       line-height: 19px;
+    }
+  }
+
+  &-- {
+    &hidden {
+      .ima-error-params__icon {
+        transform: rotate(0);
+      }
     }
   }
 }
