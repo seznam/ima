@@ -12,12 +12,18 @@ module.exports = function createIMAServer({
   logger,
   emitter,
   performance,
-  devUtils,
+  overrides = {},
 } = {}) {
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({ applicationFolder });
-  devUtils = devUtils || require('./lib/factory/devUtilsFactory.js')();
+
+  if (overrides?.processEnvironment) {
+    environment = overrides.processEnvironment(environment);
+  }
+
+  const devUtils =
+    overrides?.devUtils ?? require('./lib/factory/devUtilsFactory.js')();
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
