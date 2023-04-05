@@ -185,7 +185,7 @@ export default async (
                       flexbox: 'no-2009',
                       grid: 'autoplace',
                     },
-                    stage: 3,
+                    stage: 1,
                     features: {
                       'custom-properties': false,
                     },
