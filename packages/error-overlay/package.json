@@ -29,7 +29,7 @@
     "@ima/dev-utils": "^19.0.0-rc.2",
     "@ima/hmr-client": "^19.0.0-rc.1",
     "@types/prismjs": "^1.26.0",
-    "@types/react": "^18.0.9",
+    "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.5",
     "clsx": "^1.1.1",
     "compression-webpack-plugin": "^10.0.0",
