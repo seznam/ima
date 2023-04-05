@@ -68,15 +68,15 @@ export default async (
 
   // es2018 targets (taken from 'browserslist-generator')
   const targets = [
-    'and_chr >= 66',
-    'chrome >= 66',
+    'and_chr >= 63',
+    'chrome >= 63',
     'and_ff >= 58',
     'android >= 103',
     'edge >= 79',
-    'samsung >= 9.2',
+    'samsung >= 8.2',
     'safari >= 11.1',
     'ios_saf >= 11.4',
-    'opera >= 53',
+    'opera >= 50',
     'firefox >= 58',
   ];
 
