@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- e0dfeda28: Updated dependencies
+
 ## 19.0.0-rc.7
 
 ### Patch Changes

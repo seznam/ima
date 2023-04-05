@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.15
+
+### Patch Changes
+
+- 13ea3d64c: Reverted browser targets to compile trycatch
+
 ## 19.0.0-rc.14
 
 ### Patch Changes
