@@ -37,6 +37,7 @@ module.exports = {
     'keyframes-name-pattern': null,
     'color-function-notation': null,
     'alpha-value-notation': ['number'],
+    'media-feature-range-notation': 'prefix',
     'plugin/declaration-block-no-ignored-properties': true,
     'order/order': ['at-variables', 'declarations', 'rules'],
     'order/properties-order': [
