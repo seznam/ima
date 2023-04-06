@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.7
+
+### Minor Changes
+
+- c509bbb72: Added ability to hide/show error params, this settings is saved to local storage
+
 ## 19.0.0-rc.6
 
 ### Patch Changes

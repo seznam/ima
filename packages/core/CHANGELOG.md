@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.16
+
+### Patch Changes
+
+- 02d5a56e1: Fixed Plugin init settings types"
+
 ## 19.0.0-rc.15
 
 ### Patch Changes
