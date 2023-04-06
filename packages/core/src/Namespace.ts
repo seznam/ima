@@ -34,7 +34,7 @@ export class Namespace {
    * @return The value at the specified path in the namespace.
    */
   namespace<V = unknown>(path: string): V {
-    const levels = this._resolvePathLevels(path);
+    const levels = this.#resolvePathLevels(path);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
@@ -75,7 +75,7 @@ export class Namespace {
    * @return The value at the specified path in the namespace or undefined for any non-string path
    */
   get<V = unknown>(path: string): V | undefined {
-    const levels = this._resolvePathLevels(path);
+    const levels = this.#resolvePathLevels(path);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
@@ -97,7 +97,7 @@ export class Namespace {
    * @param value
    */
   set<V>(path: string, value: V) {
-    const levels = this._resolvePathLevels(path);
+    const levels = this.#resolvePathLevels(path);
 
     const lastKey = levels.pop() as string;
     const namespace = this.namespace<Record<string, unknown>>(levels.join('.'));
@@ -111,7 +111,7 @@ export class Namespace {
    * @param path The namespace path.
    * @param array of levels or undefined for not valid path
    */
-  _resolvePathLevels(path: string) {
+  #resolvePathLevels(path: string) {
     if (!path || typeof path !== 'string') {
       throw Error('namespace.get: path is not type of string');
     }

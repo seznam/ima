@@ -56,7 +56,7 @@ export class PluginLoader {
    */
   register(
     name: string,
-    registerFn: (ns?: Namespace) => InitPluginConfig | undefined
+    registerFn: (ns: Namespace) => InitPluginConfig | undefined
   ) {
     if (typeof name !== 'string') {
       throw new Error(

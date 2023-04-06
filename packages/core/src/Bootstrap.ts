@@ -3,6 +3,7 @@ import {
   Response as ExpressResponse,
   Request as ExpressRequest,
 } from 'express';
+import { PartialDeep } from 'type-fest';
 
 import { DictionaryConfig } from '.';
 import { AppSettings, Settings } from './boot';
@@ -58,7 +59,7 @@ export type PluginInitSettingsFunction = (
   oc: ObjectContainer,
   config: BootConfig['settings'],
   isDynamicallyLoaded: boolean
-) => AppSettings;
+) => PartialDeep<AppSettings>;
 
 export interface InitPluginConfig {
   initServices?: PluginInitServicesFunction;
