@@ -1,15 +1,14 @@
 import { ClientWindow } from '../ClientWindow';
-import { CaptureOptions } from '../Window';
 
 class TestEventTarget {
   event?: string;
   listener?: (event: Event) => void;
-  useCapture?: boolean | CaptureOptions;
+  useCapture?: boolean | EventListenerOptions;
 
   addEventListener(
     event: string,
     listener: (event: Event) => void,
-    useCapture?: boolean | CaptureOptions
+    useCapture?: boolean | EventListenerOptions
   ) {
     this.event = event;
     this.listener = listener;
@@ -19,7 +18,7 @@ class TestEventTarget {
   removeEventListener(
     event: string,
     listener: (event: Event) => void,
-    useCapture?: boolean | CaptureOptions
+    useCapture?: boolean | EventListenerOptions
   ) {
     if (
       event === this.event &&
