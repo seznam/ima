@@ -1,8 +1,4 @@
-import {
-  Dispatcher,
-  DispatcherEventsMap,
-  DispatcherListener,
-} from './Dispatcher';
+import { Dispatcher, DispatcherListener } from './Dispatcher';
 import { GenericError } from '../error/GenericError';
 import { Dependencies } from '../oc/ObjectContainer';
 
@@ -56,10 +52,10 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
-  listen<E extends keyof DispatcherEventsMap>(
-    event: E,
-    listener: DispatcherListener<DispatcherEventsMap[E]>,
-    scope: unknown = null
+  listen(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
   ): this {
     if ($Debug) {
       if (typeof listener !== 'function') {
@@ -87,10 +83,10 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
-  unlisten<E extends keyof DispatcherEventsMap>(
+  unlisten(
     event: string,
-    listener: DispatcherListener<DispatcherEventsMap[E]>,
-    scope: unknown = null
+    listener: DispatcherListener<any>,
+    scope?: unknown
   ): this {
     const scopes = this._getScopesOf(event, listener);
 
@@ -127,11 +123,7 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
-  fire<E extends keyof DispatcherEventsMap>(
-    event: string,
-    data: DispatcherEventsMap[E],
-    imaInternalEvent = false
-  ): this {
+  fire(event: string, data: any, imaInternalEvent: boolean): this {
     const listeners = this._getListenersOf(event);
 
     if (!listeners?.size && !imaInternalEvent) {

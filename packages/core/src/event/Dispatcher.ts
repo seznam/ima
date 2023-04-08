@@ -50,6 +50,16 @@ export abstract class Dispatcher {
     event: E,
     listener: DispatcherListener<DispatcherEventsMap[E]>,
     scope?: unknown
+  ): this;
+  listen(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this;
+  listen(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
   ): this {
     return this;
   }
@@ -68,6 +78,16 @@ export abstract class Dispatcher {
   unlisten<E extends keyof DispatcherEventsMap>(
     event: E,
     listener: DispatcherListener<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  unlisten(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this;
+  unlisten(
+    event: string,
+    listener: DispatcherListener<any>,
     scope?: unknown
   ): this {
     return this;
@@ -97,7 +117,9 @@ export abstract class Dispatcher {
     event: E,
     data: DispatcherEventsMap[E],
     imaInternalEvent: boolean
-  ): this {
+  ): this;
+  fire(event: string, data: any, imaInternalEvent: boolean): this;
+  fire(event: string, data: any, imaInternalEvent: boolean): this {
     return this;
   }
 }

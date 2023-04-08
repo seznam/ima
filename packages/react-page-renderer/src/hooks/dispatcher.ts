@@ -39,6 +39,14 @@ export interface useDispatcherType {
 export function useDispatcher<E extends keyof DispatcherEventsMap>(
   event?: E,
   listener?: DispatcherListener<DispatcherEventsMap[E]>
+): useDispatcherType;
+export function useDispatcher(
+  event?: string,
+  listener?: DispatcherListener<any>
+): useDispatcherType;
+export function useDispatcher(
+  event?: string,
+  listener?: DispatcherListener<any>
 ): useDispatcherType {
   const { $Dispatcher } = useComponentUtils();
 
@@ -56,7 +64,8 @@ export function useDispatcher<E extends keyof DispatcherEventsMap>(
 
   return useMemo<useDispatcherType>(
     () => ({
-      fire: (...params) => $Dispatcher.fire(...params),
+      fire: (...params: Parameters<Dispatcher['fire']>) =>
+        $Dispatcher.fire(...params),
     }),
     [$Dispatcher]
   );
