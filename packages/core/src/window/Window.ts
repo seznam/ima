@@ -1,11 +1,33 @@
-import { UnknownParameters } from '../types';
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CustomEventTargetMap {}
 
-export type CaptureOptions = {
-  capture?: boolean;
-  once?: boolean;
-  passive?: boolean;
-  signal?: AbortSignal;
-};
+export type EventTargetTarget =
+  | Document
+  | globalThis.Window
+  | HTMLBodyElement
+  | SVGSVGElement
+  | SVGElement
+  | HTMLMediaElement
+  | HTMLVideoElement
+  | Element;
+
+export type EventTargetEventMap<E extends EventTargetTarget> =
+  (E extends Document
+    ? DocumentEventMap
+    : E extends globalThis.Window
+    ? WindowEventMap
+    : E extends HTMLBodyElement
+    ? HTMLBodyElementEventMap
+    : E extends SVGSVGElement
+    ? SVGSVGElementEventMap
+    : E extends SVGElement
+    ? SVGElementEventMap
+    : E extends HTMLMediaElement
+    ? HTMLMediaElementEventMap
+    : E extends HTMLVideoElement
+    ? HTMLVideoElementEventMap
+    : HTMLElementEventMap) &
+    CustomEventTargetMap;
 
 /**
  * The {@link Window} interface defines various utility API for easier
@@ -16,7 +38,7 @@ export abstract class Window {
   /**
    * @return `true` if invoked at the client side.
    */
-  isClient() {
+  isClient(): boolean {
     return false;
   }
 
@@ -27,7 +49,7 @@ export abstract class Window {
    * @return `true` if cookies are handled automatically by
    *         the environment.
    */
-  isCookieEnabled() {
+  isCookieEnabled(): boolean {
     return false;
   }
 
@@ -36,7 +58,7 @@ export abstract class Window {
    *
    * @return `true` if the session storage is supported.
    */
-  hasSessionStorage() {
+  hasSessionStorage(): boolean {
     return false;
   }
 
@@ -45,7 +67,7 @@ export abstract class Window {
    *
    * @param title The new page title.
    */
-  setTitle(title: string) {
+  setTitle(title: string): void {
     return;
   }
 
@@ -80,7 +102,7 @@ export abstract class Window {
    * @return The number of pixels the viewport is scrolled
    *         horizontally.
    */
-  getScrollX() {
+  getScrollX(): number {
     return 0;
   }
 
@@ -90,7 +112,7 @@ export abstract class Window {
    * @return The number of pixels the document is scrolled
    *         vertically.
    */
-  getScrollY() {
+  getScrollY(): number {
     return 0;
   }
 
@@ -100,7 +122,7 @@ export abstract class Window {
    * @param x Horizontal scroll offset in pixels.
    * @param y Vertical scroll offset in pixels.
    */
-  scrollTo(x: number, y: number) {
+  scrollTo(x: number, y: number): void {
     return;
   }
 
@@ -110,14 +132,14 @@ export abstract class Window {
    *
    * @return The current domain.
    */
-  getDomain() {
+  getDomain(): string {
     return '';
   }
 
   /**
    * @return The current host.
    */
-  getHost() {
+  getHost(): string {
     return '';
   }
 
@@ -126,14 +148,14 @@ export abstract class Window {
    *
    * @return The path and query string parts of the current URL.
    */
-  getPath() {
+  getPath(): string {
     return '';
   }
 
   /**
    * @return The current document's URL.
    */
-  getUrl() {
+  getUrl(): string {
     return '';
   }
 
@@ -155,7 +177,7 @@ export abstract class Window {
    * @return The element with the specified id, or
    *         `null` if no such element exists.
    */
-  getElementById(id: string): null | Element {
+  getElementById(id: string): null | HTMLElement {
     return null;
   }
 
@@ -164,7 +186,7 @@ export abstract class Window {
    *
    * @return The current history state
    */
-  getHistoryState(): UnknownParameters {
+  getHistoryState(): History['state'] {
     return {};
   }
 
@@ -175,7 +197,7 @@ export abstract class Window {
    * @return The first element matching the CSS selector or
    *         `null` if no such element exists.
    */
-  querySelector(selector: string): null | Element {
+  querySelector<E extends Element = Element>(selector: string): E | null {
     return null;
   }
 
@@ -187,8 +209,10 @@ export abstract class Window {
    * @return A node list containing all elements matching the
    *         specified CSS selector.
    */
-  querySelectorAll(selector: string): NodeList {
-    return new NodeList();
+  querySelectorAll<E extends Element = Element>(
+    selector: string
+  ): NodeListOf<E> {
+    return Object.create(NodeList);
   }
 
   /**
@@ -197,7 +221,7 @@ export abstract class Window {
    *
    * @param url The URL to which the browser will be redirected.
    */
-  redirect(url: string) {
+  redirect(url: string): void {
     return;
   }
 
@@ -211,7 +235,7 @@ export abstract class Window {
    *        this parameter is ignored by some browsers.
    * @param url The new URL at which the state is available.
    */
-  pushState(state: UnknownParameters, title: string, url?: string) {
+  pushState<T>(state: T, title: string, url?: string): void {
     return;
   }
 
@@ -225,7 +249,7 @@ export abstract class Window {
    *        this parameter is ignored by some browsers.
    * @param url The new URL at which the state is available.
    */
-  replaceState(state: UnknownParameters, title: string, url?: string) {
+  replaceState<T>(state: T, title: string, url?: string): void {
     return;
   }
 
@@ -239,9 +263,32 @@ export abstract class Window {
    * @return The created custom event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
    */
-  createCustomEvent(name: string, options: UnknownParameters): CustomEvent {
+  createCustomEvent<T>(
+    name: string,
+    options: CustomEventInit<T>
+  ): CustomEvent<T> {
     return new CustomEvent('');
   }
+
+  /**
+   * Registers the provided event listener to be executed when the specified
+   * event occurs on the specified event target.
+   *
+   * Registering the same event listener for the same event on the same event
+   * target with the same `useCapture` flag value repeatedly has no
+   * effect.
+   *
+   * @param eventTarget The event target.
+   * @param event The name of the event.
+   * @param listener The event listener.
+   * @param options If true, the method initiates event
+   *        capture. After initiating capture, all events of the specified
+   *        type will be dispatched to the registered listener before being
+   *        dispatched to any EventTarget beneath it in the DOM tree. Events
+   *        which are bubbling upward through the tree will not trigger a
+   *        listener designated to use capture. Optionally you can provide
+   *        object with options.
+   */
 
   /**
    * Registers the provided event listener to be executed when the specified
@@ -261,12 +308,25 @@ export abstract class Window {
    *        which are bubbling upward through the tree will not trigger a
    *        listener designated to use capture.
    */
-  bindEventListener(
-    eventTarget: EventTarget,
+  bindEventListener<
+    T extends EventTargetTarget,
+    K extends keyof EventTargetEventMap<T>,
+    S = any
+  >(
+    eventTarget: T,
+    event: K,
+    listener: (event: EventTargetEventMap<T>[K]) => void,
+    options?: boolean | EventListenerOptions,
+    scope?: S
+  ): void;
+  bindEventListener<T extends EventTarget, E extends Event = Event, S = any>(
+    eventTarget: T,
     event: string,
-    listener: (event: Event) => void,
-    useCapture?: boolean | CaptureOptions
-  ) {
+    listener: (event: E) => void,
+    options?: boolean | EventListenerOptions,
+    scope?: S
+  ): void;
+  bindEventListener(): void {
     return;
   }
 
@@ -280,15 +340,28 @@ export abstract class Window {
    * @param eventTarget The event target.
    * @param event The name of the event.
    * @param listener The event listener.
-   * @param useCapture The `useCapture` flag value
-   *        that was used when the listener was registered.
+   * @param options The `useCapture` flag value that was used when the
+   *  listener was registered, or provide capture option through object options.
    */
-  unbindEventListener(
-    eventTarget: EventTarget,
+  unbindEventListener<
+    T extends EventTargetTarget,
+    K extends keyof EventTargetEventMap<T>,
+    S
+  >(
+    eventTarget: T,
+    event: K,
+    listener: (event: EventTargetEventMap<T>[K]) => void,
+    options?: boolean | EventListenerOptions,
+    scope?: S
+  ): void;
+  unbindEventListener<T extends EventTarget, E extends Event = Event, S = any>(
+    eventTarget: T,
     event: string,
-    listener: (event: Event) => void,
-    useCapture?: boolean | CaptureOptions
-  ) {
+    listener: (event: E) => void,
+    options?: boolean | EventListenerOptions,
+    scope?: S
+  ): void;
+  unbindEventListener(): void {
     return;
   }
 }

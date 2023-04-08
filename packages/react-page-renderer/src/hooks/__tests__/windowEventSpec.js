@@ -30,10 +30,7 @@ describe('useWindowEvent', () => {
 
   it('should return window and utility functions', () => {
     mountHook(() => {
-      result = useWindowEvent({
-        event: 'custom-event',
-        callback: jest.fn(),
-      });
+      result = useWindowEvent('custom-target', 'custom-event', jest.fn());
 
       expect(result).toMatchInlineSnapshot(`
         {
@@ -47,34 +44,11 @@ describe('useWindowEvent', () => {
     }, contextMock);
   });
 
-  it('should bind event correctly with defaults', () => {
+  it('should bind events correctly', () => {
     let cb = jest.fn();
 
     mountHook(() => {
-      result = useWindowEvent({
-        event: 'custom-event',
-        callback: cb,
-      });
-
-      expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(
-        windowMock,
-        'custom-event',
-        cb,
-        false
-      );
-    }, contextMock);
-  });
-
-  it('should bind event to window by default', () => {
-    let cb = jest.fn();
-
-    mountHook(() => {
-      result = useWindowEvent({
-        eventTarget: 'custom-target',
-        event: 'custom-event',
-        callback: cb,
-        useCapture: true,
-      });
+      result = useWindowEvent('custom-target', 'custom-event', cb, true);
 
       expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(
         'custom-target',
