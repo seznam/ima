@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.19
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+
 ## 19.0.0-rc.18
 
 ### Patch Changes
