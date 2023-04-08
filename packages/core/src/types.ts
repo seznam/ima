@@ -17,6 +17,10 @@ export type UnknownParameters = {
   [key: string]: unknown;
 };
 
+export type AnyParameters = {
+  [key: string]: unknown;
+};
+
 export type UnknownPromiseParameters = {
   [key: string]: unknown | Promise<unknown>;
 };

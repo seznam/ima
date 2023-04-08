@@ -599,10 +599,6 @@ describe('ima.core.router.AbstractRouter', () => {
         action: undefined,
         path: routePath,
         options: options,
-        response: {
-          content: null,
-          status: 200,
-        },
       };
 
       router.getPath.mockReturnValue(routePath);

@@ -19,6 +19,15 @@ import { ManagedPage, PageAction } from '../PageTypes';
 import { PageRenderer } from '../renderer/PageRenderer';
 import { PageStateManager } from '../state/PageStateManager';
 
+export interface PageManagerDispatcherEvents {
+  [RouterEvents.AFTER_LOADING_ASYNC_ROUTE]: {
+    route: InstanceType<typeof AbstractRoute>;
+  };
+  [RouterEvents.BEFORE_LOADING_ASYNC_ROUTE]: {
+    route: InstanceType<typeof AbstractRoute>;
+  };
+}
+
 function createDeferred<T, E>(resolveValue?: T, rejectedValue?: E) {
   return (() => {
     let resolve, reject;

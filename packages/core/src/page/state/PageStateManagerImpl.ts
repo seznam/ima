@@ -1,8 +1,20 @@
 import { PageState, PageStateManager } from './PageStateManager';
 import { StateEvents } from './StateEvents';
 import { Dispatcher } from '../../event/Dispatcher';
+import { AnyParameters } from '../../types';
 
 const MAX_HISTORY_LIMIT = 10;
+
+export interface PageStateDispatcherEvents {
+  [StateEvents.AFTER_CHANGE_STATE]: {
+    newState: AnyParameters;
+  };
+  [StateEvents.BEFORE_CHANGE_STATE]: {
+    newState: AnyParameters;
+    oldState: AnyParameters;
+    patchState: AnyParameters | null;
+  };
+}
 
 /**
  * The implementation of the {@link PageStateManager} interface.

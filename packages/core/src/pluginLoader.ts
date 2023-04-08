@@ -56,7 +56,7 @@ export class PluginLoader {
    */
   register(
     name: string,
-    registerFn: (ns: Namespace) => InitPluginConfig | undefined
+    registerFn: (ns: Namespace) => InitPluginConfig | void
   ) {
     if (typeof name !== 'string') {
       throw new Error(
@@ -74,7 +74,7 @@ export class PluginLoader {
 
     // Bootstrap plugin if imported dynamically (only if it's not already loaded)
     if (this._bootstrap && !this._plugins[name]) {
-      this._bootstrap.initPlugin(name, plugin);
+      this._bootstrap.initPlugin(name, plugin ?? undefined);
     }
 
     this._plugins[name] = { name, plugin: plugin || {} };

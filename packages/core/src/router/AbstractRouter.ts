@@ -22,6 +22,23 @@ import { HttpStatusCode } from '../http/HttpStatusCode';
 import { PageManager } from '../page/manager/PageManager';
 import { StringParameters, UnknownParameters } from '../types';
 
+type BeforeHandleRouteEventData = {
+  route: InstanceType<typeof AbstractRoute>;
+  path: string;
+  params?: RouteParams;
+  options?: Partial<RouteOptions>;
+  action?: RouteAction;
+};
+
+type AfterHandleRouteEventData = BeforeHandleRouteEventData & {
+  response?: any;
+};
+
+export interface RouterDispatcherEvents {
+  [RouterEvents.AFTER_HANDLE_ROUTE]: AfterHandleRouteEventData;
+  [RouterEvents.BEFORE_HANDLE_ROUTE]: BeforeHandleRouteEventData;
+}
+
 /**
  * The basic implementation of the {@link Router} interface, providing the
  * common or default functionality for parts of the API.
@@ -526,7 +543,7 @@ export abstract class AbstractRouter extends Router {
       options
     ) as RouteOptions;
 
-    const eventData: Record<string, unknown> = {
+    const eventData: BeforeHandleRouteEventData = {
       route,
       params,
       path: this._getCurrentlyRoutedPath(),
@@ -556,8 +573,14 @@ export abstract class AbstractRouter extends Router {
           (response as Record<string, unknown>).error = params.error;
         }
 
-        eventData.response = response;
-        this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, eventData, true);
+        this._dispatcher.fire(
+          RouterEvents.AFTER_HANDLE_ROUTE,
+          {
+            ...eventData,
+            response,
+          },
+          true
+        );
 
         return response as void | StringParameters;
       })
