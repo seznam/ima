@@ -153,7 +153,12 @@ export { Storage } from './storage/Storage';
 export { WeakMapStorage } from './storage/WeakMapStorage';
 export { ClientWindow } from './window/ClientWindow';
 export { ServerWindow } from './window/ServerWindow';
-export { type CaptureOptions, Window } from './window/Window';
+export {
+  Window,
+  type CustomEventTargetMap,
+  type EventTargetEventMap,
+  type EventTargetTarget,
+} from './window/Window';
 export {
   getInitialImaConfigFunctions,
   getInitialPluginConfig,
