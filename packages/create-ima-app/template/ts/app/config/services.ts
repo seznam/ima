@@ -9,10 +9,8 @@ export const initServicesApp: InitServicesFunction = (ns, oc, config) => {
   };
 
   $window.bindEventListener($window.getWindow()!, 'error', event => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const error = (event as unknown as ErrorEvent).error as Error;
+    const error = event.error;
 
-    // @ts-expect-error incorrectly typed params
     $router.handleError({ error }).catch(fatalError => {
       config.$IMA.fatalErrorHandler!(fatalError as Error);
     });
