@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.9
+
+### Patch Changes
+
+- 206ab1f43: Improved Dispatcher types
+
 ## 19.0.0-rc.8
 
 ### Patch Changes
