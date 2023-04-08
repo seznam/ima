@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.0.0-rc.10
+
+### Major Changes
+
+- 5bd45aa75: Changed signature of useWindowEvent hook, it now matches bindEventListener parameters of ima window
+
+### Patch Changes
+
+- 5bd45aa75: Updated Window types
+
 ## 19.0.0-rc.9
 
 ### Patch Changes

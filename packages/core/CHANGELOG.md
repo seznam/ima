@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.18
+
+### Patch Changes
+
+- 5bd45aa75: Updated Window types
+
 ## 19.0.0-rc.17
 
 ### Patch Changes
