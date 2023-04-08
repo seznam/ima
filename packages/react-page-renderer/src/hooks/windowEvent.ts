@@ -1,4 +1,4 @@
-import type { EventTargetEventMap, EventTargetTarget } from '@ima/core';
+import type { WindowEventTargetsMap, WindowEventTargets } from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
@@ -48,12 +48,12 @@ export type useWindowEventType = {
  * @returns `window` object and utility methods.
  */
 export function useWindowEvent<
-  T extends EventTargetTarget,
-  K extends keyof EventTargetEventMap<T>
+  T extends WindowEventTargets,
+  K extends keyof WindowEventTargetsMap<T>
 >(
   eventTarget: T,
   event: K,
-  listener: (event: EventTargetEventMap<T>[K]) => void,
+  listener: (event: WindowEventTargetsMap<T>[K]) => void,
   useCapture?: boolean | EventListenerOptions
 ): useWindowEventType;
 export function useWindowEvent<T extends EventTarget, E extends Event = Event>(

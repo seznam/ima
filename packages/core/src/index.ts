@@ -155,9 +155,9 @@ export { ClientWindow } from './window/ClientWindow';
 export { ServerWindow } from './window/ServerWindow';
 export {
   Window,
-  type CustomEventTargetMap,
-  type EventTargetEventMap,
-  type EventTargetTarget,
+  type WindowCustomEventsMap,
+  type WindowEventTargetsMap,
+  type WindowEventTargets,
 } from './window/Window';
 export {
   getInitialImaConfigFunctions,

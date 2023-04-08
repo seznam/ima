@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CustomEventTargetMap {}
+export interface WindowCustomEventsMap {}
 
-export type EventTargetTarget =
+export type WindowEventTargets =
   | Document
   | globalThis.Window
   | HTMLBodyElement
@@ -11,7 +11,7 @@ export type EventTargetTarget =
   | HTMLVideoElement
   | Element;
 
-export type EventTargetEventMap<E extends EventTargetTarget> =
+export type WindowEventTargetsMap<E extends WindowEventTargets> =
   (E extends Document
     ? DocumentEventMap
     : E extends globalThis.Window
@@ -27,7 +27,7 @@ export type EventTargetEventMap<E extends EventTargetTarget> =
     : E extends HTMLVideoElement
     ? HTMLVideoElementEventMap
     : HTMLElementEventMap) &
-    CustomEventTargetMap;
+    WindowCustomEventsMap;
 
 /**
  * The {@link Window} interface defines various utility API for easier
@@ -309,13 +309,13 @@ export abstract class Window {
    *        listener designated to use capture.
    */
   bindEventListener<
-    T extends EventTargetTarget,
-    K extends keyof EventTargetEventMap<T>,
+    T extends WindowEventTargets,
+    K extends keyof WindowEventTargetsMap<T>,
     S = any
   >(
     eventTarget: T,
     event: K,
-    listener: (event: EventTargetEventMap<T>[K]) => void,
+    listener: (event: WindowEventTargetsMap<T>[K]) => void,
     options?: boolean | EventListenerOptions,
     scope?: S
   ): void;
@@ -344,13 +344,13 @@ export abstract class Window {
    *  listener was registered, or provide capture option through object options.
    */
   unbindEventListener<
-    T extends EventTargetTarget,
-    K extends keyof EventTargetEventMap<T>,
+    T extends WindowEventTargets,
+    K extends keyof WindowEventTargetsMap<T>,
     S
   >(
     eventTarget: T,
     event: K,
-    listener: (event: EventTargetEventMap<T>[K]) => void,
+    listener: (event: WindowEventTargetsMap<T>[K]) => void,
     options?: boolean | EventListenerOptions,
     scope?: S
   ): void;
