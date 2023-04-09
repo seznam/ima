@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.20
+
+### Patch Changes
+
+- 3f35dcbf0: Fixed HYDRATE_ERROR types
+
 ## 19.0.0-rc.19
 
 ### Patch Changes
