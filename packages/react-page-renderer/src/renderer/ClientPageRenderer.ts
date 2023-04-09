@@ -24,7 +24,7 @@ export class ClientPageRenderer extends AbstractClientPageRenderer {
   }
 
   protected _hydrateViewAdapter(): void {
-    const serverNode = this._viewContainer?.cloneNode(true);
+    const serverNode = this._viewContainer?.cloneNode(true) as Element;
     this._reactRoot = hydrateRoot(
       this._viewContainer as Element,
       this._getViewAdapterElement({
@@ -41,7 +41,7 @@ export class ClientPageRenderer extends AbstractClientPageRenderer {
             {
               error,
               serverNode,
-              clientNode: this._viewContainer?.cloneNode(true),
+              clientNode: this._viewContainer?.cloneNode(true) as Element,
             },
             true
           );

@@ -13,8 +13,8 @@ export interface PageRendererDispatcherEvents {
   [RendererEvents.ERROR]: { message: string };
   [RendererEvents.HYDRATE_ERROR]: {
     error: Error;
-    serverNode: Node;
-    clientNode: Node;
+    serverNode: Element;
+    clientNode: Element;
   };
   [RendererEvents.MOUNTED]: {
     type: RendererTypes.HYDRATE | RendererTypes.RENDER;
