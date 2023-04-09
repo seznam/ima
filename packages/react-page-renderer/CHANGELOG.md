@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.12
+
+### Patch Changes
+
+- c37249378: Fixed HYDRATE_ERROR
+
 ## 19.0.0-rc.11
 
 ### Patch Changes
