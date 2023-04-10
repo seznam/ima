@@ -1,16 +1,16 @@
+import type { RouteOptions } from '@ima/core';
 import {
   ControllerDecorator,
   Dispatcher,
   GenericError,
   MetaManager,
+  Settings,
 } from '@ima/core';
-import type { RouteOptions } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
 
 import { AbstractPureComponent } from '../../component/AbstractPureComponent';
 import { BlankManagedRootView } from '../../component/BlankManagedRootView';
-import { Settings } from '../../types';
 import { PageData } from '../AbstractPageRenderer';
 import { PageRendererFactory } from '../PageRendererFactory';
 import { ServerPageRenderer } from '../ServerPageRenderer';
