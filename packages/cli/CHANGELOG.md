@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.11
+
+### Patch Changes
+
+- 447c51646: All packages now use correct types from IMA core
+
 ## 19.0.0-rc.10
 
 ### Patch Changes
