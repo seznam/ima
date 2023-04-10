@@ -1,5 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
+import { OCAliasMap } from '.';
 import { AppEnvironment } from './boot';
 import { Dictionary, DictionaryConfig } from './dictionary/Dictionary';
 import { Dispatcher } from './event/Dispatcher';
@@ -38,12 +39,17 @@ export interface Utils {
   $PageStateManager: PageStateManager;
   $Router: Router;
   $Window: Window;
+  $Settings: OCAliasMap['$Settings'];
+}
+
+export interface $AppSettings {
+  [key: string]: any;
 }
 
 export interface GlobalImaObject {
   $Env: keyof AppEnvironment;
   $Version: string;
-  $App: Record<string, unknown>;
+  $App: $AppSettings;
   $Language: string;
   $Debug: boolean;
   $Protocol: 'http:' | 'https:';

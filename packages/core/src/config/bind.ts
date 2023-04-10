@@ -1,6 +1,6 @@
 import * as $Helper from '@ima/helpers';
 
-import { AppEnvironment, Settings } from '../boot';
+import { AppEnvironment } from '../boot';
 import { InitBindFunction } from '../Bootstrap';
 import { Cache } from '../cache/Cache';
 import { CacheFactory } from '../cache/CacheFactory';
@@ -72,7 +72,7 @@ export type DecoratedOCAliasMap = OCAliasMap &
 export interface OCAliasMap {
   $Helper: typeof $Helper;
   $oc: ObjectContainer;
-  $Settings: Settings;
+  $Settings: Parameters<InitBindFunction>['2'] & { [key: string]: any };
   $Env: keyof AppEnvironment;
   $Protocol: GlobalImaObject['$Protocol'];
   $Secure: boolean;
@@ -132,6 +132,7 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
   } else {
     oc.provide(Window, ServerWindow);
   }
+
   oc.bind('$Window', Window);
   oc.bind('$Error', GenericError);
 

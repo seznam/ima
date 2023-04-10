@@ -102,6 +102,7 @@ export interface AppEnvironment {
  * App settings for single env key.
  */
 export interface Settings {
+  [key: string]: any;
   $Version: GlobalImaObject['$Version'];
   $Http: {
     defaultRequestOptions: Omit<HttpAgentRequestOptions, 'abortController'>;
@@ -116,6 +117,7 @@ export interface Settings {
   };
   $Page: {
     $Render: {
+      batchResolve?: boolean;
       masterElementId: string;
       documentView: unknown;
       managedRootView?: unknown;

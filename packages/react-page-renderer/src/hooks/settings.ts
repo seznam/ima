@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
-import { Settings } from '../types';
 
 /**
  * IMA $Settings access provider with optional selector.
@@ -17,7 +16,7 @@ import { Settings } from '../types';
  * @param selector Optional path selector.
  * @returns Settings value or undefined.
  */
-export function useSettings<T = Settings>(selector?: string): T | undefined {
+export function useSettings<T = any>(selector?: string): T | undefined {
   const { $Settings } = useComponentUtils();
 
   if (!selector) {
@@ -34,7 +33,7 @@ export function useSettings<T = Settings>(selector?: string): T | undefined {
         return undefined;
       }
 
-      curSettings = curSettings[segment] as Settings;
+      curSettings = curSettings[segment] as typeof $Settings;
     }
 
     return curSettings as T;

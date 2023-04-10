@@ -11,13 +11,13 @@ import {
   type UnknownParameters,
   type UnknownPromiseParameters,
   type RouteOptions,
+  type Settings,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType } from 'react';
 
 import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
 import { PageRendererFactory } from './PageRendererFactory';
-import { Settings } from '../types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -305,9 +305,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     this._prepareViewAdapter(controller, pageView, routeOptions);
 
     const masterElementId = this._settings.$Page.$Render.masterElementId;
-    const viewContainer = this._window.getElementById(
-      masterElementId as string
-    );
+    const viewContainer = this._window.getElementById(masterElementId);
     if (viewContainer) {
       this._viewContainer = viewContainer;
     }

@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
@@ -15,7 +16,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
-import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
+import { ImaCliArgs, HandlerFn } from '../types';
 import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
@@ -31,7 +32,7 @@ import {
  * (all changes in server/ folder), to automatically restart the application
  * server in case any change is detected.
  */
-function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
+function startNodemon(args: ImaCliArgs, environment: Environment) {
   let serverHasStarted = false;
 
   nodemon({

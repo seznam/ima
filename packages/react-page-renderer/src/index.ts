@@ -31,5 +31,3 @@ export { usePageContext } from './hooks/pageContext';
 export { useSettings } from './hooks/settings';
 export { useEventBus, type useEventBusType } from './hooks/eventBus';
 export { useWindowEvent } from './hooks/windowEvent';
-
-export { type Settings } from './types';

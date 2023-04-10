@@ -8,6 +8,7 @@ import {
   type UnknownPromiseParameters,
   type PageData as BasePageData,
   type RouteOptions,
+  type Settings,
 } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import { ComponentType, createElement, ReactElement } from 'react';
@@ -17,7 +18,6 @@ import * as reactDOM from 'react-dom/server';
 import { PageRendererFactory } from './PageRendererFactory';
 import { BlankManagedRootView } from '../component/BlankManagedRootView';
 import { ViewAdapter, ViewAdapterProps } from '../component/ViewAdapter';
-import { Settings } from '../types';
 
 export type PageData = {
   documentView?: ComponentType;
