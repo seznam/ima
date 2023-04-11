@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.23
+
+### Patch Changes
+
+- f55b1e8c0: Fixed Settings $Cache.enable type
+
 ## 19.0.0-rc.22
 
 ### Patch Changes
