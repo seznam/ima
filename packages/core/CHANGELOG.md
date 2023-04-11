@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.22
+
+### Patch Changes
+
+- 4224087d2: Removed any key from Settings type
+
 ## 19.0.0-rc.21
 
 ### Patch Changes
