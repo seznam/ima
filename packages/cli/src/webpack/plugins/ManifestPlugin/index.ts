@@ -158,7 +158,8 @@ class ManifestPlugin {
 
     // Include CSS only from the root directory
     if (this.#options.context.processCss) {
-      result = result || /static\/css\/[\w.\-_]+\.css$/.test(assetName);
+      result =
+        result || /static\/(css|css-legacy)\/[\w.\-_]+\.css$/.test(assetName);
     }
 
     return result;

@@ -35,9 +35,9 @@ function resolveEnvironment(
 function createPolyfillEntry(
   ctx: ImaConfigurationContext
 ): Record<string, string> {
-  const { isEsVersion, rootDir } = ctx;
+  const { name, rootDir } = ctx;
 
-  const fileName = `polyfill${isEsVersion ? '.es' : ''}.js`;
+  const fileName = `polyfill${name === 'client.es' ? '.es' : ''}.js`;
   const polyfillPath = path.join(rootDir, 'app', fileName);
 
   if (!fs.existsSync(polyfillPath)) {
@@ -174,6 +174,9 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     swc: async config => config,
     swcVendor: async config => config,
     postcss: async config => config,
+    postcssLegacy: async config => config,
+    cssBrowsersTarget: '>0.5%, not dead, not op_mini all, not ie 11',
+    cssBrowsersTargetLegacy: '>0.1%, ie 11',
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
@@ -317,14 +320,12 @@ async function createWebpackConfig(
       !imaConfig.disableLegacyBuild && {
         name: 'client',
         isServer: false,
-        isEsVersion: false,
-        processCss: false,
+        processCss: imaConfig.enableLegacyCss,
         ...args,
       },
     {
       name: 'client.es',
       isServer: false,
-      isEsVersion: true,
       processCss: true,
       ...args,
     },

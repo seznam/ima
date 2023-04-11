@@ -55,7 +55,6 @@ export interface ImaConfigurationContext extends ImaCliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
   processCss: boolean; // Flag indicating that this context should process CSS assets
-  isEsVersion?: boolean;
 }
 
 export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
@@ -137,6 +136,24 @@ export type ImaConfig = {
     config: Record<string, unknown>,
     ctx: ImaConfigurationContext
   ) => Promise<Record<string, unknown>>;
+
+  /**
+   * Equivalent to postcss function but for legacy css, when enabled with enableLegacyCss option.
+   */
+  postcssLegacy: (
+    config: Record<string, unknown>,
+    ctx: ImaConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
+   * Browserslist configuration string for postcss-preset-env.
+   */
+  cssBrowsersTarget: string;
+
+  /**
+   * Browserslist configuration string for postcss-preset-env for legacy CSS.
+   */
+  cssBrowsersTargetLegacy: string;
 
   /**
    * Optional IMA cli plugins that can be used to easily extend
@@ -233,6 +250,11 @@ export type ImaConfig = {
    * Disables build of 'client' legacy bundle.
    */
   disableLegacyBuild?: boolean;
+
+  /**
+   * Enables build of separate legacy CSS bundle. T
+   */
+  enableLegacyCss?: boolean;
 
   /**
    * Advanced functionality allowing you to include/exclude custom vendor paths that go through
