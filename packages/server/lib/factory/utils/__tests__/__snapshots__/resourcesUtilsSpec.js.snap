@@ -25,6 +25,15 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       },
     ],
   ],
+  "esStyles": [
+    [
+      "/static/css/app.d0ad44d05f82db5f.css",
+      {
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
   "scripts": [
     [
       "/static/js/app.client.8dc14fd2c9e52eef.js",
@@ -48,15 +57,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       },
     ],
   ],
-  "styles": [
-    [
-      "/static/css/app.d0ad44d05f82db5f.css",
-      {
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
+  "styles": [],
 }
 `;
 
@@ -88,6 +89,16 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       },
     ],
   ],
+  "esStyles": [
+    [
+      "cdn://static/css/app.d0ad44d05f82db5f.css",
+      {
+        "fallback": "/pro/static/static/css/app.d0ad44d05f82db5f.css",
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
   "scripts": [
     [
       "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
@@ -114,16 +125,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       },
     ],
   ],
-  "styles": [
-    [
-      "cdn://static/css/app.d0ad44d05f82db5f.css",
-      {
-        "fallback": "/pro/static/static/css/app.d0ad44d05f82db5f.css",
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
+  "styles": [],
 }
 `;
 
@@ -152,6 +154,15 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       },
     ],
   ],
+  "esStyles": [
+    [
+      "/static/css/app.d0ad44d05f82db5f.css",
+      {
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
   "scripts": [
     [
       "/static/js/app.client.8dc14fd2c9e52eef.js",
@@ -175,15 +186,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       },
     ],
   ],
-  "styles": [
-    [
-      "/static/css/app.d0ad44d05f82db5f.css",
-      {
-        "preload": true,
-        "rel": "stylesheet",
-      },
-    ],
-  ],
+  "styles": [],
 }
 `;
 
@@ -212,8 +215,7 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
       },
     ],
   ],
-  "scripts": [],
-  "styles": [
+  "esStyles": [
     [
       "/static/css/app.d0ad44d05f82db5f.css",
       {
@@ -222,6 +224,8 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
       },
     ],
   ],
+  "scripts": [],
+  "styles": [],
 }
 `;
 

@@ -22,7 +22,7 @@ jest.mock('fs', () => {
           return JSON.stringify(manifestMock);
         }
 
-        return 'runner#{resources}';
+        return 'runner#{scriptResources}';
       },
     }),
   };

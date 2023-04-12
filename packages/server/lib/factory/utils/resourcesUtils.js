@@ -117,13 +117,17 @@ function _prepareSources(manifest, language) {
     name.includes(`locale/${language}.js`);
 
   return {
-    styles: buildResources('client.es', cssFilter, {
+    styles: buildResources('client', cssFilter, {
       rel: 'stylesheet',
       preload: true,
     }),
     scripts: buildResources('client', jsFilter, {
       async: true,
       crossorigin: 'anonymous',
+    }),
+    esStyles: buildResources('client.es', cssFilter, {
+      rel: 'stylesheet',
+      preload: true,
     }),
     esScripts: buildResources('client.es', jsFilter, {
       async: true,

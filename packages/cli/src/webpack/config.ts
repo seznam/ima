@@ -44,7 +44,15 @@ export default async (
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isServer, name, processCss } = ctx;
+  const {
+    rootDir,
+    isServer,
+    isClientES,
+    isClient,
+    name,
+    processCss,
+    outputFolders,
+  } = ctx;
 
   // Define helper variables derived from context
   const useTypescript = fs.existsSync(path.join(rootDir, './tsconfig.json'));
@@ -52,9 +60,8 @@ export default async (
   const useSourceMaps = !!imaConfig.sourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
-  const outputDir = path.join(rootDir, 'build');
   const appDir = path.join(rootDir, 'app');
-  const useHMR = ctx.command === 'dev' && ctx.name === 'client.es';
+  const useHMR = ctx.command === 'dev' && isClientES;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
   const mode = ctx.environment === 'production' ? 'production' : 'development';
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
@@ -65,7 +72,6 @@ export default async (
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
-  const cssFolder = ctx.name === 'client.es' ? 'css' : 'css-legacy';
 
   // es2018 targets (taken from 'browserslist-generator')
   const targets = [
@@ -95,7 +101,7 @@ export default async (
     return imaConfig.swc(
       {
         // We use core-js only for lower ES version build
-        ...(ctx.name === 'client' && {
+        ...(isClient && {
           env: {
             targets,
             mode: 'usage',
@@ -109,7 +115,7 @@ export default async (
           type: 'es6',
         },
         jsc: {
-          target: ctx.name === 'client' ? 'es2018' : 'es2022',
+          target: isClient ? 'es2018' : 'es2022',
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -172,9 +178,7 @@ export default async (
         : []),
       {
         loader: require.resolve('postcss-loader'),
-        options: await (ctx.name === 'client.es'
-          ? imaConfig.postcss
-          : imaConfig.postcssLegacy)(
+        options: await imaConfig.postcss(
           {
             postcssOptions: {
               config: false,
@@ -183,10 +187,7 @@ export default async (
                 [
                   'postcss-preset-env',
                   {
-                    browsers:
-                      ctx.name === 'client.es'
-                        ? imaConfig.cssBrowsersTarget
-                        : imaConfig.cssBrowsersTargetLegacy,
+                    browsers: imaConfig.cssBrowsersTarget,
                     autoprefixer: {
                       flexbox: 'no-2009',
                       grid: 'autoplace',
@@ -231,7 +232,7 @@ export default async (
     dependencies: [],
     target: isServer
       ? 'node18'
-      : ctx.name === 'client.es'
+      : isClientES
       ? ['web', 'es2022']
       : ['web', 'es2018'],
     mode,
@@ -265,50 +266,38 @@ export default async (
       ...getLanguageEntryPoints(imaConfig.languages, rootDir, useHMR),
     },
     output: {
-      path: outputDir,
+      path: path.join(rootDir, 'build'),
       pathinfo: isDevEnv,
       hashFunction: 'xxhash64',
-      assetModuleFilename: 'static/media/[name].[hash][ext]',
+      assetModuleFilename: `${outputFolders.media}/[name].[hash][ext]`,
       filename: ({ chunk }) => {
-        // Put server-side JS into server directory
-        if (isServer) {
-          return `server/${
-            chunk?.name === name ? 'app.server' : '[name]'
-          }.[contenthash].js`;
-        }
-
-        // Separate client chunks into es and non-es folders
-        const baseFolder = `static/${
-          ctx.name === 'client.es' ? 'js.es' : 'js'
-        }`;
         const fileNameParts = [
-          chunk?.name === name && isDevEnv && 'app.client',
-          chunk?.name === name && !isDevEnv && 'app.bundle',
-          chunk?.name !== name && '[name]',
+          chunk?.name === name
+            ? isServer
+              ? 'app.server'
+              : isDevEnv
+              ? 'app.client'
+              : 'app.bundle'
+            : '[name]',
           '[contenthash]',
           'js',
         ].filter(Boolean);
 
-        return `${baseFolder}/${fileNameParts.join('.')}`;
+        return `${outputFolders.js}/${fileNameParts.join('.')}`;
       },
-      chunkFilename: () =>
-        isServer
-          ? `server/chunk.[id].[contenthash].js`
-          : `static/${
-              ctx.name === 'client.es' ? 'js.es' : 'js'
-            }/chunk.[id].[contenthash].js`,
+      chunkFilename: () => `${outputFolders.js}/chunk.[id].[contenthash].js`,
       cssFilename: ({ chunk }) =>
-        `static/${cssFolder}/${
+        `${outputFolders.css}/${
           chunk?.name === name ? 'app' : '[name]'
         }.[contenthash].css`,
-      cssChunkFilename: `static/${cssFolder}/chunk.[id].[contenthash].css`,
+      cssChunkFilename: `${outputFolders.css}/chunk.[id].[contenthash].css`,
       publicPath: imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the build folder.
        */
-      hotUpdateChunkFilename: 'static/hot/[id].[fullhash].hot-update.js',
-      hotUpdateMainFilename: 'static/hot/[runtime].[fullhash].hot-update.json',
+      hotUpdateChunkFilename: `${outputFolders.hot}/[id].[fullhash].hot-update.js`,
+      hotUpdateMainFilename: `${outputFolders.hot}/[runtime].[fullhash].hot-update.json`,
       ...(isServer && { library: { type: 'commonjs2' } }),
     },
     cache: {
@@ -335,7 +324,7 @@ export default async (
         new TerserPlugin({
           minify: TerserPlugin.swcMinify,
           terserOptions: {
-            ecma: isServer || ctx.name === 'client.es' ? 2020 : 2018,
+            ecma: isServer || isClientES ? 2020 : 2018,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -463,7 +452,7 @@ export default async (
             /**
              * Run vendor paths through swc for lower client versions
              */
-            ctx.name === 'client' && {
+            isClient && {
               test: /\.(js|mjs|cjs)$/,
               include: [
                 /@ima/,
@@ -586,20 +575,20 @@ export default async (
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
-                  `static/${cssFolder}/${
+                  `${outputFolders.css}/${
                     chunk?.name === name ? 'app' : '[name]'
                   }${ctx.command === 'dev' ? '' : '.[contenthash]'}.css`,
                 ignoreOrder: true,
-                chunkFilename: `static/${cssFolder}/[id].[contenthash].css`,
+                chunkFilename: `${outputFolders.css}/[id].[contenthash].css`,
               }),
 
             // Copies essential assets to static directory
-            ctx.name === 'client.es' &&
+            isClientES &&
               new CopyPlugin({
                 patterns: [
                   {
                     from: 'app/public',
-                    to: 'static/public',
+                    to: outputFolders.public,
                     noErrorOnMissing: true,
                   },
                 ],
@@ -609,7 +598,7 @@ export default async (
              * TS type checking plugin (since swc doesn't do type checking, we want
              * to show errors at least during build so it fails before going to production.
              */
-            ctx.name === 'client.es' &&
+            isClientES &&
               useTypescript &&
               new ForkTsCheckerWebpackPlugin({
                 async: ctx.command === 'dev', // be async only in watch mode,

@@ -6,12 +6,79 @@ import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
-import { Configuration } from 'webpack';
+import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 
 import webpackConfig from './config';
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
 
 const IMA_CONF_FILENAME = 'ima.config.js';
+
+/**
+ * Helper for finding rules with given loader in webpack config.
+ */
+export function findRules(
+  config: Configuration,
+  testString: string,
+  loader?: string
+): RuleSetRule[] | RuleSetUseItem[] {
+  const foundRules = [];
+  const rules = config.module?.rules;
+
+  if (!rules) {
+    return [];
+  }
+
+  (function recurseFindRules(rule: RuleSetRule | RuleSetRule[]): void {
+    if (Array.isArray(rule)) {
+      for (const r of rule) {
+        recurseFindRules(r);
+      }
+
+      return;
+    }
+
+    if (rule.oneOf) {
+      return recurseFindRules(rule.oneOf);
+    }
+
+    if (
+      rule.test &&
+      ((typeof rule.test === 'function' && rule.test(testString)) ||
+        (rule.test instanceof RegExp && rule.test.test(testString)) ||
+        (typeof rule.test === 'string' && rule.test === testString))
+    ) {
+      foundRules.push(rule);
+    }
+  })(rules as RuleSetRule[]);
+
+  if (!loader) {
+    return foundRules;
+  }
+
+  return foundRules.reduce<RuleSetUseItem[]>((acc, cur) => {
+    if (
+      (cur.loader && cur.loader.includes(loader)) ||
+      (typeof cur.use === 'string' && cur.use.includes(loader))
+    ) {
+      acc.push(cur);
+    }
+
+    cur;
+
+    if (Array.isArray(cur.use)) {
+      cur.use.forEach(r => {
+        if (
+          (typeof r === 'string' && r.includes(loader)) ||
+          (typeof r === 'object' && r.loader && r.loader.includes(loader))
+        ) {
+          acc.push(r);
+        }
+      });
+    }
+
+    return acc;
+  }, []);
+}
 
 /**
  * Loads application IMA.js environment from server/config/environment.js
@@ -174,9 +241,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     swc: async config => config,
     swcVendor: async config => config,
     postcss: async config => config,
-    postcssLegacy: async config => config,
     cssBrowsersTarget: '>0.5%, not dead, not op_mini all, not ie 11',
-    cssBrowsersTargetLegacy: '>0.1%, ie 11',
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
@@ -307,12 +372,29 @@ async function createWebpackConfig(
     { trackTime: true }
   );
 
+  // Define common output folders
+  const outputFolders: Omit<
+    ImaConfigurationContext['outputFolders'],
+    'js' | 'css'
+  > = {
+    hot: 'static/hot',
+    public: 'static/public',
+    media: 'static/media',
+  };
+
   // Create configuration contexts (server is always present)
-  const contexts: ImaConfigurationContext[] = [
+  let contexts: ImaConfigurationContext[] = [
     {
       name: 'server',
       isServer: true,
+      isClient: false,
+      isClientES: false,
       processCss: false,
+      outputFolders: {
+        ...outputFolders,
+        js: 'server',
+        css: 'static/css',
+      },
       ...args,
     },
     // Process non-es version in build and legacy contexts
@@ -320,16 +402,41 @@ async function createWebpackConfig(
       !imaConfig.disableLegacyBuild && {
         name: 'client',
         isServer: false,
-        processCss: imaConfig.enableLegacyCss,
+        isClient: true,
+        isClientES: false,
+        processCss: false,
+        outputFolders: {
+          ...outputFolders,
+          js: 'static/js',
+          css: 'static/css',
+        },
         ...args,
       },
     {
       name: 'client.es',
       isServer: false,
+      isClient: false,
+      isClientES: true,
       processCss: true,
+      outputFolders: {
+        ...outputFolders,
+        js: 'static/js.es',
+        css: 'static/css',
+      },
       ...args,
     },
   ].filter(Boolean) as ImaConfigurationContext[];
+
+  // Call configuration overrides on plugins
+  if (Array.isArray(imaConfig.plugins)) {
+    for (const plugin of imaConfig.plugins) {
+      if (!plugin.prepareConfigurations) {
+        continue;
+      }
+
+      contexts = await plugin.prepareConfigurations(contexts, imaConfig, args);
+    }
+  }
 
   /**
    * Process configuration contexts with optional webpack function extensions
