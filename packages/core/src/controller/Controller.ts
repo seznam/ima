@@ -1,15 +1,33 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
+import { Settings } from '../boot';
+import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
+import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { Dependencies } from '../oc/ObjectContainer';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IController {}
+type Intersection<A, B> = A & B extends infer U
+  ? { [P in keyof U]: Awaited<U[P]> }
+  : never;
+
+type Matching<T, Promise> = {
+  [K in keyof T]: T[K] extends Promise ? K : never;
+}[keyof T];
+
+type NonMatching<T, Promise> = {
+  [K in keyof T]: T[K] extends Promise ? never : K;
+}[keyof T];
+
+export type CreateLoadedResources<T> = Intersection<
+  Partial<Pick<T, Matching<T, Promise<any>>>>,
+  Required<Pick<T, NonMatching<T, Promise<any>>>>
+>;
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -17,15 +35,21 @@ export interface IController {}
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  */
-export abstract class Controller implements IController {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class Controller<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> {
+  static $name?: string;
+  static $dependencies: Dependencies;
+  static $extensions?: Dependencies<Extension>;
+
   [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
    */
-  init(): void {
+  init(): Promise<void> | void {
     return;
   }
 
@@ -42,7 +66,7 @@ export abstract class Controller implements IController {
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
    */
-  destroy(): void {
+  destroy(): Promise<void> | void {
     return;
   }
 
@@ -56,7 +80,7 @@ export abstract class Controller implements IController {
    * method. The controller may start receiving event bus event after this
    * method completes.
    */
-  activate(): void {
+  activate(): Promise<void> | void {
     return;
   }
 
@@ -71,7 +95,7 @@ export abstract class Controller implements IController {
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
    */
-  deactivate(): void {
+  deactivate(): Promise<void> | void {
     return;
   }
 
@@ -110,8 +134,8 @@ export abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  load(): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -136,10 +160,8 @@ export abstract class Controller implements IController {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(
-    prevParams: UnknownParameters
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -162,7 +184,7 @@ export abstract class Controller implements IController {
    * @param statePatch Patch of the controller's state to
    *        apply.
    */
-  setState(statePatch: UnknownParameters): void {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     return;
   }
 
@@ -171,8 +193,8 @@ export abstract class Controller implements IController {
    *
    * @return The current state of this controller.
    */
-  getState(): UnknownParameters {
-    return {};
+  getState(): S {
+    return {} as S;
   }
 
   /**
@@ -207,10 +229,27 @@ export abstract class Controller implements IController {
    * invoked.
    */
   addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
+      | InstanceType<typeof Extension>,
+    extensionInstance?: InstanceType<typeof Extension>
   ): void {
     return;
+  }
+
+  /**
+   * Returns extension instance defined by it's class constructor
+   * from controller's extension intance map.
+   */
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
+    throw new GenericError(
+      'The ima.core.controller.Controller.getExtension method is abstract ' +
+        'and must be overridden.'
+    );
   }
 
   /**
@@ -238,11 +277,11 @@ export abstract class Controller implements IController {
    *        current application environment.
    */
   setMetaParams(
-    loadedResources: UnknownParameters,
+    loadedResources: CreateLoadedResources<S>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: UnknownParameters
+    settings: Settings
   ): void {
     return;
   }
@@ -253,7 +292,7 @@ export abstract class Controller implements IController {
    *
    * @param params The current route parameters.
    */
-  setRouteParams(params: UnknownParameters): void {
+  setRouteParams(params: R = {} as R): void {
     return;
   }
 
@@ -262,8 +301,8 @@ export abstract class Controller implements IController {
    *
    * @return The current route parameters.
    */
-  getRouteParams(): UnknownParameters {
-    return {};
+  getRouteParams(): R {
+    return {} as R;
   }
 
   /**
@@ -276,7 +315,7 @@ export abstract class Controller implements IController {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager?: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
     return;
   }
 

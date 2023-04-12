@@ -1,9 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
+import { RendererEvents } from './RendererEvents';
+import { RendererTypes } from './RendererTypes';
 import { Controller } from '../../controller/Controller';
 import { RouteOptions } from '../../router/Router';
-import { UnknownParameters, UnknownPromiseParameters } from '../../types';
+import {
+  AnyParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../../types';
 import { PageData } from '../PageTypes';
+
+export interface PageRendererDispatcherEvents {
+  [RendererEvents.ERROR]: { message: string };
+  [RendererEvents.HYDRATE_ERROR]: {
+    error: Error;
+    serverNode: Element;
+    clientNode: Element;
+  };
+  [RendererEvents.MOUNTED]: {
+    type: RendererTypes.HYDRATE | RendererTypes.RENDER;
+  };
+  [RendererEvents.UNMOUNTED]: { type: RendererTypes.UNMOUNT };
+  [RendererEvents.UPDATED]: {
+    pageState: AnyParameters;
+  };
+}
 
 /**
  * The page renderer is a utility for rendering the page at either the

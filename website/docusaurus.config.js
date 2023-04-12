@@ -63,7 +63,7 @@ const config = {
           showLastUpdateAuthor: true,
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/seznam/ima/tree/docusaurus/docs',
+          editUrl: 'https://github.com/seznam/ima/tree/master/docs',
           remarkPlugins: [
             [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
           ],

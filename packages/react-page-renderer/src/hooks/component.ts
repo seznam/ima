@@ -1,5 +1,5 @@
 import type { Dictionary, Router, EventBus, Utils } from '@ima/core';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { usePageContext } from './pageContext';
 import type { defaultCssClasses } from '../componentHelpers';
@@ -7,11 +7,33 @@ import type { defaultCssClasses } from '../componentHelpers';
 export interface useComponentType {
   utils: Utils;
   cssClasses: typeof defaultCssClasses;
-  localize: InstanceType<typeof Dictionary>['get'];
-  link: InstanceType<typeof Router>['link'];
-  fire: InstanceType<typeof EventBus>['fire'];
-  listen: InstanceType<typeof EventBus>['listen'];
-  unlisten: InstanceType<typeof EventBus>['unlisten'];
+  localize: Dictionary['get'];
+  link: Router['link'];
+  fire: EventBus['fire'];
+  listen: EventBus['listen'];
+  unlisten: EventBus['unlisten'];
+}
+
+/**
+ * "Constructor" like hook, which makes sure, that provided callback
+ * is called only once during component's lifecycle.
+ *
+ * @example
+ * useOnce(() => {
+ * 	oneTimeAction();
+ * });
+ *
+ * @param {Function} callback
+ */
+export function useOnce(callback: () => void): void {
+  const called = useRef(false);
+
+  if (called.current) {
+    return;
+  }
+
+  callback && callback();
+  called.current = true;
 }
 
 /**

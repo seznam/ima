@@ -12,3 +12,4 @@ Added types to ima react hooks.
 `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
 `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
 All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+`Route` alias export has been replaced with `StaticRoute` export.

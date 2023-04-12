@@ -1,11 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { EventBusEventHandler } from '../event/EventBus';
-import { PageStateManager } from '../page/state/PageStateManager';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IExtension {}
+import { Dependencies } from '../oc/ObjectContainer';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -22,15 +18,20 @@ export interface IExtension {}
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  */
-export abstract class Extension implements IExtension {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class Extension<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> {
+  static $name?: string;
+  static $dependencies: Dependencies;
+
   [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
    */
-  init(): Promise<undefined> | void {
+  init(): Promise<void> | void {
     return;
   }
 
@@ -47,7 +48,7 @@ export abstract class Extension implements IExtension {
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
    */
-  destroy(): Promise<undefined> | void {
+  destroy(): Promise<void> | void {
     return;
   }
 
@@ -61,7 +62,7 @@ export abstract class Extension implements IExtension {
    * method. The extension may start receiving event bus event after this
    * method completes.
    */
-  activate(): Promise<undefined> | void {
+  activate(): Promise<void> | void {
     return;
   }
 
@@ -76,7 +77,7 @@ export abstract class Extension implements IExtension {
    * The extension should deregister listeners registered and release all
    * resources obtained in the {@link Extension#activate} method.
    */
-  deactivate(): Promise<undefined> | void {
+  deactivate(): Promise<void> | void {
     return;
   }
 
@@ -105,8 +106,8 @@ export abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  load(): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -131,10 +132,8 @@ export abstract class Extension implements IExtension {
    *         requires are ready. The resolved values will be pushed to the
    *         controller's state.
    */
-  update(
-    prevParams: UnknownParameters
-  ): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
@@ -150,7 +149,7 @@ export abstract class Extension implements IExtension {
    *
    * @param statePatch Patch of the controller's state to apply.
    */
-  setState(statePatch: UnknownParameters) {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     return;
   }
 
@@ -159,8 +158,8 @@ export abstract class Extension implements IExtension {
    *
    * @return The current state of the controller.
    */
-  getState(): UnknownParameters {
-    return {};
+  getState(): S {
+    return {} as S;
   }
 
   /**
@@ -170,7 +169,7 @@ export abstract class Extension implements IExtension {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     return;
   }
 
@@ -178,14 +177,14 @@ export abstract class Extension implements IExtension {
    * Applies queued state patches to the controller state. All patches are squashed
    * and applied with one `setState` call.
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     return;
   }
 
   /**
    * Cancels ongoing state transaction. Uncommitted state changes are lost.
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     return;
   }
 
@@ -196,7 +195,7 @@ export abstract class Extension implements IExtension {
    *
    * @param partialStatePatch Patch of the controller's state to apply.
    */
-  setPartialState(partialStatePatch: UnknownParameters) {
+  setPartialState(partialStatePatch: S): void {
     return;
   }
 
@@ -205,14 +204,14 @@ export abstract class Extension implements IExtension {
    *
    * @return The current partial state of the extension.
    */
-  getPartialState(): UnknownParameters {
+  getPartialState(): Partial<S> {
     return {};
   }
 
   /**
    * Clears the current partial state of the extension and sets it value to empty object.
    */
-  clearPartialState() {
+  clearPartialState(): void {
     return;
   }
 
@@ -222,21 +221,21 @@ export abstract class Extension implements IExtension {
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager?: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager): void {
     return;
   }
 
   /**
    * Enables using PageStateManager for getting state.
    */
-  switchToStateManager() {
+  switchToStateManager(): void {
     return;
   }
 
   /**
    * Disables using PageStateManager for getting state.
    */
-  switchToPartialState() {
+  switchToPartialState(): void {
     return;
   }
 
@@ -246,7 +245,7 @@ export abstract class Extension implements IExtension {
    *
    * @param params The current route parameters.
    */
-  setRouteParams(params: UnknownParameters) {
+  setRouteParams(params: R): void {
     return;
   }
 
@@ -255,8 +254,8 @@ export abstract class Extension implements IExtension {
    *
    * @return The current route parameters.
    */
-  getRouteParams(): UnknownParameters {
-    return {};
+  getRouteParams(): R {
+    return {} as R;
   }
 
   /**
@@ -266,7 +265,7 @@ export abstract class Extension implements IExtension {
    * @return The names of the state fields that may be manipulated
    *         by this extension.
    */
-  getAllowedStateKeys(): string[] {
+  getAllowedStateKeys(): (keyof S)[] {
     return [];
   }
 }

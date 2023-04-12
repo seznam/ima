@@ -1,5 +1,5 @@
 import { Storage } from './Storage';
-import { Dependencies } from '../ObjectContainer';
+import { Dependencies } from '../oc/ObjectContainer';
 
 /**
  * Implementation of the `link Storage` interface that relies on the

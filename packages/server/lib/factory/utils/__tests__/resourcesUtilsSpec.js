@@ -37,8 +37,8 @@ describe('resourcesUtils', () => {
     });
 
     it('should return link stylesheet tags for string items', () => {
-      expect(renderStyles(['/static/app.css'])).toBe(
-        '<link rel="stylesheet" href="/static/app.css" />'
+      expect(renderStyles(['/static/app.css'])).toMatchInlineSnapshot(
+        `"<link as="style" href="/static/app.css" rel="preload" type="text/css" /><link rel="stylesheet" href="/static/app.css" />"`
       );
 
       expect(
@@ -47,23 +47,16 @@ describe('resourcesUtils', () => {
           '/static/app2.css',
           '/static/app3.css',
         ])
-      ).toBe(
-        '<link rel="stylesheet" href="/static/app1.css" />' +
-          '<link rel="stylesheet" href="/static/app2.css" />' +
-          '<link rel="stylesheet" href="/static/app3.css" />'
+      ).toMatchInlineSnapshot(
+        `"<link as="style" href="/static/app1.css" rel="preload" type="text/css" /><link as="style" href="/static/app2.css" rel="preload" type="text/css" /><link as="style" href="/static/app3.css" rel="preload" type="text/css" /><link rel="stylesheet" href="/static/app1.css" /><link rel="stylesheet" href="/static/app2.css" /><link rel="stylesheet" href="/static/app3.css" />"`
       );
     });
 
     it('should return link tag with custom attributes', () => {
       expect(
-        renderStyles([
-          [
-            '/static/app.css',
-            { type: 'text/css', rel: 'preload', as: 'style' },
-          ],
-        ])
-      ).toBe(
-        '<link href="/static/app.css" rel="preload" type="text/css" as="style" />'
+        renderStyles([['/static/app.css', { 'data-id': 'custom-id' }]])
+      ).toMatchInlineSnapshot(
+        `"<link as="style" href="/static/app.css" rel="preload" type="text/css" /><link href="/static/app.css" rel="stylesheet" data-id="custom-id" />"`
       );
     });
 
@@ -75,8 +68,24 @@ describe('resourcesUtils', () => {
             { rel: 'stylesheet', fallback: '/static/fallback.css' },
           ],
         ])
-      ).toBe(
-        `<link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />`
+      ).toMatchInlineSnapshot(
+        `"<link as="style" href="/static/app.css" rel="preload" type="text/css" /><link href="/static/app.css" rel="stylesheet" onerror="this.onerror=null;this.href='/static/fallback.css';" />"`
+      );
+    });
+
+    it('should disable link preload', () => {
+      expect(
+        renderStyles([
+          [
+            '/static/app.css',
+            {
+              rel: 'stylesheet',
+              preload: false,
+            },
+          ],
+        ])
+      ).toMatchInlineSnapshot(
+        `"<link href="/static/app.css" rel="stylesheet" />"`
       );
     });
   });

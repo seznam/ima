@@ -5,6 +5,7 @@ import type {
   UnknownParameters,
   UnknownPromiseParameters,
   RouteOptions,
+  Settings,
 } from '@ima/core';
 import { ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
 import * as Helpers from '@ima/helpers';
@@ -13,7 +14,6 @@ import * as reactDOM from 'react-dom/server';
 
 import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
 import { PageRendererFactory } from './PageRendererFactory';
-import { Settings } from '../types';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML

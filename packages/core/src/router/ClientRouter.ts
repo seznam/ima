@@ -8,7 +8,9 @@ import { RouteFactory } from './RouteFactory';
 import { RouteAction, RouteLocals, RouteOptions } from './Router';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
+import { Dependencies } from '../oc/ObjectContainer';
 import { PageManager } from '../page/manager/PageManager';
+import { RendererEvents } from '../page/renderer/RendererEvents';
 import { StringParameters, UnknownParameters } from '../types';
 import { Window } from '../window/Window';
 
@@ -44,12 +46,22 @@ export class ClientRouter extends AbstractRouter {
   protected _boundHandlePopState = (event: Event) =>
     this._handlePopState(event as PopStateEvent);
 
-  static get $dependencies() {
+  /**
+   * Mounted promise to prevent routing until app is fully mounted.
+   */
+  protected _mountedPromise: {
+    promise: Promise<void>;
+    resolve: () => void;
+    reject: () => void;
+  } | null = null;
+
+  static get $dependencies(): Dependencies {
     return [
       PageManager,
       RouteFactory,
       Dispatcher,
       Window,
+      // @ts-expect-error `FIXME`
       '?$Settings.$Router.middlewareTimeout',
     ];
   }
@@ -90,6 +102,7 @@ export class ClientRouter extends AbstractRouter {
   }) {
     super.init(config);
     this._host = config.$Host || this._window.getHost();
+    this._dispatcher.listen(RendererEvents.MOUNTED, this.#handleMounted, this);
 
     return this;
   }
@@ -438,6 +451,15 @@ export class ClientRouter extends AbstractRouter {
    */
   _isSameDomain(url = '') {
     return new RegExp('^' + this.getBaseUrl()).test(url);
+  }
+
+  #handleMounted() {
+    this._mountedPromise?.resolve();
+    this._dispatcher.unlisten(
+      RendererEvents.MOUNTED,
+      this.#handleMounted,
+      this
+    );
   }
 }
 // @endif

@@ -1,0 +1,66 @@
+/**
+ * Base styles, usually global page styles which are included in main.js
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#page {
+  font-size: 14px;
+
+  @media only screen and (min-width: 680px) {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  color: @color-dark;
+}
+
+a {
+  border-bottom: 1px solid @color-red;
+
+  font-weight: 700;
+  color: @color-dark;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  &:hover {
+    border-width: 2px;
+
+    opacity: 0.65;
+  }
+
+  &:active {
+    color: @color-dark;
+
+    opacity: 1;
+  }
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+code {
+  border-radius: 5px;
+  padding: 4px;
+
+  background-color: @color-light;
+}
+
+strong {
+  font-weight: 700;
+}

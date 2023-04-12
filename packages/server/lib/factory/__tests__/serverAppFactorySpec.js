@@ -3,7 +3,11 @@ const {
   GenericError,
   ServerRouter,
   Cache,
+  Dispatcher,
+  PageManager,
   PageStateManager,
+  PageRenderer,
+  RouteNames,
 } = require('@ima/core');
 const { toMockedInstance } = require('to-mock');
 
@@ -67,7 +71,10 @@ describe('Server App Factory', () => {
 
   let router = null;
   let cache = null;
+  let dispatcher = null;
+  let pageManager = null;
   let pageStateManager = null;
+  let pageRenderer = null;
   let emitter = new Emitter();
   let performance = createMonitoring();
 
@@ -75,6 +82,9 @@ describe('Server App Factory', () => {
     logger = console;
     environment = {
       $Debug: true,
+      $Language: {
+        '//*:*': 'en',
+      },
       $Server: {
         concurrency: 1,
         staticConcurrency: 100,
@@ -113,7 +123,7 @@ describe('Server App Factory', () => {
         return {
           route: {
             getName() {
-              return 'notFound';
+              return RouteNames.NOT_FOUND;
             },
           },
         };
@@ -126,9 +136,13 @@ describe('Server App Factory', () => {
         .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
     });
 
+    dispatcher = toMockedInstance(Dispatcher);
+
+    pageManager = toMockedInstance(PageManager);
     pageStateManager = toMockedInstance(PageStateManager, {
       getState: jest.fn().mockReturnValue({ page: 'state' }),
     });
+    pageRenderer = toMockedInstance(PageRenderer);
 
     appFactory = jest.fn(() => {
       return {
@@ -170,6 +184,18 @@ describe('Server App Factory', () => {
                   if (name === '$PageStateManager') {
                     return pageStateManager;
                   }
+
+                  if (name === '$PageRenderer') {
+                    return pageRenderer;
+                  }
+
+                  if (name === '$PageManager') {
+                    return pageManager;
+                  }
+
+                  if (name === '$Dispatcher') {
+                    return dispatcher;
+                  }
                 },
                 clear() {},
               },
@@ -188,6 +214,7 @@ describe('Server App Factory', () => {
       get() {
         return '';
       },
+      originalUrl: '/',
     };
     RES = {
       status: jest.fn(),
@@ -316,6 +343,26 @@ describe('Server App Factory', () => {
       expect(response.SPA).toBeFalsy();
       expect(response.static).toBeTruthy();
       expect(response.status).toBe(500);
+      expect(response.content).toBe('read file content');
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 500 static page for ima app route ERROR which exceeds static thresholds', async () => {
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return RouteNames.ERROR;
+          },
+        },
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(500);
+      expect(response.error).toBeInstanceOf(Error);
       expect(response.content).toBe('read file content');
       expect(response.cache).toBeFalsy();
     });

@@ -25,7 +25,7 @@ function createWebpackConfig(callback) {
       type: 'filesystem',
       store: 'pack',
     },
-    devtool: ctx.isProduction ? 'source-map' : 'eval-cheap-source-map',
+    devtool: ctx.isProduction ? 'source-map' : 'cheap-module-source-map',
     module: {
       rules: [
         {

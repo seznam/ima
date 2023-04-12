@@ -1,11 +1,11 @@
 import {
   AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
   LOOSE_SLASHES_REGEXP,
-  RouteParamValue,
   RouteParams,
 } from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
 import { StringParameters } from '../types';
 
 /**
@@ -81,7 +81,7 @@ const PARAMS_REGEXP_OPT =
  * router's configuration using string representation of the path expression
  * with special param fields identified by `:paramName` prefix.
  */
-export class StaticRoute extends AbstractRoute {
+export class StaticRoute extends AbstractRoute<string> {
   protected _trimmedPathExpression: string;
   protected _parameterNames: string[];
   protected _hasParameters: boolean;
@@ -97,8 +97,8 @@ export class StaticRoute extends AbstractRoute {
   constructor(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ) {
     super(name, pathExpression, controller, view, options);
@@ -106,7 +106,7 @@ export class StaticRoute extends AbstractRoute {
     /**
      * The path expression with the trailing slashes trimmed.
      */
-    this._trimmedPathExpression = AbstractRoute.getTrimmedPath(pathExpression);
+    this._trimmedPathExpression = this.getTrimmedPath(pathExpression);
 
     /**
      * The names of the parameters in this route.
@@ -131,37 +131,42 @@ export class StaticRoute extends AbstractRoute {
    */
   toPath(params: RouteParams = {}) {
     let path = this._pathExpression;
-    const queryPairs = [];
+    const queryParams: RouteParams = {};
 
     for (const paramName of Object.keys(params)) {
-      if (this._isRequiredParamInPath(path as string, paramName)) {
+      if (this._isRequiredParamInPath(path, paramName)) {
         path = this._substituteRequiredParamInPath(
-          path as string,
+          path,
           paramName,
-          params[paramName] as RouteParamValue
+          params[paramName] as string
         );
-      } else if (this._isOptionalParamInPath(path as string, paramName)) {
+      } else if (this._isOptionalParamInPath(path, paramName)) {
         path = this._substituteOptionalParamInPath(
-          path as string,
+          path,
           paramName,
-          params[paramName] as RouteParamValue
+          params[paramName] as string
         );
       } else {
-        queryPairs.push([paramName, params[paramName]]);
+        queryParams[paramName] = params[paramName];
       }
     }
 
-    path = this._cleanUnusedOptionalParams(path as string);
-    path += AbstractRoute.pairsToQuery(queryPairs);
+    path = this._cleanUnusedOptionalParams(path);
 
-    return AbstractRoute.getTrimmedPath(path);
+    if (Object.keys(queryParams).length) {
+      path += `?${new URLSearchParams(
+        queryParams as unknown as string[][]
+      ).toString()}`;
+    }
+
+    return this.getTrimmedPath(path);
   }
 
   /**
    * @inheritDoc
    */
   matches(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path);
+    const trimmedPath = this.getTrimmedPath(path);
 
     return this._matcher.test(trimmedPath);
   }
@@ -169,12 +174,14 @@ export class StaticRoute extends AbstractRoute {
   /**
    * @inheritDoc
    */
-  extractParameters(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path);
+  extractParameters(path: string, baseUrl: string) {
+    const trimmedPath = this.getTrimmedPath(path);
     const parameters = this._getParameters(trimmedPath);
-    const query = AbstractRoute.getQuery(trimmedPath);
 
-    return Object.assign({}, parameters, query);
+    return {
+      ...parameters,
+      ...Object.fromEntries(new URL(`${baseUrl}${path}`).searchParams),
+    };
   }
 
   /**
@@ -183,7 +190,7 @@ export class StaticRoute extends AbstractRoute {
   _substituteRequiredParamInPath(
     path: string,
     paramName: string,
-    paramValue: RouteParamValue
+    paramValue: string
   ) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
@@ -197,7 +204,7 @@ export class StaticRoute extends AbstractRoute {
   _substituteOptionalParamInPath(
     path: string,
     paramName: string,
-    paramValue: RouteParamValue
+    paramValue: string
   ) {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(
@@ -496,7 +503,6 @@ export class StaticRoute extends AbstractRoute {
    */
   _extractParameters(parameterValues: string[]) {
     const parameters: StringParameters = {};
-
     const parametersCount = this._parameterNames.length;
 
     // Cycle for names and values from last to 0
@@ -508,8 +514,15 @@ export class StaticRoute extends AbstractRoute {
       const currentCoreName = matchesName ? matchesName[0] : '';
 
       if (currentCoreName) {
-        const value = AbstractRoute.decodeURIParameter(rawValue) as string;
-        parameters[currentCoreName] = value;
+        let value: string;
+
+        try {
+          value = decodeURIComponent(rawValue);
+        } catch {
+          value = '';
+        }
+
+        parameters[currentCoreName] = rawValue ? value : rawValue;
       }
     }
 

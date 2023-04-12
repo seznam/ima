@@ -1,15 +1,15 @@
 import { spawnSync } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import chalk from 'chalk';
-import fs from 'fs-extra';
+import fsExtra from 'fs-extra/esm';
 
-import { info, error } from './utils.js';
+import { info, error, mergePkgJson } from './utils.js';
 
-(async () => {
+export async function create(projDir, useTS) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const projDir = process.argv[2];
 
   info(
     `Creating new IMA.js application inside the ${chalk.magenta(
@@ -20,12 +20,38 @@ import { info, error } from './utils.js';
 
   const projName = projDir.split(path.sep).pop();
   const appRoot = path.resolve(projDir.toString());
-  const tplRoot = path.join(__dirname, '../template');
+  const tplRoot = path.join(__dirname, '../template/common');
+  const tplTypeRoot = path.join(
+    __dirname,
+    `../template/${useTS ? 'ts' : 'js'}`
+  );
 
   if (!fs.existsSync(projDir)) {
     try {
-      info(`Creating basic directory structure...`);
-      fs.copySync(tplRoot, appRoot);
+      info(
+        `Creating basic directory structure${
+          useTS ? chalk.blue(' for TypeScript template') : ''
+        }...`
+      );
+
+      // Copy base "common" template
+      await fsExtra.copy(tplRoot, appRoot);
+
+      // Copy JS/TS specific files
+      await fsExtra.copy(tplTypeRoot, appRoot, {
+        overwrite: false,
+        filter: filePath =>
+          !filePath.includes('package.json') && !filePath.includes('.eslintrc'),
+      });
+
+      // Merge pkgJson files
+      await mergePkgJson(tplRoot, tplTypeRoot, appRoot);
+
+      // Copy eslintrc.js file
+      await fsExtra.copy(
+        path.join(tplTypeRoot, '.eslintrc.template.js'),
+        path.join(appRoot, '.eslintrc.js')
+      );
     } catch (err) {
       error(err.message);
       process.exit(1);
@@ -41,10 +67,10 @@ import { info, error } from './utils.js';
 
   // Overwrite package.json with new name
   const pkgJsonPath = path.join(appRoot, 'package.json');
-  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
+  const pkgJson = JSON.parse(await fs.promises.readFile(pkgJsonPath, 'utf8'));
 
   pkgJson.name = projName;
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
+  await fs.promises.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
   // Run npm install
   info(
@@ -89,4 +115,4 @@ We suggest that you start with:
   ${chalk.blue('cd')} ${projDir}
   ${chalk.blue('npm run dev')}
 `);
-})();
+}

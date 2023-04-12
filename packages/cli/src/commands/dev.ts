@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
@@ -15,7 +16,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
-import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
+import { ImaCliArgs, HandlerFn } from '../types';
 import { compileLanguages } from '../webpack/languages';
 import {
   cleanup,
@@ -31,7 +32,7 @@ import {
  * (all changes in server/ folder), to automatically restart the application
  * server in case any change is detected.
  */
-function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
+function startNodemon(args: ImaCliArgs, environment: Environment) {
   let serverHasStarted = false;
 
   nodemon({
@@ -56,15 +57,18 @@ function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
         args.open &&
         !serverHasStarted
       ) {
-        const port = environment.$Server.port;
         serverHasStarted = true;
 
+        const port = environment.$Server.port;
+        const openUrl =
+          args.openUrl ??
+          process.env.IMA_CLI_OPEN_URL ??
+          `http://localhost:${port}`;
+
         try {
-          open(`http://localhost:${port}`);
+          open(openUrl);
         } catch (error) {
-          logger.error(
-            `Could not open http://localhost:${port} inside a browser, ${error}`
-          );
+          logger.error(`Could not open ${openUrl} inside a browser, ${error}`);
         }
       }
     })
@@ -137,7 +141,11 @@ const dev: HandlerFn = async args => {
 
     logger.info(
       `Running webpack watch compiler${
-        args.legacy ? ` ${chalk.black.bgCyan('in legacy mode')}` : ''
+        args.legacy
+          ? ` ${chalk.black.bgCyan(
+              `in${args.forceLegacy ? ' forced' : ''} legacy mode`
+            )}`
+          : ''
       }...`
     );
 
@@ -184,6 +192,10 @@ export const builder: CommandBuilder = {
     desc: 'Opens browser window after server has been started',
     type: 'boolean',
     default: true,
+  },
+  openUrl: {
+    desc: 'Custom URL used when opening browser window ',
+    type: 'string',
   },
   legacy: {
     desc: 'Runs application in legacy mode',

@@ -8,6 +8,7 @@ import {
   type RouteOptions,
   Window,
 } from '@ima/core';
+import { Settings } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
@@ -15,7 +16,6 @@ import { toMockedInstance } from 'to-mock';
 
 import { AbstractPureComponent } from '../../component/AbstractPureComponent';
 import { BlankManagedRootView } from '../../component/BlankManagedRootView';
-import { Settings } from '../../types';
 import { AbstractClientPageRenderer } from '../AbstractClientPageRenderer';
 import { PageRendererFactory } from '../PageRendererFactory';
 

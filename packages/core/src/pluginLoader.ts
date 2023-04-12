@@ -1,4 +1,4 @@
-import { PluginConfigFunctions, Bootstrap } from './Bootstrap';
+import { Bootstrap, InitPluginConfig } from './Bootstrap';
 import { ns, Namespace } from './Namespace';
 
 /**
@@ -9,7 +9,7 @@ import { ns, Namespace } from './Namespace';
 export class PluginLoader {
   protected _plugins: Record<
     string,
-    { name: string; plugin: PluginConfigFunctions }
+    { name: string; plugin: InitPluginConfig }
   >;
   protected _bootstrap?: Bootstrap;
   /**
@@ -56,7 +56,7 @@ export class PluginLoader {
    */
   register(
     name: string,
-    registerFn: (ns?: Namespace) => PluginConfigFunctions | undefined
+    registerFn: (ns: Namespace) => InitPluginConfig | void
   ) {
     if (typeof name !== 'string') {
       throw new Error(
@@ -74,7 +74,7 @@ export class PluginLoader {
 
     // Bootstrap plugin if imported dynamically (only if it's not already loaded)
     if (this._bootstrap && !this._plugins[name]) {
-      this._bootstrap.initPlugin(name, plugin);
+      this._bootstrap.initPlugin(name, plugin ?? undefined);
     }
 
     this._plugins[name] = { name, plugin: plugin || {} };

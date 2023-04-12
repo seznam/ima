@@ -1,4 +1,4 @@
-import type { Utils } from '@ima/core';
+import type { DictionaryMap, Utils } from '@ima/core';
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
 
@@ -46,7 +46,7 @@ export function getUtils(
  */
 export function localize(
   component: AbstractComponent | AbstractPureComponent,
-  key: string,
+  key: keyof DictionaryMap,
   params: { [key: string]: string | number }
 ): string {
   return component.utils.$Dictionary.get(key, params);
@@ -68,7 +68,7 @@ export function localize(
 export function link(
   component: AbstractComponent | AbstractPureComponent,
   name: string,
-  params: { [key: string]: string | number }
+  params: { [key: string]: string }
 ): string {
   return component.utils.$Router.link(name, params);
 }
@@ -121,7 +121,7 @@ export function cssClasses(
  */
 export function defaultCssClasses(
   classRules: classnames.Argument,
-  component: string | ComponentType
+  component?: string | ComponentType
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;
 

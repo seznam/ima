@@ -43,13 +43,16 @@ class ManifestPlugin {
   #pluginName: string;
   #options: ManifestPluginOptions;
 
-  static #instances = 0;
-  static #generated = 0;
+  static #generated: {
+    [key in ImaConfigurationContext['name']]?: boolean;
+  } = {};
 
   constructor(options: ManifestPluginOptions) {
     this.#pluginName = this.constructor.name;
     this.#options = options;
-    ManifestPlugin.#instances++;
+
+    // Track generated configurations status
+    ManifestPlugin.#generated[options.context.name] = false;
 
     // Validate options
     validate(schema as Schema, this.#options, {
@@ -76,7 +79,6 @@ class ManifestPlugin {
    * Generate runner code from compiled assets.
    */
   generate(assets: Compilation['assets'], compilation: Compilation): void {
-    ManifestPlugin.#generated++;
     const compilationName = compilation?.name as
       | ImaConfigurationContext['name']
       | undefined;
@@ -115,8 +117,16 @@ class ManifestPlugin {
         seed.assets[name] = assetWithInfo;
       });
 
-    if (ManifestPlugin.#generated === ManifestPlugin.#instances) {
-      ManifestPlugin.#generated = 0;
+    // Mark this configuration as generated
+    ManifestPlugin.#generated[compilationName] = true;
+
+    if (Object.values(ManifestPlugin.#generated).every(v => v)) {
+      // Reset tracking info
+      Object.keys(ManifestPlugin.#generated).forEach(
+        key =>
+          (ManifestPlugin.#generated[key as ImaConfigurationContext['name']] =
+            false)
+      );
 
       // Emit compiled ima runner with embedded runtime codes
       return compilation.emitAsset(
@@ -148,7 +158,7 @@ class ManifestPlugin {
 
     // Include CSS only from the root directory
     if (this.#options.context.processCss) {
-      result = result || /css\/[\w.\-_]+\.css$/.test(assetName);
+      result = result || /static\/css\/[\w.\-_]+\.css$/.test(assetName);
     }
 
     return result;

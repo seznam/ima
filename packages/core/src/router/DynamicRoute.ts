@@ -1,6 +1,10 @@
-import { AbstractRoute, RouteParams } from './AbstractRoute';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteParams,
+} from './AbstractRoute';
 import { RouteFactoryOptions } from './Router';
-import { Controller, IController } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
 /**
@@ -17,12 +21,24 @@ import { GenericError } from '../error/GenericError';
  *           params and their values.
  */
 export type RoutePathExpression = {
+  /**
+   * RegExp use in router for path matching to current route.
+   */
   matcher: RegExp;
+  /**
+   * Function that generates valid path from given route params.
+   */
   toPath: (params: RouteParams) => string;
-  extractParameters: ExtractPathFunction;
+  /**
+   * Function which takes care of parsing url params from given path.
+   * It returns object of key/value pairs which correspond to expected path url
+   * params and their values.
+   */
+  extractParameters: (
+    trimmedPath: string,
+    additionalData: { query: RouteParams; path: string }
+  ) => RouteParams;
 };
-
-export type ExtractPathFunction = (path?: string) => Record<string, string>;
 
 /**
  * Utility for representing and manipulating a single dynamic route in the
@@ -32,11 +48,7 @@ export type ExtractPathFunction = (path?: string) => Record<string, string>;
  *
  * @extends AbstractRoute
  */
-export class DynamicRoute extends AbstractRoute {
-  protected _matcher: RegExp;
-  protected _toPath: (params: RouteParams) => string;
-  protected _extractParameters: (path?: string) => RouteParams;
-
+export class DynamicRoute extends AbstractRoute<RoutePathExpression> {
   /**
    * Initializes the route.
    *
@@ -46,8 +58,8 @@ export class DynamicRoute extends AbstractRoute {
   constructor(
     name: string,
     pathExpression: RoutePathExpression,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteFactoryOptions>
   ) {
     super(name, pathExpression, controller, view, options);
@@ -58,7 +70,8 @@ export class DynamicRoute extends AbstractRoute {
       );
     }
 
-    const { matcher, toPath, extractParameters } = pathExpression;
+    this._pathExpression = pathExpression;
+    const { matcher, toPath, extractParameters } = this._pathExpression;
 
     if (!matcher || !(matcher instanceof RegExp)) {
       throw new GenericError(`The pathExpression.matcher must be a RegExp.`, {
@@ -66,60 +79,45 @@ export class DynamicRoute extends AbstractRoute {
       });
     }
 
-    /**
-     * RegExp use in router for path matching to current route.
-     */
-    this._matcher = matcher;
-
     if (!toPath || typeof toPath !== 'function') {
       throw new GenericError(
         `The pathExpression.toPath is not a function, '${typeof toPath}' was given.`
       );
     }
 
-    /**
-     * Function that generates valid path from current route and passed route params.
-     */
-    this._toPath = toPath;
-
     if (!extractParameters || typeof extractParameters !== 'function') {
       throw new GenericError(
         `The pathExpression.extractParameters is not a function, '${typeof extractParameters}' was given.`
       );
     }
-
-    /**
-     * Function which takes care of parsing url params from given path.
-     * It returns object of key/value pairs which correspond to expected path url
-     * params and their values.
-     */
-    this._extractParameters = extractParameters;
   }
 
   /**
    * @inheritDoc
    */
   toPath(params = {}) {
-    return AbstractRoute.getTrimmedPath(this._toPath(params));
+    return this.getTrimmedPath(this._pathExpression.toPath(params));
   }
 
   /**
    * @inheritDoc
    */
   matches(path: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path);
-
-    return this._matcher.test(trimmedPath);
+    return this._pathExpression.matcher.test(this.getTrimmedPath(path));
   }
 
   /**
    * @inheritDoc
    */
-  extractParameters(path?: string) {
-    const trimmedPath = AbstractRoute.getTrimmedPath(path as string);
-    const parameters = this._extractParameters(trimmedPath.split('?').shift());
-    const query = AbstractRoute.getQuery(trimmedPath);
+  extractParameters(path: string, baseUrl: string) {
+    const parsedUrl = new URL(`${baseUrl}${path}`);
 
-    return Object.assign({}, parameters, query);
+    return this._pathExpression.extractParameters(
+      this.getTrimmedPath(parsedUrl.pathname),
+      {
+        path,
+        query: Object.fromEntries(parsedUrl.searchParams),
+      }
+    );
   }
 }

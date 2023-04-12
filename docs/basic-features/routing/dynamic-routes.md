@@ -3,15 +3,15 @@ title: Dynamic Routes
 description: Basic features > Routing > Dynamic Routes
 ---
 
-Dynamic routes allows you to really take control of **route matching**, **parameters parsing** and **generation of router links**.
+Dynamic routes allows you to take control of **route matching**, **route parameters parsing** and **generation of router links**.
 
-They are really powerful and can help you cover those edge cases that cannot be done using [regular string defined routes](./introduction.md#setting-up-router).
+They are really powerful and can help you cover those edge cases that cannot be done using [basic string route expressions](./introduction.md#setting-up-router).
 
 This can be achieved by defining **custom route matcher** in form of a **regular expression** and custom functions to parse router params from path and, the other way, from route params to path.
 
 :::note
 
-The power of dynamic routes comes at a cost. You have to be really sure to define your matchers and function overrides correctly, so you don't end up with false positive route matches. We advise to cover these matches heavily with tests in order to prevent potential failures.
+The power of dynamic routes comes at a cost. You have to be really sure to define your matchers and function overrides correctly, so you don't end up with false positive route matches. We advise to cover these matchers heavily with tests in order to prevent potential failures.
 
 :::
 
@@ -36,8 +36,9 @@ export let init = (ns, oc, config) => {
     'post',
     {
       matcher: POST_MATCHER,
-      extractParameters: path => {
-        const [match, category, subcategory, itemId] = POST_MATCHER.exec(path);
+      extractParameters: (trimmedPath, ({ query, path })) => {
+        const [match, category, subcategory, itemId] =
+          POST_MATCHER.exec((trimmedPath)));
 
         return {
           category,
@@ -47,9 +48,10 @@ export let init = (ns, oc, config) => {
       },
       toPath: params => {
         const { category, subcategory, itemId, ...restParams } = params;
+        const query = new URLSearchParams(restParams).toString();
 
         return [category, subcategory, itemId].filter(i => !!i).join('/') +
-          AbstractRoute.paramsToQuery(restParams);
+          (query ? `?${query}` : '');
       }
     },
     PostController,
@@ -74,13 +76,21 @@ Regular expression used in route matching. The router tries to match **path**, *
 
 ### extractParameters
 
-> `function(string): Object<string, (number|string)>`
+> `(trimmedPath: string, { query: RouteParams; path: string }) => RouteParams`
 
-Function used to extract route params from given path. It receives path stripped from trailing slashes and query params as first argument. If the path contains any query params, **they are extracted automatically** and merged with the final params object this function returns.
+Function used to extract route params from given path. It receives path trimmed from trailing slashes and query params as first argument.
+
+For more control, you can use additional data in form of `query` and `path` which contain query params extracted from trimmed path and full path without any modifications.
+
+:::note
+
+When using [`StaticRoutes`](../../api/classes/ima_core.StaticRoute.md), query parameters are automatically merged with extracted route params. If you want to mimic this behavior, don't forget to merge `query` params into your final route params object.
+
+:::
 
 ### toPath
 
-> `function(Object<string, (number|string)>): object`
+> `(params: RouteParams) => string`
 
 Function used to create path from given params (including query params). It is used mainly in the [router link creation](./introduction.md#linking-between-routes).
 

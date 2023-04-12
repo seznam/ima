@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Execution, ExecutionJob } from './Execution';
 import { GenericError } from '../error/GenericError';
 
@@ -21,7 +19,7 @@ export abstract class AbstractExecution extends Execution {
   /**
    * @inheritDoc
    */
-  append(jobs: ExecutionJob[] | ExecutionJob) {
+  append(jobs: ExecutionJob[] | ExecutionJob): void {
     if (!Array.isArray(jobs)) {
       jobs = [jobs];
     }

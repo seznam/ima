@@ -21,8 +21,8 @@ const cliArgs = yargs
   .example([
     ['npm run dev ~/Desktop/ima-app'],
     ['npm run dev ~/Desktop/ima-app -- --watch=core cli hmr-client'],
-    ['npm run dev ~/Desktop/ima-app -- --force --init'],
-    ['npm run dev ~/Desktop/ima-app -- --force --init --watch=server core'],
+    ['npm run dev ~/Desktop/ima-app -- --force'],
+    ['npm run dev ~/Desktop/ima-app -- --force --watch=server core'],
     ['npm run dev ~/Desktop/ima-app -- --build'],
     ['npm run dev ~/Desktop/ima-app -- --watch'],
   ])
@@ -31,16 +31,24 @@ const cliArgs = yargs
     description:
       'Destination folder for the app generated using create-ima-app script.',
   })
+  .option('init', {
+    alias: 'i',
+    type: 'boolean',
+    description:
+      'Installs packages from current monorepo by packing them to zip and installing.',
+    default: false,
+  })
   .option('force', {
     alias: 'f',
     type: 'boolean',
     description:
       'Force reinstall of the application if the directory already exist.',
   })
-  .option('init', {
-    alias: 'i',
+  .option('typescript', {
+    alias: 't',
     type: 'boolean',
-    description: 'Build, pack and reinstall packages after the app is created.',
+    description: 'Generate typescript version of create-ima-app application.',
+    default: false,
   })
   .option('build', {
     alias: 'b',
@@ -52,7 +60,8 @@ const cliArgs = yargs
     type: 'array',
     description: 'Package names, which are watched and copied on changes.',
   })
-  .version(false)
+  .version()
+  .help()
   .parse();
 
 function pkgFilter(paths, needles) {
@@ -93,16 +102,6 @@ function pkgFilter(paths, needles) {
   // Handle watch command
   if (cliArgs.watch) {
     watchChanges(destDir, pkgFilter(pkgDirs, cliArgs.watch));
-  }
-
-  const imaConfigPath = path.join(destDir, 'ima.config.js');
-
-  // Copy "dev" ima config into the application, if it doesn't have any
-  if (!fs.existsSync(imaConfigPath)) {
-    fs.copyFileSync(
-      path.join(__dirname, './utils/ima.config.js'),
-      imaConfigPath
-    );
   }
 })();
 

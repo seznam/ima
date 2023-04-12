@@ -4,23 +4,37 @@
 
 import { toMockedInstance } from 'to-mock';
 
-import { ControllerDecorator } from '../../..//controller/ControllerDecorator';
 import { AbstractController } from '../../../controller/AbstractController';
-import { Controller, IController } from '../../../controller/Controller';
-import { Extension } from '../../../extension/Extension';
-import { PageHandlerRegistry } from '../../../page/handler/PageHandlerRegistry';
-import { PageNavigationHandler } from '../../../page/handler/PageNavigationHandler';
-import { PageFactory } from '../../../page/PageFactory';
-import { PageRenderer } from '../../../page/renderer/PageRenderer';
-import { PageStateManager } from '../../../page/state/PageStateManager';
+import { Controller } from '../../../controller/Controller';
+import { DispatcherImpl } from '../../../event/DispatcherImpl';
+import { AbstractExtension } from '../../../extension/AbstractExtension';
+import { GenericError, ManageArgs, RouterEvents } from '../../../index';
 import { DynamicRoute } from '../../../router/DynamicRoute';
 import { RouteFactory } from '../../../router/RouteFactory';
 import { RouteOptions } from '../../../router/Router';
 import { StaticRoute } from '../../../router/StaticRoute';
-import { UnknownParameters } from '../../../types';
+import { PageHandlerRegistry } from '../../handler/PageHandlerRegistry';
+import { PageNavigationHandler } from '../../handler/PageNavigationHandler';
+import { PageFactory } from '../../PageFactory';
+import { PageRenderer } from '../../renderer/PageRenderer';
+import { PageStateManager } from '../../state/PageStateManager';
 import { AbstractPageManager } from '../AbstractPageManager';
 
-class AbstractControllerTest extends AbstractController {
+async function wait<T>(value: T, ms = 1000) {
+  return new Promise<T>(resolve => {
+    setTimeout(() => {
+      resolve(value);
+    }, ms);
+  });
+}
+
+class ExtensionMock extends AbstractExtension {
+  load() {
+    return {};
+  }
+}
+
+class ControllerMock extends AbstractController {
   dependency: unknown;
 
   static get $dependencies() {
@@ -32,79 +46,93 @@ class AbstractControllerTest extends AbstractController {
 
     this.dependency = dependency;
   }
-}
 
-class PageRendererMock extends PageRenderer {}
+  load() {
+    return {};
+  }
+}
 
 class PageStateManagerMock extends PageStateManager {}
 
 class PageManagerMock extends AbstractPageManager {}
 
 describe('ima.core.page.manager.AbstractPageManager', () => {
-  const controllerState = {
-    controller: 'controller',
-    share: 'controller',
-  };
-  const extensionsState = {
-    extension: 'extension',
-    share: 'extension',
-  };
-  const extensionState = {
-    extension: Promise.resolve('extension'),
-  };
-
-  class ExtensionTest extends Extension {}
-
-  const pageState = Object.assign({}, extensionsState, controllerState);
-
-  const pageFactory = {
-    createController: () => new AbstractControllerTest(null),
-    decorateController: (controller: IController) => controller,
-    decoratePageStateManager: (pageStateManger: PageStateManager) =>
-      pageStateManger,
-    createView: (view: unknown) => view,
-  };
+  let pageFactory: PageFactory;
   let pageRenderer: PageRenderer;
   let pageStateManager: PageStateManager;
   let pageManager: AbstractPageManager;
   let handlerRegistry: PageHandlerRegistry;
   let routeFactory: RouteFactory;
+  let dispatcher: DispatcherImpl;
+  let extensionMock: AbstractExtension;
+  let controllerMock: AbstractController;
+  let route: StaticRoute | DynamicRoute;
+  let options: RouteOptions;
 
-  const View = () => {
-    return;
-  };
-
+  const View = () => undefined;
   const routeName = 'link';
   const routePath = '/link';
-  let route: StaticRoute | DynamicRoute;
-
-  let options: RouteOptions;
-  const params = {
+  const routeParams = {
     param1: 'param1',
     param2: 2,
   };
 
-  const controllerInstance = pageFactory.createController();
-  const decoratedController =
-    pageFactory.decorateController(controllerInstance);
-  const viewInstance = pageFactory.createView(View);
-  const extensionInstance = new ExtensionTest();
+  async function runManage(manageParams?: ManageArgs) {
+    await pageManager.manage(
+      manageParams ?? {
+        route,
+        options,
+        params: routeParams,
+      }
+    );
 
-  const pageManagerHandler = toMockedInstance(PageNavigationHandler);
+    // Resolve page promise in timeout
+    jest.runOnlyPendingTimers();
+  }
 
   beforeEach(() => {
-    pageRenderer = new PageRendererMock();
+    jest.useFakeTimers();
+    controllerMock = new ControllerMock([]);
+    extensionMock = new ExtensionMock();
+    pageRenderer = toMockedInstance(PageRenderer, {
+      mount: jest.fn().mockResolvedValue('mounted'),
+    });
     pageStateManager = new PageStateManagerMock();
-    handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
+    handlerRegistry = new PageHandlerRegistry(
+      toMockedInstance(PageNavigationHandler)
+    );
     routeFactory = new RouteFactory();
+    dispatcher = toMockedInstance(DispatcherImpl, {
+      fire: jest.fn(),
+    });
+    pageFactory = toMockedInstance(PageFactory, {
+      createController: jest.fn().mockReturnValue(controllerMock),
+      decorateController: (controller: IController) => controller,
+      decoratePageStateManager: (pageStateManger: PageStateManager) =>
+        pageStateManger,
+      createView: (view: unknown) => view,
+    });
+
+    // Mock extensions getter
+    jest
+      .spyOn(controllerMock, 'getExtensions')
+      .mockReturnValue([extensionMock]);
 
     pageManager = new PageManagerMock(
       pageFactory as unknown as PageFactory,
       pageRenderer,
       pageStateManager,
-      handlerRegistry
+      handlerRegistry,
+      dispatcher
     );
 
+    // Route & options
+    route = routeFactory.createRoute(
+      routeName,
+      routePath,
+      AbstractController,
+      View
+    );
     options = {
       autoScroll: true,
       documentView: null,
@@ -114,36 +142,42 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       middlewares: [],
     };
 
-    (
-      jest.spyOn(controllerInstance, 'getExtensions') as jest.SpyInstance
-    ).mockReturnValue([extensionInstance]);
-
-    route = routeFactory.createRoute(
-      routeName,
-      routePath,
-      Controller,
-      View,
-      options
-    );
-
-    pageManager['_managedPage'] = pageManager['_constructManagedPageValue'](
-      Controller,
-      View,
-      route,
-      options,
-      params,
-      controllerInstance,
-      decoratedController as ControllerDecorator,
-      viewInstance
-    );
+    // Init page
+    pageManager.init();
   });
 
   afterEach(() => {
-    pageManager['_clearManagedPageValue']();
     jest.clearAllMocks();
   });
 
-  describe('manage method', () => {
+  describe('init()', () => {
+    it('should init page handlers', () => {
+      jest.spyOn(handlerRegistry, 'init');
+
+      pageManager.init();
+
+      expect(handlerRegistry.init).toHaveBeenCalled();
+    });
+
+    it('should clear managed pages', () => {
+      const initialState = pageManager['_getInitialManagedPage']();
+
+      expect(JSON.stringify(pageManager['_managedPage'])).toBe(
+        JSON.stringify(initialState)
+      );
+      expect(JSON.stringify(pageManager['_previousManagedPage'])).toBe(
+        JSON.stringify(initialState)
+      );
+    });
+  });
+
+  describe('preManage()', () => {
+    it('should resolve in initial state', async () => {
+      await expect(pageManager.preManage()).resolves.not.toThrow();
+    });
+  });
+
+  describe('manage()', () => {
     it('should only update last managed controller and view', async () => {
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
@@ -158,30 +192,22 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .spyOn(pageManager, '_updatePageSource' as never)
         .mockReturnValue(Promise.resolve() as never);
 
-      await pageManager
-        .manage({
-          route,
-          controller: Controller,
-          view: View,
-          options,
-          params,
-          action: {},
-        })
-        .then(() => {
-          expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
-          expect(pageManager['_managedPage'].params).toStrictEqual(params);
-          expect(pageManager['_updatePageSource']).toHaveBeenCalled();
-          expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
-        })
-        .catch(error => {
-          console.error('ima.core.page.manager:manage', error.message);
-        });
+      await pageManager.manage({
+        route,
+        options,
+        action: {},
+      });
+
+      expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
+      expect(pageManager['_updatePageSource']).toHaveBeenCalled();
+      expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
     });
 
     it('should mount new controller and view', async () => {
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
         .mockReturnValue(false as never);
+      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
       jest
         .spyOn(pageManager, '_runPreManageHandlers' as never)
         .mockReturnValue(Promise.resolve() as never);
@@ -196,55 +222,241 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .mockImplementation();
       jest.spyOn(pageStateManager, 'clear').mockImplementation();
       jest.spyOn(pageManager, '_clearComponentState').mockImplementation();
-      jest
-        .spyOn(pageManager, '_clearManagedPageValue' as never)
-        .mockImplementation();
-      jest
-        .spyOn(pageManager, '_constructManagedPageValue' as never)
-        .mockImplementation();
+      jest.spyOn(pageManager, '_constructManagedPageValue' as never);
       jest.spyOn(pageManager, '_initPageSource' as never).mockImplementation();
       jest
         .spyOn(pageManager, '_loadPageSource' as never)
         .mockReturnValue(Promise.resolve() as never);
 
-      await pageManager
-        .manage({
-          route,
-          controller: Controller,
-          view: View,
-          options,
-          params,
-          action: {},
-        })
-        .then(() => {
-          expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
-          expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();
-          expect(pageManager['_destroyPageSource']).toHaveBeenCalled();
-          expect(pageStateManager.clear).toHaveBeenCalled();
-          expect(pageManager._clearComponentState).toHaveBeenCalledWith(
-            options
-          );
-          expect(pageManager['_clearManagedPageValue']).toHaveBeenCalled();
-          expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
-          expect(pageManager['_initPageSource']).toHaveBeenCalled();
-          expect(pageManager['_loadPageSource']).toHaveBeenCalled();
-          expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
-        })
-        .catch(error => {
-          console.error('ima.core.page.manager:manage', error.message);
-        });
+      jest.useFakeTimers();
+
+      await pageManager.manage({
+        route,
+        options,
+        action: {},
+      });
+
+      jest.advanceTimersByTime(1000);
+
+      expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
+      expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();
+      expect(pageManager['_destroyPageSource']).toHaveBeenCalled();
+      expect(pageStateManager.clear).toHaveBeenCalled();
+      expect(pageManager._clearComponentState).toHaveBeenCalledWith(options);
+      expect(pageManager['_getInitialManagedPage']).toHaveBeenCalled();
+      expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
+      expect(pageManager['_initPageSource']).toHaveBeenCalled();
+      expect(pageManager['_loadPageSource']).toHaveBeenCalled();
+      expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
+    });
+
+    it('should cancel loading of async handlers', async () => {
+      const oldPagePromise = pageManager.manage({
+        route: routeFactory.createRoute(
+          routeName,
+          routePath,
+          async () => wait(AbstractController),
+          View
+        ),
+        options,
+      });
+
+      const preManageOld = pageManager.preManage();
+      const oldResponse = await oldPagePromise;
+
+      pageManager.postManage();
+      jest.runOnlyPendingTimers();
+      await preManageOld;
+
+      expect(pageManager['_managedPage']).toMatchInlineSnapshot(`
+        {
+          "controller": undefined,
+          "controllerInstance": undefined,
+          "decoratedController": undefined,
+          "options": undefined,
+          "params": undefined,
+          "route": undefined,
+          "state": {
+            "abort": {
+              "promise": Promise {},
+              "reject": [Function],
+              "resolve": [Function],
+            },
+            "activated": false,
+            "cancelled": true,
+            "executed": false,
+            "initialized": false,
+            "page": {
+              "promise": Promise {},
+              "reject": [Function],
+              "resolve": [Function],
+            },
+          },
+          "view": undefined,
+          "viewInstance": undefined,
+        }
+      `);
+      // @ts-expect-error
+      expect(pageManager['_previouslyManagedPage']).toMatchInlineSnapshot(
+        `undefined`
+      );
+      expect(oldResponse).toStrictEqual({ status: 409 });
+    });
+
+    it('should fire router events for async route handlers', async () => {
+      const pagePromise = pageManager.manage({
+        route: routeFactory.createRoute(
+          routeName,
+          routePath,
+          async () => wait(controllerMock),
+          View
+        ),
+        options,
+      });
+
+      jest.advanceTimersByTime(10000);
+      const response = await pagePromise;
+      pageManager.postManage();
+      jest.runOnlyPendingTimers();
+
+      expect(dispatcher.fire).toHaveBeenNthCalledWith(
+        1,
+        RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
+        expect.objectContaining({ route: expect.anything() }),
+        true
+      );
+      expect(dispatcher.fire).toHaveBeenNthCalledWith(
+        2,
+        RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
+        expect.objectContaining({ route: expect.anything() }),
+        true
+      );
+
+      expect(response).toBe('mounted');
+      await expect(
+        pageManager['_managedPage'].state.page.promise
+      ).resolves.not.toThrow();
+    });
+
+    it('should handle only update properly', async () => {
+      const oldResponse = await pageManager.manage({
+        route,
+        options,
+      });
+
+      // Resolve page promise in timeout
+      jest.runOnlyPendingTimers();
+
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_hasOnlyUpdate').mockReturnValue(true);
+      const updatedResponse = await pageManager.manage({
+        route,
+        options,
+      });
+
+      // Resolve page promise in timeout
+      pageManager.postManage();
+      jest.runOnlyPendingTimers();
+
+      await expect(
+        pageManager['_managedPage'].state.page.promise
+      ).resolves.not.toThrow();
+      expect(oldResponse).toBe('mounted');
+      expect(updatedResponse).toBeUndefined();
+      expect(pageFactory.createController).toHaveBeenCalledTimes(1);
+    });
+
+    it('should clear previously managed page after successful handling', async () => {
+      await pageManager.manage({
+        route,
+        options,
+      });
+
+      // Resolve page promise in timeout
+      jest.runOnlyPendingTimers();
+
+      expect(JSON.stringify(pageManager['_previousManagedPage'])).toBe(
+        JSON.stringify(pageManager['_getInitialManagedPage']())
+      );
+    });
+
+    it('should properly destroy previous route when canceled', async () => {
+      await pageManager.manage({
+        route,
+        options,
+      });
+
+      pageManager.postManage();
+
+      // Resolve page promise in timeout
+      jest.runOnlyPendingTimers();
+      await pageManager.preManage();
+      jest.runOnlyPendingTimers();
+
+      class StuckController extends ControllerMock {
+        async init() {
+          return wait(10, 100);
+        }
+      }
+
+      jest
+        .spyOn(pageFactory, 'createController')
+        .mockReturnValue(new StuckController([]));
+
+      const oldPagePromise = pageManager.manage({
+        route,
+        options,
+      });
+
+      // Resolve page promise in timeout
+      jest.advanceTimersByTime(50);
+
+      const preManageOld = pageManager.preManage();
+      const oldResponse = await oldPagePromise;
+
+      expect(pageManager['_previousManagedPage'].state.cancelled).toBeTruthy();
+
+      pageManager.postManage();
+
+      // Resolve page promise in timeout
+      jest.runOnlyPendingTimers();
+      await preManageOld;
+      jest.runOnlyPendingTimers();
+
+      jest
+        .spyOn(pageFactory, 'createController')
+        .mockReturnValue(new ControllerMock([]));
+
+      const newPagePromise = pageManager.manage({
+        route: routeFactory.createRoute(
+          'newRoute',
+          '/new-route',
+          AbstractController,
+          View
+        ),
+        options,
+      });
+
+      // Resolve page promise in timeout
+      const newPageResponse = await newPagePromise;
+      pageManager.postManage();
+      jest.runOnlyPendingTimers();
+
+      await expect(
+        pageManager['_managedPage'].state.page.promise
+      ).resolves.not.toThrow();
+      expect(oldResponse).toStrictEqual({ status: 409 });
+      expect(newPageResponse).toBe('mounted');
     });
   });
 
-  describe('destroy method', () => {
+  describe('destroy()()', () => {
     it('should clear managed page value', async () => {
-      jest
-        .spyOn(pageManager, '_clearManagedPageValue' as never)
-        .mockImplementation();
+      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
 
       await pageManager.destroy();
 
-      expect(pageManager['_clearManagedPageValue']).toHaveBeenCalled();
+      expect(pageManager['_getInitialManagedPage']).toHaveBeenCalled();
     });
 
     it('should remove listener for onChange event from page state manager', async () => {
@@ -282,50 +494,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
   });
 
-  describe('_setRestrictedPageStateManager', () => {
-    const allowedStateKeys = ['user'];
-    const allAllowedStateKeys =
-      Object.keys(extensionState).concat(allowedStateKeys);
-
-    beforeEach(() => {
-      (
-        jest.spyOn(extensionInstance, 'getAllowedStateKeys') as jest.SpyInstance
-      ).mockReturnValue(allowedStateKeys);
-
-      jest
-        .spyOn(pageFactory, 'decoratePageStateManager')
-        .mockReturnValue(pageStateManager);
-
-      (
-        jest.spyOn(extensionInstance, 'setPageStateManager') as jest.SpyInstance
-      ).mockImplementation();
-    });
-
-    it('should create restricted page state manager for extension', () => {
-      pageManager._setRestrictedPageStateManager(
-        extensionInstance,
-        extensionState
-      );
-
-      expect(pageFactory.decoratePageStateManager).toHaveBeenCalledWith(
-        pageStateManager,
-        allAllowedStateKeys
-      );
-    });
-
-    it('should set restricted page state manager to extension', () => {
-      pageManager._setRestrictedPageStateManager(
-        extensionInstance,
-        extensionState
-      );
-
-      expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(
-        pageStateManager
-      );
-    });
-  });
-
-  describe('_initPageSource method', () => {
+  describe('_initPageSource()', () => {
     it('should initialize page source', async () => {
       jest.spyOn(pageManager, '_initController' as never).mockImplementation();
       jest.spyOn(pageManager, '_initExtensions' as never).mockImplementation();
@@ -337,122 +506,436 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
   });
 
-  describe('_initController method', () => {
+  describe('_initController()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
     it('should set route params to controller instance', async () => {
-      (
-        jest.spyOn(controllerInstance, 'setRouteParams') as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(controllerMock, 'setRouteParams').mockImplementation();
 
       await pageManager['_initController']();
 
-      expect(controllerInstance.setRouteParams).toHaveBeenCalledWith(params);
+      expect(controllerMock.setRouteParams).toHaveBeenCalledWith(routeParams);
     });
 
     it('should call init function on controller instance', async () => {
-      (
-        jest.spyOn(controllerInstance, 'init') as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(controllerMock, 'init').mockImplementation();
 
       await pageManager['_initController']();
 
-      expect(controllerInstance.init).toHaveBeenCalled();
+      expect(controllerMock.init).toHaveBeenCalled();
     });
   });
 
-  describe('_initExtensions method', () => {
+  describe('_initExtensions()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
     it('should set route params to extension instance', async () => {
-      (
-        jest.spyOn(extensionInstance, 'setRouteParams') as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(extensionMock, 'setRouteParams').mockImplementation();
 
       await pageManager['_initExtensions']();
 
-      expect(extensionInstance.setRouteParams).toHaveBeenCalledWith(params);
+      expect(extensionMock.setRouteParams).toHaveBeenCalledWith(routeParams);
     });
 
     it('should call init function on controller instance', async () => {
-      (
-        jest.spyOn(extensionInstance, 'init') as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(extensionMock, 'init').mockImplementation();
 
       await pageManager['_initExtensions']();
 
-      expect(extensionInstance.init).toHaveBeenCalled();
+      expect(extensionMock.init).toHaveBeenCalled();
     });
   });
 
-  describe('_loadPageSource method', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(pageManager, '_getLoadedControllerState' as never)
-        .mockReturnValue(controllerState as never);
+  describe('_activatePageSource()', () => {
+    beforeEach(async () => {
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_activateController').mockImplementation();
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_activateExtensions').mockImplementation();
 
-      jest
-        .spyOn(pageManager, '_getLoadedExtensionsState' as never)
-        .mockReturnValue(extensionsState as never);
-      jest
-        .spyOn(pageRenderer, 'mount')
-        .mockReturnValue(Promise.resolve() as never);
+      await runManage();
     });
 
-    it('should be merge state from controller and extensions to loaded page state', async () => {
-      await pageManager['_loadPageSource']()
-        .then(() => {
-          expect(pageRenderer.mount).toHaveBeenCalledWith(
-            decoratedController,
-            View,
-            pageState,
-            options
-          );
+    it('should activate controller and extensions', async () => {
+      await pageManager['_activatePageSource']();
+
+      expect(pageManager['_activateController']).toHaveBeenCalled();
+      expect(pageManager['_activateExtensions']).toHaveBeenCalled();
+      expect(pageManager['_managedPage'].state.activated).toBeTruthy();
+    });
+
+    it('should not call method activate more times', async () => {
+      pageManager['_managedPage'].state.activated = true;
+
+      await pageManager['_activatePageSource']();
+
+      expect(pageManager['_activateController']).not.toHaveBeenCalled();
+      expect(pageManager['_activateExtensions']).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('_clearComponentState()', () => {
+    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
+      jest.spyOn(pageRenderer, 'unmount').mockImplementation();
+
+      pageManager._clearComponentState({} as RouteOptions);
+
+      expect(pageRenderer.unmount).toHaveBeenCalled();
+    });
+  });
+
+  describe('_hasOnlyUpdate()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should return value from onlyUpdate function', () => {
+      const newOptions: RouteOptions = {
+        ...options,
+        onlyUpdate: jest.fn().mockReturnValue(true),
+      };
+
+      // @ts-expect-error
+      const spy = jest.spyOn(newOptions, 'onlyUpdate');
+      const mockSpyWrapper = (...args: unknown[]) => {
+        // @ts-expect-error
+        return spy(...args);
+      };
+      newOptions.onlyUpdate = mockSpyWrapper;
+
+      expect(
+        pageManager['_hasOnlyUpdate'](AbstractController, View, newOptions)
+      ).toBeTruthy();
+      expect(spy).toHaveBeenCalledWith(AbstractController, View);
+    });
+
+    it('should return true for option onlyUpdate set to true and for same controller and view', () => {
+      expect(
+        pageManager['_hasOnlyUpdate'](AbstractController, View, {
+          ...options,
+          onlyUpdate: true,
         })
-        .catch(error => {
-          console.error('ima.core.page.manager:_loadPageSource', error.message);
-        });
+      ).toBeTruthy();
+    });
+
+    it('should return false for option onlyUpdate set to true and for different controller and view', () => {
+      pageManager['_managedPage'].controller = undefined;
+
+      expect(
+        pageManager['_hasOnlyUpdate'](Controller, View, {
+          ...options,
+          onlyUpdate: true,
+        })
+      ).toBeFalsy();
     });
   });
 
-  describe('_getLoadedControllerState method', () => {
-    it('should calls controller load method', async () => {
-      (
-        jest.spyOn(controllerInstance, 'load') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_getLoadedControllerState']();
-
-      expect(controllerInstance.load).toHaveBeenCalled();
+  describe('_destroyExtensions()', () => {
+    beforeEach(async () => {
+      await runManage();
     });
 
-    it('should set pageStateManager to controller instance', async () => {
-      (
-        jest.spyOn(
-          controllerInstance,
-          'setPageStateManager'
-        ) as jest.SpyInstance
-      ).mockImplementation();
+    it('should call destroy on extension instance', async () => {
+      jest.spyOn(extensionMock, 'destroy').mockImplementation();
 
-      await pageManager['_getLoadedControllerState']();
+      await runManage();
 
-      expect(controllerInstance.setPageStateManager).toHaveBeenCalledWith(
-        pageStateManager
+      expect(extensionMock.destroy).toHaveBeenCalled();
+    });
+
+    it('should unset pageStateManager to extension', async () => {
+      jest.spyOn(extensionMock, 'setPageStateManager').mockImplementation();
+
+      await runManage();
+
+      expect(extensionMock.setPageStateManager).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('_destroyPageSource()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should destroy page resource', async () => {
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_destroyController').mockImplementation();
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_destroyExtensions').mockImplementation();
+
+      await runManage();
+
+      expect(pageManager['_destroyController']).toHaveBeenCalledWith();
+      expect(pageManager['_destroyExtensions']).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('_deactivateController()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should call deactivate method on controller', async () => {
+      jest.spyOn(controllerMock, 'deactivate').mockImplementation();
+      pageManager['_managedPage'].state.activated = true;
+
+      await runManage();
+
+      expect(controllerMock.deactivate).toHaveBeenCalled();
+    });
+  });
+
+  describe('_getUpdatedExtensionsState()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should call extensions update method', async () => {
+      jest.spyOn(extensionMock, 'getRouteParams').mockReturnValue(routeParams);
+      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+
+      await pageManager['_getUpdatedExtensionsState']();
+
+      expect(extensionMock.update).toHaveBeenCalledWith(routeParams);
+    });
+
+    it('should set restricted pageStateManager to extension instance', async () => {
+      jest
+        .spyOn(pageManager, '_setRestrictedPageStateManager')
+        .mockImplementation();
+      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+
+      await pageManager['_getUpdatedExtensionsState']();
+
+      expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
+        extensionMock,
+        { state: 'state' }
+      );
+    });
+
+    it("should call extension's setPartialState method and switch extension to partial state", async () => {
+      jest.spyOn(extensionMock, 'setPartialState').mockImplementation();
+      jest.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
+      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+      jest.spyOn(pageStateManager, 'getState').mockReturnValue({ foo: 'bar' });
+
+      await pageManager['_getUpdatedExtensionsState']({ foobar: 'bazfoo' });
+
+      expect(extensionMock.setPartialState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          foo: 'bar',
+          foobar: 'bazfoo',
+        })
+      );
+      expect(extensionMock.switchToPartialState).toHaveBeenCalled();
+    });
+
+    it('should return extensions state together with active controller state', async () => {
+      jest
+        .spyOn(pageManager, '_setRestrictedPageStateManager')
+        .mockImplementation();
+      jest
+        .spyOn(extensionMock, 'update')
+        .mockReturnValue({ extension: 'state' });
+
+      const result = await pageManager['_getUpdatedExtensionsState']({
+        controller: 'state',
+      });
+
+      expect(result).toStrictEqual({ controller: 'state', extension: 'state' });
+    });
+
+    it('should switch extensions to PageStateManager after all resources are updated', async () => {
+      jest
+        .spyOn(pageManager, '_switchToPageStateManagerAfterLoaded')
+        .mockImplementation();
+
+      await pageManager['_getLoadedExtensionsState']();
+
+      expect(
+        pageManager._switchToPageStateManagerAfterLoaded
+      ).toHaveBeenCalled();
+    });
+  });
+
+  describe('_deactivatePageSource()', () => {
+    beforeEach(async () => {
+      await runManage();
+
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_deactivateController').mockImplementation();
+      // @ts-expect-error
+      jest.spyOn(pageManager, '_deactivateExtensions').mockImplementation();
+    });
+
+    it('should activate controller and extensions', async () => {
+      pageManager['_managedPage'].state.activated = true;
+
+      await runManage();
+
+      expect(pageManager['_deactivateController']).toHaveBeenCalled();
+      expect(pageManager['_deactivateExtensions']).toHaveBeenCalled();
+    });
+
+    it('should not call method activate more times', async () => {
+      await runManage();
+
+      expect(pageManager['_deactivateController']).not.toHaveBeenCalled();
+      expect(pageManager['_deactivateExtensions']).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('_deactivateExtensions()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should call deactivate method on extensions', async () => {
+      jest.spyOn(extensionMock, 'deactivate').mockImplementation();
+      pageManager['_managedPage'].state.activated = true;
+
+      await runManage();
+
+      expect(extensionMock.deactivate).toHaveBeenCalled();
+    });
+  });
+
+  describe('_getUpdatedControllerState()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should calls controller update method', () => {
+      jest.spyOn(controllerMock, 'update').mockImplementation();
+      jest.spyOn(controllerMock, 'getRouteParams').mockReturnValue(routeParams);
+
+      pageManager['_getUpdatedControllerState']();
+
+      expect(controllerMock.update).toHaveBeenCalledWith(routeParams);
+    });
+  });
+
+  describe('_updatePageSource()', () => {
+    beforeEach(async () => {
+      jest
+        // @ts-expect-error
+        .spyOn(pageManager, '_getUpdatedControllerState')
+        // @ts-expect-error
+        .mockReturnValue({ controller: 'state' });
+
+      jest
+        // @ts-expect-error
+        .spyOn(pageManager, '_getUpdatedExtensionsState')
+        // @ts-expect-error
+        .mockReturnValue({ extension: 'state' });
+
+      jest.spyOn(pageRenderer, 'update').mockReturnValue(Promise.resolve());
+
+      await runManage();
+    });
+
+    it('should merge state from controller and extensions to updated page state', async () => {
+      pageManager['_storeManagedPageSnapshot']();
+      await pageManager['_updatePageSource']();
+
+      expect(pageRenderer.update).toHaveBeenCalledWith(
+        pageFactory.decorateController(controllerMock),
+        View,
+        {
+          controller: 'state',
+          extension: 'state',
+        },
+        options
       );
     });
   });
 
-  describe('_getLoadedExtensionsState method', () => {
+  describe('_activateController()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should call activate method on controller', async () => {
+      jest.spyOn(controllerMock, 'activate').mockImplementation();
+
+      await pageManager['_activateController']();
+
+      expect(controllerMock.activate).toHaveBeenCalled();
+    });
+  });
+
+  describe('_activateExtensions()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
+    it('should call activate method on extensions', async () => {
+      jest.spyOn(extensionMock, 'activate').mockImplementation();
+
+      await pageManager['_activateExtensions']();
+
+      expect(extensionMock.activate).toHaveBeenCalled();
+    });
+  });
+
+  describe('_switchToPageStateManagerAfterLoaded method', () => {
+    let deferredPromise: Promise<unknown>;
+    let resolver: (value?: unknown) => void;
+
+    beforeEach(() => {
+      deferredPromise = new Promise(resolve => {
+        resolver = resolve;
+      });
+    });
+
+    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
+      jest.spyOn(extensionMock, 'switchToStateManager').mockImplementation();
+      jest.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionMock, {
+        extension: Promise.resolve(),
+      });
+      await deferredPromise;
+
+      expect(extensionMock.switchToStateManager).toHaveBeenCalled();
+      expect(extensionMock.clearPartialState).toHaveBeenCalled();
+    });
+
+    it('should clear partial state if resource is not loaded successfully', async () => {
+      jest.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionMock, {
+        extension: Promise.reject(),
+      });
+      await deferredPromise;
+
+      expect(extensionMock.clearPartialState).toHaveBeenCalled();
+    });
+  });
+
+  describe('_getLoadedExtensionsState()', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
+
     it('should call extensions load method', async () => {
-      (
-        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
+      jest.spyOn(extensionMock, 'load').mockReturnValue({});
 
       await pageManager['_getLoadedExtensionsState']();
 
-      expect(extensionInstance.load).toHaveBeenCalled();
+      expect(extensionMock.load).toHaveBeenCalled();
     });
 
     it('should set restricted pageStateManager to extension instance', async () => {
-      (
-        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
+      jest.spyOn(extensionMock, 'load').mockReturnValue({});
       jest
         .spyOn(pageManager, '_setRestrictedPageStateManager')
         .mockImplementation();
@@ -460,45 +943,34 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       await pageManager['_getLoadedExtensionsState']();
 
       expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
-        extensionInstance,
-        extensionState
+        extensionMock,
+        {}
       );
     });
 
     it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      (
-        jest.spyOn(extensionInstance, 'setPartialState') as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(
-          extensionInstance,
-          'switchToPartialState'
-        ) as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(extensionInstance, 'load') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
+      jest.spyOn(extensionMock, 'setPartialState').mockImplementation();
+      jest.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
+      jest.spyOn(extensionMock, 'load').mockReturnValue({});
 
       await pageManager['_getLoadedExtensionsState']();
 
-      expect(extensionInstance.setPartialState).toHaveBeenCalled();
-      expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
+      expect(extensionMock.setPartialState).toHaveBeenCalled();
+      expect(extensionMock.switchToPartialState).toHaveBeenCalled();
     });
 
     it('should return extensions state together with active controller state', async () => {
-      jest.spyOn(extensionInstance, 'load');
+      jest.spyOn(extensionMock, 'load');
       jest
         .spyOn(pageManager, '_setRestrictedPageStateManager')
         .mockImplementation();
 
-      const result = await pageManager['_getLoadedExtensionsState'](
-        controllerState
-      );
+      const result = await pageManager['_getLoadedExtensionsState']({
+        controller: 'state',
+      });
 
       expect(result).toStrictEqual({
-        controller: 'controller',
-        share: 'controller',
-        extension: extensionState.extension,
+        controller: 'state',
       });
     });
 
@@ -515,407 +987,146 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
   });
 
-  describe('_switchToPageStateManagerAfterLoaded method', () => {
-    let deferredPromise: Promise<unknown>;
-    let resolver: (value?: unknown) => void;
-
-    beforeEach(() => {
-      deferredPromise = new Promise(resolve => {
-        resolver = resolve;
-      });
+  describe('_getLoadedControllerState method', () => {
+    beforeEach(async () => {
+      await runManage();
     });
 
-    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
-      (
-        jest.spyOn(
-          extensionInstance,
-          'switchToStateManager'
-        ) as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(extensionInstance, 'clearPartialState') as jest.SpyInstance
-      ).mockImplementation(() => {
-        resolver();
-      });
+    it('should calls controller load method', async () => {
+      jest.spyOn(controllerMock, 'load').mockImplementation();
 
-      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
-        extension: Promise.resolve(),
-      });
-      await deferredPromise;
+      await pageManager['_getLoadedControllerState']();
 
-      expect(extensionInstance.switchToStateManager).toHaveBeenCalled();
-      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
+      expect(controllerMock.load).toHaveBeenCalled();
     });
 
-    it('should clear partial state if resource is not loaded successfully', async () => {
-      (
-        jest.spyOn(extensionInstance, 'clearPartialState') as jest.SpyInstance
-      ).mockImplementation(() => {
-        resolver();
-      });
+    it('should set pageStateManager to controller instance', async () => {
+      jest.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
 
-      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
-        extension: Promise.reject(),
-      });
-      await deferredPromise;
+      await pageManager['_getLoadedControllerState']();
 
-      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
-    });
-  });
-
-  describe('_activatePageSource method', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(pageManager, '_activateController' as never)
-        .mockImplementation();
-
-      jest
-        .spyOn(pageManager, '_activateExtensions' as never)
-        .mockImplementation();
-    });
-
-    it('should activate controller and extensions', async () => {
-      await pageManager['_activatePageSource']();
-
-      expect(pageManager['_activateController']).toHaveBeenCalled();
-      expect(pageManager['_activateExtensions']).toHaveBeenCalled();
-      expect(
-        (pageManager['_managedPage'].state as UnknownParameters).activated
-      ).toBeTruthy();
-    });
-
-    it('should not call method activate more times', async () => {
-      (pageManager['_managedPage'].state as UnknownParameters).activated = true;
-
-      await pageManager['_activatePageSource']();
-
-      expect(pageManager['_activateController']).not.toHaveBeenCalled();
-      expect(pageManager['_activateExtensions']).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('_activateController method', () => {
-    it('should call activate method on controller', async () => {
-      (
-        jest.spyOn(controllerInstance, 'activate') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_activateController']();
-
-      expect(controllerInstance.activate).toHaveBeenCalled();
-    });
-  });
-
-  describe('_activateExtensions method', () => {
-    it('should call activate method on extensions', async () => {
-      (
-        jest.spyOn(extensionInstance, 'activate') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_activateExtensions']();
-
-      expect(extensionInstance.activate).toHaveBeenCalled();
-    });
-  });
-
-  describe('_updatePageSource method', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(pageManager, '_getUpdatedControllerState' as never)
-        .mockReturnValue(controllerState as never);
-
-      jest
-        .spyOn(pageManager, '_getUpdatedExtensionsState' as never)
-        .mockReturnValue(extensionsState as never);
-      jest
-        .spyOn(pageRenderer, 'update')
-        .mockReturnValue(Promise.resolve() as never);
-    });
-
-    it('should be merge state from controller and extensions to updated page state', async () => {
-      await pageManager['_updatePageSource']()
-        .then(() => {
-          expect(pageRenderer.update).toHaveBeenCalledWith(
-            decoratedController,
-            viewInstance,
-            pageState,
-            options
-          );
-        })
-        .catch(error => {
-          console.error(
-            'ima.core.page.manager:_updatePageSource',
-            error.message
-          );
-        });
-    });
-  });
-
-  describe('_getUpdatedControllerState method', () => {
-    it('should calls controller update method', () => {
-      (
-        jest.spyOn(controllerInstance, 'update') as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(controllerInstance, 'getRouteParams') as jest.SpyInstance
-      ).mockReturnValue(params);
-
-      pageManager['_getUpdatedControllerState']();
-
-      expect(controllerInstance.update).toHaveBeenCalledWith(params);
-    });
-  });
-
-  describe('_getUpdatedExtensionsState method', () => {
-    it('should call extensions update method', async () => {
-      (
-        jest.spyOn(extensionInstance, 'getRouteParams') as jest.SpyInstance
-      ).mockReturnValue(params);
-      (
-        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
-
-      await pageManager['_getUpdatedExtensionsState']();
-
-      expect(extensionInstance.update).toHaveBeenCalledWith(params);
-    });
-
-    it('should set restricted pageStateManager to extension instance', async () => {
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
-      (
-        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
-
-      await pageManager['_getUpdatedExtensionsState']();
-
-      expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
-        extensionInstance,
-        extensionState
+      expect(controllerMock.setPageStateManager).toHaveBeenCalledWith(
+        pageStateManager
       );
     });
+  });
 
-    it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      (
-        jest.spyOn(extensionInstance, 'setPartialState') as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(
-          extensionInstance,
-          'switchToPartialState'
-        ) as jest.SpyInstance
-      ).mockImplementation();
-      (
-        jest.spyOn(extensionInstance, 'update') as jest.SpyInstance
-      ).mockReturnValue(extensionState);
-      jest.spyOn(pageStateManager, 'getState').mockReturnValue({ foo: 'bar' });
+  describe('_initExtensions method', () => {
+    beforeEach(async () => {
+      await runManage();
+    });
 
-      await pageManager['_getUpdatedExtensionsState']({ foobar: 'bazfoo' });
+    it('should set route params to extension instance', async () => {
+      jest.spyOn(extensionMock, 'setRouteParams').mockImplementation();
 
-      expect(extensionInstance.setPartialState).toHaveBeenCalledWith(
-        expect.objectContaining({
-          foo: 'bar',
-          foobar: 'bazfoo',
-        })
+      await pageManager['_initExtensions']();
+
+      expect(extensionMock.setRouteParams).toHaveBeenCalledWith(routeParams);
+    });
+
+    it('should call init function on controller instance', async () => {
+      jest.spyOn(extensionMock, 'init').mockImplementation();
+
+      await pageManager['_initExtensions']();
+
+      expect(extensionMock.init).toHaveBeenCalled();
+    });
+  });
+
+  describe('_loadPageSource method', () => {
+    beforeEach(async () => {
+      jest
+        // @ts-expect-error
+        .spyOn(pageManager, '_getLoadedControllerState')
+        // @ts-expect-error
+        .mockReturnValue({ controller: 'state' });
+
+      jest
+        // @ts-expect-error
+        .spyOn(pageManager, '_getLoadedExtensionsState')
+        // @ts-expect-error
+        .mockReturnValue({ extension: 'state' });
+      jest.spyOn(pageRenderer, 'mount').mockReturnValue(Promise.resolve());
+
+      await runManage();
+    });
+
+    it('should be merge state from controller and extensions to loaded page state', async () => {
+      await pageManager['_loadPageSource']();
+
+      expect(pageRenderer.mount).toHaveBeenCalledWith(
+        pageFactory.decorateController(controllerMock),
+        View,
+        { controller: 'state', extension: 'state' },
+        options
       );
-      expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
-    });
-
-    it('should return extensions state together with active controller state', async () => {
-      jest.spyOn(extensionInstance, 'update');
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
-
-      const result = await pageManager['_getUpdatedExtensionsState'](
-        controllerState
-      );
-
-      expect(result).toStrictEqual({
-        controller: 'controller',
-        share: 'controller',
-        extension: extensionState.extension,
-      });
-    });
-
-    it('should switch extensions to PageStateManager after all resources are updated', async () => {
-      jest
-        .spyOn(pageManager, '_switchToPageStateManagerAfterLoaded')
-        .mockImplementation();
-
-      await pageManager['_getLoadedExtensionsState']();
-
-      expect(
-        pageManager._switchToPageStateManagerAfterLoaded
-      ).toHaveBeenCalled();
     });
   });
 
-  describe('_deactivatePageSource method', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(pageManager, '_deactivateController' as never)
-        .mockImplementation();
-
-      jest
-        .spyOn(pageManager, '_deactivateExtensions' as never)
-        .mockImplementation();
+  describe('_destroyController()', () => {
+    beforeEach(async () => {
+      await runManage();
     });
 
-    it('should activate controller and extensions', async () => {
-      (pageManager['_managedPage'].state as UnknownParameters).activated = true;
-
-      await pageManager['_deactivatePageSource']();
-
-      expect(pageManager['_deactivateController']).toHaveBeenCalled();
-      expect(pageManager['_deactivateExtensions']).toHaveBeenCalled();
-    });
-
-    it('should not call method activate more times', async () => {
-      (pageManager['_managedPage'].state as UnknownParameters).activated =
-        false;
-
-      await pageManager['_deactivatePageSource']();
-
-      expect(pageManager['_deactivateController']).not.toHaveBeenCalled();
-      expect(pageManager['_deactivateExtensions']).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('_deactivateController method', () => {
-    it('should call deactivate method on controller', async () => {
-      (
-        jest.spyOn(controllerInstance, 'deactivate') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_deactivateController']();
-
-      expect(controllerInstance.deactivate).toHaveBeenCalled();
-    });
-  });
-
-  describe('_deactivateExtensions method', () => {
-    it('should call deactivate method on extensions', async () => {
-      (
-        jest.spyOn(extensionInstance, 'deactivate') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_deactivateExtensions']();
-
-      expect(extensionInstance.deactivate).toHaveBeenCalled();
-    });
-  });
-
-  describe('_destroyPageSource method', () => {
-    it('should destroy page resource', async () => {
-      jest
-        .spyOn(pageManager, '_destroyController' as never)
-        .mockImplementation();
-      jest
-        .spyOn(pageManager, '_destroyExtensions' as never)
-        .mockImplementation();
-
-      await pageManager['_destroyPageSource']();
-
-      expect(pageManager['_destroyController']).toHaveBeenCalledWith();
-      expect(pageManager['_destroyExtensions']).toHaveBeenCalledWith();
-    });
-  });
-
-  describe('_destroyController method', () => {
     it('should call destroy on controller instance', async () => {
-      (
-        jest.spyOn(controllerInstance, 'destroy') as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(controllerMock, 'destroy').mockImplementation();
 
-      await pageManager['_destroyController']();
+      await runManage();
 
-      expect(controllerInstance.destroy).toHaveBeenCalled();
+      expect(controllerMock.destroy).toHaveBeenCalled();
     });
 
     it('should unset pageStateManager to controller', async () => {
-      (
-        jest.spyOn(
-          controllerInstance,
-          'setPageStateManager'
-        ) as jest.SpyInstance
-      ).mockImplementation();
+      jest.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
 
-      await pageManager['_destroyController']();
+      await runManage();
 
-      expect(controllerInstance.setPageStateManager).toHaveBeenCalledWith();
+      expect(controllerMock.setPageStateManager).toHaveBeenCalledWith();
     });
   });
 
-  describe('_destroyExtensions method', () => {
-    it('should call destroy on extension instance', async () => {
-      (
-        jest.spyOn(extensionInstance, 'destroy') as jest.SpyInstance
-      ).mockImplementation();
+  describe('_setRestrictedPageStateManager()', () => {
+    const allowedStateKeys = ['user'];
+    const allAllowedStateKeys = Object.keys({ extension: 'state' }).concat(
+      allowedStateKeys
+    );
 
-      await pageManager['_destroyExtensions']();
+    beforeEach(async () => {
+      jest
+        .spyOn(extensionMock, 'getAllowedStateKeys')
+        .mockReturnValue(allowedStateKeys);
 
-      expect(extensionInstance.destroy).toHaveBeenCalled();
-    });
-
-    it('should unset pageStateManager to extension', async () => {
-      (
-        jest.spyOn(extensionInstance, 'setPageStateManager') as jest.SpyInstance
-      ).mockImplementation();
-
-      await pageManager['_destroyExtensions']();
-
-      expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith();
-    });
-  });
-
-  describe('_hasOnlyUpdate method', () => {
-    it('should return value from onlyUpdate function', () => {
-      const newOptions: RouteOptions = {
-        ...options,
-        onlyUpdate: jest.fn().mockReturnValue(true),
-      };
-
-      //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
-      const spy = jest.spyOn(newOptions, 'onlyUpdate' as never);
-      const mockSpyWrapper = (...args: unknown[]) => {
+      jest
+        .spyOn(pageFactory, 'decoratePageStateManager')
         // @ts-expect-error
-        return spy(...args);
-      };
-      newOptions.onlyUpdate = mockSpyWrapper;
+        .mockReturnValue(pageStateManager);
 
-      expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
-      ).toBeTruthy();
-      expect(spy).toHaveBeenCalledWith(Controller, View);
+      (
+        jest.spyOn(extensionMock, 'setPageStateManager') as jest.SpyInstance
+      ).mockImplementation();
+
+      await runManage();
     });
 
-    it('should return true for option onlyUpdate set to true and for same controller and view', () => {
-      const newOptions = Object.assign({}, options, { onlyUpdate: true });
+    it('should create restricted page state manager for extension', () => {
+      pageManager._setRestrictedPageStateManager(extensionMock, {
+        extension: 'state',
+      });
 
-      expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
-      ).toBeTruthy();
+      expect(pageFactory.decoratePageStateManager).toHaveBeenCalledWith(
+        pageStateManager,
+        allAllowedStateKeys
+      );
     });
 
-    it('should return false for option onlyUpdate set to true and for different controller and view', () => {
-      const newOptions = Object.assign({}, options, { onlyUpdate: true });
-      pageManager['_managedPage'].controller = undefined;
+    it('should set restricted page state manager to extension', () => {
+      pageManager._setRestrictedPageStateManager(extensionMock, {
+        extension: 'state',
+      });
 
-      expect(
-        pageManager['_hasOnlyUpdate'](Controller, View, newOptions)
-      ).toBeFalsy();
-    });
-  });
-
-  describe('_clearComponentState method', () => {
-    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
-      jest.spyOn(pageRenderer, 'unmount').mockImplementation();
-
-      pageManager._clearComponentState({} as RouteOptions);
-
-      expect(pageRenderer.unmount).toHaveBeenCalled();
+      expect(extensionMock.setPageStateManager).toHaveBeenCalledWith(
+        pageStateManager
+      );
     });
   });
 });

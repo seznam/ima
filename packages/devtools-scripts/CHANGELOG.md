@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
 ## 19.0.0-rc.0
 
 ### Major Changes

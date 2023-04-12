@@ -5,7 +5,7 @@ import { toMockedInstance } from 'to-mock';
 import { CacheImpl } from '../../cache/CacheImpl';
 import { GenericError } from '../../error/GenericError';
 import { CookieStorage } from '../../storage/CookieStorage';
-import { HttpAgentResponse } from '../HttpAgent';
+import { HttpAgentRequestOptions, HttpAgentResponse } from '../HttpAgent';
 import { HttpAgentImpl } from '../HttpAgentImpl';
 import { HttpProxy } from '../HttpProxy';
 
@@ -15,7 +15,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const cache = toMockedInstance(CacheImpl);
   const cookie = toMockedInstance(CookieStorage);
   let options = null;
-  let data: HttpAgentResponse;
+  let data: HttpAgentResponse<unknown>;
   // @ts-ignore
   let httpConfig = null;
   const helper = {
@@ -29,13 +29,23 @@ describe('ima.core.http.HttpAgentImpl', () => {
         timeout: 7000,
         repeatRequest: 1,
         ttl: 0,
-        headers: {
-          Accept: 'application/json',
-          'Accept-Language': 'en',
-        },
         cache: true,
-        postProcessor: (agentResponse: Response) => agentResponse,
-      },
+        fetchOptions: {
+          headers: {
+            Accept: 'application/json',
+            'Accept-Language': 'en',
+          },
+          credentials: 'include',
+        },
+        postProcessors: [
+          jest
+            .fn()
+            .mockImplementation(
+              (agentResponse: HttpAgentResponse<unknown>) => agentResponse
+            ),
+        ],
+        keepSensitiveHeaders: false,
+      } as HttpAgentRequestOptions,
       cacheOptions: {
         prefix: 'http.',
       },
@@ -43,15 +53,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
     http = new HttpAgentImpl(proxy, cache, cookie, httpConfig, helper);
 
     options = {
-      ttl: httpConfig.defaultRequestOptions.ttl,
-      timeout: httpConfig.defaultRequestOptions.timeout,
-      repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
-      headers: {},
-      cache: true,
-      fetchOptions: {},
-      withCredentials: true,
-      // @ts-ignore
-      language: httpConfig.defaultRequestOptions.language,
+      ...httpConfig.defaultRequestOptions,
     };
 
     data = {
@@ -59,8 +61,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
       body: 111,
       params: {
         url: 'url',
+        transformedUrl: 'url',
+        method: 'get',
         data: {},
-        options: options,
+        options,
       },
       headers: {
         // @ts-ignore
@@ -86,7 +90,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.method = method;
       });
 
-      it('should be return resolved promise with data', async () => {
+      it('should return resolved promise with data', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -98,24 +102,25 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        )
-          .then((response: HttpAgentResponse) => {
-            const agentResponse = {
-              status: data.status,
-              params: data.params,
-              body: data.body,
-              headers: data.headers,
-              headersRaw: data.headersRaw,
-              cached: false,
-            };
+        ).then((response: HttpAgentResponse<unknown>) => {
+          const { postProcessors, ...restOptions } = data.params.options;
+          restOptions.fetchOptions.headers = {}; // HttpAgentImpl._cleanResponse() removes headers
+          const agentResponse = {
+            status: data.status,
+            params: {
+              ...data.params,
+              options: {
+                ...restOptions,
+              },
+            },
+            body: data.body,
+            headers: {},
+            cached: false,
+          };
 
-            // eslint-disable-next-line jest/no-conditional-expect
-            expect(response).toStrictEqual(agentResponse);
-          })
-          // @ts-ignore
-          .catch(e => {
-            console.error(e.message, e.stack);
-          });
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(response).toStrictEqual(agentResponse);
+        });
       });
 
       it('should be rejected with error', async () => {
@@ -145,7 +150,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.options.abortController = new AbortController();
 
         jest.spyOn(proxy, 'request').mockImplementation(() => {
-          data.params.options.abortController.abort();
+          data.params.options?.abortController?.abort();
 
           return Promise.reject(new GenericError('', data.params));
         });
@@ -168,7 +173,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       // eslint-disable-next-line jest/no-focused-tests
-      it('should be set cookie to response', async () => {
+      it('should set cookie to response', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -188,15 +193,57 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should call postProcessor function', async () => {
+      it('should compose fetchOptions correctly from defaults and options', async () => {
+        const proxyMock = jest
+          .spyOn(proxy, 'request')
+          .mockImplementation(() => {
+            return Promise.resolve(data);
+          });
+
+        jest
+          .spyOn(cookie, 'getCookiesStringForCookieHeader')
+          .mockImplementation(() => 'someCookie=value');
+
+        const customOptions = {
+          ...data.params.options,
+          fetchOptions: {
+            mode: 'cors',
+            referrerPolicy: 'no-referrer-when-downgrade',
+            headers: {
+              'Accept-Language': 'cs',
+            },
+          },
+        };
+
+        // @ts-ignore
+        await http[method](
+          data.params.url,
+          data.params.data,
+          customOptions
+        ).then(() => {
+          const mockCall = proxyMock.mock.lastCall || [];
+          expect(mockCall[3]).toMatchObject({
+            fetchOptions: {
+              credentials: 'include',
+              referrerPolicy: 'no-referrer-when-downgrade',
+              headers: {
+                'Accept-Language': 'cs',
+                Cookie: 'someCookie=value',
+              },
+              mode: 'cors',
+            },
+          });
+        });
+      });
+
+      it('should call postProcessors function', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        data.params.options.postProcessor =
+        data.params.options.postProcessors =
           // @ts-ignore
-          httpConfig.defaultRequestOptions.postProcessor;
-        jest.spyOn(data.params.options, 'postProcessor');
+          httpConfig.defaultRequestOptions.postProcessors;
 
         // @ts-ignore
         await http[method](
@@ -204,18 +251,18 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(data.params.options.postProcessor).toHaveBeenCalled();
+          expect(data.params.options.postProcessors?.[0]).toHaveBeenCalled();
         });
       });
 
-      it('should call clear response from postProcessor and abortController', async () => {
+      it('should call clear response from postProcessors and abortController', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        data.params.options.postProcessor =
+        data.params.options.postProcessors =
           // @ts-ignore
-          httpConfig.defaultRequestOptions.postProcessor;
+          httpConfig.defaultRequestOptions.postProcessors;
         data.params.options.abortController = new AbortController();
 
         // @ts-ignore
@@ -223,13 +270,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.url,
           data.params.data,
           data.params.options
-        ).then((response: HttpAgentResponse) => {
+        ).then((response: HttpAgentResponse<unknown>) => {
           expect(response.params.options.abortController).toBeUndefined();
-          expect(response.params.options.postProcessor).toBeUndefined();
+          expect(response.params.options.postProcessors).toBeUndefined();
         });
       });
 
-      it('should not set Cookie header only for request with withCredentials option set to false', async () => {
+      it('should not set Cookie header if request fetchOptions.credentials is not "include"', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
@@ -239,7 +286,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
         await http[method](
           data.params.url,
           data.params.data,
-          Object.assign({}, data.params.options, { withCredentials: false })
+          Object.assign({}, data.params.options, {
+            fetchOptions: { credentials: 'omit' },
+          })
         ).then(() => {
           expect(cookie.getCookiesStringForCookieHeader).not.toHaveBeenCalled();
         });

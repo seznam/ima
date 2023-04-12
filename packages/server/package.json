@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "19.0.0-rc.1",
+  "version": "19.0.0-rc.6",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@esmj/emitter": "^0.3.0",
-    "@esmj/monitor": "^0.4.0",
+    "@esmj/monitor": "^0.5.0",
+    "chalk": "^4.1.2",
     "ejs": "^3.1.6",
     "http-proxy-middleware": "^2.0.6",
     "memoize-one": "^6.0.0",

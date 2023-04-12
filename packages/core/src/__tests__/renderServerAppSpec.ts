@@ -46,7 +46,7 @@ describe('render server application', () => {
       };
     },
   };
-  const expressReponse = {
+  const expressResponse = {
     send() {
       return;
     },
@@ -105,7 +105,7 @@ describe('render server application', () => {
             oc: ObjectContainer
           ) => {
             (oc.get(Response) as Response).init(
-              expressReponse as unknown as ExpressResponse
+              expressResponse as unknown as ExpressResponse
             );
           },
           initRoutes: () => {

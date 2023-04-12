@@ -49,7 +49,11 @@ export async function parseConfigFile(
 
   // Override with custom configuration
   if (configFile) {
-    loadedConfig = (await import(path.join(configDir, configFile))).default;
+    let configPath = path.join(configDir, configFile);
+    if (!configPath.startsWith('/')) {
+      configPath = 'file:///' + configPath.replace(/\\/g, '/');
+    }
+    loadedConfig = (await import(configPath)).default;
     loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
   }
 
@@ -148,43 +152,64 @@ export async function processTransformers(
  */
 export async function createProcessingPipeline(ctx: Context) {
   const { config } = ctx;
-  const transformers = new Map<string, TransformerDefinition[]>();
+  const transformersMap = new Map<string, TransformerDefinition[]>();
   const isDevelopment =
     ctx.command !== 'build' && process.env.NODE_ENV !== 'production';
 
   // Create map of transformers for each output option
   config.output.forEach(output => {
-    transformers.set(
-      output.dir,
+    // Create default transformers set based on config options
+    const defaultTransformers = [
+      typeof output.bundle !== 'undefined' &&
+        preprocessTransformer({
+          context: {
+            client: output.bundle === 'client',
+            server: output.bundle === 'server',
+          },
+        }),
       [
-        typeof output.bundle !== 'undefined' &&
-          preprocessTransformer({
-            context: {
-              client: output.bundle === 'client',
-              server: output.bundle === 'server',
-            },
-          }),
-        [
-          createSwcTransformer({
-            target: config.target,
-            development: isDevelopment,
-            type: output.format,
-            jsxRuntime: config.jsxRuntime,
-          }),
-          { test: /\.(js|jsx)$/ },
-        ],
-        [
-          createSwcTransformer({
-            target: config.target,
-            development: isDevelopment,
-            type: output.format,
-            jsxRuntime: config.jsxRuntime,
-            syntax: 'typescript',
-          }),
-          { test: /\.(ts|tsx)$/ },
-        ],
-      ].filter(Boolean) as TransformerDefinition[]
-    );
+        createSwcTransformer({
+          target: config.target,
+          sourceMaps: config.sourceMaps,
+          development: isDevelopment,
+          type: output.format,
+          jsxRuntime: config.jsxRuntime,
+        }),
+        { test: /\.(js|jsx)$/ },
+      ],
+      [
+        createSwcTransformer({
+          target: config.target,
+          sourceMaps: config.sourceMaps,
+          development: isDevelopment,
+          type: output.format,
+          jsxRuntime: config.jsxRuntime,
+          syntax: 'typescript',
+        }),
+        { test: /\.(ts|tsx)$/ },
+      ],
+    ].filter(Boolean) as TransformerDefinition[];
+
+    // Check for custom transformers in config
+    if (Array.isArray(config.transformers)) {
+      const hasDefaultsPlaceholder = config.transformers.find(
+        t => typeof t === 'string' && t === '...'
+      );
+
+      transformersMap.set(
+        output.dir,
+        config.transformers
+          .map(t =>
+            hasDefaultsPlaceholder && typeof t === 'string' && t === '...'
+              ? defaultTransformers
+              : t
+          )
+          .flat()
+          .filter(Boolean) as TransformerDefinition[]
+      );
+    } else {
+      transformersMap.set(output.dir, defaultTransformers);
+    }
   });
 
   return async (filePath: string) => {
@@ -223,7 +248,7 @@ export async function createProcessingPipeline(ctx: Context) {
         // Process transforms
         source = await processTransformers(
           source,
-          transformers.get(dir),
+          transformersMap.get(dir),
           context
         );
 

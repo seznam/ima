@@ -363,8 +363,7 @@ describe('ima.core.router.StaticRoute', function () {
           value.userId +
           '/something/' +
           value.somethingId +
-          '?query1=query&query2=' +
-          encodeURIComponent(value.query2)
+          '?query1=query&query2=text+for+you'
       );
     });
   });
@@ -806,6 +805,11 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/something/param1/user1',
         params: {},
       },
+      {
+        pathExpression: '/test/:?param1/:?param2',
+        path: '/test/xxx',
+        params: { param1: 'xxx', param2: undefined },
+      },
     ].forEach(value => {
       it(value.pathExpression, function () {
         const localStaticRoute = new StaticRoute(
@@ -816,7 +820,10 @@ describe('ima.core.router.StaticRoute', function () {
           options
         );
 
-        const routeParams = localStaticRoute.extractParameters(value.path);
+        const routeParams = localStaticRoute.extractParameters(
+          value.path,
+          'https://imajs.io'
+        );
         const keys = Object.keys(value.params);
 
         keys.forEach(key => {
@@ -1515,7 +1522,10 @@ describe('ima.core.router.StaticRoute', function () {
 
     it('should allow query to override path parameters', function () {
       expect(
-        route.extractParameters('/abc/def?stuff=value&second=override')
+        route.extractParameters(
+          '/abc/def?stuff=value&second=override',
+          'https://domain.com'
+        )
       ).toStrictEqual({
         first: 'abc',
         second: 'override',
@@ -1526,7 +1536,9 @@ describe('ima.core.router.StaticRoute', function () {
     it('should handle query with parameter value', function () {
       expect(route.matches('/abc/def?foo=bar')).toBeTruthy();
       expect(route.matches('/abc?foo=bar')).toBeFalsy();
-      expect(route.extractParameters('/abc/def?foo=bar')).toStrictEqual({
+      expect(
+        route.extractParameters('/abc/def?foo=bar', 'https://domain.com')
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
         foo: 'bar',
@@ -1535,18 +1547,22 @@ describe('ima.core.router.StaticRoute', function () {
 
     it('should handle query without parameter value', function () {
       expect(route.matches('/abc/def?foo')).toBeTruthy();
-      expect(route.extractParameters('/abc/def?foo')).toStrictEqual({
+      expect(
+        route.extractParameters('/abc/def?foo', 'https://domain.com')
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
-        foo: true,
+        foo: '',
       });
 
       expect(route.matches('/abc/def?foo&bar')).toBeTruthy();
-      expect(route.extractParameters('/abc/def?foo&bar&second')).toStrictEqual({
+      expect(
+        route.extractParameters('/abc/def?foo&bar&second', 'https://domain.com')
+      ).toStrictEqual({
         first: 'abc',
-        second: true,
-        foo: true,
-        bar: true,
+        second: '',
+        foo: '',
+        bar: '',
       });
     });
 
@@ -1555,16 +1571,16 @@ describe('ima.core.router.StaticRoute', function () {
         route.matches('/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff')
       ).toBeTruthy();
       expect(
-        route.extractParameters('/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff')
+        route.extractParameters(
+          '/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff',
+          'https://domain.com'
+        )
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
         foo: 'xy',
-        bar: 'zz',
-        giz: 'mo',
-        stuff: true,
-        geez: true,
-        huff: true,
+        bar: 'zz;giz=mo;stuff;geez',
+        huff: '',
       });
     });
 
@@ -1573,7 +1589,10 @@ describe('ima.core.router.StaticRoute', function () {
         route.matches('/abc/def?stuff=value&second=override')
       ).toBeTruthy();
       expect(
-        route.extractParameters('/abc/def?stuff=value&second=override')
+        route.extractParameters(
+          '/abc/def?stuff=value&second=override',
+          'https://domain.com'
+        )
       ).toStrictEqual({
         first: 'abc',
         second: 'override',
@@ -1583,12 +1602,15 @@ describe('ima.core.router.StaticRoute', function () {
 
     it('should ignore hash parameters when getting url parameters', function () {
       expect(route.matches('/abc/def#hashParam=value')).toBeTruthy();
-      expect(route.extractParameters('/abc/def#hashParam=value')).toStrictEqual(
-        {
-          first: 'abc',
-          second: 'def',
-        }
-      );
+      expect(
+        route.extractParameters(
+          '/abc/def#hashParam=value',
+          'https://domain.com'
+        )
+      ).toStrictEqual({
+        first: 'abc',
+        second: 'def',
+      });
     });
 
     it('should ignore hash parameters when getting query parameters', function () {
@@ -1596,7 +1618,10 @@ describe('ima.core.router.StaticRoute', function () {
         route.matches('/abc/def?stuff=value#hashParam=value')
       ).toBeTruthy();
       expect(
-        route.extractParameters('/abc/def?stuff=value#hashParam=value')
+        route.extractParameters(
+          '/abc/def?stuff=value#hashParam=value',
+          'https://domain.com'
+        )
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
@@ -1609,7 +1634,10 @@ describe('ima.core.router.StaticRoute', function () {
         route.matches('/abc/def?stuff=value#hashParam=value')
       ).toBeTruthy();
       expect(
-        route.extractParameters('/abc/def?stuff=#hashParam=value')
+        route.extractParameters(
+          '/abc/def?stuff=#hashParam=value',
+          'https://domain.com'
+        )
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
@@ -1625,14 +1653,15 @@ describe('ima.core.router.StaticRoute', function () {
       ).toBeTruthy();
       expect(
         route.extractParameters(
-          '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam'
+          '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam',
+          'https://domain.com'
         )
       ).toStrictEqual({
         first: 'abc',
         second: 'def',
         stuff: 'value',
         other: 'value=with=equal=signs==',
-        thirdParam: true,
+        thirdParam: '',
       });
     });
   });

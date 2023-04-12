@@ -1,17 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { UnknownParameters } from '../../types';
+export type PageState = { [key: string]: any };
 
 /**
  * Manager of the current page state and state history.
  */
-export abstract class PageStateManager {
-  onChange?: (newState: UnknownParameters) => void;
+export abstract class PageStateManager<S extends PageState = {}> {
+  onChange?: (newState: S) => void;
 
   /**
    * Clears the state history.
    */
-  clear() {
+  clear(): void {
     return;
   }
 
@@ -21,7 +19,7 @@ export abstract class PageStateManager {
    *
    * @param statePatch The patch of the current state.
    */
-  setState(statePatch: UnknownParameters) {
+  setState<K extends keyof S>(patchState: Pick<S, K> | S | null): void {
     return;
   }
 
@@ -30,8 +28,8 @@ export abstract class PageStateManager {
    *
    * @return The current page state.
    */
-  getState(): UnknownParameters {
-    return {};
+  getState(): S {
+    return {} as S;
   }
 
   /**
@@ -43,7 +41,7 @@ export abstract class PageStateManager {
    *
    * @return The recorded history of page states.
    */
-  getAllStates(): UnknownParameters[] {
+  getAllStates(): S[] {
     return [];
   }
 
@@ -52,7 +50,7 @@ export abstract class PageStateManager {
    *
    * @return State patches from the begin of transaction.
    */
-  getTransactionStatePatches(): UnknownParameters[] {
+  getTransactionStatePatches(): (Pick<S, any> | S | null)[] {
     return [];
   }
 
@@ -63,7 +61,7 @@ export abstract class PageStateManager {
    * Note that call to `getState` after the transaction has begun will
    * return state as it was before the transaction.
    */
-  beginTransaction() {
+  beginTransaction(): void {
     return;
   }
 
@@ -71,14 +69,14 @@ export abstract class PageStateManager {
    * Applies queued state patches to the main state. All patches are squashed
    * and applied with one `setState` call.
    */
-  commitTransaction() {
+  commitTransaction(): void {
     return;
   }
 
   /**
    * Cancels ongoing transaction. Uncommitted state changes are lost.
    */
-  cancelTransaction() {
+  cancelTransaction(): void {
     return;
   }
 }

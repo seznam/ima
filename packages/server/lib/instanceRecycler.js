@@ -61,7 +61,6 @@ class InstanceRecycler {
 
   clearInstance(instance) {
     this._concurrentRequests--;
-    instance.oc.clear();
 
     if (this._instances.length < this._maxInstanceCount) {
       this._instances.push(instance);

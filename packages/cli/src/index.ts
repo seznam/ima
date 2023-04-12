@@ -1,7 +1,6 @@
 export {
   ImaCliPlugin,
   ImaConfig,
-  ImaEnvironment,
   ImaCliCommand,
   ImaCliArgs,
   ImaConfigurationContext,

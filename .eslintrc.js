@@ -7,6 +7,7 @@ module.exports = {
     '**/docs/**',
     '**/.docusaurus/**',
     '**/coverage/**',
+    'packages/create-ima-app/**/.eslintrc.js',
     'packages/create-ima-app/examples/todos/assets/**',
   ],
   extends: [
@@ -117,7 +118,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.mjs', '.json'],
       },
       typescript: {
-        project: 'packages/*/tsconfig.json',
+        project: './packages/*/tsconfig.json',
       },
     },
   },
@@ -150,6 +151,8 @@ module.exports = {
       extends: ['plugin:@typescript-eslint/recommended'],
       plugins: ['@typescript-eslint'],
       rules: {
+        '@typescript-eslint/ban-types': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
@@ -162,6 +165,7 @@ module.exports = {
             varsIgnorePattern: '^_',
             destructuredArrayIgnorePattern: '^_',
             ignoreRestSiblings: true,
+            args: 'none',
           },
         ],
         '@typescript-eslint/no-namespace': [

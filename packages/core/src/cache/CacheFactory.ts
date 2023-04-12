@@ -1,5 +1,5 @@
 import { CacheEntry } from './CacheEntry';
-import { Dependencies } from '../ObjectContainer';
+import { Dependencies } from '../oc/ObjectContainer';
 
 /**
  * Factory for creating instances of {@link CacheEntry}.

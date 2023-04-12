@@ -1,17 +1,21 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 import { Extension } from './Extension';
 import { GenericError } from '../error/GenericError';
 import { EventBusEventHandler } from '../event/EventBus';
-import { PageStateManager } from '../page/state/PageStateManager';
-import { UnknownParameters, UnknownPromiseParameters } from '../types';
+import { Dependencies } from '../oc/ObjectContainer';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 
 /**
  * Abstract extension
  */
-export abstract class AbstractExtension implements Extension {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: PropertyKey]: any | EventBusEventHandler | UnknownParameters;
+export abstract class AbstractExtension<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> extends Extension<S, R> {
+  static $name?: string;
+  static $dependencies: Dependencies;
+
+  [key: PropertyKey]: any | EventBusEventHandler;
 
   /**
    * State manager.
@@ -31,38 +35,40 @@ export abstract class AbstractExtension implements Extension {
   /**
    * The route parameters extracted from the current route.
    */
-  params: UnknownParameters = {};
+  params: R = {} as R;
 
   /**
    * @inheritDoc
    */
-  init(): Promise<undefined> | void {}
-
-  /**
-   * @inheritDoc
-   */
-  destroy(): Promise<undefined> | void {
+  init(): Promise<void> | void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  activate(): Promise<undefined> | void {
+  destroy(): Promise<void> | void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  deactivate(): Promise<undefined> | void {
+  activate(): Promise<void> | void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  load(): Promise<UnknownPromiseParameters> | UnknownPromiseParameters {
+  deactivate(): Promise<void> | void {
+    return;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  load(): Promise<S> | S {
     throw new GenericError(
       'The ima.core.extension.AbstractExtension.load method is abstract ' +
         'and must be overridden'
@@ -72,14 +78,14 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  update() {
-    return {};
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return {} as S;
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters) {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
     }
@@ -88,9 +94,9 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): S {
     if (this._usingStateManager && this._pageStateManager) {
-      return this._pageStateManager.getState();
+      return this._pageStateManager.getState() as S;
     } else {
       return this.getPartialState();
     }
@@ -99,7 +105,7 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.beginTransaction();
     }
@@ -108,7 +114,7 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.commitTransaction();
     }
@@ -117,7 +123,7 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.cancelTransaction();
     }
@@ -126,7 +132,7 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  setPartialState(partialStatePatch: UnknownParameters) {
+  setPartialState(partialStatePatch: S): void {
     const newPartialState = Object.assign(
       {},
       this[this._partialStateSymbol],
@@ -138,63 +144,63 @@ export abstract class AbstractExtension implements Extension {
   /**
    * @inheritDoc
    */
-  getPartialState() {
+  getPartialState(): S {
     return this[this._partialStateSymbol] || {};
   }
 
   /**
    * @inheritDoc
    */
-  clearPartialState() {
+  clearPartialState(): void {
     this[this._partialStateSymbol] = {};
   }
 
   /**
    * @inheritDoc
    */
-  setRouteParams(params = {}) {
+  setRouteParams(params: R = {} as R): void {
     this.params = params;
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams() {
+  getRouteParams(): R {
     return this.params;
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager): void {
     this._pageStateManager = pageStateManager;
   }
 
   /**
    * @inheritDoc
    */
-  switchToStateManager() {
+  switchToStateManager(): void {
     this._usingStateManager = true;
   }
 
   /**
    * @inheritDoc
    */
-  switchToPartialState() {
+  switchToPartialState(): void {
     this._usingStateManager = false;
   }
 
   /**
    * @inheritDoc
    */
-  getHttpStatus() {
+  getHttpStatus(): number {
     return this.status;
   }
 
   /**
    * Returns array of allowed state keys for extension.
    */
-  getAllowedStateKeys() {
+  getAllowedStateKeys(): (keyof S)[] {
     return [];
   }
 }

@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { IController } from '../../controller/Controller';
-import { AbstractRoute } from '../../router/AbstractRoute';
+import { AbstractRoute, RouteParams } from '../../router/AbstractRoute';
 import { RouteOptions } from '../../router/Router';
-import { UnknownParameters } from '../../types';
 import { PageAction } from '../PageTypes';
 
 export type ManageArgs = {
-  route: AbstractRoute;
-  controller: IController;
-  view: unknown;
+  route: InstanceType<typeof AbstractRoute>;
   options: RouteOptions;
-  params?: UnknownParameters;
+  params?: RouteParams;
   action?: PageAction;
 };
 
@@ -25,6 +19,16 @@ export abstract class PageManager {
    */
   init() {
     return;
+  }
+
+  /**
+   * Pre manage handler, should be called and awaited before tryint to handle
+   * new route handler. This pre manage takes care of canceling any currently
+   * executed route handlers and returns promise which is resolved when previous
+   * page finished loading (even if it got canceled).
+   */
+  async preManage(): Promise<void> {
+    return Promise.resolve();
   }
 
   /**
@@ -48,6 +52,13 @@ export abstract class PageManager {
    */
   manage(args: ManageArgs): Promise<unknown> {
     return Promise.reject();
+  }
+
+  /**
+   * Called by router after currently managed route is resolved.
+   */
+  postManage(): void {
+    return;
   }
 
   /**

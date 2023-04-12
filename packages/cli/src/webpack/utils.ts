@@ -2,18 +2,14 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
+import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
 import chalk from 'chalk';
 import { Configuration } from 'webpack';
 
 import webpackConfig from './config';
-import {
-  ImaConfigurationContext,
-  ImaEnvironment,
-  ImaConfig,
-  ImaCliArgs,
-} from '../types';
+import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
 
 const IMA_CONF_FILENAME = 'ima.config.js';
 
@@ -21,11 +17,11 @@ const IMA_CONF_FILENAME = 'ima.config.js';
  * Loads application IMA.js environment from server/config/environment.js
  *
  * @param {ImaCliArgs['rootDir']} rootDir Application root directory
- * @returns {ImaEnvironment} Loaded environment
+ * @returns {Environment} Loaded environment
  */
 function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
-): ImaEnvironment {
+): Environment {
   return environmentFactory({ applicationFolder: rootDir });
 }
 

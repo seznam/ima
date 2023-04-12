@@ -1,5 +1,49 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Major Changes
+
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+
+### Minor Changes
+
+- 7c9cf6997: Style content variable now automatically generates preload links for app styles.
+
+### Patch Changes
+
+- 1f636bbfb: Fixed issue where server redirect showed ErrorOverlay in debug mode
+- d2e426d75: The instances of $Dispatcher, $Cache, $PageRenderer and $PageManager is cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
+
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- eee60ef09: Add option to use custom manifestRequire
+- cd8af3a1b: fix devutils default value
+- 552d4e17f: Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings
+
+## 19.0.0-rc.4
+
+### Patch Changes
+
+- 5919b93d7: The App error route is protected for exceeding static thresholds.
+- bfb1f48bb: The Emitter event.cause is removed. The error cause is set in event.error.cause.
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- 394fc8985: update @esmj/monitor to 0.5.0 with breaking change for returns value from subscribe method where returns subscription is object with unsubscribe method.
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
 ## 19.0.0-rc.1
 
 ### Major Changes
@@ -50,6 +94,24 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
+
+## 18.3.3
+
+### Patch Changes
+
+- 18e6cab06: Fix export of devUtilsFactory
+
+## 18.3.2
+
+### Patch Changes
+
+- 41d7d3b56: allow devUtils to be overriden in createIMAServer
+
+## 18.3.1
+
+### Patch Changes
+
+- a980951af: Fix missing `chalk` dependency
 
 ## 18.3.0
 

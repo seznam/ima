@@ -10,6 +10,7 @@ declare global {
       IMA_CLI_LAZY_SERVER?: string;
       IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
       IMA_CLI_OPEN?: string;
+      IMA_CLI_OPEN_URL?: string;
 
       // Used to pass env publicPath settings to webpack
       IMA_PUBLIC_PATH?: string;
@@ -33,6 +34,7 @@ export interface ImaCliArgs {
   verbose?: boolean;
   ignoreWarnings?: boolean;
   open?: boolean;
+  openUrl?: string;
   legacy?: boolean;
   forceSPA?: boolean;
   profile?: boolean;
@@ -251,45 +253,3 @@ export type ImaConfig = {
     css?: boolean; // Enables webpack native CSS support
   };
 };
-
-/**
- * IMA.js loaded environment
- */
-export interface ImaEnvironment {
-  /**
-   * Server config
-   */
-  $Server: {
-    port: number;
-  };
-
-  /**
-   * Debug flag
-   */
-  $Debug: boolean;
-
-  /**
-   * Possible environments
-   */
-  $Env: string;
-
-  /**
-   * App version
-   */
-  $Version: string;
-
-  /**
-   * App data
-   */
-  $App: unknown;
-
-  /**
-   * App script and style resources
-   */
-  $Resources: unknown;
-
-  /**
-   * Array of defined languages
-   */
-  $Language: string[];
-}

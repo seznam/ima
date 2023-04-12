@@ -1,21 +1,28 @@
-import { Controller } from './Controller';
+import { AbstractConstructor, Constructor } from 'type-fest';
+
+import { Controller, CreateLoadedResources } from './Controller';
+import { Settings } from '../boot';
+import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
-import { Extension, IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { MetaManager } from '../meta/MetaManager';
-import { PageStateManager } from '../page/state/PageStateManager';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 import { Router } from '../router/Router';
-import { UnknownParameters } from '../types';
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities so these can be easily provided to
  * the decorated page controller when needed.
  */
-export class ControllerDecorator extends Controller {
+export class ControllerDecorator<
+  S extends PageState = {},
+  R extends RouteParams = {}
+> extends Controller<S, R> {
   /**
    * The controller being decorated.
    */
-  protected _controller: Controller;
+  protected _controller: Controller<S, R>;
   /**
    * The meta page attributes manager.
    */
@@ -31,7 +38,7 @@ export class ControllerDecorator extends Controller {
   /**
    * Application settings for the current application environment.
    */
-  protected _settings: UnknownParameters;
+  protected _settings: Settings;
 
   /**
    * Initializes the controller decorator.
@@ -44,99 +51,95 @@ export class ControllerDecorator extends Controller {
    *        current application environment.
    */
   constructor(
-    controller: Controller,
+    controller: Controller<S, R>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
-    settings: UnknownParameters
+    settings: Settings
   ) {
     super();
 
     this._controller = controller;
-
     this._metaManager = metaManager;
-
     this._router = router;
-
     this._dictionary = dictionary;
-
     this._settings = settings;
   }
 
   /**
    * @inheritDoc
    */
-  init() {
+  init(): Promise<void> | void {
     this._controller.init();
   }
 
   /**
    * @inheritDoc
    */
-  destroy() {
+  destroy(): Promise<void> | void {
     this._controller.destroy();
   }
 
   /**
    * @inheritDoc
    */
-  activate() {
+  activate(): Promise<void> | void {
     this._controller.activate();
   }
 
   /**
    * @inheritDoc
    */
-  deactivate() {
+  deactivate(): Promise<void> | void {
     this._controller.deactivate();
   }
 
   /**
    * @inheritDoc
    */
-  load() {
+  load(): Promise<S> | S {
     return this._controller.load();
   }
 
   /**
    * @inheritDoc
    */
-  update(params = {}) {
-    return this._controller.update(params);
+  update(prevParams: R = {} as R): Promise<S> | S {
+    return this._controller.update(prevParams);
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters) {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     this._controller.setState(statePatch);
   }
 
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): S {
     return this._controller.getState();
   }
 
   /**
    * @inheritDoc
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     this._controller.beginStateTransaction();
   }
 
   /**
    * @inheritDoc
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     this._controller.commitStateTransaction();
   }
 
   /**
    * @inheritDoc
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     this._controller.cancelStateTransaction();
   }
 
@@ -144,25 +147,36 @@ export class ControllerDecorator extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: Extension | IExtension,
-    extensionInstance?: Extension
-  ) {
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
+      | InstanceType<typeof Extension>,
+    extensionInstance?: InstanceType<typeof Extension>
+  ): void {
     this._controller.addExtension(extension, extensionInstance);
-
-    return this;
   }
 
   /**
    * @inheritDoc
    */
-  getExtensions() {
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
+    return this._controller.get(extension);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getExtensions(): Extension[] {
     return this._controller.getExtensions();
   }
 
   /**
    * @inheritDoc
    */
-  setMetaParams(loadedResources: UnknownParameters) {
+  setMetaParams(loadedResources: CreateLoadedResources<S>) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,
@@ -175,28 +189,28 @@ export class ControllerDecorator extends Controller {
   /**
    * @inheritDoc
    */
-  setRouteParams(params = {}) {
+  setRouteParams(params: R = {} as R): void {
     this._controller.setRouteParams(params);
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams() {
+  getRouteParams(): R {
     return this._controller.getRouteParams();
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
     this._controller.setPageStateManager(pageStateManager);
   }
 
   /**
    * @inheritDoc
    */
-  getHttpStatus() {
+  getHttpStatus(): number {
     return this._controller.getHttpStatus();
   }
 
@@ -207,7 +221,7 @@ export class ControllerDecorator extends Controller {
    * @return The Meta attributes manager configured by the
    *         decorated controller.
    */
-  getMetaManager() {
+  getMetaManager(): MetaManager {
     return this._metaManager;
   }
 }

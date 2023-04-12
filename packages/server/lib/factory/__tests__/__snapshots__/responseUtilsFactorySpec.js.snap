@@ -412,7 +412,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
     })(typeof window !== 'undefined' && window !== null ? window : global);
     </script>",
   "runner": "<script id="ima-runner">runner#{resources}</script>",
-  "styles": "<link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
+  "styles": "<link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
 }
 `;
 
@@ -438,7 +438,7 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
 `;
 
 exports[`responseUtilsFactory processContent should interpolate revival scripts into page content 1`] = `
-"<html><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-settings">(function (root) {
+"<html><link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};
       $IMA.SPA = false;

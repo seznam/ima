@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import chalk from 'chalk';
 
+import { create } from '../scripts/create.js';
 import { error, warn } from '../scripts/utils.js';
 
 const MIN_NODE_VERSION = 16;
@@ -53,10 +53,4 @@ if (nodeMajorVersion > MAX_NODE_VERSION) {
 }
 
 // Run create script
-spawnSync(
-  'node',
-  [path.resolve(__dirname, '../scripts/create.js'), ...process.argv.slice(2)],
-  {
-    stdio: 'inherit',
-  }
-);
+create(process.argv[2], process.argv.includes('--typescript'));

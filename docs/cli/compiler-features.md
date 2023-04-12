@@ -71,6 +71,7 @@ Now create `tsconfig.json` file (that may look something like this):
 ```json title=./tsconfig.json
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "ES2022",
     "lib": [
       "ES2022",
@@ -83,29 +84,42 @@ Now create `tsconfig.json` file (that may look something like this):
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "outDir": "./build/ts-cache",
     "paths": {
       "app/*": [
         "app/*"
       ],
     }
   },
-  "include": ["app"]
+  "include": ["./app/**/*", "./build/tmp/types/**/*"],
+  "exclude": ["./**/__tests__"]
 }
 ```
+
+:::tip
+
+You can also easily create a typescript base IMA.js application using `--typescript` cli argument when running `create-ima-app` command:
+
+```bash npm2yarn
+npx create-ima-app ~/Desktop/ima-ts --typescript
+```
+
+:::
 
 When CLI detects existence of the `tsconfig.json` file, it automatically starts **type checking** and **compiling** files with `*.ts` and `*.tsx` extensions.
 
 Keep in mind that the code is still compiled using [swc](https://swc.rs/), the same way JS code is. This means that certain settings in `tsconfig.json` only applies to type checking (like `target`, `moduleResolution`, etc.), but compilation uses it's own settings to match the JS code.
 
-:::tip
+:::note
 
-You may probably also want to install additional `@types/*` type definition libs to ensure proper support, like react types:
+You will also probably need to install additional `@types/*` type definition libs to ensure proper support, like react types:
 
 ```bash npm2yarn
 npm i -D @types/react @types/react-dom
 ```
 
 :::
+
 
 ## CSS/LESS
 

@@ -2,7 +2,7 @@ import memoizeOne from 'memoize-one';
 
 import { Storage } from './Storage';
 import { GenericError } from '../error/GenericError';
-import { Dependencies } from '../ObjectContainer';
+import { Dependencies } from '../oc/ObjectContainer';
 import { Request } from '../router/Request';
 import { Response } from '../router/Response';
 import { Window } from '../window/Window';

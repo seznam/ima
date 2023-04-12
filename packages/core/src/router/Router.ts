@@ -1,11 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
-import { AbstractRoute, RouteParams } from './AbstractRoute';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteController,
+  RouteParams,
+} from './AbstractRoute';
 import { ActionTypes } from './ActionTypes';
-import { Controller, IController } from '../controller/Controller';
+import { DecoratedOCAliasMap } from '../config/bind';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
-import { IExtension } from '../extension/Extension';
+import { Extension } from '../extension/Extension';
 import { UnknownParameters } from '../types';
 
 export interface RouteAction {
@@ -17,7 +23,7 @@ export interface RouteAction {
 export interface RouteLocals {
   [key: string]: unknown;
   action?: RouteAction;
-  route?: AbstractRoute;
+  route?: InstanceType<typeof AbstractRoute>;
 }
 
 export type RouterMiddleware = (
@@ -30,10 +36,23 @@ export interface RouteFactoryOptions {
   autoScroll: boolean;
   documentView: null | unknown;
   managedRootView: null | unknown;
-  onlyUpdate: boolean | ((controller: IController, view: unknown) => boolean);
+  onlyUpdate:
+    | boolean
+    | ((controller: RouteController, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
-  extensions?: IExtension[];
+  extensions?: (
+    | keyof DecoratedOCAliasMap
+    | Constructor<Extension<any, any>>
+    | AbstractConstructor<Extension<any, any>>
+    | [
+        (
+          | AbstractConstructor<Extension<any, any>>
+          | Constructor<Extension<any, any>>
+        ),
+        { optional: true }
+      ]
+  )[];
 }
 
 export interface RouteOptions extends RouteFactoryOptions {
@@ -109,8 +128,8 @@ export abstract class Router {
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
     options?: Partial<RouteOptions>
   ) {
     return this;
@@ -146,7 +165,9 @@ export abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  getRouteHandler(name: string): undefined | AbstractRoute | RouterMiddleware {
+  getRouteHandler(
+    name: string
+  ): undefined | InstanceType<typeof AbstractRoute> | RouterMiddleware {
     return undefined;
   }
 
@@ -214,7 +235,7 @@ export abstract class Router {
    * @throws Thrown if a route is not define for current path.
    */
   getCurrentRouteInfo(): {
-    route: AbstractRoute;
+    route: InstanceType<typeof AbstractRoute>;
     params: RouteParams;
     path: string;
   } {

@@ -7,6 +7,7 @@ module.exports = function hooksFactory({
   renderStaticSPAPage,
   renderStaticServerErrorPage,
   renderStaticClientErrorPage,
+  urlParser,
   _initApp,
   _importAppMainSync,
   _addImaToResponse,
@@ -102,9 +103,18 @@ module.exports = function hooksFactory({
     const isBadRequest =
       routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
 
-    // TODO IMA@18 documentation badRequestConcurrency
-    // TODO IMA@18 update for better performance check
+    // TODO IMA@19 documentation badRequestConcurrency
     return isBadRequest && _hasToServeStatic(event);
+  }
+
+  function _hasToServeStaticServerError(event) {
+    const { req, res } = event;
+    const routeInfo = _getRouteInfo({ req, res });
+
+    const isServerError =
+      routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
+
+    return isServerError && _hasToServeStatic(event);
   }
 
   async function _applyError(event) {
@@ -171,7 +181,11 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
-    if (environment.$Debug && process.env.IMA_CLI_WATCH) {
+    if (
+      environment.$Debug &&
+      process.env.IMA_CLI_WATCH &&
+      !event.error.isRedirection?.()
+    ) {
       return devErrorPage(event);
     } else {
       try {
@@ -225,6 +239,16 @@ module.exports = function hooksFactory({
         event.stopPropagation();
         return renderStaticClientErrorPage(event);
       }
+
+      if (_hasToServeStaticServerError(event)) {
+        event.stopPropagation();
+        return renderStaticServerErrorPage({
+          ...event,
+          error:
+            event.error ??
+            new Error('The App error route exceed static thresholds.'),
+        });
+      }
     });
   }
 
@@ -241,6 +265,16 @@ module.exports = function hooksFactory({
     useIMAInitializationRequestHook();
     userPerformanceOptimizationRequestHook();
     useIMAHandleRequestHook();
+  }
+
+  function useBeforeRequestHook() {
+    useUrlParserBeforeRequestHook();
+  }
+
+  function useUrlParserBeforeRequestHook() {
+    emitter.on(Event.BeforeRequest, async event => {
+      urlParser(event);
+    });
   }
 
   function useCreateContentVariablesHook() {
@@ -317,6 +351,14 @@ module.exports = function hooksFactory({
 
     emitter.on(Event.AfterResponse, async ({ context }) => {
       if (context.app) {
+        const { oc } = context.app;
+        oc.get('$Dispatcher').clear();
+        oc.get('$Cache').clear();
+
+        oc.get('$PageRenderer').unmount();
+        oc.get('$PageManager').destroy();
+        oc.clear();
+
         instanceRecycler.clearInstance(context.app);
         context.app = null;
       }
@@ -326,6 +368,7 @@ module.exports = function hooksFactory({
   function useIMADefaultHook() {
     useCreateContentVariablesHook();
     userErrorHook();
+    useBeforeRequestHook();
     useRequestHook();
     useResponseHook();
   }
@@ -333,6 +376,7 @@ module.exports = function hooksFactory({
   return {
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,

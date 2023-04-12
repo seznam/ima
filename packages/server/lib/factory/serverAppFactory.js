@@ -5,6 +5,7 @@ const hooksFactory = require('./hooksFactory.js');
 const IMAInternalFactory = require('./IMAInternalFactory.js');
 const responseUtilsFactory = require('./responseUtilsFactory.js');
 const staticPageFactory = require('./staticPageFactory.js');
+const urlParserFactory = require('./urlParserFactory.js');
 const { Event } = require('../emitter.js');
 
 module.exports = function serverAppFactory({
@@ -21,6 +22,7 @@ module.exports = function serverAppFactory({
   const devErrorPage = devErrorPageFactory({ logger });
   const { processContent, createContentVariables, sendResponseHeaders } =
     responseUtilsFactory();
+
   const {
     _initApp,
     createBootConfig,
@@ -35,6 +37,7 @@ module.exports = function serverAppFactory({
     instanceRecycler,
     serverGlobal,
   });
+
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
@@ -47,9 +50,15 @@ module.exports = function serverAppFactory({
     environment,
   });
 
+  const { urlParser } = urlParserFactory({
+    environment,
+    applicationFolder,
+  });
+
   const {
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,
@@ -60,6 +69,7 @@ module.exports = function serverAppFactory({
     renderStaticSPAPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
+    urlParser,
     _initApp,
     _importAppMainSync,
     _addImaToResponse,
@@ -88,10 +98,10 @@ module.exports = function serverAppFactory({
     cache: false,
   };
 
-  // TODO IMA@18 need performance test for usefulness
-  // TODO IMA@18@performance refactor
-  // TODO IMA@18@performance documentation environment.$Server.serveSPA.cache
-  // TODO IMA@18performance test rendering SPA for random url
+  // TODO IMA@19 need performance test for usefulness
+  // TODO IMA@19@performance refactor
+  // TODO IMA@19@performance documentation environment.$Server.serveSPA.cache
+  // TODO IMA@19performance test rendering SPA for random url
   // const spaCache = new Cache(
   //   Object.assign(
   //     {},
@@ -161,16 +171,18 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
+      error.cause = event.error;
+
       event.context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
     }
 
     try {
       event = await responseHandler(event);
     } catch (error) {
+      error.cause = event.error;
       const { res, context } = event;
 
       if (context.app) {
@@ -184,8 +196,7 @@ module.exports = function serverAppFactory({
 
       context.response = renderStaticServerErrorPage({
         ...event,
-        error: error,
-        cause: event.error,
+        error,
       });
 
       res.status(context.response.status);
@@ -216,6 +227,7 @@ module.exports = function serverAppFactory({
     createBootConfig,
     useIMADefaultHook,
     userErrorHook,
+    useBeforeRequestHook,
     useRequestHook,
     useResponseHook,
     useIMAHandleRequestHook,

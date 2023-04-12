@@ -1,5 +1,29 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Minor Changes
+
+- 168fa6d6a: Added ability to enable/disable soure maps generation using `sourceMaps` option in `ima-plugin.config.js` configuration file.
+  Added ability to add new custom transformers using `transformers` option in `ima-plugin.config.js` configuration file.
+
+## 19.0.0-rc.2
+
+### Minor Changes
+
+- 6a6b996d4: All swc transformations now produce source map files alongside transformed files.
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/dev-utils@19.0.0-rc.2
+
 ## 19.0.0-rc.0
 
 ### Major Changes
@@ -11,6 +35,12 @@
 - Updated dependencies [073adb5d5]
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
+
+## 18.1.1
+
+### Patch Changes
+
+- 3be28045d: Fixed windows specific errors in package building
 
 ## 18.1.0
 

@@ -136,6 +136,8 @@ function useConnect(serverError: string | null) {
 
         setError(parsedError);
       });
+
+      window.__IMA_HMR.emitter.emit('error-overlay-connected');
     }
   }, []);
 

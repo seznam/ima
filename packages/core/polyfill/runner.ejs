@@ -35,6 +35,7 @@
       testScripts: {
         scripts: [
           // es2018 env test scripts
+          'return typeof AbortController !== "undefined"',
           'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))() && !!Object.values',
         ],
         esScripts: [

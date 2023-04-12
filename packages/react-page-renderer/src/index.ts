@@ -17,16 +17,17 @@ export { PageContext, type PageContextType } from './PageContext';
 export { PageRendererFactory } from './renderer/PageRendererFactory';
 export { ServerPageRenderer } from './renderer/ServerPageRenderer';
 
-export { useComponent, type useComponentType } from './hooks/component';
+export {
+  useComponent,
+  useOnce,
+  type useComponentType,
+} from './hooks/component';
 export { useComponentUtils } from './hooks/componentUtils';
 export { useCssClasses } from './hooks/cssClasses';
 export { useDispatcher, type useDispatcherType } from './hooks/dispatcher';
 export { useLink } from './hooks/link';
 export { useLocalize } from './hooks/localize';
-export { useOnce } from './hooks/once';
 export { usePageContext } from './hooks/pageContext';
 export { useSettings } from './hooks/settings';
 export { useEventBus, type useEventBusType } from './hooks/eventBus';
 export { useWindowEvent } from './hooks/windowEvent';
-
-export { type Settings } from './types';

@@ -1,5 +1,44 @@
 # Change Log
 
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- d6f7654a2: Added support for typing controller, extension state and route params
+- 2a5dcc6d0: Added Bootstrap settings, config and env types
+
+## 19.0.0-rc.5
+
+### Major Changes
+
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+
+## 19.0.0-rc.4
+
+### Patch Changes
+
+- cd8af3a1b: integration tests run in SPA mode
+  ima RC versions override
+
+## 19.0.0-rc.3
+
+### Major Changes
+
+- 9aff57e3a: Added typescript template (use --typescript argument to generate a new TS-compatible template)
+
+### Patch Changes
+
+- 74a51dee8: Migrated to named exports in preparation for TS template
+- 5ea0c6735: Fixed default static path and public path settings.
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
 ## 19.0.0-rc.1
 
 ### Major Changes
@@ -39,6 +78,12 @@
 ### Minor Changes
 
 - 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
+
+## 18.4.1
+
+### Patch Changes
+
+- 33e7db7d7: add environment for integration tests - set SPA by default
 
 ## 18.4.0
 

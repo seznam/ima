@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Bootstrap, PluginConfigFunctions, Config } from '../Bootstrap';
+import { Bootstrap, InitPluginConfig, BootConfig } from '../Bootstrap';
 import { ns } from '../Namespace';
-import { ObjectContainer } from '../ObjectContainer';
+import { BindingState } from '../oc/BindingState';
+import { ObjectContainer } from '../oc/ObjectContainer';
 import { UnknownParameters } from '../types';
 
 describe('bootstrap', () => {
   let bootstrap: Bootstrap;
   let objectContainer: ObjectContainer;
   let environments: UnknownParameters;
-  let plugin: PluginConfigFunctions;
-  let bootConfig: Config;
+  let plugin: InitPluginConfig;
+  let bootConfig: BootConfig;
 
   beforeEach(() => {
     environments = {
@@ -20,7 +21,7 @@ describe('bootstrap', () => {
     };
 
     plugin = {
-      $registerImaPlugin: jest.fn(() => {}),
+      // @ts-expect-error
       initSettings: jest.fn(() => ({ prod: { pluginSettings: true } })),
       initBind: jest.fn(() => {}),
       //@ts-ignore
@@ -28,18 +29,22 @@ describe('bootstrap', () => {
     };
 
     bootConfig = {
+      // @ts-expect-error
       settings: {
         $Env: 'prod',
       },
       plugins: [{ name: 'test-plugin', plugin: plugin }],
+      // @ts-expect-error
       initSettings: () => environments,
       initBindIma: () => {},
       initBindApp: () => {},
       initRoutes: () => {},
       initServicesApp: () => {},
       initServicesIma: () => {},
+      // @ts-expect-error
       bind: {},
       routes: {},
+      // @ts-expect-error
       services: {},
     };
 
@@ -77,7 +82,7 @@ describe('bootstrap', () => {
   });
 
   describe('initPlugin method', () => {
-    let plugin: PluginConfigFunctions;
+    let plugin: InitPluginConfig;
 
     beforeEach(() => {
       jest.spyOn(bootstrap, '_initPluginSettings').mockImplementation();
@@ -166,7 +171,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.IMA_BINDING_STATE
+        BindingState.IMA
       );
     });
 
@@ -176,7 +181,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.PLUGIN_BINDING_STATE,
+        BindingState.Plugin,
         'test-plugin'
       );
     });
@@ -187,7 +192,7 @@ describe('bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.APP_BINDING_STATE
+        BindingState.App
       );
     });
 

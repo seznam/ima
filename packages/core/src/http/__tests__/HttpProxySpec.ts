@@ -26,10 +26,7 @@ describe('ima.core.http.HttpProxy', () => {
     transform: (url: string) => url,
   });
   const mockedWindowHelper = new ClientWindow();
-
-  const TIMEOUT_ERROR = new GenericError('The HTTP request timed out', {
-    status: HttpStatusCode.TIMEOUT,
-  });
+  const TIMEOUT_ERROR = 'The HTTP request timed out';
 
   let defaultOptions: HttpAgentRequestOptions;
   let proxy: HttpProxy;
@@ -73,8 +70,10 @@ describe('ima.core.http.HttpProxy', () => {
       ttl: 3600000,
       timeout: 2000,
       repeatRequest: 0,
-      headers: {},
-      withCredentials: true,
+      fetchOptions: {
+        credentials: 'include',
+        headers: {},
+      },
     } as HttpAgentRequestOptions;
   });
 
@@ -230,8 +229,10 @@ describe('ima.core.http.HttpProxy', () => {
 
         it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
           const options = Object.assign({}, defaultOptions, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+            fetchOptions: {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
             },
           });
 
@@ -249,8 +250,10 @@ describe('ima.core.http.HttpProxy', () => {
 
         it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
           const options = Object.assign({}, defaultOptions, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
+            fetchOptions: {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
             },
           });
 
@@ -329,7 +332,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         // Check for presence of auto-created AbortController
         expect(options.abortController).toBeInstanceOf(AbortController);
-        expect(options.abortController.signal.aborted).toBeTruthy();
+        expect(options.abortController?.signal?.aborted).toBeTruthy();
       });
 
       it('should redefine abort controller if repeatRequest is > 0', async () => {
@@ -353,7 +356,7 @@ describe('ima.core.http.HttpProxy', () => {
         }).rejects.toThrow(TIMEOUT_ERROR);
 
         expect(options.abortController).toBeInstanceOf(AbortController);
-        expect(options.abortController.signal.aborted).toBeFalsy();
+        expect(options.abortController?.signal?.aborted).toBeFalsy();
         options.repeatRequest--;
 
         // expect(options.repeatRequest).toBe(0);
@@ -373,7 +376,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         // This time it should abort
         expect(options.repeatRequest).toBe(0);
-        expect(options.abortController.signal.aborted).toBeTruthy();
+        expect(options.abortController?.signal?.aborted).toBeTruthy();
       });
 
       it('should throw Abort error when aborted externally; with other reason', async () => {
@@ -424,16 +427,16 @@ describe('ima.core.http.HttpProxy', () => {
       expect(typeof queryString).toBe('string');
 
       // testKey
-      expect(queryString.substr(12, 3)).toBe('%20');
-      expect(queryString.substr(19, 3)).toBe('%2F');
-      expect(queryString.substr(26, 3)).toBe('%7C');
-      expect(queryString.substr(33, 3)).toBe('%3F');
+      expect(queryString?.substr(12, 3)).toBe('%20');
+      expect(queryString?.substr(19, 3)).toBe('%2F');
+      expect(queryString?.substr(26, 3)).toBe('%7C');
+      expect(queryString?.substr(33, 3)).toBe('%3F');
 
       // testKey2
-      expect(queryString.substr(54, 3)).toBe('%23');
-      expect(queryString.substr(61, 3)).toBe('%24');
-      expect(queryString.substr(68, 3)).toBe('%5E');
-      expect(queryString.substr(75, 3)).toBe('%7B');
+      expect(queryString?.substr(54, 3)).toBe('%23');
+      expect(queryString?.substr(61, 3)).toBe('%24');
+      expect(queryString?.substr(68, 3)).toBe('%5E');
+      expect(queryString?.substr(75, 3)).toBe('%7B');
     });
   });
 
@@ -451,16 +454,16 @@ describe('ima.core.http.HttpProxy', () => {
     it('should return custom Content-Type header', () => {
       expect(
         proxy._getContentType('GET', {}, {
-          headers: { 'Content-Type': 'application/xml' },
-        } as unknown as HttpAgentRequestOptions)
+          'Content-Type': 'application/xml',
+        } as unknown as Record<string, string>)
       ).toBe('application/xml');
     });
 
     it('should return null for invalid custom content types', () => {
       expect(
         proxy._getContentType('GET', {}, {
-          headers: { 'Content-Type': null },
-        } as unknown as HttpAgentRequestOptions)
+          'Content-Type': null,
+        } as unknown as Record<string, string>)
       ).toBeNull();
     });
 
@@ -468,9 +471,11 @@ describe('ima.core.http.HttpProxy', () => {
       jest.spyOn(proxy, '_shouldRequestHaveBody').mockReturnValue(false);
 
       expect(
-        proxy._getContentType('GET', {}, {
-          headers: {},
-        } as unknown as HttpAgentRequestOptions)
+        proxy._getContentType(
+          'GET',
+          {},
+          {} as unknown as Record<string, string>
+        )
       ).toBeNull();
     });
   });
@@ -480,7 +485,7 @@ describe('ima.core.http.HttpProxy', () => {
       expect(proxy._shouldRequestHaveBody('', {})).toBeFalsy();
       expect(proxy._shouldRequestHaveBody('', undefined)).toBeFalsy();
       expect(proxy._shouldRequestHaveBody('GET', { data: 'foo' })).toBeFalsy();
-      expect(proxy._shouldRequestHaveBody('HEAD')).toBeFalsy();
+      expect(proxy._shouldRequestHaveBody('HEAD', undefined)).toBeFalsy();
     });
 
     it('should return true for valid data and supported methods', () => {

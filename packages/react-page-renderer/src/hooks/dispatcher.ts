@@ -1,10 +1,15 @@
-import type { Dispatcher, DispatcherListener } from '@ima/core';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import type {
+  Dispatcher,
+  DispatcherEventsMap,
+  DispatcherListener,
+} from '@ima/core';
 import { useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
 
 export interface useDispatcherType {
-  fire: InstanceType<typeof Dispatcher>['fire'];
+  fire: Dispatcher['fire'];
 }
 
 /**
@@ -28,30 +33,39 @@ export interface useDispatcherType {
  * });
  *
  * @param event Event name.
- * @param callback Callback to register to dispatcher.
+ * @param listener Callback to register to dispatcher.
  * @returns Dispatcher `fire` method.
  */
+export function useDispatcher<E extends keyof DispatcherEventsMap>(
+  event?: E,
+  listener?: DispatcherListener<DispatcherEventsMap[E]>
+): useDispatcherType;
 export function useDispatcher(
   event?: string,
-  callback?: DispatcherListener
+  listener?: DispatcherListener<any>
+): useDispatcherType;
+export function useDispatcher(
+  event?: string,
+  listener?: DispatcherListener<any>
 ): useDispatcherType {
   const { $Dispatcher } = useComponentUtils();
 
   useEffect(() => {
-    if (event && callback) {
-      $Dispatcher.listen(event, callback);
+    if (event && listener) {
+      $Dispatcher.listen(event, listener);
     }
 
     return () => {
-      if (event && callback) {
-        $Dispatcher.unlisten(event, callback);
+      if (event && listener) {
+        $Dispatcher.unlisten(event, listener);
       }
     };
-  }, [$Dispatcher, event, callback]);
+  }, [$Dispatcher, event, listener]);
 
   return useMemo<useDispatcherType>(
     () => ({
-      fire: (...params) => $Dispatcher.fire(...params),
+      fire: (...params: Parameters<Dispatcher['fire']>) =>
+        $Dispatcher.fire(...params),
     }),
     [$Dispatcher]
   );

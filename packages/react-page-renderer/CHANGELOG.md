@@ -1,5 +1,91 @@
 # Change Log
 
+## 19.0.0-rc.13
+
+### Patch Changes
+
+- 447c51646: All packages now use correct types from IMA core
+
+## 19.0.0-rc.12
+
+### Patch Changes
+
+- c37249378: Fixed HYDRATE_ERROR
+
+## 19.0.0-rc.11
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+
+## 19.0.0-rc.10
+
+### Major Changes
+
+- 5bd45aa75: Changed signature of useWindowEvent hook, it now matches bindEventListener parameters of ima window
+
+### Patch Changes
+
+- 5bd45aa75: Updated Window types
+
+## 19.0.0-rc.9
+
+### Patch Changes
+
+- 206ab1f43: Improved Dispatcher types
+
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- e0dfeda28: Updated dependencies
+
+## 19.0.0-rc.7
+
+### Patch Changes
+
+- 0d044e238: Typed ObjectContainer
+
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- 53adfb35a: Fixed BlankManagedRootView props
+
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- dc8d4b7ea: Fixed once hook parametr type
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/helpers@19.0.0-rc.1
+
 ## 19.0.0-rc.1
 
 ### Major Changes

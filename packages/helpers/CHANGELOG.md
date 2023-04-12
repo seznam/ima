@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.0.0-rc.2
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
 ## 19.0.0-rc.0
 
 ### Major Changes

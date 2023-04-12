@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { URLSearchParams } from 'url';
 
 import { formatError, ParsedErrorData } from '@ima/dev-utils/cliUtils';
 import { logger } from '@ima/dev-utils/logger';
@@ -136,8 +135,18 @@ export default async (
    * and optional less loaders.
    */
   const getStyleLoaders = async (
-    useLessLoader = false
+    useCssModules = false
   ): Promise<RuleSetUseItem[]> => {
+    /**
+     * Return null-loader in contexts that don't process styles while
+     * not using css-modules, since we don't need to compile the styles at all.
+     * This improves build performance significantly in applications with
+     * large amounts of style files.
+     */
+    if (!useCssModules && !processCss) {
+      return [{ loader: 'null-loader' }];
+    }
+
     return [
       ...(!imaConfig.experiments?.css
         ? [
@@ -147,13 +156,14 @@ export default async (
             {
               loader: require.resolve('css-loader'),
               options: {
-                modules: {
-                  auto: true,
-                  exportOnlyLocals: !processCss,
-                  localIdentName: isDevEnv
-                    ? '[path][name]__[local]--[hash:base64:5]'
-                    : '[hash:base64]',
-                },
+                ...(useCssModules && {
+                  modules: {
+                    exportOnlyLocals: !processCss,
+                    localIdentName: isDevEnv
+                      ? '[path][name]__[local]--[hash:base64:5]'
+                      : '[hash:base64]',
+                  },
+                }),
                 sourceMap: useSourceMaps,
               },
             },
@@ -175,7 +185,7 @@ export default async (
                       flexbox: 'no-2009',
                       grid: 'autoplace',
                     },
-                    stage: 3,
+                    stage: 1,
                     features: {
                       'custom-properties': false,
                     },
@@ -189,7 +199,7 @@ export default async (
           ctx
         ),
       },
-      useLessLoader && {
+      {
         loader: require.resolve('less-loader'),
         options: {
           webpackImporter: false,
@@ -486,13 +496,13 @@ export default async (
              * CSS & LESS loaders, both have the exact same capabilities
              */
             {
-              test: /\.less$/,
+              test: /\.module\.(c|le)ss$/,
               sideEffects: true,
               use: await getStyleLoaders(true),
               ...(imaConfig.experiments?.css && { type: 'css' }),
             },
             {
-              test: /\.css$/,
+              test: /\.(c|le)ss$/,
               sideEffects: true,
               use: await getStyleLoaders(),
               ...(imaConfig.experiments?.css && { type: 'css' }),
@@ -533,6 +543,15 @@ export default async (
           resolve: {
             fullySpecified: false,
           },
+        },
+        /**
+         * Extracts source maps from existing source files (from their sourceMappingURL),
+         * this is usefull mainly for node_modules.
+         */
+        useSourceMaps && {
+          enforce: 'pre',
+          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          loader: require.resolve('source-map-loader'),
         },
       ].filter(Boolean) as RuleSetRule[],
     },
@@ -642,15 +661,8 @@ export default async (
               new ReactRefreshWebpackPlugin({
                 esModule: true,
                 overlay: false,
-                include: [
-                  /@ima/,
-                  appDir,
-                  ...(imaConfig.transformVendorPaths?.include ?? []),
-                ],
-                exclude: [
-                  /node_modules/,
-                  ...(imaConfig.transformVendorPaths?.exclude ?? []),
-                ],
+                include: [/\.(jsx|tsx)$/],
+                exclude: [/node_modules/],
               }),
           ]),
 

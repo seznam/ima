@@ -11,7 +11,7 @@ import { useComponentUtils } from './componentUtils';
  *
  * @returns URL to linked path.
  */
-export function useLink(): InstanceType<typeof Router>['link'] {
+export function useLink(): Router['link'] {
   const { $Router } = useComponentUtils();
 
   return useCallback((...params) => $Router.link(...params), [$Router]);
