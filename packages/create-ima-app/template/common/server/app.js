@@ -2,7 +2,7 @@ const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
 const reactPageRendererHook = require('@ima/react-page-renderer/hook/server');
-const imaServer = require('@ima/server')();
+const { createIMAServer } = require('@ima/server');
 const compression = require('compression');
 const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
@@ -13,8 +13,9 @@ const expressStaticGzip = require('express-static-gzip');
 const helmet = require('helmet');
 const favicon = require('serve-favicon');
 
+const imaServer = createIMAServer();
 reactPageRendererHook(imaServer);
-const { serverApp, environment, logger, cache, memStaticProxy } = imaServer;
+const { serverApp, environment, logger, cache } = imaServer;
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -114,7 +115,7 @@ app
   )
   .use(
     environment.$Server.staticPath,
-    memStaticProxy,
+    imaServer.memStaticProxy,
     expressStaticGzip(path.resolve(path.join(__dirname, '../build')), {
       enableBrotli: true,
       index: false,

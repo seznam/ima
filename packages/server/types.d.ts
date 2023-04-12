@@ -1,3 +1,6 @@
+import { Emitter } from '@esmj/emitter';
+import { Environment } from '@ima/core';
+
 declare module '@ima/server' {
   export enum Event {
     BeforeError = 'ima.server.beforeError',
@@ -17,4 +20,15 @@ declare module '@ima/server' {
     CreateBootConfig = 'ima.server.bootConfig',
     CreateImaApp = 'ima.server.createApp',
   }
+
+  export function createIMAServer(params: {
+    environment?: Environment;
+    logger?: any;
+    emitter?: Emitter;
+    performance?: any;
+    devUtils?: any;
+  });
+
+  export function renderStyles(styles: any[]): string;
+  export function renderScript(name: string, script: string): string;
 }

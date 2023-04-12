@@ -102,9 +102,9 @@ function resolveEnvironment(
 function createPolyfillEntry(
   ctx: ImaConfigurationContext
 ): Record<string, string> {
-  const { name, rootDir } = ctx;
+  const { isClientES, rootDir } = ctx;
 
-  const fileName = `polyfill${name === 'client.es' ? '.es' : ''}.js`;
+  const fileName = `polyfill${isClientES ? '.es' : ''}.js`;
   const polyfillPath = path.join(rootDir, 'app', fileName);
 
   if (!fs.existsSync(polyfillPath)) {
@@ -241,7 +241,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     swc: async config => config,
     swcVendor: async config => config,
     postcss: async config => config,
-    cssBrowsersTarget: '>0.5%, not dead, not op_mini all, not ie 11',
+    cssBrowsersTarget: '>0.3%, not dead, not op_mini all',
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
