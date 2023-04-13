@@ -110,6 +110,42 @@ export function resolveStyles({
 }
 
 /**
+ * Replace storybook style loaders with ima specific ones.
+ */
+export function resolveSWC({
+  args,
+  config,
+  imaWebpackConfig,
+}: ResolverParams): Configuration {
+  const jsRules = (
+    [
+      ...findRules(imaWebpackConfig, 'test.js', 'swc'),
+      ...findRules(imaWebpackConfig, 'test.ts', 'swc'),
+    ] as RuleSetRule[]
+  ).map(rule => {
+    // Update include path
+    rule.include = [args.rootDir];
+    rule.exclude = /node_modules/;
+
+    // Enable react refres
+    if ((rule?.options as any)?.jsc?.transform?.react) {
+      (rule.options as any).jsc.transform.react.refresh = true;
+    }
+
+    return rule;
+  });
+
+  // Remove existing babel rules
+  removeRule(config, 'test.js');
+  removeRule(config, 'test.ts');
+
+  // Push new swc rules
+  config.module?.rules?.push(...jsRules);
+
+  return config;
+}
+
+/**
  * Add mocked revival settings to final bundle.
  */
 export function resolveRevivalSettings({

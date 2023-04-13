@@ -10,7 +10,7 @@
     ],
     "outDir": "dist",
     "declaration": true,
-    "types": ["webpack", "webpack-env"]
+    "types": ["webpack", "core", "cli"]
   },
   "include": [
     "src"

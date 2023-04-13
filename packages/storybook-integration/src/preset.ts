@@ -13,6 +13,7 @@ import {
   resolveAliases,
   resolveLanguageEntryPoints,
   resolveRevivalSettings,
+  resolveSWC,
 } from './utils.js';
 
 export const webpackFinal = async (
@@ -45,6 +46,7 @@ export const webpackFinal = async (
     resolveLanguageEntryPoints,
     resolveAliases,
     resolveStyles,
+    resolveSWC,
     resolveRevivalSettings,
   ].reduce((acc, resolver) => {
     acc = resolver({
