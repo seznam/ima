@@ -1,6 +1,5 @@
 import { ImaConfig, findRules, getLanguageEntryPoints } from '@ima/cli';
 import { ImaCliArgs } from '@ima/cli/src';
-import { GlobalImaObject } from '@ima/core';
 import { Options } from '@storybook/types';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration, RuleSetRule } from 'webpack';
@@ -10,7 +9,7 @@ export type ResolverParams = {
   imaConfig: ImaConfig;
   imaWebpackConfig: Configuration;
   args: ImaCliArgs;
-  options: Options & { $IMA?: GlobalImaObject };
+  options: Options & { language?: string };
 };
 
 /**
@@ -42,7 +41,7 @@ export function resolveLanguageEntryPoints({
     );
   }
 
-  const lang = options?.$IMA?.$Language;
+  const lang = options?.language;
   const languageEntries = getLanguageEntryPoints(
     imaConfig.languages,
     args.rootDir,
@@ -160,7 +159,6 @@ export function resolveRevivalSettings({
     );
   }
 
-  const { $IMA } = options;
   const revivalSettings = `(function (root) {
     root.$Debug = true;
     root.$IMA = root.$IMA || {};
@@ -168,14 +166,16 @@ export function resolveRevivalSettings({
     $IMA.SPA = true;
     $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
     $IMA.$RequestID = "storybook-request-id";
-    $IMA.$Language = "${$IMA?.$Language ?? 'en'}";
-    $IMA.$Env = "${$IMA?.$Env ?? args.environment}";
+    $IMA.$Language = "${options.language ?? 'en'}";
+    $IMA.$Env = "regression";
     $IMA.$Debug = true;
-    $IMA.$Version = "${$IMA?.$Version ?? '1.0.0'}";
+    $IMA.$Version = "${'1.0.0'}";
     $IMA.$App = {};
-    $IMA.$Protocol = "${$IMA?.$Protocol ?? 'http:'}";
-    $IMA.$Host = "${$IMA?.$Host ?? 'http:'}";
-    $IMA.$Path = "${$IMA?.$Protocol ?? '/'}";
+    $IMA.$Protocol = "${options.https ? 'https:' : 'http:'}";
+    $IMA.$Host = "${
+      options.host ? options.host : `localhost:${options.port ?? 6006}`
+    }";
+    $IMA.$Path = "";
     $IMA.$Root = "";
     $IMA.$LanguagePartPath = "";
   })(typeof window !== 'undefined' && window !== null ? window : global);

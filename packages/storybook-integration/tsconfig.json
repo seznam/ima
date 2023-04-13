@@ -9,8 +9,7 @@
       "DOM.Iterable",
     ],
     "outDir": "dist",
-    "declaration": true,
-    "types": ["webpack", "core", "cli"]
+    "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob"]
   },
   "include": [
     "src"

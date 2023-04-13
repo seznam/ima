@@ -164,23 +164,23 @@ export function getClientBootConfig(
 ): BootConfig {
   const root = _getRoot();
 
-  // if ($Debug && _isClient()) {
-  //   if ($IMA.$Protocol !== root.location.protocol) {
-  //     throw new GenericError(
-  //       `Your client's protocol is not same as server's protocol. ` +
-  //         `For right setting protocol on the server site set ` +
-  //         `'X-Forwarded-Proto' header.`
-  //     );
-  //   }
+  if ($Debug && _isClient()) {
+    if ($IMA.$Protocol !== root.location.protocol) {
+      throw new GenericError(
+        `Your client's protocol is not same as server's protocol. ` +
+          `For right setting protocol on the server site set ` +
+          `'X-Forwarded-Proto' header.`
+      );
+    }
 
-  //   if ($IMA.$Host !== root.location.host) {
-  //     throw new GenericError(
-  //       `Your client's host is not same as server's host. For right ` +
-  //         `setting host on the server site set 'X-Forwarded-Host' ` +
-  //         `header.`
-  //     );
-  //   }
-  // }
+    if ($IMA.$Host !== root.location.host) {
+      throw new GenericError(
+        `Your client's host is not same as server's host. For right ` +
+          `setting host on the server site set 'X-Forwarded-Host' ` +
+          `header.`
+      );
+    }
+  }
 
   const bootConfig: BootConfig = {
     services: {

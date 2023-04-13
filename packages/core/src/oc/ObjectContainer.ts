@@ -832,7 +832,6 @@ export class ObjectContainer {
 
     if (!Array.isArray(classConstructor.$dependencies)) {
       if ($Debug) {
-        debugger;
         throw new Error(
           `The class constructor identified as: ${this.#getDebugName(
             classConstructor

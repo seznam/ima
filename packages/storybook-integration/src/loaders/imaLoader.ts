@@ -3,6 +3,7 @@ export const imaLoader = async () => {
   // @ts-expect-error resolved in storybook context with app aliases
   // eslint-disable-next-line import/no-unresolved
   const { ima, getInitialAppConfigFunctions } = await import('app/main');
+
   const app = ima.createImaApp();
   const bootConfig = ima.getClientBootConfig(getInitialAppConfigFunctions());
 
