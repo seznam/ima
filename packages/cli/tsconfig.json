@@ -6,7 +6,7 @@
       "DOM"
     ],
     "outDir": "dist",
-    "types": ["kill-port", "core", "better-opn", "preprocess", "ima__server", "less-plugin-glob", "webpack-env", "webpack"]
+    "types": ["kill-port", "core", "better-opn", "preprocess", "server", "less-plugin-glob", "webpack-env", "webpack"]
   },
   "include": [
     "src"

@@ -112,7 +112,7 @@ export interface Settings {
   };
   $Cache?: {
     ttl?: number;
-    enable?: boolean;
+    enabled?: boolean;
   };
   $Page: {
     $Render: {
@@ -164,7 +164,7 @@ export function getClientBootConfig(
 ): BootConfig {
   const root = _getRoot();
 
-  if ($Debug && _isClient()) {
+  if ($Debug && _isClient() && !$IMA?.Test) {
     if ($IMA.$Protocol !== root.location.protocol) {
       throw new GenericError(
         `Your client's protocol is not same as server's protocol. ` +

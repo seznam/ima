@@ -31,4 +31,7 @@ declare module '@ima/server' {
 
   export function renderStyles(styles: any[]): string;
   export function renderScript(name: string, script: string): string;
+  export function environmentFactory(args: {
+    applicationFolder: string;
+  }): Environment;
 }
