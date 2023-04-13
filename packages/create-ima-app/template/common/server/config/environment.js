@@ -134,13 +134,6 @@ module.exports = (() => {
       },
     },
 
-    test: {
-      $Server: {
-        // Force client SPA app for integration tests
-        concurrency: 0,
-      },
-    },
-
     dev: {
       $Debug: true,
       $Language: {

@@ -18,7 +18,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "^18.3.3",
-    "@ima/plugin-testing-integration": "^4.0.1",
+    "@ima/plugin-testing-integration": "4.1.0-rc.3",
     "@swc/jest": "^0.2.20",
     "@cfaester/enzyme-adapter-react-18": "^0.6.0",
     "enzyme": "^3.11.0",
