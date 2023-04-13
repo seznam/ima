@@ -287,10 +287,12 @@ export default async (
       },
       chunkFilename: () => `${outputFolders.js}/chunk.[id].[contenthash].js`,
       cssFilename: ({ chunk }) =>
-        `${outputFolders.css}/${
-          chunk?.name === name ? 'app' : '[name]'
-        }.[contenthash].css`,
-      cssChunkFilename: `${outputFolders.css}/chunk.[id].[contenthash].css`,
+        `${outputFolders.css}/${chunk?.name === name ? 'app' : '[name]'}${
+          ctx.command === 'dev' ? '' : '.[contenthash]'
+        }.css`,
+      cssChunkFilename: `${outputFolders.css}/chunk.[id]${
+        ctx.command === 'dev' ? '' : '.[contenthash]'
+      }.css`,
       publicPath: imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
@@ -579,7 +581,9 @@ export default async (
                     chunk?.name === name ? 'app' : '[name]'
                   }${ctx.command === 'dev' ? '' : '.[contenthash]'}.css`,
                 ignoreOrder: true,
-                chunkFilename: `${outputFolders.css}/[id].[contenthash].css`,
+                chunkFilename: `${outputFolders.css}/[id]${
+                  ctx.command === 'dev' ? '' : '.[contenthash]'
+                }.css`,
               }),
 
             // Copies essential assets to static directory
