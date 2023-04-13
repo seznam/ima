@@ -36,6 +36,15 @@ export async function parseConfigFile(
       files.find(fileName => fileName.startsWith(CONFIG_BASENAME))
     );
 
+  // Recursively try to find file up to file system root
+  if (!configFile) {
+    const newConfigDir = path.resolve(cwd, '..');
+
+    if (newConfigDir !== configDir) {
+      return parseConfigFile(path.resolve(cwd, '..'), args);
+    }
+  }
+
   // Define default config
   let loadedConfig: ImaPluginConfig[] = [];
 
@@ -50,9 +59,11 @@ export async function parseConfigFile(
   // Override with custom configuration
   if (configFile) {
     let configPath = path.join(configDir, configFile);
+
     if (!configPath.startsWith('/')) {
       configPath = 'file:///' + configPath.replace(/\\/g, '/');
     }
+
     loadedConfig = (await import(configPath)).default;
     loadedConfig = Array.isArray(loadedConfig) ? loadedConfig : [loadedConfig];
   }

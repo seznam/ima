@@ -14,14 +14,17 @@ if (env === 'production') {
   env = prod;
 }
 
-module.exports = function environmentFactory({ applicationFolder }) {
-  let environmentConfig = require(path.resolve(
+module.exports = function environmentFactory({
+  applicationFolder,
+  processEnvironment,
+}) {
+  const environmentConfig = require(path.resolve(
     applicationFolder,
     './server/config/environment.js'
   ));
 
-  let currentEnvironment = environmentConfig[env];
-  let $Language =
+  let currentEnvironment = environmentConfig[env] || {};
+  const $Language =
     currentEnvironment.$Language &&
     Object.assign({}, currentEnvironment.$Language);
 
@@ -35,6 +38,10 @@ module.exports = function environmentFactory({ applicationFolder }) {
   }
 
   currentEnvironment['$Env'] = env;
+
+  if (typeof processEnvironment === 'function') {
+    currentEnvironment = processEnvironment(currentEnvironment);
+  }
 
   return currentEnvironment;
 };

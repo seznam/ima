@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.24
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
 ## 19.0.0-rc.23
 
 ### Patch Changes

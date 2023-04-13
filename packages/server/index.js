@@ -18,10 +18,14 @@ function createIMAServer({
   emitter,
   performance,
   devUtils,
+  processEnvironment,
 } = {}) {
   environment =
     environment ||
-    require('./lib/factory/environmentFactory.js')({ applicationFolder });
+    require('./lib/factory/environmentFactory.js')({
+      applicationFolder,
+      processEnvironment,
+    });
   devUtils = devUtils || require('./lib/factory/devUtilsFactory.js')();
 
   global.$Debug = environment.$Debug;

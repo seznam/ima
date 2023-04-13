@@ -34,18 +34,19 @@
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky install",
     "release": "npm run release:prepare && npm run release:push",
-    "release:prepare": "test \"`git status . --porcelain`\" && echo 'There are uncommitted changes. Aborting release.' && exit 1 || changeset version && npm i --package-lock-only --ignore-scripts",
+    "release:prepare": "npm run check:uncommited:changes && changeset version && npm i --package-lock-only --ignore-scripts",
     "release:push": "git add . && git commit -m 'Publish' && changeset tag && git push --follow-tags",
     "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
-    "release:graduate": "changeset pre exit && npm run release",
-    "release:next:init": "changeset pre enter rc",
+    "release:graduate": "npm run check:uncommited:changes && changeset pre exit && node utils/changesets/config-base-branch-replace.js master && changeset version",
+    "release:next:init": "changeset pre enter rc && node utils/changesets/config-base-branch-replace.js next",
     "release:publish": "changeset publish --no-git-tag",
     "stylelint": "stylelint --cache --cache-location=node_modules/.cache/ './**/*.{css,less}'",
     "test": "jest --changedSince `test -f '.changeset/pre.json' && echo 'next' || echo 'master'`",
     "test:all": "jest --colors",
     "test:create-ima-app": "utils/tests/testRunner.sh",
     "test:size": "npm run test:size --workspaces --if-present",
-    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/common/package.json"
+    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/common/package.json",
+    "check:uncommited:changes": "test \"`git status . --porcelain`\" && echo 'There are uncommitted changes. Aborting release.' && exit 1 || exit 0"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,mjs}": "eslint",
