@@ -59,6 +59,7 @@ export interface GlobalImaObject {
   $LanguagePartPath: string;
   Runner: object;
   SPA: boolean;
+  Test: boolean;
   $IMA: GlobalImaObject;
   $RequestID: string;
   $PublicPath: string;

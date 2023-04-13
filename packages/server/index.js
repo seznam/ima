@@ -6,6 +6,7 @@ const applicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
 const { Emitter, Event } = require('./lib/emitter.js');
+const environmentFactory = require('./lib/factory/environmentFactory');
 const {
   renderStyles,
   renderScript,
@@ -90,5 +91,6 @@ module.exports = {
   renderStyles,
   renderScript,
   createIMAServer,
+  environmentFactory,
   Event,
 };

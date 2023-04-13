@@ -11,7 +11,7 @@ import {
   resolveStyles,
   resolveAliases,
   resolveLanguageEntryPoints,
-} from './utils';
+} from './utils.js';
 
 export const webpackFinal = async (
   config: Configuration,

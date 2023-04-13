@@ -1,24 +1,13 @@
-import { PageContext } from '@ima/react-page-renderer';
-import { Decorator, ReactRenderer } from '@storybook/react';
-import { ProjectAnnotations } from '@storybook/types';
+import { withPageContextDecorator } from './decorators/withPageContext.js';
+import { imaLoader } from './loaders/imaLoader.js';
 
-const withPageContextDecorator: Decorator = (Story, { loaded }) => {
-  console.log('DECORATOR');
-  return (
-    <PageContext.Provider
-      value={{ $Utils: loaded.app.oc.get('$ComponentUtils').getUtils() }}
-    >
-      <Story />
-    </PageContext.Provider>
-  );
+export const decorators = [withPageContextDecorator];
+export const loaders = [imaLoader];
+export const argTypes = {
+  context: {
+    name: 'PageContext',
+    control: 'object',
+    defaultValue: {},
+    description: 'Set additional PageContext values',
+  },
 };
-
-console.log('preview');
-const preview: ProjectAnnotations<ReactRenderer> = {
-  decorators: [withPageContextDecorator],
-  // globals: {
-  //   [PARAM_KEY]: false,
-  // },
-};
-
-export default preview;

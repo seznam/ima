@@ -4,7 +4,7 @@ import path from 'path';
 
 import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
-import environmentFactory from '@ima/server/lib/factory/environmentFactory.js';
+import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
 import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 

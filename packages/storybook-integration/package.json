@@ -2,6 +2,7 @@
   "name": "@ima/storybook-integration",
   "version": "18.0.0",
   "description": "Storybook integration addon for IMA.js applications.",
+  "type": "module",
   "keywords": [
     "IMA.js",
     "storybook",
@@ -19,15 +20,24 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "main": "./dist/preset.js",
+  "module": "./dist/preset.js",
   "types": "./dist/preset.d.ts",
   "exports": {
     ".": {
       "types": "./dist/preset.d.ts",
       "default": "./dist/preset.js"
     },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "default": "./dist/preset.js"
+    },
     "./loader": {
       "types": "./dist/loader.d.ts",
       "default": "./dist/loader.js"
+    },
+    "./preview": {
+      "types": "./dist/preview.d.ts",
+      "default": "./dist/preview.js"
     }
   },
   "scripts": {
@@ -42,6 +52,7 @@
     "@types/webpack": "^5.28.1"
   },
   "peerDependencies": {
+    "@ima/react-page-renderer": ">=19.0.0-rc.0",
     "@ima/cli": ">=19.0.0-rc.0",
     "webpack": ">=5.x"
   },
