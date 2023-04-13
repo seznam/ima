@@ -12,3 +12,4 @@ export {
   createWebpackConfig,
   findRules,
 } from './webpack/utils';
+export { compileLanguages, getLanguageEntryPoints } from './webpack/languages';

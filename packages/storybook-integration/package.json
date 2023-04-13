@@ -18,8 +18,18 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "main": "./dist/client.js",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/preset.js",
+  "types": "./dist/preset.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/preset.d.ts",
+      "default": "./dist/preset.js"
+    },
+    "./loader": {
+      "types": "./dist/loader.d.ts",
+      "default": "./dist/loader.js"
+    }
+  },
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",
@@ -27,6 +37,8 @@
   },
   "devDependencies": {
     "@storybook/core-webpack": "^7.0.4",
+    "@storybook/react": "^7.0.4",
+    "@storybook/types": "^7.0.4",
     "@types/webpack": "^5.28.1"
   },
   "peerDependencies": {

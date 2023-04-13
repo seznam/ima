@@ -1,8 +1,17 @@
-import { createWebpackConfig, resolveImaConfig, ImaCliArgs } from '@ima/cli';
+import {
+  createWebpackConfig,
+  resolveImaConfig,
+  ImaCliArgs,
+  compileLanguages,
+} from '@ima/cli';
 import { Options } from '@storybook/core-webpack';
 import { Configuration } from 'webpack';
 
-import { resolveStyles, resolveAliases } from './utils';
+import {
+  resolveStyles,
+  resolveAliases,
+  resolveLanguageEntryPoints,
+} from './utils';
 
 export const webpackFinal = async (
   config: Configuration,
@@ -26,10 +35,21 @@ export const webpackFinal = async (
     );
   }
 
-  // Update storybook config with ima specifics
-  return [resolveAliases, resolveStyles].reduce((acc, resolver) => {
-    acc = resolver(config, clientConfig);
+  // Compile languages
+  await compileLanguages(imaConfig, mockArgs.rootDir, true);
 
-    return acc;
-  }, config);
+  // Update storybook config with ima specifics
+  return [resolveLanguageEntryPoints, resolveAliases, resolveStyles].reduce(
+    (acc, resolver) => {
+      acc = resolver({
+        config,
+        imaConfig,
+        imaWebpackConfig: clientConfig,
+        args: mockArgs,
+      });
+
+      return acc;
+    },
+    config
+  );
 };
