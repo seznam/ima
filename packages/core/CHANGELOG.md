@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.0-rc.25
+
+### Patch Changes
+
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+
 ## 19.0.0-rc.24
 
 ### Patch Changes
