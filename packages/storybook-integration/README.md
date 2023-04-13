@@ -10,7 +10,7 @@
 
 ## Init Storybook
 
-First init storybook inside your application using official [installation guide](https://storybook.js.org/docs/react/get-started/install/):
+First init storybook inside your application using official [installation guide](https://storybook.js.org/docs/react/get-started/install/). **Skip babel init (installing dependencies and creating .babelrc) when asked, we replace babel with SWC.**
 
 ```bash
 npx storybook@latest init
