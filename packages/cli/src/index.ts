@@ -7,6 +7,10 @@ export {
 } from './types';
 
 export {
+  IMA_CONF_FILENAME,
+  createCacheKey,
+  createDevServerConfig,
+  getCurrentCoreJsVersion,
   resolveEnvironment,
   resolveImaConfig,
   createWebpackConfig,
