@@ -1,0 +1,40 @@
+{
+  "name": "@ima/storybook-integration",
+  "version": "18.0.0",
+  "description": "Storybook integration addon for IMA.js applications.",
+  "keywords": [
+    "IMA.js",
+    "storybook",
+    "integration",
+    "addon"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/storybook-integration"
+  },
+  "license": "MIT",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "main": "./dist/client.js",
+  "types": "./dist/types.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+  },
+  "devDependencies": {
+    "@storybook/core-webpack": "^7.0.4",
+    "@types/webpack": "^5.28.1"
+  },
+  "peerDependencies": {
+    "@ima/cli": ">=19.0.0-rc.0",
+    "webpack": ">=5.x"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

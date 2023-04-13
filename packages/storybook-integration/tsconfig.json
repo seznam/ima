@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "CommonJS",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+    ],
+    "outDir": "dist",
+    "declaration": true,
+    "types": ["webpack", "webpack-env"]
+  },
+  "include": [
+    "src"
+  ]
+}
