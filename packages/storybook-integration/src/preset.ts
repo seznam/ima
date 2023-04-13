@@ -4,6 +4,7 @@ import {
   ImaCliArgs,
   compileLanguages,
 } from '@ima/cli';
+import { GlobalImaObject } from '@ima/core';
 import { Options } from '@storybook/core-webpack';
 import { Configuration } from 'webpack';
 
@@ -11,11 +12,12 @@ import {
   resolveStyles,
   resolveAliases,
   resolveLanguageEntryPoints,
+  resolveRevivalSettings,
 } from './utils.js';
 
 export const webpackFinal = async (
   config: Configuration,
-  options: Options
+  options: Options & { $IMA: GlobalImaObject }
 ): Promise<Configuration> => {
   const mockArgs: ImaCliArgs = {
     clean: false,
@@ -39,17 +41,20 @@ export const webpackFinal = async (
   await compileLanguages(imaConfig, mockArgs.rootDir, true);
 
   // Update storybook config with ima specifics
-  return [resolveLanguageEntryPoints, resolveAliases, resolveStyles].reduce(
-    (acc, resolver) => {
-      acc = resolver({
-        config,
-        imaConfig,
-        imaWebpackConfig: clientConfig,
-        args: mockArgs,
-      });
+  return [
+    resolveLanguageEntryPoints,
+    resolveAliases,
+    resolveStyles,
+    resolveRevivalSettings,
+  ].reduce((acc, resolver) => {
+    acc = resolver({
+      config,
+      imaConfig,
+      imaWebpackConfig: clientConfig,
+      args: mockArgs,
+      options,
+    });
 
-      return acc;
-    },
-    config
-  );
+    return acc;
+  }, config);
 };

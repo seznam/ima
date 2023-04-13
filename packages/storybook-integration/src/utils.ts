@@ -1,5 +1,7 @@
 import { ImaConfig, findRules, getLanguageEntryPoints } from '@ima/cli';
 import { ImaCliArgs } from '@ima/cli/src';
+import { GlobalImaObject } from '@ima/core';
+import { Options } from '@storybook/types';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration, RuleSetRule } from 'webpack';
 
@@ -8,6 +10,7 @@ export type ResolverParams = {
   imaConfig: ImaConfig;
   imaWebpackConfig: Configuration;
   args: ImaCliArgs;
+  options: Options & { $IMA?: GlobalImaObject };
 };
 
 /**
@@ -31,6 +34,7 @@ export function resolveLanguageEntryPoints({
   config,
   imaConfig,
   args,
+  options,
 }: ResolverParams): Configuration {
   if (!Array.isArray(config.entry)) {
     throw new Error(
@@ -38,11 +42,22 @@ export function resolveLanguageEntryPoints({
     );
   }
 
-  config.entry.push(
-    ...Object.values(
-      getLanguageEntryPoints(imaConfig.languages, args.rootDir, false)
-    )
+  const lang = options?.$IMA?.$Language;
+  const languageEntries = getLanguageEntryPoints(
+    imaConfig.languages,
+    args.rootDir,
+    false
   );
+
+  // Add chosen language to entries
+  if (lang && languageEntries[`locale/${lang}`]) {
+    config.entry.push(languageEntries[`locale/${lang}`]);
+
+    return config;
+  }
+
+  // Use first language as default
+  config.entry.push(languageEntries[Object.keys(languageEntries)[0]]);
 
   return config;
 }
@@ -90,6 +105,51 @@ export function resolveStyles({
   if (miniCssExtractPlugin) {
     config.plugins?.push(miniCssExtractPlugin);
   }
+
+  return config;
+}
+
+/**
+ * Add mocked revival settings to final bundle.
+ */
+export function resolveRevivalSettings({
+  config,
+  imaConfig,
+  args,
+  options,
+}: ResolverParams): Configuration {
+  if (!Array.isArray(config.entry)) {
+    throw new Error(
+      '@ima/storybook-integration: Unsupported storybook entry type.'
+    );
+  }
+
+  const { $IMA } = options;
+  const revivalSettings = `(function (root) {
+    root.$Debug = true;
+    root.$IMA = root.$IMA || {};
+    $IMA.Test = true;
+    $IMA.SPA = true;
+    $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
+    $IMA.$RequestID = "storybook-request-id";
+    $IMA.$Language = "${$IMA?.$Language ?? 'en'}";
+    $IMA.$Env = "${$IMA?.$Env ?? args.environment}";
+    $IMA.$Debug = true;
+    $IMA.$Version = "${$IMA?.$Version ?? '1.0.0'}";
+    $IMA.$App = {};
+    $IMA.$Protocol = "${$IMA?.$Protocol ?? 'http:'}";
+    $IMA.$Host = "${$IMA?.$Host ?? 'http:'}";
+    $IMA.$Path = "${$IMA?.$Protocol ?? '/'}";
+    $IMA.$Root = "";
+    $IMA.$LanguagePartPath = "";
+  })(typeof window !== 'undefined' && window !== null ? window : global);
+  `;
+
+  config.entry?.push(
+    `data:text/javascript;base64,${Buffer.from(revivalSettings).toString(
+      'base64'
+    )}`
+  );
 
   return config;
 }
