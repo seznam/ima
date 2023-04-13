@@ -112,7 +112,7 @@ export interface Settings {
   };
   $Cache?: {
     ttl?: number;
-    enable?: boolean;
+    enabled?: boolean;
   };
   $Page: {
     $Render: {

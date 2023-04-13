@@ -126,9 +126,9 @@ export function resolveSWC({
     rule.include = [args.rootDir];
     rule.exclude = /node_modules/;
 
-    // Enable react refres
+    // Disable react refresh
     if ((rule?.options as any)?.jsc?.transform?.react) {
-      (rule.options as any).jsc.transform.react.refresh = true;
+      (rule.options as any).jsc.transform.react.refresh = false;
     }
 
     return rule;
