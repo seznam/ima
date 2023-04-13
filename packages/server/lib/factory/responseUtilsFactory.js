@@ -127,18 +127,20 @@ module.exports = function responseUtilsFactory() {
     );
 
     // Get current file sources to load
-    const { styles, ...scripts } =
+    const processedResources =
       settings?.$Resources?.(response, manifest, defaultResources) ??
       defaultResources;
 
     return {
       _: {
         manifest,
-        styles,
-        scripts,
+        resources: processedResources,
       },
       // Add slashes to "" to fix terser minification on runner code.
-      resources: JSON.stringify(scripts).replace(/"/g, '\\"'),
+      scriptResources: JSON.stringify({
+        scripts: processedResources.scripts,
+        esScripts: processedResources.esScripts,
+      }).replace(/"/g, '\\"'),
       revivalSettings: renderScript(
         'revival-settings',
         _getRevivalSettings({ response, settings, res })
@@ -148,7 +150,9 @@ module.exports = function responseUtilsFactory() {
         _getRevivalCache({ response })
       ),
       runner: renderScript('runner', runner),
-      styles: renderStyles(styles),
+      styles: renderStyles(
+        processedResources.esStyles ?? processedResources.styles
+      ),
       meta: renderMeta(metaManager),
     };
   }

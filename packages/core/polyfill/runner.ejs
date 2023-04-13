@@ -29,7 +29,7 @@
   root.$IMA.Runner = assign(
     {
       isEsVersion: false,
-      resources: JSON.parse('#{resources}'),
+      scriptResources: JSON.parse('#{scriptResources}'),
       scripts: [],
       loadedScripts: [],
       testScripts: {
@@ -114,17 +114,17 @@
          * there are no sources for the newer versions.
          */
         if (
-          runner.resources.esScripts &&
+          runner.scriptResources.esScripts &&
           runner.testScripts.esScripts.every(testScript)
           <% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>
         ) {
           runner.isEsVersion = true;
-          Array.prototype.push.apply(runner.scripts, runner.resources.esScripts);
+          Array.prototype.push.apply(runner.scripts, runner.scriptResources.esScripts);
         } else if (
-          runner.resources.scripts &&
+          runner.scriptResources.scripts &&
           runner.testScripts.scripts.every(testScript)
         ) {
-          Array.prototype.push.apply(runner.scripts, runner.resources.scripts);
+          Array.prototype.push.apply(runner.scripts, runner.scriptResources.scripts);
         } else {
           // Don't create scripts and execute runtime on unsupported environments.
           return runner.onUnsupported();

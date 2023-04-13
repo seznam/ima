@@ -92,7 +92,7 @@ class ManifestPlugin {
         assetName =>
           !assetName.includes('/chunk.') &&
           !assetName.includes('runner.js') &&
-          this.#filter(compilationName, assetName)
+          this.#filter(assetName)
       )
       .forEach(assetName => {
         const asset = compilation.getAsset(assetName);
@@ -139,29 +139,23 @@ class ManifestPlugin {
   /**
    * Filter for compilation specific assets
    */
-  #filter(name: ImaConfigurationContext['name'], assetName: string): boolean {
-    let result = /\.(js)$/.test(assetName);
+  #filter(assetName: string): boolean {
+    const { outputFolders, processCss } = this.#options.context;
 
-    switch (name) {
-      case 'server':
-        result = result && assetName.startsWith('server/');
-        break;
-
-      case 'client':
-        result = result && assetName.startsWith('static/js/');
-        break;
-
-      case 'client.es':
-        result = result && assetName.startsWith('static/js.es/');
-        break;
+    // Include bundle-specific JS files
+    if (/\.(js)$/.test(assetName) && assetName.startsWith(outputFolders.js)) {
+      return true;
     }
 
     // Include CSS only from the root directory
-    if (this.#options.context.processCss) {
-      result = result || /static\/css\/[\w.\-_]+\.css$/.test(assetName);
+    if (
+      processCss &&
+      new RegExp(`${outputFolders.css}/[\\w.\\-_]+\\.css$`).test(assetName)
+    ) {
+      return true;
     }
 
-    return result;
+    return false;
   }
 }
 

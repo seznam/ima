@@ -54,8 +54,16 @@ export interface ImaCliArgs {
 export interface ImaConfigurationContext extends ImaCliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
+  isClient: boolean;
+  isClientES: boolean;
   processCss: boolean; // Flag indicating that this context should process CSS assets
-  isEsVersion?: boolean;
+  outputFolders: {
+    media: string;
+    hot: string;
+    css: string;
+    js: string;
+    public: string;
+  };
 }
 
 export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
@@ -80,6 +88,18 @@ export interface ImaCliPlugin {
    * and the imaConfig is loaded, before the webpack config creation and compiler run.
    */
   preProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
+
+  /**
+   * Called right before creating webpack configurations after preProcess call.
+   * This hook lets you customize configuration contexts for each webpack config
+   * that will be generated. This is usefull when you need to overrite configuration
+   * contexts for values that are not editable anywhere else (like output folders).
+   */
+  prepareConfigurations?(
+    configurations: ImaConfigurationContext[],
+    imaConfig: ImaConfig,
+    args: ImaCliArgs
+  ): Promise<ImaConfigurationContext[]>;
 
   /**
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
@@ -137,6 +157,11 @@ export type ImaConfig = {
     config: Record<string, unknown>,
     ctx: ImaConfigurationContext
   ) => Promise<Record<string, unknown>>;
+
+  /**
+   * Browserslist configuration string for postcss-preset-env.
+   */
+  cssBrowsersTarget: string;
 
   /**
    * Optional IMA cli plugins that can be used to easily extend

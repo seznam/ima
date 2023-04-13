@@ -328,7 +328,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       },
       "publicPath": "/",
     },
-    "scripts": {
+    "resources": {
       "esScripts": [
         [
           "/static/js.es/app.client.2106a34c6b8bbad8.js",
@@ -349,6 +349,15 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
           {
             "async": true,
             "crossorigin": "anonymous",
+          },
+        ],
+      ],
+      "esStyles": [
+        [
+          "/static/css/app.d0ad44d05f82db5f.css",
+          {
+            "preload": true,
+            "rel": "stylesheet",
           },
         ],
       ],
@@ -375,19 +384,10 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
           },
         ],
       ],
+      "styles": [],
     },
-    "styles": [
-      [
-        "/static/css/app.d0ad44d05f82db5f.css",
-        {
-          "preload": true,
-          "rel": "stylesheet",
-        },
-      ],
-    ],
   },
   "meta": "",
-  "resources": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
   "revivalCache": "<script id="ima-revival-cache">(function (root) {
       root.$IMA = root.$IMA || {};
       $IMA.Cache = {};
@@ -411,7 +411,8 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
     </script>",
-  "runner": "<script id="ima-runner">runner#{resources}</script>",
+  "runner": "<script id="ima-runner">runner#{scriptResources}</script>",
+  "scriptResources": "{\\"scripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]],\\"esScripts\\":[[\\"/static/js.es/app.client.2106a34c6b8bbad8.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/locale/en.371127fdbfbe93d2.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}],[\\"/static/js.es/vendors.a873907f25297544.js\\",{\\"async\\":true,\\"crossorigin\\":\\"anonymous\\"}]]}",
   "styles": "<link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" />",
 }
 `;
