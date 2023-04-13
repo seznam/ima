@@ -42,7 +42,7 @@ for PACKAGE in $PACKAGES ; do
 
     if [[ "$PACKAGE" == "create-ima-app" ]]
     then
-        npx json -I -f template/common/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
+        npx json -I -f template/common/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/server\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
