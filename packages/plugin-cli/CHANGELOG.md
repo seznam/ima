@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 5380e516e: When parsing configuration file the plugin now searches for ima-plugin.config.js files recursively up to filesystem root. This allows to have one custom config file for monorepositories and removes the need of duplicating same config across all package directories
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
 ## 19.0.0-rc.3
 
 ### Minor Changes

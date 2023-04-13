@@ -1,5 +1,13 @@
 # Change Log
 
+## 19.0.0-rc.7
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+- 7e107138e: update plugin integration to use native ima spa template
+- 026ab7682: update versions, set override for ima/server in CI test
+
 ## 19.0.0-rc.6
 
 ### Patch Changes
