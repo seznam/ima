@@ -11,7 +11,9 @@ module.exports = function urlParserFactory({ environment }) {
 
   function _getHost(req) {
     if (environment?.$Server?.host) {
-      return environment.$Server.host;
+      return typeof environment?.$Server?.host === 'function'
+        ? environment?.$Server?.host({ req })
+        : environment.$Server.host;
     }
 
     let forwardedHost = req.get('X-Forwarded-Host');
@@ -98,7 +100,9 @@ module.exports = function urlParserFactory({ environment }) {
 
   function _getProtocol(req) {
     if (environment?.$Server?.protocol) {
-      return environment.$Server.protocol + ':';
+      return typeof environment?.$Server?.protocol === 'function'
+        ? environment?.$Server?.protocol({ req })
+        : environment.$Server.protocol + ':';
     }
 
     return (
