@@ -38,7 +38,8 @@ export const webpackFinal = async (
   }
 
   // Compile languages
-  await compileLanguages(imaConfig, mockArgs.rootDir, true);
+  // @ts-expect-error missing in types
+  await compileLanguages(imaConfig, mockArgs.rootDir, options._name === 'dev');
 
   // Update storybook config with ima specifics
   return [
