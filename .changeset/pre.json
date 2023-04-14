@@ -14,7 +14,8 @@
     "@ima/plugin-cli": "18.1.0",
     "@ima/react-page-renderer": "18.1.6",
     "@ima/server": "18.2.0",
-    "@ima/docs": "0.0.0"
+    "@ima/docs": "0.0.0",
+    "@ima/storybook-integration": "19.0.0-rc.0"
   },
   "changesets": [
     "afraid-gifts-shout",
@@ -62,6 +63,7 @@
     "lucky-maps-promise",
     "many-fishes-wave",
     "many-humans-help",
+    "metal-moons-double",
     "modern-forks-join",
     "moody-lizards-remember",
     "nasty-rockets-approve",
@@ -70,6 +72,7 @@
     "nine-kiwis-carry",
     "nine-panthers-learn",
     "nine-students-compete",
+    "ninety-carrots-hug",
     "ninety-pots-drop",
     "odd-games-fold",
     "old-donkeys-trade",
@@ -119,6 +122,7 @@
     "warm-mice-retire",
     "weak-rats-raise",
     "weak-worms-clean",
+    "wet-dolls-yell",
     "wet-points-love",
     "yellow-bottles-live"
   ]

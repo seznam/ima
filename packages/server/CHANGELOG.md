@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.9
+
+### Minor Changes
+
+- bedc7e0bb: environment?.$Server?.host and environment?.$Server?.protocol can now be functions
+
 ## 19.0.0-rc.8
 
 ### Patch Changes

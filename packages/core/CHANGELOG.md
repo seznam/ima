@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.26
+
+### Patch Changes
+
+- b49b20d74: Renamed `AppConfigFunctions` -> `InitAppConfig` and `PluginConfigFunctions` -> `InitPluginConfig` types.
+
 ## 19.0.0-rc.25
 
 ### Patch Changes
