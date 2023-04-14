@@ -1,5 +1,11 @@
 # Change Log
 
+## 18.4.2
+
+### Patch Changes
+
+- afa560c68: removes unnecessary 'g' flag from SPA blacklist RegExp
+
 ## 18.4.1
 
 ### Patch Changes
