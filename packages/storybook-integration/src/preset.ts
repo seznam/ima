@@ -12,7 +12,6 @@ import {
   resolveStyles,
   resolveAliases,
   resolveLanguageEntryPoints,
-  resolveRevivalSettings,
   resolveSWC,
 } from './resolvers.js';
 
@@ -47,7 +46,6 @@ export const webpackFinal = async (
     resolveAliases,
     resolveStyles,
     resolveSWC,
-    resolveRevivalSettings,
   ].reduce((acc, resolver) => {
     acc = resolver({
       config,

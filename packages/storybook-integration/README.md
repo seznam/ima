@@ -45,12 +45,13 @@ export default config;
 
 ### Overriding boot config
 
-You can easily override boot config functions using `parameters.ima`:
+You can easily override boot config functions and global window.$IMA object using `parameters.ima`:
 
 ```js
 export const Story = {
   parameters: {
     ima: {
+      $IMA: { $Root: '' },
       initBindApp: (...args) => {},
       initRoutes: (...args) => {},
       initServicesApp: (...args) => {},

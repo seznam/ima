@@ -1,9 +1,43 @@
 import type * as imaCore from '@ima/core';
-import { Loader } from '@storybook/react';
+import { Loader, Parameters } from '@storybook/react';
 import merge from 'ts-deepmerge';
 
 let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;
+let lastImaParams: Parameters = {};
+
+declare global {
+  interface Window {
+    $Debug: boolean;
+  }
+}
+
+/**
+ * Set revival settings to window.
+ */
+function initRevivalSettings(parameters: Parameters): void {
+  window.$Debug = true;
+  window.$IMA = merge(
+    window.$IMA,
+    {
+      $Debug: true,
+      Test: true,
+      SPA: true,
+      $PublicPath: '',
+      $RequestID: 'storybook-request-id',
+      $Language: 'en',
+      $Env: 'regression',
+      $Version: '1.0.0',
+      $App: {},
+      $Protocol: 'http:',
+      $Host: 'localhost:6006',
+      $Path: '',
+      $Root: '',
+      $LanguagePartPath: '',
+    } as imaCore.GlobalImaObject,
+    (parameters?.ima?.$IMA ?? {}) as imaCore.GlobalImaObject
+  );
+}
 
 /**
  * Extend app boot config with parameter overrides.
@@ -34,7 +68,20 @@ export function extendBootConfig(
   };
 }
 
-export const imaLoader: Loader = async ({ parameters }) => {
+export const imaLoader: Loader = async args => {
+  const { parameters } = args;
+  initRevivalSettings(parameters);
+
+  // Create new ima app if any of the params change
+  if (
+    ['initBindApp', 'initRoutes', 'initServicesApp', 'initSettings'].some(
+      key => lastImaParams?.[key] !== parameters?.ima?.[key]
+    )
+  ) {
+    app = null;
+    bootConfig = null;
+  }
+
   // Return cached ima app
   if (app && bootConfig) {
     return {
@@ -54,6 +101,7 @@ export const imaLoader: Loader = async ({ parameters }) => {
     // eslint-disable-next-line import/no-unresolved
   } = await import('app/main');
 
+  lastImaParams = { ...parameters?.ima };
   app = ima.createImaApp();
   bootConfig = ima.getClientBootConfig(
     extendBootConfig(getInitialAppConfigFunctions(), {
