@@ -42,3 +42,30 @@ const config = {
 
 export default config;
 ```
+
+### Overriding boot config
+
+You can easily override boot config functions using `parameters.ima`:
+
+```js
+export const Story = {
+  parameters: {
+    ima: {
+      initBindApp: (...args) => {},
+      initRoutes: (...args) => {},
+      initServicesApp: (...args) => {},
+      initSettings: (...args) => {
+        return {
+          prod: {
+            links: {
+              tutorial: 'https://google.com',
+            },
+          },
+        };
+      },
+    },
+  },
+};
+```
+
+Where settings are deeply merged with the ones from app settings function. You can use this on per-story basis or define global overrides.
