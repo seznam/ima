@@ -1,0 +1,67 @@
+{
+  "name": "@ima/storybook-integration",
+  "version": "19.0.0-rc.0",
+  "description": "Storybook integration addon for IMA.js applications.",
+  "type": "module",
+  "keywords": [
+    "IMA.js",
+    "storybook",
+    "integration",
+    "addon"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/storybook-integration"
+  },
+  "license": "MIT",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "main": "./dist/preset.js",
+  "module": "./dist/preset.js",
+  "types": "./dist/preset.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/preset.d.ts",
+      "default": "./dist/preset.js"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "default": "./dist/preset.js"
+    },
+    "./loader": {
+      "types": "./dist/loader.d.ts",
+      "default": "./dist/loader.js"
+    },
+    "./preview": {
+      "types": "./dist/preview.d.ts",
+      "default": "./dist/preview.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+  },
+  "devDependencies": {
+    "@storybook/core-webpack": "^7.0.4",
+    "@storybook/react": "^7.0.4",
+    "@storybook/types": "^7.0.4",
+    "@types/webpack": "^5.28.1"
+  },
+  "peerDependencies": {
+    "@ima/cli": ">=19.0.0-rc.0",
+    "@ima/core": ">=19.0.0-rc.0",
+    "@ima/react-page-renderer": ">=19.0.0-rc.0",
+    "webpack": ">=5.x"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "ts-deepmerge": "^6.0.3"
+  }
+}

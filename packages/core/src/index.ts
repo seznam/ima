@@ -1,8 +1,8 @@
 export { Namespace, getNamespace, ns } from './Namespace';
 export {
   Bootstrap,
-  type InitPluginConfig as PluginConfigFunctions,
-  type InitAppConfig as AppConfigFunctions,
+  type InitPluginConfig,
+  type InitAppConfig,
   type BootSettings,
   type BootConfig,
   type BootServices,
