@@ -49,7 +49,7 @@ module.exports = (() => {
           // server will serve the application in SPA
           // mode (without server-side rendering)
           blackList: userAgent =>
-            new RegExp('Googlebot|SeznamBot', 'g').test(userAgent), // These user agents
+            new RegExp('Googlebot|SeznamBot').test(userAgent), // These user agents
           // will always be served a server-rendered page
         },
         cache: {
