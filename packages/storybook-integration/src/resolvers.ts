@@ -1,5 +1,9 @@
-import { ImaConfig, findRules, getLanguageEntryPoints } from '@ima/cli';
-import { ImaCliArgs } from '@ima/cli/src';
+import {
+  type ImaCliArgs,
+  type ImaConfig,
+  findRules,
+  getLanguageEntryPoints,
+} from '@ima/cli';
 import { Options } from '@storybook/types';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration, RuleSetRule } from 'webpack';

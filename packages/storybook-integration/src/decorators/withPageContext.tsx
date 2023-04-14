@@ -11,8 +11,6 @@ export const withPageContextDecorator: Decorator = (
       ...(args?.context as object),
     }}
   >
-    <div>
-      <Story />
-    </div>
+    <Story />
   </PageContext.Provider>
 );

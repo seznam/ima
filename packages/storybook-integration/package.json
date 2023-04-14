@@ -1,6 +1,6 @@
 {
   "name": "@ima/storybook-integration",
-  "version": "18.0.0",
+  "version": "0.1.0",
   "description": "Storybook integration addon for IMA.js applications.",
   "type": "module",
   "keywords": [
@@ -52,12 +52,16 @@
     "@types/webpack": "^5.28.1"
   },
   "peerDependencies": {
-    "@ima/react-page-renderer": ">=19.0.0-rc.0",
     "@ima/cli": ">=19.0.0-rc.0",
+    "@ima/core": ">=19.0.0-rc.0",
+    "@ima/react-page-renderer": ">=19.0.0-rc.0",
     "webpack": ">=5.x"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "ts-deepmerge": "^6.0.3"
   }
 }

@@ -4,7 +4,7 @@ import {
   ImaCliArgs,
   compileLanguages,
 } from '@ima/cli';
-import { GlobalImaObject } from '@ima/core';
+import type { GlobalImaObject } from '@ima/core';
 import { Options } from '@storybook/core-webpack';
 import { Configuration } from 'webpack';
 
@@ -14,7 +14,7 @@ import {
   resolveLanguageEntryPoints,
   resolveRevivalSettings,
   resolveSWC,
-} from './utils.js';
+} from './resolvers.js';
 
 export const webpackFinal = async (
   config: Configuration,

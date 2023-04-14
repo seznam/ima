@@ -5,9 +5,10 @@ export const decorators = [withPageContextDecorator];
 export const loaders = [imaLoader];
 export const argTypes = {
   context: {
-    name: 'PageContext',
+    name: 'context',
     control: 'object',
     defaultValue: {},
-    description: 'Set additional PageContext values',
+    description:
+      'Set additional PageContext values, that are shallowly merged with current context containing $Utils.',
   },
 };
