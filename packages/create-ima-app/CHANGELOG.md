@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- 615cb39b7: Fixed HomeController state mock"
+
 ## 19.0.0-rc.7
 
 ### Patch Changes
