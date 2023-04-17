@@ -42,8 +42,8 @@ export class HomeController extends AbstractController<HomeControllerState> {
 
     return {
       cards: cardsPromise,
-      message: 'Welcome to ima',
-      name: 'Name',
+      message: 'Welcome to',
+      name: `IMA.js`,
     };
   }
 
