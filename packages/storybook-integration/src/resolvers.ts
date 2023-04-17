@@ -85,6 +85,52 @@ export function resolveAliases({
 }
 
 /**
+ * Add mocked revival settings to final bundle.
+ */
+export function resolveRevivalSettings({
+  config,
+  imaConfig,
+  args,
+  options,
+}: ResolverParams): Configuration {
+  if (!Array.isArray(config.entry)) {
+    throw new Error(
+      '@ima/storybook-integration: Unsupported storybook entry type.'
+    );
+  }
+
+  const revivalSettings = `(function (root) {
+    root.$Debug = true;
+    root.$IMA = root.$IMA || {};
+    $IMA.Test = true;
+    $IMA.SPA = true;
+    $IMA.$PublicPath = "";
+    $IMA.$RequestID = "storybook-request-id";
+    $IMA.$Language = "${options.language ?? 'en'}";
+    $IMA.$Env = "regression";
+    $IMA.$Debug = true;
+    $IMA.$Version = "1.0.0";
+    $IMA.$App = {};
+    $IMA.$Protocol = "${options.https ? 'https:' : 'http:'}";
+    $IMA.$Host = "${
+      options.host ? options.host : `localhost:${options.port ?? 6006}`
+    }";
+    $IMA.$Path = "";
+    $IMA.$Root = "";
+    $IMA.$LanguagePartPath = "";
+  })(typeof window !== 'undefined' && window !== null ? window : global);
+  `;
+
+  config.entry?.push(
+    `data:text/javascript;base64,${Buffer.from(revivalSettings).toString(
+      'base64'
+    )}`
+  );
+
+  return config;
+}
+
+/**
  * Replace storybook style loaders with ima specific ones.
  */
 export function resolveStyles({

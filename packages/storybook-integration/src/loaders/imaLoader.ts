@@ -38,26 +38,7 @@ async function destroyInstance(
  */
 function initRevivalSettings(parameters: ImaLoaderParameters): void {
   window.$Debug = true;
-  window.$IMA = merge(
-    window.$IMA,
-    {
-      $Debug: true,
-      Test: true,
-      SPA: true,
-      $PublicPath: '',
-      $RequestID: 'storybook-request-id',
-      $Language: 'en',
-      $Env: 'regression',
-      $Version: '1.0.0',
-      $App: {},
-      $Protocol: 'http:',
-      $Host: 'localhost:6006',
-      $Path: '',
-      $Root: '',
-      $LanguagePartPath: '',
-    } as imaCore.GlobalImaObject,
-    parameters?.ima?.$IMA ?? {}
-  );
+  window.$IMA = merge(window.$IMA, parameters?.ima?.$IMA ?? {});
 }
 
 /**
