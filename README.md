@@ -1,4 +1,4 @@
-![IMA.js logo](https://imajs.io/img/imajs-logo.png)
+![IMA.js logo](https://imajs.io/img/logo.svg)
 
 # IMA.js
 
@@ -56,5 +56,5 @@ yarn dev
 ```
 
 ## Contributing
-  
+
 See [How to Contribute](https://imajs.io/contributing/how-to-contribute).

@@ -6,16 +6,37 @@ let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;
 let lastImaParams: Parameters = {};
 
-declare global {
-  interface Window {
-    $Debug: boolean;
+export type ImaLoaderParameters = {
+  ima?: {
+    initBindApp?: imaCore.InitBindFunction;
+    initRoutes?: imaCore.InitRoutesFunction;
+    initServicesApp?: imaCore.InitServicesFunction;
+    initSettings?: imaCore.InitSettingsFunction;
+    $IMA?: imaCore.GlobalImaObject;
+    state?: imaCore.PageState;
+  };
+};
+
+/**
+ * Utility to destroy old instance before creating a new one.
+ */
+async function destroyInstance(
+  app: ReturnType<typeof imaCore.createImaApp> | null
+): Promise<void> {
+  if (!app) {
+    return;
   }
+
+  app.oc.get('$Dispatcher').clear();
+  app.oc.get('$Router').unlisten();
+  app.oc.get('$PageRenderer').unmount();
+  await app.oc.get('$PageManager').destroy();
 }
 
 /**
  * Set revival settings to window.
  */
-function initRevivalSettings(parameters: Parameters): void {
+function initRevivalSettings(parameters: ImaLoaderParameters): void {
   window.$Debug = true;
   window.$IMA = merge(
     window.$IMA,
@@ -35,8 +56,29 @@ function initRevivalSettings(parameters: Parameters): void {
       $Root: '',
       $LanguagePartPath: '',
     } as imaCore.GlobalImaObject,
-    (parameters?.ima?.$IMA ?? {}) as imaCore.GlobalImaObject
+    parameters?.ima?.$IMA ?? {}
   );
+}
+
+/**
+ * Update ima state from parameters.ima.state.
+ */
+function updateState(
+  app: ReturnType<typeof imaCore.createImaApp>,
+  parameters: ImaLoaderParameters
+): void {
+  if (!app) {
+    return;
+  }
+
+  const patchState = parameters?.ima?.state ?? {};
+  const stateManager = app.oc.get('$PageStateManager');
+
+  if (patchState === null) {
+    return stateManager.clear();
+  }
+
+  return stateManager.setState(patchState);
 }
 
 /**
@@ -69,21 +111,32 @@ export function extendBootConfig(
 }
 
 export const imaLoader: Loader = async args => {
-  const { parameters } = args;
+  const parameters = args.parameters as ImaLoaderParameters;
   initRevivalSettings(parameters);
 
   // Create new ima app if any of the params change
   if (
-    ['initBindApp', 'initRoutes', 'initServicesApp', 'initSettings'].some(
-      key => lastImaParams?.[key] !== parameters?.ima?.[key]
-    )
+    [
+      'initBindApp',
+      'initRoutes',
+      'initServicesApp',
+      'initSettings',
+      '$IMA',
+      // @ts-expect-error
+    ].some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
   ) {
+    // Destroy old instance
+    await destroyInstance(app);
+
     app = null;
     bootConfig = null;
   }
 
   // Return cached ima app
   if (app && bootConfig) {
+    // Update page state
+    updateState(app, parameters);
+
     return {
       app,
       bootConfig,
@@ -101,7 +154,7 @@ export const imaLoader: Loader = async args => {
     // eslint-disable-next-line import/no-unresolved
   } = await import('app/main');
 
-  lastImaParams = { ...parameters?.ima };
+  lastImaParams = { ...parameters?.ima } as ImaLoaderParameters;
   app = ima.createImaApp();
   bootConfig = ima.getClientBootConfig(
     extendBootConfig(getInitialAppConfigFunctions(), {
@@ -114,6 +167,9 @@ export const imaLoader: Loader = async args => {
 
   // Init app
   ima.bootClientApp(app, bootConfig);
+
+  // Update page state
+  updateState(app, parameters);
 
   return {
     app,

@@ -1,9 +1,9 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/imajs-logo.png">
+  <img height="130" src="https://imajs.io/img/logo.svg">
 </p>
 
 <h1 align="center">@ima/storybook-integration</h1>
-  <p align="center"><i>Storybook integration for IMA.js applications.
+  <p align="center"><i>Storybook integration for IMA.js applications.</i>
 </p>
 
 ---
@@ -43,15 +43,16 @@ const config = {
 export default config;
 ```
 
-### Overriding boot config
+### Overriding boot config, $IMA global object and `PageState`
 
-You can easily override boot config functions and global window.$IMA object using `parameters.ima`:
+You can easily override boot config functions, global window.$IMA and set page state using `parameters.ima`:
 
 ```js
 export const Story = {
   parameters: {
     ima: {
-      $IMA: { $Root: '' },
+      state: { posts: [] }, // IMA PageState
+      $IMA: { $Root: '' }, // window.$IMA object
       initBindApp: (...args) => {},
       initRoutes: (...args) => {},
       initServicesApp: (...args) => {},

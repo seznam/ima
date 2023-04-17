@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="200" src="https://imajs.io/img/imajs-logo.png">
+  <img height="200" src="https://imajs.io/img/logo.svg">
 </p>
 
 # Create IMA.js App
