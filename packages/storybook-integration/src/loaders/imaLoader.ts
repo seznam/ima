@@ -61,6 +61,27 @@ function initRevivalSettings(parameters: ImaLoaderParameters): void {
 }
 
 /**
+ * Update ima state from parameters.ima.state.
+ */
+function updateState(
+  app: ReturnType<typeof imaCore.createImaApp>,
+  parameters: ImaLoaderParameters
+): void {
+  if (!app) {
+    return;
+  }
+
+  const patchState = parameters?.ima?.state ?? {};
+  const stateManager = app.oc.get('$PageStateManager');
+
+  if (patchState === null) {
+    return stateManager.clear();
+  }
+
+  return stateManager.setState(patchState);
+}
+
+/**
  * Extend app boot config with parameter overrides.
  */
 export function extendBootConfig(
@@ -101,7 +122,6 @@ export const imaLoader: Loader = async args => {
       'initServicesApp',
       'initSettings',
       '$IMA',
-      'state',
       // @ts-expect-error
     ].some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
   ) {
@@ -114,6 +134,9 @@ export const imaLoader: Loader = async args => {
 
   // Return cached ima app
   if (app && bootConfig) {
+    // Update page state
+    updateState(app, parameters);
+
     return {
       app,
       bootConfig,
@@ -146,9 +169,7 @@ export const imaLoader: Loader = async args => {
   ima.bootClientApp(app, bootConfig);
 
   // Update page state
-  if (parameters?.ima?.state) {
-    app.oc.get('$PageStateManager').setState(parameters?.ima.state);
-  }
+  updateState(app, parameters);
 
   return {
     app,
