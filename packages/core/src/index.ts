@@ -20,10 +20,7 @@ export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
 export { CacheImpl } from './cache/CacheImpl';
 export { AbstractController } from './controller/AbstractController';
-export {
-  Controller,
-  type CreateLoadedResources,
-} from './controller/Controller';
+export { Controller, type LoadedResources } from './controller/Controller';
 export { ControllerDecorator } from './controller/ControllerDecorator';
 export {
   Dictionary,

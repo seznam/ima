@@ -1,6 +1,6 @@
 import {
   AbstractController,
-  CreateLoadedResources,
+  LoadedResources,
   MetaManager,
   RouteParams,
   Router,
@@ -13,13 +13,14 @@ import IMAjsShareImg from 'app/public/imajs-share.png';
  */
 export abstract class AbstractPageController<
   S extends PageState = {},
-  R extends RouteParams = {}
-> extends AbstractController<S, R> {
+  R extends RouteParams = {},
+  SS extends S = S
+> extends AbstractController<S, R, SS> {
   /**
    * Set seo params.
    */
   setMetaParams(
-    loadedResources: CreateLoadedResources<S>,
+    loadedResources: LoadedResources<SS>,
     metaManager: MetaManager,
     router: Router
   ): void {

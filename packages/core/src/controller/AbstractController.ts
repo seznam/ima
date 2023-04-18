@@ -13,9 +13,10 @@ import { RouteParams } from '../router/AbstractRoute';
  */
 export class AbstractController<
   S extends PageState = {},
-  R extends RouteParams = {}
-> extends Controller<S, R> {
-  protected _pageStateManager?: PageStateManager<S>;
+  R extends RouteParams = {},
+  SS extends S = S
+> extends Controller<S, R, SS> {
+  protected _pageStateManager?: PageStateManager<SS>;
   protected _extensions: Map<
     | keyof OCAliasMap
     | Constructor<Extension<any, any>>
@@ -46,18 +47,18 @@ export class AbstractController<
    */
   setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
-      this._pageStateManager.setState(statePatch);
+      this._pageStateManager.setState(statePatch as S);
     }
   }
 
   /**
    * @inheritDoc
    */
-  getState(): S {
+  getState(): SS {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return {} as S;
+      return {} as SS;
     }
   }
 
@@ -155,7 +156,7 @@ export class AbstractController<
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     this._pageStateManager = pageStateManager;
   }
 

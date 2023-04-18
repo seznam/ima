@@ -10,8 +10,9 @@ import { RouteParams } from '../router/AbstractRoute';
  */
 export abstract class AbstractExtension<
   S extends PageState = {},
-  R extends RouteParams = {}
-> extends Extension<S, R> {
+  R extends RouteParams = {},
+  SS extends S = S
+> extends Extension<S, R, SS> {
   static $name?: string;
   static $dependencies: Dependencies;
 
@@ -20,7 +21,7 @@ export abstract class AbstractExtension<
   /**
    * State manager.
    */
-  protected _pageStateManager?: PageStateManager;
+  protected _pageStateManager?: PageStateManager<SS>;
   /**
    * Flag indicating whether the PageStateManager should be used instead
    * of partial state.
@@ -87,18 +88,18 @@ export abstract class AbstractExtension<
    */
   setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
-      this._pageStateManager.setState(statePatch);
+      this._pageStateManager.setState(statePatch as S);
     }
   }
 
   /**
    * @inheritDoc
    */
-  getState(): S {
+  getState(): SS {
     if (this._usingStateManager && this._pageStateManager) {
-      return this._pageStateManager.getState() as S;
+      return this._pageStateManager.getState();
     } else {
-      return this.getPartialState();
+      return this.getPartialState() as SS;
     }
   }
 
@@ -144,7 +145,7 @@ export abstract class AbstractExtension<
   /**
    * @inheritDoc
    */
-  getPartialState(): S {
+  getPartialState(): Partial<SS> {
     return this[this._partialStateSymbol] || {};
   }
 
@@ -172,7 +173,7 @@ export abstract class AbstractExtension<
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     this._pageStateManager = pageStateManager;
   }
 

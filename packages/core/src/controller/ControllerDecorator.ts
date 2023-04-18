@@ -1,6 +1,6 @@
 import { AbstractConstructor, Constructor } from 'type-fest';
 
-import { Controller, CreateLoadedResources } from './Controller';
+import { Controller, LoadedResources } from './Controller';
 import { Settings } from '../boot';
 import { OCAliasMap } from '../config/bind';
 import { Dictionary } from '../dictionary/Dictionary';
@@ -17,12 +17,13 @@ import { Router } from '../router/Router';
  */
 export class ControllerDecorator<
   S extends PageState = {},
-  R extends RouteParams = {}
-> extends Controller<S, R> {
+  R extends RouteParams = {},
+  SS extends S = S
+> extends Controller<S, R, SS> {
   /**
    * The controller being decorated.
    */
-  protected _controller: Controller<S, R>;
+  protected _controller: Controller<S, R, SS>;
   /**
    * The meta page attributes manager.
    */
@@ -51,7 +52,7 @@ export class ControllerDecorator<
    *        current application environment.
    */
   constructor(
-    controller: Controller<S, R>,
+    controller: Controller<S, R, SS>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
@@ -118,7 +119,7 @@ export class ControllerDecorator<
   /**
    * @inheritDoc
    */
-  getState(): S {
+  getState(): SS {
     return this._controller.getState();
   }
 
@@ -176,7 +177,7 @@ export class ControllerDecorator<
   /**
    * @inheritDoc
    */
-  setMetaParams(loadedResources: CreateLoadedResources<S>) {
+  setMetaParams(loadedResources: LoadedResources<SS>) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,
@@ -203,7 +204,7 @@ export class ControllerDecorator<
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     this._controller.setPageStateManager(pageStateManager);
   }
 

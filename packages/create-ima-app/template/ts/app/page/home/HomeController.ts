@@ -1,6 +1,5 @@
 import {
-  AbstractController,
-  CreateLoadedResources,
+  LoadedResources,
   Dependencies,
   Dictionary,
   HttpAgent,
@@ -8,6 +7,7 @@ import {
   Router,
   Settings,
 } from '@ima/core';
+import { AbstractPageController } from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export type CardData = typeof import('../../public/cards.json');
@@ -18,7 +18,7 @@ export type HomeControllerState = {
   name: string;
 };
 
-export class HomeController extends AbstractController<HomeControllerState> {
+export class HomeController extends AbstractPageController<HomeControllerState> {
   #httpAgent: HttpAgent;
 
   static $dependencies: Dependencies = [HttpAgent];
@@ -83,7 +83,7 @@ export class HomeController extends AbstractController<HomeControllerState> {
    * controller has been provided with the rendered view.
    */
   setMetaParams(
-    loadedResources: CreateLoadedResources<HomeControllerState>,
+    loadedResources: LoadedResources<HomeControllerState>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,

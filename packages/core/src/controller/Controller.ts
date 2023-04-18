@@ -24,7 +24,7 @@ type NonMatching<T, Promise> = {
   [K in keyof T]: T[K] extends Promise ? never : K;
 }[keyof T];
 
-export type CreateLoadedResources<T> = Intersection<
+export type LoadedResources<T> = Intersection<
   Partial<Pick<T, Matching<T, Promise<any>>>>,
   Required<Pick<T, NonMatching<T, Promise<any>>>>
 >;
@@ -37,7 +37,8 @@ export type CreateLoadedResources<T> = Intersection<
  */
 export abstract class Controller<
   S extends PageState = {},
-  R extends RouteParams = {}
+  R extends RouteParams = {},
+  SS extends S = S
 > {
   static $name?: string;
   static $dependencies: Dependencies;
@@ -193,8 +194,8 @@ export abstract class Controller<
    *
    * @return The current state of this controller.
    */
-  getState(): S {
-    return {} as S;
+  getState(): SS {
+    return {} as SS;
   }
 
   /**
@@ -277,7 +278,7 @@ export abstract class Controller<
    *        current application environment.
    */
   setMetaParams(
-    loadedResources: CreateLoadedResources<S>,
+    loadedResources: LoadedResources<SS>,
     metaManager: MetaManager,
     router: Router,
     dictionary: Dictionary,
@@ -315,7 +316,7 @@ export abstract class Controller<
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager?: PageStateManager<S>): void {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     return;
   }
 

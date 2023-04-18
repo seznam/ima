@@ -20,7 +20,8 @@ import { RouteParams } from '../router/AbstractRoute';
  */
 export abstract class Extension<
   S extends PageState = {},
-  R extends RouteParams = {}
+  R extends RouteParams = {},
+  SS extends S = S
 > {
   static $name?: string;
   static $dependencies: Dependencies;
@@ -158,8 +159,8 @@ export abstract class Extension<
    *
    * @return The current state of the controller.
    */
-  getState(): S {
-    return {} as S;
+  getState(): SS {
+    return {} as SS;
   }
 
   /**
@@ -221,7 +222,7 @@ export abstract class Extension<
    * @param pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager?: PageStateManager): void {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     return;
   }
 
