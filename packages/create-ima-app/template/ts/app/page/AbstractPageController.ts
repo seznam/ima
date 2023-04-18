@@ -5,6 +5,8 @@ import {
   RouteParams,
   Router,
   PageState,
+  Settings,
+  DictionaryConfig,
 } from '@ima/core';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
@@ -22,7 +24,9 @@ export abstract class AbstractPageController<
   setMetaParams(
     loadedResources: LoadedResources<SS>,
     metaManager: MetaManager,
-    router: Router
+    router: Router,
+    dictionary: DictionaryConfig,
+    settings: Settings
   ): void {
     const title = 'IMA.js';
     const description =
