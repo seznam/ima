@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "typedocMain": "./src/index.ts",
+  "typedocMain": "./src/preview.tsx",
   "main": "./dist/preset.js",
   "module": "./dist/preset.js",
   "types": "./dist/preset.d.ts",

@@ -27,6 +27,8 @@ const config = {
           '../packages/cli',
           '../packages/plugin-cli',
           '../packages/dev-utils',
+          '../packages/server',
+          '../packages/storybook-integration',
         ],
         entryPointStrategy: 'packages',
         out: '../../docs/api',

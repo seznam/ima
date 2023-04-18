@@ -59,6 +59,7 @@ const sidebars = {
         'basic-features/seo-and-meta-manager',
         'basic-features/dictionary',
         'basic-features/error-handling',
+        'basic-features/typescript',
       ],
     },
     {

@@ -19,7 +19,8 @@
   "license": "MIT",
   "author": "Seznam.cz, a.s.",
   "main": "index.js",
-  "types": "./types.d",
+  "types": "./types.d.ts",
+  "typedocMain": "./types.d.ts",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest"
