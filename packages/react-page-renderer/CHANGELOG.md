@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.15
+
+### Patch Changes
+
+- 430ec0b0d: Fixed missing Utils $CssClasses type export
+
 ## 19.0.0-rc.14
 
 ### Patch Changes
