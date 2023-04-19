@@ -1,6 +1,6 @@
-import { AbstractPageController } from 'app/page/AbstractPageController';
+import { AbstractController } from '@ima/core';
 
-export class NotFoundController extends AbstractPageController {
+export class NotFoundController extends AbstractController {
   static get $dependencies() {
     return [];
   }
@@ -15,5 +15,11 @@ export class NotFoundController extends AbstractPageController {
     return {
       status: this.status,
     };
+  }
+
+  setMetaParams(loadedResources, metaManager) {
+    metaManager.setTitle(`Error ${this.status} - IMA.js`);
+    metaManager.setMetaName('description', 'Not Found');
+    metaManager.setMetaName('robots', 'noindex, nofollow');
   }
 }

@@ -1,11 +1,18 @@
-import { Dependencies } from '@ima/core';
-import { AbstractPageController } from 'app/page/AbstractPageController';
+import {
+  AbstractController,
+  Dependencies,
+  Dictionary,
+  LoadedResources,
+  MetaManager,
+  Router,
+  Settings,
+} from '@ima/core';
 
-type NotFoundControllerState = {
+export type NotFoundControllerState = {
   status: number;
 };
 
-export class NotFoundController extends AbstractPageController<NotFoundControllerState> {
+export class NotFoundController extends AbstractController<NotFoundControllerState> {
   status = 404;
 
   static $dependencies: Dependencies = [];
@@ -14,5 +21,17 @@ export class NotFoundController extends AbstractPageController<NotFoundControlle
     return {
       status: this.status,
     };
+  }
+
+  setMetaParams(
+    loadedResources: LoadedResources<NotFoundControllerState>,
+    metaManager: MetaManager,
+    router: Router,
+    dictionary: Dictionary,
+    settings: Settings
+  ): void {
+    metaManager.setTitle(`Error ${this.status} - IMA.js`);
+    metaManager.setMetaName('description', 'Not Found');
+    metaManager.setMetaName('robots', 'noindex, nofollow');
   }
 }

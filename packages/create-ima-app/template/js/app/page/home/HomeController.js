@@ -1,8 +1,7 @@
-import { HttpAgent } from '@ima/core';
-import { AbstractPageController } from 'app/page/AbstractPageController';
+import { AbstractController, HttpAgent } from '@ima/core';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
-export class HomeController extends AbstractPageController {
+export class HomeController extends AbstractController {
   static get $dependencies() {
     return [HttpAgent];
   }

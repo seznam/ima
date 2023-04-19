@@ -6,19 +6,18 @@ import {
   MetaManager,
   Router,
   Settings,
+  AbstractController,
 } from '@ima/core';
-import { AbstractPageController } from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export type CardData = typeof import('../../public/cards.json');
-
 export type HomeControllerState = {
   cards: Promise<CardData>;
   message: string;
   name: string;
 };
 
-export class HomeController extends AbstractPageController<HomeControllerState> {
+export class HomeController extends AbstractController<HomeControllerState> {
   #httpAgent: HttpAgent;
 
   static $dependencies: Dependencies = [HttpAgent];
@@ -100,20 +99,15 @@ export class HomeController extends AbstractPageController<HomeControllerState> 
     const domain = router.getDomain();
     const image = `${domain}/${IMAjsShareImg}`;
 
-    metaManager.setTitle(title);
     metaManager
+      .setTitle(title)
       .setMetaName('description', description)
-      .setMetaName(
-        'keywords',
-        'IMA.js, isomorphic application, javascript, hello world'
-      );
-    metaManager
+      .setMetaName('keywords', 'IMA.js, isomorphic application, javascript')
       .setMetaName('twitter:title', title)
       .setMetaName('twitter:description', description)
       .setMetaName('twitter:card', 'summary')
       .setMetaName('twitter:image', image)
-      .setMetaName('twitter:url', url);
-    metaManager
+      .setMetaName('twitter:url', url)
       .setMetaProperty('og:title', title)
       .setMetaProperty('og:description', description)
       .setMetaProperty('og:type', 'website')

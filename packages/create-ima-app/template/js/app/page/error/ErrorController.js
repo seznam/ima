@@ -1,6 +1,6 @@
-import { AbstractPageController } from 'app/page/AbstractPageController';
+import { AbstractController } from '@ima/core';
 
-export class ErrorController extends AbstractPageController {
+export class ErrorController extends AbstractController {
   static get $dependencies() {
     return [];
   }
@@ -16,5 +16,11 @@ export class ErrorController extends AbstractPageController {
       status: this.status,
       error: this.params.error,
     };
+  }
+
+  setMetaParams(loadedResources, metaManager) {
+    metaManager.setTitle(`Error ${this.status} - IMA.js`);
+    metaManager.setMetaName('description', 'Server error');
+    metaManager.setMetaName('robots', 'noindex, nofollow');
   }
 }
