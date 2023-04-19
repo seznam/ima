@@ -1,4 +1,6 @@
-![IMA.js logo](https://imajs.io/img/logo.svg)
+<div align="center">
+<img width="200" src="https://imajs.io/img/logo.svg" />
+</div>
 
 # IMA.js
 
