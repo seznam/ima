@@ -1,5 +1,14 @@
 # Change Log
 
+## 19.0.0-rc.9
+
+### Patch Changes
+
+- 60cb7d182: CIA now also accepts -ts argument for TS template
+- 8f40ac359: Controller and Extension type tweaks.
+  Renamed `CreateLoadedResources` type to `LoadedResources`.
+  CIA HomeController AbstractPageController fixes.
+
 ## 19.0.0-rc.8
 
 ### Patch Changes

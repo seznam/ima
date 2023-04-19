@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- dc676bf01: Fixed presets.js export
+
 ## 19.0.0-rc.2
 
 ### Patch Changes

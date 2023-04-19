@@ -1,5 +1,13 @@
 # Change Log
 
+## 19.0.0-rc.27
+
+### Patch Changes
+
+- 8f40ac359: Controller and Extension type tweaks.
+  Renamed `CreateLoadedResources` type to `LoadedResources`.
+  CIA HomeController AbstractPageController fixes.
+
 ## 19.0.0-rc.26
 
 ### Patch Changes
