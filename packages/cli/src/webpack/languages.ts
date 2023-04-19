@@ -172,13 +172,16 @@ export async function compileLanguages(
     locales.map(async locale => {
       const messages: StringStructure = {};
       const outputPath = getLanguageModulePath(locale, rootDir);
-      const languagePaths = await globby(imaConfig.languages[locale], {
-        cwd: rootDir,
-        absolute: true,
-      });
 
-      // Parse all language files
-      await parseLanguageFiles(messages, locale, languagePaths, outputPath);
+      for (const glob of imaConfig.languages[locale]) {
+        const languagePaths = await globby(glob, {
+          cwd: rootDir,
+          absolute: true,
+        });
+
+        // Parse the language files
+        await parseLanguageFiles(messages, locale, languagePaths, outputPath);
+      }
 
       if (!watch) {
         return;
