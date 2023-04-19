@@ -1,5 +1,12 @@
 # Change Log
 
+## 18.3.4
+
+### Patch Changes
+
+- da1246b79: Languages compilation respects glob order defined in ima.config.
+  Dictionary key could be now overridden by defining the same key in file from following glob.
+
 ## 18.3.3
 
 ### Patch Changes
