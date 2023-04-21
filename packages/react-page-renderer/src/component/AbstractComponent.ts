@@ -97,7 +97,7 @@ export abstract class AbstractComponent<
    * @param eventTarget EventTarget compatible node.
    * @param data Data to send within the event.
    */
-  fire(eventTarget: EventTarget, eventName: string, data = undefined): void {
+  fire(eventTarget: EventTarget, eventName: string, data?: any): void {
     helpers.fire(this, eventTarget, eventName, data);
   }
 
