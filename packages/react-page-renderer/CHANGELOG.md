@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.16
+
+### Patch Changes
+
+- a3e9335bb: Fixed fire method data type
+
 ## 19.0.0-rc.15
 
 ### Patch Changes
