@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- 5c5b037e0: SPA blacklist config is omitted for using degradation isSPA method when decision serving SPA page.
+
 ## 19.0.0-rc.9
 
 ### Minor Changes
