@@ -1,5 +1,63 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- ceb4cbd12: #### Breaking changes
+
+  Dropped support for direct `response.contentVariables` mutations, use `event.result` and return in `CreateContentVariables` event.
+  Dropped support for `$Source`, `$RevivalSettings`, `$RevivalCache`, `$Runner`, `$Styles`, `$Scripts` content variables. These have been replaced by their `lowerFirst` counter-parts `source`, `revivalSettings`, `revivalCache`, `runner`, `styles`, `scripts`, while `$Scripts` support have been dropped completely.
+
+- 021c103fa: add new metric concurrent requests to monitoring. Update dependency esmj/monitor to 0.4.0.
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+- 9ea9018d7: Default resources in $Resources now produce styles and esStyles fields. This does not necessarily mean which should be loaded on which es version, but what bundle produced those styles. This also means that without any custom configuration, all styles should now be under `esStyles` key, since they are built in client.es webpack bundle.
+  #### BREAKING CHANGE
+  The package now provides named exports, the deafult export has been replaced with named `createIMAServer` function.
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ca55af922: Add `routeName` key to `res.locals` instead of `res.$IMA`, since `res.$IMA` should not be used anymore.
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 2f789cdae: Add support for Client Errors and Redirects when serving static error pages.
+- 6510a25f6: Add information about error cause in places, where we used to throw away this information.
+- 7c9cf6997: Style content variable now automatically generates preload links for app styles.
+- bedc7e0bb: environment?.$Server?.host and environment?.$Server?.protocol can now be functions
+- 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
+
+### Patch Changes
+
+- 394fc8985: update @esmj/monitor to 0.5.0 with breaking change for returns value from subscribe method where returns subscription is object with unsubscribe method.
+- eee60ef09: Add option to use custom manifestRequire
+- cd8af3a1b: fix devutils default value
+- 71f33a761: Final release of all RC ima@19 packages
+- 90d0121f2: Fixed IMA@18 and IMA@19 todos
+- 1f636bbfb: Fixed issue where server redirect showed ErrorOverlay in debug mode
+- 5919b93d7: The App error route is protected for exceeding static thresholds.
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+- 1a8d16890: Added `X-Request-ID` to revival settings. Can be accesed through $IMA.$RequestID
+- 552d4e17f: Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings
+- 5c5b037e0: SPA blacklist config is omitted for using degradation isSPA method when decision serving SPA page.
+- bfb1f48bb: The Emitter event.cause is removed. The error cause is set in event.error.cause.
+- 793a59813: override server devUtils and environment in createIMAServer
+- d2e426d75: The instances of $Dispatcher, $Cache, $PageRenderer and $PageManager is cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
+- 804a51612: Added XSS protection to host and protocol in revival settings
+
 ## 19.0.0-rc.10
 
 ### Patch Changes

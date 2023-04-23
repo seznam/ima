@@ -1,5 +1,26 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- c509bbb72: Added ability to hide/show error params, this settings is saved to local storage
+
+### Patch Changes
+
+- 0526618ad: Reduced number of levels that are expanded by default in ErrorOverlay error params view
+- 71f33a761: Final release of all RC ima@19 packages
+- c3cb36a66: Fixed SWC dependency
+- e0dfeda28: Updated dependencies
+- 1bd52f08c: Fixed an issue where if application produces error before the error-ovleray is initialize, it is not displayed in the overlay.
+- 95af45a42: Fixed issue when displaying error params with circular dependencies
+- 0526618ad: Updated dependencies
+
 ## 19.0.0-rc.8
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "19.0.0-rc.16",
+  "version": "19.0.0",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -59,7 +59,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@ima/helpers": "^19.0.0-rc.2",
+    "@ima/helpers": "^19.0.0",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },

@@ -1,5 +1,50 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 81a8605d5: Bump versions
+- 28660d902: Fire method arguments are now in correct order.
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- 5bd45aa75: Changed signature of useWindowEvent hook, it now matches bindEventListener parameters of ima window
+- c0fe68ef3: IMA 19 Release
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+  `Route` alias export has been replaced with `StaticRoute` export.
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+- 430ec0b0d: Fixed missing Utils $CssClasses type export
+- 71f33a761: Final release of all RC ima@19 packages
+- 0d044e238: Typed ObjectContainer
+- e0dfeda28: Updated dependencies
+- dc8d4b7ea: Fixed once hook parametr type
+- c37249378: Fixed HYDRATE_ERROR
+- a3e9335bb: Fixed fire method data type
+- 5bd45aa75: Updated Window types
+- 447c51646: All packages now use correct types from IMA core
+- 206ab1f43: Improved Dispatcher types
+- 53adfb35a: Fixed BlankManagedRootView props
+- Updated dependencies [71f33a761]
+- Updated dependencies [81a8605d5]
+- Updated dependencies [6a6b996d4]
+- Updated dependencies [c0fe68ef3]
+  - @ima/helpers@19.0.0
+
 ## 19.0.0-rc.16
 
 ### Patch Changes

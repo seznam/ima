@@ -1,6 +1,6 @@
 {
   "name": "@ima/plugin-cli",
-  "version": "19.0.0-rc.4",
+  "version": "19.0.0",
   "description": "IMA.js Plugin CLI tool to build, link, develop IMA.js plugins.",
   "keywords": [
     "IMA",
@@ -32,7 +32,7 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
-    "@ima/dev-utils": "^19.0.0-rc.2",
+    "@ima/dev-utils": "^19.0.0",
     "@swc/core": "^1.3.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.3",

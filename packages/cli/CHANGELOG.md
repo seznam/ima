@@ -1,5 +1,58 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- e4656c192: **BREAKING CHANGE** Bumped browserslist targets definition a little bit to browsers supporting AbortController. Added AbortController to es2018 test script to runner.ejs. While technically not breaking change, since it's pretty minor bump, it is something however you should be aware of.
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 6a6b996d4: Added support for 3rd party source maps, this is usefull especially in error overlay.
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+- 0327da69d: Added ability to customize open URL using `--openUrl` CLI argument or `IMA_CLI_OPEN_URL` environment variable.
+- b1e29d200: Performance improvement while building non-module CSS/LESS (\*.module.css) files on bundles that don't process CSS (server and client). In this cases the CSS imports are completely ignored which improves build performance merginally, depending on the amount of CSS files you app is using
+- 3b14b4b24: Added additional CLI output info when `forcedLegacy` and `writeToDisk` args are used
+- 61d39b9af: Added new export for `findRules`, this is simple helper function you can use to extract rules from webpack config in yor plugins for easier customization.
+  Added new export for `createWebpackConfig`, when provided with CLI args and imaConfig, it generates webpack configurations which are then passed to webpack compiler. This can be usefull for other tooling like StoryBook, where you need to customize different webpack config with fields from the IMA app one.
+  Added additional `ImaConfigurationContext` variables: `isClientES`, `isClient` and `outputFolders`
+  Removed `isESVersion` `ImaConfigurationContext` variable (use `isClientES` instead).
+  Added support for `prepareConfigurations` CLI plugin method, which lets you customize webpack configuration contexts, before generating webpack config from them.
+  Added new `cssBrowsersTarget` ima.config.js settings, this allows you to easily customize `postcss-preset-env` `browsers` targets field.
+
+### Patch Changes
+
+- 5378e2485: Fixed issue with broken manifets.json files
+- 71f33a761: Final release of all RC ima@19 packages
+- ceb4cbd12: Updated types
+- c3cb36a66: Fixed SWC dependency
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+- fc0a978cd: CSS files generated to Manifest are only from static/css/ folder.
+- e0dfeda28: Updated dependencies
+- 447c51646: All packages now use correct types from IMA core
+- 0526618ad: Updated dependencies
+- 010f5d872: Fix support for pnpm
+- Updated dependencies [0526618ad]
+- Updated dependencies [71f33a761]
+- Updated dependencies [81a8605d5]
+- Updated dependencies [c3cb36a66]
+- Updated dependencies [a3e8b5d2e]
+- Updated dependencies [95af45a42]
+- Updated dependencies [c509bbb72]
+- Updated dependencies [e0dfeda28]
+- Updated dependencies [1bd52f08c]
+- Updated dependencies [95af45a42]
+- Updated dependencies [c0fe68ef3]
+- Updated dependencies [0526618ad]
+  - @ima/error-overlay@19.0.0
+  - @ima/dev-utils@19.0.0
+  - @ima/hmr-client@19.0.0
+
 ## 19.0.0-rc.13
 
 ### Patch Changes

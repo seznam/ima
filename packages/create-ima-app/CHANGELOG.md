@@ -1,5 +1,60 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+- 9aff57e3a: Added typescript template (use --typescript argument to generate a new TS-compatible template)
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+  `Route` alias export has been replaced with `StaticRoute` export.
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+- 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
+
+### Patch Changes
+
+- 74a51dee8: Migrated to named exports in preparation for TS template
+- d6f7654a2: Added support for typing controller, extension state and route params
+- 2a5dcc6d0: Added Bootstrap settings, config and env types
+- 71f33a761: Final release of all RC ima@19 packages
+- 60cb7d182: CIA now also accepts -ts argument for TS template
+- 8f40ac359: Controller and Extension type tweaks.
+  Renamed `CreateLoadedResources` type to `LoadedResources`.
+  CIA HomeController AbstractPageController fixes.
+- 5ea0c6735: Fixed default static path and public path settings.
+- 7e107138e: update plugin integration to use native ima spa template
+- 615cb39b7: Fixed HomeController state mock"
+- cd8af3a1b: integration tests run in SPA mode
+  ima RC versions override
+- 026ab7682: update versions, set override for ima/server in CI test
+
 ## 19.0.0-rc.9
 
 ### Patch Changes
