@@ -102,6 +102,12 @@
 
 - 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
 
+## 18.4.2
+
+### Patch Changes
+
+- afa560c68: removes unnecessary 'g' flag from SPA blacklist RegExp
+
 ## 18.4.1
 
 ### Patch Changes

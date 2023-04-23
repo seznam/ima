@@ -127,6 +127,12 @@
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
 
+## 18.3.4
+
+### Patch Changes
+
+- e2b89569c: Updated dependency @esmj/monitor:^0.5.1
+
 ## 18.3.3
 
 ### Patch Changes
