@@ -1,15 +1,9 @@
 module.exports = {
-  bail: false,
-  verbose: true,
   rootDir: '.',
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
   setupFiles: ['<rootDir>/setupJest.js'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
   transform: {
     '^.+\\.(js|jsx)$': [
       '@swc/jest',

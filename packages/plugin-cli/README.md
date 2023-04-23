@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/imajs-logo.png">
+  <img height="130" src="https://imajs.io/img/logo.svg">
 </p>
 
 <h1 align="center">@ima/plugin-cli</h1>
@@ -50,6 +50,8 @@ const {
   defaultConfig, // corresponds with CLI options described above
   clientServerConfig, // corresponds with CLI options described above
   nodeConfig, // corresponds with CLI options described above
+  preprocessTransformer,
+  swcTransformer,
   typescriptDeclarationsPlugin
 } = require('@ima/plugin-cli');
 
@@ -61,6 +63,30 @@ const {
 module.exports = {
   inputDir: './src',
   jsxRuntime: 'classic', // 'classic' or 'automatic' JSX runtime settings
+  sourceMaps: true, // enabled by default
+  /**
+   * Optionally create additional transformers. There are 2 transformers
+   * that plugin CLI exports - preprocessTransformer (for removing code
+   * parts based on @if/@else pragma comments), swcTransformer (runs
+   * JS code through swc/core transform).
+   *
+   * '...' -> this placeholder is replaced with default set of transformers.
+   * This allows you to easily extend default configuration without the need
+   * to re-define it again manually.
+   *
+   * You can also always opt out of using '...', in that case, default
+   * transformers are not used, only the ones defined in the `transformers`
+   * field below.
+   */
+  transformers: [
+    preprocessTransformer({
+      context: {
+        production: true,
+        development: false,
+      },
+    }),
+    '...',
+  ],
   output: [
     {
       dir: './dist/esm',

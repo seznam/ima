@@ -1,6 +1,6 @@
 {
   "name": "create-ima-app",
-  "version": "18.4.2",
+  "version": "19.0.0-rc.9",
   "description": "Create a IMA.js App easily.",
   "type": "module",
   "keywords": [
@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "chalk": "^5.0.1",
+    "deepmerge": "^4.3.0",
     "fs-extra": "^11.1.0"
   },
   "publishConfig": {

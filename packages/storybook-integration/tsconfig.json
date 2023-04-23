@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "Node16",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+    ],
+    "outDir": "dist",
+    "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob"]
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -12,7 +12,6 @@ ROOT_DIR_IMA=`pwd`
 cd ..
 
 ROOT_DIR=`pwd`
-ROOT_DIR_IMA_APP="$ROOT_DIR/ima-app"
 
 cd "$ROOT_DIR_IMA"
 
@@ -37,13 +36,13 @@ for PACKAGE in $PACKAGES ; do
 
         if [[ "$PACKAGE" == "create-ima-app" ]]
         then
-            sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" template/package.json
+            sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" template/common/package.json
         fi
     done
 
     if [[ "$PACKAGE" == "create-ima-app" ]]
     then
-        npx json -I -f template/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
+        npx json -I -f template/common/package.json -e "this.overrides={\"@ima/cli\":\"0.0.0-next\",\"@ima/core\":\"0.0.0-next\",\"@ima/server\":\"0.0.0-next\",\"@ima/helpers\":\"0.0.0-next\"}"
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
@@ -62,10 +61,23 @@ node utils/version/create-ima-app-versions.js
 cd "$CREATE_IMA_APP_DIR"
 npm link
 
-# Setup app from example hello
-cd "$ROOT_DIR"
-npx create-ima-app ima-app
+# Setup JS template from create-ima-app
+ROOT_DIR_IMA_APP="$ROOT_DIR/ima-js-app"
 
+cd "$ROOT_DIR"
+npx create-ima-app $ROOT_DIR_IMA_APP
+cd "$ROOT_DIR_IMA_APP"
+
+npm run build
+
+# Run tests
+source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"
+
+# Setup TS template from create-ima-app
+ROOT_DIR_IMA_APP="$ROOT_DIR/ima-ts-app"
+
+cd "$ROOT_DIR"
+npx create-ima-app $ROOT_DIR_IMA_APP --typescript
 cd "$ROOT_DIR_IMA_APP"
 
 npm run build

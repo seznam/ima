@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-export type Job = (...args: unknown[]) => Promise<unknown> | unknown;
+export type ExecutionJob = (...args: unknown[]) => Promise<unknown> | unknown;
 
 /**
  * Execution is an abstract class that defines a standard for executing jobs.
@@ -17,14 +15,14 @@ export type Job = (...args: unknown[]) => Promise<unknown> | unknown;
  * affect another job) or they could be supplied to the first job and then
  * piped through other jobs.
  */
-export default abstract class Execution {
+export abstract class Execution {
   /**
    * Adds a new job to be executed. The job is appended at the end of the
    * list of current jobs therefore is executed last.
    *
    * @param jobs The jobs to be executed.
    */
-  append(jobs: Job[]) {
+  append(jobs: ExecutionJob[]): void {
     return;
   }
 

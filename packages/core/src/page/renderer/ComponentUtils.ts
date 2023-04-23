@@ -1,10 +1,7 @@
-import { StringParameters, UnknownParameters } from '../../CommonTypes';
-import ObjectContainer, {
-  FactoryFunction,
-  UnknownConstructable,
-} from '../../ObjectContainer';
+import { ObjectContainer, Dependency } from '../../oc/ObjectContainer';
+import { StringParameters, Utils } from '../../types';
 
-export default class ComponentUtils {
+export class ComponentUtils {
   /**
    * The application's dependency injector - the object container.
    */
@@ -13,12 +10,12 @@ export default class ComponentUtils {
    * Map of registered utilities.
    */
   private _utilityClasses: {
-    [key: string]: UnknownConstructable | FactoryFunction;
+    [key: string]: Dependency<any>;
   } = {};
   /**
    * Map of instantiated utilities
    */
-  private _utilities?: UnknownParameters;
+  private _utilities?: Utils;
 
   /**
    * Map of referrers to utilities
@@ -38,13 +35,9 @@ export default class ComponentUtils {
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
    */
-  register(
-    name:
-      | string
-      | UnknownConstructable
-      | FactoryFunction
-      | { [key: string]: string | UnknownConstructable | FactoryFunction },
-    componentUtilityClass?: UnknownConstructable | FactoryFunction,
+  register<T>(
+    name: string | Dependency<T> | { [key: string]: string | Dependency<any> },
+    componentUtilityClass?: Dependency<any>,
     referrer?: string
   ) {
     if (
@@ -67,6 +60,7 @@ export default class ComponentUtils {
       name.constructor === Object
     ) {
       const utilityClasses = name;
+      // @ts-expect-error
       referrer = componentUtilityClass;
 
       for (const alias of Object.keys(utilityClasses)) {
@@ -74,11 +68,8 @@ export default class ComponentUtils {
           continue;
         }
 
-        this.register(
-          alias,
-          utilityClasses[alias] as UnknownConstructable | FactoryFunction,
-          referrer
-        );
+        // @ts-expect-error
+        this.register(alias, utilityClasses[alias], referrer);
       }
     }
   }
@@ -86,12 +77,12 @@ export default class ComponentUtils {
   /**
    * Returns object containing all registered utilities
    */
-  getUtils() {
+  getUtils(): Utils {
     if (this._utilities) {
       return this._utilities;
     }
 
-    this._utilities = {};
+    this._utilities = {} as Utils;
 
     // create instance of each utility class
     for (const alias of Object.keys(this._utilityClasses)) {
@@ -110,11 +101,8 @@ export default class ComponentUtils {
     return this._utilityReferrers;
   }
 
-  _createUtilityInstance(
-    alias: string,
-    utilityClass: UnknownConstructable | FactoryFunction
-  ) {
-    return ((this._utilities as UnknownParameters)[alias] =
-      this._oc.get(utilityClass));
+  _createUtilityInstance(alias: string, utilityClass: Dependency<any>) {
+    // @ts-expect-error No way to handle this with current OC typing setup
+    return (this._utilities![alias] = this._oc.get(utilityClass));
   }
 }

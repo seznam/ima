@@ -1,12 +1,17 @@
-import EventBus, { Listener, NativeListener, Options } from './EventBus';
-import GenericError from '../error/GenericError';
-import Window from '../window/Window';
+import {
+  EventBus,
+  EventBusListener,
+  NativeListener,
+  EventBusOptions,
+} from './EventBus';
+import { GenericError } from '../error/GenericError';
+import { Window } from '../window/Window';
 
 type NativeListenerMap = Map<string, NativeListener>;
 
 type ListenersWeakMap = WeakMap<EventTarget, NativeListenerMap>;
 
-type AllListenersWeakMap = WeakMap<Listener, NativeListener>;
+type AllListenersWeakMap = WeakMap<EventBusListener, NativeListener>;
 
 /**
  * Global name of IMA.js custom event.
@@ -19,7 +24,7 @@ export const IMA_EVENT = '$IMA.CustomEvent';
  * It offers public methods for firing custom events and two methods for
  * catching events (e.g. inside view components).
  */
-export default class EventBusImpl extends EventBus {
+export class EventBusImpl extends EventBus {
   private _window: Window;
   /**
    * Map of listeners provided to the public API of this event bus to a
@@ -28,7 +33,8 @@ export default class EventBusImpl extends EventBus {
    *
    * The "listen all" event listeners are not registered in this map.
    */
-  private _listeners: WeakMap<Listener, ListenersWeakMap> = new WeakMap();
+  private _listeners: WeakMap<EventBusListener, ListenersWeakMap> =
+    new WeakMap();
   /**
    * Map of event targets to listeners executed on all IMA.js event bus
    * events.
@@ -60,8 +66,8 @@ export default class EventBusImpl extends EventBus {
   fire(
     eventTarget: EventTarget,
     eventName: string,
-    data: unknown,
-    options: Options = {}
+    data: any,
+    options: EventBusOptions = {}
   ) {
     const eventInitialization = {};
     const params = { detail: { eventName, data } };
@@ -90,7 +96,7 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  listenAll(eventTarget: EventTarget, listener: Listener): this {
+  listenAll(eventTarget: EventTarget, listener: EventBusListener): this {
     if (!this._allListenersTargets.has(eventTarget)) {
       this._allListenersTargets.set(eventTarget, new WeakMap());
     }
@@ -118,7 +124,11 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  listen(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  listen(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     if (!eventTarget) {
       if ($Debug) {
         console.warn(
@@ -168,7 +178,7 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  unlistenAll(eventTarget: EventTarget, listener: Listener) {
+  unlistenAll(eventTarget: EventTarget, listener: EventBusListener) {
     if (!this._allListenersTargets.has(eventTarget)) {
       if ($Debug) {
         console.warn(
@@ -209,7 +219,11 @@ export default class EventBusImpl extends EventBus {
   /**
    * @inheritDoc
    */
-  unlisten(eventTarget: EventTarget, eventName: string, listener: Listener) {
+  unlisten(
+    eventTarget: EventTarget,
+    eventName: string,
+    listener: EventBusListener
+  ) {
     if (!this._listeners.has(listener)) {
       if ($Debug) {
         console.warn(

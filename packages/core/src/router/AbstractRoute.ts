@@ -1,16 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import { RouteOptions } from './Router';
 import { RoutePathExpression } from './DynamicRoute';
-import Controller, { IController } from '../controller/Controller';
-import GenericError from '../error/GenericError';
-
-export type ParamValue = string | number | boolean;
+import { RouteFactoryOptions } from './Router';
+import { OCAliasMap } from '../config/bind';
+import { Controller } from '../controller/Controller';
+import { GenericError } from '../error/GenericError';
 
 export type RouteParams = {
-  [key: string]: ParamValue | Error;
+  [key: string]: string | GenericError;
 };
+
+export type RouteController =
+  | keyof OCAliasMap
+  | Constructor<Controller<any>>
+  | AbstractConstructor<Controller<any>>;
+
+export type RouteView =
+  | keyof OCAliasMap
+  | Constructor<any>
+  | AbstractConstructor<any>
+  | ((...args: any[]) => any);
+
+type WithAsync<T> = T | (() => Promise<T>);
+export type AsyncRouteController = WithAsync<RouteController>;
+export type AsyncRouteView = WithAsync<RouteView>;
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -25,7 +38,7 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
-export default abstract class AbstractRoute {
+export abstract class AbstractRoute<T extends string | RoutePathExpression> {
   /**
    * The unique name of this route, identifying it among the rest of the
    * routes in the application.
@@ -35,155 +48,30 @@ export default abstract class AbstractRoute {
    * Path expression used in route matching, to generate valid path with
    * provided params and parsing params from current path.
    */
-  protected _pathExpression: RoutePathExpression | string;
+  protected _pathExpression: T;
   /**
    * The full name of Object Container alias identifying the controller
    * associated with this route.
    */
-  protected _controller: string | typeof Controller | (() => IController);
+  protected _controller: {
+    resolved: boolean;
+    controller: AsyncRouteController;
+    cached: null | RouteController | Promise<RouteController>;
+  };
   /**
    * The full name or Object Container alias identifying the view class
    * associated with this route.
    */
-  protected _view: string | unknown | (() => unknown);
+  protected _view: {
+    resolved: boolean;
+    view: AsyncRouteView;
+    cached: null | RouteView | Promise<RouteView>;
+  };
+
   /**
    * The route additional options.
    */
-  protected _options: RouteOptions;
-  protected _cachedController: unknown;
-  protected _cachedView: unknown;
-
-  /**
-   * TODO IMA@18 remove static method
-   *
-   * Converts array of pairs (tuples) into valid URI query component.
-   * Filters out invalid inputs (undefined, null, object, array, non-pair).
-   *
-   * @example
-   * let pairs = [['a', true], ['hello world', 123]];
-   * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
-   *
-   * @param [pairs=[]] Array of arrays where the first
-   *         element must be string|number and the second element can be any.
-   * @return Valid URI query component or empty string if
-   *         there are no valid pairs provided.
-   */
-  static pairsToQuery(pairs: Array<Array<unknown>> = []) {
-    if (!pairs || !pairs.length) {
-      return '';
-    }
-
-    const query = pairs
-      .filter(
-        pair =>
-          Array.isArray(pair) &&
-          pair.length === 2 &&
-          pair.every(v => ['boolean', 'string', 'number'].includes(typeof v))
-      )
-      .map(pair =>
-        (pair as (string | number | boolean)[])
-          .map(encodeURIComponent)
-          .join('=')
-      )
-      .join('&');
-
-    return query.length ? `?${query}` : '';
-  }
-
-  /**
-   * TODO IMA@18 remove static method
-   *
-   * Converts object of key/value pairs to URI query,
-   * which can be appended to url.
-   */
-  static paramsToQuery(params: RouteParams = {}) {
-    if (
-      !params ||
-      typeof params !== 'object' ||
-      Object.keys(params).length === 0
-    ) {
-      return '';
-    }
-
-    return AbstractRoute.pairsToQuery(
-      Object.keys(params).map(param => [param, params[param]])
-    );
-  }
-
-  /**
-   * TODO IMA@18 remove static method
-   *
-   * Extracts and decodes the query parameters from the provided URL path and
-   * query.
-   *
-   * @param path The URL path, including the optional query string
-   *        (if any).
-   * @return Parsed query parameters.
-   */
-  static getQuery(path: string) {
-    const query: RouteParams = {};
-    const queryStart = path.indexOf('?');
-
-    if (queryStart > -1 && queryStart !== path.length - 1) {
-      const pairs = path.substring(queryStart + 1).split(/[&;]/);
-
-      for (const parameterPair of pairs) {
-        const delimiterIndex = parameterPair.indexOf('=');
-
-        const pair = [];
-
-        if (delimiterIndex !== -1) {
-          pair.push(parameterPair.slice(0, delimiterIndex));
-          pair.push(parameterPair.slice(delimiterIndex + 1)); //+ 1 to exclude equal sign
-        } else {
-          pair.push(parameterPair);
-        }
-
-        if (pair.length > 1) {
-          const hashIndex = pair[1].indexOf('#');
-
-          if (hashIndex !== -1) {
-            pair[1] = pair[1].slice(0, hashIndex);
-          }
-        }
-
-        query[AbstractRoute.decodeURIParameter(pair[0]) as string] =
-          pair.length > 1
-            ? AbstractRoute.decodeURIParameter(pair[1]) || ''
-            : true;
-      }
-    }
-
-    return query;
-  }
-
-  /**
-   * TODO IMA@18 remove static method
-   *
-   * Decoding parameters.
-   *
-   * @param parameterValue
-   * @return decodedValue
-   */
-  static decodeURIParameter(parameterValue: string) {
-    try {
-      return decodeURIComponent(parameterValue);
-    } catch (_) {
-      return '';
-    }
-  }
-
-  /**
-   * TODO IMA@18 remove static method
-   *
-   * Trims the trailing forward slash from the provided URL path.
-   *
-   * @param path The path to trim.
-   * @return Trimmed path.
-   */
-  static getTrimmedPath(path: string) {
-    return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
-  }
+  protected _options: RouteFactoryOptions;
 
   /**
    * Initializes the route.
@@ -200,35 +88,38 @@ export default abstract class AbstractRoute {
    */
   constructor(
     name: string,
-    pathExpression: RoutePathExpression | string,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
-    options: RouteOptions
+    pathExpression: T,
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
+    options?: Partial<RouteFactoryOptions>
   ) {
     this._name = name;
-
     this._pathExpression = pathExpression;
+    this._controller = {
+      resolved: !this.isAsync(controller),
+      controller: controller,
+      cached: null,
+    };
+    this._view = {
+      resolved: !this.isAsync(view),
+      view: view,
+      cached: null,
+    };
 
-    this._controller = controller;
-
-    this._view = view;
-
-    this._options = Object.assign(
-      {
-        onlyUpdate: false,
+    /**
+     * Init options with defaults.
+     */
+    this._options = {
+      ...{
         autoScroll: true,
         documentView: null,
         managedRootView: null,
+        onlyUpdate: false,
         viewAdapter: null,
         middlewares: [],
       },
-      options
-    );
-
-    // Initialize router middlewares
-    this._options.middlewares = this._options?.middlewares?.map(
-      middleware => new RouterMiddleware(middleware as MiddleWareFunction)
-    );
+      ...options,
+    };
   }
 
   /**
@@ -241,6 +132,15 @@ export default abstract class AbstractRoute {
   }
 
   /**
+   * Checks if given argument is an async handler.
+   */
+  isAsync(module: string | unknown | (() => unknown)) {
+    return (
+      module?.constructor.name === 'AsyncFunction' || module instanceof Promise
+    );
+  }
+
+  /**
    * Returns Controller class/alias/constant associated with this route.
    * Internally caches async calls for dynamically imported controllers,
    * meaning that once they're loaded, you get the same promise for
@@ -248,12 +148,28 @@ export default abstract class AbstractRoute {
    *
    * @return The Controller class/alias/constant.
    */
-  getController() {
-    if (!this._cachedController) {
-      this._cachedController = this._getAsyncModule(this._controller);
+  getController(): RouteController | Promise<RouteController> {
+    if (!this._controller.cached) {
+      this._controller.cached = !this._controller.resolved
+        ? ((this._controller.controller as () => Promise<any>)().then(
+            module => {
+              this._controller.resolved = true;
+
+              return module.default ?? module;
+            }
+          ) as Promise<RouteController>)
+        : (this._controller.controller as RouteController);
     }
 
-    return this._cachedController;
+    return this._controller.cached;
+  }
+
+  /**
+   * Returns true for resolved controller. This is always true
+   * for sync route views.
+   */
+  isControllerResolved(): boolean {
+    return this._controller.resolved;
   }
 
   /**
@@ -264,18 +180,32 @@ export default abstract class AbstractRoute {
    *
    * @return The View class/alias/constant.
    */
-  getView() {
-    if (!this._cachedView) {
-      this._cachedView = this._getAsyncModule(this._view);
+  getView(): RouteView | Promise<RouteView> {
+    if (!this._view.cached) {
+      this._view.cached = !this._view.resolved
+        ? ((this._view.view as () => Promise<any>)().then(module => {
+            this._view.resolved = true;
+
+            return module.default ?? module;
+          }) as Promise<RouteView>)
+        : (this._view.view as RouteView);
     }
 
-    return this._cachedView;
+    return this._view.cached;
+  }
+
+  /**
+   * Returns true for resolved view. This is always true
+   * for sync route views.
+   */
+  isViewResolved(): boolean {
+    return this._view.resolved;
   }
 
   /**
    * Return route additional options.
    */
-  getOptions() {
+  getOptions(): RouteFactoryOptions {
     return this._options;
   }
 
@@ -285,8 +215,18 @@ export default abstract class AbstractRoute {
    *
    * @return The path expression.
    */
-  getPathExpression() {
+  getPathExpression(): T {
     return this._pathExpression;
+  }
+
+  /**
+   * Trims the trailing forward slash from the provided URL path.
+   *
+   * @param path The path to trim.
+   * @return Trimmed path.
+   */
+  getTrimmedPath(path: string): string {
+    return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 
   /**
@@ -294,7 +234,7 @@ export default abstract class AbstractRoute {
    *
    * @return Promise.All resolving to [view, controller] tuple.
    */
-  async preload() {
+  async preload(): Promise<[RouteController, RouteView]> {
     return Promise.all([this.getController(), this.getView()]);
   }
 
@@ -314,7 +254,8 @@ export default abstract class AbstractRoute {
   toPath(params: RouteParams): string {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.toPath method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { params }
     );
   }
 
@@ -328,7 +269,8 @@ export default abstract class AbstractRoute {
   matches(path: string): boolean {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.matches method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { path }
     );
   }
 
@@ -340,30 +282,16 @@ export default abstract class AbstractRoute {
    * The method returns an empty hash object if the path does not match this
    * route.
    *
-   * @param path
+   * @param path Currently routed path.
+   * @param baseUrl Currently routed baseUrl.
    * @return Map of parameter names to parameter
    *         values.
    */
-  extractParameters(path?: string): RouteParams {
+  extractParameters(path: string, baseUrl: string): RouteParams {
     throw new GenericError(
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
-        'and must be overridden'
+        'and must be overridden',
+      { path, baseUrl }
     );
-  }
-
-  /**
-   * Helper method to pre-process view and controller which can be
-   * async functions in order to support dynamic async routing.
-   *
-   * @param module The module class/alias/constant.
-   * @return Module, or promise resolving to the actual view or controller
-   *  constructor function/class.
-   */
-  _getAsyncModule(module: string | unknown | (() => unknown)) {
-    return module?.constructor.name === 'AsyncFunction'
-      ? (module as () => Promise<Record<string, unknown>>)().then(
-          module => module.default ?? module
-        )
-      : module;
   }
 }

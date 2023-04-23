@@ -1,4 +1,10 @@
-import Error from './Error';
+import { IMAError } from './Error';
+
+export type GenericErrorParams = {
+  cause?: Error | string;
+  status?: number;
+  [key: string]: unknown;
+};
 
 /**
  * Implementation of the {@link Error} interface, providing more advanced
@@ -6,8 +12,8 @@ import Error from './Error';
  *
  * @extends Error
  */
-export default class GenericError extends Error {
-  protected _params: { status?: number; [key: string]: unknown };
+export class GenericError<T = unknown> extends IMAError {
+  protected _params: T & GenericErrorParams;
 
   /**
    * Initializes the generic IMA error.
@@ -17,32 +23,41 @@ export default class GenericError extends Error {
    *        details related to the error. It is recommended to set the
    *        `status` field to the HTTP response code that should be sent
    *        to the client.
-   * @param dropInternalStackFrames Whether or not the call stack
-   *        frames referring to the constructors of the custom errors should
-   *        be excluded from the stack of this error (just like the native
-   *        platform call stack frames are dropped by the JS engine).
-   *        This flag is enabled by default.
    */
-  constructor(message: string, params = {}, dropInternalStackFrames = true) {
-    super(message, dropInternalStackFrames);
+  constructor(message: string, params?: T & GenericErrorParams) {
+    super(message, params);
 
     /**
      * The data providing additional details related to this error.
      */
-    this._params = params;
+    this._params = params ?? ({} as T & GenericErrorParams);
   }
 
   /**
    * @inheritDoc
    */
   getHttpStatus(): number {
-    return this._params.status || 500;
+    return this._params.status || super.getHttpStatus();
   }
 
   /**
    * @inheritDoc
    */
-  getParams() {
+  getParams(): T & GenericErrorParams {
     return this._params;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  isClientError(): boolean {
+    return this.getHttpStatus() >= 400 && this.getHttpStatus() < 500;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  isRedirection(): boolean {
+    return this.getHttpStatus() >= 300 && this.getHttpStatus() < 400;
   }
 }

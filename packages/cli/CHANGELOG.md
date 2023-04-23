@@ -1,5 +1,133 @@
 # Change Log
 
+## 19.0.0-rc.13
+
+### Patch Changes
+
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+
+## 19.0.0-rc.12
+
+### Minor Changes
+
+- 61d39b9af: Added new export for `findRules`, this is simple helper function you can use to extract rules from webpack config in yor plugins for easier customization.
+  Added new export for `createWebpackConfig`, when provided with CLI args and imaConfig, it generates webpack configurations which are then passed to webpack compiler. This can be usefull for other tooling like StoryBook, where you need to customize different webpack config with fields from the IMA app one.
+  Added additional `ImaConfigurationContext` variables: `isClientES`, `isClient` and `outputFolders`
+  Removed `isESVersion` `ImaConfigurationContext` variable (use `isClientES` instead).
+  Added support for `prepareConfigurations` CLI plugin method, which lets you customize webpack configuration contexts, before generating webpack config from them.
+  Added new `cssBrowsersTarget` ima.config.js settings, this allows you to easily customize `postcss-preset-env` `browsers` targets field.
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
+## 19.0.0-rc.11
+
+### Patch Changes
+
+- 447c51646: All packages now use correct types from IMA core
+
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- e0dfeda28: Updated dependencies
+
+## 19.0.0-rc.9
+
+### Patch Changes
+
+- c3cb36a66: Fixed SWC dependency
+
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- 5378e2485: Fixed issue with broken manifets.json files
+
+## 19.0.0-rc.7
+
+### Minor Changes
+
+- b1e29d200: Performance improvement while building non-module CSS/LESS (\*.module.css) files on bundles that don't process CSS (server and client). In this cases the CSS imports are completely ignored which improves build performance merginally, depending on the amount of CSS files you app is using
+
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- fc0a978cd: CSS files generated to Manifest are only from static/css/ folder.
+
+## 19.0.0-rc.5
+
+### Major Changes
+
+- e4656c192: **BREAKING CHANGE** Bumped browserslist targets definition a little bit to browsers supporting AbortController. Added AbortController to es2018 test script to runner.ejs. While technically not breaking change, since it's pretty minor bump, it is something however you should be aware of.
+
+### Minor Changes
+
+- 6a6b996d4: Added support for 3rd party source maps, this is usefull especially in error overlay.
+- 0327da69d: Added ability to customize open URL using `--openUrl` CLI argument or `IMA_CLI_OPEN_URL` environment variable.
+
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 3b14b4b24: Added additional CLI output info when `forcedLegacy` and `writeToDisk` args are used
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- 0526618ad: Updated dependencies
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/error-overlay@19.0.0-rc.2
+  - @ima/hmr-client@19.0.0-rc.1
+  - @ima/dev-utils@19.0.0-rc.2
+
+## 19.0.0-rc.1
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+
+### Patch Changes
+
+- 010f5d872: Fix support for pnpm
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- ceb4cbd12: Updated types
+- Updated dependencies [2f789cdae]
+- Updated dependencies [073adb5d5]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [1a4c07a96]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ca55af922]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [c0fe68ef3]
+  - @ima/server@19.0.0-rc.0
+  - @ima/dev-utils@19.0.0-rc.0
+  - @ima/error-overlay@19.0.0-rc.0
+  - @ima/hmr-client@19.0.0-rc.0
+
 ## 18.3.4
 
 ### Patch Changes

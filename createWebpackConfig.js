@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -24,7 +25,7 @@ function createWebpackConfig(callback) {
       type: 'filesystem',
       store: 'pack',
     },
-    devtool: ctx.isProduction ? 'source-map' : 'eval-cheap-source-map',
+    devtool: ctx.isProduction ? 'source-map' : 'cheap-module-source-map',
     module: {
       rules: [
         {

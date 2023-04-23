@@ -34,6 +34,18 @@ export interface ImaCliPlugin {
   preProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
 
   /**
+   * Called right before creating webpack configurations after preProcess call.
+   * This hook lets you customize configuration contexts for each webpack config
+   * that will be generated. This is usefull when you need to overrite configuration
+   * contexts for values that are not editable anywhere else (like output folders).
+   */
+  prepareConfigurations?(
+    configurations: ImaConfigurationContext[],
+    imaConfig: ImaConfig,
+    args: ImaCliArgs
+  ): Promise<ImaConfigurationContext[]>;
+
+  /**
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
    */
   webpack?(

@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/imajs-logo.png">
+  <img height="130" src="https://imajs.io/img/logo.svg">
 </p>
 
 <h1 align="center">@ima/dev-utils</h1>
@@ -14,9 +14,9 @@ There's intentionally no "main" export or index file and each utils file has to 
 
 This means that you need to import each utility as:
 ```javascript
-import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
-import { FragmentLine } from '@ima/dev-utils/dist/sourceFragment';
-import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
+import { extractSourceMappingUrl } from '@ima/dev-utils/sourceMapUtils';
+import { FragmentLine } from '@ima/dev-utils/sourceFragment';
+import { parseCompileError } from '@ima/dev-utils/compileErrorParser';
 // ...
 ```
 

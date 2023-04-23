@@ -60,51 +60,11 @@ In dev we use the development version of react library (for better debugging) an
 
 ## Typescript
 
-From IMA.js v18 we introduced **support for Typescript in your application code**. To enable it, first you need to add `typescript` to your app dependencies:
-
-```bash npm2yarn
-npm i -D typescript
-```
-
-Now create `tsconfig.json` file (that may look something like this):
-
-```json title=./tsconfig.json
-{
-  "compilerOptions": {
-    "allowJs": true,
-    "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "module": "ES2022",
-    "moduleResolution": "Node16",
-    "strict": true,
-    "resolveJsonModule": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "app/*": [
-        "app/*"
-      ],
-    }
-  },
-  "include": ["app"]
-}
-```
-
-When CLI detects existence of the `tsconfig.json` file, it automatically starts **type checking** and **compiling** files with `*.ts` and `*.tsx` extensions.
-
-Keep in mind that the code is still compiled using [swc](https://swc.rs/), the same way JS code is. This means that certain settings in `tsconfig.json` only applies to type checking (like `target`, `moduleResolution`, etc.), but compilation uses it's own settings to match the JS code.
+From IMA.js v18 we've introduced **support for Typescript in your application code**. To enable it, simply install `typescript` dependency and create `tsconfig.json` file in the root of your project.
 
 :::tip
 
-You may probably also want to install additional `@types/*` type definition libs to ensure proper support, like react types:
-
-```bash npm2yarn
-npm i -D @types/react @types/react-dom
-```
+For more information and additional tips about TypeScript usage in IMA.js applications, [**see the TypeScript section**](../basic-features/typescript.md).
 
 :::
 

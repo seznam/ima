@@ -1,9 +1,7 @@
 import { toMockedInstance } from 'to-mock';
 
-import ObjectContainer, {
-  UnknownConstructable,
-} from '../../../ObjectContainer';
-import ComponentUtils from '../ComponentUtils';
+import { ObjectContainer } from '../../../oc/ObjectContainer';
+import { ComponentUtils } from '../ComponentUtils';
 
 class SomeMockHelper {}
 
@@ -51,9 +49,7 @@ describe('componentUtils', () => {
       jest
         .spyOn(oc, 'get')
         .mockImplementation(entity =>
-          typeof entity === 'function'
-            ? new (entity as UnknownConstructable)()
-            : entity
+          typeof entity === 'function' ? new entity() : entity
         );
 
       componentUtils.register({
@@ -78,11 +74,14 @@ describe('componentUtils', () => {
       const utils = componentUtils.getUtils();
 
       expect(oc.get).toHaveBeenCalledTimes(2);
+      // @ts-expect-error error expected
       expect(utils['SomeHelper'] instanceof SomeHelper).toBeTruthy();
+      // @ts-expect-error error expected
       expect(utils['SomeMockHelper'] instanceof SomeMockHelper).toBeTruthy();
     });
 
     it('should not create instances again.', () => {
+      // @ts-expect-error error expected
       const utils = (componentUtils['_utilities'] = {});
       jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 

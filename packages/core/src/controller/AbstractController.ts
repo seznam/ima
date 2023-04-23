@@ -1,15 +1,28 @@
-import PageStateManager from '../page/state/PageStateManager';
-import Controller from './Controller';
-import Extension, { IExtension } from '../extension/Extension';
-import { UnknownParameters } from '../CommonTypes';
+import { AbstractConstructor, Constructor } from 'type-fest';
+
+import { Controller } from './Controller';
+import { OCAliasMap } from '../config/bind';
+import { Extension } from '../extension/Extension';
+import { Dependencies } from '../oc/ObjectContainer';
+import { PageState, PageStateManager } from '../page/state/PageStateManager';
+import { RouteParams } from '../router/AbstractRoute';
 
 /**
  * Basic implementation of the {@link Controller} interface, providing the
  * default implementation of the most of the API.
  */
-export default abstract class AbstractController extends Controller {
-  protected _pageStateManager?: PageStateManager;
-  protected _extensions: Map<Extension | IExtension, Extension> = new Map();
+export class AbstractController<
+  S extends PageState = {},
+  R extends RouteParams = {},
+  SS extends S = S
+> extends Controller<S, R, SS> {
+  protected _pageStateManager?: PageStateManager<SS>;
+  protected _extensions: Map<
+    | keyof OCAliasMap
+    | Constructor<Extension<any, any>>
+    | AbstractConstructor<Extension<any, any>>,
+    InstanceType<typeof Extension>
+  > = new Map();
   /**
    * The HTTP response code to send to the client.
    */
@@ -19,36 +32,40 @@ export default abstract class AbstractController extends Controller {
    * set externally by IMA right before the {@link Controller#init} or the
    * {@link Controller#update} method is called.
    */
-  params: UnknownParameters = {};
+  params: R = {} as R;
 
-  static get $extensions(): IExtension[] {
-    return [];
+  static $name?: string;
+  static $dependencies: Dependencies;
+  static $extensions?: Dependencies<Extension<any, any>>;
+
+  constructor() {
+    super();
   }
 
   /**
    * @inheritDoc
    */
-  setState(statePatch: UnknownParameters) {
+  setState<K extends keyof S>(statePatch: Pick<S, K> | S | null): void {
     if (this._pageStateManager) {
-      this._pageStateManager.setState(statePatch);
+      this._pageStateManager.setState(statePatch as S);
     }
   }
 
   /**
    * @inheritDoc
    */
-  getState() {
+  getState(): SS {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return {};
+      return {} as SS;
     }
   }
 
   /**
    * @inheritDoc
    */
-  beginStateTransaction() {
+  beginStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.beginTransaction();
     }
@@ -57,7 +74,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  commitStateTransaction() {
+  commitStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.commitTransaction();
     }
@@ -66,7 +83,7 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  cancelStateTransaction() {
+  cancelStateTransaction(): void {
     if (this._pageStateManager) {
       this._pageStateManager.cancelTransaction();
     }
@@ -76,9 +93,14 @@ export default abstract class AbstractController extends Controller {
    * @inheritDoc
    */
   addExtension(
-    extension: Extension | IExtension,
+    extension:
+      | keyof OCAliasMap
+      | Constructor<Extension<any, any>>
+      | AbstractConstructor<Extension<any, any>>
+      | InstanceType<typeof Extension>,
     extensionInstance?: InstanceType<typeof Extension>
-  ) {
+  ): void {
+    // FIXME IMA@20, remove backwards compatibility
     if (
       (!extensionInstance && typeof extension !== 'object') ||
       (extensionInstance && typeof extensionInstance !== 'object')
@@ -89,11 +111,14 @@ export default abstract class AbstractController extends Controller {
     }
 
     if (extensionInstance) {
-      this._extensions.set(extension, extensionInstance);
+      this._extensions.set(
+        extension as Constructor<Extension>,
+        extensionInstance
+      );
     } else {
       this._extensions.set(
-        extension?.constructor ?? extension,
-        extension as Extension
+        (extension?.constructor as typeof Extension) ?? extension,
+        extension as unknown as InstanceType<typeof Extension>
       );
     }
   }
@@ -101,42 +126,44 @@ export default abstract class AbstractController extends Controller {
   /**
    * @inheritDoc
    */
-  getExtension(extension: IExtension) {
+  getExtension(
+    extension: typeof Extension
+  ): InstanceType<typeof Extension> | undefined {
     return this._extensions.get(extension);
   }
 
   /**
    * @inheritDoc
    */
-  getExtensions() {
+  getExtensions(): Extension[] {
     return Array.from(this._extensions.values());
   }
 
   /**
    * @inheritDoc
    */
-  setRouteParams(params: UnknownParameters = {}) {
+  setRouteParams(params: R = {} as R) {
     this.params = params;
   }
 
   /**
    * @inheritDoc
    */
-  getRouteParams() {
+  getRouteParams(): R {
     return this.params;
   }
 
   /**
    * @inheritDoc
    */
-  setPageStateManager(pageStateManager?: PageStateManager) {
+  setPageStateManager(pageStateManager?: PageStateManager<SS>): void {
     this._pageStateManager = pageStateManager;
   }
 
   /**
    * @inheritDoc
    */
-  getHttpStatus() {
+  getHttpStatus(): number {
     return this.status;
   }
 }

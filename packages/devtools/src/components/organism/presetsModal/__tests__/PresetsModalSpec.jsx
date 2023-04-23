@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { shallow } from 'enzyme';
 
 jest.mock('@/utils');

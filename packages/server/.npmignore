@@ -2,4 +2,5 @@
 !lib/**/*
 !package.json
 !index.js
+!types.d.ts
 !resolver.js

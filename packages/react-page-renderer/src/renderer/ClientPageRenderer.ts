@@ -1,17 +1,17 @@
 /* @if server **
-export default class ClientPageRenderer {};
+export class ClientPageRenderer {};
 /* @else */
 import { RendererEvents } from '@ima/core';
 import { ReactElement } from 'react';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
 
-import AbstractClientPageRenderer from './AbstractClientPageRenderer';
+import { AbstractClientPageRenderer } from './AbstractClientPageRenderer';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  */
-export default class ClientPageRenderer extends AbstractClientPageRenderer {
+export class ClientPageRenderer extends AbstractClientPageRenderer {
   private _reactRoot?: Root;
 
   unmount(): void {
@@ -24,7 +24,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
   }
 
   protected _hydrateViewAdapter(): void {
-    const serverNode = this._viewContainer?.cloneNode(true);
+    const serverNode = this._viewContainer?.cloneNode(true) as Element;
     this._reactRoot = hydrateRoot(
       this._viewContainer as Element,
       this._getViewAdapterElement({
@@ -41,7 +41,7 @@ export default class ClientPageRenderer extends AbstractClientPageRenderer {
             {
               error,
               serverNode,
-              clientNode: this._viewContainer?.cloneNode(true),
+              clientNode: this._viewContainer?.cloneNode(true) as Element,
             },
             true
           );

@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 const child = require('child_process');
-const chalk = require('chalk');
-const fs = require('fs-extra');
 const path = require('path');
+
+const chalk = require('chalk');
 const chokidar = require('chokidar');
+const fs = require('fs-extra');
 
 const IGNORED = [
   '.DS_Store',
@@ -17,6 +18,7 @@ const IGNORED = [
   'jest.config.js',
   'src',
   '**/*.tgz',
+  '**/tsconfig.build.tsbuildinfo/**',
   '**/node_modules/**',
   '**/typings/**',
   '**/__mocks__/**',
@@ -84,6 +86,11 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
 
             fs.mkdirSync(destDir, { recursive: true });
           } else if (options?.skipExisting) {
+            return;
+          }
+
+          // Ignore TS files
+          if (filePath.endsWith('.ts') && !filePath.endsWith('.d.ts')) {
             return;
           }
 
@@ -217,33 +224,31 @@ function initApp(destDir, pkgDirs, cliArgs) {
   if (exists && !cliArgs.force) {
     console.log(
       chalk.yellow(
-        'The app destination folder already exists, skipping initialization...\n' +
+        'The app destination folder already exists, skipping CIA initialization...\n' +
           'Use --force cli argument to overwrite the destination folder.'
       )
     );
-  } else {
-    // Delete folder before init
-    if (exists) {
-      fs.rmSync(destDir, { recursive: true, force: true });
+  }
 
-      console.log(
-        chalk.yellow(
-          'The app destination folder already exists, overwriting...'
-        )
-      );
-    }
+  // Delete folder before init
+  if (exists && cliArgs.force) {
+    fs.rmSync(destDir, { recursive: true, force: true });
 
+    console.log(
+      chalk.yellow('The app destination folder already exists, overwriting...')
+    );
+  }
+
+  if (cliArgs.init) {
     // Run create-ima-app script
     shell(
       `${path.resolve(
         __dirname,
         '../../../packages/create-ima-app/bin/create-ima-app.js'
-      )} ${destDir}`
+      )} ${destDir}${cliArgs.typescript ? ' --typescript' : ''}`
     );
-  }
 
-  // Build, pack and install packages in the target directory.
-  if (cliArgs.init) {
+    // Build, pack and install packages in the target directory.
     let packFiles = [];
 
     pkgDirs.forEach(pkgDir => {
@@ -262,6 +267,10 @@ function initApp(destDir, pkgDirs, cliArgs) {
     });
 
     packFiles.forEach(packFilePath => fs.rmSync(packFilePath));
+
+    // Copy "dev" ima config into the application, if it doesn't have any
+    const imaConfigPath = path.join(destDir, 'ima.config.js');
+    fs.copyFileSync(path.join(__dirname, './ima.config.js'), imaConfigPath);
   }
 }
 

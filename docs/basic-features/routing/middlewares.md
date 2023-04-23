@@ -19,8 +19,8 @@ export let init = (ns, oc, config) => {
     });
     .add('home', '/', HomeController, HomeView, {
       middlewares: [
-        async (params, locals) => {
-          locals.counter++;
+        async (params, locals, next) => {
+          next({ counter: counter++ });
         }
       ]
     })
@@ -37,9 +37,9 @@ You can easily define authentication middlewares or access-restricting middlewar
 
 :::
 
-## Middleware function arguments
+## Function arguments
 
-Each middleware can be async and receives exactly **two arguments**: `params` and `locals`. `params` specifically allows you to modify route params while `locals` is used to pass data between middlewares.
+Each middleware can be **async** and the functions can use up to three arguments: `params`, `locals` and `next`. `params` specifically allows you to modify route params, `locals` is used to pass data between middlewares and `next` callback provides additional
 
 ### params
 
@@ -49,9 +49,35 @@ Contains route params extracted by the **currently matched route handler**. Can 
 
 ### locals
 
-> `object`
+> `RouteLocals = {}`
 
-Object you can use to pass data between middlewares. It shares reference across all middlewares, so anything you define here, is available in following middleware functions. Additionally it always contains following keys:
+Mutable object you can use to pass data between middlewares. It is passed across all middlewares, so anything you define here, is available in following middleware functions.
+
+:::tip
+
+In addition to mutating the original object, you can also **return object values from middlewares** or pass them as an argument in the `next()` function. These are then merged into the `locals` upon it's execution.
+
+```js
+async (params, locals) => {
+  locals.counter++;
+}
+
+// or
+
+async (params, locals) => {
+  return { counter: counter++ };
+}
+
+// or
+
+async (params, locals, next) => {
+  next({ counter: counter++ });
+}
+```
+
+:::
+
+Additionally it always contains following keys:
 
 #### route
 
@@ -61,9 +87,33 @@ Instance of currently matched route.
 
 #### action
 
-> `object = {}`
+> `RouteAction = {}`
 
 An action object describing what triggered this routing (can be empty).
+
+### next
+
+> `(result?: object) => void`
+
+When called, this function (as the name suggest) allows you to continue with execution of other route handlers. Apart from other frameworks that use similar feature, when you define `next` argument in your middleware, **you have to execute it in order to continue**. Otherwise the router will not proceed any further even if the middleware function content finished it's execution.
+
+This is intentional as it allows you to have more control over the middleware execution and gives you ability to stop the routing process completely.
+
+:::tip
+This is can be usefull in situations when for example you want to do a redirect, which is synchronous but takes a while until the window is reloaded. Without stopping the middleware execution (by defining the `next` callback and not calling it), you could get a glimpse of Error Page that is rendered before the redirect takes places, because the router continued it's processing.
+
+```js
+async (params, locals, next) => {
+  if (await oc.get('User').isLoggedIn()) {
+    // Continue normally
+    return next();
+  }
+
+  // Stop execution by not calling `next()` and do a redirect
+  oc.get('$Router').redirect('/');
+}
+```
+:::
 
 ## Execution order
 
@@ -80,3 +130,21 @@ In case of an **error** or not **found page**, the execution order is still **th
 There's only one exception, since the `locals` object is cleared to an empty object before route handling, if an error occurs during route handling and execution is internally passed to error handling (displaying error page), the locals object may retain values that were there for the previous route matching. However the `locals.route` object will still be up to date and equal to currently routed route (error in this case).
 
 :::
+
+## Execution timeout
+
+To prevent middlewares from freezing the application, for example when the middlewares takes too long to execute, we've implemented execution timeout, which prevents them from running indefinitely.
+
+You can **customize the timeout value** in app settings:
+
+```js title="./app/config/settings.js"
+export default (ns, oc, config) => {
+  return {
+    prod: {
+      $Router: {
+        middlewareTimeout: 30000, // ms
+      },
+    },
+  };
+};
+```

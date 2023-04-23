@@ -1,5 +1,284 @@
 # Change Log
 
+## 19.0.0-rc.28
+
+### Patch Changes
+
+- a3e9335bb: Fixed fire method data type
+
+## 19.0.0-rc.27
+
+### Patch Changes
+
+- 8f40ac359: Controller and Extension type tweaks.
+  Renamed `CreateLoadedResources` type to `LoadedResources`.
+  CIA HomeController AbstractPageController fixes.
+
+## 19.0.0-rc.26
+
+### Patch Changes
+
+- b49b20d74: Renamed `AppConfigFunctions` -> `InitAppConfig` and `PluginConfigFunctions` -> `InitPluginConfig` types.
+
+## 19.0.0-rc.25
+
+### Patch Changes
+
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+
+## 19.0.0-rc.24
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
+## 19.0.0-rc.23
+
+### Patch Changes
+
+- f55b1e8c0: Fixed Settings $Cache.enable type
+
+## 19.0.0-rc.22
+
+### Patch Changes
+
+- 4224087d2: Removed any key from Settings type
+
+## 19.0.0-rc.21
+
+### Patch Changes
+
+- 447c51646: All packages now use correct types from IMA core
+
+## 19.0.0-rc.20
+
+### Patch Changes
+
+- 3f35dcbf0: Fixed HYDRATE_ERROR types
+
+## 19.0.0-rc.19
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+
+## 19.0.0-rc.18
+
+### Patch Changes
+
+- 5bd45aa75: Updated Window types
+
+## 19.0.0-rc.17
+
+### Patch Changes
+
+- 206ab1f43: Improved Dispatcher types
+
+## 19.0.0-rc.16
+
+### Patch Changes
+
+- 02d5a56e1: Fixed Plugin init settings types"
+
+## 19.0.0-rc.15
+
+### Patch Changes
+
+- 13ea3d64c: Reverted browser targets to compile trycatch
+
+## 19.0.0-rc.14
+
+### Patch Changes
+
+- c3cb36a66: Fixed SWC dependency
+
+## 19.0.0-rc.13
+
+### Patch Changes
+
+- d6f7654a2: Added support for typing controller, extension state and route params
+- 2a5dcc6d0: Added Bootstrap settings, config and env types
+- 75f54c9b1: Added autocompletion support for language file keys in localization functions. This is done by generating the language keys interface during built-time.
+- bb08c5c2b: Minor HttpAgent type enhancements
+  Added generics to GenericError params types
+
+## 19.0.0-rc.12
+
+### Patch Changes
+
+- 8c1864320: Added route cancelation to init, activate and load methods
+- e5112f165: Fixed issues with newly introduced route cancelation
+
+## 19.0.0-rc.11
+
+### Patch Changes
+
+- 0d044e238: Typed ObjectContainer
+
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- accfd6a15: Fixed backwards compatibility check in addExtension method in AbstractController\
+
+## 19.0.0-rc.9
+
+### Major Changes
+
+- 4cdfac35a: Multiple changes in router route handling and page manager with a goal of implementing ability to cancel running handlers before handling a new ones. This results in much more stable routing specifically when using async routes. Each route should now be executed "sequentially" where BEFORE/AFTER_HANDLE_ROUTE router events should always fire in correct order. Also if you quickly move between different routes, without them finishing loading, the page manager is able to cancel it's executing mid handling and continue with a new route, which results in faster and more stable routing. While this change is essentially not a breaking change, since it only changes our internal API, it could possibly result in some new behaviour.
+  Added `BEFORE_ASYNC_ROUTE` and `AFTER_ASYNC_ROUTE` which you can use to implement custom loaders when routing between async routes (or use it for any other handling).
+  #### Breaking Changes
+  `AbstractRouter.manage` method no longer has controller and view properties in an object argument.
+
+### Patch Changes
+
+- d32ef1744: Fix window history for error action
+
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- 89f3d2166: Used baseUrl + path for params parsing, instead of full current url. This fixes issue where path is already different (redirect) than currently routed URL, which results in invalid params.
+
+## 19.0.0-rc.7
+
+### Major Changes
+
+- a21d0f0af: Replace custom URL parsing methods in `AbstractRoute`, `StaticRoute` and `DynamicRoute` with combination of native URL and URLSearchParams.
+  Removed `pairsToQuery`, `paramsToQuery`, `getQuery`, `decodeURIParameter` static methods on `AbstractRoute`. These have been replaced with combination of native `URL` and `URLSearchParams` interfaces.
+  `getTrimmedPath` static method in `AbstractRoute` is now instance method.
+
+  #### Breaking Changes
+
+  Url query params with no value (`?param=`) are no longer extracted as `{ param: true }`, but as `{ param: '' }`. Please update your code to check for `key` presence in these cases rather than `true` value.
+  Parsing of semi-colons inside query params is not supported (as a result of using `URLSearchParams`)
+
+## 19.0.0-rc.6
+
+### Major Changes
+
+- 432f6bb55: `extractParameters()` function in `DynamicRoute` now receives additional object argument, containing `query` and `path` (not modified path) for more control over extracted parameters.
+  **BREAKING CHANGE** the router now uses params returned from `extractParameters()` directly. It no longer automatically merges query params into the resulting object. If you want to preserve this behavior, merge the extracted route params with `query` object provided in the second argument.
+- 24ed8e07f: Removed support for `HttpAgent` options.listener (these were used mainly in plugin-xhr, which is now unsupported)
+  **BREAKING CHANGE**: You can now define multiple `postProcessors[]` in `HttpAgent` options, this however presents a breaking change, since if you are already using any `postProcessor`, you need to update your options to `postProcessors` and make sure to pass an array to this option.
+- b55415fdb: Remove older, conflicting settings of `HttpAgent`, `withCredentials`, `headers`, and `listeners`. The first two now conflict with the newer `options.fetchOptions`, the last one is no longer used for anything.
+
+  #### Breaking changes
+
+  `options.withCredentials` and `options.headers` are no longer followed. Use `options.fetchOptions.credentials` and `options.fetchOptions.headers` instead. For definition, see the native Fetch API. **Note**: for simplicity, `options.fetchOptions.headers` only accepts headers defined by an object, not a tuple or an instance of `Headers`.
+
+  `options.listeners` no longer supported.
+
+### Minor Changes
+
+- c0abf3082: Controller and Extension event bus methods can be targeted with prefix. Prefix is set by static field in controller/extension class e.g. `$name = 'ArticleController';`. Event is then `ArticleController.eventName`.
+
+### Patch Changes
+
+- a7bd5bb87: Fix missing optional parameters in static router are evaluated as 'undefined' instead of undefined.
+- a3e8b5d2e: Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
+- 5578d8f40: Add clear for transaction in PageStateManager
+- f2e1a5df2: Fixed HttpAgent types -> data in method arguments should be optional
+
+## 19.0.0-rc.5
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- 1bd52f08c: Fixed an issue where boot erros did not bubble up to the root promise catch
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
+## 19.0.0-rc.4
+
+### Major Changes
+
+- 299b87c3d: IMA HttpAgent remove by default all headers from request and response which is stored in Cache. You can turn off this behaviour with `keepSensitiveHeaders` option but it is not recommended.
+
+### Minor Changes
+
+- 0526618ad: Updated HttpAgent and HttpProxy types - added option to set body type using generics.
+- 4ca573b83: `getRouteHandlersByPath` method on `AbstractRouter` is now public
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- d084c840c: Fixed dictionary.get types, second argument should be optional
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/helpers@19.0.0-rc.1
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 73ae7af1e: Added missing TS exports.
+  All internal modules now use named exports.
+
+  #### Breaking change
+
+  `StatusCode` has been renamed to `HttpStatusCode`
+
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
+### Minor Changes
+
+- 067a5268c: Added new `next` callback to router middleware functions
+  Fixed `RouteOptions` type definitiona across routing-related classes
+  Added middleware execution timeout => all middlewares must execute within this defined timeframe (defaults to 30s). This can be customized using `$Router.middlewareTimeout` app settings
+- 7b5c19ba1: Router middlewares now support `next` callback, which when defined, has to be called, otherwise the middleware will eventually timeout and not proceed any further. This enables some additional features, where you are able to stop route processing by not calling the next functio if desired.
+  Middlewares can now return object value, which will be merged to the locals object, received as a second argument in middleware function
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- 464d307ae: Removed `ExtensibleError`
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 2f789cdae: Add new methods `isClientError` and `isRedirection` to `GenericError`.
+- ceb4cbd12: Added new `onRun` event to IMA runner
+- 961d65688: MetaManager set\* methods now return `this`, this means that set methods can be chained
+
+### Patch Changes
+
+- Updated dependencies [c0fe68ef3]
+  - @ima/helpers@19.0.0-rc.0
+
 ## 18.1.3
 
 ### Patch Changes

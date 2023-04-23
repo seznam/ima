@@ -35,7 +35,7 @@ export class EventSourceWrapper {
     // Init event source
     this.#init();
 
-    this.#liveCheck = setInterval(() => {
+    this.#liveCheck = window.setInterval(() => {
       if (Date.now() - this.#lastActivity > this.#options.timeout) {
         this.disconnect();
       }

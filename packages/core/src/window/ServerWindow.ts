@@ -1,14 +1,13 @@
 /* @if client **
-export default class ServerWindow {};
+export class ServerWindow {};
 /* @else */
-import Window from './Window';
-import GenericError from '../error/GenericError';
-import { UnknownParameters } from '../CommonTypes';
+import { Window } from './Window';
+import { GenericError } from '../error/GenericError';
 
 /**
  * Server-side implementation of the `Window` utility API.
  */
-export default class ServerWindow extends Window {
+export class ServerWindow extends Window {
   static get $dependencies() {
     return [];
   }
@@ -16,126 +15,128 @@ export default class ServerWindow extends Window {
   /**
    * @inheritDoc
    */
-  isClient() {
+  isClient(): false {
     return false;
   }
 
   /**
    * @inheritDoc
    */
-  isCookieEnabled() {
+  isCookieEnabled(): false {
     return false;
   }
 
   /**
    * @inheritDoc
    */
-  hasSessionStorage() {
+  hasSessionStorage(): false {
     return false;
   }
 
   /**
    * @inheritDoc
    */
-  setTitle() {
+  setTitle(): never {
     throw new GenericError('The setTitle() is denied on server side.');
   }
 
   /**
    * @inheritDoc
    */
-  getWindow() {
+  getWindow(): undefined {
     return undefined;
   }
 
   /**
    * @inheritDoc
    */
-  getDocument() {
+  getDocument(): undefined {
     return undefined;
   }
 
   /**
    * @inheritDoc
    */
-  getScrollX() {
+  getScrollX(): 0 {
     return 0;
   }
 
   /**
    * @inheritDoc
    */
-  getScrollY() {
+  getScrollY(): 0 {
     return 0;
   }
 
   /**
    * @inheritDoc
    */
-  scrollTo() {
+  scrollTo(): void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  getDomain() {
+  getDomain(): '' {
     return '';
   }
 
   /**
    * @inheritDoc
    */
-  getHost() {
+  getHost(): '' {
     return '';
   }
 
   /**
    * @inheritDoc
    */
-  getPath() {
+  getPath(): '' {
     return '';
   }
 
   /**
    * @inheritDoc
    */
-  getUrl() {
+  getUrl(): '' {
     return '';
   }
 
   /**
    * @inheritDoc
    */
-  getBody() {
+  getBody(): undefined {
     return undefined;
   }
 
   /**
    * @inheritDoc
    */
-  getElementById() {
+  getElementById(): null {
     return null;
   }
 
   /**
    * @inheritDoc
    */
-  getHistoryState() {
-    return {};
+  getHistoryState(): undefined {
+    return;
   }
 
   /**
    * @inheritDoc
    */
-  querySelector() {
+  querySelector(): null {
     return null;
   }
 
   /**
    * @inheritDoc
    */
-  querySelectorAll(_selector: string) {
+  querySelectorAll<E extends Element = Element>(
+    selector: string
+  ): NodeListOf<E> {
     class DummyNodeList extends NodeList {
       length: number;
       constructor() {
@@ -148,34 +149,37 @@ export default class ServerWindow extends Window {
       }
     }
 
-    return new DummyNodeList();
+    return new DummyNodeList() as unknown as NodeListOf<E>;
   }
 
   /**
    * @inheritDoc
    */
-  redirect() {
+  redirect(): void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  pushState() {
+  pushState(): void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  replaceState() {
+  replaceState(): void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  createCustomEvent(name: string, options: UnknownParameters) {
+  createCustomEvent<T>(
+    name: string,
+    options: CustomEventInit<T>
+  ): CustomEvent<T> {
     const dummyCustomEvent = {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       initCustomEvent: () => {},
@@ -188,14 +192,14 @@ export default class ServerWindow extends Window {
   /**
    * @inheritDoc
    */
-  bindEventListener() {
+  bindEventListener(): void {
     return;
   }
 
   /**
    * @inheritDoc
    */
-  unbindEventListener() {
+  unbindEventListener(): void {
     return;
   }
 }

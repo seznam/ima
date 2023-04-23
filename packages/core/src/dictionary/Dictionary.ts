@@ -1,24 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ObjectParameters } from '../types';
 
-import { ObjectParameters } from '../CommonTypes';
-
-export type Config = {
+export type DictionaryConfig = {
   $Language: string;
-  dictionary: Fields;
+  dictionary: DictionaryData;
 };
 
-export type Fields = {
-  [key: string]: Fields | LocalizationFunction;
+export type DictionaryData = {
+  [key: string]: DictionaryData | LocalizationFunction;
 };
 
 export type LocalizationFunction = (parameters: ObjectParameters) => string;
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DictionaryMap {}
 
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
  * single language. The format of the localization phrases depends on the
  * implementation of this interface.
  */
-export default abstract class Dictionary {
+export abstract class Dictionary {
   /**
    * Initializes this dictionary with the provided language and localization
    * phrases.
@@ -29,7 +30,7 @@ export default abstract class Dictionary {
    * @param config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.
    */
-  init(config: Config) {
+  init(config: DictionaryConfig): void {
     return;
   }
 
@@ -40,7 +41,7 @@ export default abstract class Dictionary {
    * @return The language code representing the language of the
    *         localization phrases in this dictionary.
    */
-  getLanguage() {
+  getLanguage(): string {
     return '';
   }
 
@@ -56,7 +57,7 @@ export default abstract class Dictionary {
    * @return The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key: string, parameters: ObjectParameters) {
+  get(key: keyof DictionaryMap, parameters?: ObjectParameters): string {
     return '';
   }
 
@@ -68,7 +69,7 @@ export default abstract class Dictionary {
    * @return`true` if the key exists and denotes a single
    *         localization phrase, otherwise `false`.
    */
-  has(key: string) {
+  has(key: string): boolean {
     return false;
   }
 }

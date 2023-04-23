@@ -1,8 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { PageManagerDispatcherEvents } from '../page/manager/AbstractPageManager';
+import { PageRendererDispatcherEvents } from '../page/renderer/PageRenderer';
+import { PageStateDispatcherEvents } from '../page/state/PageStateManagerImpl';
+import { RouterDispatcherEvents } from '../router/AbstractRouter';
 
-import { UnknownParameters } from '../CommonTypes';
-
-export type Listener = (data: UnknownParameters) => unknown;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DispatcherEventsMap
+  extends PageStateDispatcherEvents,
+    PageManagerDispatcherEvents,
+    RouterDispatcherEvents,
+    PageRendererDispatcherEvents {}
+export type DispatcherListener<D> = (data: D) => void;
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -13,12 +20,12 @@ export type Listener = (data: UnknownParameters) => unknown;
  * propagate events from controllers to UI components when modifying/passing
  * the state is impractical for any reason.
  */
-export default abstract class Dispatcher {
+export abstract class Dispatcher {
   /**
    * Deregisters all event listeners currently registered with this
    * dispatcher.
    */
-  clear() {
+  clear(): this {
     return this;
   }
 
@@ -39,7 +46,21 @@ export default abstract class Dispatcher {
    *        will be bound in the event listener.
    * @return This dispatcher.
    */
-  listen(event: string, listener: Listener, scope?: unknown) {
+  listen<E extends keyof DispatcherEventsMap>(
+    event: E,
+    listener: DispatcherListener<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  listen(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this;
+  listen(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this {
     return this;
   }
 
@@ -54,7 +75,21 @@ export default abstract class Dispatcher {
    *        would be bound in the event listener.
    * @return This dispatcher.
    */
-  unlisten(event: string, listener: Listener, scope?: unknown) {
+  unlisten<E extends keyof DispatcherEventsMap>(
+    event: E,
+    listener: DispatcherListener<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  unlisten(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this;
+  unlisten(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this {
     return this;
   }
 
@@ -78,7 +113,13 @@ export default abstract class Dispatcher {
    *        propagation of the event.
    * @return This dispatcher.
    */
-  fire(event: string, data: UnknownParameters, imaInternalEvent: boolean) {
+  fire<E extends keyof DispatcherEventsMap>(
+    event: E,
+    data: DispatcherEventsMap[E],
+    imaInternalEvent: boolean
+  ): this;
+  fire(event: string, data: any, imaInternalEvent: boolean): this;
+  fire(event: string, data: any, imaInternalEvent: boolean): this {
     return this;
   }
 }

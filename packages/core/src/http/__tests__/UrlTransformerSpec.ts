@@ -1,4 +1,4 @@
-import UrlTransformer from '../UrlTransformer';
+import { UrlTransformer } from '../UrlTransformer';
 
 describe('ima.core.http.UrlTransformer', () => {
   let transformer: UrlTransformer;

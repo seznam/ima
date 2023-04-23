@@ -1,23 +1,34 @@
-import HttpAgent, {
+import * as Helpers from '@ima/helpers';
+
+import {
+  HttpAgent,
   HttpAgentRequestOptions,
   HttpAgentResponse,
 } from './HttpAgent';
-import HttpProxy from './HttpProxy';
-import Cache from '../cache/Cache';
-import GenericError from '../error/GenericError';
-import CookieStorage from '../storage/CookieStorage';
-import * as Helpers from '@ima/helpers';
-import { StringParameters, UnknownParameters } from '../CommonTypes';
+import { HttpProxy, HttpProxyErrorParams } from './HttpProxy';
+import { Cache } from '../cache/Cache';
+import { GenericError } from '../error/GenericError';
+import { CookieStorage } from '../storage/CookieStorage';
+import { UnknownParameters } from '../types';
+
+export interface HttpAgentImplCacheOptions {
+  prefix: string;
+}
+
+export interface HttpAgentImplConfig {
+  cacheOptions: HttpAgentImplCacheOptions;
+  defaultRequestOptions: HttpAgentRequestOptions;
+}
 
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
-export default class HttpAgentImpl extends HttpAgent {
+export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<unknown>;
+  protected _cache: Cache<HttpAgentResponse<unknown>>;
   protected _cookie: CookieStorage;
-  protected _cacheOptions: StringParameters;
+  protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
   protected _Helper: typeof Helpers;
   protected _internalCacheOfPromises = new Map();
@@ -42,8 +53,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *              withCredentials: true,
    *              timeout: 2000,
    *              accept: 'application/json',
-   *              language: 'en',
-   *              listeners: { 'progress': callbackFunction }
+   *              language: 'en'
    *          })
    *          .then((response) => {
    *              //resolve
@@ -58,9 +68,9 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   constructor(
     proxy: HttpProxy,
-    cache: Cache<unknown>,
+    cache: Cache<HttpAgentResponse<unknown>>,
     cookie: CookieStorage,
-    config: UnknownParameters,
+    config: HttpAgentImplConfig,
     Helper: typeof Helpers
   ) {
     super();
@@ -80,11 +90,8 @@ export default class HttpAgentImpl extends HttpAgent {
      * server and send them with the subsequent requests to the server.
      */
     this._cookie = cookie;
-
-    this._cacheOptions = config.cacheOptions as StringParameters;
-
-    this._defaultRequestOptions =
-      config.defaultRequestOptions as HttpAgentRequestOptions;
+    this._cacheOptions = config.cacheOptions;
+    this._defaultRequestOptions = config.defaultRequestOptions;
 
     /**
      * Tha IMA.js helper methods.
@@ -95,23 +102,23 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  get(
+  get<B = unknown>(
     url: string,
-    data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
-  ) {
-    return this._requestWithCheckCache('get', url, data, options);
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    return this._requestWithCheckCache<B>('get', url, data, options);
   }
 
   /**
    * @inheritDoc
    */
-  post(
+  post<B = unknown>(
     url: string,
-    data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
-  ) {
-    return this._requestWithCheckCache(
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    return this._requestWithCheckCache<B>(
       'post',
       url,
       data,
@@ -122,12 +129,12 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  put(
+  put<B = unknown>(
     url: string,
-    data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
-  ) {
-    return this._requestWithCheckCache(
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    return this._requestWithCheckCache<B>(
       'put',
       url,
       data,
@@ -138,12 +145,12 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  patch(
+  patch<B = unknown>(
     url: string,
-    data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
-  ) {
-    return this._requestWithCheckCache(
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    return this._requestWithCheckCache<B>(
       'patch',
       url,
       data,
@@ -154,12 +161,12 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  delete(
+  delete<B = unknown>(
     url: string,
-    data: UnknownParameters,
-    options = {} as HttpAgentRequestOptions
-  ) {
-    return this._requestWithCheckCache(
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    return this._requestWithCheckCache<B>(
       'delete',
       url,
       data,
@@ -170,7 +177,7 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  getCacheKey(method: string, url: string, data: UnknownParameters) {
+  getCacheKey(method: string, url: string, data?: UnknownParameters): string {
     return (
       this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data)
     );
@@ -179,7 +186,7 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  setDefaultHeader(header: string, value: string) {
+  setDefaultHeader(header: string, value: string): this {
     this._proxy.setDefaultHeader(header, value);
 
     return this;
@@ -188,7 +195,7 @@ export default class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
-  clearDefaultHeaders() {
+  clearDefaultHeaders(): this {
     this._proxy.clearDefaultHeaders();
 
     return this;
@@ -202,7 +209,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @return The created clone, or the provided value if the value cannot be
    *         cloned.
    */
-  _clone(value: unknown) {
+  _clone<V>(value: V): V {
     if (
       value !== null &&
       typeof value === 'object' &&
@@ -224,23 +231,23 @@ export default class HttpAgentImpl extends HttpAgent {
    * @return A promise that resolves to the response
    *         with body parsed as JSON.
    */
-  _requestWithCheckCache(
+  _requestWithCheckCache<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
-    options: HttpAgentRequestOptions
-  ) {
-    options = this._prepareOptions(options);
+    data?: UnknownParameters,
+    options?: Partial<HttpAgentRequestOptions>
+  ): Promise<HttpAgentResponse<B>> {
+    const optionsWithDefault = this._prepareOptions(options);
 
-    if (options.cache) {
-      const cachedData = this._getCachedData(method, url, data);
+    if (optionsWithDefault.cache) {
+      const cachedData = this._getCachedData<B>(method, url, data);
 
       if (cachedData) {
         return cachedData;
       }
     }
 
-    return this._request(method, url, data, options);
+    return this._request<B>(method, url, data, optionsWithDefault);
   }
 
   /**
@@ -259,19 +266,23 @@ export default class HttpAgentImpl extends HttpAgent {
    *         server response with the body parsed as JSON, or `null` if
    *         no such request is present in the cache.
    */
-  _getCachedData(method: string, url: string, data: UnknownParameters) {
+  _getCachedData<B>(
+    method: string,
+    url: string,
+    data?: UnknownParameters
+  ): Promise<HttpAgentResponse<B>> | null {
     const cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
       return this._internalCacheOfPromises
         .get(cacheKey)
-        .then((data: unknown) => this._clone(data));
+        .then((data: UnknownParameters) => this._clone(data));
     }
 
     if (this._cache.has(cacheKey)) {
-      const cacheData = this._cache.get(cacheKey);
+      const cacheData = this._cache.get(cacheKey) as HttpAgentResponse<B>;
 
-      return Promise.resolve(cacheData);
+      return Promise.resolve<HttpAgentResponse<B>>(cacheData);
     }
 
     return null;
@@ -291,18 +302,20 @@ export default class HttpAgentImpl extends HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the response
    *         with the body parsed as JSON.
    */
-  _request(
+  _request<B>(
     method: string,
     url: string,
-    data: UnknownParameters,
+    data: UnknownParameters | undefined,
     options: HttpAgentRequestOptions
-  ): Promise<HttpAgentResponse> {
+  ): Promise<HttpAgentResponse<B>> {
     const cacheKey = this.getCacheKey(method, url, data);
 
-    const cachePromise = this._proxy.request(method, url, data, options).then(
-      response => this._proxyResolved(response as HttpAgentResponse),
-      error => this._proxyRejected(error)
-    );
+    const cachePromise = this._proxy
+      .request<B>(method, url, data, options)
+      .then(
+        response => this._proxyResolved<B>(response),
+        error => this._proxyRejected<B>(error)
+      );
 
     this._internalCacheOfPromises.set(cacheKey, cachePromise);
 
@@ -318,8 +331,8 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} response Server response.
    * @return {HttpAgent~Response} The post-processed server response.
    */
-  _proxyResolved(response: HttpAgentResponse) {
-    let agentResponse: HttpAgentResponse = {
+  _proxyResolved<B>(response: HttpAgentResponse<B>): HttpAgentResponse<B> {
+    let agentResponse: HttpAgentResponse<B> = {
       status: response.status,
       body: response.body,
       params: response.params,
@@ -339,12 +352,16 @@ export default class HttpAgentImpl extends HttpAgent {
       this._setCookiesFromResponse(agentResponse);
     }
 
-    const { postProcessor, cache } = agentResponse.params.options;
-    if (typeof postProcessor === 'function') {
-      agentResponse = postProcessor(agentResponse);
+    const { postProcessors, cache } = agentResponse.params.options;
+
+    if (Array.isArray(postProcessors)) {
+      for (const postProcessor of postProcessors) {
+        agentResponse = postProcessor<B>(agentResponse);
+      }
     }
 
     const pureResponse = this._cleanResponse(agentResponse);
+
     if (cache) {
       this._saveAgentResponseToCache(pureResponse);
     }
@@ -369,14 +386,14 @@ export default class HttpAgentImpl extends HttpAgent {
    *         with an error containing details of the cause of the request's
    *         failure.
    */
-  _proxyRejected(error: GenericError) {
+  _proxyRejected<B>(
+    error: GenericError<HttpProxyErrorParams>
+  ): Promise<HttpAgentResponse<B>> {
     const errorParams = error.getParams();
-    const method = errorParams.method as string;
-    const url = errorParams.url as string;
-    const data = errorParams.data as {
-      [key: string]: string | number | boolean;
-    };
-    const options = errorParams.options as HttpAgentRequestOptions;
+    const method = errorParams.method;
+    const url = errorParams.url;
+    const data = errorParams.data;
+    const options = errorParams.options;
     const isAborted =
       options.fetchOptions?.signal?.aborted ||
       options.abortController?.signal.aborted;
@@ -392,6 +409,7 @@ export default class HttpAgentImpl extends HttpAgent {
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
+
       return Promise.reject(agentError);
     }
   }
@@ -405,23 +423,31 @@ export default class HttpAgentImpl extends HttpAgent {
    *         default values for missing fields, and extra options used
    *         internally.
    */
-  _prepareOptions(options: HttpAgentRequestOptions): HttpAgentRequestOptions {
-    const composedOptions = Object.assign(
-      {},
-      this._defaultRequestOptions,
-      options
-    );
-    let cookieHeader = {};
+  _prepareOptions(
+    options: Partial<HttpAgentRequestOptions> = {}
+  ): HttpAgentRequestOptions {
+    const composedOptions = {
+      ...this._defaultRequestOptions,
+      ...options,
+      postProcessors: [
+        ...(this._defaultRequestOptions?.postProcessors || []),
+        ...(options?.postProcessors || []),
+      ],
+      fetchOptions: {
+        ...this._defaultRequestOptions?.fetchOptions,
+        ...options?.fetchOptions,
+        headers: {
+          ...this._defaultRequestOptions?.fetchOptions?.headers,
+          ...options?.fetchOptions?.headers,
+        },
+      },
+    };
 
-    if (composedOptions.withCredentials) {
-      cookieHeader = { Cookie: this._cookie.getCookiesStringForCookieHeader() };
+    if (composedOptions.fetchOptions?.credentials === 'include') {
+      // mock default browser behavior for server-side (sending cookie with a fetch request)
+      composedOptions.fetchOptions.headers.Cookie =
+        this._cookie.getCookiesStringForCookieHeader();
     }
-
-    composedOptions.headers = Object.assign(
-      cookieHeader,
-      this._defaultRequestOptions.headers,
-      options.headers || {}
-    );
 
     return composedOptions;
   }
@@ -437,7 +463,11 @@ export default class HttpAgentImpl extends HttpAgent {
    * @return The suffix of a cache key to use for a request to the
    *         specified URL, carrying the specified data.
    */
-  _getCacheKeySuffix(method: string, url: string, data: UnknownParameters) {
+  _getCacheKeySuffix(
+    method: string,
+    url: string,
+    data?: UnknownParameters
+  ): string {
     let dataQuery = '';
     if (data) {
       try {
@@ -446,6 +476,7 @@ export default class HttpAgentImpl extends HttpAgent {
         console.warn('The provided data does not have valid JSON format', data);
       }
     }
+
     return `${method}:${url}?${dataQuery}`;
   }
 
@@ -455,7 +486,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *
    * @param agentResponse The response of the server.
    */
-  _setCookiesFromResponse(agentResponse: HttpAgentResponse) {
+  _setCookiesFromResponse<B>(agentResponse: HttpAgentResponse<B>): void {
     if (agentResponse.headersRaw) {
       const receivedCookies = agentResponse.headersRaw.get('set-cookie');
 
@@ -471,7 +502,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *
    * @param agentResponse The response of the server.
    */
-  _saveAgentResponseToCache(agentResponse: HttpAgentResponse) {
+  _saveAgentResponseToCache<B>(agentResponse: HttpAgentResponse<B>): void {
     const cacheKey = this.getCacheKey(
       agentResponse.params.method,
       agentResponse.params.url,
@@ -486,24 +517,31 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Cleans cache response from data (abort controller, postProcessor), that cannot be persisted,
+   * Cleans cache response from data (abort controller, postProcessors), that cannot be persisted,
    * before saving the data to the cache.
    */
-  _cleanResponse(response: HttpAgentResponse) {
+  _cleanResponse<B>(response: HttpAgentResponse<B>): HttpAgentResponse<B> {
     /**
-     * Create copy of agentResponse without AbortController and AbortController signal and postProcessor.
-     * Setting agentResponse with AbortController or signal or postProcessor into cache would result in crash.
+     * Create copy of agentResponse without AbortController and AbortController signal and postProcessors.
+     * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crash.
      */
-    // eslint-disable-next-line no-unused-vars
     const { signal, ...fetchOptions } =
       response.params.options.fetchOptions || {};
-    const { abortController, postProcessor, ...options } =
+    const { abortController, postProcessors, ...options } =
       response.params.options || {};
     options.fetchOptions = fetchOptions;
 
-    return {
+    const pureResponse = {
       ...response,
-      params: { ...response.params, options },
-    } as HttpAgentResponse;
+      params: { ...response.params, options: { ...options } },
+    };
+
+    if (pureResponse.params.options.keepSensitiveHeaders !== true) {
+      pureResponse.headers = {};
+      pureResponse.params.options.fetchOptions.headers = {};
+      delete pureResponse.headersRaw;
+    }
+
+    return pureResponse;
   }
 }

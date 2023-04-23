@@ -1,20 +1,18 @@
-import ObjectContainer, { UnknownConstructable } from '../ObjectContainer';
-import GenericError from '../error/GenericError';
-import AbstractController from '../controller/AbstractController';
-import { IController } from '../controller/Controller';
-import Router, { RouteOptions } from '../router/Router';
-import Extension from '../extension/Extension';
-import PageStateManager from './state/PageStateManager';
-import ControllerDecorator from '../controller/ControllerDecorator';
-import MetaManager from '../meta/MetaManager';
-import Dictionary from '../dictionary/Dictionary';
-import PageStateManagerDecorator from './state/PageStateManagerDecorator';
-import { UnknownParameters } from '../CommonTypes';
+import { Constructor } from 'type-fest';
+
+import { PageStateManager } from './state/PageStateManager';
+import { OCAliasMap } from '../config/bind';
+import { Controller } from '../controller/Controller';
+import { GenericError } from '../error/GenericError';
+import { Extension } from '../extension/Extension';
+import { ObjectContainer } from '../oc/ObjectContainer';
+import { RouteController } from '../router/AbstractRoute';
+import { RouteOptions } from '../router/Router';
 
 /**
  * Factory for page.
  */
-export default class PageFactory {
+export class PageFactory {
   /**
    * The current application object container.
    */
@@ -31,26 +29,24 @@ export default class PageFactory {
    * Create new instance of {@link Controller}.
    */
   createController(
-    controller: string | IController,
-    options: RouteOptions = {}
-  ) {
+    controller: RouteController,
+    options: RouteOptions
+  ): Controller {
     const { extensions = [] } = options;
     let mergedExtensions = [...extensions];
+
     if (
-      Array.isArray((controller as typeof AbstractController)?.$extensions) &&
-      (controller as typeof AbstractController).$extensions.length
+      Array.isArray((controller as typeof Controller)?.$extensions) &&
+      (controller as typeof Controller).$extensions?.length
     ) {
-      mergedExtensions = mergedExtensions.concat(
-        (controller as typeof AbstractController).$extensions
-      );
+      // @ts-expect-error can't check static properties
+      mergedExtensions = mergedExtensions.concat(controller.$extensions);
     }
 
-    const controllerInstance = this._oc.create(
-      controller as typeof AbstractController
-    ) as AbstractController;
+    const controllerInstance = this._oc.create(controller) as Controller;
 
     for (const extension of mergedExtensions) {
-      const loadedExtension = this._oc.get(extension as typeof Extension);
+      const loadedExtension = this._oc.get(extension) as Extension;
 
       // Optional extension handling
       if (!loadedExtension) {
@@ -60,15 +56,15 @@ export default class PageFactory {
       // Spread support handling
       if (Array.isArray(loadedExtension)) {
         for (const extensionInstance of loadedExtension) {
-          (controllerInstance as AbstractController).addExtension(
+          controllerInstance.addExtension(
             extensionInstance.constructor,
             extensionInstance
           );
         }
       } else {
-        (controllerInstance as AbstractController).addExtension(
+        controllerInstance.addExtension(
           extension as typeof Extension,
-          loadedExtension as Extension
+          loadedExtension
         );
       }
     }
@@ -85,13 +81,14 @@ export default class PageFactory {
    * @return The react component class
    *         constructor.
    */
-  createView(view: unknown) {
+  createView<
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+  >(view: V) {
     if (typeof view === 'function') {
       return view;
     }
-    const classConstructor = this._oc.getConstructorOf(
-      view as UnknownConstructable
-    );
+
+    const classConstructor = this._oc.getConstructorOf(view);
 
     if (classConstructor) {
       return classConstructor;
@@ -105,12 +102,11 @@ export default class PageFactory {
   /**
    * Returns decorated controller for ease setting seo params in controller.
    */
-  decorateController(controller: IController) {
-    const metaManager = this._oc.get('$MetaManager') as MetaManager;
-    const router = this._oc.get('$Router') as Router;
-    const dictionary = this._oc.get('$Dictionary') as Dictionary;
-    const settings = this._oc.get('$Settings') as UnknownParameters;
-
+  decorateController(controller: Controller) {
+    const metaManager = this._oc.get('$MetaManager');
+    const router = this._oc.get('$Router');
+    const dictionary = this._oc.get('$Dictionary');
+    const settings = this._oc.get('$Settings');
     const decoratedController = this._oc.create('$ControllerDecorator', [
       controller,
       metaManager,
@@ -119,7 +115,7 @@ export default class PageFactory {
       settings,
     ]);
 
-    return decoratedController as ControllerDecorator;
+    return decoratedController;
   }
 
   /**
@@ -134,6 +130,6 @@ export default class PageFactory {
       [pageStateManager, allowedStateKeys]
     );
 
-    return decoratedPageStateManager as PageStateManagerDecorator;
+    return decoratedPageStateManager;
   }
 }

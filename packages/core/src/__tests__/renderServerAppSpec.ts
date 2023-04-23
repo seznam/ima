@@ -1,12 +1,12 @@
-import React from 'react';
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
   ServerPageRenderer,
   AbstractPureComponent,
 } from '@ima/react-page-renderer';
-import Response from '../router/Response';
 import { Response as ExpressResponse } from 'express';
+import React from 'react';
+
 import {
   AbstractController,
   bootClientApp,
@@ -19,6 +19,7 @@ import {
   PageRenderer,
   Router,
 } from '../index';
+import { Response } from '../router/Response';
 
 jest.mock('fs');
 jest.mock('path', () => {
@@ -45,7 +46,7 @@ describe('render server application', () => {
       };
     },
   };
-  const expressReponse = {
+  const expressResponse = {
     send() {
       return;
     },
@@ -73,7 +74,6 @@ describe('render server application', () => {
   const options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: DocumentView,
   };
 
@@ -105,7 +105,7 @@ describe('render server application', () => {
             oc: ObjectContainer
           ) => {
             (oc.get(Response) as Response).init(
-              expressReponse as unknown as ExpressResponse
+              expressResponse as unknown as ExpressResponse
             );
           },
           initRoutes: () => {
@@ -161,6 +161,9 @@ describe('render server application', () => {
           settings: {
             $Http: {
               cacheOptions: {},
+            },
+            $Router: {
+              middlewareTimeout: 30000,
             },
             $Page: {
               $Render: {

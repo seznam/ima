@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools",
-  "version": "0.4.0",
+  "version": "1.0.0-rc.1",
   "description": "IMA.js debugging panel in the Chrome Developer Tools window.",
   "keywords": [
     "IMA",
@@ -34,7 +34,7 @@
     "upload": "chrome-webstore-upload upload --source ./dist --auto-publish"
   },
   "devDependencies": {
-    "@ima/devtools-scripts": "^18.0.0",
+    "@ima/devtools-scripts": "^19.0.0-rc.1",
     "@reach/menu-button": "0.16.2",
     "@reach/tooltip": "0.16.2",
     "@reduxjs/toolkit": "1.8.1",

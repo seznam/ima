@@ -4,7 +4,7 @@ import { Component, ComponentType, PureComponent } from 'react';
 /**
  * Factory for page render.
  */
-export default class PageRendererFactory {
+export class PageRendererFactory {
   private _componentUtils: ComponentUtils;
 
   /**
@@ -39,6 +39,7 @@ export default class PageRendererFactory {
    */
   getDocumentView(documentView: ComponentType) {
     if ($Debug) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = documentView.prototype;
 
       if (
@@ -69,6 +70,7 @@ export default class PageRendererFactory {
    */
   getManagedRootView(managedRootView: ComponentType) {
     if ($Debug) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = managedRootView.prototype;
 
       if (
@@ -89,6 +91,7 @@ export default class PageRendererFactory {
   private _isFunctionalComponent(component: unknown) {
     return (
       typeof component === 'function' &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       !(component.prototype && component.prototype.isReactComponent)
     );
   }

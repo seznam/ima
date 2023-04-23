@@ -1,32 +1,70 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AbstractConstructor, Constructor } from 'type-fest';
 
-import RouterMiddleware, { MiddleWareFunction } from './RouterMiddleware';
-import Controller, { IController } from '../controller/Controller';
-import AbstractRoute, { RouteParams } from './AbstractRoute';
-import GenericError from '../error/GenericError';
-import { IExtension } from '../extension/Extension';
-import { UnknownParameters } from '../CommonTypes';
+import {
+  AbstractRoute,
+  AsyncRouteController,
+  AsyncRouteView,
+  RouteController,
+  RouteParams,
+} from './AbstractRoute';
+import { ActionTypes } from './ActionTypes';
+import { DecoratedOCAliasMap } from '../config/bind';
+import { IMAError } from '../error/Error';
+import { GenericError } from '../error/GenericError';
+import { Extension } from '../extension/Extension';
+import { UnknownParameters } from '../types';
 
-export type RouteOptions = {
-  autoScroll?: boolean;
-  documentView?: unknown;
-  extensions?: IExtension[];
+export interface RouteAction {
+  type?: ActionTypes;
+  event?: Event;
+  url?: string;
+}
+
+export interface RouteLocals {
+  [key: string]: unknown;
+  action?: RouteAction;
+  route?: InstanceType<typeof AbstractRoute>;
+}
+
+export type RouterMiddleware = (
+  params: RouteParams,
+  locals: RouteLocals,
+  next?: (result: UnknownParameters) => void
+) => UnknownParameters | void | Promise<UnknownParameters | void>;
+
+export interface RouteFactoryOptions {
+  autoScroll: boolean;
+  documentView: null | unknown;
+  managedRootView: null | unknown;
+  onlyUpdate:
+    | boolean
+    | ((controller: RouteController, view: unknown) => boolean);
+  viewAdapter: null | unknown;
+  middlewares: RouterMiddleware[];
+  extensions?: (
+    | keyof DecoratedOCAliasMap
+    | Constructor<Extension<any, any>>
+    | AbstractConstructor<Extension<any, any>>
+    | [
+        (
+          | AbstractConstructor<Extension<any, any>>
+          | Constructor<Extension<any, any>>
+        ),
+        { optional: true }
+      ]
+  )[];
+}
+
+export interface RouteOptions extends RouteFactoryOptions {
   headers?: UnknownParameters;
   httpStatus?: number;
-  managedRootView?: unknown;
-  middlewares?:
-    | Promise<RouterMiddleware>[]
-    | RouterMiddleware[]
-    | MiddleWareFunction[];
-  onlyUpdate?: boolean | ((controller: IController, view: unknown) => boolean);
-  viewAdapter?: unknown;
-};
+}
 
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  */
-export default abstract class Router {
+export abstract class Router {
   /**
    * Initializes the router with the provided configuration.
    *
@@ -84,22 +122,15 @@ export default abstract class Router {
    *        The `autoScroll` flag signals whether the page should be
    *        scrolled to the top when the navigation takes place. This flag is
    *        enabled by default.
-   *        The `allowSPA` flag can be used to make the route
-   *        always served from the server and never using the SPA page even
-   *        if the server is overloaded. This is useful for routes that use
-   *        different document views (specified by the `documentView`
-   *        option), for example for rendering the content of iframes.
-   *        The route specific `middlewares` which are run after
-   *        extracting parameters before route handling.
    * @return This router.
    * @throws Thrown if a route with the same name already exists.
    */
   add(
     name: string,
     pathExpression: string,
-    controller: string | typeof Controller | (() => IController),
-    view: string | unknown | (() => unknown),
-    options: RouteOptions | undefined
+    controller: AsyncRouteController,
+    view: AsyncRouteView,
+    options?: Partial<RouteOptions>
   ) {
     return this;
   }
@@ -114,7 +145,7 @@ export default abstract class Router {
    * @return This router.
    * @throws Thrown if a middleware with the same name already exists.
    */
-  use(middleware: (routeParams: RouteParams, locals: object) => unknown) {
+  use(middleware: RouterMiddleware) {
     return this;
   }
 
@@ -134,7 +165,9 @@ export default abstract class Router {
    * @param name The route's unique name.
    * @return Route with given name or undefined.
    */
-  getRouteHandler(name: string): undefined | AbstractRoute | RouterMiddleware {
+  getRouteHandler(
+    name: string
+  ): undefined | InstanceType<typeof AbstractRoute> | RouterMiddleware {
     return undefined;
   }
 
@@ -202,7 +235,7 @@ export default abstract class Router {
    * @throws Thrown if a route is not define for current path.
    */
   getCurrentRouteInfo(): {
-    route: AbstractRoute;
+    route: InstanceType<typeof AbstractRoute>;
     params: RouteParams;
     path: string;
   } {
@@ -277,9 +310,9 @@ export default abstract class Router {
    */
   redirect(
     url: string,
-    options?: RouteOptions,
-    action?: Record<string, unknown>,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
   ) {
     return;
   }
@@ -317,9 +350,9 @@ export default abstract class Router {
    */
   route(
     path: string,
-    options?: RouteOptions,
-    action?: Record<string, unknown>,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    action?: RouteAction,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
@@ -340,8 +373,8 @@ export default abstract class Router {
    */
   handleError(
     params: RouteParams,
-    options?: RouteOptions,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
@@ -362,8 +395,8 @@ export default abstract class Router {
    */
   handleNotFound(
     params: RouteParams,
-    options?: RouteOptions,
-    locals?: Record<string, unknown>
+    options?: Partial<RouteOptions>,
+    locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     return Promise.reject();
   }
@@ -377,7 +410,7 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         client.
    */
-  isClientError(reason: GenericError | Error) {
+  isClientError(reason: IMAError | Error) {
     return false;
   }
 
@@ -388,7 +421,7 @@ export default abstract class Router {
    * @return `true` if the error was caused the action of the
    *         redirection.
    */
-  isRedirection(reason: GenericError | Error) {
+  isRedirection(reason: IMAError | Error) {
     return false;
   }
 }

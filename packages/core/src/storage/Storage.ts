@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 /**
  * The {@link Storage} is an unordered collection of named values of any
  * type. Values in the storage are named using `string` keys. The storage
  * can be therefore thought of as a `Map<string, *>`.....
  */
-export default abstract class Storage<V> {
+export abstract class Storage<V> {
   /**
    * This method is used to finalize the initialization of the storage after
    * the dependencies provided through the constructor have been prepared for

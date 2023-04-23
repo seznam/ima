@@ -1,6 +1,6 @@
 {
   "name": "@ima/dev-utils",
-  "version": "18.0.1",
+  "version": "19.0.0-rc.3",
   "description": "IMA.js dev utils used used mainly in @ima/cli and other dev-related utilities.",
   "keywords": [
     "IMA.js",
@@ -17,6 +17,12 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "typedocMain": "./src/index.ts",
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",

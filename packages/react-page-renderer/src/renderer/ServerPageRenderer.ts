@@ -1,25 +1,25 @@
 /* @if client **
-export default class ServerPageRenderer {};
+export class ServerPageRenderer {};
 /* @else */
 import type {
   UnknownParameters,
   UnknownPromiseParameters,
   RouteOptions,
+  Settings,
 } from '@ima/core';
 import { ControllerDecorator, Dispatcher, GenericError } from '@ima/core';
 import * as Helpers from '@ima/helpers';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
-import AbstractPageRenderer, { PageData } from './AbstractPageRenderer';
-import PageRendererFactory from './PageRendererFactory';
-import { Settings } from '../types';
+import { AbstractPageRenderer, PageData } from './AbstractPageRenderer';
+import { PageRendererFactory } from './PageRendererFactory';
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
  */
-export default class ServerPageRenderer extends AbstractPageRenderer {
+export class ServerPageRenderer extends AbstractPageRenderer {
   /**
    * Initializes the server-side page renderer.
    *

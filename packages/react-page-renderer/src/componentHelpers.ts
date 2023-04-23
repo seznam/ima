@@ -1,10 +1,10 @@
+import type { DictionaryMap, Utils } from '@ima/core';
 import classnames from 'classnames';
 import { Component, ComponentType, ContextType, PureComponent } from 'react';
 
-import AbstractComponent from './component/AbstractComponent';
-import AbstractPureComponent from './component/AbstractPureComponent';
-import PageContext from './PageContext';
-import { Utils } from './types';
+import { AbstractComponent } from './component/AbstractComponent';
+import { AbstractPureComponent } from './component/AbstractPureComponent';
+import { PageContext } from './PageContext';
 
 /**
  * Retrieves the view utilities from the component's current context or
@@ -46,10 +46,9 @@ export function getUtils(
  */
 export function localize(
   component: AbstractComponent | AbstractPureComponent,
-  key: string,
+  key: keyof DictionaryMap,
   params: { [key: string]: string | number }
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$Dictionary.get(key, params);
 }
 
@@ -69,9 +68,8 @@ export function localize(
 export function link(
   component: AbstractComponent | AbstractPureComponent,
   name: string,
-  params: { [key: string]: string | number }
+  params: { [key: string]: string }
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$Router.link(name, params);
 }
 
@@ -98,13 +96,12 @@ export function link(
  */
 export function cssClasses(
   component: AbstractComponent | AbstractPureComponent,
-  classRules: string | object,
+  classRules: string | { [key: string]: boolean } | string[],
   includeComponentClassName: boolean
 ): string {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return component.utils.$CssClasses(
     classRules,
-    includeComponentClassName ? component : ''
+    includeComponentClassName ? (component as unknown as ComponentType) : ''
   );
 }
 
@@ -123,17 +120,17 @@ export function cssClasses(
  *         to `true`.
  */
 export function defaultCssClasses(
-  classRules: classnames.Value | classnames.Mapping,
-  component: string | ComponentType
+  classRules: classnames.Argument,
+  component?: string | ComponentType
 ): string {
   let extraClasses = typeof component === 'string' ? component : null;
 
-  // TODO find out why is ts complaining..
   const isComponent = component instanceof Component;
   const isPureComponent = component instanceof PureComponent;
 
   if (!extraClasses && (isComponent || isPureComponent)) {
-    extraClasses = component.props.className;
+    extraClasses = (component as Component<{ className: string }>).props
+      .className;
   }
 
   return classnames(classRules, extraClasses);
@@ -149,11 +146,11 @@ export function defaultCssClasses(
  */
 export function fire(
   component: AbstractComponent | AbstractPureComponent,
+  eventTarget: EventTarget,
   eventName: string,
-  target: EventTarget,
   data: unknown = null
 ) {
-  return component.utils.$EventBus.fire(target, eventName, data);
+  return component.utils.$EventBus.fire(eventTarget, eventName, data);
 }
 
 /**

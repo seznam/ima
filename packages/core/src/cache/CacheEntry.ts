@@ -7,7 +7,7 @@ export type SerializedCacheEntry<V> = {
  * The cache entry is a typed container of cache data used to track the
  * creation and expiration of cache entries.
  */
-export default class CacheEntry<V> {
+export class CacheEntry<V> {
   /**
    * Cache entry value.
    */

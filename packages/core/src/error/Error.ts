@@ -1,16 +1,14 @@
-import { UnknownParameters } from '../CommonTypes';
-import ExtensibleError from './ExtensibleError';
+import { UnknownParameters } from '../types';
 
 /**
  * The IMA application error extends the native `Error` with additional details
  * that lead to the error and the HTTP status code to send to the client.
- *
- * Implementation note: This is an interface that extends the abstract class
- * {@link ExtensibleError}, which does not make much sense from the strict
- * OOP standpoint, but is necessary due to limitations of JavaScript, so that
- * IMA errors are instances of both the native errors and of this interface.
  */
-export default abstract class Error extends ExtensibleError {
+export abstract class IMAError extends Error {
+  constructor(message: string, params?: { cause?: Error | string }) {
+    super(message, { cause: params?.cause });
+  }
+
   /**
    * Returns the HTTP status to send to the client.
    *
@@ -40,5 +38,25 @@ export default abstract class Error extends ExtensibleError {
    */
   getParams(): UnknownParameters {
     return {};
+  }
+
+  /**
+   * Tests, whether the specified error was caused by the
+   * client's action (for example wrong URL or request encoding).
+   *
+   * @return `true` if the error was caused the action of the
+   *         client.
+   */
+  isClientError(): boolean {
+    return false;
+  }
+
+  /**
+   * Tests, whether the specified error should lead to a redirect.
+   *
+   * @return `true` if the error should cause a redirect.
+   */
+  isRedirection(): boolean {
+    return false;
   }
 }

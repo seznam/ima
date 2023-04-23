@@ -1,5 +1,143 @@
 # Change Log
 
+## 19.0.0-rc.16
+
+### Patch Changes
+
+- a3e9335bb: Fixed fire method data type
+
+## 19.0.0-rc.15
+
+### Patch Changes
+
+- 430ec0b0d: Fixed missing Utils $CssClasses type export
+
+## 19.0.0-rc.14
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
+## 19.0.0-rc.13
+
+### Patch Changes
+
+- 447c51646: All packages now use correct types from IMA core
+
+## 19.0.0-rc.12
+
+### Patch Changes
+
+- c37249378: Fixed HYDRATE_ERROR
+
+## 19.0.0-rc.11
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+
+## 19.0.0-rc.10
+
+### Major Changes
+
+- 5bd45aa75: Changed signature of useWindowEvent hook, it now matches bindEventListener parameters of ima window
+
+### Patch Changes
+
+- 5bd45aa75: Updated Window types
+
+## 19.0.0-rc.9
+
+### Patch Changes
+
+- 206ab1f43: Improved Dispatcher types
+
+## 19.0.0-rc.8
+
+### Patch Changes
+
+- e0dfeda28: Updated dependencies
+
+## 19.0.0-rc.7
+
+### Patch Changes
+
+- 0d044e238: Typed ObjectContainer
+
+## 19.0.0-rc.6
+
+### Patch Changes
+
+- 53adfb35a: Fixed BlankManagedRootView props
+
+## 19.0.0-rc.5
+
+### Patch Changes
+
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+
+## 19.0.0-rc.4
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- Updated dependencies [6a6b996d4]
+  - @ima/helpers@19.0.0-rc.2
+
+## 19.0.0-rc.3
+
+### Patch Changes
+
+- dc8d4b7ea: Fixed once hook parametr type
+
+## 19.0.0-rc.2
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+
+### Patch Changes
+
+- Updated dependencies [81a8605d5]
+  - @ima/helpers@19.0.0-rc.1
+
+## 19.0.0-rc.1
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 28660d902: Fire method arguments are now in correct order.
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+
+## 19.0.0-rc.0
+
+### Major Changes
+
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- Updated dependencies [2f789cdae]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [ceb4cbd12]
+- Updated dependencies [464d307ae]
+- Updated dependencies [961d65688]
+- Updated dependencies [c0fe68ef3]
+  - @ima/core@19.0.0-rc.0
+  - @ima/helpers@19.0.0-rc.0
+
 ## 18.2.0
 
 ### Minor Changes

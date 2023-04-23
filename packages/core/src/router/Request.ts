@@ -1,12 +1,12 @@
 /* @if client **
-export default class Request {};
+export class Request {};
 /* @else */
 import { Request as ExpressRequest } from 'express';
 
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
-export default class Request {
+export class Request {
   /**
    * The current ExpressJS request object, or `null` if running at
    * the client side.

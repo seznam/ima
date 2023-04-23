@@ -1,9 +1,9 @@
-import { StringParameters } from '../CommonTypes';
+import { StringParameters } from '../types';
 
 /**
  * Utility for transforming URLs according to the configured replacement rules.
  */
-export default class UrlTransformer {
+export class UrlTransformer {
   protected _rules: StringParameters;
 
   static get $dependencies() {

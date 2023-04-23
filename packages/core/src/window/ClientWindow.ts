@@ -1,14 +1,13 @@
 /* @if server **
-export default class ClientWindow {};
+export class ClientWindow {};
 /* @else */
-import { UnknownParameters } from '../CommonTypes';
-import Window, { ListenerOptions } from './Window';
+import { Window } from './Window';
 
 /**
  * Client-side implementation of the {@link Window} utility API.
  */
-export default class ClientWindow extends Window {
-  private _scopedListeners = new WeakMap();
+export class ClientWindow extends Window {
+  #scopedListeners = new WeakMap();
 
   static get $dependencies() {
     return [];
@@ -17,21 +16,21 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  isClient() {
+  isClient(): boolean {
     return true;
   }
 
   /**
    * @inheritDoc
    */
-  isCookieEnabled() {
+  isCookieEnabled(): boolean {
     return navigator.cookieEnabled;
   }
 
   /**
    * @inheritDoc
    */
-  hasSessionStorage() {
+  hasSessionStorage(): boolean {
     try {
       if (window.sessionStorage) {
         const sessionKey = 'IMA.jsTest';
@@ -53,28 +52,28 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  setTitle(title: string) {
+  setTitle(title: string): void {
     document.title = title;
   }
 
   /**
    * @inheritDoc
    */
-  getWindow() {
+  getWindow(): globalThis.Window {
     return window;
   }
 
   /**
    * @inheritDoc
    */
-  getDocument() {
+  getDocument(): globalThis.Document {
     return document;
   }
 
   /**
    * @inheritDoc
    */
-  getScrollX() {
+  getScrollX(): number {
     const { pageXOffset } = window;
     const pageOffsetSupported = pageXOffset !== undefined;
     const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
@@ -89,7 +88,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  getScrollY() {
+  getScrollY(): number {
     const { pageYOffset } = window;
     const pageOffsetSupported = pageYOffset !== undefined;
     const isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
@@ -104,84 +103,86 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  scrollTo(x: number, y: number) {
+  scrollTo(x: number, y: number): void {
     window.scrollTo(x, y);
   }
 
   /**
    * @inheritDoc
    */
-  getDomain() {
+  getDomain(): string {
     return window.location.protocol + '//' + window.location.host;
   }
 
   /**
    * @inheritDoc
    */
-  getHost() {
+  getHost(): string {
     return window.location.host;
   }
 
   /**
    * @inheritDoc
    */
-  getPath() {
+  getPath(): string {
     return window.location.pathname + window.location.search;
   }
 
   /**
    * @inheritDoc
    */
-  getUrl() {
+  getUrl(): string {
     return window.location.href;
   }
 
   /**
    * @inheritDoc
    */
-  getBody() {
+  getBody(): undefined | HTMLElement {
     return document.body;
   }
 
   /**
    * @inheritDoc
    */
-  getElementById(id: string) {
+  getElementById(id: string): null | HTMLElement {
     return document.getElementById(id);
   }
 
   /**
    * @inheritDoc
    */
-  getHistoryState() {
+  getHistoryState(): History['state'] {
     return window.history.state;
   }
 
   /**
    * @inheritDoc
    */
-  querySelector(selector: string) {
+  querySelector<E extends Element = Element>(selector: string): E | null {
     return document.querySelector(selector);
   }
 
   /**
    * @inheritDoc
    */
-  querySelectorAll(selector: string) {
+  querySelectorAll<E extends Element = Element>(
+    selector: string
+  ): NodeListOf<E> {
     return document.querySelectorAll(selector);
   }
 
   /**
    * @inheritDoc
    */
-  redirect(url: string) {
+  redirect(url: string): void {
     window.location.href = url;
   }
 
   /**
    * @inheritDoc
    */
-  pushState(state: UnknownParameters, title: string, url?: string) {
+  pushState<T>(state: T, title: string, url?: string): void {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
     }
@@ -190,7 +191,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  replaceState(state: UnknownParameters, title: string, url?: string) {
+  replaceState<T>(state: T, title: string, url?: string): void {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
     }
@@ -199,141 +200,134 @@ export default class ClientWindow extends Window {
   /**
    * @inheritDoc
    */
-  createCustomEvent(name: string, options: UnknownParameters) {
+  createCustomEvent<T>(
+    name: string,
+    options: CustomEventInit<T>
+  ): CustomEvent<T> {
     return new CustomEvent(name, options);
   }
 
   /**
    * @inheritDoc
    */
-  bindEventListener(
-    eventTarget: EventTarget,
+  bindEventListener<T extends EventTarget, E extends Event, S>(
+    eventTarget: T,
     event: string,
-    listener: (event: Event) => void,
-    useCapture = false,
-    scope?: unknown
-  ) {
-    if (eventTarget.addEventListener) {
-      let usedListener = listener;
-
-      if (scope) {
-        usedListener = this._findScopedListener(
-          eventTarget,
-          event,
-          listener,
-          useCapture,
-          scope
-        );
-
-        if (!usedListener) {
-          usedListener = listener.bind(scope);
-
-          this._addScopedListener(
-            eventTarget,
-            event,
-            listener,
-            useCapture,
-            scope,
-            usedListener
-          );
-        }
-      }
-
-      eventTarget.addEventListener(event, usedListener, useCapture);
+    listener: (event: E) => void,
+    options: boolean | EventListenerOptions = false,
+    scope?: S
+  ): void {
+    if (!eventTarget.addEventListener) {
+      return;
     }
+
+    let scopedListener;
+
+    if (scope) {
+      scopedListener = this._findScopedListener(
+        eventTarget,
+        event,
+        listener,
+        options,
+        scope
+      );
+
+      if (!scopedListener) {
+        scopedListener = listener.bind(scope);
+
+        // Add scoped listener
+        if (!this.#scopedListeners.has(eventTarget)) {
+          this.#scopedListeners.set(eventTarget, new Map());
+        }
+
+        const scopedListeners = this.#scopedListeners.get(eventTarget);
+        scopedListeners.set([event, listener, options, scope], scopedListener);
+      }
+    }
+
+    eventTarget.addEventListener(event, scopedListener ?? listener, options);
   }
 
   /**
    * @inheritDoc
    */
-  unbindEventListener(
-    eventTarget: EventTarget,
+  unbindEventListener<T extends EventTarget, E extends Event = Event, S = any>(
+    eventTarget: T,
     event: string,
-    listener: (event: Event) => void,
-    useCapture = false,
-    scope?: unknown
-  ) {
-    if (eventTarget.removeEventListener) {
-      let usedListener = listener;
+    listener: (event: E) => void,
+    options: boolean | EventListenerOptions = false,
+    scope?: S
+  ): void {
+    if (!eventTarget.addEventListener) {
+      return;
+    }
 
-      if (scope) {
-        usedListener = this._findScopedListener(
-          eventTarget,
-          event,
-          listener,
-          useCapture,
-          scope,
-          true
+    let scopedListener;
+
+    if (scope) {
+      scopedListener = this._findScopedListener(
+        eventTarget,
+        event,
+        listener,
+        options,
+        scope,
+        true
+      );
+
+      if ($Debug && !scopedListener) {
+        console.warn(
+          'ima.core.window.ClientWindow.unbindEventListener(): the provided ' +
+            `listener '${listener}' is not registered for the ` +
+            `specified event '${
+              event as string
+            }' and scope '${scope}'. Check ` +
+            `your workflow.`,
+          {
+            event,
+            listener,
+            scope,
+          }
         );
-
-        if ($Debug && !usedListener) {
-          console.warn(
-            'ima.core.window.ClientWindow.unbindEventListener(): the provided ' +
-              `listener '${listener}' is not registered for the ` +
-              `specified event '${event}' and scope '${scope}'. Check ` +
-              `your workflow.`,
-            {
-              event,
-              listener,
-              scope,
-            }
-          );
-        }
       }
-
-      eventTarget.removeEventListener(event, usedListener, useCapture);
-    }
-  }
-
-  _addScopedListener(
-    eventTarget: EventTarget,
-    event: string,
-    listener: (event: Event) => void,
-    useCapture = false,
-    scope?: unknown,
-    usedListener?: (event: Event) => void
-  ) {
-    if (!this._scopedListeners.has(eventTarget)) {
-      this._scopedListeners.set(eventTarget, new Map());
     }
 
-    const scopedListeners = this._scopedListeners.get(eventTarget);
-
-    scopedListeners.set([event, listener, useCapture, scope], usedListener);
+    eventTarget.removeEventListener(event, scopedListener ?? listener, options);
   }
 
-  _findScopedListener(
-    eventTarget: EventTarget,
+  private _findScopedListener<T extends EventTarget, E extends Event, S>(
+    eventTarget: T,
     event: string,
-    listener: (event: Event) => void,
-    useCapture: boolean | ListenerOptions,
-    scope: unknown,
+    listener: (event: E) => void,
+    options: boolean | AddEventListenerOptions,
+    scope: S,
     remove = false
   ) {
-    if (this._scopedListeners.has(eventTarget)) {
-      const scopedListeners = this._scopedListeners.get(eventTarget);
+    if (!this.#scopedListeners.has(eventTarget)) {
+      return;
+    }
 
-      for (const key of scopedListeners.keys()) {
-        const [_event, _listener, _useCapture, _scope] = key;
+    const scopedListeners = this.#scopedListeners.get(eventTarget);
 
-        if (
-          event === _event &&
-          listener === _listener &&
-          useCapture === _useCapture &&
-          scope === _scope
-        ) {
-          const usedListener = scopedListeners.get(key);
+    for (const key of scopedListeners.keys()) {
+      const [scopedEvent, scopedListener, scopedOptions, scopedScope] = key;
 
-          if (remove) {
-            scopedListeners.delete(key);
+      if (
+        event === scopedEvent &&
+        listener === scopedListener &&
+        options === scopedOptions &&
+        scope === scopedScope
+      ) {
+        const usedListener = scopedListeners.get(key);
 
-            if (!scopedListeners.size) {
-              this._scopedListeners.delete(eventTarget);
-            }
+        if (remove) {
+          scopedListeners.delete(key);
+
+          if (!scopedListeners.size) {
+            this.#scopedListeners.delete(eventTarget);
           }
-
-          return usedListener;
         }
+
+        return usedListener;
       }
     }
   }

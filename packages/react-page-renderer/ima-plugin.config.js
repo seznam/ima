@@ -1,21 +1,10 @@
-const {
-  clientServerConfig,
-  nodeConfig,
-  typescriptDeclarationsPlugin,
-} = require('@ima/plugin-cli');
+const { clientServerConfig, nodeConfig } = require('@ima/plugin-cli');
 
 /**
  * @type import('@ima/plugin-cli').ImaPluginConfig[]
  */
 module.exports = [
-  {
-    ...clientServerConfig,
-    plugins: [
-      typescriptDeclarationsPlugin({
-        additionalArgs: ['--skipLibCheck', '--project', 'tsconfig.build.json'],
-      }),
-    ],
-  },
+  clientServerConfig,
   {
     ...nodeConfig,
     inputDir: './hook',

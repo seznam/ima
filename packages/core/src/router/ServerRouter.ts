@@ -1,23 +1,32 @@
 /* @if client **
-export default class ServerRouter {};
+export class ServerRouter {};
 /* @else */
-import AbstractRouter from './AbstractRouter';
-import Request from './Request';
-import Response from './Response';
-import RouteFactory from './RouteFactory';
-import Dispatcher from '../event/Dispatcher';
-import PageManager from '../page/manager/PageManager';
-import { UnknownParameters } from '../CommonTypes';
+import { AbstractRouter } from './AbstractRouter';
+import { Request } from './Request';
+import { Response } from './Response';
+import { RouteFactory } from './RouteFactory';
+import { Dispatcher } from '../event/Dispatcher';
+import { Dependencies } from '../oc/ObjectContainer';
+import { PageManager } from '../page/manager/PageManager';
+import { RouteOptions } from '../router/Router';
 
 /**
  * The server-side implementation of the {@link Router} interface.
  */
-export default class ServerRouter extends AbstractRouter {
-  protected _request: Request;
-  protected _response: Response;
+export class ServerRouter extends AbstractRouter {
+  #request: Request;
+  #response: Response;
 
-  static get $dependencies() {
-    return [PageManager, RouteFactory, Dispatcher, Request, Response];
+  static get $dependencies(): Dependencies {
+    return [
+      PageManager,
+      RouteFactory,
+      Dispatcher,
+      Request,
+      Response,
+      // @ts-expect-error `FIXME`
+      '?$Settings.$Router.middlewareTimeout',
+    ];
   }
 
   /**
@@ -28,26 +37,27 @@ export default class ServerRouter extends AbstractRouter {
    * @param dispatcher Dispatcher fires events to app.
    * @param request The current HTTP request.
    * @param response The current HTTP response.
+   * @param middlewareTimeout Middleware timeout value in ms.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
     request: Request,
-    response: Response
+    response: Response,
+    middlewareTimeout: number | undefined
   ) {
-    super(pageManager, factory, dispatcher);
+    super(pageManager, factory, dispatcher, middlewareTimeout);
 
-    this._request = request;
-
-    this._response = response;
+    this.#request = request;
+    this.#response = response;
   }
 
   /**
    * @inheritDoc
    */
   getPath() {
-    return this._extractRoutePath(this._request.getPath());
+    return this._extractRoutePath(this.#request.getPath());
   }
 
   /**
@@ -67,8 +77,8 @@ export default class ServerRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  redirect(url = '/', options: UnknownParameters = {}) {
-    this._response.redirect(url, { httpStatus: 302, ...options });
+  redirect(url = '/', options?: Partial<RouteOptions>) {
+    this.#response.redirect(url, { httpStatus: 302, ...options });
   }
 }
 // @endif

@@ -12,7 +12,7 @@ module.exports = function IMAInternalFactory({
     DUMMY_APP: 'dummyApp',
   };
 
-  function _createDummyApp({ environment }) {
+  function _createDummyApp({ environment, language }) {
     // TODO IMA@18 doc dummy APP
     // BETTER 404 detection
     const event = createEvent('createDummyApp', {
@@ -22,7 +22,7 @@ module.exports = function IMAInternalFactory({
         app: {},
         headersSent: false,
         locals: {
-          language: 'en',
+          language,
         },
         append() {},
         attachment() {},
@@ -139,10 +139,10 @@ module.exports = function IMAInternalFactory({
       routeName = routeInfo.route.getName();
     }
 
-    res.$IMA = res.$IMA ? { ...res.$IMA, routeName } : { routeName };
+    res.locals.routeName = routeName;
   }
 
-  function _importAppMainSync({ environment, context = {} }) {
+  function _importAppMainSync({ res, environment, context = {} }) {
     let appMain = serverGlobal.has(GLOBAL.APP_MAIN)
       ? serverGlobal.get(GLOBAL.APP_MAIN)
       : appFactory();
@@ -155,7 +155,10 @@ module.exports = function IMAInternalFactory({
 
     if (!instanceRecycler.isInitialized()) {
       serverGlobal.set(GLOBAL.APP_MAIN, appMain);
-      serverGlobal.set(GLOBAL.DUMMY_APP, _createDummyApp({ environment }));
+      serverGlobal.set(
+        GLOBAL.DUMMY_APP,
+        _createDummyApp({ environment, language: res.locals.language })
+      );
 
       instanceRecycler.init(
         appMain.ima.createImaApp,
@@ -201,7 +204,7 @@ module.exports = function IMAInternalFactory({
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
-        $Source: environment.$Source,
+        $Resources: environment.$Resources,
         $Protocol: protocol,
         $Language: language,
         $Host: host,

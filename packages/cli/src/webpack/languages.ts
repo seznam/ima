@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/dist/logger';
+import { logger } from '@ima/dev-utils/logger';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,
@@ -12,7 +12,7 @@ import globby from 'globby';
 
 import { ImaConfig } from '../types';
 
-const LOCALE_TEMP_BASEPATH = './build/tmp/locale';
+const TMP_BASEPATH = './build/tmp';
 
 /**
  * Returns path to location of compiled messageformat JS modules
@@ -23,7 +23,7 @@ const LOCALE_TEMP_BASEPATH = './build/tmp/locale';
  * @returns Path to compiled locale module.
  */
 export function getLanguageModulePath(locale: string, rootDir: string) {
-  return path.join(rootDir, LOCALE_TEMP_BASEPATH, `${locale}.module.js`);
+  return path.join(rootDir, TMP_BASEPATH, `/locale/${locale}.module.js`);
 }
 
 /**
@@ -35,7 +35,7 @@ export function getLanguageModulePath(locale: string, rootDir: string) {
  * @returns Path to compiled locale module.
  */
 export function getLanguageEntryPath(locale: string, rootDir: string) {
-  return path.join(rootDir, LOCALE_TEMP_BASEPATH, `${locale}.js`);
+  return path.join(rootDir, TMP_BASEPATH, `/locale/${locale}.js`);
 }
 
 /**
@@ -101,6 +101,48 @@ export function getLanguageEntryPoints(
       [`locale/${locale}`]: entryPath,
     });
   }, {});
+}
+
+export async function generateTypeDeclarations(
+  rootDir: string,
+  messages: StringStructure
+) {
+  const dictionaryMap = new Map<string, string>();
+  const dictionaryTypesPath = path.join(
+    rootDir,
+    TMP_BASEPATH,
+    '/types/dictionary.ts'
+  );
+
+  (function recurseMessages(messages: StringStructure | string, path = '') {
+    if (typeof messages === 'object') {
+      Object.keys(messages).forEach(key => {
+        recurseMessages(messages[key], `${path ? path + '.' : path}${key}`);
+      });
+    } else {
+      dictionaryMap.set(path, messages);
+    }
+  })(messages);
+
+  const content = `declare module '@ima/core' {
+  interface DictionaryMap {
+    ${Array.from(dictionaryMap.keys())
+      .map(key => `'${key}': string;`)
+      .join('\n\t\t')}
+  }
+}
+
+export { };
+`;
+
+  if (!fs.existsSync(path.dirname(dictionaryTypesPath))) {
+    await fs.promises.mkdir(path.dirname(dictionaryTypesPath));
+  }
+
+  await fs.promises.writeFile(
+    path.join(rootDir, TMP_BASEPATH, '/types/dictionary.ts'),
+    content
+  );
 }
 
 /**
@@ -169,7 +211,7 @@ export async function compileLanguages(
   }
 
   await Promise.all(
-    locales.map(async locale => {
+    locales.map(async (locale, index) => {
       const messages: StringStructure = {};
       const outputPath = getLanguageModulePath(locale, rootDir);
 
@@ -181,6 +223,12 @@ export async function compileLanguages(
 
         // Parse the language files
         await parseLanguageFiles(messages, locale, languagePaths, outputPath);
+      }
+
+      // Run only for first language file to avoid conflicts
+      if (index === 0) {
+        // Don't await since it can be compiled lazily
+        generateTypeDeclarations(rootDir, messages);
       }
 
       if (!watch) {
@@ -217,6 +265,12 @@ export async function compileLanguages(
               eventName === 'unlink' ? [] : [changedLanguagePath],
               outputPath
             );
+
+            // Run only for first language file to avoid conflicts
+            if (index === 0) {
+              // Don't await since it can be compiled lazily
+              generateTypeDeclarations(rootDir, messages);
+            }
           } catch (error) {
             logger.error(error as Error);
           }

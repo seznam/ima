@@ -1,13 +1,14 @@
 /* eslint-disable no-console */
-const chalk = require('chalk');
-const { createLogger, format, transports, config } = require('winston');
-const TransportStream = require('winston-transport');
-const { printf, combine, json } = format;
 const {
   formatError: devFormatError,
   parseError,
-} = require('@ima/dev-utils/dist/cliUtils');
-const { resolveErrorType } = require('@ima/dev-utils/dist/compileErrorParser');
+} = require('@ima/dev-utils/cliUtils');
+const { resolveErrorType } = require('@ima/dev-utils/compileErrorParser');
+const chalk = require('chalk');
+const { createLogger, format, transports, config } = require('winston');
+const TransportStream = require('winston-transport');
+
+const { printf, combine, json } = format;
 
 function colorizeLevel(level) {
   switch (level) {

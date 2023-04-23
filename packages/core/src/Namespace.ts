@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
@@ -7,7 +5,6 @@
  * each other more easily than by using the ES6 import/export mechanism.
  */
 export class Namespace {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: PropertyKey]: any;
 
   /**
@@ -22,8 +19,6 @@ export class Namespace {
    *        ns.namespace('ima.core');
    *        ns.has('ima.core');
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
 
   /**
    * Verifies that the specified path in namespace exists, creates it if it
@@ -35,12 +30,12 @@ export class Namespace {
    * as an argument, the return value will be the last created namespace
    * object.
    *
-   * @deprecated
    * @param path The namespace path.
    * @return The value at the specified path in the namespace.
    */
-  namespace(path: string) {
-    const levels = this._resolvePathLevels(path);
+  namespace<V = unknown>(path: string): V {
+    const levels = this.#resolvePathLevels(path);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
     for (const levelName of levels) {
@@ -51,7 +46,7 @@ export class Namespace {
       self = self[levelName];
     }
 
-    return self;
+    return self as unknown as V;
   }
 
   /**
@@ -62,7 +57,7 @@ export class Namespace {
    * @return `true` if the namespace or terminal value exists
    *         at the specified path.
    */
-  has(path: string) {
+  has(path: string): boolean {
     let hasPath;
     try {
       hasPath = this.get(path) !== undefined;
@@ -79,9 +74,9 @@ export class Namespace {
    * @param path The namespace path to get.
    * @return The value at the specified path in the namespace or undefined for any non-string path
    */
-  get(path: string): unknown {
-    const levels = this._resolvePathLevels(path);
-
+  get<V = unknown>(path: string): V | undefined {
+    const levels = this.#resolvePathLevels(path);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
 
     for (const level of levels) {
@@ -92,7 +87,7 @@ export class Namespace {
       self = self[level];
     }
 
-    return self;
+    return self as unknown as V;
   }
 
   /**
@@ -101,11 +96,11 @@ export class Namespace {
    * @param path The namespace path to set.
    * @param value
    */
-  set(path: string, value: unknown) {
-    const levels = this._resolvePathLevels(path);
+  set<V>(path: string, value: V) {
+    const levels = this.#resolvePathLevels(path);
 
     const lastKey = levels.pop() as string;
-    const namespace = this.namespace(levels.join('.'));
+    const namespace = this.namespace<Record<string, unknown>>(levels.join('.'));
 
     namespace[lastKey] = value;
   }
@@ -116,7 +111,7 @@ export class Namespace {
    * @param path The namespace path.
    * @param array of levels or undefined for not valid path
    */
-  _resolvePathLevels(path: string) {
+  #resolvePathLevels(path: string) {
     if (!path || typeof path !== 'string') {
       throw Error('namespace.get: path is not type of string');
     }
@@ -125,4 +120,8 @@ export class Namespace {
   }
 }
 
-export default new Namespace();
+export const ns = new Namespace();
+
+export function getNamespace() {
+  return ns;
+}

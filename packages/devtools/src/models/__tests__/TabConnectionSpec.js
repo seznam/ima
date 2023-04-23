@@ -6,8 +6,8 @@ jest.mock('@/utils', () => ({
   setIcon: jest.fn(),
 }));
 
-// eslint-disable-next-line import/order
-import * as utils from '@/utils';
+// // eslint-disable-next-line import/order
+// import * as utils from '@/utils';
 
 describe('TabConnection', () => {
   let instance = null;
@@ -28,7 +28,9 @@ describe('TabConnection', () => {
     },
   });
 
-  jest.spyOn(utils, 'setIcon').mockImplementation();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe('constructor', () => {
     it('should initialize defaults', () => {

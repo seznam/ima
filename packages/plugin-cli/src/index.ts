@@ -9,6 +9,8 @@ export {
   TransformerOptions,
 } from './types';
 
+export { preprocessTransformer } from './transformers/preprocessTransformer';
+export { swcTransformer } from './transformers/swcTransformer';
 export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
 export {
   defaultConfig,

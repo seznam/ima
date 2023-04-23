@@ -1,4 +1,4 @@
-// IMA@18 keep only for backwards compatibility. IMA@19 will be removed.
+// TODO IMA@20 keep only for backwards compatibility. IMA@20 will be removed.
 /**
  * Instance Recycler.
  *
@@ -61,7 +61,6 @@ class InstanceRecycler {
 
   clearInstance(instance) {
     this._concurrentRequests--;
-    instance.oc.clear();
 
     if (this._instances.length < this._maxInstanceCount) {
       this._instances.push(instance);

@@ -1,15 +1,15 @@
-import MapStorage from './MapStorage';
-import SessionStorage from './SessionStorage';
-import Storage from './Storage';
-import CacheEntry from '../cache/CacheEntry';
-import { Dependencies } from '../ObjectContainer';
+import { MapStorage } from './MapStorage';
+import { SessionStorage } from './SessionStorage';
+import { Storage } from './Storage';
+import { CacheEntry } from '../cache/CacheEntry';
+import { Dependencies } from '../oc/ObjectContainer';
 
 /**
  * The `link SessionMap` storage is an implementation of the
  * `link Storage` interface acting as a synchronization proxy between
  * the underlying map storage and the `sessionStorage` DOM storage.
  */
-export default class SessionMapStorage<V> extends Storage<V> {
+export class SessionMapStorage<V> extends Storage<V> {
   /**
    * The map storage, synced with the session storage.
    */

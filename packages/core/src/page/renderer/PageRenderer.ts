@@ -1,15 +1,35 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { UnknownParameters, UnknownPromiseParameters } from '../../CommonTypes';
-import Controller from '../../controller/Controller';
+import { RendererEvents } from './RendererEvents';
+import { RendererTypes } from './RendererTypes';
+import { Controller } from '../../controller/Controller';
 import { RouteOptions } from '../../router/Router';
+import {
+  AnyParameters,
+  UnknownParameters,
+  UnknownPromiseParameters,
+} from '../../types';
 import { PageData } from '../PageTypes';
+
+export interface PageRendererDispatcherEvents {
+  [RendererEvents.ERROR]: { message: string };
+  [RendererEvents.HYDRATE_ERROR]: {
+    error: Error;
+    serverNode: Element;
+    clientNode: Element;
+  };
+  [RendererEvents.MOUNTED]: {
+    type: RendererTypes.HYDRATE | RendererTypes.RENDER;
+  };
+  [RendererEvents.UNMOUNTED]: { type: RendererTypes.UNMOUNT };
+  [RendererEvents.UPDATED]: {
+    pageState: AnyParameters;
+  };
+}
 
 /**
  * The page renderer is a utility for rendering the page at either the
  * client-side or the server-side, handling the differences in the environment.
  */
-export default abstract class PageRenderer {
+export abstract class PageRenderer {
   /**
    * Renders the page using the provided controller and view. The actual
    * behavior of this method differs at the client-side and the at
