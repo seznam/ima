@@ -84,8 +84,8 @@
     "@types/nodemon": "^1.19.2"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0-rc.0",
-    "@ima/server": ">=19.0.0-rc.0"
+    "@ima/core": ">=19.0.0",
+    "@ima/server": ">=19.0.0"
   },
   "publishConfig": {
     "access": "public",

@@ -39,9 +39,9 @@
     "express": "^4.17.3"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0-rc.0",
-    "@ima/dev-utils": ">=19.0.0-rc.0",
-    "@ima/helpers": ">=19.0.0-rc.0"
+    "@ima/core": ">=19.0.0",
+    "@ima/dev-utils": ">=19.0.0",
+    "@ima/helpers": ">=19.0.0"
   },
   "publishConfig": {
     "access": "public",

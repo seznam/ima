@@ -73,7 +73,7 @@
     "to-mock": "^1.6.2"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0-rc.0",
+    "@ima/core": ">=19.0.0",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

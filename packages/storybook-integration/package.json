@@ -53,9 +53,9 @@
     "@types/webpack": "^5.28.1"
   },
   "peerDependencies": {
-    "@ima/cli": ">=19.0.0-rc.0",
-    "@ima/core": ">=19.0.0-rc.0",
-    "@ima/react-page-renderer": ">=19.0.0-rc.0",
+    "@ima/cli": ">=19.0.0",
+    "@ima/core": ">=19.0.0",
+    "@ima/react-page-renderer": ">=19.0.0",
     "webpack": ">=5.x"
   },
   "publishConfig": {
