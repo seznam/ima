@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- 2323c6a13: Updated dependencies to use non-rc version ranges
+
 ## 19.0.0
 
 ### Major Changes
