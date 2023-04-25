@@ -1,7 +1,7 @@
 export type MetaValue = number | boolean | string | null | undefined;
 export type MetaAttributes = Record<string, MetaValue>;
 
-export type MetaManagerRecordKeys = 'property' | 'content' | 'href';
+export type MetaManagerRecordKeys = 'content' | 'href';
 export type MetaManagerRecord<K extends MetaManagerRecordKeys> = {
   [key in K]: MetaValue;
 } & MetaAttributes;
@@ -28,7 +28,7 @@ export abstract class MetaManager {
    *
    * @param title The new page title.
    */
-  setTitle(title: string): MetaManager {
+  setTitle(title: string): this {
     return this;
   }
 
@@ -54,11 +54,7 @@ export abstract class MetaManager {
    * @param content The meta information content.
    * @parram attr Additional optional meta attributes.
    */
-  setMetaName(
-    name: string,
-    content: MetaValue,
-    attr?: MetaAttributes
-  ): MetaManager {
+  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): this {
     return this;
   }
 
@@ -104,10 +100,10 @@ export abstract class MetaManager {
    * @parram attr Additional optional meta attributes.
    */
   setMetaProperty(
-    name: string,
-    property: MetaValue,
+    property: string,
+    content: MetaValue,
     attr?: MetaAttributes
-  ): MetaManager {
+  ): this {
     return this;
   }
 
@@ -121,8 +117,8 @@ export abstract class MetaManager {
    * @return The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name: string): MetaManagerRecord<'property'> {
-    return { property: '' };
+  getMetaProperty(property: string): MetaManagerRecord<'content'> {
+    return { content: '' };
   }
 
   /**
@@ -142,7 +138,7 @@ export abstract class MetaManager {
    * @return [key, value] pairs of meta information properties.
    */
   getMetaPropertiesIterator():
-    | IterableIterator<[string, MetaManagerRecord<'property'>]>
+    | IterableIterator<[string, MetaManagerRecord<'content'>]>
     | never[] {
     return [];
   }
@@ -156,11 +152,7 @@ export abstract class MetaManager {
    *        document, e.g. a URL.
    * @parram attr Additional optional link attributes.
    */
-  setLink(
-    relation: string,
-    href: MetaValue,
-    attr?: MetaAttributes
-  ): MetaManager {
+  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): this {
     return this;
   }
 
