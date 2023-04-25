@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.2
+
+### Patch Changes
+
+- 9cf262c73: Fixed incorrectly rendered meta properties, where they would render as `<meta name="og:title" property="Test Page" /> instead of `<meta property="og:title" content="Test Page" />`.
+
 ## 19.0.1
 
 ### Patch Changes
