@@ -15,13 +15,13 @@ function _sanitizeValue(value) {
  * @param tagName Name of the meta tag to render to string.
  * @returns string[] Array of rendered meta tags.
  */
-function _getMetaTags(iterator, tagName) {
+function _getMetaTags(iterator, tagName, keyName) {
   const metaTags = [];
 
   for (const [key, value] of iterator) {
     const tagParts = [`<${tagName}`, 'data-ima-meta'];
     const attributes = {
-      [tagName === 'link' ? 'rel' : 'name']: key,
+      [keyName]: key,
       ...value,
     };
 
@@ -57,9 +57,13 @@ function renderMeta(metaManager) {
 
   return [
     `<title>${metaManager.getTitle()}</title>`,
-    ..._getMetaTags(metaManager.getLinksIterator(), 'link'),
-    ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta'),
-    ..._getMetaTags(metaManager.getMetaPropertiesIterator(), 'meta'),
+    ..._getMetaTags(metaManager.getLinksIterator(), 'link', 'rel'),
+    ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta', 'name'),
+    ..._getMetaTags(
+      metaManager.getMetaPropertiesIterator(),
+      'meta',
+      'property'
+    ),
   ]
     .filter(Boolean)
     .join('');

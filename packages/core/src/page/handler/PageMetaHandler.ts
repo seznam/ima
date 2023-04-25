@@ -66,14 +66,20 @@ export class PageMetaHandler extends PageHandler {
     this.#window.setTitle(this.#metaManager.getTitle());
 
     // Update meta tags
-    this.#updateMetaTag<'href'>(this.#metaManager.getLinksIterator(), 'link');
-    this.#updateMetaTag<'property'>(
-      this.#metaManager.getMetaPropertiesIterator(),
-      'meta'
+    this.#updateMetaTag<'href'>(
+      this.#metaManager.getLinksIterator(),
+      'link',
+      'rel'
     );
     this.#updateMetaTag<'content'>(
       this.#metaManager.getMetaNamesIterator(),
-      'meta'
+      'meta',
+      'name'
+    );
+    this.#updateMetaTag<'content'>(
+      this.#metaManager.getMetaPropertiesIterator(),
+      'meta',
+      'property'
     );
   }
 
@@ -86,13 +92,14 @@ export class PageMetaHandler extends PageHandler {
    */
   #updateMetaTag<K extends MetaManagerRecordKeys>(
     iterator: IterableIterator<[string, MetaManagerRecord<K>]> | never[],
-    tagName: 'link' | 'meta'
+    tagName: 'link' | 'meta',
+    keyName: 'rel' | 'name' | 'property'
   ): void {
     const document = this.#window.getDocument()!;
 
     for (const [key, value] of iterator) {
       const attributes = {
-        [tagName === 'link' ? 'rel' : 'name']: key,
+        [keyName]: key,
         ...value,
       };
 

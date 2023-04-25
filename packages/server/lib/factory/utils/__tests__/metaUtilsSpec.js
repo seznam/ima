@@ -23,11 +23,11 @@ describe('metaUtils', () => {
         ),
         getMetaPropertiesIterator: jest.fn().mockReturnValue(
           new Map([
-            ['og:description', { property: null }],
+            ['og:description', { content: null }],
             [
               'og:keywords',
               {
-                property: 'ima core cli',
+                content: 'ima core cli',
                 'data-custom-attr': 'custom-attribute',
                 invalid: null,
               },
