@@ -797,7 +797,8 @@ export abstract class AbstractPageManager extends PageManager {
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
-    if (!previousManagedPage.state.executed) {
+    // Has to be called for first managed page too (previous is empty)
+    if (previousManagedPage.controller && !previousManagedPage.state.executed) {
       previousManagedPage.state.executed = false;
       return;
     }
