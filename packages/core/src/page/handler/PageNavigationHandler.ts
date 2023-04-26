@@ -57,6 +57,7 @@ export class PageNavigationHandler extends PageHandler {
       if (!isRedirection) {
         this._saveScrollHistory();
       }
+
       this._setAddressBar(action.url as string, isRedirection);
     }
 
