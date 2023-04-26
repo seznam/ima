@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.3
+
+### Patch Changes
+
+- 0b8a6213a: Fixed issue during initial routing, where URLs with hash params were redirected to url without hash params.
+
 ## 19.0.2
 
 ### Patch Changes
