@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.2
+
+### Patch Changes
+
+- 422639207: Fixed issue where postManagedHandlers were not called on page load
+
 ## 19.0.1
 
 ### Patch Changes
