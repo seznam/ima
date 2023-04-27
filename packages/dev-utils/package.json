@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "typedocMain": "./src/index.ts",
+  "typedoc": { "entryPoint": "./src/index.ts" },
   "exports": {
     "./*": {
       "types": "./dist/*.d.ts",

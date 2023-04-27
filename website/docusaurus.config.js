@@ -1,7 +1,8 @@
 const path = require('path');
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/palenight');
+const themes = require('prism-react-renderer').themes;
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.palenight;
 
 /**
  * @ts-check

@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "typedocMain": "./src/index.ts",
+  "typedoc": { "entryPoint": "./src/index.ts" },
   "main": "./dist/cjs/index.js",
   "types": "./dist/esm/client/index.d.ts",
   "exports": {
