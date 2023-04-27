@@ -5,6 +5,7 @@ import { ManagedPage, PageAction } from '../PageTypes';
 
 export class PageNavigationHandler extends PageHandler {
   private _window: Window;
+  #preManaged = false;
 
   static get $dependencies() {
     return [Window];
@@ -45,6 +46,16 @@ export class PageNavigationHandler extends PageHandler {
     action: PageAction
   ) {
     const { options } = nextManagedPage;
+
+    /**
+     * Ignore first preManaged call, because this behavior
+     * is already set correctly by the browser.
+     */
+    if (!this.#preManaged) {
+      this.#preManaged = true;
+
+      return;
+    }
 
     if (
       managedPage &&
