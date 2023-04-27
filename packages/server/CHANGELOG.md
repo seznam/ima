@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.3
+
+### Patch Changes
+
+- f471ff62b: Allow applicationFolder to be overriden
+
 ## 19.0.2
 
 ### Patch Changes
