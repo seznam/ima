@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const applicationFolder = path.resolve('.');
+const defaultApplicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
 const { Emitter, Event } = require('./lib/emitter.js');
@@ -18,6 +18,7 @@ function createIMAServer({
   emitter,
   performance,
   devUtils,
+  applicationFolder = defaultApplicationFolder,
   processEnvironment,
 } = {}) {
   environment =
