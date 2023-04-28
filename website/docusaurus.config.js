@@ -22,15 +22,7 @@ const config = {
     [
       'docusaurus-plugin-typedoc',
       {
-        entryPoints: [
-          '../packages/core',
-          '../packages/react-page-renderer',
-          '../packages/cli',
-          '../packages/plugin-cli',
-          '../packages/dev-utils',
-          '../packages/server',
-          '../packages/storybook-integration',
-        ],
+        entryPoints: ['../packages/*'],
         entryPointStrategy: 'packages',
         out: '../../docs/api',
         sidebar: {
