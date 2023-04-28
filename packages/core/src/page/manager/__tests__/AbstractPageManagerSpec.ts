@@ -179,6 +179,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('manage()', () => {
     it('should only update last managed controller and view', async () => {
+      pageManager['_managedPage'].state.mounted = true;
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
         .mockReturnValue(true as never);
@@ -286,6 +287,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
             "cancelled": true,
             "executed": false,
             "initialized": false,
+            "mounted": false,
             "page": {
               "promise": Promise {},
               "reject": [Function],
