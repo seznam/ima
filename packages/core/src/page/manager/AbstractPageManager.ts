@@ -163,8 +163,13 @@ export abstract class AbstractPageManager extends PageManager {
       }
     }
 
-    if (this._hasOnlyUpdate(controller, view, options)) {
+    if (
+      this._hasOnlyUpdate(controller, view, options) &&
+      this._managedPage.state.mounted
+    ) {
       this._managedPage.params = params;
+      this._managedPage.state.cancelled = false;
+      this._managedPage.state.executed = false;
 
       await this._runPreManageHandlers(this._managedPage, action);
       const response = await this._updatePageSource();
@@ -183,6 +188,7 @@ export abstract class AbstractPageManager extends PageManager {
     // @ts-expect-error fixme in the future
     const viewInstance = this._pageFactory.createView(view);
 
+    const actualManagedPage = this._managedPage;
     this._managedPage = this._constructManagedPageValue(
       controller,
       view,
@@ -195,7 +201,7 @@ export abstract class AbstractPageManager extends PageManager {
     );
 
     // Run pre-manage handlers before affecting anything
-    await this._runPreManageHandlers(this._managedPage, action);
+    await this._runPreManageHandlers(actualManagedPage, action);
 
     // Deactivate the old instances and clearing state
     await this._deactivatePageSource();
@@ -260,6 +266,7 @@ export abstract class AbstractPageManager extends PageManager {
         initialized: false,
         cancelled: false,
         executed: false,
+        mounted: false,
         page: createDeferred(),
       },
     };
@@ -307,6 +314,7 @@ export abstract class AbstractPageManager extends PageManager {
         initialized: false,
         cancelled: false,
         executed: false,
+        mounted: false,
         page: {
           promise: Promise.resolve(),
           reject: () => undefined,
@@ -458,6 +466,8 @@ export abstract class AbstractPageManager extends PageManager {
           this._managedPage.options
         )
       );
+
+      this._managedPage.state.mounted = true;
 
       return response;
     } catch (error) {
@@ -774,21 +784,21 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   protected async _runPreManageHandlers(
-    nextManagedPage: ManagedPage,
+    actualManagedPage: ManagedPage,
     action: PageAction
   ) {
     const result = this._pageHandlerRegistry.handlePreManagedState(
-      this._managedPage.controller
+      actualManagedPage.controller
         ? (this._stripManagedPageValueForPublic(
-            this._managedPage
+            actualManagedPage
           ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
-        nextManagedPage
+        this._managedPage
       ) as unknown as ManagedPage) || null,
       action
     );
-    nextManagedPage.state.executed = true;
+    this._managedPage.state.executed = true;
 
     return result;
   }
