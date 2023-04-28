@@ -37,7 +37,7 @@ function resolvePackageVersions(dependencies) {
       if (fs.existsSync(dependencyPackageJson)) {
         let { version } = require(dependencyPackageJson);
 
-        dependencies[dependency] = version;
+        dependencies[dependency] = `^${version}`;
       }
     }
   });
