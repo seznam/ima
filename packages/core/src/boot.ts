@@ -243,11 +243,10 @@ export function routeClientApp(app: {
   oc: ObjectContainer;
 }) {
   const router = app.oc.get('$Router');
-  const window = app.oc.get('$Window');
 
   return router
     .listen()
-    .route(router.getPath() + window.getWindow()?.location.hash)
+    .route(router.getPath())
     .catch((error: GenericError) => {
       if (typeof $IMA.fatalErrorHandler === 'function') {
         $IMA.fatalErrorHandler(error);
