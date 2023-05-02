@@ -394,6 +394,8 @@ export default async (
                 /\.gif$/,
                 /\.jpe?g$/,
                 /\.png$/,
+                /\.ico$/,
+                /\.avif$/,
                 /\.webp$/,
                 /\.svg$/,
               ],
