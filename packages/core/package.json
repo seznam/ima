@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "19.0.3",
+  "version": "19.0.4",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -33,7 +33,9 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "typedoc": { "entryPoint": "./src/index.ts" },
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
   "main": "./dist/cjs/index.js",
   "types": "./dist/esm/client/index.d.ts",
   "exports": {

@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.1.0
+
+### Minor Changes
+
+- 8bdeee5e0: Added support for .avif and .ico image imports.
+  Added global.d.ts file to @ima/cli, declaring types for supported webpack imports (images, html files, etc.). To use this add `/// <reference types="@ima/cli/global" />` to your app type definitions.
+
 ## 19.0.1
 
 ### Patch Changes

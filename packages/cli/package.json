@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "19.0.1",
+  "version": "19.1.0",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -18,7 +18,9 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "typedoc": { "entryPoint": "./src/index.ts" },
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
