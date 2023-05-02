@@ -22,6 +22,7 @@ export type ManagedPage = {
     initialized: boolean;
     cancelled: boolean;
     executed: boolean;
+    mounted: boolean;
     abort?: {
       promise: Promise<void>;
       resolve: () => void;
