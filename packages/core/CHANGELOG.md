@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.5
+
+### Patch Changes
+
+- 5b82a8f08: Changed get and namespace default type to `any` to prevent complex casts of unknown in places where it's not nedded
+
 ## 19.0.4
 
 ### Patch Changes
