@@ -37,7 +37,7 @@ export class CacheImpl<V> extends Cache<V> {
     cacheStorage: Storage<CacheEntry<V>>,
     factory: CacheFactory<V>,
     Helper: typeof Helpers,
-    config: { ttl: number; enabled: boolean } = { ttl: 30000, enabled: false }
+    { ttl = 30000, enabled = false }
   ) {
     super();
 
@@ -52,12 +52,12 @@ export class CacheImpl<V> extends Cache<V> {
     /**
      * Default cache entry time to live in milliseconds.
      */
-    this._ttl = config.ttl;
+    this._ttl = ttl;
 
     /**
      * Flag signalling whether the cache is currently enabled.
      */
-    this._enabled = config.enabled;
+    this._enabled = enabled;
   }
 
   /**

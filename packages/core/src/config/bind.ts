@@ -178,7 +178,7 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
     '$CacheStorage',
     CacheFactory,
     '$Helper',
-    config.$Cache,
+    config.$Cache || {},
   ]);
   oc.bind('$Cache', Cache);
 
