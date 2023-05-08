@@ -424,7 +424,7 @@ function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets: name === 'client.es' ? targets : [],
+    targets: name === 'client' ? targets : [],
   }));
 }
 
