@@ -86,7 +86,7 @@ export function findRules(
  * @param {ImaCliArgs['rootDir']} rootDir Application root directory
  * @returns {Environment} Loaded environment
  */
-function resolveEnvironment(
+export function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
 ): Environment {
   return environmentFactory({ applicationFolder: rootDir });
@@ -99,7 +99,7 @@ function resolveEnvironment(
  * @param {ImaConfigurationContext} ctx Current configuration context.
  * @returns {Record<string, string>} Entry object or empty object.
  */
-function createPolyfillEntry(
+export function createPolyfillEntry(
   ctx: ImaConfigurationContext
 ): Record<string, string> {
   const { isClientES, rootDir } = ctx;
@@ -118,7 +118,7 @@ function createPolyfillEntry(
  * Creates hmr dev server configuration from provided contexts
  * and arguments with this priority args -> ctx -> imaConfig -> [defaults].
  */
-function createDevServerConfig({
+export function createDevServerConfig({
   args,
   ctx,
   imaConfig,
@@ -163,7 +163,7 @@ function createDevServerConfig({
  * @param {ImaConfig} imaConfig ima configuration
  * @returns {string}
  */
-function createCacheKey(
+export function createCacheKey(
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig,
   additionalData = {}
@@ -213,7 +213,7 @@ function createCacheKey(
  * @param {string} [rootDir=process.cwd()] App root directory.
  * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
  */
-function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
+export function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
   const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
 
   return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : null;
@@ -225,7 +225,7 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
  * @param {ImaCliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
+export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '/',
     compress: true,
@@ -284,7 +284,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
  * Takes care of cleaning build directory and node_modules/.cache
  * directory based on passed cli arguments.
  */
-async function cleanup(args: ImaCliArgs): Promise<void> {
+export async function cleanup(args: ImaCliArgs): Promise<void> {
   // Clear cache before doing anything else
   if (args.clearCache) {
     const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
@@ -327,7 +327,7 @@ async function cleanup(args: ImaCliArgs): Promise<void> {
  * @param {ImaConfig} imaConfig Loaded ima config.
  * @param hook
  */
-async function runImaPluginsHook(
+export async function runImaPluginsHook(
   args: ImaCliArgs,
   imaConfig: ImaConfig,
   hook: 'preProcess' | 'postProcess'
@@ -362,7 +362,7 @@ async function runImaPluginsHook(
  * @param {ImaConfig} imaConfig
  * @returns {ImaConfigurationContext[]}
  */
-function createContexts(
+export function createContexts(
   configurationNames: ImaConfigurationContext['name'][],
   args: ImaCliArgs,
   imaConfig: ImaConfig
@@ -437,7 +437,7 @@ function createContexts(
  * @param {ImaConfig} imaConfig Loaded ima config.
  * @returns {Promise<Configuration[]>}
  */
-async function createWebpackConfig(
+export async function createWebpackConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration[]> {
@@ -522,7 +522,7 @@ async function createWebpackConfig(
  * Extracts major.minor version string of currently resolved
  * core-js from node_modules.
  */
-async function getCurrentCoreJsVersion() {
+export async function getCurrentCoreJsVersion() {
   return JSON.parse(
     (
       await fs.promises.readFile(
@@ -534,17 +534,3 @@ async function getCurrentCoreJsVersion() {
     .slice(0, 2)
     .join('.');
 }
-
-export {
-  resolveEnvironment,
-  cleanup,
-  createCacheKey,
-  createWebpackConfig,
-  createDevServerConfig,
-  requireImaConfig,
-  resolveImaConfig,
-  runImaPluginsHook,
-  createPolyfillEntry,
-  getCurrentCoreJsVersion,
-  IMA_CONF_FILENAME,
-};
