@@ -11,7 +11,7 @@ import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import webpackConfig from './config';
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
 
-const IMA_CONF_FILENAME = 'ima.config.js';
+export const IMA_CONF_FILENAME = 'ima.config.js';
 
 /**
  * Helper for finding rules with given loader in webpack config.
