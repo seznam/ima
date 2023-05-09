@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.6
+
+### Patch Changes
+
+- cb79f3f98: The ObjectContainer throw new error if dependency of dependencies for class constructor is undefined.
+
 ## 19.0.5
 
 ### Patch Changes

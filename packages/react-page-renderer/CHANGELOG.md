@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.0.2
+
+### Patch Changes
+
+- ffaed386e: Fixed issue where context was not properly memoized. This triggered uninteded context updates and rerenders when no real value in the context actually changed.
+  Fixed issue where createContext received 2 arguments (Utils and object with context selector values) instead of variadic args.
+
 ## 19.0.1
 
 ### Patch Changes
