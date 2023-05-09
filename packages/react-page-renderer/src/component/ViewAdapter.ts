@@ -52,8 +52,10 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
     /**
      * The memoized context value.
      */
-    this._getContextValue = (props: ViewAdapterProps, state: State) =>
-      this.getContextValue(props, state);
+    this._getContextValue = memoizeOne(
+      (props: ViewAdapterProps, state: State) =>
+        this.getContextValue(props, state)
+    );
 
     /**
      * The function for creating context.
