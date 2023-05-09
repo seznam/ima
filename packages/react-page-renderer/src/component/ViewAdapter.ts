@@ -1,9 +1,9 @@
-import type { UnknownParameters, Utils } from '@ima/core';
-import memoizeOne from 'memoize-one';
+import type { Utils } from '@ima/core';
+import memoizeOne, { type MemoizedFn } from 'memoize-one';
 import { Component, ComponentClass, ComponentType, createElement } from 'react';
 
 import { ErrorBoundary } from './ErrorBoundary';
-import { PageContext } from '../PageContext';
+import { PageContext, PageContextType } from '../PageContext';
 
 export interface ViewAdapterProps {
   $Utils: Utils;
@@ -14,7 +14,7 @@ export interface ViewAdapterProps {
 }
 
 interface State {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 /**
@@ -22,19 +22,16 @@ interface State {
  * page view component through its properties.
  */
 export class ViewAdapter extends Component<ViewAdapterProps, State> {
+  private _managedRootView: ComponentType;
   private _getContextValue: (
     props: ViewAdapterProps,
     state: State
-  ) => { $Utils: Utils };
-  private _managedRootView: ComponentType;
+  ) => PageContextType;
 
-  contextSelectors: Array<
-    (props: ViewAdapterProps, state: State) => UnknownParameters
-  > = [];
-  createContext: (
-    $Utils: Utils,
-    values: UnknownParameters
-  ) => { $Utils: Utils };
+  createContext: MemoizedFn<(...args: any[]) => PageContextType>;
+  contextSelectors: Array<(props: ViewAdapterProps, state: State) => any> = [
+    props => props.$Utils,
+  ];
 
   /**
    * Initializes the adapter component.
@@ -55,22 +52,18 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
     /**
      * The memoized context value.
      */
-    this._getContextValue = memoizeOne(
-      (props: ViewAdapterProps, state: State) =>
-        this.getContextValue(props, state)
-    );
+    this._getContextValue = (props: ViewAdapterProps, state: State) =>
+      this.getContextValue(props, state);
 
     /**
      * The function for creating context.
      */
-    this.createContext = memoizeOne(
-      ($Utils: Utils, values: UnknownParameters) => {
-        return {
-          $Utils,
-          ...values,
-        };
-      }
-    );
+    this.createContext = memoizeOne(($Utils: Utils, ...values: any[]) => {
+      return {
+        $Utils,
+        ...values,
+      };
+    });
   }
 
   static getDerivedStateFromProps(
@@ -92,13 +85,9 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
   }
 
   getContextValue(props: ViewAdapterProps, state: State) {
-    const selectedValues = this.contextSelectors.map(selector =>
-      selector(props, state)
-    );
-
     return this.createContext(
-      props.$Utils,
-      Object.assign.apply(null, [{}, ...selectedValues]) as UnknownParameters
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
+      ...this.contextSelectors.map(selector => selector(props, state))
     );
   }
 
