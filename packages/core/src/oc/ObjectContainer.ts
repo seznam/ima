@@ -690,6 +690,20 @@ export class ObjectContainer {
       dependencies = [];
 
       for (const dependency of entry.dependencies) {
+        if ($Debug && dependency === undefined) {
+          throw new GenericError(
+            `ima.core.ObjectContainer:_createInstanceFromEntry The dependency ` +
+              `of class constructor function ${this.#getDebugName(
+                entry.classConstructor
+              )} is undefined. Fix class constructor $dependencies.`,
+            {
+              classConstructor: entry.classConstructor,
+              referrer: entry.referrer,
+              dependencies: entry.dependencies?.toString(),
+            }
+          );
+        }
+
         // Optional and spread dependency handling
         if (
           ['function', 'string'].indexOf(typeof dependency) !== -1 ||
