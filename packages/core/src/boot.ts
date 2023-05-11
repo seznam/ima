@@ -102,7 +102,6 @@ export interface AppEnvironment {
  * App settings for single env key.
  */
 export interface Settings {
-  $Version: GlobalImaObject['$Version'];
   $Http: {
     defaultRequestOptions: Omit<HttpAgentRequestOptions, 'abortController'>;
     cacheOptions: HttpAgentImplCacheOptions;
