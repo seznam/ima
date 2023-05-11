@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.7
+
+### Patch Changes
+
+- da95ad9c2: Version is deleted at Settings definition. It is already defined at Environment.
+
 ## 19.0.6
 
 ### Patch Changes
