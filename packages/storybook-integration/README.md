@@ -71,3 +71,15 @@ export const Story = {
 ```
 
 Where settings are deeply merged with the ones from app settings function. You can use this on per-story basis or define global overrides.
+
+### Autocomplete types for `parameters`
+
+Add following to your `tsconfig.json`. Since we are not importing anything from this packaged, the types would not be loaded automatically without following option.
+
+```json
+{
+  "compilerOptions": {
+    "types": ["./node_modules/@ima/storybook-integration/dist/types.d.ts"],
+  }
+}
+```
