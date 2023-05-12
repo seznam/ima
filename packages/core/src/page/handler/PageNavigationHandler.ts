@@ -2,14 +2,13 @@ import { PageHandler } from './PageHandler';
 import { ActionTypes } from '../../router/ActionTypes';
 import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
+import { Dependencies } from '../../oc/ObjectContainer';
 
 export class PageNavigationHandler extends PageHandler {
   protected _window: Window;
   #preManaged = false;
 
-  static get $dependencies() {
-    return [Window];
-  }
+  static $dependencies: Dependencies = [Window];
 
   /**
    * @param window The utility for manipulating the global context
