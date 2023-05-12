@@ -4,7 +4,7 @@ import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
 
 export class PageNavigationHandler extends PageHandler {
-  private _window: Window;
+  protected _window: Window;
   #preManaged = false;
 
   static get $dependencies() {
