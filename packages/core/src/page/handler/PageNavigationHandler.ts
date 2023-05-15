@@ -1,15 +1,15 @@
 import { PageHandler } from './PageHandler';
+import { Dependencies } from '../../oc/ObjectContainer';
 import { ActionTypes } from '../../router/ActionTypes';
 import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
 
 export class PageNavigationHandler extends PageHandler {
-  private _window: Window;
+  window: Window;
+
   #preManaged = false;
 
-  static get $dependencies() {
-    return [Window];
-  }
+  static $dependencies: Dependencies = [Window];
 
   /**
    * @param window The utility for manipulating the global context
@@ -22,7 +22,7 @@ export class PageNavigationHandler extends PageHandler {
      * The utility for manipulating the global context and global
      * client-side-specific APIs.
      */
-    this._window = window;
+    this.window = window;
   }
 
   /**
@@ -30,7 +30,7 @@ export class PageNavigationHandler extends PageHandler {
    */
   init() {
     // Setup history object to leave the scrolling to us and to not interfere
-    const browserWindow = this._window.getWindow();
+    const browserWindow = this.window.getWindow();
 
     if (browserWindow && 'scrollRestoration' in browserWindow.history) {
       browserWindow.history.scrollRestoration = 'manual';
@@ -102,17 +102,17 @@ export class PageNavigationHandler extends PageHandler {
    * document.
    */
   _saveScrollHistory() {
-    const url = this._window.getUrl();
+    const url = this.window.getUrl();
     const scroll = {
-      x: this._window.getScrollX(),
-      y: this._window.getScrollY(),
+      x: this.window.getScrollX(),
+      y: this.window.getScrollY(),
     };
     const state = { url, scroll };
 
-    const oldState = this._window.getHistoryState();
+    const oldState = this.window.getHistoryState();
     const newState = Object.assign({}, oldState, state);
 
-    this._window.replaceState(newState, '', url);
+    this.window.replaceState(newState, '', url);
   }
 
   /**
@@ -120,7 +120,7 @@ export class PageNavigationHandler extends PageHandler {
    */
   _scrollTo({ x = 0, y = 0 }) {
     setTimeout(() => {
-      this._window.scrollTo(x, y);
+      this.window.scrollTo(x, y);
     }, 0);
   }
 
@@ -143,9 +143,9 @@ export class PageNavigationHandler extends PageHandler {
     const state = { url, scroll };
 
     if (isRedirection) {
-      this._window.replaceState(state, '', url);
+      this.window.replaceState(state, '', url);
     } else {
-      this._window.pushState(state, '', url);
+      this.window.pushState(state, '', url);
     }
   }
 }
