@@ -18,6 +18,7 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
+  "types": "./types.d.ts",
   "scripts": {
     "test": "jest",
     "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
