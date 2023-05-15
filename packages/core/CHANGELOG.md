@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.8
+
+### Patch Changes
+
+- aa9fbebf8: Made `_window` in `PageNavigationHandler` protected
+
 ## 19.0.7
 
 ### Patch Changes
