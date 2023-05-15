@@ -1,8 +1,8 @@
 import { PageHandler } from './PageHandler';
+import { Dependencies } from '../../oc/ObjectContainer';
 import { ActionTypes } from '../../router/ActionTypes';
 import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
-import { Dependencies } from '../../oc/ObjectContainer';
 
 export class PageNavigationHandler extends PageHandler {
   protected _window: Window;
