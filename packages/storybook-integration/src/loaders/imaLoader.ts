@@ -1,21 +1,11 @@
 import type * as imaCore from '@ima/core';
-import { Loader, Parameters } from '@storybook/react';
+import { Loader, Parameters, ReactRenderer } from '@storybook/react';
+import { StoryContextForLoaders, StrictArgs } from '@storybook/types';
 import merge from 'ts-deepmerge';
 
 let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;
 let lastImaParams: Parameters = {};
-
-export type ImaLoaderParameters = {
-  ima?: {
-    initBindApp?: imaCore.InitBindFunction;
-    initRoutes?: imaCore.InitRoutesFunction;
-    initServicesApp?: imaCore.InitServicesFunction;
-    initSettings?: imaCore.InitSettingsFunction;
-    $IMA?: imaCore.GlobalImaObject;
-    state?: imaCore.PageState;
-  };
-};
 
 /**
  * Utility to destroy old instance before creating a new one.
@@ -36,7 +26,7 @@ async function destroyInstance(
 /**
  * Set revival settings to window.
  */
-function initRevivalSettings(parameters: ImaLoaderParameters): void {
+function initRevivalSettings(parameters: Parameters): void {
   window.$Debug = true;
   window.$IMA = merge(window.$IMA, parameters?.ima?.$IMA ?? {});
 }
@@ -46,7 +36,7 @@ function initRevivalSettings(parameters: ImaLoaderParameters): void {
  */
 function updateState(
   app: ReturnType<typeof imaCore.createImaApp>,
-  parameters: ImaLoaderParameters
+  parameters: Parameters
 ): void {
   if (!app) {
     return;
@@ -66,33 +56,34 @@ function updateState(
  * Extend app boot config with parameter overrides.
  */
 export function extendBootConfig(
+  storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>,
   appConfigFunctions: imaCore.InitAppConfig,
-  extendedConfig?: Partial<imaCore.InitAppConfig>
+  extendedConfig?: Parameters['ima']
 ): imaCore.InitAppConfig {
   return {
     initBindApp: (...args) => {
       appConfigFunctions.initBindApp(...args);
-      extendedConfig?.initBindApp?.(...args);
+      extendedConfig?.initBindApp?.(...args, storybookArgs);
     },
     initRoutes: (...args) => {
       appConfigFunctions.initRoutes(...args);
-      extendedConfig?.initRoutes?.(...args);
+      extendedConfig?.initRoutes?.(...args, storybookArgs);
     },
     initServicesApp: (...args) => {
       appConfigFunctions.initServicesApp(...args);
-      extendedConfig?.initServicesApp?.(...args);
+      extendedConfig?.initServicesApp?.(...args, storybookArgs);
     },
     initSettings: (...args) => {
       return merge(
         appConfigFunctions.initSettings(...args),
-        extendedConfig?.initSettings?.(...args) ?? {}
+        extendedConfig?.initSettings?.(...args, storybookArgs) ?? {}
       );
     },
   };
 }
 
 export const imaLoader: Loader = async args => {
-  const parameters = args.parameters as ImaLoaderParameters;
+  const parameters = args.parameters;
   initRevivalSettings(parameters);
 
   // Create new ima app if any of the params change
@@ -103,6 +94,7 @@ export const imaLoader: Loader = async args => {
       'initServicesApp',
       'initSettings',
       '$IMA',
+      'args',
       // @ts-expect-error
     ].some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
   ) {
@@ -135,10 +127,10 @@ export const imaLoader: Loader = async args => {
     // eslint-disable-next-line import/no-unresolved
   } = await import('app/main');
 
-  lastImaParams = { ...parameters?.ima } as ImaLoaderParameters;
+  lastImaParams = { ...parameters?.ima };
   app = ima.createImaApp();
   bootConfig = ima.getClientBootConfig(
-    extendBootConfig(getInitialAppConfigFunctions(), {
+    extendBootConfig(args, getInitialAppConfigFunctions(), {
       initBindApp: parameters?.ima?.initBindApp,
       initRoutes: parameters?.ima?.initRoutes,
       initServicesApp: parameters?.ima?.initServicesApp,

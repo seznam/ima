@@ -22,25 +22,7 @@
   "typedoc": { "entryPoint": "./src/preview.tsx" },
   "main": "./dist/preset.js",
   "module": "./dist/preset.js",
-  "types": "./dist/preset.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/preset.d.ts",
-      "default": "./dist/preset.js"
-    },
-    "./preset": {
-      "types": "./dist/preset.d.ts",
-      "default": "./dist/preset.js"
-    },
-    "./loader": {
-      "types": "./dist/loader.d.ts",
-      "default": "./dist/loader.js"
-    },
-    "./preview": {
-      "types": "./dist/preview.d.ts",
-      "default": "./dist/preview.js"
-    }
-  },
+  "types": "./dist/types.d.ts",
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",
