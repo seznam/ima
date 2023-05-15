@@ -5,7 +5,7 @@ import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
 
 export class PageNavigationHandler extends PageHandler {
-  window: Window;
+  protected _window: Window;
 
   #preManaged = false;
 
@@ -22,7 +22,7 @@ export class PageNavigationHandler extends PageHandler {
      * The utility for manipulating the global context and global
      * client-side-specific APIs.
      */
-    this.window = window;
+    this._window = window;
   }
 
   /**
@@ -30,7 +30,7 @@ export class PageNavigationHandler extends PageHandler {
    */
   init() {
     // Setup history object to leave the scrolling to us and to not interfere
-    const browserWindow = this.window.getWindow();
+    const browserWindow = this._window.getWindow();
 
     if (browserWindow && 'scrollRestoration' in browserWindow.history) {
       browserWindow.history.scrollRestoration = 'manual';
@@ -102,17 +102,17 @@ export class PageNavigationHandler extends PageHandler {
    * document.
    */
   _saveScrollHistory() {
-    const url = this.window.getUrl();
+    const url = this._window.getUrl();
     const scroll = {
-      x: this.window.getScrollX(),
-      y: this.window.getScrollY(),
+      x: this._window.getScrollX(),
+      y: this._window.getScrollY(),
     };
     const state = { url, scroll };
 
-    const oldState = this.window.getHistoryState();
+    const oldState = this._window.getHistoryState();
     const newState = Object.assign({}, oldState, state);
 
-    this.window.replaceState(newState, '', url);
+    this._window.replaceState(newState, '', url);
   }
 
   /**
@@ -120,7 +120,7 @@ export class PageNavigationHandler extends PageHandler {
    */
   _scrollTo({ x = 0, y = 0 }) {
     setTimeout(() => {
-      this.window.scrollTo(x, y);
+      this._window.scrollTo(x, y);
     }, 0);
   }
 
@@ -143,9 +143,9 @@ export class PageNavigationHandler extends PageHandler {
     const state = { url, scroll };
 
     if (isRedirection) {
-      this.window.replaceState(state, '', url);
+      this._window.replaceState(state, '', url);
     } else {
-      this.window.pushState(state, '', url);
+      this._window.pushState(state, '', url);
     }
   }
 }
