@@ -2,3 +2,4 @@
 !dist/**/*
 !package.json
 !index.js
+!types.d.ts
