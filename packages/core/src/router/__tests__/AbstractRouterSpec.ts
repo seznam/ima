@@ -341,7 +341,6 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
-        // @ts-expect-error error param is not typed properly
         .handleError(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -374,7 +373,6 @@ describe('ima.core.router.AbstractRouter', () => {
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
-      // @ts-expect-error error param is not typed properly
       await router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
@@ -428,7 +426,6 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       await router
-        // @ts-expect-error error param is not typed properly
         .handleNotFound(params, options)
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
@@ -461,7 +458,6 @@ describe('ima.core.router.AbstractRouter', () => {
 
       jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
-      // @ts-expect-error error param is not typed properly
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
