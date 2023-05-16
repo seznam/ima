@@ -25,7 +25,6 @@ import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
-  resolveEnvironment,
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
@@ -52,19 +51,21 @@ export default async (
     name,
     processCss,
     outputFolders,
+    useTypescript,
+    imaEnvironment,
+    appDir,
+    useHMR,
+    mode,
+    lessGlobalsPath,
+    useSourceMaps,
+    isDevEnv,
+    devtool,
+    targets,
   } = ctx;
 
   // Define helper variables derived from context
-  const useTypescript = fs.existsSync(path.join(rootDir, './tsconfig.json'));
-  const isDevEnv = ctx.environment === 'development';
-  const useSourceMaps = !!imaConfig.sourceMaps || isDevEnv;
-  const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
-  const appDir = path.join(rootDir, 'app');
-  const useHMR = ctx.command === 'dev' && isClientES;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
-  const mode = ctx.environment === 'production' ? 'production' : 'development';
-  const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
 
   // Bundle entries
   const publicPathEntry = path.join(__dirname, './entries/publicPathEntry');
@@ -72,27 +73,6 @@ export default async (
 
   // Define browserslist targets for current context
   const coreJsVersion = await getCurrentCoreJsVersion();
-
-  // es2018 targets (taken from 'browserslist-generator')
-  const targets = [
-    'and_chr >= 63',
-    'chrome >= 63',
-    'and_ff >= 58',
-    'android >= 103',
-    'edge >= 79',
-    'samsung >= 8.2',
-    'safari >= 11.1',
-    'ios_saf >= 11.4',
-    'opera >= 50',
-    'firefox >= 58',
-  ];
-
-  // Set correct devtool source maps config
-  const devtool = useSourceMaps
-    ? typeof imaConfig.sourceMaps === 'string'
-      ? imaConfig.sourceMaps
-      : 'source-map'
-    : false;
 
   /**
    * Generates SWC loader for js and ts files
@@ -394,6 +374,8 @@ export default async (
                 /\.gif$/,
                 /\.jpe?g$/,
                 /\.png$/,
+                /\.ico$/,
+                /\.avif$/,
                 /\.webp$/,
                 /\.svg$/,
               ],

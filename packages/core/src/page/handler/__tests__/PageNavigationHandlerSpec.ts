@@ -47,6 +47,15 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
 
+      // Should skip first call
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage as ManagedPage,
+        {
+          url: 'http://localhost/',
+        } as PageAction
+      );
+
       handler.handlePreManagedState(
         {} as ManagedPage,
         nextManagedPage as ManagedPage,
@@ -65,6 +74,16 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
         .spyOn(window, 'pushState')
         .mockImplementation();
       const nextManagedPage = { options: { autoScroll: false } };
+
+      // Should skip first call
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage as ManagedPage,
+        {
+          url: 'http://localhost/final_url',
+          type: ActionTypes.REDIRECT,
+        } as PageAction
+      );
 
       handler.handlePreManagedState(
         {} as ManagedPage,
@@ -137,6 +156,13 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     it('window should be scrolled to the top if routers autoScroll option was set to true.', () => {
       jest.spyOn(window, 'scrollTo').mockImplementation();
       const nextManagedPage = { options: { autoScroll: true } };
+
+      // Should skip first call
+      handler.handlePreManagedState(
+        {} as ManagedPage,
+        nextManagedPage as ManagedPage,
+        {} as PageAction
+      );
 
       handler.handlePreManagedState(
         {} as ManagedPage,

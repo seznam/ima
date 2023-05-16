@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.1.0
+
+### Minor Changes
+
+- 61c2cbb88: Added storybook args as last argument to boot init functions
+  Added types to parameters for autocomplete. Add `"types": ["./node_modules/@ima/storybook-integration/dist/types.d.ts"],` to your `tsconfig.json`
+
 ## 19.0.1
 
 ### Patch Changes

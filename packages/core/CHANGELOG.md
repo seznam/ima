@@ -1,5 +1,43 @@
 # Change Log
 
+## 19.0.9
+
+### Patch Changes
+
+- 762d17dca: Don't throw HMR errors for redirects
+
+## 19.0.8
+
+### Patch Changes
+
+- aa9fbebf8: Made `_window` in `PageNavigationHandler` protected
+
+## 19.0.7
+
+### Patch Changes
+
+- da95ad9c2: Version is deleted at Settings definition. It is already defined at Environment.
+
+## 19.0.6
+
+### Patch Changes
+
+- cb79f3f98: The ObjectContainer throw new error if dependency of dependencies for class constructor is undefined.
+
+## 19.0.5
+
+### Patch Changes
+
+- 5b82a8f08: Changed get and namespace default type to `any` to prevent complex casts of unknown in places where it's not nedded
+
+## 19.0.4
+
+### Patch Changes
+
+- 7e70a768f: Don't call preManage on `PageNavigationHandler` on first call. This is not needed since it handles correct browser behavior in SPA mode, but the behavior is correctly set on the first call.
+  Reverted inclusion of hash arguments in initial routing, introduced in previous patch version.
+- 545517489: Fix manage for onlyUpdate
+
 ## 19.0.3
 
 ### Patch Changes

@@ -236,12 +236,13 @@ export class ClientRouter extends AbstractRouter {
     locals?: RouteLocals
   ): Promise<void | UnknownParameters> {
     options = options ?? {};
+    const error = params.error as GenericError;
 
     if ($Debug) {
-      console.error(params.error);
+      console.error(error);
 
       // Show error overlay
-      if (window.__IMA_HMR?.emitter) {
+      if (window.__IMA_HMR?.emitter && !this.isRedirection(error)) {
         window.__IMA_HMR.emitter.emit('error', {
           error: params.error as Error,
         });
@@ -253,8 +254,6 @@ export class ClientRouter extends AbstractRouter {
         });
       }
     }
-
-    const error = params.error as GenericError;
 
     if (this.isClientError(error)) {
       return this.handleNotFound(params as StringParameters, {}, locals);

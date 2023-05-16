@@ -152,6 +152,12 @@ The webpack configuration intentionally ignores any **.postcssrc** configuration
 
 :::
 
+### prepareConfigurations
+> ` async function(configurations: ImaConfigurationContext[], imaConfig: ImaConfig, args: ImaCliArgs): Promise<ImaConfigurationContext[]>`
+
+Called right before creating webpack configurations after preProcess call. This hook lets you customize configuration contexts for each webpack config that will be generated. This allows you to override values of context variables like `useHMR`, `useTypeScript` which define
+how the final webpack config is generated, without the need to customize the config itself.
+
 ### languages
 
 > `object`

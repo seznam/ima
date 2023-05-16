@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- cd5364df6: Added type declarations
+
 ## 19.0.0
 
 ### Major Changes

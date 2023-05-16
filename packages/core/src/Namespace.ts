@@ -33,7 +33,7 @@ export class Namespace {
    * @param path The namespace path.
    * @return The value at the specified path in the namespace.
    */
-  namespace<V = unknown>(path: string): V {
+  namespace<V = any>(path: string): V {
     const levels = this.#resolvePathLevels(path);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
@@ -46,7 +46,7 @@ export class Namespace {
       self = self[levelName];
     }
 
-    return self as unknown as V;
+    return self as any as V;
   }
 
   /**
@@ -74,7 +74,7 @@ export class Namespace {
    * @param path The namespace path to get.
    * @return The value at the specified path in the namespace or undefined for any non-string path
    */
-  get<V = unknown>(path: string): V | undefined {
+  get<V = any>(path: string): V | undefined {
     const levels = this.#resolvePathLevels(path);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
@@ -87,7 +87,7 @@ export class Namespace {
       self = self[level];
     }
 
-    return self as unknown as V;
+    return self as any as V;
   }
 
   /**
@@ -100,7 +100,7 @@ export class Namespace {
     const levels = this.#resolvePathLevels(path);
 
     const lastKey = levels.pop() as string;
-    const namespace = this.namespace<Record<string, unknown>>(levels.join('.'));
+    const namespace = this.namespace<Record<string, any>>(levels.join('.'));
 
     namespace[lastKey] = value;
   }
