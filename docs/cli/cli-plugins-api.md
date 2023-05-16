@@ -250,7 +250,7 @@ module.exports = {
 
 ### Using TypeScript
 
-Since the `@ima/cli` is written in TypeScript, there are [TypeScript definitions](./plugins-api.md#plugins-api) you can use while defining your plugin. All types and interfaces are available as exports from the `@ima/cli` package while you can always have a look at our existing plugins, which are also written in TypeScript for an inspiration.
+Since the `@ima/cli` is written in TypeScript, there are [TypeScript definitions](./cli-plugins-api.md#plugins-api) you can use while defining your plugin. All types and interfaces are available as exports from the `@ima/cli` package while you can always have a look at our existing plugins, which are also written in TypeScript for an inspiration.
 
 ## Existing CLI plugins
 

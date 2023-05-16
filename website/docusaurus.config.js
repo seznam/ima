@@ -22,8 +22,20 @@ const config = {
     [
       'docusaurus-plugin-typedoc',
       {
-        entryPoints: ['../packages/*'],
+        entryPoints: [
+          '../packages/cli',
+          '../packages/core',
+          '../packages/react-page-renderer',
+          '../packages/dev-utils',
+          '../packages/plugin-cli',
+        ],
         entryPointStrategy: 'packages',
+        includeVersion: true,
+        categorizeByGroup: true,
+        cleanOutputDir: true,
+        jsDocCompatibility: true,
+        exclude: 'index',
+        readme: 'none',
         out: '../../docs/api',
         sidebar: {
           fullNames: true,
@@ -109,7 +121,7 @@ const config = {
           label: 'Tutorial',
         },
         {
-          to: 'api/modules',
+          to: 'api',
           position: 'right',
           label: 'API',
         },
