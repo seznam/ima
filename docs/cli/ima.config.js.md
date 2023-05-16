@@ -384,4 +384,4 @@ Currently there's only one running experiment option `experiments.css`, that use
 
 > `ImaCliPlugin[]`
 
-Array of IMA.js CLI plugin instances. For more information about CLI plugins, see [Plugins API](./plugins-api.md) section.
+Array of IMA.js CLI plugin instances. For more information about CLI plugins, see [Plugins API](./cli-plugins-api.md) section.

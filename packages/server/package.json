@@ -20,7 +20,6 @@
   "author": "Seznam.cz, a.s.",
   "main": "index.js",
   "types": "./types.d.ts",
-  "typedoc": { "entryPoint": "./types.d.ts" },
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest"
