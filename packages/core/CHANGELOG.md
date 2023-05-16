@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.9
+
+### Patch Changes
+
+- 762d17dca: Don't throw HMR errors for redirects
+
 ## 19.0.8
 
 ### Patch Changes
