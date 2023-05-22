@@ -6,21 +6,21 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "/static/js.es/app.client.2106a34c6b8bbad8.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/locale/en.371127fdbfbe93d2.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/vendors.a873907f25297544.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
@@ -38,21 +38,21 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "/static/js/app.client.8dc14fd2c9e52eef.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js/vendors.0e456297851f0a3a.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
@@ -67,7 +67,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js.es/app.client.2106a34c6b8bbad8.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/app.client.2106a34c6b8bbad8.js",
       },
@@ -75,7 +75,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js.es/locale/en.371127fdbfbe93d2.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/locale/en.371127fdbfbe93d2.js",
       },
@@ -83,7 +83,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js.es/vendors.a873907f25297544.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/vendors.a873907f25297544.js",
       },
@@ -103,7 +103,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/app.client.8dc14fd2c9e52eef.js",
       },
@@ -111,7 +111,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js/locale/en.3c6a5e7a55bb2ab4.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/locale/en.3c6a5e7a55bb2ab4.js",
       },
@@ -119,7 +119,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
     [
       "cdn://static/js/vendors.0e456297851f0a3a.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/vendors.0e456297851f0a3a.js",
       },
@@ -135,21 +135,21 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
     [
       "/static/js.es/app.client.2106a34c6b8bbad8.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/locale/en.371127fdbfbe93d2.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/vendors.a873907f25297544.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
@@ -167,21 +167,21 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
     [
       "/static/js/app.client.8dc14fd2c9e52eef.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js/vendors.0e456297851f0a3a.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
@@ -196,21 +196,21 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
     [
       "/static/js.es/app.client.2106a34c6b8bbad8.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/locale/en.371127fdbfbe93d2.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
     [
       "/static/js.es/vendors.a873907f25297544.js",
       {
-        "async": true,
+        "async": "",
         "crossorigin": "anonymous",
       },
     ],
