@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.4
+
+### Patch Changes
+
+- 0ae36c8f4: Fixed async attribute value in web script resources
+
 ## 19.0.3
 
 ### Patch Changes
