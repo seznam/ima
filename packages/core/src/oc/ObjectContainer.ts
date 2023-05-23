@@ -569,7 +569,7 @@ export class ObjectContainer {
         return spreadEntry;
       }
 
-      if ($Debug) {
+      if ($Debug && !this._isOptional<T>(name)) {
         throw new Error(
           `ima.core.ObjectContainer:_getEntry Invalid use of spread entry identified as: <strong>${this.#getDebugName(
             name
