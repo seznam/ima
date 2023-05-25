@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.10
+
+### Patch Changes
+
+- 492115a07: Fixed issue where OC thrown error for optional spread dependencies that were not defined
+
 ## 19.0.9
 
 ### Patch Changes
