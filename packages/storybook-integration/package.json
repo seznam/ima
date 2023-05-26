@@ -27,6 +27,23 @@
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
+  "exports": {
+    "./preset": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/preset.js",
+      "require": "./dist/preset.js"
+    },
+    "./preview": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/preview.js",
+      "require": "./dist/preview.js"
+    },
+    "./helpers": {
+      "types": "./dist/helpers/index.d.ts",
+      "import": "./dist/helpers/index.js",
+      "require": "./dist/helpers/index.js"
+    }
+  },
   "devDependencies": {
     "@storybook/core-webpack": "^7.0.4",
     "@storybook/react": "^7.0.4",

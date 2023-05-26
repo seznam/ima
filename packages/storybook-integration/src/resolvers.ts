@@ -121,7 +121,7 @@ export function resolveRevivalSettings({
   })(typeof window !== 'undefined' && window !== null ? window : global);
   `;
 
-  config.entry?.push(
+  config.entry?.unshift(
     `data:text/javascript;base64,${Buffer.from(revivalSettings).toString(
       'base64'
     )}`
