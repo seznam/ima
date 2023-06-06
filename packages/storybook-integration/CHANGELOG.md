@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.2.0
+
+### Minor Changes
+
+- 00c929e51: Fixed issue where in certain situations you could get $Debug error in storybook previews
+  Added new export `@ima/storybook-integration/helpers` which contains helper functions you can use in your stories. Currently it contains `isStorybook` function export, that can be used in your components code to execute some part specifically only on the storybook screen.
+
 ## 19.1.0
 
 ### Minor Changes

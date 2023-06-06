@@ -1,6 +1,6 @@
 {
   "name": "@ima/storybook-integration",
-  "version": "19.1.0",
+  "version": "19.2.0",
   "description": "Storybook integration addon for IMA.js applications.",
   "type": "module",
   "keywords": [

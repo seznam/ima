@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.11
+
+### Patch Changes
+
+- 20dce931e: Add invalidate cache method to HttpAgent
+
 ## 19.0.10
 
 ### Patch Changes
