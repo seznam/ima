@@ -184,6 +184,11 @@ export abstract class HttpAgent {
   }
 
   /**
+   * Method invalidate cache for given params
+   */
+  invalidateCache(method: string, url: string, data: UnknownParameters) {}
+
+  /**
    * Sets the specified header to be sent with every subsequent HTTP request,
    * unless explicitly overridden by request options.
    *

@@ -186,6 +186,19 @@ export class HttpAgentImpl extends HttpAgent {
   /**
    * @inheritDoc
    */
+  invalidateCache(method: string, url: string, data?: UnknownParameters) {
+    const cacheKey = this.getCacheKey(
+        method,
+        url,
+        data
+    );
+
+    this._cache.delete(cacheKey);
+  }
+
+  /**
+   * @inheritDoc
+   */
   setDefaultHeader(header: string, value: string): this {
     this._proxy.setDefaultHeader(header, value);
 
