@@ -63,8 +63,28 @@ export interface Environment {
     defaultResources: Resources
   ) => Resources;
   $Server: {
-    protocol?: GlobalImaObject['$Protocol'];
-    host?: string;
+    protocol?:
+      | GlobalImaObject['$Protocol']
+      | (({
+          environment,
+          protocol,
+          req,
+        }: {
+          environment: Environment;
+          protocol: string;
+          req: ExpressRequest;
+        }) => GlobalImaObject['$Protocol']);
+    host?:
+      | string
+      | (({
+          environment,
+          host,
+          req,
+        }: {
+          environment: Environment;
+          host: string;
+          req: ExpressRequest;
+        }) => string);
     port: number;
     staticPath: string;
     concurrency: number;
