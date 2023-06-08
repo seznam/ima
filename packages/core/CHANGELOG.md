@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.12
+
+### Patch Changes
+
+- efcf9b99a: Environment $Server properties host&protocol now accepts functions with added arguments.
+
 ## 19.0.11
 
 ### Patch Changes
