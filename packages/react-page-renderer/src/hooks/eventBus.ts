@@ -1,5 +1,5 @@
 import { EventBus, type EventBusListener } from '@ima/core';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useComponentUtils } from './componentUtils';
 
@@ -25,19 +25,29 @@ export interface useEventBusType {
  * @returns Dispatcher `fire` method.
  */
 export function useEventBus(
-  eventTarget: EventTarget,
-  eventName: string,
-  listener: EventBusListener
+  eventTarget?: EventTarget | null,
+  eventName?: string,
+  listener?: EventBusListener
 ): useEventBusType {
   const { $EventBus } = useComponentUtils();
+  const memoListener = useCallback(
+    (...args: Parameters<EventBusListener>) => {
+      listener?.(...args);
+    },
+    [listener]
+  );
 
   useEffect(() => {
-    $EventBus.listen(eventTarget, eventName, listener);
+    if (!eventTarget || !eventName || !memoListener) {
+      return;
+    }
+
+    $EventBus.listen(eventTarget, eventName, memoListener);
 
     return () => {
-      $EventBus.unlisten(eventTarget, eventName, listener);
+      $EventBus.unlisten(eventTarget, eventName, memoListener);
     };
-  }, [$EventBus]);
+  }, [$EventBus, eventName, eventTarget, memoListener]);
 
   return useMemo<useEventBusType>(
     () => ({
