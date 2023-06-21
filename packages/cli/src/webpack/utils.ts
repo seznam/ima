@@ -38,7 +38,7 @@ export function findRules(
     }
 
     if (rule.oneOf) {
-      return recurseFindRules(rule.oneOf);
+      return recurseFindRules(rule.oneOf as RuleSetRule);
     }
 
     if (
@@ -69,7 +69,7 @@ export function findRules(
       cur.use.forEach(r => {
         if (
           (typeof r === 'string' && r.includes(loader)) ||
-          (typeof r === 'object' && r.loader && r.loader.includes(loader))
+          (typeof r === 'object' && r && r.loader && r.loader.includes(loader))
         ) {
           acc.push(r);
         }

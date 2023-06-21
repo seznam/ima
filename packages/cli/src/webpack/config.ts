@@ -173,9 +173,6 @@ export default async (
                       grid: 'autoplace',
                     },
                     stage: 1,
-                    features: {
-                      'custom-properties': false,
-                    },
                   },
                 ],
               ],
