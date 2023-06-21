@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.3
+
+### Patch Changes
+
+- 5a30ba1e1: Fixed useEventBus (could not work properly before)
+
 ## 19.0.2
 
 ### Patch Changes

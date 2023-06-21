@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.0
+
+### Minor Changes
+
+- db669a9b3: Fixed postcss-preset-env settings in webpack config
+
 ## 19.2.0
 
 ### Minor Changes
