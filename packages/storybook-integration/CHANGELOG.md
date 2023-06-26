@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.0
+
+### Minor Changes
+
+- 357a5d000: $Debug, $App, $Version revival settings are now taken from app env settings
+
 ## 19.2.0
 
 ### Minor Changes
