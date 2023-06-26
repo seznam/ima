@@ -3,6 +3,7 @@ import {
   type ImaConfig,
   findRules,
   getLanguageEntryPoints,
+  resolveEnvironment,
 } from '@ima/cli';
 import { Options } from '@storybook/types';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -99,18 +100,24 @@ export function resolveRevivalSettings({
     );
   }
 
+  // Load env for regression environment
+  const oldEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'regression';
+  const env = resolveEnvironment();
+  process.env.NODE_ENV = oldEnv;
+
   const revivalSettings = `(function (root) {
-    root.$Debug = true;
+    root.$Debug = ${env.$App.$Debug};
     root.$IMA = root.$IMA || {};
     $IMA.Test = true;
     $IMA.SPA = true;
+    $IMA.$App = ${JSON.stringify(env.$App)};
     $IMA.$PublicPath = "";
     $IMA.$RequestID = "storybook-request-id";
     $IMA.$Language = "${options.language ?? 'en'}";
     $IMA.$Env = "regression";
-    $IMA.$Debug = true;
-    $IMA.$Version = "1.0.0";
-    $IMA.$App = {};
+    $IMA.$Debug = ${env.$App.$Debug};
+    $IMA.$Version = "${env.$Version}";
     $IMA.$Protocol = "${options.https ? 'https:' : 'http:'}";
     $IMA.$Host = "${
       options.host ? options.host : `localhost:${options.port ?? 6006}`
