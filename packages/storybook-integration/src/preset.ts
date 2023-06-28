@@ -3,8 +3,8 @@ import {
   resolveImaConfig,
   ImaCliArgs,
   compileLanguages,
+  runImaPluginsHook,
 } from '@ima/cli';
-import { runImaPluginsHook } from '@ima/cli/dist/webpack/utils.js';
 import type { GlobalImaObject } from '@ima/core';
 import { Options } from '@storybook/core-webpack';
 import { Configuration } from 'webpack';
