@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.0
+
+### Minor Changes
+
+- 52a8657b1: Added new `runImaPluginsHook` export
+
 ## 19.3.0
 
 ### Minor Changes
