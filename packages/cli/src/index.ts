@@ -15,5 +15,6 @@ export {
   resolveImaConfig,
   createWebpackConfig,
   findRules,
+  runImaPluginsHook,
 } from './webpack/utils';
 export { compileLanguages, getLanguageEntryPoints } from './webpack/languages';
