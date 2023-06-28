@@ -4,6 +4,7 @@ import {
   ImaCliArgs,
   compileLanguages,
 } from '@ima/cli';
+import { runImaPluginsHook } from '@ima/cli/dist/webpack/utils.js';
 import type { GlobalImaObject } from '@ima/core';
 import { Options } from '@storybook/core-webpack';
 import { Configuration } from 'webpack';
@@ -25,10 +26,11 @@ export const webpackFinal = async (
     environment:
       process.env.NODE_ENV === 'production' ? 'production' : 'development',
     rootDir: process.cwd(),
-    command: 'dev',
+    command: options.configType === 'DEVELOPMENT' ? 'dev' : 'build',
   };
 
   const imaConfig = await resolveImaConfig(mockArgs);
+  await runImaPluginsHook(mockArgs, imaConfig, 'preProcess');
   const imaWebpackConfig = await createWebpackConfig(mockArgs, imaConfig);
   const clientConfig = imaWebpackConfig.find(c => c.name === 'client.es');
 
@@ -41,6 +43,12 @@ export const webpackFinal = async (
   // Compile languages
   // @ts-expect-error missing in types
   await compileLanguages(imaConfig, mockArgs.rootDir, options._name === 'dev');
+
+  // Replace minimizers
+  config.optimization = {
+    ...clientConfig.optimization,
+    minimizer: clientConfig.optimization?.minimizer ?? [],
+  };
 
   // Update storybook config with ima specifics
   return [
