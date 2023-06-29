@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.0
+
+### Minor Changes
+
+- ff203f7b2: Ima now uses better mock args to generate storybook webpack config based on storybookconfig type, additionally we replace storybook with our custom minimizers to better match production env
+
 ## 19.3.0
 
 ### Minor Changes
