@@ -50,6 +50,7 @@ Options:
   --clean           Clean build folder before building the application  [boolean] [default: true]
   --clearCache      Deletes node_modules/.cache directory to invalidate loaders cache  [boolean]
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
+  --inspect         Enable Node inspector mode  [boolean]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --open            Opens browser window after server has been started  [boolean] [default: true]
   --openUrl         Custom URL used when opening browser window  [string]
@@ -126,6 +127,12 @@ Clears `./node_modules/.cache` folder. This is used to store webpack filesystem 
 > `boolean = false`
 
 Disables custom CLI logging style in favor of default webpack CLI verbose. This can be useful for debugging.
+
+### --inspect
+
+> `boolean = false`
+
+Disable/enable node [inspector](https://nodejs.org/en/docs/guides/debugging-getting-started) mode.
 
 ### --ignoreWarnings
 
@@ -214,6 +221,7 @@ Disable this option if you are watching and editing `node_modules` files, this m
 > `boolean = true`
 
 Disable/enable lazy init of server app factory.
+
 
 ## Dev server options
 
