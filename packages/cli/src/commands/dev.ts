@@ -41,6 +41,7 @@ function startNodemon(args: ImaCliArgs, environment: Environment) {
       path.join(args.rootDir, p)
     ),
     args: args.verbose ? [`--verbose=${args.verbose}`] : [],
+    nodeArgs: args.inspect ? [`--inspect`] : [],
     cwd: args.rootDir,
   })
     .on('start', () => {
