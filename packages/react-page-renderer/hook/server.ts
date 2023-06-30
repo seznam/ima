@@ -11,7 +11,7 @@ type RendererContext = {
     react: typeof react;
     reactDOM: typeof reactDOM;
     status: number;
-    viewAdapter: react.ReactElement;
+    viewAdapter?: react.ReactElement;
   };
 };
 
@@ -20,6 +20,14 @@ module.exports = function createReactRenderer({
 }: {
   emitter: Emitter;
 }) {
+  emitter.prependListener(Event.BeforeError, event => {
+    const context = event.context as RendererContext;
+
+    if (context?.response?.viewAdapter) {
+      delete context.response.viewAdapter;
+    }
+  });
+
   emitter.prependListener(Event.BeforeResponse, event => {
     const { documentView, documentViewProps, react, reactDOM, viewAdapter } = (
       event.context as RendererContext
