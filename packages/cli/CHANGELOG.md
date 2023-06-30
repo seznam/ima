@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.0
+
+### Minor Changes
+
+- 6324d35ef: Add inspect CLI option for ima server.
+
 ## 19.4.0
 
 ### Minor Changes
