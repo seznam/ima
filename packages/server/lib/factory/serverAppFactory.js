@@ -20,8 +20,12 @@ module.exports = function serverAppFactory({
   logger,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
-  const { processContent, createContentVariables, sendResponseHeaders } =
-    responseUtilsFactory();
+  const {
+    processContent,
+    createContentVariables,
+    sendResponseHeaders,
+    encodeHTMLEntities,
+  } = responseUtilsFactory();
 
   const {
     _initApp,
@@ -240,5 +244,6 @@ module.exports = function serverAppFactory({
     requestHandler,
     responseHandler,
     errorHandler,
+    encodeHTMLEntities,
   };
 };
