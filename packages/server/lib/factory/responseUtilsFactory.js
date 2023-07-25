@@ -2,9 +2,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const validator = require('validator');
-
-const { renderMeta } = require('./utils/metaUtils');
+const { renderMeta, encodeHTMLEntities } = require('./utils/metaUtils');
 const {
   renderScript,
   renderStyles,
@@ -51,9 +49,9 @@ module.exports = function responseUtilsFactory() {
       $IMA.$Version = "${settings.$Version}";
       $IMA.$App = ${JSON.stringify(settings.$App)};
       $IMA.$Protocol = "${
-        settings.$Protocol && validator.escape(settings.$Protocol)
+        settings.$Protocol && encodeHTMLEntities(settings.$Protocol)
       }";
-      $IMA.$Host = "${settings.$Host && validator.escape(settings.$Host)}";
+      $IMA.$Host = "${settings.$Host && encodeHTMLEntities(settings.$Host)}";
       $IMA.$Path = "${settings.$Path}";
       $IMA.$Root = "${settings.$Root}";
       $IMA.$LanguagePartPath = "${settings.$LanguagePartPath}";
@@ -192,6 +190,7 @@ module.exports = function responseUtilsFactory() {
   return {
     createContentVariables,
     processContent,
+    encodeHTMLEntities,
     sendResponseHeaders,
     _prepareCookieOptionsForExpress,
   };

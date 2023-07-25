@@ -1,3 +1,47 @@
+// https://github.com/preactjs/preact-render-to-string/blob/main/src/util.js#L9
+const ENCODED_ENTITIES = /["&<]/;
+
+/** @param {string} value */
+function encodeHTMLEntities(value) {
+  // Skip all work for value with no entities needing encoding:
+  if (value.length === 0 || ENCODED_ENTITIES.test(value) === false) {
+    return value;
+  }
+
+  let last = 0,
+    i = 0,
+    out = '',
+    ch = '';
+
+  // Seek forward in value until the next entity char:
+  for (; i < value.length; i++) {
+    switch (value.charCodeAt(i)) {
+      case 34:
+        ch = '&quot;';
+        break;
+      case 38:
+        ch = '&amp;';
+        break;
+      case 60:
+        ch = '&lt;';
+        break;
+      default:
+        continue;
+    }
+    // Append skipped/buffered characters and the encoded entity:
+    if (i !== last) {
+      out += value.slice(last, i);
+    }
+    out += ch;
+    // Start the next seek/buffer after the entity's offset:
+    last = i + 1;
+  }
+  if (i !== last) {
+    out += value.slice(last, i);
+  }
+  return out;
+}
+
 /**
  * Sanitizes and validates attribute value
  *
@@ -5,7 +49,9 @@
  * @returns string|null Sanitized valid value or null
  */
 function _sanitizeValue(value) {
-  return value === undefined || value === null ? null : value;
+  return value === undefined || value === null
+    ? null
+    : encodeHTMLEntities(value);
 }
 
 /**
@@ -56,7 +102,7 @@ function renderMeta(metaManager) {
   }
 
   return [
-    `<title>${metaManager.getTitle()}</title>`,
+    `<title>${encodeHTMLEntities(metaManager.getTitle())}</title>`,
     ..._getMetaTags(metaManager.getLinksIterator(), 'link', 'rel'),
     ..._getMetaTags(metaManager.getMetaNamesIterator(), 'meta', 'name'),
     ..._getMetaTags(
@@ -72,4 +118,5 @@ function renderMeta(metaManager) {
 module.exports = {
   _getMetaTags,
   renderMeta,
+  encodeHTMLEntities,
 };
