@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.1
+
+### Patch Changes
+
+- 1b07412fa: Prevent XSS for meta tags where application not clear html from user input.
+
 ## 19.1.0
 
 ### Minor Changes
