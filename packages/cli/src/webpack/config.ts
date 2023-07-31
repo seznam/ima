@@ -95,7 +95,7 @@ export default async (
           type: 'es6',
         },
         jsc: {
-          target: isClient ? 'es2018' : 'es2022',
+          target: isClient ? undefined : 'es2022',
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -457,7 +457,6 @@ export default async (
                     type: 'es6',
                   },
                   jsc: {
-                    target: 'es2018',
                     parser: {
                       syntax: 'ecmascript',
                       decorators: false,
