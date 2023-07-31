@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.1
+
+### Patch Changes
+
+- aa32d733f: Fixed invalid swc config, freezed swc/core dependencies to prevent future mishaps
+
 ## 19.5.0
 
 ### Minor Changes
