@@ -65,6 +65,7 @@ module.exports = {
 
     // React plugin overrides
     'react/prop-types': 'off',
+    'react/no-deprecated': 'off',
 
     // Import plugin
     'import/no-unresolved': [
