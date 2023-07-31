@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.2
+
+### Patch Changes
+
+- 3df366e90: Downgraded @swc/core"
+
 ## 19.5.1
 
 ### Patch Changes
