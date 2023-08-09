@@ -4,6 +4,11 @@ const ENCODED_ENTITIES = /["&<]/;
 /** @param {string} value */
 function encodeHTMLEntities(value) {
   // Skip all work for value with no entities needing encoding:
+
+  if (typeof value !== 'string' ) {
+    return '';
+  }
+
   if (value.length === 0 || ENCODED_ENTITIES.test(value) === false) {
     return value;
   }
