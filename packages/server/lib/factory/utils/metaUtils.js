@@ -5,7 +5,7 @@ const ENCODED_ENTITIES = /["&<]/;
 function encodeHTMLEntities(value) {
   // Skip all work for value with no entities needing encoding:
 
-  if (typeof value !== 'string' ) {
+  if (typeof value !== 'string') {
     return '';
   }
 
