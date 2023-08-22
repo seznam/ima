@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.13
+
+### Patch Changes
+
+- c2f9f5a97: Argument `imaInternalEvent` in `Dispatcher.fire` method has now default value.
+
 ## 19.0.12
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.2
+
+### Patch Changes
+
+- b036b1988: Fixed issue where non-string meta values were being sanitized through encodeHTMLEntities, which resulted in server error.
+
 ## 19.1.1
 
 ### Patch Changes
