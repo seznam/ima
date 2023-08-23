@@ -76,7 +76,7 @@ export class PageRendererFactory {
       if (
         !(
           componentPrototype instanceof Component ||
-          this._isFunctionalComponent(componentPrototype)
+          this._isFunctionalComponent(managedRootView)
         )
       ) {
         throw new Error(
