@@ -1,6 +1,8 @@
 /* @if server **
 export class ClientPageManager {};
 /* @else */
+import { autoYield } from '@esmj/task';
+
 import { AbstractPageManager } from './AbstractPageManager';
 import { ManageArgs } from './PageManager';
 import { Dependencies } from '../..';
@@ -112,6 +114,7 @@ export class ClientPageManager extends AbstractPageManager {
       action,
     });
 
+    await autoYield();
     await this._activatePageSource();
 
     return response;

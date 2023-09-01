@@ -60,21 +60,22 @@
     "preversion": "npm test"
   },
   "dependencies": {
+    "@esmj/task": "^0.1.0",
     "@ima/helpers": "^19.0.0",
-    "@types/node": "^18.13.0",
-    "@types/webpack": "^5.28.0",
-    "@types/yargs": "^17.0.22",
-    "classnames": "^2.3.1",
+    "@types/node": "^20.5.7",
+    "@types/webpack": "^5.28.2",
+    "@types/yargs": "^17.0.24",
+    "classnames": "^2.3.2",
     "memoize-one": "^6.0.0",
-    "type-fest": "^3.7.0"
+    "type-fest": "^4.3.1"
   },
   "devDependencies": {
     "@ima/plugin-cli": "^19.0.0",
-    "@types/express": "^4.17.14",
-    "@types/jest": "^29.2.2",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.4",
     "@types/merge-deep": "^3.0.0",
     "@types/multer": "^1.4.7",
-    "jscodeshift": "^0.14.0"
+    "jscodeshift": "^0.15.0"
   },
   "publishConfig": {
     "access": "public",

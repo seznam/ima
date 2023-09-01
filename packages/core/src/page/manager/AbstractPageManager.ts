@@ -1,3 +1,5 @@
+import { autoYield } from '@esmj/task';
+
 import { PageManager, ManageArgs } from './PageManager';
 import { Controller } from '../../controller/Controller';
 import { ControllerDecorator } from '../../controller/ControllerDecorator';
@@ -136,6 +138,7 @@ export abstract class AbstractPageManager extends PageManager {
       route.isControllerResolved() && route.isViewResolved();
 
     try {
+      await autoYield();
       if (!isControllerViewResolved) {
         this._dispatcher.fire(
           RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
@@ -144,6 +147,7 @@ export abstract class AbstractPageManager extends PageManager {
         );
       }
 
+      await autoYield();
       const data = await this.getViewController(route);
       controller = data.controller;
       view = data.view;
@@ -553,6 +557,7 @@ export abstract class AbstractPageManager extends PageManager {
 
     const controller = this._managedPage.controllerInstance;
 
+    await autoYield();
     await controller.activate();
   }
 
@@ -567,6 +572,7 @@ export abstract class AbstractPageManager extends PageManager {
         throw new CancelError();
       }
 
+      await autoYield();
       await extension.activate();
     }
   }
@@ -787,6 +793,7 @@ export abstract class AbstractPageManager extends PageManager {
     actualManagedPage: ManagedPage,
     action: PageAction
   ) {
+    await autoYield();
     const result = this._pageHandlerRegistry.handlePreManagedState(
       actualManagedPage.controller
         ? (this._stripManagedPageValueForPublic(
@@ -813,6 +820,7 @@ export abstract class AbstractPageManager extends PageManager {
       return;
     }
 
+    await autoYield();
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
@@ -839,9 +847,11 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   #cancelable<T>(promise: T): Promise<T | never> {
-    return Promise.race([
-      this._previousManagedPage.state.abort?.promise as never,
-      promise,
-    ]);
+    return autoYield().then(() =>
+      Promise.race([
+        this._previousManagedPage.state.abort?.promise as never,
+        promise,
+      ])
+    );
   }
 }

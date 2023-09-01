@@ -1,3 +1,5 @@
+import { autoYield } from '@esmj/task';
+
 import {
   AbstractRoute,
   AsyncRouteController,
@@ -551,6 +553,7 @@ export abstract class AbstractRouter extends Router {
       action,
     };
 
+    await autoYield();
     /**
      * Call pre-manage to cancel/property kill previously managed
      * route handler.
@@ -566,13 +569,14 @@ export abstract class AbstractRouter extends Router {
         params,
         action,
       })
-      .then(response => {
+      .then(async response => {
         response = response || {};
 
         if (params?.error instanceof Error) {
           (response as Record<string, unknown>).error = params.error;
         }
 
+        await autoYield();
         this._dispatcher.fire(
           RouterEvents.AFTER_HANDLE_ROUTE,
           {
@@ -584,7 +588,10 @@ export abstract class AbstractRouter extends Router {
 
         return response as void | StringParameters;
       })
-      .finally(() => this._pageManager.postManage());
+      .finally(async () => {
+        await autoYield();
+        return this._pageManager.postManage();
+      });
   }
 
   /**
@@ -677,9 +684,9 @@ export abstract class AbstractRouter extends Router {
           )
         );
       }, this._middlewareTimeout);
-
       for (const middleware of middlewares) {
         try {
+          await autoYield();
           /**
            * When middleware uses next() function we await in indefinitely
            * until the function is called. Otherwise we just await the middleware
