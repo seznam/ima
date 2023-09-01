@@ -1,6 +1,7 @@
 /* @if server **
 export class AbstractClientPageRenderer {};
 /* @else */
+import { autoYield, forceYield } from '@esmj/task';
 import {
   Controller,
   ControllerDecorator,
@@ -26,6 +27,8 @@ import { PageRendererFactory } from './PageRendererFactory';
 export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   private _hydrated = false;
   private _mounted = this._createMountedPromise();
+  private _syncMouted = false;
+  private _renderedOnChange = true;
   /**
    * Flag signalling that the page is being rendered for the first time.
    */
@@ -76,11 +79,17 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     const { values: defaultPageState, promises: loadedPromises } =
       this._separatePromisesAndValues(pageResources);
 
+    await forceYield();
+
     let batchPromise: Promise<unknown> = Promise.resolve();
     if (this._viewContainer && this._viewContainer.children.length) {
+      this._renderedOnChange = false;
       controller.setState(defaultPageState);
+      this._renderedOnChange = true;
+
       await this._renderPageViewToDOM(controller, pageView, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
+
       if (this._settings?.$Page?.$Render?.batchResolve) {
         batchPromise = this._startBatchTransactions(controller, loadedPromises);
       }
@@ -120,7 +129,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritDoc
    */
-  update(
+  async update(
     controller: ControllerDecorator,
     pageView: ComponentType,
     resourcesUpdate: UnknownPromiseParameters
@@ -128,7 +137,9 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     const { values: defaultPageState, promises: updatedPromises } =
       this._separatePromisesAndValues(resourcesUpdate);
 
+    await autoYield();
     controller.setState(defaultPageState);
+
     this._patchPromisesToState(controller, updatedPromises);
     let batchPromise: Promise<unknown> = Promise.resolve();
     if (this._settings?.$Page?.$Render?.batchResolve) {
@@ -152,11 +163,18 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
   unmount(): void {
     this._hydrated = false;
+    this._syncMouted = false;
     this._mounted = this._createMountedPromise();
   }
 
   async setState(pageState = {}) {
-    await this._mounted;
+    if (!this._syncMouted) {
+      await this._mounted;
+    }
+
+    if (!this._renderedOnChange) {
+      return;
+    }
 
     this._renderViewAdapter(this._getUpdateCallback(pageState), {
       state: pageState,
@@ -204,7 +222,10 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
   private _createMountedPromise(): Promise<void> {
     return new Promise(resolve => {
-      this._dispatcher.listen(RendererEvents.MOUNTED, () => resolve());
+      this._dispatcher.listen(RendererEvents.MOUNTED, () => {
+        this._syncMouted = true;
+        resolve();
+      });
     });
   }
 
@@ -264,7 +285,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
         controller.beginStateTransaction();
         setTimeout(() => {
           requestIdleCallback(handler(resolve), options);
-        }, 1000 / 60);
+        }, 75);
       } else {
         resolve();
       }
@@ -272,7 +293,9 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
     controller.beginStateTransaction();
     const batchPromise = new Promise<void>(resolve => {
-      requestIdleCallback(handler(resolve), options);
+      setTimeout(() => {
+        requestIdleCallback(handler(resolve), options);
+      }, 100);
     });
 
     this._helpers
@@ -328,12 +351,10 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     }
 
     if (!this._hydrated && this._viewContainer.children.length) {
-      return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
-        this._hydrateViewAdapter();
-        this._hydrated = true;
+      this._hydrateViewAdapter();
+      this._hydrated = true;
 
-        return this._mounted;
-      });
+      return this._mounted;
     } else {
       this._renderViewAdapter(this._getRenderCallback());
 

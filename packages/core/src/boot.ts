@@ -1,3 +1,4 @@
+import { autoYield } from '@esmj/task';
 import { Request as ExpressRequest } from 'express';
 import { PartialDeep } from 'type-fest';
 import { AssetInfo } from 'webpack';
@@ -277,16 +278,22 @@ export function routeClientApp(app: {
     });
 }
 
-export function reviveClientApp(initialAppConfigFunctions: InitAppConfig) {
+export async function reviveClientApp(
+  initialAppConfigFunctions: InitAppConfig
+) {
+  await autoYield();
   const root = _getRoot();
 
   root.$Debug = !!root.$IMA.$Debug;
 
   let app = createImaApp();
+  await autoYield();
   const bootConfig = getClientBootConfig(initialAppConfigFunctions);
 
+  await autoYield();
   app = bootClientApp(app, bootConfig);
 
+  await autoYield();
   return routeClientApp(app).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
@@ -298,12 +305,18 @@ export function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return new Promise(resolve => setTimeout(resolve, 1000 / 60));
+    return autoYield();
   }
 
   return new Promise(resolve => {
-    document.addEventListener('DOMContentLoaded', () => resolve(undefined), {
-      once: true,
-    });
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        return autoYield().then(resolve);
+      },
+      {
+        once: true,
+      }
+    );
   });
 }
