@@ -48,7 +48,7 @@ export const initSettings: InitSettingsFunction = (ns, oc, config) => {
         },
       },
       links: {
-        documentation: 'https://imajs.io/docs',
+        documentation: 'https://imajs.io/introduction/getting-started',
         tutorial: 'https://imajs.io/tutorial/introduction',
         plugins: 'https://github.com/seznam/IMA.js-plugins',
         api: 'https://imajs.io/api',
