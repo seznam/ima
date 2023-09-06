@@ -437,6 +437,7 @@ export default async (
               test: /\.(js|mjs|cjs)$/,
               include: [
                 /@ima/,
+                /@esmj/,
                 ...(imaConfig.transformVendorPaths?.include ?? []),
               ],
               exclude: [
