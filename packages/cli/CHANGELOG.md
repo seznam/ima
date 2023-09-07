@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.3
+
+### Patch Changes
+
+- 983754a53: Added @esmj/\* modules to vendor transpilation.
+
 ## 19.5.2
 
 ### Patch Changes
