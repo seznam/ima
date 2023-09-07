@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.1
+
+### Patch Changes
+
+- db5f2418c: Udpated docs url.
+
 ## 19.1.0
 
 ### Minor Changes

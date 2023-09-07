@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.0
+
+### Minor Changes
+
+- a54c32608: Added `autoYield` mechanism to ima which improve browser responsiveness and core web vitals metrics. The micro tasks are divide into macro tasks if it needs it. In the `PageRenderer` is updated logic for batching updates during page loading phase which is still experimental.
+
 ## 19.0.13
 
 ### Patch Changes
