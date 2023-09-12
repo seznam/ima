@@ -1,4 +1,4 @@
-import { autoYield } from '@esmj/task';
+import { autoYield, nextFrameYield } from '@esmj/task';
 import { Request as ExpressRequest } from 'express';
 import { PartialDeep } from 'type-fest';
 import { AssetInfo } from 'webpack';
@@ -119,6 +119,14 @@ export interface AppEnvironment {
   regression?: PartialDeep<Environment>;
 }
 
+export interface PageRendererSettings {
+  batchResolve?: boolean;
+  masterElementId: string;
+  documentView: unknown;
+  managedRootView?: unknown;
+  viewAdapter?: unknown;
+}
+
 /**
  * App settings for single env key.
  */
@@ -135,13 +143,7 @@ export interface Settings {
     enabled?: boolean;
   };
   $Page: {
-    $Render: {
-      batchResolve?: boolean;
-      masterElementId: string;
-      documentView: unknown;
-      managedRootView?: unknown;
-      viewAdapter?: unknown;
-    };
+    $Render: PageRendererSettings;
   };
 }
 
@@ -305,7 +307,7 @@ export function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return autoYield();
+    return nextFrameYield();
   }
 
   return new Promise(resolve => {
