@@ -169,6 +169,7 @@ export {
   type Environment,
   type AppSettings,
   type Settings,
+  type PageRendererSettings,
   type Manifest,
   type ManifestAsset,
   type Resource,

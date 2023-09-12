@@ -27,8 +27,9 @@ import { PageRendererFactory } from './PageRendererFactory';
 export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   private _hydrated = false;
   private _mounted = this._createMountedPromise();
-  private _syncMouted = false;
+  private _syncMounted = false;
   private _renderedOnChange = true;
+  private _lastRendered = this._createRenderPromise();
   /**
    * Flag signalling that the page is being rendered for the first time.
    */
@@ -82,6 +83,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     await forceYield();
 
     let batchPromise: Promise<unknown> = Promise.resolve();
+    this._lastRendered = Promise.resolve();
     if (this._viewContainer && this._viewContainer.children.length) {
       this._renderedOnChange = false;
       controller.setState(defaultPageState);
@@ -95,35 +97,41 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
       }
     }
 
-    return batchPromise.then(() => {
-      return this._helpers
-        .allPromiseHash(loadedPromises)
-        .then(async (fetchedResources: unknown) => {
-          const pageState = Object.assign(
-            {},
-            defaultPageState,
-            fetchedResources
-          );
+    return batchPromise
+      .then(() => {
+        if (this._settings?.$Page?.$Render?.resolveAfterRender) {
+          return this._lastRendered;
+        }
+      })
+      .then(() => {
+        return this._helpers
+          .allPromiseHash(loadedPromises)
+          .then(async (fetchedResources: unknown) => {
+            const pageState = Object.assign(
+              {},
+              defaultPageState,
+              fetchedResources
+            );
 
-          const isViewContainerEmpty =
-            !this._viewContainer || !this._viewContainer.children.length;
-          isViewContainerEmpty && controller.setState(pageState);
-          controller.setMetaParams(pageState);
+            const isViewContainerEmpty =
+              !this._viewContainer || !this._viewContainer.children.length;
+            isViewContainerEmpty && controller.setState(pageState);
+            controller.setMetaParams(pageState);
 
-          isViewContainerEmpty &&
-            (await this._renderPageViewToDOM(
-              controller,
-              pageView,
-              routeOptions
-            ));
+            isViewContainerEmpty &&
+              (await this._renderPageViewToDOM(
+                controller,
+                pageView,
+                routeOptions
+              ));
 
-          return {
-            pageState: controller.getState(),
-            status: controller.getHttpStatus(),
-          };
-        })
-        .catch((error: Error) => this._handleError(error));
-    });
+            return {
+              pageState: controller.getState(),
+              status: controller.getHttpStatus(),
+            };
+          })
+          .catch((error: Error) => this._handleError(error));
+      });
   }
 
   /**
@@ -142,39 +150,48 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
     this._patchPromisesToState(controller, updatedPromises);
     let batchPromise: Promise<unknown> = Promise.resolve();
+    this._lastRendered = Promise.resolve();
     if (this._settings?.$Page?.$Render?.batchResolve) {
       batchPromise = this._startBatchTransactions(controller, updatedPromises);
     }
 
-    return batchPromise.then(() => {
-      return this._helpers
-        .allPromiseHash(updatedPromises)
-        .then(() => {
-          controller.setMetaParams(controller.getState());
+    return batchPromise
+      .then(() => {
+        if (this._settings?.$Page?.$Render?.resolveAfterRender) {
+          return this._lastRendered;
+        }
+      })
+      .then(() => {
+        return this._helpers
+          .allPromiseHash(updatedPromises)
+          .then(() => {
+            controller.setMetaParams(controller.getState());
 
-          return {
-            pageState: controller.getState(),
-            status: controller.getHttpStatus(),
-          };
-        })
-        .catch((error: Error) => this._handleError(error));
-    });
+            return {
+              pageState: controller.getState(),
+              status: controller.getHttpStatus(),
+            };
+          })
+          .catch((error: Error) => this._handleError(error));
+      });
   }
 
   unmount(): void {
     this._hydrated = false;
-    this._syncMouted = false;
+    this._syncMounted = false;
     this._mounted = this._createMountedPromise();
   }
 
   async setState(pageState = {}) {
-    if (!this._syncMouted) {
+    if (!this._syncMounted) {
       await this._mounted;
     }
 
     if (!this._renderedOnChange) {
       return;
     }
+
+    this._lastRendered = this._createRenderPromise();
 
     this._renderViewAdapter(this._getUpdateCallback(pageState), {
       state: pageState,
@@ -200,8 +217,9 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   }
 
   protected _getUpdateCallback(pageState: unknown) {
-    return () =>
+    return () => {
       this._dispatcher.fire(RendererEvents.UPDATED, { pageState }, true);
+    };
   }
 
   /**
@@ -222,10 +240,24 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
   private _createMountedPromise(): Promise<void> {
     return new Promise(resolve => {
-      this._dispatcher.listen(RendererEvents.MOUNTED, () => {
-        this._syncMouted = true;
+      const handler = () => {
+        this._syncMounted = true;
         resolve();
-      });
+        this._dispatcher.unlisten(RendererEvents.MOUNTED, handler);
+      };
+
+      this._dispatcher.listen(RendererEvents.MOUNTED, handler);
+    });
+  }
+
+  private _createRenderPromise(): Promise<void> {
+    return new Promise(resolve => {
+      const handler = () => {
+        resolve();
+        this._dispatcher.unlisten(RendererEvents.UPDATED, handler);
+      };
+
+      this._dispatcher.listen(RendererEvents.UPDATED, handler);
     });
   }
 
