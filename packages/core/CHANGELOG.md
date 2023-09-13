@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.0
+
+### Minor Changes
+
+- 460a3aed7: Added new option resolveAfterRender which resolving promise from PagaManeger mount and update methods after react render component to DOM with state created from controller/extensions load methods. The @esmj/task is updated to improve INP metric. The load event should be called before page is hydrated.
+
 ## 19.1.0
 
 ### Minor Changes
