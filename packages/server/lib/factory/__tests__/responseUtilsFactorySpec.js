@@ -36,7 +36,7 @@ describe('responseUtilsFactory', () => {
     processContent,
     createContentVariables,
     _prepareCookieOptionsForExpress,
-  } = responseUtilsFactory();
+  } = responseUtilsFactory({ applicationFolder: 'applicationFolder' });
 
   nowMock.mockRestore();
   randomMock.mockRestore();

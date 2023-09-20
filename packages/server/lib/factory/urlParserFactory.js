@@ -6,8 +6,8 @@ const { URL } = require('url');
 
 const { GenericError } = require('@ima/core');
 
-module.exports = function urlParserFactory({ environment }) {
-  const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
+module.exports = function urlParserFactory({ applicationFolder, environment }) {
+  const IMA_CONFIG_JS_PATH = path.resolve(applicationFolder, './ima.config.js');
 
   function _getHost(req) {
     const forwardedHost = req.get('X-Forwarded-Host');
