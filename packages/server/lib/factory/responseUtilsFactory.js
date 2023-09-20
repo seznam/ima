@@ -9,10 +9,13 @@ const {
   prepareDefaultResources,
 } = require('./utils/resourcesUtils');
 
-module.exports = function responseUtilsFactory() {
+module.exports = function responseUtilsFactory({ applicationFolder }) {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
-  const runnerPath = path.resolve('./build/server/runner.js');
-  const manifestPath = path.resolve('./build/manifest.json');
+  const runnerPath = path.resolve(
+    applicationFolder,
+    './build/server/runner.js'
+  );
+  const manifestPath = path.resolve(applicationFolder, './build/manifest.json');
   const uuidPrefix = `${Date.now().toString(36)}-${(
     Math.random() * 2057
   ).toString(36)}`;

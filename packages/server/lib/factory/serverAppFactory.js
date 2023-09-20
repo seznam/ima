@@ -25,7 +25,7 @@ module.exports = function serverAppFactory({
     createContentVariables,
     sendResponseHeaders,
     encodeHTMLEntities,
-  } = responseUtilsFactory();
+  } = responseUtilsFactory({ applicationFolder });
 
   const {
     _initApp,
