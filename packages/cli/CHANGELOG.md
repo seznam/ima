@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.0
+
+### Minor Changes
+
+- 5399d0c7e: Localization files are now deep merged instead of overriding all keys. This allows you tu override certain localization keys without having to copy the entire contents of the file.
+
 ## 19.5.3
 
 ### Patch Changes
