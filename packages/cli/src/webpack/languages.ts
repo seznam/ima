@@ -8,6 +8,7 @@ import compileModule, {
 } from '@messageformat/core/lib/compile-module';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
+import merge from 'deepmerge';
 import globby from 'globby';
 
 import { ImaConfig } from '../types';
@@ -156,7 +157,7 @@ export { };
  * @param outputPath Output path for the messageformat JS module.
  */
 export async function parseLanguageFiles(
-  messages: StringStructure,
+  messages: Record<string, any>,
   locale: string,
   languagePaths: string | string[],
   outputPath: string
@@ -171,8 +172,9 @@ export async function parseLanguageFiles(
             languagePath
           );
 
-          messages[dictionaryKey] = JSON.parse(
-            (await fs.promises.readFile(languagePath)).toString()
+          messages[dictionaryKey] = merge(
+            messages[dictionaryKey] ?? {},
+            JSON.parse((await fs.promises.readFile(languagePath)).toString())
           );
         } catch (error) {
           throw new Error(
