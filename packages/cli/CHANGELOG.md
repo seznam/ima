@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.1
+
+### Patch Changes
+
+- cc9c43f95: Replaced deepmerge dependency with @ima/helpers assignRecursively which is used for deep merging localization files
+
 ## 19.6.0
 
 ### Minor Changes
