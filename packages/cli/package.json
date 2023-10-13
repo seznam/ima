@@ -31,6 +31,7 @@
   "dependencies": {
     "@ima/dev-utils": "^19.0.0",
     "@ima/error-overlay": "^19.0.0",
+    "@ima/helpers": "^19.0.0",
     "@ima/hmr-client": "^19.0.0",
     "@messageformat/core": "^3.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.9",
@@ -48,7 +49,6 @@
     "core-js": "^3.30.0",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^5.0.0",
-    "deepmerge": "^4.3.1",
     "ejs": "^3.1.7",
     "express": "^4.18.1",
     "express-static-gzip": "^2.1.7",

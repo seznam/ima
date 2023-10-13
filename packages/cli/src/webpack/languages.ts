@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger } from '@ima/dev-utils/logger';
+import { assignRecursively } from '@ima/helpers';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,
 } from '@messageformat/core/lib/compile-module';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
-import merge from 'deepmerge';
 import globby from 'globby';
 
 import { ImaConfig } from '../types';
@@ -172,7 +172,7 @@ export async function parseLanguageFiles(
             languagePath
           );
 
-          messages[dictionaryKey] = merge(
+          messages[dictionaryKey] = assignRecursively(
             messages[dictionaryKey] ?? {},
             JSON.parse((await fs.promises.readFile(languagePath)).toString())
           );
