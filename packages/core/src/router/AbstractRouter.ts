@@ -734,7 +734,7 @@ export abstract class AbstractRouter extends Router {
     }
 
     return {
-      ...route.extractParameters(originalPath, this.getUrl()),
+      ...route.extractParameters(originalPath, this.getBaseUrl()),
       ...params,
     };
   }
