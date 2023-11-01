@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.0
+
+### Minor Changes
+
+- 00c4cc7a3: Added `urlParserFactory` exports for use in custom middlewares
+
 ## 19.1.3
 
 ### Patch Changes

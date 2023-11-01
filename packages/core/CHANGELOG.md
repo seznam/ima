@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.1
+
+### Patch Changes
+
+- 7ae02ffe8: Fixed doubled path in extractParameters
+
 ## 19.2.0
 
 ### Minor Changes
