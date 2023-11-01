@@ -201,5 +201,5 @@ module.exports = function urlParserFactory({ applicationFolder, environment }) {
     }
   }
 
-  return { urlParser };
+  return { urlParser, getProtocol: _getProtocol, getHost: _getHost };
 };
