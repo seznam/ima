@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.2
+
+### Patch Changes
+
+- f9b9511a9: partitioned cookie option
+
 ## 19.2.1
 
 ### Patch Changes
