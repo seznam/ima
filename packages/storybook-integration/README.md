@@ -111,12 +111,12 @@ export const Story = {
 
 ## TypeScript support
 
-Add following to your `tsconfig.json`. Since we are not importing anything from this packaged, the types would not be loaded automatically without following option.
+Add following to your `tsconfig.json`. Since we are not importing anything from this packaged (in default state), the types would not be loaded automatically without following option.
 
 ```json
 {
   "compilerOptions": {
-    "types": ["./node_modules/@ima/storybook-integration/dist/types.d.ts"],
+    "types": ["./node_modules/@ima/storybook-integration/dist/index.d.ts"],
   }
 }
 ```
