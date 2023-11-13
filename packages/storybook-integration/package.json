@@ -19,29 +19,27 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "main": "./dist/preset.js",
-  "module": "./dist/preset.js",
-  "types": "./dist/types.d.ts",
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/index.js"
+    },
     "./preset": {
       "types": "./dist/types.d.ts",
-      "import": "./dist/preset.js",
-      "require": "./dist/preset.js"
+      "import": "./dist/preset.js"
     },
     "./preview": {
       "types": "./dist/types.d.ts",
-      "import": "./dist/preview.js",
-      "require": "./dist/preview.js"
+      "import": "./dist/preview.js"
     },
     "./helpers": {
       "types": "./dist/helpers/index.d.ts",
-      "import": "./dist/helpers/index.js",
-      "require": "./dist/helpers/index.js"
+      "import": "./dist/helpers/index.js"
     }
   },
   "devDependencies": {

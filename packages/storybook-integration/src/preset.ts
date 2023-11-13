@@ -15,7 +15,7 @@ import {
   resolveLanguageEntryPoints,
   resolveSWC,
   resolveRevivalSettings,
-} from './resolvers.js';
+} from './presets/resolvers.js';
 
 export const webpackFinal = async (
   config: Configuration,
