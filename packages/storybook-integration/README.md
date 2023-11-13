@@ -72,14 +72,51 @@ export const Story = {
 
 Where settings are deeply merged with the ones from app settings function. You can use this on per-story basis or define global overrides.
 
-### Autocomplete types for `parameters`
+### `isStorybook` helper
 
-Add following to your `tsconfig.json`. Since we are not importing anything from this packaged, the types would not be loaded automatically without following option.
+You can use this helper to check if you are within storybook environment. This is useful for example when you want to render something only in storybook.
+
+```js
+import { isStorybook } from '@ima/storybook-integration/helpers';
+
+
+export function Header() {
+  return (
+    <div>
+      {isStorybook() ? (
+        <div>Rendered only in storybook</div>
+      ) : (
+        <div>Rendered only in app</div>
+      )}
+    </div>
+  );
+};
+```
+
+**This pattern should be used only as last resort**, you should use storybook native features like [args](https://storybook.js.org/docs/react/writing-stories/args) or [decorators](https://storybook.js.org/docs/react/writing-stories/decorators) when possible.
+
+### Decorators & other utilities
+
+The package also exports some additional utilities and decorates you can use in your stories. All are available from default export.
+
+```js
+import { withPageContext } from '@ima/storybook-integration';
+
+export const Story = {
+  decorators: [withPageContext],
+};
+```
+
+- `withPageContext` - adds `pageContext` to your story. It is used already as root decorator when using `ima` storybook-integration. So this is usefull only in niche cases.
+
+## TypeScript support
+
+Add following to your `tsconfig.json`. Since we are not importing anything from this packaged (in default state), the types would not be loaded automatically without following option.
 
 ```json
 {
   "compilerOptions": {
-    "types": ["./node_modules/@ima/storybook-integration/dist/types.d.ts"],
+    "types": ["./node_modules/@ima/storybook-integration/dist/index.d.ts"],
   }
 }
 ```
