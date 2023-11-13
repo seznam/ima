@@ -27,19 +27,23 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./preset": {
       "types": "./dist/preset.d.ts",
-      "import": "./dist/preset.js"
+      "import": "./dist/preset.js",
+      "default": "./dist/preset.js"
     },
     "./preview": {
       "types": "./dist/preview.d.ts",
-      "import": "./dist/preview.js"
+      "import": "./dist/preview.js",
+      "default": "./dist/preview.js"
     },
     "./helpers": {
       "types": "./dist/helpers/index.d.ts",
-      "import": "./dist/helpers/index.js"
+      "import": "./dist/helpers/index.js",
+      "default": "./dist/helpers/index.js"
     }
   },
   "devDependencies": {
