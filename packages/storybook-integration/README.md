@@ -24,7 +24,7 @@ npm install @ima/storybook-integration -D
 
 ## Usage
 
-Register addon in config in `.storybook/main.js`. Optionally you can set custom language, for loading language files.
+Register addon in config in `.storybook/main.js`. Optionally you can set custom language, for loading language files, or set CLI plugins to skip (some plugins might not work well with Storybook, such as minimizers/scramblers).
 
 ```js
 const config = {
@@ -33,7 +33,8 @@ const config = {
     {
       name: "@ima/storybook-integration",
       options: {
-        language: 'cs'
+        language: 'cs',
+        skipPlugins: ['ScrambleCssPlugin']
       }
     }
   ],

@@ -24,7 +24,7 @@ import {
 
 export const webpackFinal = async (
   config: Configuration,
-  options: Options & { $IMA: GlobalImaObject }
+  options: Options & { $IMA: GlobalImaObject; skipPlugins?: string[] }
 ): Promise<Configuration> => {
   const mockArgs: ImaCliArgs = {
     clean: false,
@@ -43,6 +43,19 @@ export const webpackFinal = async (
   fs.rmSync(buildFolder, { recursive: true });
 
   const imaConfig = await resolveImaConfig(mockArgs);
+
+  // Remove chosen CLI plugins from build (some plugins might not be compatible with storybook)
+  const { skipPlugins = [] } = options;
+  if (skipPlugins.length) {
+    logger.write(
+      `${chalk.green('info')} => Configured to skip CLI plugins: ${skipPlugins
+        .map(pluginName => chalk.blue(pluginName))
+        .join(', ')}`
+    );
+    imaConfig.plugins = (imaConfig?.plugins || []).filter(
+      plugin => !skipPlugins.includes(plugin.constructor.name)
+    );
+  }
   await runImaPluginsHook(mockArgs, imaConfig, 'preProcess');
   const imaWebpackConfig = await createWebpackConfig(mockArgs, imaConfig);
   const clientConfig = imaWebpackConfig.find(c => c.name === 'client.es');
