@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.1
+
+### Patch Changes
+
+- 2c0d4f63f: Cleans build folder before running and adds option to disable chosen plugins for storybook builds (in case they don't play well with Storybook).
+
 ## 19.5.0
 
 ### Minor Changes
