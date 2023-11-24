@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.5.2
+
+### Patch Changes
+
+- 5a8a5bdd2: Moved chalk@4 to dependencies from peerDependencies, to prevent installation of unsupported versions
+- 207e74052: Storybook build will not crash if build folder does not exist yet
+
 ## 19.5.1
 
 ### Patch Changes
