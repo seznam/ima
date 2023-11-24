@@ -40,7 +40,7 @@ export const webpackFinal = async (
     `${chalk.green('info')} => Removing build folder '${buildFolder}'`
   );
 
-  fs.rmSync(buildFolder, { recursive: true });
+  fs.rmSync(buildFolder, { recursive: true, force: true });
 
   const imaConfig = await resolveImaConfig(mockArgs);
 
