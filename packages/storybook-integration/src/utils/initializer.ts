@@ -28,7 +28,7 @@ const initializers: ImaInitializers = [];
  */
 export function registerImaInitializer(
   initializer: InitAppConfigCallback,
-  priority = 100000
+  priority: number
 ): void {
   initializers.push({ initializer, priority });
 }
