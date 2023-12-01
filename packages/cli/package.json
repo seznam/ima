@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "19.6.1",
+  "version": "19.6.2",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",

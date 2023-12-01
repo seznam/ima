@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.6.0
+
+### Minor Changes
+
+- 7bcbf6d71: Added support for imaInitializers. These allow you to register multiple boot config overrides across multiple packages and execute them all.
+
+### Patch Changes
+
+- 7bcbf6d71: Changed default tsconfig to isolated modules, which required some export adjustments
+
 ## 19.5.2
 
 ### Patch Changes

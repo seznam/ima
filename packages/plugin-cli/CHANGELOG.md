@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- 7bcbf6d71: Changed default tsconfig to isolated modules, which required some export adjustments
+
 ## 19.0.0
 
 ### Major Changes
