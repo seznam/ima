@@ -1,9 +1,9 @@
 export {
-  ImaCliPlugin,
-  ImaConfig,
-  ImaCliCommand,
-  ImaCliArgs,
-  ImaConfigurationContext,
+  type ImaCliPlugin,
+  type ImaConfig,
+  type ImaCliCommand,
+  type ImaCliArgs,
+  type ImaConfigurationContext,
 } from './types';
 
 export {

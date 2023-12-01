@@ -4,7 +4,7 @@ export { swcLoaderErrorParser } from './swcLoaderErrorParser';
 export { webpackErrorParser } from './webpackErrorParser';
 
 export {
-  CompileError,
+  type CompileError,
   RE_FILE_PATH_REGEX,
   extractErrorLoc,
   extractFileUri,
