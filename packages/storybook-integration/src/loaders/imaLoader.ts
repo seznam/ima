@@ -3,6 +3,8 @@ import { Loader, Parameters, ReactRenderer } from '@storybook/react';
 import { StoryContextForLoaders, StrictArgs } from '@storybook/types';
 import merge from 'ts-deepmerge';
 
+import { getImaInitializers } from '../utils/initializer.js';
+
 let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;
 let lastImaParams: Parameters = {};
@@ -53,29 +55,37 @@ function updateState(
 }
 
 /**
- * Extend app boot config with parameter overrides.
+ * Extend app boot config with parameter overrides + custom initializers.
  */
 export function extendBootConfig(
   storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>,
   appConfigFunctions: imaCore.InitAppConfig,
   extendedConfig?: Parameters['ima']
 ): imaCore.InitAppConfig {
+  const initializers = getImaInitializers(storybookArgs);
+
   return {
     initBindApp: (...args) => {
       appConfigFunctions.initBindApp(...args);
+      initializers.map(callback => callback?.initBindApp?.(...args));
       extendedConfig?.initBindApp?.(...args, storybookArgs);
     },
     initRoutes: (...args) => {
       appConfigFunctions.initRoutes(...args);
+      initializers.map(callback => callback?.initRoutes?.(...args));
       extendedConfig?.initRoutes?.(...args, storybookArgs);
     },
     initServicesApp: (...args) => {
       appConfigFunctions.initServicesApp(...args);
+      initializers.map(callback => callback?.initServicesApp?.(...args));
       extendedConfig?.initServicesApp?.(...args, storybookArgs);
     },
     initSettings: (...args) => {
       return merge(
         appConfigFunctions.initSettings(...args),
+        initializers.reduce((acc, cur) => {
+          return merge(acc, cur?.initSettings?.(...args) ?? {});
+        }, {}),
         extendedConfig?.initSettings?.(...args, storybookArgs) ?? {}
       );
     },
