@@ -13,7 +13,7 @@ function assign(target, source, parentField = null, ignoreMeta = true) {
     fieldList.push(fieldPath);
 
     if (value instanceof Array) {
-      target[field] = value.slice();
+      target[field] = clone(value);
     } else if (
       value instanceof Object &&
       !(value instanceof Function) &&

@@ -12,6 +12,15 @@ describe('helper', () => {
       );
       expect(target).toStrictEqual({ a: 3, b: { c: 5, d: [5] }, d: 4 });
     });
+
+    it('should clone array to the target object', () => {
+      const arrayWithObject = [{ x: 1 }];
+      let target = {};
+      helpers.assignRecursively(target, { a: arrayWithObject, d: 4 });
+
+      expect(target).toStrictEqual({ a: arrayWithObject, d: 4 });
+      expect(arrayWithObject[0]).not.toBe(target.a[0]);
+    });
   });
 
   describe('assignRecursivelyWithTracking', () => {
