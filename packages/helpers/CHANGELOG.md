@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.2
+
+### Patch Changes
+
+- c0f035919: fix for assignRecursively - use deepClone for arrays instead of slice, so any modifications in the assignRecursively result newly NOT mutate the other results
+
 ## 19.0.1
 
 ### Patch Changes
