@@ -10,7 +10,7 @@ using the provided tools and several [plugins](https://github.com/seznam/IMA.js-
 IMA.js development stack consists of many different components. Here's a summary of few of the main ones:
 - [React](https://reactjs.org/docs/getting-started.html) for UI, which you should [learn before](https://reactjs.org/tutorial/tutorial.html) you dive head-first into IMA.js.
 - [Express.js](http://expressjs.com/) as the web server, but you don't need to know express to use IMA.js.
-- [Rollup](https://rollupjs.org/) and [Gulp](https://gulpjs.com/) with various other tools which are used for building the application.
+- [Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/) and [Vite](https://vitejs.dev/) with various other tools which are used for building the application.
 - And various little utilities you don't need to concern yourself with :).
 
 :::info
@@ -39,12 +39,7 @@ npx create-ima-app my-app
 
 :::
 
-This will bootstrap your new application and install all dependencies. The provided wizard will
-also let you choose the template you wish to start with.
-
-- `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello)]
-- `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/feed)]
-- `todos` - Twitter-Like Feed [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/todos)]
+This will bootstrap your new application and install all dependencies. 
 
 After the installation succeeds, run following commands to start your application:
 
@@ -61,13 +56,13 @@ which describes many different parts of IMA.js in detail, take a direct look at 
 
 Once you've initialized your new IMA.js project, following commands become available to you through npm.
 
-- `npm run dev` - Starts development server in ES6 mode on [`http://localhost:3001/`](http://localhost:3001/). This will also start gulp tasks in watch mode, so any changes you make to the source code are automatically re-builded.
-- `npm run dev --legacy-compat-mode` - Starts development server in legacy mode for older browsers, where the code is transpiled to ES5 (IE11).
+- `npm run dev` - Starts development server in ES13 mode on [`http://localhost:3001/`](http://localhost:3001/). This will also start task in watch mode, so any changes you make to the source code are automatically re-builded.
 - `npm run test` - Starts jest test runners.
 - `npm run lint` - Runs eslint on your application source files. We've prepared pre-configured .eslintrc.js file which follows our IMA.js coding styles, but feel free to adjust this to your needs.
 - `npm run build` - Builds your application. For more information *(see [Production use](#production-use))*.
-- `npm run build:spa` - Builds SPA version of your application.
 - `npm run start` - Starts IMA.js server.
+
+The new IMA [cli](https://imajs.io/cli/) brings more configuration for your application.
 
 ### Why should I use `create-ima-app` command?
 Developing IMA.js application is fairly easy, but the initial setup process can be quite tiresome.
@@ -80,53 +75,57 @@ Running `npx create-ima-app my-app` command will create following directory stru
 
 ```
 my-app
-├── LICENSE
-├── README.md
 ├── app
-│   ├── assets
-│   │   ├── less
-│   │   └── static
-│   ├── build.js
 │   ├── component
-│   │   └── document
+│   │   └── card
 │   ├── config
 │   │   ├── bind.js
 │   │   ├── routes.js
 │   │   ├── services.js
 │   │   └── settings.js
-│   ├── environment.js
-│   ├── main.js
-│   └── page
-│       ├── AbstractPageController.js
-│       ├── error
-│       ├── home
-│       └── notFound
-├── gulpConfig.js
-├── gulpfile.js
+│   ├── document
+│   │   └── DocumentView.jsx
+│   ├── less
+│   │   ├── global.less
+│   │   └── app.less
+│   ├── page
+│   │   ├── AbstractPageController.js
+│   │   ├── error
+│   │   ├── home
+│   │   └── notFound
+│   ├── public
+│   │   ├── cards.json
+│   │   ├── favicon.ico
+│   │   └── ...
+│   └─── main.js
+└── server
+│   ├── config
+│   │   └── environment.js
+│   ├── template
+│   │   ├── 400.ejs
+│   │   ├── 500.ejs
+│   │   └── spa.ejs
+│   └── app.js
+│   └── server.js
+├── LICENSE
+├── README.md
+├── ima.config.js
 ├── jest.config.json
 ├── jest.setup.js
+├── jsConfig.json
 ├── package-lock.json
-├── package.json
-└── server
-    └── server.js
+└── package.json
 ```
 
 So let's take a closer look at the **contents of the application**:
 
-- `app` - main application folder where all the source code is located.
-  - `assets` - files that are preprocessed and copied to our built application,
-    usually as static resources.
-    - `less` - Less CSS files defining common rules, overrides, macros, mixins
-      and the basic UI layout.
-    - `static` - any files that do not need preprocessing (3rd party JS files,
-      images, ...).
-      - `html` - this folder contains **two main files**:
-        - `spa.html` - this is a template for SPA applications.
-        - `error.html` - an error page showed in production.
+- `app` - main application folder where all application source code is located.
   - `component` - our React components for use in the view. Components are
   covered in [part 3 of our tutorial](../tutorial/adding-some-state.md).
   - `config`, `environment.js` - configuration files. For more information see
-    [Configuration](./configuration) page.
+  [Configuration](./configuration) page.
+  - `less` - Less CSS files defining common rules, overrides, macros, mixins
+    and the basic UI layout.
   - `page` - controllers, main views and page-specific Less CSS files for pages
     in our application. Usage of these is configured via routing.
     - `error` - the page shown when the application encounters an error that
@@ -134,11 +133,13 @@ So let's take a closer look at the **contents of the application**:
     - `home` - the index (home) page.
     - `notFound` - the page shown when the user navigates to a page that is not
       defined in our application.
+  - `public` - files that are preprocessed and copied to `built/static/public/` for our build application,
+    usually as static resources.
 
-The `assets` and `config` directories are **expected** by the IMA.js
+<!-- TODO The `assets` and `config` directories are **expected** by the IMA.js
 application stack, the remaining directories can be renamed or moved and you
 are free to organize your files in any way you like (but you will have to
-update the configuration accordingly).
+update the configuration accordingly). -->
 
 ## Production use
 
@@ -167,7 +168,7 @@ npm run start
 Your application is now running at [`http://localhost:3001/`](http://localhost:3001/)
 (unless configured otherwise).
 
-### Building for SPA deployment
+<!-- TODO ### Building for SPA deployment
 
 It is also possible to deploy your IMA.js application as an SPA (single-page
 application). To do that, run the following command to build your application:
@@ -177,4 +178,4 @@ npm run build:spa
 ```
 
 Your built application will be in the `build` directory, ready to deploy
-to a HTTP server.
+to a HTTP server. -->
