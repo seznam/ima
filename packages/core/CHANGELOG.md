@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.3
+
+### Patch Changes
+
+- 677dfcc16: Fixed OC chaining and missing type for Response cookie options.
+
 ## 19.2.2
 
 ### Patch Changes
