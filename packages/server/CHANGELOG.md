@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.0
+
+### Minor Changes
+
+- 093a4b6ef: Updates dependency @esmj/monitor to the latest version - support for defining custom metrics.
+
 ## 19.2.0
 
 ### Minor Changes
