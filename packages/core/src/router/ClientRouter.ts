@@ -61,7 +61,6 @@ export class ClientRouter extends AbstractRouter {
       RouteFactory,
       Dispatcher,
       Window,
-      // @ts-expect-error `FIXME`
       '?$Settings.$Router.middlewareTimeout',
     ];
   }

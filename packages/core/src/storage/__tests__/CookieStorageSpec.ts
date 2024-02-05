@@ -18,7 +18,7 @@ describe('ima.storage.CookieStorage', () => {
   const setCookieStringWithDomain =
     'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
   const setCookieStringWithComplex =
-    'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Partitioned; Path=/; SameSite=Lax';
+    'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Partitioned; Path=/; SameSite=lax';
   const setCookieStringWithMaxAge =
     'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Partitioned; Secure; Path=/';
   const cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
@@ -162,7 +162,7 @@ describe('ima.storage.CookieStorage', () => {
         (cookie['_storage'].get('cok1') as Cookie).options.expires
       ).not.toBeNull();
       expect((cookie['_storage'].get('cok1') as Cookie).options.sameSite).toBe(
-        'Lax'
+        'lax'
       );
       expect((cookie['_storage'].get('cok2') as Cookie).options.path).toBe('/');
     });
@@ -240,7 +240,7 @@ describe('ima.storage.CookieStorage', () => {
         secure: true,
         path: '/',
         domain: 'localhost:3001',
-        sameSite: 'Lax',
+        sameSite: 'lax',
         partitioned: true,
       });
     });
