@@ -1,10 +1,11 @@
 /* @if client **
 export class Response {};
 /* @else */
-import { Response as ExpressResponse, CookieOptions } from 'express';
+import { Response as ExpressResponse } from 'express';
 
 import { RouteOptions } from './Router';
 import { GenericError } from '../error/GenericError';
+import { type CookieOptions } from '../storage/CookieStorage';
 import { UnknownParameters } from '../types';
 
 export type CookieTransformFunction = {

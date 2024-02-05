@@ -56,9 +56,7 @@ type AddOCPrefixes<T, P extends string> = {
 };
 
 type AddOCChaining<T> = {
-  [K in keyof T as K extends string ? `${K}` | `${K}.${string}` : never]:
-    | T[K]
-    | null;
+  [K in keyof T as K extends string ? `${K}` | `${K}.${string}` : never]: T[K];
 };
 
 type WithOCOptional<T> = AddOCPrefixes<AddOCChaining<T>, '?'>;
