@@ -24,7 +24,9 @@ export const defaultConfig: ImaPluginConfig = {
     },
   ],
   plugins: [
-    typescriptDeclarationsPlugin({ additionalArgs: ['--skipLibCheck'] }),
+    typescriptDeclarationsPlugin({
+      additionalArgs: ['--skipLibCheck'],
+    }),
   ],
   exclude: [
     '**/__snapshots__/**',

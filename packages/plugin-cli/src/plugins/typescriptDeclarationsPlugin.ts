@@ -9,19 +9,32 @@ import { Plugin } from '../types';
 export interface TypescriptDeclarationsPluginOptions {
   additionalArgs?: string[];
   tscPath?: string;
+  tsConfigPath?: string;
+  allowFailure?: boolean;
+}
+
+/**
+ * Resolves tsconfig paths in given directory and returns them.
+ * We always use the first one. They are sorted by their priority.
+ */
+function resolveTsConfigs(cwd: string) {
+  const tsConfigPaths = ['tsconfig.build.json', 'tsconfig.json'];
+
+  return tsConfigPaths.filter(tsConfigPath =>
+    fs.existsSync(path.join(cwd, tsConfigPath))
+  );
 }
 
 export function typescriptDeclarationsPlugin(
   options: TypescriptDeclarationsPluginOptions
 ): Plugin {
-  let hasTsConfig: boolean | undefined;
+  let tsConfigPath: string | undefined;
+  const allowFailure = options?.allowFailure ?? false;
 
   return async context => {
-    if (typeof hasTsConfig === 'undefined') {
-      hasTsConfig = fs.existsSync(path.join(context.cwd, 'tsconfig.json'));
-    }
+    [tsConfigPath] = options?.tsConfigPath ?? resolveTsConfigs(context.cwd);
 
-    if (!hasTsConfig) {
+    if (!tsConfigPath) {
       return;
     }
 
@@ -37,7 +50,10 @@ export function typescriptDeclarationsPlugin(
         [
           '--outDir',
           context.config.output[0].dir,
+          '--project',
+          tsConfigPath,
           '--emitDeclarationOnly',
+          '--declarationMap',
           '--preserveWatchOutput',
           ...(['dev', 'link'].includes(context.command)
             ? ['--watch', '--incremental']
@@ -50,7 +66,11 @@ export function typescriptDeclarationsPlugin(
           shell: true,
         }
       )
-        .on('close', () => {
+        .on('close', code => {
+          if (code !== 0 && !allowFailure) {
+            throw new Error('Error generating declaration files.');
+          }
+
           resolve();
         })
         .on('error', err => {
