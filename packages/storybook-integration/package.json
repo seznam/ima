@@ -2,7 +2,6 @@
   "name": "@ima/storybook-integration",
   "version": "19.6.0",
   "description": "Storybook integration addon for IMA.js applications.",
-  "type": "module",
   "keywords": [
     "IMA.js",
     "storybook",
@@ -20,30 +19,56 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
-    "build": "tsc -b",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -b",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": {
+        "import": "./dist/esm/index.js",
+        "require": "./dist/cjs/index.js"
+      },
+      "default": {
+        "import": "./dist/esm/index.js",
+        "require": "./dist/cjs/index.js"
+      }
     },
     "./preset": {
-      "types": "./dist/preset.d.ts",
-      "import": "./dist/preset.js",
-      "default": "./dist/preset.js"
+      "types": "./dist/esm/preset.d.ts",
+      "import": {
+        "import": "./dist/esm/preset.js",
+        "require": "./dist/cjs/preset.js"
+      },
+      "default": {
+        "import": "./dist/esm/preset.js",
+        "require": "./dist/cjs/preset.js"
+      }
     },
     "./preview": {
-      "types": "./dist/preview.d.ts",
-      "import": "./dist/preview.js",
-      "default": "./dist/preview.js"
+      "types": "./dist/esm/preview.d.ts",
+      "import": {
+        "import": "./dist/esm/preview.js",
+        "require": "./dist/cjs/preview.js"
+      },
+      "default": {
+        "import": "./dist/esm/preview.js",
+        "require": "./dist/cjs/preview.js"
+      }
     },
     "./helpers": {
-      "types": "./dist/helpers/index.d.ts",
-      "import": "./dist/helpers/index.js",
-      "default": "./dist/helpers/index.js"
+      "types": "./dist/esm/helpers/index.d.ts",
+      "import": {
+        "import": "./dist/esm/helpers/index.js",
+        "require": "./dist/cjs/helpers/index.js"
+      },
+      "default": {
+        "import": "./dist/esm/helpers/index.js",
+        "require": "./dist/cjs/helpers/index.js"
+      }
     }
   },
   "devDependencies": {

@@ -8,7 +8,7 @@
       "DOM",
       "DOM.Iterable",
     ],
-    "outDir": "dist",
+    "outDir": "dist/esm",
     "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob"]
   },
   "include": [
