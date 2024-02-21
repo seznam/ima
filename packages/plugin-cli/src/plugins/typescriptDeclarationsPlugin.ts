@@ -68,14 +68,15 @@ export function typescriptDeclarationsPlugin(
       )
         .on('close', code => {
           if (code !== 0 && !allowFailure) {
-            throw new Error('Error generating declaration files.');
+            return reject('Error generating declaration files.');
           }
 
-          resolve();
+          return resolve();
         })
         .on('error', err => {
           logger.error('Error generating declaration files.');
-          reject(err);
+
+          return reject(err);
         });
     });
   };
