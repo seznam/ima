@@ -27,47 +27,34 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": {
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js"
-      },
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": {
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js"
+        "import": "./dist/index.js",
+        "node": "./dist/cjs/index.js"
       }
     },
     "./preset": {
-      "types": "./dist/esm/preset.d.ts",
-      "import": {
-        "import": "./dist/esm/preset.js",
-        "require": "./dist/cjs/preset.js"
-      },
+      "types": "./dist/preset.d.ts",
+      "import": "./dist/preset.js",
       "default": {
-        "import": "./dist/esm/preset.js",
-        "require": "./dist/cjs/preset.js"
-      }
+        "import": "./dist/preset.js",
+        "node": "./dist/cjs/preset.js"}
     },
     "./preview": {
-      "types": "./dist/esm/preview.d.ts",
-      "import": {
-        "import": "./dist/esm/preview.js",
-        "require": "./dist/cjs/preview.js"
-      },
+      "types": "./dist/preview.d.ts",
+      "import": "./dist/preview.js",
       "default": {
-        "import": "./dist/esm/preview.js",
-        "require": "./dist/cjs/preview.js"
+        "import": "./dist/preview.js",
+        "node": "./dist/cjs/preview.js"
       }
     },
     "./helpers": {
-      "types": "./dist/esm/helpers/index.d.ts",
-      "import": {
-        "import": "./dist/esm/helpers/index.js",
-        "require": "./dist/cjs/helpers/index.js"
-      },
+      "types": "./dist/helpers/index.d.ts",
+      "import": "./dist/helpers/index.js",
       "default": {
-        "import": "./dist/esm/helpers/index.js",
-        "require": "./dist/cjs/helpers/index.js"
+        "import": "./dist/helpers/index.js",
+        "node": "./dist/cjs/helpers/index.js"
       }
     }
   },
