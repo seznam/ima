@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time, printTime } from '@ima/dev-utils/logger';
+import { logger, time } from '@ima/dev-utils/logger';
 import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
@@ -13,7 +13,7 @@ import {
   parseConfigFile,
   runPlugins,
 } from './process';
-import { cleanOutput, processOutput } from './utils';
+import { cleanOutput, createBatcher, processOutput } from './utils';
 import { Args, Context, ImaPluginConfig } from '../types';
 
 function parseArgs(args: Arguments) {
@@ -53,28 +53,6 @@ export async function parsePkgJson(basePath: string): Promise<{
       await fs.promises.readFile(path.join(basePath, 'package.json'))
     ).toString()
   );
-}
-
-/**
- * Return colored status icon based on provided chokidar event.
- */
-export function getStatusIcon(
-  eventName: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'
-): string {
-  switch (eventName) {
-    case 'add':
-    case 'change':
-      return chalk.green('✓');
-      break;
-
-    case 'unlink':
-    case 'unlinkDir':
-      return chalk.red('×');
-
-    case 'addDir':
-      return chalk.blue('+');
-      break;
-  }
 }
 
 function errorHandler(error: Error) {
@@ -147,7 +125,9 @@ export async function build(args: Arguments) {
       // Run plugins
       await runPlugins(context);
     })
-  );
+  ).catch(error => {
+    logger.error(error);
+  });
 
   logger.success('Finished', { elapsed });
 }
@@ -164,8 +144,19 @@ export async function watch(args: Arguments) {
     parseConfigFile(cwd, parsedArgs),
   ]);
 
+  let title = `Watching ${chalk.bold.magenta(pkgJson.name)}`;
+
+  if (command === 'link' && linkPath) {
+    const linkedPkgJson = await parsePkgJson(path.resolve(linkPath));
+
+    title = `Linking ${chalk.bold.magenta(pkgJson.name)} ${chalk.white(
+      '→'
+    )} ${chalk.cyan(linkedPkgJson.name)}`;
+  }
+
+  // Batch file events
+  const batch = createBatcher(title);
   logger.setSilent(parsedArgs.silent);
-  logger.info(`Watching ${chalk.bold.magenta(pkgJson.name)}`);
 
   // Spawn watch for each config
   configurations.forEach(async config => {
@@ -190,46 +181,40 @@ export async function watch(args: Arguments) {
       .watch([path.join(inputDir, './**/*')], {
         ignoreInitial: false,
         ignored: config.exclude,
+        persistent: true,
       })
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
-        const elapsed = time();
 
-        switch (eventName) {
-          case 'add':
-          case 'change':
-            await process(filePath);
-            break;
+        batch(async () => {
+          switch (eventName) {
+            case 'add':
+            case 'change':
+              await process(filePath);
+              break;
 
-          case 'unlink':
-          case 'unlinkDir':
-            await processOutput(
-              config,
-              async outputPath => {
-                const outputContextPath = path.join(outputPath, contextPath);
+            case 'unlink':
+            case 'unlinkDir':
+              await processOutput(
+                config,
+                async outputPath => {
+                  const outputContextPath = path.join(outputPath, contextPath);
 
-                if (fs.existsSync(outputContextPath)) {
-                  await fs.promises.rm(outputContextPath, { recursive: true });
-                }
-              },
-              cwd
-            );
-            break;
+                  if (fs.existsSync(outputContextPath)) {
+                    await fs.promises.rm(outputContextPath, {
+                      recursive: true,
+                    });
+                  }
+                },
+                cwd
+              );
+              break;
 
-          default:
-            return;
-        }
-
-        // Prevents duplicate logging in `link` mode
-        if (command !== 'link') {
-          logger.write(
-            `${printTime()} ${getStatusIcon(eventName)} ${contextPath}`,
-            {
-              elapsed,
-            }
-          );
-        }
+            default:
+              return;
+          }
+        }, eventName);
       })
       .on('ready', async () => {
         await runPlugins(context);
@@ -243,7 +228,6 @@ export async function watch(args: Arguments) {
       const distBaseDir = getBaseCommonOutputDir(config.output);
       const outputDir = path.join(cwd, distBaseDir);
       const linkedPath = path.resolve(linkPath);
-      const linkedPkgJson = await parsePkgJson(linkedPath);
       const linkedBasePath = path.resolve(
         linkedPath,
         'node_modules',
@@ -262,6 +246,7 @@ export async function watch(args: Arguments) {
           ].filter(Boolean) as string[],
           {
             ignoreInitial: false,
+            persistent: true,
             ignored: [
               '**/tsconfig.tsbuildinfo/**',
               '**/node_modules/**',
@@ -270,7 +255,7 @@ export async function watch(args: Arguments) {
           }
         )
         .on('error', errorHandler)
-        .on('all', async (eventName, filePath) => {
+        .on('all', (eventName, filePath) => {
           // Handler to link additional non-dist files
           const isAdditionalFile = !filePath.startsWith(outputDir);
           const contextPath = path.relative(
@@ -282,43 +267,29 @@ export async function watch(args: Arguments) {
             contextPath
           );
           const linkedOutputDir = path.dirname(linkedOutputPath);
-          const outputContextPath = `./${path.join(
-            isAdditionalFile ? '' : distBaseDir,
-            contextPath
-          )}`;
 
-          const elapsed = time();
+          batch(async () => {
+            switch (eventName) {
+              case 'add':
+              case 'change':
+                if (!fs.existsSync(linkedOutputDir)) {
+                  await fs.promises.mkdir(linkedOutputDir, {
+                    recursive: true,
+                  });
+                }
 
-          switch (eventName) {
-            case 'add':
-            case 'change':
-              if (!fs.existsSync(linkedOutputDir)) {
-                await fs.promises.mkdir(linkedOutputDir, { recursive: true });
-              }
+                await fs.promises.copyFile(filePath, linkedOutputPath);
+                break;
 
-              await fs.promises.copyFile(filePath, linkedOutputPath);
-              break;
+              case 'unlink':
+              case 'unlinkDir':
+                await fs.promises.rm(linkedOutputPath, { recursive: true });
+                break;
 
-            case 'unlink':
-            case 'unlinkDir':
-              await fs.promises.rm(linkedOutputPath, { recursive: true });
-              break;
-
-            default:
-              return;
-          }
-
-          // Print info to output
-          logger.write(
-            `${printTime()} ${getStatusIcon(eventName)} ${chalk.cyan(
-              pkgJson.name
-            )} ${outputContextPath} ${chalk.green('→')} ${chalk.magenta(
-              linkedPkgJson.name
-            )}`,
-            {
-              elapsed,
+              default:
+                return;
             }
-          );
+          }, eventName);
         });
     }
   });
