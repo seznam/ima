@@ -17,13 +17,13 @@ jobs:
     name: Prepare Cache
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/prepare-cache/action.yml
+      - uses: ./.github/actions/prepare-cache
 
   ci:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/prepare-cache/action.yml
+      - uses: ./.github/actions/prepare-cache
 
       - name: Run Lint
         run: npm run lint
