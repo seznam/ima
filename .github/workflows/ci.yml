@@ -18,14 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/prepare-workspace/action.yml
+      - uses: ./.github/actions/prepare-workspace
 
   ci:
     name: CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/prepare-workspace/action.yml
+      - uses: ./.github/actions/prepare-workspace
 
       - name: Run Lint
         run: npm run lint
