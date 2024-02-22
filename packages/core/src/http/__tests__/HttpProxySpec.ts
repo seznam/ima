@@ -422,6 +422,34 @@ describe('ima.core.http.HttpProxy', () => {
           expect(result.body).toStrictEqual({ data: responseType });
         }
       );
+
+      it('should parse error content as json no matter the responseType', async () => {
+        Object.assign(response, {
+          ok: false,
+          headers: {
+            get: key => {
+              if (key.toLowerCase() === 'content-type') {
+                return 'application/json';
+              }
+
+              return null;
+            },
+          },
+        });
+
+        expect.assertions(1);
+
+        try {
+          await proxy.request(method, API_URL, DATA, {
+            ...defaultOptions,
+            responseType: 'blob',
+          });
+        } catch (error) {
+          expect((error as GenericError).getParams().body).toStrictEqual({
+            data: 'json',
+          });
+        }
+      });
     }
   );
 
