@@ -29,7 +29,7 @@ export function typescriptDeclarationsPlugin(
   options: TypescriptDeclarationsPluginOptions
 ): Plugin {
   let tsConfigPath: string | undefined;
-  const allowFailure = options?.allowFailure ?? false;
+  const allowFailure = options?.allowFailure ?? true;
 
   return async context => {
     [tsConfigPath] = options?.tsConfigPath ?? resolveTsConfigs(context.cwd);
