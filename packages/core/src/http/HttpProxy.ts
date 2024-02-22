@@ -172,7 +172,7 @@ export class HttpProxy {
            * We usually want to parse the response body as JSON, when the
            * response status is not OK, and the content type is JSON.
            *
-           * This overrides responseType optiona and allows to parse the response
+           * This overrides responseType options and allows to parse the response
            * body as JSON even when the response status is not OK.
            */
           if (!response.ok && contentType?.includes('application/json')) {
