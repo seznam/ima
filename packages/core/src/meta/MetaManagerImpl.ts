@@ -11,7 +11,7 @@ import {
 export class MetaManagerImpl extends MetaManager {
   protected _title: string;
   protected _metaName: Map<string, MetaManagerRecord<'content'>>;
-  protected _metaProperty: Map<string, MetaManagerRecord<'property'>>;
+  protected _metaProperty: Map<string, MetaManagerRecord<'content'>>;
   protected _link: Map<string, MetaManagerRecord<'href'>>;
 
   static get $dependencies() {
@@ -48,7 +48,7 @@ export class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setTitle(title: string): MetaManager {
+  setTitle(title: string): this {
     this._title = title;
 
     return this;
@@ -64,11 +64,7 @@ export class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setMetaName(
-    name: string,
-    content: MetaValue,
-    attr?: MetaAttributes
-  ): MetaManager {
+  setMetaName(name: string, content: MetaValue, attr?: MetaAttributes): this {
     this._metaName.set(name, { content, ...attr });
 
     return this;
@@ -101,11 +97,11 @@ export class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   setMetaProperty(
-    name: string,
-    property: MetaValue,
+    property: string,
+    content: MetaValue,
     attr?: MetaAttributes
-  ): MetaManager {
-    this._metaProperty.set(name, { property, ...attr });
+  ): this {
+    this._metaProperty.set(property, { content, ...attr });
 
     return this;
   }
@@ -113,8 +109,8 @@ export class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  getMetaProperty(name: string): MetaManagerRecord<'property'> {
-    return this._metaProperty.get(name) || super.getMetaProperty(name);
+  getMetaProperty(property: string): MetaManagerRecord<'content'> {
+    return this._metaProperty.get(property) || super.getMetaProperty(property);
   }
 
   /**
@@ -129,7 +125,7 @@ export class MetaManagerImpl extends MetaManager {
    * @inheritDoc
    */
   getMetaPropertiesIterator(): IterableIterator<
-    [string, MetaManagerRecord<'property'>]
+    [string, MetaManagerRecord<'content'>]
   > {
     return this._metaProperty.entries();
   }
@@ -137,11 +133,7 @@ export class MetaManagerImpl extends MetaManager {
   /**
    * @inheritDoc
    */
-  setLink(
-    relation: string,
-    href: MetaValue,
-    attr?: MetaAttributes
-  ): MetaManager {
+  setLink(relation: string, href: MetaValue, attr?: MetaAttributes): this {
     this._link.set(relation, { href, ...attr });
 
     return this;

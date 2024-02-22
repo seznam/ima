@@ -2,11 +2,12 @@
 
 const path = require('path');
 
-const applicationFolder = path.resolve('.');
+const defaultApplicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
 const { Emitter, Event } = require('./lib/emitter.js');
 const environmentFactory = require('./lib/factory/environmentFactory');
+const urlParserFactory = require('./lib/factory/urlParserFactory');
 const {
   renderStyles,
   renderScript,
@@ -18,6 +19,7 @@ function createIMAServer({
   emitter,
   performance,
   devUtils,
+  applicationFolder = defaultApplicationFolder,
   processEnvironment,
 } = {}) {
   environment =
@@ -26,7 +28,9 @@ function createIMAServer({
       applicationFolder,
       processEnvironment,
     });
-  devUtils = devUtils || require('./lib/factory/devUtilsFactory.js')();
+  devUtils =
+    devUtils ||
+    require('./lib/factory/devUtilsFactory.js')({ applicationFolder });
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
@@ -96,5 +100,6 @@ module.exports = {
   renderScript,
   createIMAServer,
   environmentFactory,
+  urlParserFactory,
   Event,
 };

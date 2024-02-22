@@ -1,5 +1,16 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
 ## 19.0.0-rc.2
 
 ### Patch Changes

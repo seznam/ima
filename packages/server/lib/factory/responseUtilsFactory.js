@@ -2,19 +2,20 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-const validator = require('validator');
-
-const { renderMeta } = require('./utils/metaUtils');
+const { renderMeta, encodeHTMLEntities } = require('./utils/metaUtils');
 const {
   renderScript,
   renderStyles,
   prepareDefaultResources,
 } = require('./utils/resourcesUtils');
 
-module.exports = function responseUtilsFactory() {
+module.exports = function responseUtilsFactory({ applicationFolder }) {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
-  const runnerPath = path.resolve('./build/server/runner.js');
-  const manifestPath = path.resolve('./build/manifest.json');
+  const runnerPath = path.resolve(
+    applicationFolder,
+    './build/server/runner.js'
+  );
+  const manifestPath = path.resolve(applicationFolder, './build/manifest.json');
   const uuidPrefix = `${Date.now().toString(36)}-${(
     Math.random() * 2057
   ).toString(36)}`;
@@ -51,9 +52,9 @@ module.exports = function responseUtilsFactory() {
       $IMA.$Version = "${settings.$Version}";
       $IMA.$App = ${JSON.stringify(settings.$App)};
       $IMA.$Protocol = "${
-        settings.$Protocol && validator.escape(settings.$Protocol)
+        settings.$Protocol && encodeHTMLEntities(settings.$Protocol)
       }";
-      $IMA.$Host = "${settings.$Host && validator.escape(settings.$Host)}";
+      $IMA.$Host = "${settings.$Host && encodeHTMLEntities(settings.$Host)}";
       $IMA.$Path = "${settings.$Path}";
       $IMA.$Root = "${settings.$Root}";
       $IMA.$LanguagePartPath = "${settings.$LanguagePartPath}";
@@ -192,6 +193,7 @@ module.exports = function responseUtilsFactory() {
   return {
     createContentVariables,
     processContent,
+    encodeHTMLEntities,
     sendResponseHeaders,
     _prepareCookieOptionsForExpress,
   };

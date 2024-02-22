@@ -1,5 +1,97 @@
 # Change Log
 
+## 19.2.0
+
+### Minor Changes
+
+- 460a3aed7: Added new option resolveAfterRender which resolving promise from PagaManeger mount and update methods after react render component to DOM with state created from controller/extensions load methods. The @esmj/task is updated to improve INP metric. The load event should be called before page is hydrated.
+
+## 19.1.0
+
+### Minor Changes
+
+- a54c32608: Added `autoYield` mechanism to ima which improve browser responsiveness and core web vitals metrics. The micro tasks are divide into macro tasks if it needs it. In the `PageRenderer` is updated logic for batching updates during page loading phase which is still experimental.
+
+### Patch Changes
+
+- fde2bab5f: fix: bad parameter to check if the component is a function
+
+## 19.0.4
+
+### Patch Changes
+
+- 6c5adc483: The error thrown in react view in request phase can cause problem in error and next response phases. In before error phase we remove viewAdpater for next before response phase which will be skip when page renderer not set the new react components.
+
+## 19.0.3
+
+### Patch Changes
+
+- 5a30ba1e1: Fixed useEventBus (could not work properly before)
+
+## 19.0.2
+
+### Patch Changes
+
+- ffaed386e: Fixed issue where context was not properly memoized. This triggered uninteded context updates and rerenders when no real value in the context actually changed.
+  Fixed issue where createContext received 2 arguments (Utils and object with context selector values) instead of variadic args.
+
+## 19.0.1
+
+### Patch Changes
+
+- 2323c6a13: Updated dependencies to use non-rc version ranges
+
+## 19.0.0
+
+### Major Changes
+
+- 97b006e65: Removed deprecated package entry points
+- 81a8605d5: Bump versions
+- 28660d902: Fire method arguments are now in correct order.
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- 5bd45aa75: Changed signature of useWindowEvent hook, it now matches bindEventListener parameters of ima window
+- c0fe68ef3: IMA 19 Release
+- 4f7a4767f: Fixed numerous TS types in page renderer.
+  Added types to ima react hooks.
+
+  #### Breaking changes
+
+  `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
+  `useSettings` now returns undefined, when settings is not found when using `selector` namespace as an argument.
+  All exports are now named exports, you need to update import to `ClientPageRenderer` in `bind.js` to `import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';`
+  `Route` alias export has been replaced with `StaticRoute` export.
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- c2526f132: Changed CustomEventTargetMap to WindowCustomEventsMap
+- d9c2d7a3b: Fixed defaultCssClasses types, second argument should be optional
+- 430ec0b0d: Fixed missing Utils $CssClasses type export
+- 71f33a761: Final release of all RC ima@19 packages
+- 0d044e238: Typed ObjectContainer
+- e0dfeda28: Updated dependencies
+- dc8d4b7ea: Fixed once hook parametr type
+- c37249378: Fixed HYDRATE_ERROR
+- a3e9335bb: Fixed fire method data type
+- 5bd45aa75: Updated Window types
+- 447c51646: All packages now use correct types from IMA core
+- 206ab1f43: Improved Dispatcher types
+- 53adfb35a: Fixed BlankManagedRootView props
+- Updated dependencies [71f33a761]
+- Updated dependencies [81a8605d5]
+- Updated dependencies [6a6b996d4]
+- Updated dependencies [c0fe68ef3]
+  - @ima/helpers@19.0.0
+
+## 19.0.0-rc.16
+
+### Patch Changes
+
+- a3e9335bb: Fixed fire method data type
+
 ## 19.0.0-rc.15
 
 ### Patch Changes

@@ -1,3 +1,4 @@
+import { autoYield, nextFrameYield } from '@esmj/task';
 import { Request as ExpressRequest } from 'express';
 import { PartialDeep } from 'type-fest';
 import { AssetInfo } from 'webpack';
@@ -63,8 +64,28 @@ export interface Environment {
     defaultResources: Resources
   ) => Resources;
   $Server: {
-    protocol?: GlobalImaObject['$Protocol'];
-    host?: string;
+    protocol?:
+      | GlobalImaObject['$Protocol']
+      | (({
+          environment,
+          protocol,
+          req,
+        }: {
+          environment: Environment;
+          protocol: string;
+          req: ExpressRequest;
+        }) => GlobalImaObject['$Protocol']);
+    host?:
+      | string
+      | (({
+          environment,
+          host,
+          req,
+        }: {
+          environment: Environment;
+          host: string;
+          req: ExpressRequest;
+        }) => string);
     port: number;
     staticPath: string;
     concurrency: number;
@@ -98,11 +119,18 @@ export interface AppEnvironment {
   regression?: PartialDeep<Environment>;
 }
 
+export interface PageRendererSettings {
+  batchResolve?: boolean;
+  masterElementId: string;
+  documentView: unknown;
+  managedRootView?: unknown;
+  viewAdapter?: unknown;
+}
+
 /**
  * App settings for single env key.
  */
 export interface Settings {
-  $Version: GlobalImaObject['$Version'];
   $Http: {
     defaultRequestOptions: Omit<HttpAgentRequestOptions, 'abortController'>;
     cacheOptions: HttpAgentImplCacheOptions;
@@ -115,13 +143,7 @@ export interface Settings {
     enabled?: boolean;
   };
   $Page: {
-    $Render: {
-      batchResolve?: boolean;
-      masterElementId: string;
-      documentView: unknown;
-      managedRootView?: unknown;
-      viewAdapter?: unknown;
-    };
+    $Render: PageRendererSettings;
   };
 }
 
@@ -258,16 +280,22 @@ export function routeClientApp(app: {
     });
 }
 
-export function reviveClientApp(initialAppConfigFunctions: InitAppConfig) {
+export async function reviveClientApp(
+  initialAppConfigFunctions: InitAppConfig
+) {
+  await autoYield();
   const root = _getRoot();
 
   root.$Debug = !!root.$IMA.$Debug;
 
   let app = createImaApp();
+  await autoYield();
   const bootConfig = getClientBootConfig(initialAppConfigFunctions);
 
+  await autoYield();
   app = bootClientApp(app, bootConfig);
 
+  await autoYield();
   return routeClientApp(app).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
@@ -279,12 +307,18 @@ export function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return new Promise(resolve => setTimeout(resolve, 1000 / 60));
+    return nextFrameYield();
   }
 
   return new Promise(resolve => {
-    document.addEventListener('DOMContentLoaded', () => resolve(undefined), {
-      once: true,
-    });
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        return autoYield().then(resolve);
+      },
+      {
+        once: true,
+      }
+    );
   });
 }

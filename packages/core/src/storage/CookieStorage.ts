@@ -21,12 +21,13 @@ const COOKIE_SEPARATOR = '; ';
 
 export type CookieOptions = {
   domain?: string;
-  expires?: number | Date;
+  expires?: Date;
   httpOnly?: boolean;
   maxAge?: number;
   path?: string;
-  sameSite?: string;
+  sameSite?: 'none' | 'lax' | 'strict' | undefined;
   secure?: boolean;
+  partitioned?: boolean;
 };
 
 export type Cookie = {
@@ -69,9 +70,10 @@ export class CookieStorage extends Storage<Cookie['value']> {
     expires: undefined,
     maxAge: undefined,
     secure: false,
+    partitioned: false,
     httpOnly: false,
     domain: '',
-    sameSite: 'Lax',
+    sameSite: 'lax',
   };
 
   /**
@@ -464,6 +466,7 @@ export class CookieStorage extends Storage<Cookie['value']> {
     cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
     cookieString += options.httpOnly ? ';HttpOnly' : '';
     cookieString += options.secure ? ';Secure' : '';
+    cookieString += options.partitioned ? ';Partitioned' : '';
     cookieString += options.sameSite ? ';SameSite=' + options.sameSite : '';
 
     return cookieString;

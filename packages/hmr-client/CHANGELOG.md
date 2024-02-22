@@ -1,5 +1,18 @@
 # Change Log
 
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+- a3e8b5d2e: Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
+- 1bd52f08c: Fixed an issue where if application produces error before the error-ovleray is initialize, it is not displayed in the overlay.
+
 ## 19.0.0-rc.4
 
 ### Patch Changes

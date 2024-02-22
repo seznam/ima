@@ -1,14 +1,15 @@
 import { PageHandler } from './PageHandler';
+import { Dependencies } from '../../oc/ObjectContainer';
 import { ActionTypes } from '../../router/ActionTypes';
 import { Window } from '../../window/Window';
 import { ManagedPage, PageAction } from '../PageTypes';
 
 export class PageNavigationHandler extends PageHandler {
-  private _window: Window;
+  protected _window: Window;
 
-  static get $dependencies() {
-    return [Window];
-  }
+  #preManaged = false;
+
+  static $dependencies: Dependencies = [Window];
 
   /**
    * @param window The utility for manipulating the global context
@@ -46,6 +47,16 @@ export class PageNavigationHandler extends PageHandler {
   ) {
     const { options } = nextManagedPage;
 
+    /**
+     * Ignore first preManaged call, because this behavior
+     * is already set correctly by the browser.
+     */
+    if (!this.#preManaged) {
+      this.#preManaged = true;
+
+      return;
+    }
+
     if (
       managedPage &&
       action &&
@@ -57,6 +68,7 @@ export class PageNavigationHandler extends PageHandler {
       if (!isRedirection) {
         this._saveScrollHistory();
       }
+
       this._setAddressBar(action.url as string, isRedirection);
     }
 

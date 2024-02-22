@@ -166,4 +166,4 @@ class SourceStorage {
   }
 }
 
-export { SourceStorage, SourceStorageEntry };
+export { SourceStorage, type SourceStorageEntry };

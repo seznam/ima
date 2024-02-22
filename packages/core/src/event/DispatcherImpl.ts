@@ -123,7 +123,7 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
-  fire(event: string, data: any, imaInternalEvent: boolean): this {
+  fire(event: string, data: any, imaInternalEvent = false): this {
     const listeners = this._getListenersOf(event);
 
     if (!listeners?.size && !imaInternalEvent) {

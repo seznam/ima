@@ -11,7 +11,7 @@ import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import webpackConfig from './config';
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
 
-const IMA_CONF_FILENAME = 'ima.config.js';
+export const IMA_CONF_FILENAME = 'ima.config.js';
 
 /**
  * Helper for finding rules with given loader in webpack config.
@@ -38,7 +38,7 @@ export function findRules(
     }
 
     if (rule.oneOf) {
-      return recurseFindRules(rule.oneOf);
+      return recurseFindRules(rule.oneOf as RuleSetRule);
     }
 
     if (
@@ -69,7 +69,7 @@ export function findRules(
       cur.use.forEach(r => {
         if (
           (typeof r === 'string' && r.includes(loader)) ||
-          (typeof r === 'object' && r.loader && r.loader.includes(loader))
+          (typeof r === 'object' && r && r.loader && r.loader.includes(loader))
         ) {
           acc.push(r);
         }
@@ -86,7 +86,7 @@ export function findRules(
  * @param {ImaCliArgs['rootDir']} rootDir Application root directory
  * @returns {Environment} Loaded environment
  */
-function resolveEnvironment(
+export function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
 ): Environment {
   return environmentFactory({ applicationFolder: rootDir });
@@ -99,7 +99,7 @@ function resolveEnvironment(
  * @param {ImaConfigurationContext} ctx Current configuration context.
  * @returns {Record<string, string>} Entry object or empty object.
  */
-function createPolyfillEntry(
+export function createPolyfillEntry(
   ctx: ImaConfigurationContext
 ): Record<string, string> {
   const { isClientES, rootDir } = ctx;
@@ -118,7 +118,7 @@ function createPolyfillEntry(
  * Creates hmr dev server configuration from provided contexts
  * and arguments with this priority args -> ctx -> imaConfig -> [defaults].
  */
-function createDevServerConfig({
+export function createDevServerConfig({
   args,
   ctx,
   imaConfig,
@@ -163,7 +163,7 @@ function createDevServerConfig({
  * @param {ImaConfig} imaConfig ima configuration
  * @returns {string}
  */
-function createCacheKey(
+export function createCacheKey(
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig,
   additionalData = {}
@@ -213,7 +213,7 @@ function createCacheKey(
  * @param {string} [rootDir=process.cwd()] App root directory.
  * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
  */
-function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
+export function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
   const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
 
   return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : null;
@@ -225,7 +225,7 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
  * @param {ImaCliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
+export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '/',
     compress: true,
@@ -284,7 +284,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
  * Takes care of cleaning build directory and node_modules/.cache
  * directory based on passed cli arguments.
  */
-async function cleanup(args: ImaCliArgs): Promise<void> {
+export async function cleanup(args: ImaCliArgs): Promise<void> {
   // Clear cache before doing anything else
   if (args.clearCache) {
     const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
@@ -327,7 +327,7 @@ async function cleanup(args: ImaCliArgs): Promise<void> {
  * @param {ImaConfig} imaConfig Loaded ima config.
  * @param hook
  */
-async function runImaPluginsHook(
+export async function runImaPluginsHook(
   args: ImaCliArgs,
   imaConfig: ImaConfig,
   hook: 'preProcess' | 'postProcess'
@@ -354,6 +354,81 @@ async function runImaPluginsHook(
 }
 
 /**
+ * Generate configuration contexts for given array of configuration names.
+ * Contexts are generated based on ima.config.js file and CLI arguments.
+ *
+ * @param {ImaConfigurationContext['name'][]} configurationNames
+ * @param {ImaCliArgs} args
+ * @param {ImaConfig} imaConfig
+ * @returns {ImaConfigurationContext[]}
+ */
+export function createContexts(
+  configurationNames: ImaConfigurationContext['name'][],
+  args: ImaCliArgs,
+  imaConfig: ImaConfig
+): ImaConfigurationContext[] {
+  const { rootDir, environment, command } = args;
+  const useSourceMaps =
+    !!imaConfig.sourceMaps || args.environment === 'development';
+  const imaEnvironment = resolveEnvironment(rootDir);
+  const appDir = path.join(rootDir, 'app');
+  const useTypescript = fs.existsSync(path.join(rootDir, './tsconfig.json'));
+  const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
+  const isDevEnv = environment === 'development';
+  const mode = environment === 'production' ? 'production' : 'development';
+  const devtool = useSourceMaps
+    ? typeof imaConfig.sourceMaps === 'string'
+      ? imaConfig.sourceMaps
+      : 'source-map'
+    : false;
+
+  // es2018 targets (taken from 'browserslist-generator')
+  const targets = [
+    'and_chr >= 63',
+    'chrome >= 63',
+    'and_ff >= 58',
+    'android >= 103',
+    'edge >= 79',
+    'samsung >= 8.2',
+    'safari >= 11.1',
+    'ios_saf >= 11.4',
+    'opera >= 50',
+    'firefox >= 58',
+  ];
+
+  return configurationNames.map(name => ({
+    ...args,
+    name,
+    isServer: name === 'server',
+    isClient: name === 'client',
+    isClientES: name === 'client.es',
+    processCss: name === 'client.es',
+    outputFolders: {
+      hot: 'static/hot',
+      public: 'static/public',
+      media: 'static/media',
+      css: 'static/css',
+      js:
+        name === 'server'
+          ? 'server'
+          : name === 'client'
+          ? 'static/js'
+          : 'static/js.es',
+    },
+    useTypescript,
+    imaEnvironment,
+    appDir,
+    useHMR: command === 'dev' && name === 'client.es',
+    mode,
+    isDevEnv,
+    lessGlobalsPath,
+    useSourceMaps,
+    devtool,
+    targets: name === 'client' ? targets : [],
+  }));
+}
+
+/**
  * Creates webpack configurations contexts from current config and cli args.
  * Additionally it applies all existing configuration overrides from cli plugins
  * and app overrides in this order cli -> plugins -> app.
@@ -362,7 +437,7 @@ async function runImaPluginsHook(
  * @param {ImaConfig} imaConfig Loaded ima config.
  * @returns {Promise<Configuration[]>}
  */
-async function createWebpackConfig(
+export async function createWebpackConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration[]> {
@@ -372,60 +447,17 @@ async function createWebpackConfig(
     { trackTime: true }
   );
 
-  // Define common output folders
-  const outputFolders: Omit<
-    ImaConfigurationContext['outputFolders'],
-    'js' | 'css'
-  > = {
-    hot: 'static/hot',
-    public: 'static/public',
-    media: 'static/media',
-  };
-
-  // Create configuration contexts (server is always present)
-  let contexts: ImaConfigurationContext[] = [
-    {
-      name: 'server',
-      isServer: true,
-      isClient: false,
-      isClientES: false,
-      processCss: false,
-      outputFolders: {
-        ...outputFolders,
-        js: 'server',
-        css: 'static/css',
-      },
-      ...args,
-    },
-    // Process non-es version in build and legacy contexts
+  // Create array of webpack build configurations based on current context.
+  const configurationNames = [
+    'server',
     (args.command === 'build' || args.legacy) &&
-      !imaConfig.disableLegacyBuild && {
-        name: 'client',
-        isServer: false,
-        isClient: true,
-        isClientES: false,
-        processCss: false,
-        outputFolders: {
-          ...outputFolders,
-          js: 'static/js',
-          css: 'static/css',
-        },
-        ...args,
-      },
-    {
-      name: 'client.es',
-      isServer: false,
-      isClient: false,
-      isClientES: true,
-      processCss: true,
-      outputFolders: {
-        ...outputFolders,
-        js: 'static/js.es',
-        css: 'static/css',
-      },
-      ...args,
-    },
-  ].filter(Boolean) as ImaConfigurationContext[];
+      !imaConfig.disableLegacyBuild &&
+      'client',
+    'client.es',
+  ].filter(Boolean) as ImaConfigurationContext['name'][];
+
+  // Create configuration contexts
+  let contexts = createContexts(configurationNames, args, imaConfig);
 
   // Call configuration overrides on plugins
   if (Array.isArray(imaConfig.plugins)) {
@@ -436,6 +468,11 @@ async function createWebpackConfig(
 
       contexts = await plugin.prepareConfigurations(contexts, imaConfig, args);
     }
+  }
+
+  // Call configuration overrides on ima.config.js
+  if (imaConfig.prepareConfigurations) {
+    contexts = await imaConfig.prepareConfigurations(contexts, imaConfig, args);
   }
 
   /**
@@ -485,7 +522,7 @@ async function createWebpackConfig(
  * Extracts major.minor version string of currently resolved
  * core-js from node_modules.
  */
-async function getCurrentCoreJsVersion() {
+export async function getCurrentCoreJsVersion() {
   return JSON.parse(
     (
       await fs.promises.readFile(
@@ -497,17 +534,3 @@ async function getCurrentCoreJsVersion() {
     .slice(0, 2)
     .join('.');
 }
-
-export {
-  resolveEnvironment,
-  cleanup,
-  createCacheKey,
-  createWebpackConfig,
-  createDevServerConfig,
-  requireImaConfig,
-  resolveImaConfig,
-  runImaPluginsHook,
-  createPolyfillEntry,
-  getCurrentCoreJsVersion,
-  IMA_CONF_FILENAME,
-};

@@ -55,11 +55,15 @@ type AddOCPrefixes<T, P extends string> = {
   [K in keyof T as K extends string ? `${P}${K}` : never]: T[K] | null;
 };
 
-type WithOCOptional<T> = AddOCPrefixes<T, '?'>;
-type WithOCSpread<T> = AddOCPrefixes<T, '...'>;
-type WithOCOptionalSpread<T> = AddOCPrefixes<T, '...?'>;
+type AddOCChaining<T> = {
+  [K in keyof T as K extends string ? `${K}` | `${K}.${string}` : never]: T[K];
+};
 
-export type DecoratedOCAliasMap = OCAliasMap &
+type WithOCOptional<T> = AddOCPrefixes<AddOCChaining<T>, '?'>;
+type WithOCSpread<T> = AddOCPrefixes<AddOCChaining<T>, '...'>;
+type WithOCOptionalSpread<T> = AddOCPrefixes<AddOCChaining<T>, '...?'>;
+
+export type DecoratedOCAliasMap = AddOCChaining<OCAliasMap> &
   WithOCOptional<OCAliasMap> &
   WithOCOptionalSpread<OCAliasMap> &
   WithOCSpread<OCAliasMap>;
@@ -178,7 +182,7 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
     '$CacheStorage',
     CacheFactory,
     '$Helper',
-    config.$Cache,
+    config.$Cache || {},
   ]);
   oc.bind('$Cache', Cache);
 

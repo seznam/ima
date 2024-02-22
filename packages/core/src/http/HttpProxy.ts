@@ -168,6 +168,14 @@ export class HttpProxy {
 
           const contentType = response.headers.get('content-type');
 
+          // Parse content by the new responseType option
+          if (options?.responseType) {
+            return response[options.responseType]().then(body => [
+              response,
+              body,
+            ]);
+          }
+
           if (response.status === HttpStatusCode.NO_CONTENT) {
             return Promise.resolve([response, null]);
           } else if (contentType && contentType.includes('application/json')) {

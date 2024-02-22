@@ -66,7 +66,7 @@ export class EventBusImpl extends EventBus {
   fire(
     eventTarget: EventTarget,
     eventName: string,
-    data: unknown,
+    data: any,
     options: EventBusOptions = {}
   ) {
     const eventInitialization = {};

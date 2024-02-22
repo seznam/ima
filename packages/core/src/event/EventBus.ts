@@ -56,7 +56,7 @@ export abstract class EventBus {
   fire(
     eventTarget: EventTarget,
     eventName: string,
-    data: unknown,
+    data?: any,
     options?: EventBusOptions
   ) {
     return this;

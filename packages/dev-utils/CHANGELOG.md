@@ -1,5 +1,23 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- 7bcbf6d71: Changed default tsconfig to isolated modules, which required some export adjustments
+
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- 95af45a42: Package now uses exports field for package exports definition
+- c0fe68ef3: IMA 19 Release
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
 ## 19.0.0-rc.3
 
 ### Patch Changes

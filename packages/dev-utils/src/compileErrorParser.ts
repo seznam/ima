@@ -53,4 +53,4 @@ export function parseCompileError(
   return webpackErrorParser(error);
 }
 
-export { CompileError };
+export { type CompileError };

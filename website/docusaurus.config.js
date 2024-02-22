@@ -1,7 +1,8 @@
 const path = require('path');
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/palenight');
+const themes = require('prism-react-renderer').themes;
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.palenight;
 
 /**
  * @ts-check
@@ -22,15 +23,19 @@ const config = {
       'docusaurus-plugin-typedoc',
       {
         entryPoints: [
+          '../packages/cli',
           '../packages/core',
           '../packages/react-page-renderer',
-          '../packages/cli',
-          '../packages/plugin-cli',
           '../packages/dev-utils',
-          '../packages/server',
-          '../packages/storybook-integration',
+          '../packages/plugin-cli',
         ],
         entryPointStrategy: 'packages',
+        includeVersion: true,
+        categorizeByGroup: true,
+        cleanOutputDir: true,
+        jsDocCompatibility: true,
+        exclude: 'index',
+        readme: 'none',
         out: '../../docs/api',
         sidebar: {
           fullNames: true,
@@ -116,7 +121,7 @@ const config = {
           label: 'Tutorial',
         },
         {
-          to: 'api/modules',
+          to: 'api',
           position: 'right',
           label: 'API',
         },

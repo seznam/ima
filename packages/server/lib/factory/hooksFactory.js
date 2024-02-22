@@ -54,20 +54,22 @@ module.exports = function hooksFactory({
     }
     const { req, environment } = event;
 
-    const userAgent = req.headers['user-agent'] || '';
     const spaConfig = environment.$Server.serveSPA;
     const isAllowedServeSPA = spaConfig.allow;
     let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
+
+    if (environment.$Server.degradation) {
+      isServerBusy = environment.$Server.degradation?.isSPA?.(event) ?? false;
+
+      return isAllowedServeSPA && isServerBusy;
+    }
+
+    const userAgent = req.headers['user-agent'] || '';
     const isAllowedUserAgent = !(
       spaConfig.blackList &&
       typeof spaConfig.blackList === 'function' &&
       spaConfig.blackList(userAgent)
     );
-
-    if (environment.$Server.degradation) {
-      isServerBusy =
-        environment.$Server.degradation?.isSPA?.(event) ?? isServerBusy;
-    }
 
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
   }

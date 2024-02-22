@@ -58,6 +58,15 @@ npm i -D @types/react @types/react-dom
 
 :::
 
+### ima-env.d.ts
+Additionally we recommend creating a new `ima-env.d.ts` file in root of your `./app` folder with following contents:
+
+```ts title=./app/ima-env.d.ts
+/// <reference types="@ima/cli/global" />
+```
+
+This adds proper types support for webpack specific imports like images and other files.
+
 ## `create-ima-app` support
 
 You can also easily create a typescript base IMA.js application using `--typescript` cli argument when running `create-ima-app` command:

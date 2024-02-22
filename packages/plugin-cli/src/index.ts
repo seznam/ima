@@ -1,12 +1,12 @@
 export {
-  ImaPluginConfig,
-  Source,
-  PipeContext,
-  Command,
-  Plugin,
-  Context,
-  Transformer,
-  TransformerOptions,
+  type ImaPluginConfig,
+  type Source,
+  type PipeContext,
+  type Command,
+  type Plugin,
+  type Context,
+  type Transformer,
+  type TransformerOptions,
 } from './types';
 
 export { preprocessTransformer } from './transformers/preprocessTransformer';

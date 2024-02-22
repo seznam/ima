@@ -93,7 +93,7 @@ export default function ThemeComponent({ children, title, href }) {
 
 :::caution
 
-The constants are generated only in the [`preProcess`](../plugins-api.md#plugins-api) which **runs just ones before the compilation**. So make sure to restart the built manually, when you add any new constants, to allow for the regeneration of the `constants.less` file.
+The constants are generated only in the [`preProcess`](../cli-plugins-api.md#plugins-api) which **runs just ones before the compilation**. So make sure to restart the built manually, when you add any new constants, to allow for the regeneration of the `constants.less` file.
 
 :::
 

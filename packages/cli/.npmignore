@@ -1,3 +1,4 @@
 *
 !dist/**/*
 !package.json
+!global.d.ts

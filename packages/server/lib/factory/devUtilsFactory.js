@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function devUtilsFactory() {
+module.exports = function devUtilsFactory({ applicationFolder }) {
   function manifestRequire(module, options = {}) {
     const manifest = JSON.parse(
-      fs.readFileSync(path.resolve('./build/manifest.json'))
+      fs.readFileSync(path.resolve(applicationFolder, './build/manifest.json'))
     );
     const assets = manifest.assetsByCompiler.server;
 
@@ -14,12 +14,14 @@ module.exports = function devUtilsFactory() {
 
     if (Array.isArray(options?.dependencies)) {
       options?.dependencies.forEach(dependency =>
-        require(path.resolve(path.join('./build', assets[dependency].fileName)))
+        require(path.resolve(
+          path.join(applicationFolder, './build', assets[dependency].fileName)
+        ))
       );
     }
 
     return require(path.resolve(
-      path.join('./build', assets[module]?.fileName)
+      path.join(applicationFolder, './build', assets[module]?.fileName)
     ));
   }
 

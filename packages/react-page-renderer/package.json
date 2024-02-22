@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "19.0.0-rc.15",
+  "version": "19.2.0",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -16,7 +16,6 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "typedocMain": "./src/index.ts",
   "main": "./dist/cjs/index.js",
   "types": "./dist/esm/client/index.d.ts",
   "exports": {
@@ -59,13 +58,13 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@ima/helpers": "^19.0.0-rc.2",
+    "@esmj/task": "^0.2.0",
+    "@ima/helpers": "^19.0.0",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@cfaester/enzyme-adapter-react-18": "^0.7.0",
-    "@esmj/emitter": "^0.3.0",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.6",
@@ -73,7 +72,8 @@
     "to-mock": "^1.6.2"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0-rc.0",
+    "@ima/server": ">=19.0.0",
+    "@ima/core": ">=19.0.0",
     "react": ">=16",
     "react-dom": ">=16",
     "webpack": "^5.70.0"

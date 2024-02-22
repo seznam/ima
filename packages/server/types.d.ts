@@ -1,5 +1,6 @@
 import { Emitter } from '@esmj/emitter';
 import { Environment } from '@ima/core';
+import { Request } from 'express';
 
 declare module '@ima/server' {
   export enum Event {
@@ -34,4 +35,12 @@ declare module '@ima/server' {
   export function environmentFactory(args: {
     applicationFolder: string;
   }): Environment;
+
+  export function urlParserFactory(params: {
+    environment: Environment;
+    applicationFolder: string;
+  }): {
+    getHost: (req: Request) => string;
+    getProtocol: (req: Request) => string;
+  };
 }

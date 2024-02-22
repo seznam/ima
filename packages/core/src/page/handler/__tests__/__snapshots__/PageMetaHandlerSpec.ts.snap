@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PageMetaHandlerSpec handlePostManagedState should render meta tags from meta manager into document.head 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://styles.css"><meta data-ima-meta="" name="og:title" property="Test Page" with="additional-params"><meta data-ima-meta="" name="description" content="Test Page" value="value">"`;
+exports[`PageMetaHandlerSpec handlePostManagedState should render meta tags from meta manager into document.head 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://styles.css"><meta data-ima-meta="" name="description" content="Test Page" value="value"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params">"`;
 
 exports[`PageMetaHandlerSpec handlePostManagedState should replace old meta with new set 1`] = `"<title></title><link data-ima-meta="" rel="preload" href="https://api.com">"`;
 
-exports[`PageMetaHandlerSpec handlePostManagedState should update existing meta tags with updated values 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://new-styles.css"><meta data-ima-meta="" name="og:title" property="Test Page" with="additional-params" andwith="another-additional-params"><meta data-ima-meta="" name="description" content="Test Page">"`;
+exports[`PageMetaHandlerSpec handlePostManagedState should update existing meta tags with updated values 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://new-styles.css"><meta data-ima-meta="" name="description" content="Test Page"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params" andwith="another-additional-params">"`;

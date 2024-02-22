@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger } from '@ima/dev-utils/logger';
+import { assignRecursively } from '@ima/helpers';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,
@@ -156,7 +157,7 @@ export { };
  * @param outputPath Output path for the messageformat JS module.
  */
 export async function parseLanguageFiles(
-  messages: StringStructure,
+  messages: Record<string, any>,
   locale: string,
   languagePaths: string | string[],
   outputPath: string
@@ -171,8 +172,9 @@ export async function parseLanguageFiles(
             languagePath
           );
 
-          messages[dictionaryKey] = JSON.parse(
-            (await fs.promises.readFile(languagePath)).toString()
+          messages[dictionaryKey] = assignRecursively(
+            messages[dictionaryKey] ?? {},
+            JSON.parse((await fs.promises.readFile(languagePath)).toString())
           );
         } catch (error) {
           throw new Error(
@@ -214,13 +216,16 @@ export async function compileLanguages(
     locales.map(async (locale, index) => {
       const messages: StringStructure = {};
       const outputPath = getLanguageModulePath(locale, rootDir);
-      const languagePaths = await globby(imaConfig.languages[locale], {
-        cwd: rootDir,
-        absolute: true,
-      });
 
-      // Parse all language files
-      await parseLanguageFiles(messages, locale, languagePaths, outputPath);
+      for (const glob of imaConfig.languages[locale]) {
+        const languagePaths = await globby(glob, {
+          cwd: rootDir,
+          absolute: true,
+        });
+
+        // Parse the language files
+        await parseLanguageFiles(messages, locale, languagePaths, outputPath);
+      }
 
       // Run only for first language file to avoid conflicts
       if (index === 0) {

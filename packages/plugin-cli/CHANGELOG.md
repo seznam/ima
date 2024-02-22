@@ -1,5 +1,34 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- 7bcbf6d71: Changed default tsconfig to isolated modules, which required some export adjustments
+
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 6a6b996d4: All swc transformations now produce source map files alongside transformed files.
+- 5380e516e: When parsing configuration file the plugin now searches for ima-plugin.config.js files recursively up to filesystem root. This allows to have one custom config file for monorepositories and removes the need of duplicating same config across all package directories
+- 168fa6d6a: Added ability to enable/disable soure maps generation using `sourceMaps` option in `ima-plugin.config.js` configuration file.
+  Added ability to add new custom transformers using `transformers` option in `ima-plugin.config.js` configuration file.
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+- Updated dependencies [71f33a761]
+- Updated dependencies [81a8605d5]
+- Updated dependencies [95af45a42]
+- Updated dependencies [c0fe68ef3]
+  - @ima/dev-utils@19.0.0
+
 ## 19.0.0-rc.4
 
 ### Minor Changes

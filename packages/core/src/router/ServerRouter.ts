@@ -24,7 +24,6 @@ export class ServerRouter extends AbstractRouter {
       Dispatcher,
       Request,
       Response,
-      // @ts-expect-error `FIXME`
       '?$Settings.$Router.middlewareTimeout',
     ];
   }

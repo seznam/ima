@@ -179,6 +179,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('manage()', () => {
     it('should only update last managed controller and view', async () => {
+      pageManager['_managedPage'].state.mounted = true;
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
         .mockReturnValue(true as never);
@@ -192,11 +193,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .spyOn(pageManager, '_updatePageSource' as never)
         .mockReturnValue(Promise.resolve() as never);
 
-      await pageManager.manage({
+      const pagePromise = pageManager.manage({
         route,
         options,
         action: {},
       });
+
+      jest.runAllTimers();
+      await pagePromise;
 
       expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
       expect(pageManager['_updatePageSource']).toHaveBeenCalled();
@@ -230,13 +234,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       jest.useFakeTimers();
 
-      await pageManager.manage({
+      const pagePromise = pageManager.manage({
         route,
         options,
         action: {},
       });
 
-      jest.advanceTimersByTime(1000);
+      jest.runAllTimers();
+      await pagePromise;
 
       expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
       expect(pageManager['_deactivatePageSource']).toHaveBeenCalled();
@@ -260,6 +265,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         ),
         options,
       });
+      jest.runAllTimers();
 
       const preManageOld = pageManager.preManage();
       const oldResponse = await oldPagePromise;
@@ -286,6 +292,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
             "cancelled": true,
             "executed": false,
             "initialized": false,
+            "mounted": false,
             "page": {
               "promise": Promise {},
               "reject": [Function],
@@ -304,6 +311,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should fire router events for async route handlers', async () => {
+      jest.useRealTimers();
       const pagePromise = pageManager.manage({
         route: routeFactory.createRoute(
           routeName,
@@ -314,7 +322,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         options,
       });
 
-      jest.advanceTimersByTime(10000);
       const response = await pagePromise;
       pageManager.postManage();
       jest.runOnlyPendingTimers();

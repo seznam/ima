@@ -117,7 +117,7 @@ export class Response {
   setCookie(
     name: string,
     value: boolean | number | string,
-    options = {}
+    options: CookieOptions = {}
   ): this {
     if ($Debug) {
       if (this._response && this._response.headersSent) {

@@ -1,5 +1,129 @@
 # Change Log
 
+## 19.3.0
+
+### Minor Changes
+
+- 093a4b6ef: Updates dependency @esmj/monitor to the latest version - support for defining custom metrics.
+
+## 19.2.0
+
+### Minor Changes
+
+- 00c4cc7a3: Added `urlParserFactory` exports for use in custom middlewares
+
+## 19.1.3
+
+### Patch Changes
+
+- a4a42a706: Use `applicationFolder` to reference to application root everywhere. Until now, sometimes we would refer to `applicationFolder` as root, while other times we refered to `process.cwd()`, which caused some inconsistencies and it was not usable outside of tests scope (which is a reason why this was implemented in a first place).
+
+## 19.1.2
+
+### Patch Changes
+
+- b036b1988: Fixed issue where non-string meta values were being sanitized through encodeHTMLEntities, which resulted in server error.
+
+## 19.1.1
+
+### Patch Changes
+
+- 1b07412fa: Prevent XSS for meta tags where application not clear html from user input.
+
+## 19.1.0
+
+### Minor Changes
+
+- efcf9b99a: Environment $Server properties host&protocol now accepts functions with added arguments.
+
+## 19.0.4
+
+### Patch Changes
+
+- 0ae36c8f4: Fixed async attribute value in web script resources
+
+## 19.0.3
+
+### Patch Changes
+
+- f471ff62b: Allow applicationFolder to be overriden
+
+## 19.0.2
+
+### Patch Changes
+
+- 9cf262c73: Fixed incorrectly rendered meta properties, where they would render as `<meta name="og:title" property="Test Page" /> instead of `<meta property="og:title" content="Test Page" />`.
+
+## 19.0.1
+
+### Patch Changes
+
+- 2323c6a13: Updated dependencies to use non-rc version ranges
+
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- ceb4cbd12: #### Breaking changes
+
+  Dropped support for direct `response.contentVariables` mutations, use `event.result` and return in `CreateContentVariables` event.
+  Dropped support for `$Source`, `$RevivalSettings`, `$RevivalCache`, `$Runner`, `$Styles`, `$Scripts` content variables. These have been replaced by their `lowerFirst` counter-parts `source`, `revivalSettings`, `revivalCache`, `runner`, `styles`, `scripts`, while `$Scripts` support have been dropped completely.
+
+- 021c103fa: add new metric concurrent requests to monitoring. Update dependency esmj/monitor to 0.4.0.
+- 895f31400: Migrated urlParser middleware to ima server BeforeRequest hook
+  #### Breaking Change
+  Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
+- 9ea9018d7: Default resources in $Resources now produce styles and esStyles fields. This does not necessarily mean which should be loaded on which es version, but what bundle produced those styles. This also means that without any custom configuration, all styles should now be under `esStyles` key, since they are built in client.es webpack bundle.
+  #### BREAKING CHANGE
+  The package now provides named exports, the deafult export has been replaced with named `createIMAServer` function.
+- ceb4cbd12: Added new iterator functions to MetaManager.
+  Added ability to set additional attributes for meta tags/links in meta manager.
+  Meta values/attributes with null/undefined values are not rendered, other values are converted to string.
+
+  #### Breaking changes
+
+  Rewritten meta tag management in SPA mode, all MetaManager managed tags are removed between pages while new page contains only those currently defined using `setMetaParams` function in app controller. This should make meta tags rendering more deterministic, while fixing situations where old meta tags might be left on the page indefinitely if not cleaner properly.
+  MetaManager get\* methods now always return object with key=value pairs of their set value. This should make settings additional meta attributes in loops much easier (for example: `getMetaProperty('og:title');` -> `{ property: 'property-value' });`)
+  `$Source` env variable has been renamed to `$Resources`.
+
+- ca55af922: Add `routeName` key to `res.locals` instead of `res.$IMA`, since `res.$IMA` should not be used anymore.
+- ceb4cbd12: Moved meta tags management to new PageMetaHandler in `@ima/core`.
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 2f789cdae: Add support for Client Errors and Redirects when serving static error pages.
+- 6510a25f6: Add information about error cause in places, where we used to throw away this information.
+- 7c9cf6997: Style content variable now automatically generates preload links for app styles.
+- bedc7e0bb: environment?.$Server?.host and environment?.$Server?.protocol can now be functions
+- 1a4c07a96: Added option to force app host and protocol, using `$Server.host` and `$Server.protocol` settings in the environment.js
+
+### Patch Changes
+
+- 394fc8985: update @esmj/monitor to 0.5.0 with breaking change for returns value from subscribe method where returns subscription is object with unsubscribe method.
+- eee60ef09: Add option to use custom manifestRequire
+- cd8af3a1b: fix devutils default value
+- 71f33a761: Final release of all RC ima@19 packages
+- 90d0121f2: Fixed IMA@18 and IMA@19 todos
+- 1f636bbfb: Fixed issue where server redirect showed ErrorOverlay in debug mode
+- 5919b93d7: The App error route is protected for exceeding static thresholds.
+- 6050cdb5d: Type fixes
+  Added additional missing exports
+- 1a8d16890: Added `X-Request-ID` to revival settings. Can be accesed through $IMA.$RequestID
+- 552d4e17f: Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings
+- 5c5b037e0: SPA blacklist config is omitted for using degradation isSPA method when decision serving SPA page.
+- bfb1f48bb: The Emitter event.cause is removed. The error cause is set in event.error.cause.
+- 793a59813: override server devUtils and environment in createIMAServer
+- d2e426d75: The instances of $Dispatcher, $Cache, $PageRenderer and $PageManager is cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
+- 804a51612: Added XSS protection to host and protocol in revival settings
+
+## 19.0.0-rc.10
+
+### Patch Changes
+
+- 5c5b037e0: SPA blacklist config is omitted for using degradation isSPA method when decision serving SPA page.
+
 ## 19.0.0-rc.9
 
 ### Minor Changes
@@ -120,6 +244,12 @@
 - Updated dependencies [c0fe68ef3]
   - @ima/dev-utils@19.0.0-rc.0
   - @ima/helpers@19.0.0-rc.0
+
+## 18.3.4
+
+### Patch Changes
+
+- e2b89569c: Updated dependency @esmj/monitor:^0.5.1
 
 ## 18.3.3
 

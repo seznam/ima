@@ -1,3 +1,4 @@
+import { Environment } from '@ima/core';
 import { Configuration, ResolveOptions, Watching } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -32,6 +33,7 @@ export interface ImaCliArgs {
   clean: boolean;
   clearCache?: boolean;
   verbose?: boolean;
+  inspect?: boolean;
   ignoreWarnings?: boolean;
   open?: boolean;
   openUrl?: string;
@@ -64,6 +66,16 @@ export interface ImaConfigurationContext extends ImaCliArgs {
     js: string;
     public: string;
   };
+  useTypescript: boolean;
+  imaEnvironment: Environment;
+  appDir: string;
+  lessGlobalsPath: string;
+  mode: Configuration['mode'];
+  useHMR: boolean;
+  useSourceMaps: boolean;
+  isDevEnv: boolean;
+  targets: string[];
+  devtool: Configuration['devtool'];
 }
 
 export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
@@ -157,6 +169,18 @@ export type ImaConfig = {
     config: Record<string, unknown>,
     ctx: ImaConfigurationContext
   ) => Promise<Record<string, unknown>>;
+
+  /**
+   * Called right before creating webpack configurations after preProcess call.
+   * This hook lets you customize configuration contexts for each webpack config
+   * that will be generated. This is usefull when you need to overrite configuration
+   * contexts for values that are not editable anywhere else (like output folders).
+   */
+  prepareConfigurations?(
+    configurations: ImaConfigurationContext[],
+    imaConfig: ImaConfig,
+    args: ImaCliArgs
+  ): Promise<ImaConfigurationContext[]>;
 
   /**
    * Browserslist configuration string for postcss-preset-env.

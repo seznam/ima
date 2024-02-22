@@ -93,7 +93,7 @@ module.exports = (() => {
            * These user agents will always be served a server-rendered page.
            */
           blackList: userAgent =>
-            new RegExp('Googlebot|SeznamBot', 'g').test(userAgent),
+            new RegExp('Googlebot|SeznamBot').test(userAgent),
         },
         cache: {
           // boolean, or function(Express.Request): boolean

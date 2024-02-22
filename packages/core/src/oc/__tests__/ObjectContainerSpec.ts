@@ -351,6 +351,18 @@ describe('ima.core.ObjectContainer', () => {
       } as Entry;
     });
 
+    it('should throw error if dependency in $dependencies is undefined', () => {
+      class A {
+        static get $dependencies() {
+          return [undefined];
+        }
+      }
+
+      expect(() => {
+        oc.get(A);
+      }).toThrow();
+    });
+
     it('should return shared instance', () => {
       entry.sharedInstance = false;
 

@@ -1,9 +1,9 @@
 export {
-  ImaCliPlugin,
-  ImaConfig,
-  ImaCliCommand,
-  ImaCliArgs,
-  ImaConfigurationContext,
+  type ImaCliPlugin,
+  type ImaConfig,
+  type ImaCliCommand,
+  type ImaCliArgs,
+  type ImaConfigurationContext,
 } from './types';
 
 export {
@@ -15,5 +15,6 @@ export {
   resolveImaConfig,
   createWebpackConfig,
   findRules,
+  runImaPluginsHook,
 } from './webpack/utils';
 export { compileLanguages, getLanguageEntryPoints } from './webpack/languages';

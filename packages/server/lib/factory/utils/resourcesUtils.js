@@ -122,7 +122,7 @@ function _prepareSources(manifest, language) {
       preload: true,
     }),
     scripts: buildResources('client', jsFilter, {
-      async: true,
+      async: '',
       crossorigin: 'anonymous',
     }),
     esStyles: buildResources('client.es', cssFilter, {
@@ -130,7 +130,7 @@ function _prepareSources(manifest, language) {
       preload: true,
     }),
     esScripts: buildResources('client.es', jsFilter, {
-      async: true,
+      async: '',
       crossorigin: 'anonymous',
     }),
   };

@@ -6,21 +6,22 @@ const { URL } = require('url');
 
 const { GenericError } = require('@ima/core');
 
-module.exports = function urlParserFactory({ environment }) {
-  const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
+module.exports = function urlParserFactory({ applicationFolder, environment }) {
+  const IMA_CONFIG_JS_PATH = path.resolve(applicationFolder, './ima.config.js');
 
   function _getHost(req) {
-    if (environment?.$Server?.host) {
-      return typeof environment?.$Server?.host === 'function'
-        ? environment?.$Server?.host({ req })
-        : environment.$Server.host;
-    }
-
-    let forwardedHost = req.get('X-Forwarded-Host');
+    const forwardedHost = req.get('X-Forwarded-Host');
     let host = req.get('host');
 
     if (forwardedHost) {
       host = forwardedHost;
+    }
+
+    if (environment?.$Server?.host) {
+      host =
+        typeof environment?.$Server?.host === 'function'
+          ? environment?.$Server?.host({ environment, host, req })
+          : environment.$Server.host;
     }
 
     return host;
@@ -99,18 +100,20 @@ module.exports = function urlParserFactory({ environment }) {
   }
 
   function _getProtocol(req) {
+    let protocol =
+      _getProtocolFromForwardedHeader(req) ||
+      _getProtocolFromXForwardedProtoHeader(req) ||
+      _getProtocolFromFrontEndHttpsHeader(req) ||
+      req.protocol;
+
     if (environment?.$Server?.protocol) {
-      return typeof environment?.$Server?.protocol === 'function'
-        ? environment?.$Server?.protocol({ req })
-        : environment.$Server.protocol + ':';
+      protocol =
+        typeof environment?.$Server?.protocol === 'function'
+          ? environment?.$Server?.protocol({ environment, protocol, req })
+          : environment.$Server.protocol;
     }
 
-    return (
-      (_getProtocolFromForwardedHeader(req) ||
-        _getProtocolFromXForwardedProtoHeader(req) ||
-        _getProtocolFromFrontEndHttpsHeader(req) ||
-        req.protocol) + ':'
-    );
+    return `${protocol}:`;
   }
 
   function urlParser({ req, res }) {
@@ -198,5 +201,5 @@ module.exports = function urlParserFactory({ environment }) {
     }
   }
 
-  return { urlParser };
+  return { urlParser, getProtocol: _getProtocol, getHost: _getHost };
 };

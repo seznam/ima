@@ -1,5 +1,32 @@
 # Change Log
 
+## 19.0.2
+
+### Patch Changes
+
+- c0f035919: fix for assignRecursively - use deepClone for arrays instead of slice, so any modifications in the assignRecursively result newly NOT mutate the other results
+
+## 19.0.1
+
+### Patch Changes
+
+- cd5364df6: Added type declarations
+
+## 19.0.0
+
+### Major Changes
+
+- 81a8605d5: Bump versions
+- c0fe68ef3: IMA 19 Release
+
+### Minor Changes
+
+- 6a6b996d4: Package source files now include source map files
+
+### Patch Changes
+
+- 71f33a761: Final release of all RC ima@19 packages
+
 ## 19.0.0-rc.3
 
 ### Patch Changes

@@ -46,13 +46,16 @@ describe('ima.core.http.HttpProxy', () => {
       status: 200,
       // @ts-ignore
       headers: new Map(), // compatible enough with Headers
-      json() {
-        return Promise.resolve(this.body);
-      },
       // @ts-ignore
-      text() {
-        return Promise.resolve(this.body);
-      },
+      json: () => Promise.resolve({ data: 'json' }),
+      // @ts-ignore
+      blob: () => Promise.resolve({ data: 'blob' }),
+      // @ts-ignore
+      text: () => Promise.resolve({ data: 'text' }),
+      // @ts-ignore
+      arrayBuffer: () => Promise.resolve({ data: 'arrayBuffer' }),
+      // @ts-ignore
+      formData: () => Promise.resolve({ data: 'formData' }),
       // @ts-ignore
       body: { data: 'some data' },
     };
@@ -406,6 +409,19 @@ describe('ima.core.http.HttpProxy', () => {
         expect(abortController.signal.reason).toBe('Aborted');
         expect(abortController.signal.aborted).toBeTruthy();
       });
+
+      it.each([['json'], ['blob'], ['text'], ['arrayBuffer'], ['formData']])(
+        'should parse response with given response type',
+        async responseType => {
+          const result = (await proxy.request(method, API_URL, DATA, {
+            ...defaultOptions,
+            responseType:
+              responseType as HttpAgentRequestOptions['responseType'],
+          })) as UnknownParameters;
+
+          expect(result.body).toStrictEqual({ data: responseType });
+        }
+      );
     }
   );
 

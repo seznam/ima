@@ -1,3 +1,5 @@
+import { autoYield } from '@esmj/task';
+
 import { PageManager, ManageArgs } from './PageManager';
 import { Controller } from '../../controller/Controller';
 import { ControllerDecorator } from '../../controller/ControllerDecorator';
@@ -136,6 +138,7 @@ export abstract class AbstractPageManager extends PageManager {
       route.isControllerResolved() && route.isViewResolved();
 
     try {
+      await autoYield();
       if (!isControllerViewResolved) {
         this._dispatcher.fire(
           RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
@@ -144,6 +147,7 @@ export abstract class AbstractPageManager extends PageManager {
         );
       }
 
+      await autoYield();
       const data = await this.getViewController(route);
       controller = data.controller;
       view = data.view;
@@ -163,8 +167,13 @@ export abstract class AbstractPageManager extends PageManager {
       }
     }
 
-    if (this._hasOnlyUpdate(controller, view, options)) {
+    if (
+      this._hasOnlyUpdate(controller, view, options) &&
+      this._managedPage.state.mounted
+    ) {
       this._managedPage.params = params;
+      this._managedPage.state.cancelled = false;
+      this._managedPage.state.executed = false;
 
       await this._runPreManageHandlers(this._managedPage, action);
       const response = await this._updatePageSource();
@@ -183,6 +192,7 @@ export abstract class AbstractPageManager extends PageManager {
     // @ts-expect-error fixme in the future
     const viewInstance = this._pageFactory.createView(view);
 
+    const actualManagedPage = this._managedPage;
     this._managedPage = this._constructManagedPageValue(
       controller,
       view,
@@ -195,7 +205,7 @@ export abstract class AbstractPageManager extends PageManager {
     );
 
     // Run pre-manage handlers before affecting anything
-    await this._runPreManageHandlers(this._managedPage, action);
+    await this._runPreManageHandlers(actualManagedPage, action);
 
     // Deactivate the old instances and clearing state
     await this._deactivatePageSource();
@@ -260,6 +270,7 @@ export abstract class AbstractPageManager extends PageManager {
         initialized: false,
         cancelled: false,
         executed: false,
+        mounted: false,
         page: createDeferred(),
       },
     };
@@ -307,6 +318,7 @@ export abstract class AbstractPageManager extends PageManager {
         initialized: false,
         cancelled: false,
         executed: false,
+        mounted: false,
         page: {
           promise: Promise.resolve(),
           reject: () => undefined,
@@ -459,6 +471,8 @@ export abstract class AbstractPageManager extends PageManager {
         )
       );
 
+      this._managedPage.state.mounted = true;
+
       return response;
     } catch (error) {
       if (error instanceof CancelError) {
@@ -543,6 +557,7 @@ export abstract class AbstractPageManager extends PageManager {
 
     const controller = this._managedPage.controllerInstance;
 
+    await autoYield();
     await controller.activate();
   }
 
@@ -557,6 +572,7 @@ export abstract class AbstractPageManager extends PageManager {
         throw new CancelError();
       }
 
+      await autoYield();
       await extension.activate();
     }
   }
@@ -774,21 +790,22 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   protected async _runPreManageHandlers(
-    nextManagedPage: ManagedPage,
+    actualManagedPage: ManagedPage,
     action: PageAction
   ) {
+    await autoYield();
     const result = this._pageHandlerRegistry.handlePreManagedState(
-      this._managedPage.controller
+      actualManagedPage.controller
         ? (this._stripManagedPageValueForPublic(
-            this._managedPage
+            actualManagedPage
           ) as unknown as ManagedPage)
         : null,
       (this._stripManagedPageValueForPublic(
-        nextManagedPage
+        this._managedPage
       ) as unknown as ManagedPage) || null,
       action
     );
-    nextManagedPage.state.executed = true;
+    this._managedPage.state.executed = true;
 
     return result;
   }
@@ -797,11 +814,13 @@ export abstract class AbstractPageManager extends PageManager {
     previousManagedPage: ManagedPage,
     action: PageAction
   ) {
-    if (!previousManagedPage.state.executed) {
+    // Has to be called for first managed page too (previous is empty)
+    if (previousManagedPage.controller && !previousManagedPage.state.executed) {
       previousManagedPage.state.executed = false;
       return;
     }
 
+    await autoYield();
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? (this._stripManagedPageValueForPublic(
@@ -828,9 +847,11 @@ export abstract class AbstractPageManager extends PageManager {
   }
 
   #cancelable<T>(promise: T): Promise<T | never> {
-    return Promise.race([
-      this._previousManagedPage.state.abort?.promise as never,
-      promise,
-    ]);
+    return autoYield().then(() =>
+      Promise.race([
+        this._previousManagedPage.state.abort?.promise as never,
+        promise,
+      ])
+    );
   }
 }

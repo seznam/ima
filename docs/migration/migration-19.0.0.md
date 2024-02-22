@@ -9,9 +9,100 @@ While IMA.js 19 is not as big of a release as previous major version, it brings 
 
 :::info
 
-For full list of changes, see [Github releases](https://github.com/seznam/ima/releases) page.
+In addition to new features, **there have been significant updates to TypeScript types in IMA monorepo**. This should allow you to write even better applications in TypeScript, while also benefit from better autocomplete in JS applications.
 
 :::
+
+## Migration Guide
+
+The list of changes required to get your app compiled is pretty minimal, however we suggest you take a look at all potential breaking changes in the (full list of changes)[migration-19.0.0.md#breaking-changes].
+
+### `@ima/server` updates
+
+- `@ima/server` now contains named exports, change following in `./server/app.js`
+
+```js
+// from
+const imaServer = require('@ima/server')();
+
+// to
+const { createIMAServer } = require('@ima/server');
+const imaServer = createIMAServer();
+```
+
+- Update definition of `$Source`, `$RevivalSettings`, `$RevivalCache`, `$Runner`, `$Styles`, `$Scripts` content variables in `spa.ejs` and DocumentView. These have been replaced by their lowerFirst counter-parts `resource` (now replaces `$Source`), `revivalSettings`, `revivalCache`, `runner`, `styles`, while `$Scripts` support have been dropped completely.
+- Remove `urlParser` middleware from `app.js`, it is now part of renderApp middleware as a server hook.
+
+### Update `@ima/react-page-renderer` import
+
+Change `ClientPageRenderer` import from default to named import.
+
+```js
+// from
+import ClientPageRenderer
+  from '@ima/react-page-renderer/dist/esm/client/renderer/ClientPageRenderer';
+
+// to
+import { ClientPageRenderer }
+  from '@ima/react-page-renderer/renderer/ClientPageRenderer';
+```
+
+### Register new `PageMetaHandler`
+
+Add new `PageMetaHandler` to `PageHandlerRegistry` in `bind.js`
+```js
+oc.inject(PageHandlerRegistry, [PageNavigationHandler, PageMetaHandler, SspPageHandler]);
+```
+
+Optionally remove all meta tag renders from `DocumentView` and `spa.ejs` including `<title />` tag. These can be replaced with `#{meta}` content variable,
+
+### Fire method params order change
+
+In v18 after introducting the need for a `EventTarget` in `EventBus.fire` methods, we made a mistake with the argument order. In v19 it has been moved to first position to match other event handling methods.
+
+```js
+// from
+this.fire('fetchDataArticles', event.target, { data: true })
+
+// to
+this.fire(event.target, 'fetchDataArticles', { data: true })
+```
+
+### Removed duplicates from `HttpAgent` settings:
+
+ - `headers` have been moved to `fetchOptions`:
+
+```js
+// from
+$Http: {
+  defaultRequestOptions: {
+    headers: {
+      // Set default request headers
+      Accept: 'application/json',
+      'Accept-Language': config.$Language,
+    },
+    fetchOptions: {
+      mode: 'cors',
+    },
+  },
+}
+
+// to
+$Http: {
+  defaultRequestOptions: {
+    fetchOptions: {
+      mode: 'cors',
+      headers: {
+        // Set default request headers
+        Accept: 'application/json',
+        'Accept-Language': config.$Language,
+      },
+    },
+  },
+}
+```
+
+## Full list of changes
 
 ## New features
 
@@ -22,6 +113,11 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
  - **Performance improvement** when building CSS/LESS files (except CSS modules), on `server` and `client` bundles. This can add up to 25% built speed improvement depending on the amount of CSS files your project is using.
  - Added additional CLI output information when `forcedLegacy` and `writeToDisk` options are used.
  - Fixed manifest CSS files regexp, only files from static/css/ folder are now included in final manifest.json file.
+ - Added new export for `findRules`, this is simple helper function you can use to extract rules from webpack config in yor plugins for easier customization.
+ - Added new export for `createWebpackConfig`, when provided with CLI args and `imaConfig`, it generates webpack configurations which are then passed to webpack compiler. This can be usefull for other tooling like StoryBook, where you need to customize different webpack config with fields from the IMA app one
+ - Added additional `ImaConfigurationContext` variables: `isClientES`, `isClient` and `outputFolders`.
+ - **Added support for `prepareConfigurations` CLI plugin method**, which lets you customize webpack configuration contexts, before generating webpack config from them.
+- **Added new `cssBrowsersTarget` ima.config.js settings**, this allows you to easily customize postcss-preset-env browsers targets field.
 
 <div class="text--center">
 
@@ -38,6 +134,7 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
  - **Added support for source-maps**, now all files transformed using `swc` (JS/TS) also produce `.map` files alongside transformed files.
  - Added ability to enable/disable source maps generation using `sourceMaps` option in `ima-plugin.config.js` configuration file.
  - Added ability to add new custom transformers using `transformers` option in` ima-plugin.config.js` configuration file.
+ - When parsing configuration file the plugin now searches for `ima-plugin.config.js` files recursively up to filesystem root. This allows to have one custom config file for monorepositories and removes the need of duplicating same config across all package directories.
 
 ### @ima/hmr-client
  - Fixed async issue in HMR, where IMA app could be re-rendered before the old instance finished cleanup.
@@ -55,6 +152,7 @@ For full list of changes, see [Github releases](https://github.com/seznam/ima/re
  - Fixed HttpAgent types -> data in method arguments should be optional
  - Fixed missing transaction cleanup in PageStateManager
  - Fix missing optional parameters in static router that were evaluated as undefined instead of 'undefined'.
+ - Added autocompletion support for language file keys in localization functions. To be able to use this function, update `jsconfig.json`/`tsconfig.json` according to the documentation (adding `./build/tmp/types/**/*"` path to `include` field should suffice).
  - Controller and Extension event bus methods can be targeted with prefix. Prefix is set by static field in controller/extension class e.g. `$name = 'ArticleController'`;. Event is then `ArticleController.eventName`:
 
 ```javascript title="./app/page/article/ArticleController.js"
@@ -100,6 +198,7 @@ router.use(async (params, locals, next) => {
  - Fixed an issue where invalid Error params caused circular dependency error.
  - Fixed an issue where errors, that occurred before error overlay is initialized were not reported to the error overlay.
  - Reduced number of levels that are expanded by default in error overlay error params view.
+ - Added ability to hide/show error params, this settings is saved to local storage.
 
 ### @ima/server
  - Style content variable now automatically generates preload links for app styles.
@@ -109,12 +208,14 @@ router.use(async (params, locals, next) => {
  - Added `X-Request-ID` to revival settings. Can be accessed through `$IMA.$RequestID`. This can be usefull to match same requests between client and server instances.
  - Added **XSS protection** to **host** and **protocol** in revival settings.
  - Add support for Client Errors and Redirects when serving static error pages.
- - Added option to **force app host** and **protocol**, using `$Server.host` and `$Server.protocol` settings in the `environment.js`.
+ - Added option to **force app host** and **protocol**, using `$Server.host` and `$Server.protocol` settings in the `environment.js`. (These 2 values can also be functions).
  - The App error route is protected for exceeding static thresholds.
  - The Emitter `event.cause` is removed. The error cause is set in `event.error.cause`.
  - Fixed issue with dummyApp forcing 'en' language, which fails to resolve on applications with different language settings.
  - Fixed issue where server redirect showed ErrorOverlay in debug mode.
  - The instances of `$Dispatcher`, `$Cache`, `$PageRenderer` and `$PageManager` are cleared after server sending response. Clearing PageManager cause calling `destroy` lifecycle method of controller and extensions on server.
+ - Add option to use custom `manifestRequire`.
+ - SPA blacklist config is omitted for using degradation isSPA method when decision serving SPA page.
 
 ### create-ima-app
  - Added new **typescript template**, use `--typescript` option when generating new application.
@@ -125,7 +226,7 @@ router.use(async (params, locals, next) => {
 ## Breaking Changes
 
 ### @ima/cli
- - Bumped **browserslist targets definition** a little bit to browsers supporting `AbortController` -> Added `AbortController` to `es2018` test script to runner.ejs. This means that browsers not supporting `AbortController` will be served MPA version of IMA app. While technically not a breaking change, since it's pretty minor bump, it is something however you should be aware of.
+ - Removed `isESVersion` `ImaConfigurationContext` variable (use `isClientES` instead).
 
 ### @ima/core
  - `AbstractRouter.manage` method no longer has controller and view properties in an object argument.
@@ -175,6 +276,7 @@ this.#metaManager.setLink('lcp-image', media.url, {
  - `isSSR` hook has been removed, use `window.isClient()` directly from `useComponentUtils()`.
  - `useSettings` now returns `undefined`, when settings is not found when using `selector` namespace as an argument.
  - All exports are now **named exports**, you need to update import to `ClientPageRenderer` in bind.js to:
+ - Changed signature of `useWindowEvent` hook, it now matches bindEventListener parameters of ima window.
 
 ```javascript title=./app/config/bind.js
 import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
@@ -198,3 +300,5 @@ this.fire(event.target, 'fetchDataArticles', { data: true })
  - Migrated urlParser middleware to ima server BeforeRequest hook. Remove `urlParser` middleware from `app.js`, it is now part of `renderApp` middleware.
  - Dropped support for direct `response.contentVariables` mutations, use `event.result` and return values in `CreateContentVariables` event.
  - Dropped support for `$Source`, `$RevivalSettings`, `$RevivalCache`, `$Runner`, `$Styles`, `$Scripts` content variables. These have been replaced by their lowerFirst counter-parts `resource` (now replaces `$Source`), `revivalSettings`, `revivalCache`, `runner`, `styles`, while `$Scripts` support have been dropped completely.
+ - Default resources in `$Resources` now produce `styles` and `esStyles` fields (should not break anything in 99% of the applications). This does not necessarily mean which should be loaded on which `es` version, but what bundle produced those styles. This also means that without any custom configuration, all styles should now be under `esStyles` key, since they are built in client.es webpack bundle. This change was made to enable built of 2 CSS bundles simliar to how we handle ES bundles. This can be enabled using `@ima/cli-plugin-legacy-css`.
+ - The package now provides multiple additional exports using named exports, the deafult export has been replaced with named `createIMAServer` function.

@@ -6,7 +6,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "types": ["hmr-client", "ima__helpers", "express", "jest", "to-mock", "node"]
+    "types": ["hmr-client", "express", "jest", "to-mock", "node"]
   },
   "include": [
     "src"

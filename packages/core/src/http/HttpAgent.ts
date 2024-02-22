@@ -33,6 +33,7 @@ export interface HttpAgentRequestOptions {
   repeatRequest: number;
   fetchOptions: ImaRequestInit;
   cache: boolean;
+  responseType?: 'json' | 'blob' | 'text' | 'arrayBuffer' | 'formData';
   postProcessors?: (<B = unknown>(
     response: HttpAgentResponse<B>
   ) => HttpAgentResponse<B>)[];
@@ -181,6 +182,13 @@ export abstract class HttpAgent {
    */
   getCacheKey(method: string, url: string, data: UnknownParameters): string {
     return '';
+  }
+
+  /**
+   * Method invalidate cache for given params
+   */
+  invalidateCache(method: string, url: string, data: UnknownParameters) {
+    return;
   }
 
   /**
