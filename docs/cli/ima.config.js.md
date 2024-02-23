@@ -245,10 +245,10 @@ The only thing that's configurable through the ima.config.js **only**, is the `w
  */
 module.exports = {
   devServer: {
-    port: 3101;
-    hostname: 'localhost';
-    publicUrl: 'http://localhost:3101';
-    writeToDiskFilter: (filePath) => false;
+    port: 3101,
+    hostname: 'localhost',
+    publicUrl: 'http://localhost:3101',
+    writeToDiskFilter: (filePath) => false,
   };
 };
 ```
