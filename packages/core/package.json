@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "19.3.0",
+  "version": "19.3.1",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -70,7 +70,7 @@
     "type-fest": "^4.3.1"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^19.0.0",
+    "@ima/plugin-cli": "^19.1.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.4",
     "@types/merge-deep": "^3.0.0",

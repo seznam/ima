@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.3.1
+
+### Patch Changes
+
+- 02bc1c044: - Added `response` to `getParams()` in HttpProxy error responses
+  - Always parse not OK responses as `json()` when response headers content-type is `application/json`
+
 ## 19.3.0
 
 ### Minor Changes
