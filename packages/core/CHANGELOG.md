@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.2
+
+### Patch Changes
+
+- d1ba342d9: Test new release process
+
 ## 19.3.1
 
 ### Patch Changes
