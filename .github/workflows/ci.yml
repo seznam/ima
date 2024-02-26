@@ -35,8 +35,15 @@ jobs:
       - name: Run Create IMA App Test
         run: npm run test:create-ima-app
 
+  release:
+    if: github.ref_name == 'master' || github.ref_name == 'next'
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare-workspace
+
       - name: Release new versions
-        if: github.ref_name == 'master' || github.ref_name == 'next'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run release:publish
