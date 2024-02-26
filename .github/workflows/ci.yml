@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - next
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare-workspace
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Run Stylelint
+        run: npm run stylelint
+
+      - name: Run Tests
+        run: npm run test:all
+
+      - name: Run Bundle Size Test
+        run: npm run test:size
+
+      - name: Run Create IMA App Test
+        run: npm run test:create-ima-app
+
+      - name: Release new versions
+        if: github.ref_name == 'master' || github.ref_name == 'next'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release:publish

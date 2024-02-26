@@ -1,0 +1,26 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '@ima\/devtools@.*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  prepare-cache:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare-workspace
+
+      - name: Publish
+        env:
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+        run: npm run release:devtools
