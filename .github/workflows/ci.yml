@@ -37,6 +37,7 @@ jobs:
 
   release:
     if: github.ref_name == 'master' || github.ref_name == 'next'
+    needs: [ci]
     name: Release
     runs-on: ubuntu-latest
     steps:
