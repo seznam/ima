@@ -35,6 +35,7 @@ describe('responseUtilsFactory', () => {
   const {
     processContent,
     createContentVariables,
+    sendResponseHeaders,
     _prepareCookieOptionsForExpress,
   } = responseUtilsFactory({ applicationFolder: 'applicationFolder' });
 
@@ -46,12 +47,15 @@ describe('responseUtilsFactory', () => {
   beforeEach(() => {
     event = {
       res: {
+        cookie: jest.fn(),
+        set: jest.fn(),
         locals: {},
       },
       context: {
         response: {
           content: '<html>#{styles}#{revivalSettings}#{runner}</html>',
           contentVariables: {},
+          page: {},
         },
         bootConfig: {
           settings: {
@@ -86,6 +90,34 @@ describe('responseUtilsFactory', () => {
     });
   });
 
+  describe('sendResponseHeaders', () => {
+    it('should set page cookie to response headers', () => {
+      const cookie = new Map();
+      cookie.set('namex', { value: 1, options: {} });
+      cookie.set('namey', { value: 2, options: {} });
+
+      event.context.response.page.cookie = cookie;
+
+      sendResponseHeaders(event);
+
+      expect(event.res.cookie).toHaveBeenCalledTimes(2);
+      expect(event.res.cookie.mock.calls[0]).toEqual(['namex', 1, {}]);
+      expect(event.res.cookie.mock.calls[1]).toEqual(['namey', 2, {}]);
+    });
+
+    it('should set page headers to response headers', () => {
+      event.context.response.page.headers = {
+        'Content-Type': 'text/html',
+      };
+
+      sendResponseHeaders(event);
+
+      expect(event.res.set).toHaveBeenCalledTimes(1);
+      expect(event.res.set.mock.calls[0][0]).toEqual(
+        event.context.response.page.headers
+      );
+    });
+  });
   describe('createContentVariables', () => {
     it('should return empty object if there is no valid bootConfig', () => {
       expect(createContentVariables({ context: {} })).toStrictEqual({});

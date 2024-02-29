@@ -71,7 +71,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
   }
 
   function _setCookieHeaders({ res, context }) {
-    for (let [name, param] of context?.page?.cookie ?? []) {
+    for (let [name, param] of context?.response?.page?.cookie ?? []) {
       const options = _prepareCookieOptionsForExpress(param.options);
       res.cookie(name, param.value, options);
     }
@@ -92,7 +92,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
   function sendResponseHeaders({ context, res }) {
     _setCookieHeaders({ res, context });
 
-    res.set(context?.page?.headers ?? {});
+    res.set(context?.response?.page?.headers ?? {});
   }
 
   // Preload resources
