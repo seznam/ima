@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.1
+
+### Patch Changes
+
+- 8cd66bd8c: Fix server to send defined headers and cookie to response.
+
 ## 19.3.0
 
 ### Minor Changes
