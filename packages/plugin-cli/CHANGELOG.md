@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.1
+
+### Patch Changes
+
+- 0a95f11e6: Hotfix error exit on build command
+
 ## 19.1.0
 
 ### Minor Changes
