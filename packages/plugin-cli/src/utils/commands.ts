@@ -127,6 +127,7 @@ export async function build(args: Arguments) {
     })
   ).catch(error => {
     logger.error(error);
+    process.exit(1);
   });
 
   logger.success('Finished', { elapsed });
