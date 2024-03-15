@@ -21,6 +21,18 @@ describe('helper', () => {
       expect(target).toStrictEqual({ a: arrayWithObject, d: 4 });
       expect(arrayWithObject[0]).not.toBe(target.a[0]);
     });
+
+    it('should not merge object protected fields', () => {
+      let target = {};
+      helpers.assignRecursively(target, {
+        a: 1,
+        __proto__: { b: 2 },
+        prototype: { c: 3 },
+        constructor: function () {},
+      });
+
+      expect(target).toStrictEqual({ a: 1 });
+    });
   });
 
   describe('assignRecursivelyWithTracking', () => {

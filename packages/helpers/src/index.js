@@ -1,9 +1,14 @@
 import clone from 'clone';
 
+const PROTECTED_FIELDS = ['__proto__', 'prototype', 'constructor'];
 function assign(target, source, parentField = null, ignoreMeta = true) {
   let fieldList = [];
 
   for (const field of Object.keys(source)) {
+    if (PROTECTED_FIELDS.includes(field)) {
+      continue;
+    }
+
     if (ignoreMeta && field === '__meta__') {
       continue;
     }
