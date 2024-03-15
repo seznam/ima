@@ -297,10 +297,10 @@ describe('urlParserFactory', () => {
 
       it(`should always use environment.$Server.protocol, when defined for ${originalUrl}`, () => {
         ENVIRONMENT.$Server = {
-          protocol: 'env-protocol',
+          protocol: 'http',
         };
 
-        expect(getProtocol(originalUrl, protocol)).toBe('env-protocol:');
+        expect(getProtocol(originalUrl, protocol)).toBe('http:');
 
         ENVIRONMENT.$Server = {};
       });
@@ -372,10 +372,10 @@ describe('urlParserFactory', () => {
 
       it(`should always use environment.$Server.protocol, when defined for header key '${headerKey}'`, () => {
         ENVIRONMENT.$Server = {
-          protocol: 'env-protocol',
+          protocol: 'http',
         };
 
-        expect(getHeadersProtocol(header, headerKey)).toBe('env-protocol:');
+        expect(getHeadersProtocol(header, headerKey)).toBe('http:');
 
         ENVIRONMENT.$Server = {};
       });

@@ -88,6 +88,7 @@ describe('Server App Factory', () => {
       $Server: {
         concurrency: 1,
         staticConcurrency: 100,
+        protocol: 'http',
         cache: {
           enabled: true,
         },
@@ -314,7 +315,7 @@ describe('Server App Factory', () => {
     it('should render 500 ima app page', async () => {
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Error')));
+        .mockReturnValue(Promise.reject(new Error('Custom error messages')));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
