@@ -215,7 +215,7 @@ describe('Server App Factory', () => {
       get() {
         return '';
       },
-      originalUrl: '/',
+      originalUrl: 'http://www.example.com/',
     };
     RES = {
       status: jest.fn(),
