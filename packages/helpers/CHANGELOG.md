@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.3
+
+### Patch Changes
+
+- 7c71dd826: The assignRecursively method not merge object protected fields.
+
 ## 19.0.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.2
+
+### Patch Changes
+
+- 34e7115e8: Encode all url specific values of $IMA attributes and urlParser method throws TypeError for unsopported protocols.
+
 ## 19.3.1
 
 ### Patch Changes
