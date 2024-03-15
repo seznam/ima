@@ -6,6 +6,9 @@ const { URL } = require('url');
 
 const { GenericError } = require('@ima/core');
 
+const HTTP_PROTOCOL = 'http';
+const HTTPS_PROTOCOL = 'https';
+
 module.exports = function urlParserFactory({ applicationFolder, environment }) {
   const IMA_CONFIG_JS_PATH = path.resolve(applicationFolder, './ima.config.js');
 
@@ -93,7 +96,8 @@ module.exports = function urlParserFactory({ applicationFolder, environment }) {
     let protocol = null;
 
     if (httpsHeader) {
-      protocol = httpsHeader.toLowerCase() === 'on' ? 'https' : 'http';
+      protocol =
+        httpsHeader.toLowerCase() === 'on' ? HTTPS_PROTOCOL : HTTP_PROTOCOL;
     }
 
     return protocol;
@@ -111,6 +115,12 @@ module.exports = function urlParserFactory({ applicationFolder, environment }) {
         typeof environment?.$Server?.protocol === 'function'
           ? environment?.$Server?.protocol({ environment, protocol, req })
           : environment.$Server.protocol;
+    }
+
+    if (![HTTP_PROTOCOL, HTTPS_PROTOCOL].includes(protocol)) {
+      throw new TypeError(
+        `Invalid protocol: You set unsupported protocol "${protocol}". Allowed protocols are only ${HTTP_PROTOCOL} and ${HTTPS_PROTOCOL}. You can set protocol in environment.$Server.protocol or update proxy configuration.`
+      );
     }
 
     return `${protocol}:`;

@@ -46,7 +46,9 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
       $IMA.SPA = ${response?.SPA ?? false};
       $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
       $IMA.$RequestID = "${requestID}";
-      $IMA.$Language = "${settings.$Language}";
+      $IMA.$Language = "${
+        settings.$Language && encodeHTMLEntities(settings.$Language)
+      }";
       $IMA.$Env = "${settings.$Env}";
       $IMA.$Debug = ${settings.$Debug};
       $IMA.$Version = "${settings.$Version}";
@@ -55,9 +57,12 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
         settings.$Protocol && encodeHTMLEntities(settings.$Protocol)
       }";
       $IMA.$Host = "${settings.$Host && encodeHTMLEntities(settings.$Host)}";
-      $IMA.$Path = "${settings.$Path}";
-      $IMA.$Root = "${settings.$Root}";
-      $IMA.$LanguagePartPath = "${settings.$LanguagePartPath}";
+      $IMA.$Path = "${settings.$Path && encodeHTMLEntities(settings.$Path)}";
+      $IMA.$Root = "${settings.$Root && encodeHTMLEntities(settings.$Root)}";
+      $IMA.$LanguagePartPath = "${
+        settings.$LanguagePartPath &&
+        encodeHTMLEntities(settings.$LanguagePartPath)
+      }";
     })(typeof window !== 'undefined' && window !== null ? window : global);
     `;
   }
