@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@esmj/task": "^0.2.0",
-    "@ima/helpers": "^19.0.0",
+    "@ima/helpers": "^19.0.3",
     "@types/node": "^20.5.7",
     "@types/webpack": "^5.28.2",
     "@types/yargs": "^17.0.24",

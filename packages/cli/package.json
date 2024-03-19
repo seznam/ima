@@ -31,7 +31,7 @@
   "dependencies": {
     "@ima/dev-utils": "^19.0.0",
     "@ima/error-overlay": "^19.0.0",
-    "@ima/helpers": "^19.0.0",
+    "@ima/helpers": "^19.0.3",
     "@ima/hmr-client": "^19.0.0",
     "@messageformat/core": "^3.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.9",
