@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.3
+
+### Patch Changes
+
+- b97985115: update @ima/helpers dependency to new version
+
 ## 19.6.2
 
 ### Patch Changes
