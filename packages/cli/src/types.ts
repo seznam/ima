@@ -207,6 +207,12 @@ export type ImaConfig = {
     publicUrl?: string; // public url used to access static files [default=localhost:3101]
 
     /**
+     * Optional custom ima app origin (defaults to http://localhost:[environment.$Server.port])
+     * this is used for CORS configuration.
+     */
+    origin?: string;
+
+    /**
      * Custom filtr for files which should be always written to disk,
      * even if we're serving static files from memory. This is used for
      * example to always save runner.js to disk, since it's used on server-side too.
