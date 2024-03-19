@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@esmj/task": "^0.2.0",
-    "@ima/helpers": "^19.0.0",
+    "@ima/helpers": "^19.0.3",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },

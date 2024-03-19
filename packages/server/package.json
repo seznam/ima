@@ -39,7 +39,7 @@
   "peerDependencies": {
     "@ima/core": ">=19.0.0",
     "@ima/dev-utils": ">=19.0.0",
-    "@ima/helpers": ">=19.0.0"
+    "@ima/helpers": ">=19.0.3"
   },
   "publishConfig": {
     "access": "public",
