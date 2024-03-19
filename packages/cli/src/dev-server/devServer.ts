@@ -1,5 +1,7 @@
 import path from 'path';
 
+import { Environment } from '@ima/core';
+import { urlParserFactory } from '@ima/server';
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { Compiler } from 'webpack';
@@ -19,6 +21,7 @@ export async function createDevServer({
   hostname,
   port,
   rootDir,
+  environment,
 }: {
   args: ImaCliArgs;
   config: ImaConfig;
@@ -26,6 +29,8 @@ export async function createDevServer({
   hostname: string;
   port: number;
   rootDir: string;
+  publicUrl: string;
+  environment: Environment;
 }): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!compiler) {
@@ -39,11 +44,27 @@ export async function createDevServer({
       '..'
     );
 
+    const { getProtocol } = urlParserFactory({
+      environment,
+      applicationFolder: args.rootDir,
+    });
+
+    /**
+     * Helper to retrieve server origin used for CORS definition.
+     */
+    function getOrigin(req: Request) {
+      if (config.devServer?.origin) {
+        return config.devServer.origin;
+      }
+
+      return `${getProtocol(req)}//localhost:${environment.$Server.port}`;
+    }
+
     app
+      // CORS
       .use((req, res, next) => {
-        // Allow cors
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', '*');
+        res.header('Access-Control-Allow-Origin', getOrigin(req));
+        res.header('Access-Control-Allow-Headers', 'OPTIONS, GET');
 
         next();
       })
@@ -68,8 +89,12 @@ export async function createDevServer({
         devMiddleware(compiler, {
           index: false,
           publicPath: process.env.IMA_PUBLIC_PATH ?? config.publicPath,
+          headers: (req, res) => {
+            res.header('Access-Control-Allow-Origin', getOrigin(req));
+            res.header('Access-Control-Allow-Headers', 'OPTIONS, GET');
+          },
           writeToDisk: args.writeToDisk
-            ? true
+            ? () => true
             : filePath =>
                 (WRITE_TO_DISK_WHITELIST.test(filePath) ||
                   config.devServer?.writeToDiskFilter?.(filePath)) ??

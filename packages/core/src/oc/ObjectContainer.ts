@@ -552,8 +552,9 @@ export class ObjectContainer {
         `ima.core.ObjectContainer:_getEntry There is no constant, ` +
           `alias, registered class, registered interface with ` +
           `configured implementation or namespace entry ` +
-          `identified as: <strong>${this.#getDebugName(name)}</strong>
-           Check your bind.js file for ` +
+          `identified as: \n\n${this.#getDebugName(
+            name
+          )}\n\n Check your bind.js file for ` +
           `typos or register given entry with the object container.`
       );
     }

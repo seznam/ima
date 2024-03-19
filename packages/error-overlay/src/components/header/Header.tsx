@@ -26,10 +26,7 @@ const Header: FunctionComponent<HeaderProps> = ({
       </div>
       <div className='ima-header__meta'>
         <span className='ima-header__name'>{name}: </span>
-        <span
-          className='ima-header__message'
-          dangerouslySetInnerHTML={{ __html: message }}
-        />
+        <span className='ima-header__message'>{message}</span>
       </div>
       {hasCloseButton && <Close onClose={() => onClose()} />}
     </div>

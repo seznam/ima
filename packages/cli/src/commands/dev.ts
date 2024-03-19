@@ -166,7 +166,9 @@ const dev: HandlerFn = async args => {
         ),
         hostname: devServerConfig.hostname,
         port: devServerConfig.port,
+        publicUrl: devServerConfig.publicUrl,
         rootDir: args.rootDir,
+        environment,
       }),
     ]);
 

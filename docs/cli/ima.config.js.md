@@ -249,6 +249,8 @@ module.exports = {
     hostname: 'localhost',
     publicUrl: 'http://localhost:3101',
     writeToDiskFilter: (filePath) => false,
+    // Use to define custom origin for CORS headers on dev server
+    origin: 'http://localhost:3001',
   };
 };
 ```
