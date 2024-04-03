@@ -66,7 +66,10 @@ export interface ImaConfigurationContext extends ImaCliArgs {
     js: string;
     public: string;
   };
-  useTypescript: boolean;
+  typescript: {
+    enabled: boolean;
+    tsconfigPath: string | undefined;
+  };
   imaEnvironment: Environment;
   appDir: string;
   lessGlobalsPath: string;

@@ -13,11 +13,13 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import lessPluginGlob from 'less-plugin-glob';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import webpack, {
+// eslint-disable-next-line import/default
+import {
   Configuration,
   RuleSetRule,
   RuleSetUseItem,
   WebpackPluginInstance,
+  HotModuleReplacementPlugin,
 } from 'webpack';
 
 import { getLanguageEntryPoints } from './languages';
@@ -51,7 +53,7 @@ export default async (
     name,
     processCss,
     outputFolders,
-    useTypescript,
+    typescript,
     imaEnvironment,
     appDir,
     useHMR,
@@ -424,7 +426,7 @@ export default async (
             /**
              * Handle app Typescript files
              */
-            useTypescript && {
+            typescript.enabled && {
               test: /\.(ts|tsx)$/,
               include: appDir,
               loader: require.resolve('swc-loader'),
@@ -582,8 +584,11 @@ export default async (
              * to show errors at least during build so it fails before going to production.
              */
             isClientES &&
-              useTypescript &&
+              typescript.enabled &&
               new ForkTsCheckerWebpackPlugin({
+                typescript: {
+                  configFile: typescript.tsconfigPath,
+                },
                 async: ctx.command === 'dev', // be async only in watch mode,
                 devServer: false,
                 // Custom formatter for async mode
@@ -635,7 +640,7 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            useHMR && new webpack.HotModuleReplacementPlugin(),
+            useHMR && new HotModuleReplacementPlugin(),
             useHMR &&
               ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({
