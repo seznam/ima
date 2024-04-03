@@ -13,7 +13,6 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import lessPluginGlob from 'less-plugin-glob';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-// eslint-disable-next-line import/default
 import {
   Configuration,
   RuleSetRule,
