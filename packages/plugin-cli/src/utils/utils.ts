@@ -76,7 +76,7 @@ export function createBatcher(title: string, timeout = 150) {
             stats.deleted++;
           }
 
-          return fn;
+          return fn();
         })
       );
 
