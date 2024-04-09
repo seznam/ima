@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.2
+
+### Patch Changes
+
+- ba937c138: Fix bug in createBatcher function in utils.ts, which resulted in link not working
+
 ## 19.1.1
 
 ### Patch Changes

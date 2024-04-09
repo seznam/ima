@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.4
+
+### Patch Changes
+
+- 81bba0110: Security fixes in IMA CLI dev server CORS policy and error overlay
+
 ## 19.6.3
 
 ### Patch Changes
