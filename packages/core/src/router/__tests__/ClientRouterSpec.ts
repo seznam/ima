@@ -35,7 +35,7 @@ describe('ima.core.router.ClientRouter', () => {
       30000
     );
 
-    jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
+    jest.spyOn(router, 'getPath').mockReturnValue('/routePath?foo=bar');
 
     router.init(routerConfig);
   });
@@ -50,11 +50,13 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should be return actual url', () => {
-    jest.spyOn(window, 'getUrl').mockImplementation();
+    jest.spyOn(router, 'getBaseUrl');
+    jest.spyOn(router, 'getPath');
 
-    router.getUrl();
+    expect(router.getUrl()).toBe('http://locahlost:3002/routePath?foo=bar');
 
-    expect(window.getUrl).toHaveBeenCalled();
+    expect(router.getBaseUrl).toHaveBeenCalled();
+    expect(router.getPath).toHaveBeenCalled();
   });
 
   it('should add listener to popState event, click event', () => {
