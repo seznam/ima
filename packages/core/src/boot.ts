@@ -121,6 +121,7 @@ export interface AppEnvironment {
 
 export interface PageRendererSettings {
   batchResolve?: boolean;
+  batchResolveNoTransaction?: boolean;
   masterElementId: string;
   documentView: unknown;
   managedRootView?: unknown;

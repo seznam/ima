@@ -311,10 +311,21 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     }
 
     const handler = (resolve: () => void) => () => {
-      controller.commitStateTransaction();
+      if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+        // TODO IMA@20 - make this default behaviour
+        this._renderedOnChange = true;
+        controller.setState(controller.getState());
+      } else {
+        controller.commitStateTransaction();
+      }
 
       if (!hasResourcesLoaded) {
-        controller.beginStateTransaction();
+        if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+          this._renderedOnChange = false;
+        } else {
+          controller.beginStateTransaction();
+        }
+
         setTimeout(() => {
           requestIdleCallback(handler(resolve), options);
         }, 75);
@@ -323,7 +334,11 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
       }
     };
 
-    controller.beginStateTransaction();
+    if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+      this._renderedOnChange = false;
+    } else {
+      controller.beginStateTransaction();
+    }
     const batchPromise = new Promise<void>(resolve => {
       setTimeout(() => {
         requestIdleCallback(handler(resolve), options);
