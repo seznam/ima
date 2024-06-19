@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.0
+
+### Minor Changes
+
+- 93ab4553f: Adds flag `batchResolveNoTransaction` as a new `PageRendererSettings`. When it is true, transaction is not used in load phase to avoid getting obsolete state from getState.
+
 ## 19.3.4
 
 ### Patch Changes
