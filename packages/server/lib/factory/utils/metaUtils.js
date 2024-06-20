@@ -53,7 +53,7 @@ function encodeHTMLEntities(value) {
  * @param value Attribute value to sanitize
  * @returns string|null Sanitized valid value or null
  */
-export function sanitizeValue(value) {
+function sanitizeValue(value) {
   return value === undefined || value === null
     ? null
     : encodeHTMLEntities(value);
@@ -123,5 +123,6 @@ function renderMeta(metaManager) {
 module.exports = {
   _getMetaTags,
   renderMeta,
+  sanitizeValue,
   encodeHTMLEntities,
 };
