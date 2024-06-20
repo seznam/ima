@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.0
+
+### Minor Changes
+
+- dacb7056e: Added new `sanitizeValue` function export.
+
 ## 19.3.3
 
 ### Patch Changes
