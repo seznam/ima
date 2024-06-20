@@ -30,6 +30,7 @@ declare module '@ima/server' {
     devUtils?: any;
   });
 
+  export function sanitizeValue(value: unknown): null | string;
   export function renderStyles(styles: any[]): string;
   export function renderScript(name: string, script: string): string;
   export function environmentFactory(args: {
