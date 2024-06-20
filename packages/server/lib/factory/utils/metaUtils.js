@@ -53,7 +53,7 @@ function encodeHTMLEntities(value) {
  * @param value Attribute value to sanitize
  * @returns string|null Sanitized valid value or null
  */
-function _sanitizeValue(value) {
+function sanitizeValue(value) {
   return value === undefined || value === null
     ? null
     : encodeHTMLEntities(value);
@@ -77,7 +77,7 @@ function _getMetaTags(iterator, tagName, keyName) {
     };
 
     for (let [attrName, attrValue] of Object.entries(attributes)) {
-      const sanitizedAttrValue = _sanitizeValue(attrValue);
+      const sanitizedAttrValue = sanitizeValue(attrValue);
 
       // Skip empty values
       if (sanitizedAttrValue === null) {
@@ -123,5 +123,6 @@ function renderMeta(metaManager) {
 module.exports = {
   _getMetaTags,
   renderMeta,
+  sanitizeValue,
   encodeHTMLEntities,
 };

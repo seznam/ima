@@ -8,6 +8,7 @@ const { createMonitoring } = require('@esmj/monitor');
 const { Emitter, Event } = require('./lib/emitter.js');
 const environmentFactory = require('./lib/factory/environmentFactory');
 const urlParserFactory = require('./lib/factory/urlParserFactory');
+const { sanitizeValue } = require('./lib/factory/utils/metaUtils');
 const {
   renderStyles,
   renderScript,
@@ -101,5 +102,6 @@ module.exports = {
   createIMAServer,
   environmentFactory,
   urlParserFactory,
+  sanitizeValue,
   Event,
 };
