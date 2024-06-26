@@ -84,23 +84,6 @@ emitter.on(Event.AfterResponse, function saveToCache({ req, context }) {
 });
 
 function renderApp(req, res, next) {
-  if (req.headers['x-moz'] && req.headers['x-moz'] === 'prefetch') {
-    res.status(204);
-    res.send();
-
-    return;
-  }
-
-  if (req.method === 'GET') {
-    const cachedPage = cache.get(req);
-    if (cachedPage) {
-      res.status(200);
-      res.send(cachedPage);
-
-      return;
-    }
-  }
-
   serverApp
     .requestHandlerMiddleware(req, res)
     .then(
@@ -109,15 +92,6 @@ function renderApp(req, res, next) {
           logger.error('Application server error', {
             error: errorToJSON(response.error),
           });
-        }
-
-        if (
-          req.method === 'GET' &&
-          response.status === 200 &&
-          !response.SPA &&
-          !response.error
-        ) {
-          cache.set(req, response.content);
         }
       },
       error => {
