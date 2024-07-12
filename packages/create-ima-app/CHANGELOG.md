@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.2
+
+### Patch Changes
+
+- 3d2a6f581: The logic for cache was rewritten to IMA server hooks.
+
 ## 19.1.1
 
 ### Patch Changes

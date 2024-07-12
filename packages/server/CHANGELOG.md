@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.1
+
+### Patch Changes
+
+- 9aee5e343: The default key generator for server cache use parsed value from urlParser method.
+
 ## 19.4.0
 
 ### Minor Changes
