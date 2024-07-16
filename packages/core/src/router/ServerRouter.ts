@@ -1,7 +1,7 @@
 /* @if client **
 export class ServerRouter {};
 /* @else */
-import { AbstractRouter } from './AbstractRouter';
+import { AbstractRouter, SPARoutedHandler } from './AbstractRouter';
 import { Request } from './Request';
 import { Response } from './Response';
 import { RouteFactory } from './RouteFactory';
@@ -25,6 +25,7 @@ export class ServerRouter extends AbstractRouter {
       Request,
       Response,
       '?$Settings.$Router.middlewareTimeout',
+      '?$Settings.$Router.isSPARouted',
     ];
   }
 
@@ -44,9 +45,10 @@ export class ServerRouter extends AbstractRouter {
     dispatcher: Dispatcher,
     request: Request,
     response: Response,
-    middlewareTimeout: number | undefined
+    middlewareTimeout: number | undefined,
+    isSPARouted: SPARoutedHandler | undefined
   ) {
-    super(pageManager, factory, dispatcher, middlewareTimeout);
+    super(pageManager, factory, dispatcher, middlewareTimeout, isSPARouted);
 
     this.#request = request;
     this.#response = response;

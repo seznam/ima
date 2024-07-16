@@ -17,6 +17,7 @@ import {
   RouteLocals,
 } from './Router';
 import { RouterEvents } from './RouterEvents';
+import { Settings } from '../boot';
 import { IMAError } from '../error/Error';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
@@ -36,6 +37,7 @@ type AfterHandleRouteEventData = BeforeHandleRouteEventData & {
   response?: any;
 };
 
+export type SPARoutedHandler = NonNullable<Settings['$Router']>['isSPARouted'];
 export interface RouterDispatcherEvents {
   [RouterEvents.AFTER_HANDLE_ROUTE]: AfterHandleRouteEventData;
   [RouterEvents.BEFORE_HANDLE_ROUTE]: BeforeHandleRouteEventData;
@@ -91,6 +93,7 @@ export abstract class AbstractRouter extends Router {
   protected _currentMiddlewareId = 0;
   protected _currentlyRoutedPath = '';
   protected _middlewareTimeout: number;
+  protected _isSPARouted: SPARoutedHandler | undefined;
 
   /**
    * Initializes the router.
@@ -122,7 +125,8 @@ export abstract class AbstractRouter extends Router {
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
-    middlewareTimeout?: number
+    middlewareTimeout: number | undefined,
+    isSPARouted: SPARoutedHandler | undefined
   ) {
     super();
 
@@ -130,6 +134,7 @@ export abstract class AbstractRouter extends Router {
     this._factory = factory;
     this._dispatcher = dispatcher;
     this._middlewareTimeout = middlewareTimeout ?? 30000;
+    this._isSPARouted = isSPARouted;
   }
 
   /**

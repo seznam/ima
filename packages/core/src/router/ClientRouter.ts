@@ -2,7 +2,7 @@
 export class ClientRouter {};
 /* @else */
 import { RouteParams } from './AbstractRoute';
-import { AbstractRouter } from './AbstractRouter';
+import { AbstractRouter, SPARoutedHandler } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteAction, RouteLocals, RouteOptions } from './Router';
@@ -62,6 +62,7 @@ export class ClientRouter extends AbstractRouter {
       Dispatcher,
       Window,
       '?$Settings.$Router.middlewareTimeout',
+      '?$Settings.$Router.isSPARouted',
     ];
   }
 
@@ -80,9 +81,10 @@ export class ClientRouter extends AbstractRouter {
     factory: RouteFactory,
     dispatcher: Dispatcher,
     window: Window,
-    middlewareTimeout: number | undefined
+    middlewareTimeout: number | undefined,
+    isSPARouted: SPARoutedHandler | undefined
   ) {
-    super(pageManager, factory, dispatcher, middlewareTimeout);
+    super(pageManager, factory, dispatcher, middlewareTimeout, isSPARouted);
 
     /**
      * Helper for accessing the native client-side APIs.
@@ -171,7 +173,7 @@ export class ClientRouter extends AbstractRouter {
     action?: RouteAction,
     locals?: RouteLocals
   ): void {
-    if (this._isSameDomain(url)) {
+    if (this._isSameDomain(url) && this.#isSPARouted(url)) {
       let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
@@ -364,6 +366,7 @@ export class ClientRouter extends AbstractRouter {
     const isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
     const isCMDPlusLeftButton = event.metaKey && isLeftButton;
     const isSameDomain = this._isSameDomain(anchorHref);
+    const isSPARouted = this.#isSPARouted(anchorHref);
     const isHashLink = this._isHashLink(anchorHref);
     const isLinkPrevented = event.defaultPrevented;
 
@@ -372,6 +375,7 @@ export class ClientRouter extends AbstractRouter {
       isSetTarget ||
       !isLeftButton ||
       !isSameDomain ||
+      !isSPARouted ||
       isHashLink ||
       isCtrlPlusLeftButton ||
       isCMDPlusLeftButton ||
@@ -449,6 +453,19 @@ export class ClientRouter extends AbstractRouter {
    */
   _isSameDomain(url = '') {
     return new RegExp('^' + this.getBaseUrl()).test(url);
+  }
+
+  /**
+   * This option allows user to override how certain URLs are handled
+   * during SPA (client) routing. This adds possibility to opt-out
+   * of SPA routing for specific URLs and let them be handled by browser
+   * natively.
+   *
+   * @param [url=''] The URL.
+   * @return `true` if url routing should be handled by IMA.
+   */
+  #isSPARouted(url = '') {
+    return this._isSPARouted?.(url) ?? true;
   }
 
   #handleMounted() {

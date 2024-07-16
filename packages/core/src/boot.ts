@@ -138,6 +138,7 @@ export interface Settings {
   };
   $Router?: {
     middlewareTimeout?: number;
+    isSPARouted?: (url: string) => boolean;
   };
   $Cache?: {
     ttl?: number;
