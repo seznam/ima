@@ -37,7 +37,6 @@ type AfterHandleRouteEventData = BeforeHandleRouteEventData & {
   response?: any;
 };
 
-export type SPARoutedHandler = NonNullable<Settings['$Router']>['isSPARouted'];
 export interface RouterDispatcherEvents {
   [RouterEvents.AFTER_HANDLE_ROUTE]: AfterHandleRouteEventData;
   [RouterEvents.BEFORE_HANDLE_ROUTE]: BeforeHandleRouteEventData;
@@ -93,7 +92,9 @@ export abstract class AbstractRouter extends Router {
   protected _currentMiddlewareId = 0;
   protected _currentlyRoutedPath = '';
   protected _middlewareTimeout: number;
-  protected _isSPARouted: SPARoutedHandler | undefined;
+  protected _isSPARouted:
+    | NonNullable<Settings['$Router']>['isSPARouted']
+    | undefined;
 
   /**
    * Initializes the router.
@@ -125,16 +126,23 @@ export abstract class AbstractRouter extends Router {
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
-    middlewareTimeout: number | undefined,
-    isSPARouted: SPARoutedHandler | undefined
+    settings: Settings['$Router'] | number
   ) {
     super();
 
     this._pageManager = pageManager;
     this._factory = factory;
     this._dispatcher = dispatcher;
-    this._middlewareTimeout = middlewareTimeout ?? 30000;
-    this._isSPARouted = isSPARouted;
+    this._middlewareTimeout = 30000;
+
+    // ima@20 - Remove in IMA.js 20, this is for backwards compatibility
+    if (typeof settings === 'number') {
+      this._middlewareTimeout = settings;
+    } else {
+      this._middlewareTimeout =
+        settings?.middlewareTimeout ?? this._middlewareTimeout;
+      this._isSPARouted = settings?.isSPARouted;
+    }
   }
 
   /**

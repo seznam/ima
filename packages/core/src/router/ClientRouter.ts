@@ -2,10 +2,11 @@
 export class ClientRouter {};
 /* @else */
 import { RouteParams } from './AbstractRoute';
-import { AbstractRouter, SPARoutedHandler } from './AbstractRouter';
+import { AbstractRouter } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteAction, RouteLocals, RouteOptions } from './Router';
+import { Settings } from '../boot';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
 import { Dependencies } from '../oc/ObjectContainer';
@@ -61,8 +62,7 @@ export class ClientRouter extends AbstractRouter {
       RouteFactory,
       Dispatcher,
       Window,
-      '?$Settings.$Router.middlewareTimeout',
-      '?$Settings.$Router.isSPARouted',
+      '?$Settings.$Router',
     ];
   }
 
@@ -74,17 +74,16 @@ export class ClientRouter extends AbstractRouter {
    * @param factory Factory for routes.
    * @param dispatcher Dispatcher fires events to app.
    * @param window The current global client-side APIs provider.
-   * @param middlewareTimeout Middleware timeout value in ms.
+   * @param settings $Router settings.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
     window: Window,
-    middlewareTimeout: number | undefined,
-    isSPARouted: SPARoutedHandler | undefined
+    settings: Settings['$Router'] | number
   ) {
-    super(pageManager, factory, dispatcher, middlewareTimeout, isSPARouted);
+    super(pageManager, factory, dispatcher, settings);
 
     /**
      * Helper for accessing the native client-side APIs.

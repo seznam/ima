@@ -1,10 +1,11 @@
 /* @if client **
 export class ServerRouter {};
 /* @else */
-import { AbstractRouter, SPARoutedHandler } from './AbstractRouter';
+import { AbstractRouter } from './AbstractRouter';
 import { Request } from './Request';
 import { Response } from './Response';
 import { RouteFactory } from './RouteFactory';
+import { Settings } from '../boot';
 import { Dispatcher } from '../event/Dispatcher';
 import { Dependencies } from '../oc/ObjectContainer';
 import { PageManager } from '../page/manager/PageManager';
@@ -37,7 +38,7 @@ export class ServerRouter extends AbstractRouter {
    * @param dispatcher Dispatcher fires events to app.
    * @param request The current HTTP request.
    * @param response The current HTTP response.
-   * @param middlewareTimeout Middleware timeout value in ms.
+   * @param settings $Router settings.
    */
   constructor(
     pageManager: PageManager,
@@ -45,10 +46,9 @@ export class ServerRouter extends AbstractRouter {
     dispatcher: Dispatcher,
     request: Request,
     response: Response,
-    middlewareTimeout: number | undefined,
-    isSPARouted: SPARoutedHandler | undefined
+    settings: Settings['$Router'] | number
   ) {
-    super(pageManager, factory, dispatcher, middlewareTimeout, isSPARouted);
+    super(pageManager, factory, dispatcher, settings);
 
     this.#request = request;
     this.#response = response;
