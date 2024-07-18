@@ -172,7 +172,7 @@ export class ClientRouter extends AbstractRouter {
     action?: RouteAction,
     locals?: RouteLocals
   ): void {
-    if (this._isSameDomain(url) && this.#isSPARouted(url)) {
+    if (this._isSameDomain(url) && this.#isSPARouted(url, action)) {
       let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
@@ -365,9 +365,15 @@ export class ClientRouter extends AbstractRouter {
     const isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
     const isCMDPlusLeftButton = event.metaKey && isLeftButton;
     const isSameDomain = this._isSameDomain(anchorHref);
-    const isSPARouted = this.#isSPARouted(anchorHref);
     const isHashLink = this._isHashLink(anchorHref);
     const isLinkPrevented = event.defaultPrevented;
+
+    const routeAction: RouteAction = {
+      type: ActionTypes.CLICK,
+      event,
+      url: anchorHref,
+    };
+    const isSPARouted = this.#isSPARouted(anchorHref, routeAction);
 
     if (
       !isDefinedTargetHref ||
@@ -463,8 +469,8 @@ export class ClientRouter extends AbstractRouter {
    * @param [url=''] The URL.
    * @return `true` if url routing should be handled by IMA.
    */
-  #isSPARouted(url = '') {
-    return this._isSPARouted?.(url) ?? true;
+  #isSPARouted(url = '', action?: RouteAction) {
+    return this._isSPARouted?.(url, action) ?? true;
   }
 
   #handleMounted() {
