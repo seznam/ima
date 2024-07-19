@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.0
+
+### Minor Changes
+
+- 9b8f0ccf9: Added ability to define custom $Router.isSPARouted function, which returns boolean and let's you override client routing, whenever the given URL is handled by IMA or browser
+
 ## 19.4.0
 
 ### Minor Changes
