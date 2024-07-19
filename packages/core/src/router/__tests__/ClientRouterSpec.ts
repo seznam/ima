@@ -4,6 +4,7 @@
 
 import { toMockedInstance } from 'to-mock';
 
+import { Settings } from '../..';
 import { Dispatcher } from '../../event/Dispatcher';
 import { PageManager } from '../../page/manager/PageManager';
 import { ClientWindow } from '../../window/ClientWindow';
@@ -26,18 +27,25 @@ describe('ima.core.router.ClientRouter', () => {
     $Host: host,
   };
 
+  let settings: Partial<Settings['$Router']>;
+
   beforeEach(() => {
+    settings = {};
     router = new ClientRouter(
       pageRenderer,
       routeFactory,
       dispatcher,
       window,
-      30000
+      settings
     );
 
     jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
 
     router.init(routerConfig);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should return actual path', () => {
@@ -96,13 +104,70 @@ describe('ima.core.router.ClientRouter', () => {
     });
 
     it('return null for non exist route', () => {
-      const url = 'http://example.com/somePath';
+      const url = 'http://example.com/somePath/1';
 
       jest.spyOn(window, 'redirect').mockImplementation();
 
+      router.init(routerConfig);
       router.redirect(url);
 
       expect(window.redirect).toHaveBeenCalledWith(url);
+    });
+
+    it('should redirect using native window methods when custom isSPARouted method is provided', () => {
+      const url = 'http://example.com/somePath/2';
+
+      jest.spyOn(window, 'redirect').mockImplementation();
+
+      router = new ClientRouter(
+        pageRenderer,
+        routeFactory,
+        dispatcher,
+        window,
+        {
+          isSPARouted: () => false,
+        }
+      );
+
+      router.init(routerConfig);
+      router.redirect(url);
+
+      expect(window.redirect).toHaveBeenCalledWith(url);
+    });
+
+    it("should handle SPA redirects, when custom isSPARouted method is provided but doesn't match", () => {
+      const path = '/somePath';
+      const url = protocol + '//' + host + path;
+      const options = { httpStatus: 302 };
+
+      router = new ClientRouter(
+        pageRenderer,
+        routeFactory,
+        dispatcher,
+        window,
+        {
+          isSPARouted: () => true,
+        }
+      );
+
+      jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
+      jest.spyOn(router, 'route').mockImplementation();
+      jest.spyOn(window, 'redirect').mockImplementation();
+
+      router.init(routerConfig);
+      router.redirect(url, options);
+
+      expect(router.route).toHaveBeenCalledWith(
+        path,
+        options,
+        {
+          type: ActionTypes.REDIRECT,
+          event: undefined,
+          url: 'http://locahlost:3002/somePath',
+        },
+        {}
+      );
+      expect(window.redirect).not.toHaveBeenCalledWith(url);
     });
   });
 

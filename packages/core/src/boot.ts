@@ -18,6 +18,7 @@ import { HttpAgentImplCacheOptions } from './http/HttpAgentImpl';
 import { ns } from './Namespace';
 import { ObjectContainer } from './oc/ObjectContainer';
 import { pluginLoader } from './pluginLoader';
+import { RouteAction } from './router/Router';
 import { GlobalImaObject } from './types';
 
 export interface ManifestAsset extends AssetInfo {
@@ -138,6 +139,7 @@ export interface Settings {
   };
   $Router?: {
     middlewareTimeout?: number;
+    isSPARouted?: (url: string, action?: RouteAction) => boolean;
   };
   $Cache?: {
     ttl?: number;
