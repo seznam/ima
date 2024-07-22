@@ -52,7 +52,7 @@ app/
 ```
 
 In the extension file should be plain `class` extending
-`ima/extension/AbstractExtension` with the same methods as you'd use in the controller. In addition you should implement `getAllowedStateKeys()` method which returns array of keys the extension is allowed to change in controller's state.
+`ima/extension/AbstractExtension` with the same methods as you'd use in the controller. In addition you should implement `getAllowedStateKeys()` method which returns array of keys the extension is allowed to change in controller's state. (If the extension itself creates the state key, it does not have to be claimed this way - the extension has access to it automatically.)
 
 > **Note:** List and description of controller methods can be seen in [Controller lifecycle](./controller-lifecycle).
 
