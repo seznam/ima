@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.1
+
+### Patch Changes
+
+- f208d218b: Fixes router looping for specific request path and routes with more optional parameters
+
 ## 19.5.0
 
 ### Minor Changes
