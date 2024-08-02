@@ -388,37 +388,31 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:userId-',
         path: '/895174-bad-user',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?userId-',
         path: '/895174-bad-user',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:userId_',
         path: '/895174_bad-user',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?userId_',
         path: '/895174_bad-user',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:userId ',
         path: '/895174 bad-user',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?userId ',
         path: '/895174 bad-user',
-        params: {},
         result: false,
       },
 
@@ -431,7 +425,6 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:catId_:catName',
         path: '/89524171-yellow-roses',
-        params: {},
         result: false,
       },
       {
@@ -466,7 +459,7 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId-:catName',
         path: '/-yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
         result: true,
       },
       {
@@ -478,31 +471,35 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId-:?catName',
         path: '/89524171-',
-        params: { catId: '89524171' },
+        params: { catId: '89524171', catName: undefined },
         result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/-yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
         result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/-',
-        params: {},
+        params: { catId: undefined, catName: undefined },
         result: true,
       },
       {
         pathExpression: '/:?catId-:?catName/:?dogId/:?dog2Id',
         path: '/-//',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId-:?catName/:?dogId/:?fishId',
         path: '/-/777',
-        params: { dogId: '777' },
+        params: {
+          catId: undefined,
+          catName: undefined,
+          dogId: '777',
+          fishId: undefined,
+        },
         result: true,
       },
 
@@ -515,13 +512,12 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId_:catName',
         path: '/_yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
         result: true,
       },
       {
         pathExpression: '/:?catId_:catName',
         path: '/-yellow-roses',
-        params: {},
         result: false,
       },
       {
@@ -533,50 +529,44 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId_:?catName',
         path: '/89524331_',
-        params: { catId: '89524331' },
+        params: { catId: '89524331', catName: undefined },
         result: true,
       },
       {
         pathExpression: '/:?catId_:?catName',
         path: '/_yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
         result: true,
       },
 
       {
         pathExpression: '/:?catId :catName',
         path: '/89524171 yellow-roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId :catName',
         path: '/ yellow-roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/89524171 yellow-roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/89524171 ',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/ yellow-roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/ ',
-        params: {},
         result: false,
       },
 
@@ -589,7 +579,7 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId-some-expected-string-:catName',
         path: '/-some-expected-string-pink-roses',
-        params: { catName: 'pink-roses' },
+        params: { catId: undefined, catName: 'pink-roses' },
         result: true,
       },
       {
@@ -601,25 +591,24 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/89524221-some-unexpected-string-pink-roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/-some-expected-string-',
-        params: {},
+        params: { catId: undefined, catName: undefined },
         result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/-some-expected-string-pink-roses',
-        params: { catName: 'pink-roses' },
+        params: { catId: undefined, catName: 'pink-roses' },
         result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/89524221-some-expected-string-',
-        params: { catId: '89524221' },
+        params: { catId: '89524221', catName: undefined },
         result: true,
       },
 
@@ -632,7 +621,7 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId_some_expected_string_:catName',
         path: '/_some_expected_string_pink_roses',
-        params: { catName: 'pink_roses' },
+        params: { catId: undefined, catName: 'pink_roses' },
         result: true,
       },
       {
@@ -644,50 +633,48 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/_some_expected_string_',
-        params: {},
+        params: { catId_some_expected_string: undefined, catName: undefined },
         result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/_some_expected_string_pink_roses',
-        params: { catName: 'pink_roses' },
+        params: {
+          catId_some_expected_string: undefined,
+          catName: 'pink_roses',
+        },
         result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/89524221_some_expected_string_',
-        params: { catId: '89524221' },
+        params: { catId_some_expected_string: undefined, catId: '89524221' },
         result: true,
       },
 
       {
         pathExpression: '/:?catId some expected string :catName',
         path: '/89524521 some expected string pink roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId some expected string :catName',
         path: '/ some expected string pink roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/89524521 some expected string pink roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/ some expected string pink roses',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/89524521 some expected string ',
-        params: {},
         result: false,
       },
 
@@ -705,7 +692,12 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:catId-:catName/:?someId/:?anotherId',
         path: '/578742-roses',
-        params: { catId: '578742', catName: 'roses' },
+        params: {
+          catId: '578742',
+          catName: 'roses',
+          someId: undefined,
+          another: undefined,
+        },
         result: true,
       },
       {
@@ -715,6 +707,7 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '578742',
           catName: 'roses',
           someId: '8999',
+          another: undefined,
         },
         result: true,
       },
@@ -732,7 +725,6 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/something/:group/:catId-:catName',
         path: '/something/flowers/',
-        params: {},
         result: false,
       },
       {
@@ -748,7 +740,6 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: multipleParamsExpr,
         path: '/offer/flowers/524175',
-        params: {},
         result: false,
       },
       {
@@ -758,6 +749,8 @@ describe('ima.core.router.StaticRoute', function () {
           group: 'flowers',
           catId: '524175',
           catName: 'red-roses',
+          productId: undefined,
+          promo: undefined,
         },
         result: true,
       },
@@ -769,6 +762,7 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '524175',
           catName: 'red-roses',
           productId: '120415247',
+          promo: undefined,
         },
         result: true,
       },
@@ -794,7 +788,6 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/home/:userId/something/:somethingId',
         path: '/home/1/something',
-        params: { userId: undefined, somethingId: undefined },
         result: false,
       },
       {
@@ -825,7 +818,7 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:userId/something/:?somethingId',
         path: 'user1/something',
-        params: { userId: 'user1' },
+        params: { userId: 'user1', somethingId: undefined },
         result: true,
       },
       {
@@ -837,7 +830,7 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/something/:?somethingId/:?userId',
         path: '/something/param1',
-        params: { somethingId: 'param1' },
+        params: { somethingId: 'param1', userId: undefined },
         result: true,
       },
       {
@@ -857,13 +850,11 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:catId-:catName/:?someParam/:?another',
         path: '/rondam/moje-inzeraty/nejlevneji',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:catId-:catName/:?someParam/:?another',
         path: '/rondam?name=moje-inzeraty&param=nejlevneji',
-        params: {},
         result: false,
       },
 
@@ -871,25 +862,21 @@ describe('ima.core.router.StaticRoute', function () {
       {
         pathExpression: '/:?userId/something/:someId',
         path: '/something/param1',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/:?userId/something/:someId',
         path: 'user1/something/param1',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/something/:?someId/:userId',
         path: '/something/user1',
-        params: {},
         result: false,
       },
       {
         pathExpression: '/something/:?someId/:userId',
         path: '/something/param1/user1',
-        params: {},
         result: false,
       },
       {
@@ -906,6 +893,9 @@ describe('ima.core.router.StaticRoute', function () {
           selectorId: '501bunk81da0q4o',
           minSelectedItems: '1',
           maxSelectedItems: '1',
+          itemIds: undefined,
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
         },
         result: true,
       },
@@ -918,6 +908,8 @@ describe('ima.core.router.StaticRoute', function () {
           minSelectedItems: '1',
           maxSelectedItems: '1',
           itemIds: '123',
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
         },
         result: true,
       },
@@ -930,6 +922,8 @@ describe('ima.core.router.StaticRoute', function () {
           minSelectedItems: '1',
           maxSelectedItems: '1',
           itemIds: '123',
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
         },
         result: true,
       },
@@ -945,11 +939,17 @@ describe('ima.core.router.StaticRoute', function () {
 
         expect(localStaticRoute.matches(value.path)).toBe(value.result);
 
+        if (!value.result) {
+          return;
+        }
+
         const routeParams = localStaticRoute.extractParameters(
           value.path,
           'https://imajs.io'
         );
         const keys = Object.keys(value.params);
+
+        expect(keys).toHaveLength(Object.keys(routeParams).length);
 
         keys.forEach(key => {
           // @ts-expect-error
