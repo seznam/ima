@@ -32,7 +32,7 @@ export type AsyncRouteView = WithAsync<RouteView>;
  * @const
  * @type {RegExp}
  */
-export const LOOSE_SLASHES_REGEXP = /^\/|\/$|\/\?/g;
+export const LOOSE_SLASHES_REGEXP = /^\/|\/$|\/(?=\?)/g;
 
 /**
  * Utility for representing and manipulating a single route in the router's
