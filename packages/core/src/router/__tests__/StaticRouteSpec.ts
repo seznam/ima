@@ -1259,6 +1259,12 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/rondam/moje-inzeraty/nejlevneji',
         result: false,
       },
+      {
+        pathExpression:
+          '/media/gallery/select/:selectorId/:minSelectedItems-:maxSelectedItems/:?itemIds',
+        path: '/media/gallery/select/501bunk81da0q4o/1-1/?popupToken=ad9b3270f0765df736e6461be5947c7500d8eb6ef2101f0a1119d346da8faf12eec2051aacd574a8597b8a1e5444d87e458a10896bc95e6226479eccb0aa6ced833fba995a17de8642cc5896f68623fdbf096b1ddfe784869b80033037497944dbf815e573651eb122a2f719777a87cd442746a4a8ddd50c72c30f9fe5cb45bc51a78f3e6f9e6ea6619ff1f4b27708e59a52f250215191a92931b2293ce37bfb&popupUid=517o5uvn79ga8mo',
+        result: true,
+      },
     ].forEach(value => {
       const localStaticRoute = new StaticRoute(
         name,
