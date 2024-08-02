@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.2
+
+### Patch Changes
+
+- 15a3b556c: Fixes matching path with trailing slash before question mark
+
 ## 19.5.1
 
 ### Patch Changes
