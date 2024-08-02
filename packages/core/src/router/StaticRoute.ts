@@ -319,7 +319,7 @@ export class StaticRoute extends AbstractRoute<string> {
   _replaceOptionalParametersInPath(path: string, optionalParams: string[]) {
     const pattern = optionalParams.reduce((path, paramExpr) => {
       const separator = paramExpr.startsWith('\\/') ? '/' : '';
-      const regExpr = '(?:' + separator + `([^/?]+)(?=/|$))?`;
+      const regExpr = '(?:' + separator + `([^/?]+)(?=/|$|\\?))?`;
 
       return path.replace(paramExpr, regExpr);
     }, path);
