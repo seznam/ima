@@ -21,7 +21,7 @@ Now let's replace the contents of the file with a blank view:
 import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
-export default class HomeView extends AbstractComponent {
+export class HomeView extends AbstractComponent {
   static get contextType() {
     return PageContext;
   }
