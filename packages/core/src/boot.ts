@@ -55,7 +55,7 @@ export interface Resources {
  */
 export interface Environment {
   [key: string]: unknown;
-  $Debug: GlobalImaObject['$Version'];
+  $Debug: GlobalImaObject['$Debug'];
   $Language: Record<string, string>;
   $Version: GlobalImaObject['$Version'];
   $App: GlobalImaObject['$App'];

@@ -23,6 +23,8 @@ declare module '@ima/server' {
   }
 
   export function createIMAServer(params: {
+    applicationFolder?: string;
+    processEnvironment?: (environment: Environment) => Environment;
     environment?: Environment;
     logger?: any;
     emitter?: Emitter;

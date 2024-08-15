@@ -1,0 +1,48 @@
+{
+  "name": "@ima/testing-library",
+  "version": "19.6.0",
+  "description": "Testing library for IMA.js applications.",
+  "keywords": [
+    "IMA.js",
+    "react",
+    "testing",
+    "library"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/testing-library"
+  },
+  "license": "MIT",
+  "author": "Filip Satek <filip.satek@firma.seznam.cz>",
+  "scripts": {
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./jest-preset": "./dist/cjs/jest-preset.js",
+    "./jestSetupFileAfterEnv": "./dist/cjs/jestSetupFileAfterEnv.js"
+  },
+  "peerDependencies": {
+    "@ima/core": ">=19.0.0",
+    "@ima/react-page-renderer": ">=19.0.0",
+    "@testing-library/dom": ">=10.0.0",
+    "@testing-library/jest-dom": ">=6.0.0",
+    "@testing-library/react": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
