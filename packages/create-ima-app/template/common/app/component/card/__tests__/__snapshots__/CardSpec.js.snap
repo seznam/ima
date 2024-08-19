@@ -1,27 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Card can render 1`] = `
-<div
-  className="card"
->
-  <a
-    className="card-title"
-    href="https://www.seznam.cz"
-    rel="noreferrer"
-    target="_blank"
+<div>
+  <div
+    class="card"
   >
-    <h3>
-      Test card
-       »
-    </h3>
-  </a>
-  <p
-    className="card-content"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Some content of the card.",
-      }
-    }
-  />
+    <a
+      class="card-title"
+      href="https://www.seznam.cz"
+      rel="noreferrer"
+      target="_blank"
+    >
+      <h3>
+        Test card
+         »
+      </h3>
+    </a>
+    <p
+      class="card-content"
+    >
+      Some content of the card.
+    </p>
+  </div>
 </div>
 `;
