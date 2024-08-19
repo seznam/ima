@@ -17,7 +17,7 @@ The `@ima/testing-library` contains utilities for testing IMA.js applications. I
 Install the new dependencies. Note that RTL dependencies are only peer dependencies and you should specify them in your project.
 
 ```bash
-npm install -D @ima/testing-library @testing-library/dom @testing-library/jest-dom @testing-library/react
+npm install -D @ima/testing-library @testing-library/dom @testing-library/jest-dom @testing-library/react jest-environment-jsdom
 ```
 
 Configure jest preset in your jest config file.
@@ -28,21 +28,43 @@ Configure jest preset in your jest config file.
 }
 ```
 
-Everything should start working out of the box for a typical IMA.js application. If you are trying to setup this library in a monorepo or an npm package, you might have to do some tweaks with the configuration. In this case, you need the jest config file to be in non-json format.
+Everything should start working out of the box for a typical IMA.js application. If you are trying to setup this library in a monorepo or an npm package, you might have to do some tweaks with the configuration.
+
+### Configuration
+
+There are 2 config functions that you can use to adjust the IMA Testing Library to your specific needs.
+
+**Server Configuration**
+
+In this case, you need the jest config file to be in non-json format.
+
+This configuration should be evaluated in the jest config file. It's config values are used to initialize the JSDOM environment in which the tests are running.
 
 ```javascript
-const { setImaTestingLibraryConfig, FALLBACK_APP_MAIN_PATH } = require('@ima/testing-library');
+const { setImaTestingLibraryServerConfig } = require('@ima/testing-library');
 
-setImaTestingLibraryConfig({
+setImaTestingLibraryServerConfig({
   // your custom config
-  appMainPath: FALLBACK_APP_MAIN_PATH, // There is a default app main file as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real app main file.
-  imaConfigPath: 'path/to/your/ima.config.js',
   applicationFolder: '/path/to/folder/containing/server/folder',
 });
 
 module.exports = {
   preset: '@ima/testing-library'
 };
+```
+
+**Client Configuration**
+
+This configuration should be evaluated in the setup files, or directly in the test files. It's config values are used to initialize the IMA.js application and provide the context for the tests.
+
+```javascript
+const { setImaTestingLibraryClientConfig, FALLBACK_APP_MAIN_PATH } = require('@ima/testing-library');
+
+setImaTestingLibraryClientConfig({
+  // your custom config
+  appMainPath: FALLBACK_APP_MAIN_PATH, // There is a default app main file as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real app main file.
+  imaConfigPath: 'path/to/your/ima.config.js',
+});
 ```
 
 ## Usage

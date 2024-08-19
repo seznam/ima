@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { render } from '@ima/testing-library';
 
 import { Card } from '../Card';
 
@@ -10,8 +10,8 @@ describe('Card', () => {
       children: 'Some content of the card.',
     };
 
-    const wrapper = shallow(<Card {...props} />);
+    const { container } = render(<Card {...props} />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

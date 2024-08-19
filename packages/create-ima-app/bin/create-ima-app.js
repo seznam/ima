@@ -9,7 +9,7 @@ import { create } from '../scripts/create.js';
 import { error, warn } from '../scripts/utils.js';
 
 const MIN_NODE_VERSION = 16;
-const MAX_NODE_VERSION = 18;
+const MAX_NODE_VERSION = 22;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 if (process.argv.length === 2) {

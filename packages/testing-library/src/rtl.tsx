@@ -1,19 +1,12 @@
-import path from 'node:path';
-
 import * as imaCore from '@ima/core';
 import { PageContext } from '@ima/react-page-renderer';
 import { render, RenderOptions } from '@testing-library/react'; // eslint-disable-line import/named
 import React, { ReactElement } from 'react';
 
-import { getImaTestingLibraryConfig } from './configuration';
+import { getImaTestingLibraryClientConfig } from './configuration';
 import { requireFromProject } from './helpers';
 import { generateDictionary } from './localization';
-
-export interface ContextValue {
-  $Utils: imaCore.Utils;
-}
-
-export const FALLBACK_APP_MAIN_PATH = path.resolve(__dirname, 'app/main.js');
+import type { ContextValue } from './types';
 
 // Some operations take way too long to be executed with each render call,
 // so we need to cache these values
@@ -27,21 +20,33 @@ const mainFile: Record<
 const dictionary: Record<string, imaCore.DictionaryConfig['dictionary']> = {};
 
 export function initImaApp() {
-  const config = getImaTestingLibraryConfig();
+  const config = getImaTestingLibraryClientConfig();
+
+  if (!document || !window) {
+    throw new Error(
+      'Missing document, or window. Are you running the test in the jsdom environment?'
+    );
+  }
 
   if (!mainFile[config.appMainPath]) {
     mainFile[config.appMainPath] = requireFromProject(config.appMainPath);
   }
 
-  if (!dictionary[config.locale]) {
-    dictionary[config.locale] = generateDictionary(config.locale);
+  if (!dictionary[$IMA.$Language]) {
+    if (!$IMA.$Language) {
+      throw new Error(
+        'Variable $IMA.$Language is not defined. The variable should be defined in the jsdom html template, but it is missing. Maybe your SPA template is not setting this variable?'
+      );
+    }
+
+    dictionary[$IMA.$Language] = generateDictionary($IMA.$Language);
   }
 
   const { ima, getInitialAppConfigFunctions } = mainFile[config.appMainPath];
 
   // Init language files
   // This must be initialized before oc.get('$Dictionary').init() is called (usualy part of initServices)
-  global.$IMA.i18n = dictionary[config.locale];
+  $IMA.i18n = dictionary[$IMA.$Language];
 
   const app = ima.createImaApp();
   const bootConfig = ima.getClientBootConfig(getInitialAppConfigFunctions());
@@ -49,17 +54,21 @@ export function initImaApp() {
   // Init app
   ima.bootClientApp(app, bootConfig);
 
+  config.afterInitImaApp(app);
+
   return app;
 }
 
 export function getContextValue(
   app?: ReturnType<typeof imaCore.createImaApp>
 ): ContextValue {
+  const config = getImaTestingLibraryClientConfig();
+
   if (!app) {
     app = initImaApp();
   }
 
-  return { $Utils: app.oc.get('$ComponentUtils').getUtils() };
+  return config.getContextValue(app);
 }
 
 export function getContextWrapper(contextValue?: ContextValue) {

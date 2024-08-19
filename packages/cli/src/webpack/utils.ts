@@ -226,7 +226,7 @@ export function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
  * @param {ImaCliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
+export function resolveImaConfig(args: ImaCliArgs): ImaConfig {
   const defaultImaConfig: ImaConfig = {
     publicPath: '/',
     compress: true,

@@ -1,6 +1,29 @@
-import type { Environment } from '@ima/core';
+import path from 'node:path';
 
-export interface Configuration {
+import type { createImaApp, Environment } from '@ima/core';
+
+import type { ContextValue } from './types';
+
+export interface ServerConfiguration {
+  /**
+   * The protocol of the application.
+   */
+  protocol: string;
+  /**
+   * The host of the application.
+   */
+  host: string;
+  /**
+   * The process environment configuration. This allows you to change the environment configuration that will be available in jsdom.
+   */
+  processEnvironment: (env: Environment) => Environment;
+  /**
+   * The path to the application folder.
+   */
+  applicationFolder: string | undefined;
+}
+
+export interface ClientConfiguration {
   /**
    * The path to the main application file. This file should be exporting getInitialAppConfigFunctions and ima keys.
    */
@@ -8,50 +31,64 @@ export interface Configuration {
   /**
    * The path to the IMA configuration file. This can be only configured once before first `initImaApp` call and cannot be reconfigured later.
    */
-  imaConfigPath: string;
+  rootDir: string;
   /**
-   * The protocol of the application. This can be only configured in the jest config file and cannot be reconfigured later.
+   * The function that will be called after the IMA application is initialized.
    */
-  protocol: string;
+  afterInitImaApp: (app: ReturnType<typeof createImaApp>) => void;
   /**
-   * The host of the application. This can be only configured in the jest config file and cannot be reconfigured later.
+   * The function that will be called after the context value is created.
    */
-  host: string;
-  /**
-   * The locale of the application. This will affect the language of the application.
-   */
-  locale: string;
-  /**
-   * The process environment configuration. This allows you to change the environment configuration that will be available in jsdom.
-   * This can be only configured in the jest config file and cannot be reconfigured later.
-   */
-  processEnvironment: (env: Environment) => Environment;
-  /**
-   * The path to the application folder. This can be only configured in the jest config file and cannot be reconfigured later.
-   */
-  applicationFolder: string | undefined;
+  getContextValue: (app: ReturnType<typeof createImaApp>) => ContextValue;
 }
 
-const configuration: Configuration = {
-  appMainPath: 'app/main.js',
-  imaConfigPath: 'ima.config.js',
+const serverConfiguration: ServerConfiguration = {
   protocol: 'https:',
   host: 'imajs.io',
-  locale: 'en',
   processEnvironment: env => env,
   applicationFolder: undefined,
 };
 
+const clientConfiguration: ClientConfiguration = {
+  appMainPath: 'app/main.js',
+  rootDir: process.cwd(),
+  afterInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  getContextValue: app => ({
+    $Utils: app.oc.get('$ComponentUtils').getUtils(),
+  }),
+};
+
+export const FALLBACK_APP_MAIN_PATH = path.resolve(__dirname, 'app/main.js');
+export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname);
+
 /**
- * Get the current configuration.
+ * Get the current serverConfiguration.
  */
-export function getImaTestingLibraryConfig() {
-  return configuration;
+export function getImaTestingLibraryServerConfig() {
+  return serverConfiguration;
 }
 
 /**
- * Modify the current configuration.
+ * Modify the current serverConfiguration.
  */
-export function setImaTestingLibraryConfig(config: Partial<Configuration>) {
-  Object.assign(configuration, config);
+export function setImaTestingLibraryServerConfig(
+  config: Partial<ServerConfiguration>
+) {
+  Object.assign(serverConfiguration, config);
+}
+
+/**
+ * Get the current clientConfiguration.
+ */
+export function getImaTestingLibraryClientConfig() {
+  return clientConfiguration;
+}
+
+/**
+ * Modify the current clientConfiguration.
+ */
+export function setImaTestingLibraryClientConfig(
+  config: Partial<ClientConfiguration>
+) {
+  Object.assign(clientConfiguration, config);
 }

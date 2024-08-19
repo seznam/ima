@@ -58,7 +58,7 @@ export interface Environment {
   $Debug: GlobalImaObject['$Debug'];
   $Language: Record<string, string>;
   $Version: GlobalImaObject['$Version'];
-  $App: GlobalImaObject['$App'];
+  $App?: GlobalImaObject['$App'];
   $Resources?: (
     response: unknown,
     manifest: Manifest,

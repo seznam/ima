@@ -1,13 +1,8 @@
-const util = require('util');
+const {
+  setImaTestingLibraryClientConfig,
+  FALLBACK_APP_MAIN_PATH,
+} = require('@ima/testing-library');
 
-var root = typeof window !== 'undefined' && window !== null ? window : global;
-
-root.TextEncoder = util.TextEncoder;
-root.TextDecoder = util.TextDecoder;
-
-root.$Debug = true;
-
-const Adapter = require('@cfaester/enzyme-adapter-react-18').default;
-const enzyme = require('enzyme');
-
-enzyme.configure({ adapter: new Adapter() });
+setImaTestingLibraryClientConfig({
+  appMainPath: FALLBACK_APP_MAIN_PATH,
+});

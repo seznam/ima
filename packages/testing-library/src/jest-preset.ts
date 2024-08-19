@@ -1,9 +1,9 @@
 import { createIMAServer } from '@ima/server';
 import type { Config } from 'jest';
 
-import { getImaTestingLibraryConfig } from './configuration';
+import { getImaTestingLibraryServerConfig } from './configuration';
 
-const imaTestingLibraryConfig = getImaTestingLibraryConfig();
+const serverConfig = getImaTestingLibraryServerConfig();
 
 /**
  * Get response content from @ima/server.
@@ -17,9 +17,9 @@ async function _getIMAResponseContent(): Promise<string> {
   // Prepare serverApp with environment override
   const { serverApp } = await createIMAServer({
     devUtils,
-    applicationFolder: imaTestingLibraryConfig.applicationFolder,
+    applicationFolder: serverConfig.applicationFolder,
     processEnvironment: currentEnvironment =>
-      imaTestingLibraryConfig.processEnvironment({
+      serverConfig.processEnvironment({
         ...currentEnvironment,
         $Server: {
           ...currentEnvironment.$Server,
@@ -37,21 +37,14 @@ async function _getIMAResponseContent(): Promise<string> {
     {
       get: () => '',
       headers: () => '',
-      originalUrl: imaTestingLibraryConfig.host,
-      protocol: imaTestingLibraryConfig.protocol.replace(':', ''),
+      originalUrl: serverConfig.host,
+      protocol: serverConfig.protocol.replace(':', ''),
     },
     {
       status: () => 200,
       send: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
       set: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-      locals: {
-        language: imaTestingLibraryConfig.locale,
-        host: imaTestingLibraryConfig.host,
-        protocol: imaTestingLibraryConfig.protocol,
-        path: '',
-        root: '',
-        languagePartPath: '',
-      },
+      locals: {},
     }
   );
 
@@ -69,7 +62,7 @@ const jestConfig: Promise<Config> = (async () => ({
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     html: await _getIMAResponseContent(),
-    url: `${imaTestingLibraryConfig.protocol}//${imaTestingLibraryConfig.host}/`,
+    url: `${serverConfig.protocol}//${serverConfig.host}/`,
   },
 }))();
 

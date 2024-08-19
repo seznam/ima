@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useDispatcher } from '../dispatcher';
 
 describe('useDispatcher', () => {
@@ -11,7 +11,7 @@ describe('useDispatcher', () => {
   });
 
   it('should return `fire` callback', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useDispatcher();
     });
 

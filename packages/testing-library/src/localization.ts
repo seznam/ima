@@ -1,9 +1,12 @@
 import path from 'path';
 
+import { resolveImaConfig } from '@ima/cli';
+import type { ImaCliArgs } from '@ima/cli';
 import { assignRecursively } from '@ima/helpers';
 import MessageFormat from '@messageformat/core';
 import globby from 'globby';
 
+import { getImaTestingLibraryClientConfig } from './configuration';
 import { requireFromProject } from './helpers';
 
 /**
@@ -17,9 +20,9 @@ import { requireFromProject } from './helpers';
  * @param {string} locale
  * @returns {object}
  */
-function generateDictionary(locale = 'cs') {
-  // @TODO: locale should be taken from config and should be en by default
-  const { languages } = requireFromProject('./ima.config.js');
+function generateDictionary(locale: string) {
+  const { rootDir } = getImaTestingLibraryClientConfig();
+  const { languages } = resolveImaConfig({ rootDir } as ImaCliArgs);
   const mf = new MessageFormat(locale);
   const dictionaries: Record<string, any> = {};
   const langFileGlobs = languages[locale];

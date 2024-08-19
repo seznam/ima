@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useSettings } from '../settings';
 
 describe('useSettings', () => {
@@ -15,7 +15,7 @@ describe('useSettings', () => {
   };
 
   it('should return settings object by default', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useSettings();
     }, contextMock);
 
@@ -23,7 +23,7 @@ describe('useSettings', () => {
   });
 
   it('should return specific sub-settings for given selector', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useSettings('$Page.scripts');
     }, contextMock);
 
@@ -31,7 +31,7 @@ describe('useSettings', () => {
   });
 
   it('should return empty object for invalid selectors', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useSettings('invalid.settings.path');
     }, contextMock);
 

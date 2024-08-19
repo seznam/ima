@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useCssClasses } from '../cssClasses';
 
 describe('useCssClasses', () => {
@@ -10,7 +10,7 @@ describe('useCssClasses', () => {
   };
 
   it('should return shortcut to $CssClasses utility', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useCssClasses();
     }, contextMock);
 
