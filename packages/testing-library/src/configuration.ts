@@ -1,33 +1,10 @@
-import path from 'node:path';
-
-import type { createImaApp, Environment } from '@ima/core';
-
-import type { ContextValue } from './types';
-
-export interface ServerConfiguration {
-  /**
-   * The protocol of the application.
-   */
-  protocol: string;
-  /**
-   * The host of the application.
-   */
-  host: string;
-  /**
-   * The process environment configuration. This allows you to change the environment configuration that will be available in jsdom.
-   */
-  processEnvironment: (env: Environment) => Environment;
-  /**
-   * The path to the application folder.
-   */
-  applicationFolder: string | undefined;
-}
+import type { ContextValue, ImaApp } from './types';
 
 export interface ClientConfiguration {
   /**
-   * The path to the main application file. This file should be exporting getInitialAppConfigFunctions and ima keys.
+   * If true, the fake dictionary will be used. The real dictionary degrades the performance of the tests so disable this with caution.
    */
-  appMainPath: string;
+  useFakeDictionary: boolean;
   /**
    * The path to the IMA configuration file. This can be only configured once before first `initImaApp` call and cannot be reconfigured later.
    */
@@ -35,47 +12,21 @@ export interface ClientConfiguration {
   /**
    * The function that will be called after the IMA application is initialized.
    */
-  afterInitImaApp: (app: ReturnType<typeof createImaApp>) => void;
+  afterInitImaApp: (app: ImaApp) => void;
   /**
    * The function that will be called after the context value is created.
    */
-  getContextValue: (app: ReturnType<typeof createImaApp>) => ContextValue;
+  getContextValue: (app: ImaApp) => ContextValue;
 }
 
-const serverConfiguration: ServerConfiguration = {
-  protocol: 'https:',
-  host: 'imajs.io',
-  processEnvironment: env => env,
-  applicationFolder: undefined,
-};
-
 const clientConfiguration: ClientConfiguration = {
-  appMainPath: 'app/main.js',
+  useFakeDictionary: true,
   rootDir: process.cwd(),
   afterInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
   getContextValue: app => ({
     $Utils: app.oc.get('$ComponentUtils').getUtils(),
   }),
 };
-
-export const FALLBACK_APP_MAIN_PATH = path.resolve(__dirname, 'app/main.js');
-export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname);
-
-/**
- * Get the current serverConfiguration.
- */
-export function getImaTestingLibraryServerConfig() {
-  return serverConfiguration;
-}
-
-/**
- * Modify the current serverConfiguration.
- */
-export function setImaTestingLibraryServerConfig(
-  config: Partial<ServerConfiguration>
-) {
-  Object.assign(serverConfiguration, config);
-}
 
 /**
  * Get the current clientConfiguration.

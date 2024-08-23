@@ -2,9 +2,6 @@
 
 set -e
 
-TARGET_WEB_URL="http://localhost:3001/"
-PARALLEL_TEST_CONNECTIONS=300
-SKELETON_URL="https://github.com/seznam/IMA.js-skeleton.git"
 NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR_IMA=`pwd`

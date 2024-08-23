@@ -41,15 +41,19 @@ In this case, you need the jest config file to be in non-json format.
 This configuration should be evaluated in the jest config file. It's config values are used to initialize the JSDOM environment in which the tests are running.
 
 ```javascript
-const { setImaTestingLibraryServerConfig } = require('@ima/testing-library');
+const { setImaTestingLibraryServerConfig, FALLBACK_APPLICATION_FOLDER, FALLBACK_APP_MAIN_PATH } = require('@ima/testing-library/server');
 
 setImaTestingLibraryServerConfig({
   // your custom config
-  applicationFolder: '/path/to/folder/containing/server/folder',
+  applicationFolder: FALLBACK_APPLICATION_FOLDER, // There is a default application folder as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real application folder with server files.
 });
 
 module.exports = {
-  preset: '@ima/testing-library'
+  preset: '@ima/testing-library',
+  // The preset automatically sets up the moduleNameMapper for the IMA.js application, but you can override it if you need to.
+  moduleNameMapper: {
+    'app/main': FALLBACK_APP_MAIN_PATH, // There is a default app main file as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real app main file.
+  }
 };
 ```
 
@@ -62,67 +66,167 @@ const { setImaTestingLibraryClientConfig, FALLBACK_APP_MAIN_PATH } = require('@i
 
 setImaTestingLibraryClientConfig({
   // your custom config
-  appMainPath: FALLBACK_APP_MAIN_PATH, // There is a default app main file as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real app main file.
+  appMainPath: FALLBACK_APP_MAIN_PATH, 
   imaConfigPath: 'path/to/your/ima.config.js',
 });
 ```
 
 ## Usage
 
-IMA Testing Library is re-exporting everything from `@testing-library/react`. It provides the default context wrapper for the `render` method. Thanks to this, the default example from the React Testing Library documentation will work out of the box. You just need to import the `render` method from the `@ima/testing-library` package.
+IMA Testing Library is re-exporting everything from `@testing-library/react`. You should always import React Testing Library functions from `@ima/testing-library` as we might add some additional functionality / wrappers in the future.
+
+IMA Testing Library exports async function `renderWithContext`. It adds default context to the render function from RTL. The context is created from the IMA.js application and it contains the same values as the real application context.
 
 ```javascript
-import { render } from '@ima/testing-library';
+import { renderWithContext } from '@ima/testing-library';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
+test('renders learn react link', async () => {
+  const { getByText } = await renderWithContext(<Component>My Text</Component>);
+  const textElement = getByText(/My Text/i);
 
-  expect(linkElement).toBeInTheDocument();
+  expect(textElement).toBeInTheDocument();
 });
 ```
 
 You might need to specify custom additions to the context, or mock some parts of the IMA application. You can do this by providing a custom context wrapper and using the `@ima/testing-library` specific utilities.
 
 ```javascript
-import { render, getContextWrapper, getContextValue, initImaApp } from '@ima/testing-library';
+import { renderWithContext, getContextValue, initImaApp } from '@ima/testing-library';
 
-test('renders learn react link with custom context wrapper', () => {
-  const ContextWrapper = getContextWrapper();
-  const { getByText } = render(<App />, {
-    wrapper: <MyCustomWrapper><CotextWrapper /></MyCustomWrapper>,
-  });
-  const linkElement = getByText(/learn react/i);
-
-  expect(linkElement).toBeInTheDocument();
-});
-
-test('renders learn react link with custom context value', () => {
-  const contextValue = getContextValue();
-
-  contextValue.$Utils.$Foo = jest.fn(() => 'bar');
-
-  const ContextWrapper = getContextWrapper(contextValue);
-  const { getByText } = render(<App />, {
-    wrapper: ContextWrapper,
-  });
-  const linkElement = getByText(/learn react/i);
-
-  expect(linkElement).toBeInTheDocument();
-});
-
-test('renders learn react link with custom app configuration', () => {
-  const app = initImaApp();
+test('renders learn react link with custom app configuration', async () => {
+  const app = await initImaApp();
 
   app.oc.get('$Utils').$Foo = jest.fn(() => 'bar');
 
-  const contextValue = getContextValue(app);
-  const ContextWrapper = getContextWrapper(contextValue);
-  const { getByText } = render(<App />, {
-    wrapper: ContextWrapper,
-  });
-  const linkElement = getByText(/learn react/i);
+  const { getByText } = await renderWithContext(<Component>My Text</Component>, { app });
+  const textElement = getByText(/My Text/i);
 
-  expect(linkElement).toBeInTheDocument();
+  expect(textElement).toBeInTheDocument();
+});
+
+test('renders learn react link with custom context value', async () => {
+  const app = await initImaApp();
+  const contextValue = await getContextValue(app);
+
+  contextValue.$Utils.$Foo = jest.fn(() => 'bar');
+
+  const { getByText } = await renderWithContext(<Component>My Text</Component>, { contextValue });
+  const textElement = getByText(/My Text/i);
+
+  expect(textElement).toBeInTheDocument();
 });
 ```
+
+### Extending IMA boot config methods
+
+You can extend IMA boot config by using [IMA `pluginLoader.register`](https://imajs.io/api/classes/ima_core.PluginLoader/#register) method. Use the same approach as in IMA plugins.
+
+You can either register a plugin loader for all tests by setting it up in a setup file.
+
+```javascript
+// jestSetup.js
+import { pluginLoader } from '@ima/core';
+
+// If you don't care, if this plugin loader is registered first, or last
+pluginLoader.register('jestSetup.js', () => {
+  return {
+    initSettings: () => {
+      return {
+        prod: {
+          customSetting: 'customValue'
+        }
+      }
+    }
+  };
+});
+
+// If you need to register the plugin loader as the last one
+beforeAll(() => {
+  pluginLoader.register('jestSetup.js', () => {
+    return {
+      initSettings: () => {
+        return {
+          prod: {
+            customSetting: 'customValue'
+          }
+        }
+      }
+    };
+  });
+});
+
+// jest.config.js
+module.exports = {
+  // Add this line to your jest config
+  setupFilesAfterEnv: ['./jestSetup.js']
+};
+```
+
+Or you can register a plugin loader for a specific test file.
+
+```javascript
+// mySpec.js
+import { pluginLoader } from '@ima/core';
+
+beforeAll(() => {
+  pluginLoader.register('mySpec', () => {
+    return {
+      initSettings: () => {
+        return {
+          prod: {
+            customSetting: 'customValue'
+          }
+        }
+      }
+    };
+  });
+});
+
+test('renders learn react link with custom app configuration', async () => {
+  const { getByText } = await renderWithContext(<Component>My Text</Component>);
+  const textElement = getByText(/My Text/i);
+
+  expect(textElement).toBeInTheDocument();
+});
+```
+
+Or you can register a plugin loader for a test file, but make the boot config methods dynamic so you can change them for each test.
+
+```javascript
+// mySpec.js
+import { pluginLoader } from '@ima/core';
+
+// We create a placeholder for the plugin loader, so we can change it later
+let initSettings = () => {};
+
+beforeAll(() => {
+  pluginLoader.register('mySpec', (...args) => {
+    return {
+      initSettings: (...args) => {
+        return initSettings(...args);
+      }
+    };
+  });
+});
+
+afterEach(() => {
+  initSettings = () => {}; // Reset the plugin loader
+});
+
+test('renders learn react link with custom app configuration', async () => {
+  initSettings = () => {
+    return {
+      prod: {
+        customSetting: 'customValue'
+      }
+    }
+  };
+
+  const { getByText } = await renderWithContext(<Component>My Text</Component>);
+  const textElement = getByText(/My Text/i);
+
+  expect(textElement).toBeInTheDocument();
+});
+```
+
+*Note, that the plugin loader register method evaluates the second argument right away, but the specific boot config methods are evaluated during `renderWithContext` (or `initImaApp` if you are using it directly).*

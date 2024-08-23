@@ -1,4 +1,4 @@
-import { render } from '@ima/testing-library';
+import { renderWithContext } from '@ima/testing-library';
 
 import { renderHook } from '../../testUtils';
 import { useComponent, useOnce } from '../component';
@@ -29,7 +29,7 @@ describe('useComponent', () => {
 });
 
 describe('useOnce', () => {
-  it('should call callback only once', () => {
+  it('should call callback only once', async () => {
     let count = 0;
 
     const TestComponent = () => {
@@ -38,7 +38,7 @@ describe('useOnce', () => {
       return null;
     };
 
-    const { rerender } = render(<TestComponent />);
+    const { rerender } = await renderWithContext(<TestComponent />);
 
     rerender();
     rerender();

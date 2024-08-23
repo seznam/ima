@@ -31,6 +31,10 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/cjs/index.js"
     },
+    "./server": {
+      "import": "./dist/esm/server/index.js",
+      "default": "./dist/cjs/server/index.js"
+    },
     "./jest-preset": "./dist/cjs/jest-preset.js",
     "./jestSetupFileAfterEnv": "./dist/cjs/jestSetupFileAfterEnv.js"
   },

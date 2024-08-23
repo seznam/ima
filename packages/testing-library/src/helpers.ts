@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 
 /**
  * Requires specified file from projectPath
@@ -6,6 +6,6 @@ import path from 'path';
  * @param {string} projectPath relative project path to a file
  * @returns {*} File exports
  */
-export function requireFromProject(projectPath: string) {
-  return require(path.resolve(projectPath));
+export function importFromProject(projectPath: string) {
+  return import(path.resolve(projectPath));
 }

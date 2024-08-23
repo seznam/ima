@@ -1,105 +1,104 @@
-import * as imaCore from '@ima/core';
 import { PageContext } from '@ima/react-page-renderer';
-import { render, RenderOptions } from '@testing-library/react'; // eslint-disable-line import/named
-import React, { ReactElement } from 'react';
+import { render } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
+import { ReactElement } from 'react';
+
+// import of app/main is resolved by the jest moduleNameMapper
+import { ima, getInitialAppConfigFunctions } from 'app/main';
 
 import { getImaTestingLibraryClientConfig } from './configuration';
-import { requireFromProject } from './helpers';
 import { generateDictionary } from './localization';
-import type { ContextValue } from './types';
+import type {
+  ContextValue,
+  ImaApp,
+  ImaContextWrapper,
+  ImaRenderResult,
+} from './types';
 
-// Some operations take way too long to be executed with each render call,
-// so we need to cache these values
-const mainFile: Record<
-  string,
-  {
-    ima: typeof imaCore;
-    getInitialAppConfigFunctions: () => imaCore.InitAppConfig;
-  }
-> = {};
-const dictionary: Record<string, imaCore.DictionaryConfig['dictionary']> = {};
-
-export function initImaApp() {
-  const config = getImaTestingLibraryClientConfig();
-
+/**
+ * Initialize the IMA application for testing.
+ */
+export async function initImaApp(): Promise<ImaApp> {
   if (!document || !window) {
     throw new Error(
       'Missing document, or window. Are you running the test in the jsdom environment?'
     );
   }
 
-  if (!mainFile[config.appMainPath]) {
-    mainFile[config.appMainPath] = requireFromProject(config.appMainPath);
-  }
-
-  if (!dictionary[$IMA.$Language]) {
-    if (!$IMA.$Language) {
-      throw new Error(
-        'Variable $IMA.$Language is not defined. The variable should be defined in the jsdom html template, but it is missing. Maybe your SPA template is not setting this variable?'
-      );
-    }
-
-    dictionary[$IMA.$Language] = generateDictionary($IMA.$Language);
-  }
-
-  const { ima, getInitialAppConfigFunctions } = mainFile[config.appMainPath];
+  const config = getImaTestingLibraryClientConfig();
 
   // Init language files
   // This must be initialized before oc.get('$Dictionary').init() is called (usualy part of initServices)
-  $IMA.i18n = dictionary[$IMA.$Language];
+  await generateDictionary();
 
-  const app = ima.createImaApp();
-  const bootConfig = ima.getClientBootConfig(getInitialAppConfigFunctions());
+  const app = await ima.createImaApp();
+  const bootConfig = await ima.getClientBootConfig(
+    await getInitialAppConfigFunctions()
+  );
 
   // Init app
-  ima.bootClientApp(app, bootConfig);
+  await ima.bootClientApp(app, bootConfig);
 
-  config.afterInitImaApp(app);
+  await config.afterInitImaApp(app);
 
   return app;
 }
 
-export function getContextValue(
-  app?: ReturnType<typeof imaCore.createImaApp>
-): ContextValue {
+/**
+ * Get the context value for the IMA application.
+ */
+export async function getContextValue(app?: ImaApp): Promise<ContextValue> {
   const config = getImaTestingLibraryClientConfig();
 
   if (!app) {
-    app = initImaApp();
+    app = await initImaApp();
   }
 
   return config.getContextValue(app);
 }
 
-export function getContextWrapper(contextValue?: ContextValue) {
-  if (!contextValue) {
-    contextValue = getContextValue();
-  }
-
-  return function IMATestingLibraryContextWrapper({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
+/**
+ * Creates a context wrapper component from the provided context value.
+ */
+async function getContextWrapper(
+  contextValue: ContextValue
+): Promise<ImaContextWrapper> {
+  return function IMATestingLibraryContextWrapper({ children }) {
     return (
-      <PageContext.Provider value={contextValue as ContextValue}>
+      <PageContext.Provider value={contextValue}>
         {children}
       </PageContext.Provider>
     );
   };
 }
 
-const customRender = (ui: ReactElement, options?: RenderOptions) => {
-  let { wrapper, ...rest } = options ?? {}; // eslint-disable-line prefer-const
+/**
+ * Renders the provided React element with the IMA context.
+ */
+async function renderWithContext(
+  ui: ReactElement,
+  options?: RenderOptions & { contextValue?: ContextValue; app?: ImaApp }
+): Promise<ImaRenderResult> {
+  let { app = null, contextValue, ...rest } = options ?? {}; // eslint-disable-line prefer-const
 
-  if (!wrapper) {
-    wrapper = getContextWrapper();
+  if (!contextValue) {
+    if (!app) {
+      app = await initImaApp();
+    }
+
+    contextValue = await getContextValue(app);
   }
 
-  const result = render(ui, { wrapper, ...rest });
+  const wrapper = await getContextWrapper(contextValue);
 
-  return result;
-};
+  const result = render(ui, { ...rest, wrapper });
 
-export * from '@testing-library/react'; // eslint-disable-line import/export
-export { customRender as render }; // eslint-disable-line import/export
+  return {
+    ...result,
+    app,
+    contextValue,
+  };
+}
+
+export * from '@testing-library/react';
+export { renderWithContext };
