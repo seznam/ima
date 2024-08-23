@@ -10,7 +10,7 @@
 
 ## IMA Testing Library
 
-The `@ima/testing-library` contains utilities for testing IMA.js applications. It provides integration with [Jest](https://jestjs.io), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) (RTL for short) amd [Testing Library Jest DOM](https://testing-library.com/docs/ecosystem-jest-dom).
+The `@ima/testing-library` contains utilities for testing IMA.js applications. It provides integration with [Jest](https://jestjs.io), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) (RTL for short) and [Testing Library Jest DOM](https://testing-library.com/docs/ecosystem-jest-dom).
 
 ## Installation
 
@@ -75,7 +75,7 @@ setImaTestingLibraryClientConfig({
 
 IMA Testing Library is re-exporting everything from `@testing-library/react`. You should always import React Testing Library functions from `@ima/testing-library` as we might add some additional functionality / wrappers in the future.
 
-IMA Testing Library exports async function `renderWithContext`. It adds default context to the render function from RTL. The context is created from the IMA.js application and it contains the same values as the real application context.
+IMA Testing Library exports async function `renderWithContext`. It adds default context to the `render` function from RTL. The context is created from the IMA.js application and it contains the same values as the real application context.
 
 ```javascript
 import { renderWithContext } from '@ima/testing-library';
@@ -203,14 +203,14 @@ beforeAll(() => {
   pluginLoader.register('mySpec', (...args) => {
     return {
       initSettings: (...args) => {
-        return initSettings(...args);
+        return initSettings(...args); // Here we call our overridable function
       }
     };
   });
 });
 
 afterEach(() => {
-  initSettings = () => {}; // Reset the plugin loader
+  initSettings = () => {}; // Reset the plugin loader so it is not called for other tests
 });
 
 test('renders learn react link with custom app configuration', async () => {
