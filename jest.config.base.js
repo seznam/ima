@@ -8,6 +8,9 @@ module.exports = {
       '@swc/jest',
       {
         jsc: {
+          experimental: {
+            plugins: [['swc_mut_cjs_exports', {}]],
+          },
           target: 'es2022',
           parser: {
             syntax: 'ecmascript',
@@ -25,6 +28,9 @@ module.exports = {
       '@swc/jest',
       {
         jsc: {
+          experimental: {
+            plugins: [['swc_mut_cjs_exports', {}]],
+          },
           target: 'es2022',
           parser: {
             syntax: 'typescript',
