@@ -12,3 +12,4 @@ build/
 app/assets/bower
 .npmrc
 package-lock.json
+.swc/
