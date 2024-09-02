@@ -12,6 +12,6 @@ describe('Card', () => {
 
     const { container } = render(<Card {...props} />);
 
-    expect(container).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot();
   });
 });
