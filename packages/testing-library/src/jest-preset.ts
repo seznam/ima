@@ -1,8 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import type { Config } from 'jest';
 
 import {
   getIMAResponseContent,
   getImaTestingLibraryServerConfig,
+  FALLBACK_APP_MAIN_PATH,
 } from './server';
 
 /**
@@ -30,7 +34,9 @@ const jestConfig: Promise<Config> = (async () => {
     setupFiles: ['@ima/core/setupJest.js'],
     setupFilesAfterEnv: ['@ima/testing-library/jestSetupFileAfterEnv'],
     moduleNameMapper: {
-      'app/main': '<rootDir>/app/main',
+      'app/main': fs.existsSync(path.resolve('./app/main.js'))
+        ? '<rootDir>/app/main'
+        : FALLBACK_APP_MAIN_PATH,
     },
     testEnvironment: 'jsdom',
     testEnvironmentOptions: {

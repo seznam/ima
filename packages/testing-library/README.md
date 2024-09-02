@@ -41,18 +41,19 @@ In this case, you need the jest config file to be in non-json format.
 This configuration should be evaluated in the jest config file. It's config values are used to initialize the JSDOM environment in which the tests are running.
 
 ```javascript
-const { setImaTestingLibraryServerConfig, FALLBACK_APPLICATION_FOLDER, FALLBACK_APP_MAIN_PATH } = require('@ima/testing-library/server');
+const path = require('node:path');
+const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/server');
 
 setImaTestingLibraryServerConfig({
   // your custom config
-  applicationFolder: FALLBACK_APPLICATION_FOLDER, // There is a default application folder as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real application folder with server files.
+  applicationFolder: path.resolve('./__tests__/') // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
 });
 
 module.exports = {
   preset: '@ima/testing-library',
   // The preset automatically sets up the moduleNameMapper for the IMA.js application, but you can override it if you need to.
   moduleNameMapper: {
-    'app/main': FALLBACK_APP_MAIN_PATH, // There is a default app main file as part of the package, it contains only the minimal setup and it might be enough for you if you don't have any real app main file.
+    'app/main': '<rootDir>/app/main.test.js', // You can tell jest to use a different main file for the tests
   }
 };
 ```
@@ -62,11 +63,10 @@ module.exports = {
 This configuration should be evaluated in the setup files, or directly in the test files. It's config values are used to initialize the IMA.js application and provide the context for the tests.
 
 ```javascript
-const { setImaTestingLibraryClientConfig, FALLBACK_APP_MAIN_PATH } = require('@ima/testing-library');
+const { setImaTestingLibraryClientConfig } = require('@ima/testing-library');
 
 setImaTestingLibraryClientConfig({
   // your custom config
-  appMainPath: FALLBACK_APP_MAIN_PATH, 
   imaConfigPath: 'path/to/your/ima.config.js',
 });
 ```

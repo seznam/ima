@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 
 import type { Environment } from '@ima/core';
@@ -21,15 +22,10 @@ export interface ServerConfiguration {
   applicationFolder: string | undefined;
 }
 
-const serverConfiguration: ServerConfiguration = {
-  protocol: 'https:',
-  host: 'imajs.io',
-  processEnvironment: env => env,
-  applicationFolder: undefined,
-};
-
 export const FALLBACK_APP_MAIN_PATH = path.resolve(__dirname, '../app/main.js');
 export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
+
+const serverConfiguration: ServerConfiguration = resolveDefaultConfiguration();
 
 /**
  * Get the current serverConfiguration.
@@ -45,4 +41,19 @@ export function setImaTestingLibraryServerConfig(
   config: Partial<ServerConfiguration>
 ) {
   Object.assign(serverConfiguration, config);
+}
+
+function resolveDefaultConfiguration() {
+  const serverConfiguration: ServerConfiguration = {
+    protocol: 'https:',
+    host: 'imajs.io',
+    processEnvironment: env => env,
+    applicationFolder: undefined,
+  };
+
+  if (!fs.existsSync(path.resolve('.', 'server/config/environment.js'))) {
+    serverConfiguration.applicationFolder = FALLBACK_APPLICATION_FOLDER;
+  }
+
+  return serverConfiguration;
 }
