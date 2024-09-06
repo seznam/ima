@@ -1,7 +1,7 @@
 import { PageContext } from '@ima/react-page-renderer';
 import { render } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 // import of app/main is resolved by the jest moduleNameMapper
 import { ima, getInitialAppConfigFunctions } from 'app/main';

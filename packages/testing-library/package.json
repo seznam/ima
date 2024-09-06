@@ -62,12 +62,19 @@
       "default": "./dist/cjs/jestSetupFileAfterEnv.js"
     }
   },
+  "dependencies": {
+    "@messageformat/core": "^3.0.1",
+    "globby": "^11.1.0"
+  },
   "peerDependencies": {
+    "@ima/cli": ">=19.0.0",
     "@ima/core": ">=19.0.0",
+    "@ima/server": ">=19.0.0",
     "@ima/react-page-renderer": ">=19.0.0",
     "@testing-library/dom": ">=10.0.0",
     "@testing-library/jest-dom": ">=6.0.0",
-    "@testing-library/react": ">=12.0.0"
+    "@testing-library/react": ">=12.0.0",
+    "express": ">=4.0.0"
   },
   "publishConfig": {
     "access": "public",
