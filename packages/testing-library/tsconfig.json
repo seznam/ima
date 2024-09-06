@@ -10,7 +10,7 @@
     ],
     "outDir": "dist",
     "paths": {
-      "app/main": ["./src/app/main"],
+      "app/main": ["./src/client/app/main"],
     },
     "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob"]
   },

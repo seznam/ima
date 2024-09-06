@@ -34,7 +34,7 @@ const jestConfig: Promise<Config> = (async () => {
     setupFiles: ['@ima/core/setupJest.js'],
     setupFilesAfterEnv: ['@ima/testing-library/jestSetupFileAfterEnv'],
     moduleNameMapper: {
-      'app/main': fs.existsSync(path.resolve('./app/main.js'))
+      '^app/main$': fs.existsSync(path.resolve('./app/main.js'))
         ? '<rootDir>/app/main'
         : FALLBACK_APP_MAIN_PATH,
     },

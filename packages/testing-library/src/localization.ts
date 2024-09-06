@@ -11,7 +11,7 @@ import { assignRecursively } from '@ima/helpers';
 import MessageFormat from '@messageformat/core';
 import globby from 'globby';
 
-import { getImaTestingLibraryClientConfig } from './configuration';
+import { getImaTestingLibraryClientConfig } from './client/configuration';
 import { importFromProject } from './helpers';
 
 // Some operations take way too long to be executed with each render call,

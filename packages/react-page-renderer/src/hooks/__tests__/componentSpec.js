@@ -35,16 +35,17 @@ describe('useOnce', () => {
     const TestComponent = () => {
       useOnce(() => count++);
 
-      return null;
+      return <div>NotEmpty</div>;
     };
 
-    const { rerender } = await renderWithContext(<TestComponent />);
+    const { container, rerender } = await renderWithContext(<TestComponent />);
 
-    rerender();
-    rerender();
-    rerender();
-    rerender();
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
 
+    expect(container).not.toBeEmptyDOMElement();
     expect(count).toBe(1);
   });
 });

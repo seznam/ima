@@ -6,7 +6,7 @@ import { ReactElement } from 'react';
 // import of app/main is resolved by the jest moduleNameMapper
 import { ima, getInitialAppConfigFunctions } from 'app/main';
 
-import { getImaTestingLibraryClientConfig } from './configuration';
+import { getImaTestingLibraryClientConfig } from './client/configuration';
 import { generateDictionary } from './localization';
 import type {
   ContextValue,

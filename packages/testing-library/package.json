@@ -31,9 +31,21 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/cjs/index.js"
     },
+    "./client": {
+      "import": "./dist/esm/client/index.js",
+      "default": "./dist/cjs/client/index.js"
+    },
     "./server": {
       "import": "./dist/esm/server/index.js",
       "default": "./dist/cjs/server/index.js"
+    },
+    "./fallback/app/main": {
+      "import": "./dist/esm/client/app/main.js",
+      "default": "./dist/cjs/client/app/main.js"
+    },
+    "./fallback/config/environment": {
+      "import": "./dist/esm/server/config/environment.js",
+      "default": "./dist/cjs/server/config/environment.js"
     },
     "./jest-preset": "./dist/cjs/jest-preset.js",
     "./jestSetupFileAfterEnv": "./dist/cjs/jestSetupFileAfterEnv.js"

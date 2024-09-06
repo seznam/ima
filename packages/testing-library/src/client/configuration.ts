@@ -1,4 +1,4 @@
-import type { ContextValue, ImaApp } from './types';
+import type { ContextValue, ImaApp } from '../types';
 
 export interface ClientConfiguration {
   /**

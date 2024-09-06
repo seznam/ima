@@ -53,7 +53,7 @@ module.exports = {
   preset: '@ima/testing-library',
   // The preset automatically sets up the moduleNameMapper for the IMA.js application, but you can override it if you need to.
   moduleNameMapper: {
-    'app/main': '<rootDir>/app/main.test.js', // You can tell jest to use a different main file for the tests
+    '^app/main$': '<rootDir>/app/main.test.js', // You can tell jest to use a different main file for the tests
   }
 };
 ```
@@ -63,7 +63,7 @@ module.exports = {
 This configuration should be evaluated in the setup files, or directly in the test files. It's config values are used to initialize the IMA.js application and provide the context for the tests.
 
 ```javascript
-const { setImaTestingLibraryClientConfig } = require('@ima/testing-library');
+const { setImaTestingLibraryClientConfig } = require('@ima/testing-library/client');
 
 setImaTestingLibraryClientConfig({
   // your custom config
