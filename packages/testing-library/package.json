@@ -43,7 +43,7 @@
       "import": "./dist/esm/client/app/main.js",
       "default": "./dist/cjs/client/app/main.js"
     },
-    "./fallback/config/environment": {
+    "./fallback/server/config/environment": {
       "import": "./dist/esm/server/config/environment.js",
       "default": "./dist/cjs/server/config/environment.js"
     },

@@ -22,10 +22,6 @@ export interface ServerConfiguration {
   applicationFolder: string | undefined;
 }
 
-export const FALLBACK_APP_MAIN_PATH = path.resolve(
-  __dirname,
-  '../client/app/main.js'
-);
 export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
 
 const serverConfiguration: ServerConfiguration = resolveDefaultConfiguration();

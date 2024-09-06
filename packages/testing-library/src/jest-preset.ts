@@ -6,7 +6,6 @@ import type { Config } from 'jest';
 import {
   getIMAResponseContent,
   getImaTestingLibraryServerConfig,
-  FALLBACK_APP_MAIN_PATH,
 } from './server';
 
 /**
@@ -36,7 +35,7 @@ const jestConfig: Promise<Config> = (async () => {
     moduleNameMapper: {
       '^app/main$': fs.existsSync(path.resolve('./app/main.js'))
         ? '<rootDir>/app/main'
-        : FALLBACK_APP_MAIN_PATH,
+        : '@ima/testing-library/fallback/app/main',
     },
     testEnvironment: 'jsdom',
     testEnvironmentOptions: {
