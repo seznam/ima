@@ -32,26 +32,32 @@
       "default": "./dist/cjs/index.js"
     },
     "./client": {
+      "types": "./dist/esm/client/index.d.ts",
       "import": "./dist/esm/client/index.js",
       "default": "./dist/cjs/client/index.js"
     },
     "./server": {
+      "types": "./dist/esm/server/index.d.ts",
       "import": "./dist/esm/server/index.js",
       "default": "./dist/cjs/server/index.js"
     },
     "./fallback/app/main": {
+      "types": "./dist/esm/client/app/main.d.ts",
       "import": "./dist/esm/client/app/main.js",
       "default": "./dist/cjs/client/app/main.js"
     },
     "./fallback/server/*": {
+      "types": "./dist/esm/server/*.d.ts",
       "import": "./dist/esm/server/*.js",
       "default": "./dist/cjs/server/*.js"
     },
     "./jest-preset": {
+      "types": "./dist/esm/jest-preset.d.ts",
       "import": "./dist/esm/jest-preset.js",
       "default": "./dist/cjs/jest-preset.js"
     },
     "./jestSetupFileAfterEnv": {
+      "types": "./dist/esm/jestSetupFileAfterEnv.d.ts",
       "import": "./dist/esm/jestSetupFileAfterEnv.js",
       "default": "./dist/cjs/jestSetupFileAfterEnv.js"
     }
