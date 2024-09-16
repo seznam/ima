@@ -110,7 +110,7 @@ describe('metaUtils', () => {
       });
 
       expect(meta).toMatchSnapshot();
-      expect(meta.match(/data-ima-meta/g)).toHaveLength(5);
+      expect(meta.match(/data-ima-meta/g)).toHaveLength(6);
     });
   });
 });
