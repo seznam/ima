@@ -76,6 +76,13 @@ describe('metaUtils', () => {
                 'data-custom-attr': 'custom-attribute',
               },
             ],
+            [
+              '"><script>alert(1)</script>',
+              {
+                content: '"><script>alert(1)</script>',
+                'data-custom-attr': 'custom-attribute',
+              },
+            ],
           ]).entries()
         ),
         getMetaPropertiesIterator: jest.fn().mockReturnValue(

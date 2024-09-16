@@ -78,13 +78,14 @@ function _getMetaTags(iterator, tagName, keyName) {
 
     for (let [attrName, attrValue] of Object.entries(attributes)) {
       const sanitizedAttrValue = sanitizeValue(attrValue);
+      const sannitizedAttrName = sanitizeValue(attrName);
 
       // Skip empty values
-      if (sanitizedAttrValue === null) {
+      if (sanitizedAttrValue === null || sannitizedAttrName === null) {
         continue;
       }
 
-      tagParts.push(`${attrName}="${sanitizedAttrValue}"`);
+      tagParts.push(`${sannitizedAttrName}="${sanitizedAttrValue}"`);
     }
 
     tagParts.push('/>');
