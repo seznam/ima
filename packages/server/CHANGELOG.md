@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.2
+
+### Patch Changes
+
+- 2411b9920: The meta attribute names are also sanitized.
+
 ## 19.4.1
 
 ### Patch Changes
