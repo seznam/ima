@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TARGET_WEB_URL="http://localhost:3001/"
+PARALLEL_TEST_CONNECTIONS=300
+
 # Add customized environment configuration
 mv server/config/environment.js server/config/environment.orig.js
 cp "$ROOT_DIR_IMA/utils/tests/app/environment.js" server/config/environment.js

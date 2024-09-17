@@ -2,6 +2,6 @@ const defaultConfig = require('../../jest.config.base.js');
 
 module.exports = {
   ...defaultConfig,
-  testEnvironment: 'jsdom',
+  preset: '@ima/testing-library',
   testRegex: '(/__tests__/).*Spec\\.[jt]s$',
 };

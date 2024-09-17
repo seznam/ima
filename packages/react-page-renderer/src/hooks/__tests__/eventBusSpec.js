@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useEventBus } from '../eventBus';
 
 describe('useEventBus', () => {
@@ -19,7 +19,7 @@ describe('useEventBus', () => {
   });
 
   it('should return `fire` callback', () => {
-    mountHook(() => {
+    renderHook(() => {
       const ref = React.createRef(null);
 
       result = useEventBus(ref, 'event', () => {});

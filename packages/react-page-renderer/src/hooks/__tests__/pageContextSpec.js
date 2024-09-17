@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { usePageContext } from '../pageContext';
 
 describe('usePageContext', () => {
@@ -9,7 +9,7 @@ describe('usePageContext', () => {
   };
 
   it('should return pageContext', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = usePageContext();
     }, contextMock);
 

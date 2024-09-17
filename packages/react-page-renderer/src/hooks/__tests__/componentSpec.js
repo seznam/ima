@@ -1,13 +1,13 @@
-import { shallow } from 'enzyme';
+import { renderWithContext } from '@ima/testing-library';
 
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useComponent, useOnce } from '../component';
 
 describe('useComponent', () => {
   let result;
 
   it('should return object of component utility functions', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useComponent();
     }, {});
 
@@ -29,24 +29,23 @@ describe('useComponent', () => {
 });
 
 describe('useOnce', () => {
-  let wrapper;
-
-  it('should call callback only once', () => {
+  it('should call callback only once', async () => {
     let count = 0;
 
     const TestComponent = () => {
       useOnce(() => count++);
 
-      return null;
+      return <div>NotEmpty</div>;
     };
 
-    wrapper = shallow(<TestComponent />);
+    const { container, rerender } = await renderWithContext(<TestComponent />);
 
-    wrapper.setProps({});
-    wrapper.setProps({});
-    wrapper.setProps({});
-    wrapper.setProps({});
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
+    rerender(<TestComponent />);
 
+    expect(container).not.toBeEmptyDOMElement();
     expect(count).toBe(1);
   });
 });

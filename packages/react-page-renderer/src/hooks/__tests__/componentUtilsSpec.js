@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useComponentUtils } from '../componentUtils';
 
 describe('useComponentUtils', () => {
@@ -6,7 +6,7 @@ describe('useComponentUtils', () => {
   let contextMock = { $Utils: { CustomContextHelper: {} } };
 
   it('should return componentUtils', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useComponentUtils();
     }, contextMock);
 

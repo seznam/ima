@@ -1,9 +1,7 @@
 module.exports = {
   bail: true,
-  testEnvironment: 'node',
+  preset: '@ima/testing-library',
   modulePaths: ['<rootDir>/'],
-  setupFiles: ['@ima/core/setupJest.js', '<rootDir>/setupJest.js'],
-  snapshotSerializers: ['enzyme-to-json/serializer'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
@@ -15,6 +13,9 @@ module.exports = {
       '@swc/jest',
       {
         jsc: {
+          experimental: {
+            plugins: [['swc_mut_cjs_exports', {}]],
+          },
           parser: {
             syntax: 'ecmascript',
             jsx: true,
@@ -31,6 +32,9 @@ module.exports = {
       '@swc/jest',
       {
         jsc: {
+          experimental: {
+            plugins: [['swc_mut_cjs_exports', {}]],
+          },
           parser: {
             syntax: 'typescript',
             tsx: true,

@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { render } from '@ima/testing-library';
 
 import { PageContext } from './PageContext';
 
@@ -9,17 +9,17 @@ import { PageContext } from './PageContext';
  * @param {object} props
  * @returns {ReactWrapper}
  */
-function mountHook(callback, context = {}, props = {}) {
+function renderHook(callback, context = {}, props = {}) {
   const TestHookComponent = ({ __callback__ }) => {
     __callback__();
     return null;
   };
 
-  return mount(
+  return render(
     <PageContext.Provider value={context}>
       <TestHookComponent __callback__={callback} {...props} />
     </PageContext.Provider>
   );
 }
 
-export { mountHook };
+export { renderHook };

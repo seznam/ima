@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useWindowEvent } from '../windowEvent';
 
 describe('useWindowEvent', () => {
@@ -29,7 +29,7 @@ describe('useWindowEvent', () => {
   });
 
   it('should return window and utility functions', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useWindowEvent('custom-target', 'custom-event', jest.fn());
 
       expect(result).toMatchInlineSnapshot(`
@@ -47,7 +47,7 @@ describe('useWindowEvent', () => {
   it('should bind events correctly', () => {
     let cb = jest.fn();
 
-    mountHook(() => {
+    renderHook(() => {
       result = useWindowEvent('custom-target', 'custom-event', cb, true);
 
       expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(

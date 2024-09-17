@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useLocalize } from '../localize';
 
 describe('useLocalize', () => {
@@ -12,7 +12,7 @@ describe('useLocalize', () => {
   };
 
   it('should return shortcut to $Dictionary.get function', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useLocalize();
     }, contextMock);
 

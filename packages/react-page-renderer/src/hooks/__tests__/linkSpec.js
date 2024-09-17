@@ -1,4 +1,4 @@
-import { mountHook } from '../../testUtils';
+import { renderHook } from '../../testUtils';
 import { useLink } from '../link';
 
 describe('useLink', () => {
@@ -12,7 +12,7 @@ describe('useLink', () => {
   };
 
   it('should return shortcut to router link', () => {
-    mountHook(() => {
+    renderHook(() => {
       result = useLink();
     }, contextMock);
 
