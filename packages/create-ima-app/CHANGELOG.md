@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.2.0
+
+### Minor Changes
+
+- 03d109ad6: Use `@ima/testing-library` instead of `enzyme` by default.
+
 ## 19.1.2
 
 ### Patch Changes

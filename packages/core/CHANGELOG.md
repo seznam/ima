@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.3
+
+### Patch Changes
+
+- 03d109ad6: Fix some typing errors.
+
 ## 19.5.2
 
 ### Patch Changes
