@@ -27,6 +27,8 @@ export async function initImaApp(): Promise<ImaApp> {
 
   const config = getImaTestingLibraryClientConfig();
 
+  await config.beforeInitImaApp();
+
   // Init language files
   // This must be initialized before oc.get('$Dictionary').init() is called (usualy part of initServices)
   await generateDictionary();
@@ -91,7 +93,13 @@ async function renderWithContext(
 
   const wrapper = await getContextWrapper(contextValue);
 
+  const config = getImaTestingLibraryClientConfig();
+
+  await config.beforeRenderWithContext({ app, contextValue });
+
   const result = render(ui, { ...rest, wrapper });
+
+  await config.afterRenderWithContext({ app, contextValue, ...result });
 
   return {
     ...result,

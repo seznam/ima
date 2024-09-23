@@ -1,4 +1,4 @@
-import type { ContextValue, ImaApp } from '../types';
+import type { ContextValue, ImaApp, ImaRenderResult } from '../types';
 
 export interface ClientConfiguration {
   /**
@@ -10,22 +10,41 @@ export interface ClientConfiguration {
    */
   rootDir: string;
   /**
+   * The function that will be called before the IMA application is initialized.
+   */
+  beforeInitImaApp: () => void | Promise<void>;
+  /**
    * The function that will be called after the IMA application is initialized.
    */
-  afterInitImaApp: (app: ImaApp) => void;
+  afterInitImaApp: (app: ImaApp) => void | Promise<void>;
   /**
    * The function that will be called after the context value is created.
    */
-  getContextValue: (app: ImaApp) => ContextValue;
+  getContextValue: (app: ImaApp) => ContextValue | Promise<ContextValue>;
+  beforeRenderWithContext: ({
+    app,
+    contextValue,
+  }: {
+    app: ImaApp | null;
+    contextValue: ContextValue;
+  }) => void | Promise<void>;
+  afterRenderWithContext: ({
+    app,
+    contextValue,
+    ...result
+  }: ImaRenderResult) => void | Promise<void>;
 }
 
 const clientConfiguration: ClientConfiguration = {
   useFakeDictionary: true,
   rootDir: process.cwd(),
+  beforeInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
   afterInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
   getContextValue: app => ({
     $Utils: app.oc.get('$ComponentUtils').getUtils(),
   }),
+  beforeRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  afterRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 };
 
 /**
