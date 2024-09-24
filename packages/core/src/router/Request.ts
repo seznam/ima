@@ -90,5 +90,9 @@ export class Request {
   getIPs(): string[] {
     return this._request ? this._request.ips || [] : [];
   }
+
+  getMethod() {
+    return this._request ? this._request.method : '';
+  }
 }
 // @endif
