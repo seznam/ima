@@ -23,7 +23,7 @@ but to make this tutorial simpler, we're going to replace contents of this file 
 ```javascript
 import { AbstractController } from '@ima/core';
 
-export default class HomeController extends AbstractController {
+export class HomeController extends AbstractController {
   static get $dependencies() {
     return [];
   }
@@ -243,6 +243,8 @@ Put the following code into the `Post.jsx` file:
 ```jsx
 import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
+import './post.less';
+
 
 export default class Post extends AbstractComponent {
   render() {

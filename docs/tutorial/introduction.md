@@ -85,8 +85,7 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 
 All files that are specific to our application are located in the `app`,
 directory. The `package.json` file provides the `npm`  tool with information
-about the dependencies of our application, `gulpConfig.js` configures our gulp tasks (such as LESS file processing), and, finally,
-the `gulpfile.js` loads the tasks we can run using the `gulp` tool.
+about the dependencies of our application.
 
 You may have also noticed the `doc`, `build` and `server` directories *(some of these folders may not be visible until they are generated in the first call of `npm run dev` or `npm run build`)*.
  - The `doc` directory contains the documentation for IMA.js APIs and our application
