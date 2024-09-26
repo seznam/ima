@@ -25,7 +25,7 @@ with 2 new state keys:
 ```javascript
 constructor(props, context) {
   super(props, context);
-
+  ...
   this.state = {
     author: '',
     content: '',
@@ -128,7 +128,7 @@ _onSubmit(event) {
     return;
   }
 
-  this.fire('postSubmitted', {
+  this.fire(this.#containerRef.current, 'postSubmitted', {
     author: this.state.author,
     content: this.state.content
   });
@@ -181,7 +181,7 @@ Next we need to update the `getEntityList()` method in the **post resource** cla
 
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/static/public/posts.json', {})
   .then(response => {
     response.body.forEach(post => (post.isSaved = true));
     return response.body;
@@ -347,7 +347,7 @@ Nothing really new here, we're just adding the `post-pending` CSS class on our
 post's root element if the post is not saved yet.
 
 Open the post's style file (`app/component/post/post.less`) and add the
-following the content:
+following content:
 
 ```scss
 .post-pending .card-body {
@@ -731,7 +731,7 @@ With this issue taken care of, let's resolve the posts refresh race condition.
 ### Posts refresh race condition
 
 To fix our refresh race condition, we'll envelope the server responses and add a timestamp at which
-the response has been generated. Open the `app/assets/static/api/posts.json`
+the response has been generated. Open the `app/public/posts.json`
 file and update its contents as follows:
 
 ```json
@@ -806,7 +806,7 @@ Next update the `getEntityList()` method of the post resource
 
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/static/public/posts.json', {})
   .then(response => {
     response.body.posts.forEach(post => (post.isSaved = true));
 

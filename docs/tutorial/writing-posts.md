@@ -68,14 +68,33 @@ those input to the state of our `PostingForm` component.
 We can't forget to define the default state for these two keys:
 
 ```javascript
+#containerRef;
 constructor(props, context) {
   super(props, context);
-
+  this.#containerRef = createRef();
   this.state = {
     author: '',
     content: ''
   };
 }
+```
+
+Import the `createRef` from React to the
+beginning of the file:
+
+```javascript
+import { createRef } from 'react';
+```
+
+...and add `ref={this.#containerRef}` to the first `div` in the the component:
+
+```javascript
+...
+render() {
+    return (
+      <div className='posting-form card' ref={this.#containerRef}>
+        <form action='' method='post' onSubmit={e => this._onSubmit(e)}>
+          ...
 ```
 
 This adds some internal state to our form component, which we'll maintain
@@ -100,7 +119,7 @@ The only thing that remains is to define the `_onSubmit()` in our component:
 _onSubmit(event) {
   event.preventDefault();
 
-  this.fire('postSubmitted', {
+  this.fire(this.#containerRef.current, 'postSubmitted', {
     author: this.state.author,
     content: this.state.content
   });
@@ -174,7 +193,7 @@ Now add the following method for creating new posts to the post resource
 ```javascript
 createPost(postData) {
   return this._http
-    .post('http://localhost:3001/static/api/posts.json', postData)
+    .post('http://localhost:3001/static/static/public/posts.json', postData)
     .then(response => this._factory.createEntity(response.body));
 }
 ```

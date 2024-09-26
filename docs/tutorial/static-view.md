@@ -20,6 +20,7 @@ Now let's replace the contents of the file with a blank view:
 ```jsx
 import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
+import './homeView.less';
 
 export class HomeView extends AbstractComponent {
   static get contextType() {
@@ -210,14 +211,14 @@ This will save us a lot of effort with styling our UI.
 #### Defining custom styles
 
 Let's write some CSS to make our guestbook look even better. Open the
-`app/assets/less/setting.less` file and add the following code to set up our
+`app/less/globals.less` file and add the following code to set up our
 layout configuration:
 
 ```scss
 @post-author-alignment: right;
 ```
 
-Next open the `app/assets/less/base.less` file and add the following code below the existing one:
+Next open the `app/less/app.less` file and add the following code below the existing one:
 
 ```scss
 form {
