@@ -36,7 +36,7 @@ function Component({ children }) {
   return <div>{localize('my.translation.key')} {children}</div>;
 }
 
-test('renders learn react link', async () => {
+test('renders component with localized string', async () => {
   const { getByText } = await renderWithContext(<Component>My Text</Component>);
   const textElement = getByText(/My Text/i);
 
@@ -57,7 +57,7 @@ async function getContextValue(app?: ImaApp): Promise<ContextValue>
 Example usage:
 
 ```javascript
-test('renders learn react link with custom context value', async () => {
+test('renders component with custom context value', async () => {
   const contextValue = await getContextValue(); // Generate default context value
 
   contextValue.$Utils.$Foo = jest.fn(() => 'bar'); // Mock some part of the context
@@ -80,7 +80,7 @@ async function initImaApp(): Promise<ImaApp>
 `initImaApp` is a helper function that initializes the IMA.js app.
 
 ```javascript
-test('renders learn react link with custom app configuration', async () => {
+test('renders component with custom app configuration', async () => {
   const app = await initImaApp(); // Initialize the app
 
   app.oc.get('$Utils').$Foo = jest.fn(() => 'bar'); // Mock some part of the app
@@ -159,7 +159,7 @@ beforeAll(() => {
   });
 });
 
-test('renders learn react link with custom app configuration', async () => {
+test('renders component with custom app configuration', async () => {
   const { getByText } = await renderWithContext(<Component>My Text</Component>);
   const textElement = getByText(/My Text/i);
 
@@ -190,7 +190,7 @@ afterEach(() => {
   initSettings = () => {}; // Reset the plugin loader so it is not called for other tests
 });
 
-test('renders learn react link with custom app configuration', async () => {
+test('renders component with custom app configuration', async () => {
   initSettings = () => {
     return {
       prod: {
