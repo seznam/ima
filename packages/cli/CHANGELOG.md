@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.7.1
+
+### Patch Changes
+
+- 029b480a7: Fixed @swc/core minimizer config
+
 ## 19.7.0
 
 ### Minor Changes
