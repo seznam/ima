@@ -305,6 +305,7 @@ export default async (
           minify: TerserPlugin.swcMinify,
           terserOptions: {
             ecma: isServer || isClientES ? 2020 : 2018,
+            module: true,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
