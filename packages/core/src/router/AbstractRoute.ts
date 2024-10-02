@@ -6,7 +6,9 @@ import { OCAliasMap } from '../config/bind';
 import { Controller } from '../controller/Controller';
 import { GenericError } from '../error/GenericError';
 
-export type RouteParams = {
+export type RouteParams<T = {}> = Partial<{
+  [K in keyof T]: T[K];
+}> & {
   [key: string]: string | GenericError;
 };
 
