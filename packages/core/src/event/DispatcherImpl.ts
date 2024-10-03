@@ -15,6 +15,12 @@ const EMPTY_MAP: Readonly<Map<DispatcherListener<any>, Set<unknown>>> =
  */
 const EMPTY_SET = Object.freeze(new Set());
 
+export const EVENT_TYPE = {
+  APP: 'app',
+  PAGE: 'page',
+  NONE: 'none',
+};
+
 /**
  * Default implementation of the {@link Dispatcher} interface.
  */
@@ -22,6 +28,13 @@ export class DispatcherImpl extends Dispatcher {
   protected _eventListeners: Map<
     string,
     Map<DispatcherListener<any>, Set<unknown>>
+  >;
+  protected _firedEvents: Map<
+    string,
+    {
+      eventType: string;
+      data: unknown;
+    }
   >;
 
   static $dependencies: Dependencies = [];
@@ -38,6 +51,7 @@ export class DispatcherImpl extends Dispatcher {
      * the event.
      */
     this._eventListeners = new Map();
+    this._firedEvents = new Map();
   }
 
   /**
@@ -45,6 +59,49 @@ export class DispatcherImpl extends Dispatcher {
    */
   clear(): this {
     this._eventListeners.clear();
+    this._firedEvents.clear();
+
+    return this;
+  }
+
+  clearPageEvents(): this {
+    this._firedEvents.forEach((value, key) => {
+      if (value.eventType === EVENT_TYPE.PAGE) {
+        this._firedEvents.delete(key);
+      }
+    });
+
+    return this;
+  }
+
+  xlisten(
+    event: string,
+    listener: DispatcherListener<any>,
+    scope?: unknown
+  ): this {
+    if ($Debug) {
+      if (typeof listener !== 'function') {
+        throw new GenericError(
+          `The listener must be a function, ${listener} provided.`
+        );
+      }
+    }
+
+    if (!this._eventListeners.has(event)) {
+      this._createNewEvent(event);
+    }
+
+    const listeners = this._getListenersOf(event);
+
+    if (!listeners.has(listener)) {
+      this._createNewListener(event, listener);
+    }
+
+    this._getScopesOf(event, listener).add(scope);
+
+    if (this._firedEvents.has(event)) {
+      listener.bind(scope)(this._firedEvents.get(event)?.data);
+    }
 
     return this;
   }
@@ -123,7 +180,12 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
-  fire(event: string, data: any, imaInternalEvent = false): this {
+  fire(
+    event: string,
+    data: any,
+    imaInternalEvent = false,
+    eventType = EVENT_TYPE.NONE
+  ): this {
     const listeners = this._getListenersOf(event);
 
     if (!listeners?.size && !imaInternalEvent) {
@@ -141,6 +203,9 @@ export class DispatcherImpl extends Dispatcher {
         listener.bind(scope)(data);
       }
     }
+
+    eventType !== EVENT_TYPE.NONE &&
+      this._firedEvents.set(event, { eventType, data });
 
     return this;
   }

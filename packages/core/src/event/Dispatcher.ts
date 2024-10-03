@@ -116,7 +116,8 @@ export abstract class Dispatcher {
   fire<E extends keyof DispatcherEventsMap>(
     event: E,
     data: DispatcherEventsMap[E],
-    imaInternalEvent?: boolean
+    imaInternalEvent?: boolean,
+    eventType?: string
   ): this;
   fire(event: string, data: any, imaInternalEvent?: boolean): this;
   fire(event: string, data: any, imaInternalEvent?: boolean): this {

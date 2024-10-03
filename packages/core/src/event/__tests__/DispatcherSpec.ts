@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { DispatcherImpl } from '../DispatcherImpl';
+import { DispatcherImpl, EVENT_TYPE } from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {
   const handlers = {
@@ -183,6 +183,86 @@ describe('ima.core.event.DispatcherImpl', () => {
       dispatcher.clear();
 
       expect(dispatcher['_eventListeners'].size).toBe(0);
+    });
+  });
+
+  describe('brekeke', () => {
+    it('should work', () => {
+      jest.restoreAllMocks();
+
+      const event = 'prefired';
+      dispatcher.fire(event, { mrkev: true }, false, EVENT_TYPE.PAGE);
+
+      const listener = jest.fn();
+
+      // original listen => wont catch events fired before listen
+      dispatcher.listen(event, listener);
+      expect(listener).not.toHaveBeenCalled();
+
+      // xlisten => will catch events fired before listen
+      dispatcher.xlisten(event, listener);
+      expect(listener).toHaveBeenCalledWith({ mrkev: true });
+
+      // same event fired again => works normal
+      dispatcher.fire(event, { chleba: false });
+      expect(listener).toHaveBeenCalledWith({ chleba: false });
+
+      // xlisten wont create new listener, if listen was already called
+      expect(dispatcher['_eventListeners'].size).toBe(1);
+
+      dispatcher.clear();
+    });
+
+    it('should work too', () => {
+      jest.restoreAllMocks();
+
+      const event = 'prefired';
+      dispatcher.fire(event, { mrkev: true });
+
+      const listener = jest.fn();
+
+      // normal event have no history
+      dispatcher.xlisten(event, listener);
+      expect(listener).not.toHaveBeenCalled();
+
+      dispatcher.clear();
+
+      dispatcher.fire(event, { mrkev: true }, false, EVENT_TYPE.PAGE);
+
+      // page event will be fired
+      dispatcher.xlisten(event, listener);
+      expect(listener).toHaveBeenCalledWith({ mrkev: true });
+
+      dispatcher.clearPageEvents();
+      dispatcher.unlisten(event, listener);
+      listener.mockClear();
+      expect(dispatcher['_eventListeners'].size).toBe(0);
+
+      // page event was cleared
+      dispatcher.xlisten(event, listener);
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('should work three', () => {
+      jest.restoreAllMocks();
+
+      const event = 'prefired';
+      const listener = jest.fn();
+
+      dispatcher.fire(event, { mrkev: true }, false, EVENT_TYPE.APP);
+
+      // app event will be fired
+      dispatcher.xlisten(event, listener);
+      expect(listener).toHaveBeenCalledWith({ mrkev: true });
+
+      dispatcher.clearPageEvents();
+      dispatcher.unlisten(event, listener);
+      listener.mockClear();
+      expect(dispatcher['_eventListeners'].size).toBe(0);
+
+      // app event will be cleared only using dispatcher.clear()
+      dispatcher.xlisten(event, listener);
+      expect(listener).toHaveBeenCalledWith({ mrkev: true });
     });
   });
 });
