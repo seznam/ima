@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.5.4
+
+### Patch Changes
+
+- 7453e0599: feat: add `getMethod` method to `Request` class
+- 864bfe2d3: fix: route params
+
 ## 19.5.3
 
 ### Patch Changes
