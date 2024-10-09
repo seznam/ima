@@ -1,4 +1,9 @@
-import { Dispatcher, DispatcherListener } from './Dispatcher';
+import {
+  Dispatcher,
+  DispatcherEventsMap,
+  DispatcherListener,
+  DispatcherListenerAll,
+} from './Dispatcher';
 import { GenericError } from '../error/GenericError';
 import { Dependencies } from '../oc/ObjectContainer';
 
@@ -15,12 +20,6 @@ const EMPTY_MAP: Readonly<Map<DispatcherListener<any>, Set<unknown>>> =
  */
 const EMPTY_SET = Object.freeze(new Set());
 
-export const EVENT_TYPE = {
-  APP: 'app',
-  PAGE: 'page',
-  NONE: 'none',
-};
-
 /**
  * Default implementation of the {@link Dispatcher} interface.
  */
@@ -29,13 +28,8 @@ export class DispatcherImpl extends Dispatcher {
     string,
     Map<DispatcherListener<any>, Set<unknown>>
   >;
-  protected _firedEvents: Map<
-    string,
-    {
-      eventType: string;
-      data: unknown;
-    }
-  >;
+
+  protected _eventListenersAll: Map<DispatcherListenerAll<any>, Set<unknown>>;
 
   static $dependencies: Dependencies = [];
 
@@ -51,7 +45,7 @@ export class DispatcherImpl extends Dispatcher {
      * the event.
      */
     this._eventListeners = new Map();
-    this._firedEvents = new Map();
+    this._eventListenersAll = new Map();
   }
 
   /**
@@ -59,49 +53,6 @@ export class DispatcherImpl extends Dispatcher {
    */
   clear(): this {
     this._eventListeners.clear();
-    this._firedEvents.clear();
-
-    return this;
-  }
-
-  clearPageEvents(): this {
-    this._firedEvents.forEach((value, key) => {
-      if (value.eventType === EVENT_TYPE.PAGE) {
-        this._firedEvents.delete(key);
-      }
-    });
-
-    return this;
-  }
-
-  xlisten(
-    event: string,
-    listener: DispatcherListener<any>,
-    scope?: unknown
-  ): this {
-    if ($Debug) {
-      if (typeof listener !== 'function') {
-        throw new GenericError(
-          `The listener must be a function, ${listener} provided.`
-        );
-      }
-    }
-
-    if (!this._eventListeners.has(event)) {
-      this._createNewEvent(event);
-    }
-
-    const listeners = this._getListenersOf(event);
-
-    if (!listeners.has(listener)) {
-      this._createNewListener(event, listener);
-    }
-
-    this._getScopesOf(event, listener).add(scope);
-
-    if (this._firedEvents.has(event)) {
-      listener.bind(scope)(this._firedEvents.get(event)?.data);
-    }
 
     return this;
   }
@@ -133,6 +84,29 @@ export class DispatcherImpl extends Dispatcher {
     }
 
     this._getScopesOf(event, listener).add(scope);
+
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  listenAll(listener: DispatcherListenerAll<any>, scope?: unknown) {
+    if ($Debug) {
+      if (typeof listener !== 'function') {
+        throw new GenericError(
+          `The listener must be a function, ${listener} provided.`
+        );
+      }
+    }
+
+    if (!this._eventListenersAll.has(listener)) {
+      const scopes = new Set();
+
+      this._eventListenersAll.set(listener, scopes);
+    }
+
+    this._eventListenersAll.get(listener)?.add(scope);
 
     return this;
   }
@@ -177,14 +151,40 @@ export class DispatcherImpl extends Dispatcher {
     return this;
   }
 
+  unlistenAll(listener: DispatcherListenerAll<any>, scope?: unknown) {
+    const scopes = this._eventListenersAll.get(listener) ?? EMPTY_SET;
+
+    if ($Debug) {
+      if (!scopes.has(scope)) {
+        console.warn(
+          'ima.core.event.DispatcherImpl.unlistenAll(): the provided ' +
+            `listener '${listener}' is not registered for` +
+            `scope '${scope}'. Check ` +
+            `your workflow.`,
+          {
+            listener: listener,
+            scope: scope,
+          }
+        );
+      }
+    }
+
+    scopes.delete(scope);
+
+    if (!scopes.size) {
+      this._eventListenersAll.delete(listener);
+    }
+
+    return this;
+  }
+
   /**
    * @inheritDoc
    */
-  fire(
-    event: string,
+  fire<E extends string | keyof DispatcherEventsMap>(
+    event: E,
     data: any,
-    imaInternalEvent = false,
-    eventType = EVENT_TYPE.NONE
+    imaInternalEvent = false
   ): this {
     const listeners = this._getListenersOf(event);
 
@@ -204,8 +204,11 @@ export class DispatcherImpl extends Dispatcher {
       }
     }
 
-    eventType !== EVENT_TYPE.NONE &&
-      this._firedEvents.set(event, { eventType, data });
+    for (const [listener, scopes] of this._eventListenersAll.entries()) {
+      for (const scope of scopes) {
+        listener.bind(scope)(event, data);
+      }
+    }
 
     return this;
   }

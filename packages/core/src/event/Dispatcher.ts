@@ -10,6 +10,10 @@ export interface DispatcherEventsMap
     RouterDispatcherEvents,
     PageRendererDispatcherEvents {}
 export type DispatcherListener<D> = (data: D) => void;
+export type DispatcherListenerAll<D> = (
+  event: keyof DispatcherEventsMap | string,
+  data: D
+) => void;
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -65,6 +69,32 @@ export abstract class Dispatcher {
   }
 
   /**
+   * Registers the provided event listener to be executed when the specified
+   * event is fired on this dispatcher.
+   *
+   * When the specified event is fired, the event listener will be executed
+   * with the data passed with the event as the first argument.
+   *
+   * The order in which the event listeners will be executed is unspecified
+   * and should not be relied upon. Registering the same listener for the
+   * same event and with the same scope multiple times has no effect.
+   *
+   * @param event The name of the event to listen for.
+   * @param listener The event listener to register.
+   * @param scope The object to which the `this` keyword
+   *        will be bound in the event listener.
+   * @return This dispatcher.
+   */
+  listenAll<E extends keyof DispatcherEventsMap>(
+    listener: DispatcherListenerAll<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  listenAll(listener: DispatcherListenerAll<any>, scope?: unknown): this;
+  listenAll(listener: DispatcherListenerAll<any>, scope?: unknown): this {
+    return this;
+  }
+
+  /**
    * Deregisters the provided event listener, so it will no longer be
    * executed with the specified scope when the specified event is fired.
    *
@@ -90,6 +120,26 @@ export abstract class Dispatcher {
     listener: DispatcherListener<any>,
     scope?: unknown
   ): this {
+    return this;
+  }
+
+  /**
+   * Deregisters the provided event listener, so it will no longer be
+   * executed with the specified scope when the specified event is fired.
+   *
+   * @param event The name of the event for which the listener
+   *        should be deregistered.
+   * @param listener The event listener to deregister.
+   * @param scope The object to which the `this` keyword
+   *        would be bound in the event listener.
+   * @return This dispatcher.
+   */
+  unlistenAll<E extends keyof DispatcherEventsMap>(
+    listener: DispatcherListenerAll<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  unlistenAll(listener: DispatcherListenerAll<any>, scope?: unknown): this;
+  unlistenAll(listener: DispatcherListenerAll<any>, scope?: unknown): this {
     return this;
   }
 
