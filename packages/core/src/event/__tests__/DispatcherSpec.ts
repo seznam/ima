@@ -157,22 +157,6 @@ describe('ima.core.event.DispatcherImpl', () => {
       expect(handler2Spy).toHaveBeenCalledWith(data);
     });
 
-    it('should show warning for none listeners', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
-
-      dispatcher.fire(event, data);
-
-      expect(console.warn).toHaveBeenCalled();
-    });
-
-    it('should not show warning for $IMA internal event', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
-
-      dispatcher.fire(event, data, true);
-
-      expect(console.warn).not.toHaveBeenCalled();
-    });
-
     it('should fire event for all handlers', () => {
       const handler1Spy = jest.spyOn(handlers, 'handler1');
       const handler2Spy = jest.spyOn(handlers, 'handler2');
@@ -192,8 +176,8 @@ describe('ima.core.event.DispatcherImpl', () => {
 
       dispatcher.fire(event, data);
 
-      expect(handler1Spy).toHaveBeenCalledWith(data);
-      expect(handler2Spy).toHaveBeenCalledWith(data);
+      expect(handler1Spy).toHaveBeenCalledWith(event, data);
+      expect(handler2Spy).toHaveBeenCalledWith(event, data);
     });
   });
 

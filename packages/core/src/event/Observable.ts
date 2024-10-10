@@ -4,11 +4,13 @@ import {
   DispatcherListener,
 } from './Dispatcher';
 import { Dependencies } from '../oc/ObjectContainer';
+import { RouterEvents } from '../router/RouterEvents';
 
 export class Observable {
   protected _dispatcher: Dispatcher;
   protected _observers: Map<string, Map<DispatcherListener<any>, Set<unknown>>>;
   protected _activityHistory: Map<string, unknown>;
+  protected _pageResetEvents: Set<string>;
 
   static $dependencies: Dependencies = ['$Dispatcher'];
 
@@ -16,6 +18,7 @@ export class Observable {
     this._dispatcher = dispatcher;
     this._observers = new Map();
     this._activityHistory = new Map();
+    this._pageResetEvents = new Set();
   }
 
   init() {
@@ -29,6 +32,11 @@ export class Observable {
   clear() {
     this._observers.clear();
     this._activityHistory.clear();
+    this._pageResetEvents.clear();
+  }
+
+  registerPageReset(event: keyof DispatcherEventsMap | string) {
+    this._pageResetEvents.add(event);
   }
 
   subscribe(
@@ -76,6 +84,12 @@ export class Observable {
   }
 
   _handleDispatcherEvent(event: string, data: any) {
+    if (event === RouterEvents.BEFORE_HANDLE_ROUTE) {
+      for (const pageResetEvent of this._pageResetEvents) {
+        this._activityHistory.delete(pageResetEvent);
+      }
+    }
+
     this._activityHistory.set(event, data);
 
     if (!this._observers.has(event)) {

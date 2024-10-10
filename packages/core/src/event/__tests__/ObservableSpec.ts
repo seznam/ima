@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import { RouterEvents } from '../../router/RouterEvents';
 import { DispatcherImpl } from '../DispatcherImpl';
 import { Observable } from '../Observable';
 
@@ -90,5 +91,21 @@ describe('ima.core.event.Observable', () => {
       expect(observer).not.toHaveBeenCalled();
       expect(observable['_observers'].get(event)?.size).toBe(0);
     });
+  });
+
+  it('should reset page events', () => {
+    observable.registerPageReset(event);
+    dispatcher.fire(event, eventData);
+    dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, { bhr: true });
+
+    const eventObserver = jest.fn();
+    observable.subscribe(event, eventObserver);
+
+    expect(eventObserver).not.toHaveBeenCalledWith(eventData);
+
+    const bhrObserver = jest.fn();
+    observable.subscribe(RouterEvents.BEFORE_HANDLE_ROUTE, bhrObserver);
+
+    expect(bhrObserver).toHaveBeenCalledWith({ bhr: true });
   });
 });

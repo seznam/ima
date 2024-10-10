@@ -183,20 +183,9 @@ export class DispatcherImpl extends Dispatcher {
    */
   fire<E extends string | keyof DispatcherEventsMap>(
     event: E,
-    data: any,
-    imaInternalEvent = false
+    data: any
   ): this {
     const listeners = this._getListenersOf(event);
-
-    if (!listeners?.size && !imaInternalEvent) {
-      console.warn(
-        `There are no event listeners registered for the ${event} ` + `event`,
-        {
-          event: event,
-          data: data,
-        }
-      );
-    }
 
     for (const [listener, scopes] of listeners) {
       for (const scope of scopes) {
