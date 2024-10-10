@@ -24,6 +24,12 @@ const jestConfig: Promise<Config> = (async () => {
     // Some async errors are swallowed by jest, so we need to log them manually and throw a safe error
     console.error(error.stack ?? error);
 
+    if (error.cause) {
+      // eslint-disable-next-line no-console
+      console.log(); // Empty line to avoid stacking with the error above
+      console.error(error.cause.stack ?? error.cause);
+    }
+
     throw new Error(
       'Failed to get IMA response content. Check the error above.'
     );

@@ -47,5 +47,18 @@ export async function getIMAResponseContent(): Promise<string> {
     }
   );
 
+  if (response.status !== 200) {
+    throw new Error(
+      `Failed to generate HTML content for JSDOM template (status: ${response.status}).`,
+      {
+        cause:
+          response.error ||
+          new Error(
+            `This should not happen, file an issue with @ima/testing-library if you are seeing this.`
+          ),
+      }
+    );
+  }
+
   return response.content;
 }
