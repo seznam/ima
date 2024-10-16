@@ -1,6 +1,6 @@
 {
   "name": "@ima/testing-library",
-  "version": "19.9.0",
+  "version": "19.10.0",
   "description": "Testing library for IMA.js applications.",
   "keywords": [
     "IMA.js",
