@@ -4,12 +4,13 @@ import {
   DispatcherListener,
 } from './Dispatcher';
 import { Dependencies } from '../oc/ObjectContainer';
+import { RendererEvents } from '../page/renderer/RendererEvents';
 import { RouterEvents } from '../router/RouterEvents';
 
 export class Observable {
   protected _dispatcher: Dispatcher;
   protected _observers: Map<string, Map<DispatcherListener<any>, Set<unknown>>>;
-  protected _activityHistory: Map<string, unknown>;
+  protected _activityHistory: Map<string, unknown[]>;
   protected _pageResetEvents: Set<string>;
 
   static $dependencies: Dependencies = ['$Dispatcher'];
@@ -19,6 +20,8 @@ export class Observable {
     this._observers = new Map();
     this._activityHistory = new Map();
     this._pageResetEvents = new Set();
+
+    this.clear();
   }
 
   init() {
@@ -33,6 +36,14 @@ export class Observable {
     this._observers.clear();
     this._activityHistory.clear();
     this._pageResetEvents.clear();
+
+    Object.values(RouterEvents).forEach(event =>
+      this._pageResetEvents.add(event)
+    );
+
+    Object.values(RendererEvents).forEach(event =>
+      this._pageResetEvents.add(event)
+    );
   }
 
   registerPageReset(event: keyof DispatcherEventsMap | string) {
@@ -55,7 +66,9 @@ export class Observable {
     this._observers.get(event)!.get(observer)!.add(scope);
 
     if (this._activityHistory.has(event)) {
-      observer.bind(scope)(this._activityHistory.get(event));
+      this._activityHistory
+        .get(event)!
+        .forEach(data => observer.bind(scope)(data));
     }
 
     return this;
@@ -90,7 +103,11 @@ export class Observable {
       }
     }
 
-    this._activityHistory.set(event, data);
+    if (!this._activityHistory.has(event)) {
+      this._activityHistory.set(event, []);
+    }
+
+    this._activityHistory.get(event)!.push(data);
 
     if (!this._observers.has(event)) {
       return;

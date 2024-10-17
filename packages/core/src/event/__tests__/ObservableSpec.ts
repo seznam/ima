@@ -52,6 +52,21 @@ describe('ima.core.event.Observable', () => {
       expect(observer).toHaveBeenCalledWith({ 1: 2 });
     });
 
+    it('should subscribe to event and get data if already fired multiple times', () => {
+      dispatcher.fire(event, eventData);
+      const observer = jest.fn();
+      observable.subscribe(event, observer);
+
+      expect(observer).toHaveBeenCalledWith(eventData);
+
+      dispatcher.fire(event, { 1: 2 });
+      dispatcher.fire(event, { 1: 2 });
+      dispatcher.fire(event, { 3: 4 });
+
+      expect(observer).toHaveBeenNthCalledWith(2, { 1: 2 });
+      expect(observer).toHaveBeenLastCalledWith({ 3: 4 });
+    });
+
     it('should work with scope', () => {
       class Foo {
         foo = jest.fn();
