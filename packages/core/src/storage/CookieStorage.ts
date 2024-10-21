@@ -266,10 +266,14 @@ export class CookieStorage extends Storage<Cookie['value']> {
    *        header.
    */
   parseFromSetCookieHeader(setCookieHeader: string): void {
-    const cookie = this.#extractCookie(setCookieHeader);
+    const cookiesArray = setCookieHeader ? setCookieHeader.split(', ') : [];
 
-    if (typeof cookie.name === 'string') {
-      this.set(cookie.name, cookie.value, cookie.options);
+    for (const cookie of cookiesArray) {
+      const cookieItem = this.#extractCookie(cookie);
+
+      if (typeof cookieItem.name === 'string') {
+        this.set(cookieItem.name, cookieItem.value, cookieItem.options);
+      }
     }
   }
 
