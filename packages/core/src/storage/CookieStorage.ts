@@ -19,6 +19,12 @@ const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
  */
 const COOKIE_SEPARATOR = '; ';
 
+/**
+ * Separator used to separate cookie declarations in the `Set-Cookie` HTTP
+ * header.
+ */
+const SERVER_COOKIE_SEPARATOR = ', ';
+
 export type CookieOptions = {
   domain?: string;
   expires?: Date;
@@ -94,6 +100,61 @@ export class CookieStorage extends Storage<Cookie['value']> {
 
   static get $dependencies(): Dependencies {
     return [Window, Request, Response];
+  }
+
+  /**
+   * Filters invalid cookies based on the provided validate options.
+   * We try to check validity of the domain based on secure, path and
+   * domain definitions.
+   */
+  static validateCookieSecurity(cookie: Cookie, url: string): boolean {
+    const { pathname, hostname, protocol } = new URL(url);
+    const secure = protocol === 'https:';
+
+    /**
+     * Don't allow setting secure cookies without the secure
+     * defined in the validate options.
+     */
+    if (
+      typeof cookie.options.secure === 'boolean' &&
+      secure !== cookie.options.secure
+    ) {
+      return false;
+    }
+
+    /**
+     * Don't allow setting cookies with a path that doesn't start with
+     * the path defined in the validate options.
+     */
+    if (
+      typeof cookie.options.path === 'string' &&
+      !cookie.options.path.endsWith(pathname)
+    ) {
+      return false;
+    }
+
+    /**
+     * Final domain check, since this check uses guard clauses, it HAS
+     * TO BE THE LAST CHECK!.
+     */
+    if (cookie.options.domain) {
+      const cookieDomain = cookie.options.domain.toLowerCase();
+
+      // Check subdomain match
+      if (cookieDomain === hostname) {
+        return true;
+      }
+
+      // Check if cookieDomain is a subdomain of hostname
+      if (cookieDomain.endsWith(hostname)) {
+        return true;
+      }
+
+      // Domains don't match
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -238,14 +299,28 @@ export class CookieStorage extends Storage<Cookie['value']> {
    * Returns all cookies in this storage serialized to a string compatible
    * with the `Cookie` HTTP header.
    *
+   * When `url` is provided, the method validates the cookie security based on
+   * the `url` and the cookie's domain, path, and secure attributes.
+   *
    * @return All cookies in this storage serialized to a string
    *         compatible with the `Cookie` HTTP header.
    */
-  getCookiesStringForCookieHeader(): string {
+  getCookiesStringForCookieHeader(url?: string): string {
     const cookieStrings = [];
 
     for (const cookieName of this._storage.keys()) {
       const cookieItem = this._storage.get(cookieName);
+
+      // Validate cookie security
+      if (
+        url &&
+        cookieItem &&
+        !CookieStorage.validateCookieSecurity(cookieItem, url)
+      ) {
+        // eslint-disable-next-line no-console
+        console.log('cookie not valid', cookieItem);
+        continue;
+      }
 
       cookieStrings.push(
         this.#generateCookieString(cookieName, cookieItem!.value, {})
@@ -258,6 +333,9 @@ export class CookieStorage extends Storage<Cookie['value']> {
   /**
    * Parses cookies from the provided `Set-Cookie` HTTP header value.
    *
+   * When `url` is provided, the method validates the cookie security based on
+   * the `url` and the cookie's domain, path, and secure attributes.
+   *
    * The parsed cookies will be set to the internal storage, and the current
    * HTTP response (via the `Set-Cookie` HTTP header) if at the server
    * side, or the browser (via the `document.cookie` property).
@@ -265,11 +343,24 @@ export class CookieStorage extends Storage<Cookie['value']> {
    * @param setCookieHeader The value of the `Set-Cookie` HTTP
    *        header.
    */
-  parseFromSetCookieHeader(setCookieHeader: string): void {
-    const cookiesArray = setCookieHeader ? setCookieHeader.split(', ') : [];
+  parseFromSetCookieHeader(setCookieHeader: string, url?: string): void {
+    const cookiesArray = setCookieHeader
+      ? setCookieHeader.split(SERVER_COOKIE_SEPARATOR)
+      : [];
 
     for (const cookie of cookiesArray) {
       const cookieItem = this.#extractCookie(cookie);
+
+      // Validate cookie security
+      if (
+        url &&
+        cookieItem &&
+        !CookieStorage.validateCookieSecurity(cookieItem, url)
+      ) {
+        // eslint-disable-next-line no-console
+        console.log('cookie not valid', cookieItem);
+        continue;
+      }
 
       if (typeof cookieItem.name === 'string') {
         this.set(cookieItem.name, cookieItem.value, cookieItem.options);

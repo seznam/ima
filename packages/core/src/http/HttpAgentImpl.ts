@@ -246,7 +246,7 @@ export class HttpAgentImpl extends HttpAgent {
     data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
-    const optionsWithDefault = this._prepareOptions(options);
+    const optionsWithDefault = this._prepareOptions(options, url);
 
     if (optionsWithDefault.cache) {
       const cachedData = this._getCachedData<B>(method, url, data);
@@ -433,7 +433,8 @@ export class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options: Partial<HttpAgentRequestOptions> = {}
+    options: Partial<HttpAgentRequestOptions> = {},
+    url: string
   ): HttpAgentRequestOptions {
     const composedOptions = {
       ...this._defaultRequestOptions,
@@ -455,7 +456,7 @@ export class HttpAgentImpl extends HttpAgent {
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending cookie with a fetch request)
       composedOptions.fetchOptions.headers.Cookie =
-        this._cookie.getCookiesStringForCookieHeader();
+        this._cookie.getCookiesStringForCookieHeader(url);
     }
 
     return composedOptions;
@@ -500,7 +501,10 @@ export class HttpAgentImpl extends HttpAgent {
       const receivedCookies = agentResponse.headersRaw.get('set-cookie');
 
       if (receivedCookies) {
-        this._cookie.parseFromSetCookieHeader(receivedCookies);
+        this._cookie.parseFromSetCookieHeader(
+          receivedCookies,
+          agentResponse.params.url
+        );
       }
     }
   }
