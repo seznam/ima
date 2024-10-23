@@ -103,7 +103,7 @@ export class CookieStorage extends Storage<Cookie['value']> {
   }
 
   /**
-   * Filters invalid cookies based on the provided validate options.
+   * Filters invalid cookies based on the provided url.
    * We try to check validity of the domain based on secure, path and
    * domain definitions.
    */
@@ -124,34 +124,50 @@ export class CookieStorage extends Storage<Cookie['value']> {
 
     /**
      * Don't allow setting cookies with a path that doesn't start with
-     * the path defined in the validate options.
+     * the path defined in the validate options. Root path is always valid.
      */
     if (
       typeof cookie.options.path === 'string' &&
-      !cookie.options.path.endsWith(pathname)
+      cookie.options.path !== '/'
     ) {
-      return false;
+      const pathChunks = pathname.split('/');
+      const cookiePathChunks = cookie.options.path.split('/');
+
+      /**
+       * Compare the path chunks of the request path and the cookie path.
+       */
+      for (let i = 0; i < cookiePathChunks.length; i++) {
+        /**
+         * There are no more path chunks to compare, so the cookie path is a
+         * prefix of the request path.
+         */
+        if (cookiePathChunks[i] === undefined) {
+          break;
+        }
+
+        /**
+         * The path chunks don't match, the cookie path is not a prefix of
+         * the request path.
+         */
+        if (pathChunks[i] !== cookiePathChunks[i]) {
+          return false;
+        }
+      }
     }
 
     /**
-     * Final domain check, since this check uses guard clauses, it HAS
-     * TO BE THE LAST CHECK!.
+     * Domain security check, we also check for subdomain match.
      */
     if (cookie.options.domain) {
       const cookieDomain = cookie.options.domain.toLowerCase();
+      const normalizedCookieDomain = cookieDomain.startsWith('.')
+        ? cookieDomain.slice(1)
+        : cookieDomain;
 
-      // Check subdomain match
-      if (cookieDomain === hostname) {
-        return true;
-      }
-
-      // Check if cookieDomain is a subdomain of hostname
-      if (cookieDomain.endsWith(hostname)) {
-        return true;
-      }
-
-      // Domains don't match
-      return false;
+      return normalizedCookieDomain === hostname ||
+        hostname.endsWith(normalizedCookieDomain)
+        ? true
+        : false;
     }
 
     return true;
@@ -311,14 +327,14 @@ export class CookieStorage extends Storage<Cookie['value']> {
     for (const cookieName of this._storage.keys()) {
       const cookieItem = this._storage.get(cookieName);
 
-      // Validate cookie security
+      /**
+       * Skip cookies that are not secure for the provided url.
+       */
       if (
         url &&
         cookieItem &&
         !CookieStorage.validateCookieSecurity(cookieItem, url)
       ) {
-        // eslint-disable-next-line no-console
-        console.log('cookie not valid', cookieItem);
         continue;
       }
 
@@ -351,14 +367,14 @@ export class CookieStorage extends Storage<Cookie['value']> {
     for (const cookie of cookiesArray) {
       const cookieItem = this.#extractCookie(cookie);
 
-      // Validate cookie security
+      /**
+       * Skip cookies that are not secure for the provided url.
+       */
       if (
         url &&
         cookieItem &&
         !CookieStorage.validateCookieSecurity(cookieItem, url)
       ) {
-        // eslint-disable-next-line no-console
-        console.log('cookie not valid', cookieItem);
         continue;
       }
 
