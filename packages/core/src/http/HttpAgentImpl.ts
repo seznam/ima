@@ -498,9 +498,9 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _setCookiesFromResponse<B>(agentResponse: HttpAgentResponse<B>): void {
     if (agentResponse.headersRaw) {
-      const receivedCookies = agentResponse.headersRaw.get('set-cookie');
+      const receivedCookies = agentResponse.headersRaw.getSetCookie();
 
-      if (receivedCookies) {
+      if (receivedCookies.length > 0) {
         this._cookie.parseFromSetCookieHeader(
           receivedCookies,
           agentResponse.params.url

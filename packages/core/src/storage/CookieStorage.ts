@@ -19,12 +19,6 @@ const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
  */
 const COOKIE_SEPARATOR = '; ';
 
-/**
- * Separator used to separate cookie declarations in the `Set-Cookie` HTTP
- * header.
- */
-const SERVER_COOKIE_SEPARATOR = ', ';
-
 export type CookieOptions = {
   domain?: string;
   expires?: Date;
@@ -356,13 +350,17 @@ export class CookieStorage extends Storage<Cookie['value']> {
    * HTTP response (via the `Set-Cookie` HTTP header) if at the server
    * side, or the browser (via the `document.cookie` property).
    *
-   * @param setCookieHeader The value of the `Set-Cookie` HTTP
-   *        header.
+   * @param cookiesString The value of the `Set-Cookie` HTTP
+   *        header. When there are multiple cookies, the value can be
+   *        provided as an array of strings.
    */
-  parseFromSetCookieHeader(setCookieHeader: string, url?: string): void {
-    const cookiesArray = setCookieHeader
-      ? setCookieHeader.split(SERVER_COOKIE_SEPARATOR)
-      : [];
+  parseFromSetCookieHeader(
+    cookiesString: string | string[],
+    url?: string
+  ): void {
+    const cookiesArray = Array.isArray(cookiesString)
+      ? cookiesString
+      : [cookiesString];
 
     for (const cookie of cookiesArray) {
       const cookieItem = this.#extractCookie(cookie);
