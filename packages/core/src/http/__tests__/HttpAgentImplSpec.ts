@@ -71,11 +71,9 @@ describe('ima.core.http.HttpAgentImpl', () => {
         'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
       },
       // @ts-ignore
-      headersRaw: new Map(
-        Object.entries({
-          'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
-        })
-      ),
+      headersRaw: new Headers({
+        'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
+      }),
     };
   });
 

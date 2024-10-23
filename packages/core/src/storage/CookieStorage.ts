@@ -97,6 +97,77 @@ export class CookieStorage extends Storage<Cookie['value']> {
   }
 
   /**
+   * Filters invalid cookies based on the provided url.
+   * We try to check validity of the domain based on secure, path and
+   * domain definitions.
+   */
+  static validateCookieSecurity(cookie: Cookie, url: string): boolean {
+    const { pathname, hostname, protocol } = new URL(url);
+    const secure = protocol === 'https:';
+
+    /**
+     * Don't allow setting secure cookies without the secure
+     * defined in the validate options.
+     */
+    if (
+      typeof cookie.options.secure === 'boolean' &&
+      secure !== cookie.options.secure
+    ) {
+      return false;
+    }
+
+    /**
+     * Don't allow setting cookies with a path that doesn't start with
+     * the path defined in the validate options. Root path is always valid.
+     */
+    if (
+      typeof cookie.options.path === 'string' &&
+      cookie.options.path !== '/'
+    ) {
+      const pathChunks = pathname.split('/');
+      const cookiePathChunks = cookie.options.path.split('/');
+
+      /**
+       * Compare the path chunks of the request path and the cookie path.
+       */
+      for (let i = 0; i < cookiePathChunks.length; i++) {
+        /**
+         * There are no more path chunks to compare, so the cookie path is a
+         * prefix of the request path.
+         */
+        if (cookiePathChunks[i] === undefined) {
+          break;
+        }
+
+        /**
+         * The path chunks don't match, the cookie path is not a prefix of
+         * the request path.
+         */
+        if (pathChunks[i] !== cookiePathChunks[i]) {
+          return false;
+        }
+      }
+    }
+
+    /**
+     * Domain security check, we also check for subdomain match.
+     */
+    if (cookie.options.domain) {
+      const cookieDomain = cookie.options.domain.toLowerCase();
+      const normalizedCookieDomain = cookieDomain.startsWith('.')
+        ? cookieDomain.slice(1)
+        : cookieDomain;
+
+      return normalizedCookieDomain === hostname ||
+        hostname.endsWith(normalizedCookieDomain)
+        ? true
+        : false;
+    }
+
+    return true;
+  }
+
+  /**
    * Initializes the cookie storage.
    *
    * @param window The window utility.
@@ -238,14 +309,28 @@ export class CookieStorage extends Storage<Cookie['value']> {
    * Returns all cookies in this storage serialized to a string compatible
    * with the `Cookie` HTTP header.
    *
+   * When `url` is provided, the method validates the cookie security based on
+   * the `url` and the cookie's domain, path, and secure attributes.
+   *
    * @return All cookies in this storage serialized to a string
    *         compatible with the `Cookie` HTTP header.
    */
-  getCookiesStringForCookieHeader(): string {
+  getCookiesStringForCookieHeader(url?: string): string {
     const cookieStrings = [];
 
     for (const cookieName of this._storage.keys()) {
       const cookieItem = this._storage.get(cookieName);
+
+      /**
+       * Skip cookies that are not secure for the provided url.
+       */
+      if (
+        url &&
+        cookieItem &&
+        !CookieStorage.validateCookieSecurity(cookieItem, url)
+      ) {
+        continue;
+      }
 
       cookieStrings.push(
         this.#generateCookieString(cookieName, cookieItem!.value, {})
@@ -258,18 +343,42 @@ export class CookieStorage extends Storage<Cookie['value']> {
   /**
    * Parses cookies from the provided `Set-Cookie` HTTP header value.
    *
+   * When `url` is provided, the method validates the cookie security based on
+   * the `url` and the cookie's domain, path, and secure attributes.
+   *
    * The parsed cookies will be set to the internal storage, and the current
    * HTTP response (via the `Set-Cookie` HTTP header) if at the server
    * side, or the browser (via the `document.cookie` property).
    *
-   * @param setCookieHeader The value of the `Set-Cookie` HTTP
-   *        header.
+   * @param cookiesString The value of the `Set-Cookie` HTTP
+   *        header. When there are multiple cookies, the value can be
+   *        provided as an array of strings.
    */
-  parseFromSetCookieHeader(setCookieHeader: string): void {
-    const cookie = this.#extractCookie(setCookieHeader);
+  parseFromSetCookieHeader(
+    cookiesString: string | string[],
+    url?: string
+  ): void {
+    const cookiesArray = Array.isArray(cookiesString)
+      ? cookiesString
+      : [cookiesString];
 
-    if (typeof cookie.name === 'string') {
-      this.set(cookie.name, cookie.value, cookie.options);
+    for (const cookie of cookiesArray) {
+      const cookieItem = this.#extractCookie(cookie);
+
+      /**
+       * Skip cookies that are not secure for the provided url.
+       */
+      if (
+        url &&
+        cookieItem &&
+        !CookieStorage.validateCookieSecurity(cookieItem, url)
+      ) {
+        continue;
+      }
+
+      if (typeof cookieItem.name === 'string') {
+        this.set(cookieItem.name, cookieItem.value, cookieItem.options);
+      }
     }
   }
 
