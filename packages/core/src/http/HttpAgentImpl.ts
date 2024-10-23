@@ -456,7 +456,9 @@ export class HttpAgentImpl extends HttpAgent {
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending cookie with a fetch request)
       composedOptions.fetchOptions.headers.Cookie =
-        this._cookie.getCookiesStringForCookieHeader(url);
+        this._cookie.getCookiesStringForCookieHeader(
+          options.validateCookies ? url : undefined
+        );
     }
 
     return composedOptions;
@@ -503,7 +505,9 @@ export class HttpAgentImpl extends HttpAgent {
       if (receivedCookies.length > 0) {
         this._cookie.parseFromSetCookieHeader(
           receivedCookies,
-          agentResponse.params.url
+          this._defaultRequestOptions.validateCookies
+            ? agentResponse.params.url
+            : undefined
         );
       }
     }
