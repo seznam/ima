@@ -20,8 +20,8 @@ class). You can read more about components and views in the [documentation](../b
 
 Now let's replace the contents of the file with a blank view:
 
-<Tabs values={[{label: 'JavaScript', value: 'javascript'},{label: 'TypeScript', value: 'typescript'}]}>
-<TabItem value="javascript">
+<Tabs>
+<TabItem value="JavaScript">
 
 ```jsx
 import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
@@ -40,7 +40,7 @@ export class HomeView extends AbstractComponent {
 ```
 
 </TabItem>
-<TabItem value="typescript">
+<TabItem value="TypeScript">
 
 ```tsx
 import { usePageContext } from '@ima/react-page-renderer';
@@ -85,15 +85,15 @@ not have a UI yet.
 Now that we know our way around our component, let's replace the contents of
 the `render()` method with the following code:
 
-<Tabs values={[{label: 'JavaScript', value: 'javascript'},{label: 'TypeScript', value: 'typescript'}]}>
-<TabItem value="javascript">
+<Tabs>
+<TabItem value="JavaScript">
 
 ```jsx
 return <div className="l-home container">Hello {'World'}!</div>;
 ```
 
 </TabItem>
-<TabItem value="typescript">
+<TabItem value="TypeScript">
 
 ```tsx
 return <div className="l-home container">Hello {'World'}!</div>;
@@ -127,8 +127,8 @@ If everything went well you should see the following page when you refresh your 
 
 Let's modify the return value of the `render` method to look like this:
 
-<Tabs values={[{label: 'JavaScript', value: 'javascript'},{label: 'TypeScript', value: 'typescript'}]}>
-<TabItem value="javascript">
+<Tabs>
+<TabItem value="JavaScript">
 
 ```jsx
 return (
@@ -199,7 +199,7 @@ return (
 ```
 
 </TabItem>
-<TabItem value="typescript">
+<TabItem value="TypeScript">
 
 ```tsx
 import { usePageContext } from '@ima/react-page-renderer';
