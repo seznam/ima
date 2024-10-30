@@ -3,6 +3,22 @@ title: Fetching Data
 description: Tutorial > Fetching Data
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs values={[{label: 'JavaScript', value: 'javascript'},{label: 'TypeScript', value: 'typescript'}]}>
+<TabItem value="javascript">
+
+This is an apple 🍎
+
+</TabItem>
+<TabItem value="typescript">
+
+This is an orange 🍊
+
+</TabItem>
+</Tabs>
+
 In [last part](./adding-some-state) of this series we tidied up our HomeView component and split our render method
 into much smaller and manageable components thanks to react. In this part we're going to
 mock the data fetching from server and learn more about IMA.js object container.
