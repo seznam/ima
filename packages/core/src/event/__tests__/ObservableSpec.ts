@@ -67,6 +67,22 @@ describe('ima.core.event.Observable', () => {
       expect(observer).toHaveBeenLastCalledWith({ 3: 4 });
     });
 
+    it('should subscribe to event and get data if already mrkev fired multiple times', () => {
+      const observable2 = new Observable(dispatcher, { maxHistoryLength: 2 });
+      observable2.init();
+
+      dispatcher.fire(event, eventData);
+      dispatcher.fire(event, { 1: 2 });
+      dispatcher.fire(event, { 3: 4 });
+
+      const observer = jest.fn();
+      observable2.subscribe(event, observer);
+
+      expect(observer).not.toHaveBeenCalledWith(eventData);
+      expect(observer).toHaveBeenCalledWith({ 1: 2 });
+      expect(observer).toHaveBeenLastCalledWith({ 3: 4 });
+    });
+
     it('should work with scope', () => {
       class Foo {
         foo = jest.fn();
@@ -101,26 +117,32 @@ describe('ima.core.event.Observable', () => {
 
       observer.mockClear();
       observable.unsubscribe(event, observer);
-      dispatcher.fire(event, { foor: 'bar' });
+      dispatcher.fire(event, { foo: 'bar' });
 
       expect(observer).not.toHaveBeenCalled();
       expect(observable['_observers'].get(event)?.size).toBe(0);
     });
   });
 
-  it('should reset page events', () => {
-    observable.registerPageReset(event);
+  it('should reset only page events', () => {
+    observable.unregisterPageReset(event);
     dispatcher.fire(event, eventData);
+    dispatcher.fire('foo', 'bar');
     dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, { bhr: true });
 
     const eventObserver = jest.fn();
     observable.subscribe(event, eventObserver);
 
-    expect(eventObserver).not.toHaveBeenCalledWith(eventData);
+    expect(eventObserver).toHaveBeenCalledWith(eventData);
 
     const bhrObserver = jest.fn();
     observable.subscribe(RouterEvents.BEFORE_HANDLE_ROUTE, bhrObserver);
 
     expect(bhrObserver).toHaveBeenCalledWith({ bhr: true });
+
+    const fooObserver = jest.fn();
+    observable.subscribe('foo', fooObserver);
+
+    expect(fooObserver).not.toHaveBeenCalled();
   });
 });

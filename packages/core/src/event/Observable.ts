@@ -3,23 +3,28 @@ import {
   DispatcherEventsMap,
   DispatcherListener,
 } from './Dispatcher';
+import { Settings } from '../boot';
 import { Dependencies } from '../oc/ObjectContainer';
-import { RendererEvents } from '../page/renderer/RendererEvents';
 import { RouterEvents } from '../router/RouterEvents';
 
 export class Observable {
   protected _dispatcher: Dispatcher;
   protected _observers: Map<string, Map<DispatcherListener<any>, Set<unknown>>>;
   protected _activityHistory: Map<string, unknown[]>;
-  protected _pageResetEvents: Set<string>;
+  protected _persistentEvents: Set<string>;
+  protected _settings: Settings['$Observable'];
 
-  static $dependencies: Dependencies = ['$Dispatcher'];
+  static $dependencies: Dependencies = [
+    '$Dispatcher',
+    '?$Settings.$Observable',
+  ];
 
-  constructor(dispatcher: Dispatcher) {
+  constructor(dispatcher: Dispatcher, settings?: Settings['$Observable']) {
     this._dispatcher = dispatcher;
     this._observers = new Map();
     this._activityHistory = new Map();
-    this._pageResetEvents = new Set();
+    this._persistentEvents = new Set();
+    this._settings = settings;
 
     this.clear();
   }
@@ -35,19 +40,11 @@ export class Observable {
   clear() {
     this._observers.clear();
     this._activityHistory.clear();
-    this._pageResetEvents.clear();
-
-    Object.values(RouterEvents).forEach(event =>
-      this._pageResetEvents.add(event)
-    );
-
-    Object.values(RendererEvents).forEach(event =>
-      this._pageResetEvents.add(event)
-    );
+    this._persistentEvents.clear();
   }
 
-  registerPageReset(event: keyof DispatcherEventsMap | string) {
-    this._pageResetEvents.add(event);
+  unregisterPageReset(event: keyof DispatcherEventsMap | string) {
+    this._persistentEvents.add(event);
   }
 
   subscribe(
@@ -98,8 +95,10 @@ export class Observable {
 
   _handleDispatcherEvent(event: string, data: any) {
     if (event === RouterEvents.BEFORE_HANDLE_ROUTE) {
-      for (const pageResetEvent of this._pageResetEvents) {
-        this._activityHistory.delete(pageResetEvent);
+      for (const [eventKey] of this._activityHistory) {
+        if (!this._persistentEvents.has(eventKey)) {
+          this._activityHistory.delete(eventKey);
+        }
       }
     }
 
@@ -108,6 +107,12 @@ export class Observable {
     }
 
     this._activityHistory.get(event)!.push(data);
+    this._activityHistory.set(
+      event,
+      this._activityHistory
+        .get(event)!
+        .splice(-(this._settings?.maxHistoryLength || 10))
+    );
 
     if (!this._observers.has(event)) {
       return;

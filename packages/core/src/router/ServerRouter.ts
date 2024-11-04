@@ -26,7 +26,6 @@ export class ServerRouter extends AbstractRouter {
       Request,
       Response,
       '?$Settings.$Router.middlewareTimeout',
-      '?$Settings.$Router.isSPARouted',
     ];
   }
 
