@@ -102,31 +102,42 @@ taken from the Bootstrap CSS library we're using and will apply red shadow to th
   <TabItem value="TypeScript">
 
 ```tsx
-<input
-  id='postForm-name'
-  className={cssClasses({
-    'form-control': true,
-    'is-invalid': !post.authorValid,
-  })}
-  type='text'
-  name='author'
-  value={post.author}
-  onChange={e => handleChange(e)}
-  placeholder='Your name'
-/>
-...
-<textarea
-  id='postForm-content'
-  className={cssClasses({
-    'form-control': true,
-    'is-invalid': !post.contentValid,
-  })}
-  name='content'
-  value={post.content}
-  onChange={e => handleChange(e)}
-  placeholder='What would you like to tell us?'
-/>
+const cssClasses = useCssClasses();
+
+return(
+  ...
+
+  <input
+    id='postForm-name'
+    className={cssClasses({
+      'form-control': true,
+      'is-invalid': !post.authorValid,
+    })}
+    type='text'
+    name='author'
+    value={post.author}
+    onChange={e => handleChange(e)}
+    placeholder='Your name'
+  />
+  ...
+  <textarea
+    id='postForm-content'
+    className={cssClasses({
+      'form-control': true,
+      'is-invalid': !post.contentValid,
+    })}
+    name='content'
+    value={post.content}
+    onChange={e => handleChange(e)}
+    placeholder='What would you like to tell us?'
+  />
+
+  ...
+)
 ```
+
+> **TypeScript: ** As you definitely noticed, again we got access to the functionality from the `AbstractComponent`
+  by using another IMA hook, this time `useCssClasses`, that gives us direct access to the IMA CssClases.
 
   </TabItem>
 </Tabs>
@@ -255,6 +266,7 @@ _onSubmit(event) {
 const handleSubmit = (event: any): void => {
   event.preventDefault();
 
+  // Validate on submit to also cover the initial submission
   const { author, content } = post;
   if (!validate('author', author) || !validate('content', content)) {
     return;
@@ -262,6 +274,7 @@ const handleSubmit = (event: any): void => {
 
   fire(containerRef.current as EventTarget, 'postSubmitted', post);
 
+  // Reset the state after submitting
   setPost({ ...post, author: '', content: '' });
 };
 ```
@@ -325,10 +338,9 @@ export class PostEntity {
 }
 ```
 
-  </TabItem>
-</Tabs>
 
-In Typescript also change the `PostData` type in `app/page/home/HomeController` to:
+> **TypeScript:** In Typescript also change the `PostData` type in `app/page/home/HomeController` to:
+
 ```typescript
 export type PostData = {
   id: number | null;
@@ -337,6 +349,10 @@ export type PostData = {
   isSaved: boolean;
 };
 ```
+
+  </TabItem>
+</Tabs>
+
 
 We will use the `isSaved` flag to determine whether the post has been saved at
 the server or not.
@@ -413,6 +429,8 @@ export class HomeController extends AbstractController<HomeControllerState> {
   }
 }
 ```
+
+> **TypeScript:** Do not forget to update the `HomeControllerState` type.
 
   </TabItem>
 </Tabs>
@@ -1255,6 +1273,9 @@ onPostSubmitted(eventData: PostData) {
 }
 ```
 
+> **TypeScript:** As you can see, we have to completely refactor our types to match our input data.
+  This is how it might look like in an actual app.
+
 </TabItem>
 </Tabs>
 
@@ -1464,14 +1485,7 @@ this.setState({
 });
 ```
 
-</TabItem>
-</Tabs>
-
-We added simple checks that **compares** the `generated` timestamps of the received
-posts with our current posts, and **discards** the received posts if they are
-stale.
-
-Note that in TypeScript we have to also slightly adjust the rendering of the posts in `app/page/home/HomeView.tsx`
+> **TypeScript:** Note that in TypeScript we have to also slightly adjust the rendering of the posts in `app/page/home/HomeView.tsx`
 
 ```tsx
 const _renderPosts = () => {
@@ -1487,6 +1501,13 @@ const _renderPosts = () => {
   ));
 };
 ```
+
+</TabItem>
+</Tabs>
+
+We added simple checks that **compares** the `generated` timestamps of the received
+posts with our current posts, and **discards** the received posts if they are
+stale.
 
 ## Animations
 

@@ -93,6 +93,9 @@ export class HomeController extends AbstractController<HomeControllerState> {
 }
 ```
 
+> **TypeScript:** As you can see, the TypeScript code is a lot more complex.
+    The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
+
   </TabItem>
 </Tabs>
 
@@ -325,6 +328,8 @@ export function HomeView({ posts }: HomeViewProps) {
 }
 ```
 
+> **TypeScript: ** New type `HomeViewProps` has been used to correctly accept typed props in our `HomeView`.
+
   </TabItem>
 </Tabs>
 
@@ -413,6 +418,9 @@ export function Post({ content, author }: PostProps) {
   );
 }
 ```
+
+> **TypeScript: ** With `PostProps` type, in TypeScript we can directly destructure the props in the function
+  parameters and use their single attributes in the return function.
 
 </TabItem>
 </Tabs>

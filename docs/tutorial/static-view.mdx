@@ -52,6 +52,12 @@ export function HomeView() {
   return null;
 }
 ```
+> **TypeScript: ** With functional components we have to use `usePageContext()` hook,
+  that provides us direct access to the IMA Page context. You can find more about the hooks provided by IMA at
+  [@ima/react-hooks](https://www.npmjs.com/package/@ima/react-hooks).
+
+> There is also no need for any constructor or render method, so we do not have to worry about implementing the
+  `AbstractComponent` class to our functional component, and we can directly output the content with `return`.
 
 </TabItem>
 </Tabs>

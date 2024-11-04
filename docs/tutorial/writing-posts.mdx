@@ -148,6 +148,9 @@ export function PostingForm() {
 }
 ```
 
+> **TypeScript:** Again, instead of the constructor, we used `useState` hook from React and defined `Post` type
+  for the newly defined state.
+
 </TabItem>
 </Tabs>
 
@@ -227,6 +230,8 @@ const handleChange = (event: any): void => {
 };
 ```
 
+> **TypeScript: ** In our functional component we replaced the `_onChange()` method with `handleChange()` arrow function.
+
 </TabItem>
 </Tabs>
 
@@ -277,6 +282,9 @@ to us by extending the `AbstractComponent`. So in this example
 we fire the `postSubmitted` event through EventBus with the form data as
 the event data, clear the form, and finally we prevent the browser from
 submitting the form to the server.
+
+> **Typescript: ** In functional components, the `fire` method is provided
+to us by the `useComponent` hook, which gives us access to the utility methods.
 
 The `this.fire()` method is a **short-hand** for `this.utils.$EventBus.fire(this, ...)`
 call, which fires the custom DOM event using the EventBus. The `this.utils`
@@ -362,7 +370,7 @@ return entities.map(entityData => this.createEntity(entityData));
 <TabItem value="TypeScript">
 
 ```typescript
-return entities.map(entityData => this.createEntity(entityData));
+return entities.map((entityData: PostData) => this.createEntity(entityData));
 ```
 
 </TabItem>
