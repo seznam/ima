@@ -125,7 +125,7 @@ describe('ima.core.event.Observable', () => {
   });
 
   it('should reset only page events', () => {
-    observable.unregisterPageReset(event);
+    observable.registerPersistenEvent(event);
     dispatcher.fire(event, eventData);
     dispatcher.fire('foo', 'bar');
     dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, { bhr: true });

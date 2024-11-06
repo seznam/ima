@@ -43,7 +43,7 @@ export class Observable {
     this._persistentEvents.clear();
   }
 
-  unregisterPageReset(event: keyof DispatcherEventsMap | string) {
+  registerPersistenEvent(event: keyof DispatcherEventsMap | string) {
     this._persistentEvents.add(event);
   }
 
