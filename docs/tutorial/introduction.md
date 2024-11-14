@@ -38,6 +38,12 @@ To initialize new project, run following command and choose the "Empty" (Hello W
 ```bash npm2yarn
 npx create-ima-app imajs-tutorial
 ```
+
+For TypeScript support run the initializing command with following parameters:
+```bash npm2yarn
+npx create-ima-app imajs-tutorial --typescript
+```
+
 This will bootstrap the IMA.js directory structure and install all dependencies. To
 learn more information about `create-ima-app` package, take a look at its [github repository](https://github.com/seznam/ima/tree/master/packages/create-ima-app).
 
