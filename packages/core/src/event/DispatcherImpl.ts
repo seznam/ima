@@ -106,7 +106,7 @@ export class DispatcherImpl extends Dispatcher {
       this._eventListenersAll.set(listener, scopes);
     }
 
-    this._eventListenersAll.get(listener)?.add(scope);
+    this._eventListenersAll.get(listener)!.add(scope);
 
     return this;
   }

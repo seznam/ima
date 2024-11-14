@@ -195,10 +195,121 @@ will still receive the `showLightbox` event when it's fired.
 > **Note:** A great place to
 mount components like Lightbox is [ManagedRootView](./rendering-process.md#managedrootview).
 
-Note that events distributed using the Dispatcher are useful only in very
-specific use-cases, so the Dispatcher logs a warning to the console if there
-are no listeners registered for the fired event in order to notify you of
-possible typos in event names.
+### Listening to all Dispatcher events
+
+You can listen to all events dispatched by the `Dispatcher` by using the `listenAll()`
+and `unlistenAll()` methods.
+
+```javascript
+// app/component/eventLogger/EventLogger.jsx
+
+componentDidMount() {
+  this.utils.$Dispatcher.listenAll(this._onDispatcherEvent, this);
+}
+
+componentWillUnmount() {
+  this.utils.$Dispatcher.unlistenAll(this._onDispatcherEvent, this);
+}
+
+_onDispatcherEvent(eventName, data) {
+  // ...
+}
+```
+
+## Observable
+
+The `Observable` class allows you to subscribe to events dispatched by the
+`Dispatcher`. Upon subscribing, subscribers will be notified of past and future
+events.
+
+### Initializing Observable
+
+```javascript
+// app/config/services.js
+
+export const initServicesApp = (ns, oc, config) => {
+  const Observable = oc.get('$Observable');
+
+  Observable.init();
+}
+```
+
+**Accessing Observable in Controllers** is easy with [Dependency Injection](./object-container.md#1-dependency-injection).  
+**To access Observable from Views and Components** you should register it in [ComponentUtils](./views-and-components.md#utilities-shared-across-views-and-components).
+
+```javascript
+// app/config/bind.js
+import { Observable } from '@ima/core';
+
+export let init = (ns, oc, config) => {
+  const ComponentUtils = oc.get('$ComponentUtils');
+
+  ComponentUtils.register({
+    $Observable: Observable
+  });
+}
+```
+
+### Subscribing and unsubscribing to events
+
+You can subscribe to events dispatched by the `Dispatcher` using the `subscribe()`, and unsubscribe using the `unsubscribe()` method.
+
+```javascript
+// app/component/media/Media.jsx
+
+componentDidMount() {
+  this.utils.$Observable.subscribe('showLightbox', this._onShowLightbox, this);
+}
+
+componentWillUnmount() {
+  this.utils.$Observable.unsubscribe('showLightbox', this._onShowLightbox, this);
+}
+
+_onShowLightbox(data) {
+  // ...
+}
+```
+
+> **Note:** If the `showLightbox` event was already dispatched before the `Media` component was mounted,
+ the `_onShowLightbox` method will be called immediately upon subscribing with the data that was passed to the event.  
+> **Note:** If the event was dispatched multiple times before the `Media` component was mounted,
+ the `_onShowLightbox` method will be called for each event.
+
+### Persistent events
+
+The `Observable` class clears its history of dispatched events when the `RouterEvents.BEFORE_HANDLE_ROUTE` event is dispatched.
+If you want to keep the history of dispatched events, you can use the `registerPersistentEvent()` method.
+
+```javascript
+// app/config/services.js
+
+export const initServicesApp = (ns, oc, config) => {
+  const Observable = oc.get('$Observable');
+
+  Observable.init();
+  Observable.registerPersistentEvent('scriptLoaded');
+}
+```
+
+### Settings
+
+By default, the `Observable` class holds the last 10 events dispatched by the `Dispatcher`.
+You can change this by modifying the `$Observable.maxHistoryLength` setting.
+
+```javascript
+// app/config/settings.js
+
+export default (ns, oc, config) => {
+  return {
+    prod: {
+      // ...
+      $Observable: {
+        maxHistoryLength: 20
+      }
+    }
+  };
+}
+```
 
 ## Built-in events
 
