@@ -3,11 +3,11 @@
 
 import { RouterEvents } from '../../router/RouterEvents';
 import { DispatcherImpl } from '../DispatcherImpl';
-import { Observable } from '../Observable';
+import { ObservableImpl } from '../ObservableImpl';
 
 describe('ima.core.event.Observable', () => {
   const dispatcher = new DispatcherImpl();
-  const observable = new Observable(dispatcher);
+  const observable = new ObservableImpl(dispatcher);
   const event = 'dispatcher.event';
   const eventData = { foo: 'bar' };
 
@@ -68,7 +68,9 @@ describe('ima.core.event.Observable', () => {
     });
 
     it('should subscribe to event and get data if already mrkev fired multiple times', () => {
-      const observable2 = new Observable(dispatcher, { maxHistoryLength: 2 });
+      const observable2 = new ObservableImpl(dispatcher, {
+        maxHistoryLength: 2,
+      });
       observable2.init();
 
       dispatcher.fire(event, eventData);

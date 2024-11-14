@@ -329,14 +329,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
         RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
-        expect.objectContaining({ route: expect.anything() }),
-        true
+        expect.objectContaining({ route: expect.anything() })
       );
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         2,
         RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
-        expect.objectContaining({ route: expect.anything() }),
-        true
+        expect.objectContaining({ route: expect.anything() })
       );
 
       expect(response).toBe('mounted');

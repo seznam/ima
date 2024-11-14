@@ -14,6 +14,7 @@ import { DispatcherImpl } from '../event/DispatcherImpl';
 import { EventBus } from '../event/EventBus';
 import { EventBusImpl } from '../event/EventBusImpl';
 import { Observable } from '../event/Observable';
+import { ObservableImpl } from '../event/ObservableImpl';
 import { HttpAgent } from '../http/HttpAgent';
 import { HttpAgentImpl } from '../http/HttpAgentImpl';
 import { HttpProxy } from '../http/HttpProxy';
@@ -178,7 +179,7 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
   oc.bind('$EventBus', EventBus);
 
   // Observable
-  oc.provide(Observable, Observable);
+  oc.provide(Observable, ObservableImpl);
   oc.bind('$Observable', Observable);
 
   // Cache

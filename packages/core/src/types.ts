@@ -5,7 +5,7 @@ import { AppEnvironment } from './boot';
 import { Dictionary, DictionaryConfig } from './dictionary/Dictionary';
 import { Dispatcher } from './event/Dispatcher';
 import { EventBus } from './event/EventBus';
-import { Observable } from './event/Observable';
+import { ObservableImpl } from './event/ObservableImpl';
 import { HttpAgent } from './http/HttpAgent';
 import { PageStateManager } from './page/state/PageStateManager';
 import { Router } from './router/Router';
@@ -35,7 +35,7 @@ export interface Utils {
   $Dictionary: Dictionary;
   $Dispatcher: Dispatcher;
   $EventBus: EventBus;
-  $Observable: Observable;
+  $Observable: ObservableImpl;
   $Helper: typeof $Helper;
   $Http: HttpAgent;
   $PageStateManager: PageStateManager;

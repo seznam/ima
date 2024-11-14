@@ -62,14 +62,12 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
         StateEvents.BEFORE_CHANGE_STATE,
-        { newState, patchState, oldState: defaultState },
-        true
+        { newState, patchState, oldState: defaultState }
       );
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         2,
         StateEvents.AFTER_CHANGE_STATE,
-        { newState },
-        true
+        { newState }
       );
     });
 
