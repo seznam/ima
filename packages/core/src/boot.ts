@@ -149,7 +149,7 @@ export interface Settings {
     $Render: PageRendererSettings;
   };
   $Observable?: {
-    maxHistoryLength: number;
+    maxHistoryLength?: number;
   };
 }
 

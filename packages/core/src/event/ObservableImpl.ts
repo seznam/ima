@@ -8,6 +8,8 @@ import { Settings } from '../boot';
 import { Dependencies } from '../oc/ObjectContainer';
 import { RouterEvents } from '../router/RouterEvents';
 
+const MAX_HISTORY_LENGTH = 10;
+
 /**
  * An Observable is a class that manages event listeners and allows distributing
  * events to the registered listeners. It maintains a history of events and supports
@@ -161,7 +163,7 @@ export class ObservableImpl extends Observable {
       event,
       this._activityHistory
         .get(event)!
-        .splice(-(this._settings?.maxHistoryLength || 10))
+        .splice(-(this._settings?.maxHistoryLength || MAX_HISTORY_LENGTH))
     );
 
     if (!this._observers.has(event)) {
