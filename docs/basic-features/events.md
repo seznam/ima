@@ -222,18 +222,6 @@ The `Observable` class allows you to subscribe to events dispatched by the
 `Dispatcher`. Upon subscribing, subscribers will be notified of past and future
 events.
 
-### Initializing Observable
-
-```javascript
-// app/config/services.js
-
-export const initServicesApp = (ns, oc, config) => {
-  const Observable = oc.get('$Observable');
-
-  Observable.init();
-}
-```
-
 **Accessing Observable in Controllers** is easy with [Dependency Injection](./object-container.md#1-dependency-injection).  
 **To access Observable from Views and Components** you should register it in [ComponentUtils](./views-and-components.md#utilities-shared-across-views-and-components).
 
@@ -286,7 +274,6 @@ If you want to keep the history of dispatched events, you can use the `registerP
 export const initServicesApp = (ns, oc, config) => {
   const Observable = oc.get('$Observable');
 
-  Observable.init();
   Observable.registerPersistentEvent('scriptLoaded');
 }
 ```
