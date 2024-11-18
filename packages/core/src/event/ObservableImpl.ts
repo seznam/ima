@@ -48,6 +48,7 @@ export class ObservableImpl extends Observable {
    * @inheritDoc
    */
   init() {
+    this.clear();
     this._dispatcher.listenAll(this._handleDispatcherEvent, this);
 
     return this;
