@@ -138,20 +138,6 @@ way to propagate event in other directions, or to other parts of the UI, or
 from the controller to the UI is using the `app/event/Dispatcher` API.
 
 **Accessing Dispatcher in Controllers** is easy with [Dependency Injection](./object-container.md#1-dependency-injection).
-**To access Dispatcher from Views and Components** you should register it in [ComponentUtils](./views-and-components.md#utilities-shared-across-views-and-components).
-
-```javascript
-// app/config/bind.js
-import { Dispatcher } from '@ima/core';
-
-export let init = (ns, oc, config) => {
-  const ComponentUtils = oc.get('$ComponentUtils');
-
-  ComponentUtils.register({
-  $Dispatcher: Dispatcher
-  });
-}
-```
 
 
 ### Firing and listening to Dispatcher events
@@ -222,21 +208,7 @@ The `Observable` class allows you to subscribe to events dispatched by the
 `Dispatcher`. Upon subscribing, subscribers will be notified of past and future
 events.
 
-**Accessing Observable in Controllers** is easy with [Dependency Injection](./object-container.md#1-dependency-injection).  
-**To access Observable from Views and Components** you should register it in [ComponentUtils](./views-and-components.md#utilities-shared-across-views-and-components).
-
-```javascript
-// app/config/bind.js
-import { Observable } from '@ima/core';
-
-export let init = (ns, oc, config) => {
-  const ComponentUtils = oc.get('$ComponentUtils');
-
-  ComponentUtils.register({
-    $Observable: Observable
-  });
-}
-```
+**Accessing Observable in Controllers** is easy with [Dependency Injection](./object-container.md#1-dependency-injection).
 
 ### Subscribing and unsubscribing to events
 
