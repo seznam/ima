@@ -36,15 +36,11 @@ export class ClientPageRenderer extends AbstractClientPageRenderer {
             console.error('onRecoverableError', error);
           }
 
-          this._dispatcher.fire(
-            RendererEvents.HYDRATE_ERROR,
-            {
-              error,
-              serverNode,
-              clientNode: this._viewContainer?.cloneNode(true) as Element,
-            },
-            true
-          );
+          this._dispatcher.fire(RendererEvents.HYDRATE_ERROR, {
+            error,
+            serverNode,
+            clientNode: this._viewContainer?.cloneNode(true) as Element,
+          });
         },
       }
     );

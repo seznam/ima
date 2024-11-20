@@ -67,11 +67,11 @@ export class PageStateManagerImpl<
     const newState = Object.assign({}, this.getState(), patchState);
 
     if (this._dispatcher) {
-      this._dispatcher.fire(
-        StateEvents.BEFORE_CHANGE_STATE,
-        { newState, oldState, patchState },
-        true
-      );
+      this._dispatcher.fire(StateEvents.BEFORE_CHANGE_STATE, {
+        newState,
+        oldState,
+        patchState,
+      });
     }
 
     this._eraseExcessHistory();
@@ -178,7 +178,7 @@ export class PageStateManagerImpl<
     }
 
     if (this._dispatcher) {
-      this._dispatcher.fire(StateEvents.AFTER_CHANGE_STATE, { newState }, true);
+      this._dispatcher.fire(StateEvents.AFTER_CHANGE_STATE, { newState });
     }
   }
 }

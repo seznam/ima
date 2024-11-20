@@ -140,11 +140,9 @@ export abstract class AbstractPageManager extends PageManager {
     try {
       await autoYield();
       if (!isControllerViewResolved) {
-        this._dispatcher.fire(
-          RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
-          { route },
-          true
-        );
+        this._dispatcher.fire(RouterEvents.BEFORE_LOADING_ASYNC_ROUTE, {
+          route,
+        });
       }
 
       await autoYield();
@@ -159,11 +157,9 @@ export abstract class AbstractPageManager extends PageManager {
       return { status: 409 };
     } finally {
       if (!isControllerViewResolved) {
-        this._dispatcher.fire(
-          RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
-          { route },
-          true
-        );
+        this._dispatcher.fire(RouterEvents.AFTER_LOADING_ASYNC_ROUTE, {
+          route,
+        });
       }
     }
 

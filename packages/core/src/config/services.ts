@@ -3,6 +3,7 @@ import { InitServicesFunction } from '../Bootstrap';
 export const initServices: InitServicesFunction = (ns, oc, config) => {
   oc.get('$Dictionary').init(config.dictionary);
   oc.get('$Dispatcher').clear();
+  oc.get('$Observable').init();
 
   if (!oc.get('$Window').isClient()) {
     oc.get('$Request').init(config.request!);
@@ -34,6 +35,7 @@ export const initServices: InitServicesFunction = (ns, oc, config) => {
   if ($Debug && typeof window !== 'undefined') {
     window.__IMA_HMR?.emitter?.once('destroy', async () => {
       oc.get('$Dispatcher').clear();
+      oc.get('$Observable').destroy();
       oc.get('$Router').unlisten();
       oc.get('$PageRenderer').unmount();
       await oc.get('$PageManager').destroy();

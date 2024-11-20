@@ -13,6 +13,8 @@ import { Dispatcher } from '../event/Dispatcher';
 import { DispatcherImpl } from '../event/DispatcherImpl';
 import { EventBus } from '../event/EventBus';
 import { EventBusImpl } from '../event/EventBusImpl';
+import { Observable } from '../event/Observable';
+import { ObservableImpl } from '../event/ObservableImpl';
 import { HttpAgent } from '../http/HttpAgent';
 import { HttpAgentImpl } from '../http/HttpAgentImpl';
 import { HttpProxy } from '../http/HttpProxy';
@@ -95,6 +97,7 @@ export interface OCAliasMap {
   $SessionMapStorage: InstanceType<typeof SessionMapStorage>;
   $Dispatcher: Dispatcher;
   $EventBus: EventBus;
+  $Observable: Observable;
   $CacheStorage: OCAliasMap['$MapStorage'];
   $CacheFactory: InstanceType<typeof CacheFactory>;
   $Cache: Cache;
@@ -175,6 +178,10 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
   oc.provide(EventBus, EventBusImpl);
   oc.bind('$EventBus', EventBus);
 
+  // Observable
+  oc.provide(Observable, ObservableImpl);
+  oc.bind('$Observable', Observable);
+
   // Cache
   oc.constant('$CacheStorage', oc.get(MapStorage));
   oc.bind('$CacheFactory', CacheFactory);
@@ -206,6 +213,7 @@ export const initBind: InitBindFunction = (ns, oc, config) => {
     $Dictionary: Dictionary,
     $Dispatcher: Dispatcher,
     $EventBus: EventBus,
+    $Observable: Observable,
     $Helper: '$Helper',
     $Http: HttpAgent,
     $PageStateManager: PageStateManager,
