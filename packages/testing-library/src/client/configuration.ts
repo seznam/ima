@@ -1,4 +1,9 @@
-import type { ContextValue, ImaApp, ImaRenderResult } from '../types';
+import type {
+  ContextValue,
+  ImaApp,
+  ImaRenderResult,
+  ImaRenderHookResult,
+} from '../types';
 
 export interface ClientConfiguration {
   /**
@@ -33,6 +38,18 @@ export interface ClientConfiguration {
     contextValue,
     ...result
   }: ImaRenderResult) => void | Promise<void>;
+  beforeRenderHookWithContext: ({
+    app,
+    contextValue,
+  }: {
+    app: ImaApp | null;
+    contextValue: ContextValue;
+  }) => void | Promise<void>;
+  afterRenderHookWithContext<TResult, TProps>({
+    app,
+    contextValue,
+    ...result
+  }: ImaRenderHookResult<TResult, TProps>): void | Promise<void>;
 }
 
 const clientConfiguration: ClientConfiguration = {
@@ -45,6 +62,8 @@ const clientConfiguration: ClientConfiguration = {
   }),
   beforeRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
   afterRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  beforeRenderHookWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  afterRenderHookWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 };
 
 /**

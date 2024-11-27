@@ -1,22 +1,17 @@
-import { renderWithContext } from '@ima/testing-library';
+import { renderHookWithContext } from '@ima/testing-library';
 
-import { renderHook } from '../../testUtils';
 import { useComponent, useOnce } from '../component';
 
 describe('useComponent', () => {
-  let result;
-
-  it('should return object of component utility functions', () => {
-    renderHook(() => {
-      result = useComponent();
-    }, {});
+  it('should return object of component utility functions', async () => {
+    const { result } = await renderHookWithContext(() => useComponent());
 
     expect(
       ['cssClasses', 'localize', 'link', 'fire', 'listen', 'unlisten'].every(
-        key => typeof result[key] === 'function'
+        key => typeof result.current[key] === 'function'
       )
     ).toBeTruthy();
-    expect(Object.keys(result)).toEqual([
+    expect(Object.keys(result.current)).toEqual([
       'utils',
       'cssClasses',
       'localize',
@@ -32,20 +27,15 @@ describe('useOnce', () => {
   it('should call callback only once', async () => {
     let count = 0;
 
-    const TestComponent = () => {
-      useOnce(() => count++);
+    const { rerender } = await renderHookWithContext(() =>
+      useOnce(() => count++)
+    );
 
-      return <div>NotEmpty</div>;
-    };
+    rerender();
+    rerender();
+    rerender();
+    rerender();
 
-    const { container, rerender } = await renderWithContext(<TestComponent />);
-
-    rerender(<TestComponent />);
-    rerender(<TestComponent />);
-    rerender(<TestComponent />);
-    rerender(<TestComponent />);
-
-    expect(container).not.toBeEmptyDOMElement();
     expect(count).toBe(1);
   });
 });

@@ -94,6 +94,17 @@ test('renders component with custom app configuration', async () => {
 });
 ```
 
+### renderHookWithContext
+
+```javascript
+async function renderHookWithContext<TResult, TProps>(
+  hook: (props: TProps) => TResult,
+  options?: { contextValue?: ContextValue; app?: ImaApp }
+): Promise<ReturnType<typeof renderHook<TResult, TProps>> & { app: ImaApp | null; contextValue: ContextValue; }>
+```
+
+`renderHookWithContext` is a wrapper around [`renderHook` from `@testing-library/react`](https://testing-library.com/docs/react-testing-library/api#renderhook). It uses the same logic as `renderWithContext` to provide the IMA.js context. See [the `renderWithContext` section](#renderwithcontext) for more information.
+
 ## Extending IMA boot config methods
 
 You can extend IMA boot config by using [IMA `pluginLoader.register`](https://imajs.io/api/classes/ima_core.PluginLoader/#register) method. Use the same approach as in IMA plugins.

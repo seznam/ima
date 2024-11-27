@@ -1,22 +1,19 @@
-import { renderHook } from '../../testUtils';
+import { getContextValue, renderHookWithContext } from '@ima/testing-library';
+
 import { useLocalize } from '../localize';
 
 describe('useLocalize', () => {
-  let result;
-  let contextMock = {
-    $Utils: {
-      $Dictionary: {
-        get: () => 'Dictionary.get() function',
-      },
-    },
-  };
+  it('should return shortcut to $Dictionary.get utility', async () => {
+    const contextValue = await getContextValue();
 
-  it('should return shortcut to $Dictionary.get function', () => {
-    renderHook(() => {
-      result = useLocalize();
-    }, contextMock);
+    contextValue.$Utils.$Dictionary.get = jest
+      .fn()
+      .mockReturnValue('$Dictionary.get');
 
-    expect(typeof result === 'function').toBe(true);
-    expect(result()).toBe('Dictionary.get() function');
+    const { result } = await renderHookWithContext(() => useLocalize(), {
+      contextValue,
+    });
+
+    expect(result.current()).toBe('$Dictionary.get');
   });
 });
