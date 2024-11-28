@@ -500,6 +500,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _setCookiesFromResponse<B>(agentResponse: HttpAgentResponse<B>): void {
     if (agentResponse.headersRaw) {
+      // @ts-expect-error this type is not part of older typescript distributions (needs TS update)
       const receivedCookies = agentResponse.headersRaw.getSetCookie();
 
       if (receivedCookies.length > 0) {
