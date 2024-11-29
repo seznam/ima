@@ -12,7 +12,7 @@ IMA_SKELETON_SERVER_PID=$!
 sleep 7
 
 echo "Run es-check"
-../ima/node_modules/.bin/es-check es2018 './build/static/js/**/*.js'
+$ROOT_DIR_IMA/node_modules/.bin/es-check es2018 './build/static/js/**/*.js'
 
 echo "Run benchmark test on create-ima-app"
 cd "$ROOT_DIR_IMA"
