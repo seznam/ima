@@ -1,6 +1,6 @@
 import { PageContext } from '@ima/react-page-renderer';
-import { render } from '@testing-library/react';
-import type { RenderOptions } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
+import type { RenderOptions, RenderHookOptions } from '@testing-library/react';
 import type { ReactElement } from 'react';
 
 // import of app/main is resolved by the jest moduleNameMapper
@@ -12,6 +12,7 @@ import type {
   ContextValue,
   ImaApp,
   ImaContextWrapper,
+  ImaRenderHookResult,
   ImaRenderResult,
 } from './types';
 
@@ -108,5 +109,39 @@ async function renderWithContext(
   };
 }
 
+async function renderHookWithContext<TResult, TProps>(
+  hook: (props: TProps) => TResult,
+  options?: RenderHookOptions<TProps> & {
+    contextValue?: ContextValue;
+    app?: ImaApp;
+  }
+): Promise<ImaRenderHookResult<TResult, TProps>> {
+  let { app = null, contextValue, ...rest } = options ?? {}; // eslint-disable-line prefer-const
+
+  if (!contextValue) {
+    if (!app) {
+      app = await initImaApp();
+    }
+
+    contextValue = await getContextValue(app);
+  }
+
+  const wrapper = await getContextWrapper(contextValue);
+
+  const config = getImaTestingLibraryClientConfig();
+
+  await config.beforeRenderHookWithContext({ app, contextValue });
+
+  const result = renderHook(hook, { ...rest, wrapper });
+
+  await config.afterRenderHookWithContext({ app, contextValue, ...result });
+
+  return {
+    ...result,
+    app,
+    contextValue,
+  };
+}
+
 export * from '@testing-library/react';
-export { renderWithContext };
+export { renderHookWithContext, renderWithContext };
