@@ -50,7 +50,7 @@ export interface RouteFactoryOptions {
           | AbstractConstructor<Extension<any, any>>
           | Constructor<Extension<any, any>>
         ),
-        { optional: true }
+        { optional: true },
       ]
   )[];
 }

@@ -118,7 +118,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
             cached: false,
           };
 
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(response).toStrictEqual(agentResponse);
         });
       });
@@ -135,7 +134,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then(
           // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+
           () => {},
           // @ts-ignore
           error => {
@@ -162,7 +161,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then(
           // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+
           () => {},
           // @ts-ignore
           error => {
@@ -172,7 +171,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
         );
       });
 
-      // eslint-disable-next-line jest/no-focused-tests
       it('should set cookie to response', async () => {
         jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
@@ -180,7 +178,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
         jest
           .spyOn(cookie, 'parseFromSetCookieHeader')
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+
           .mockImplementation(() => {});
 
         // @ts-ignore

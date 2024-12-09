@@ -3,7 +3,6 @@ import { PageRendererDispatcherEvents } from '../page/renderer/PageRenderer';
 import { PageStateDispatcherEvents } from '../page/state/PageStateManagerImpl';
 import { RouterDispatcherEvents } from '../router/AbstractRouter';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DispatcherEventsMap
   extends PageStateDispatcherEvents,
     PageManagerDispatcherEvents,

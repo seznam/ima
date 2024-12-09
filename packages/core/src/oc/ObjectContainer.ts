@@ -28,7 +28,7 @@ export type Dependency<T> =
       OCInjectable<T>,
       {
         optional: boolean;
-      }
+      },
     ];
 
 export type OCInstanceConstrain<T = any> =
@@ -41,13 +41,13 @@ export type OCInstance<T extends OCInstanceConstrain> =
   T extends keyof DecoratedOCAliasMap
     ? DecoratedOCAliasMap[T]
     : T extends AbstractConstructor<any> | Constructor<any>
-    ? InstanceType<T>
-    : T extends [
-        AbstractConstructor<any> | Constructor<any>,
-        { optional: true }
-      ]
-    ? InstanceType<T[0]> | null
-    : T;
+      ? InstanceType<T>
+      : T extends [
+            AbstractConstructor<any> | Constructor<any>,
+            { optional: true },
+          ]
+        ? InstanceType<T[0]> | null
+        : T;
 
 const SPREAD_RE = /^\.../;
 const OPTIONAL_RE = /^(...)?\?/;

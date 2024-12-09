@@ -105,7 +105,6 @@ export async function createDevServer({
       )
       .use(
         hotMiddleware(compiler, {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           ...(isVerbose ? undefined : { quiet: true, log: () => {} }),
           path: '/__webpack_hmr',
           heartbeat: 1500,

@@ -211,8 +211,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isClientES
-      ? ['web', 'es2022']
-      : ['web', 'es2018'],
+        ? ['web', 'es2022']
+        : ['web', 'es2018'],
     mode,
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -254,8 +254,8 @@ export default async (
             ? isServer
               ? 'app.server'
               : isDevEnv
-              ? 'app.client'
-              : 'app.bundle'
+                ? 'app.client'
+                : 'app.bundle'
             : '[name]',
           '[contenthash]',
           'js',
@@ -618,7 +618,7 @@ export default async (
                         console.error(message);
                       }
                     },
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+
                     log: () => {},
                   },
                 }),

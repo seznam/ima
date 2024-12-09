@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 import { Bootstrap, InitPluginConfig, BootConfig } from '../Bootstrap';
 import { ns } from '../Namespace';
 import { BindingState } from '../oc/BindingState';

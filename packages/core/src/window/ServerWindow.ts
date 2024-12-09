@@ -181,7 +181,6 @@ export class ServerWindow extends Window {
     options: CustomEventInit<T>
   ): CustomEvent<T> {
     const dummyCustomEvent = {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       initCustomEvent: () => {},
       detail: {},
     } as unknown as CustomEvent;

@@ -41,8 +41,8 @@ export async function getIMAResponseContent(): Promise<string> {
     },
     {
       status: () => 200,
-      send: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-      set: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+      send: () => {},
+      set: () => {},
       locals: {},
     }
   );

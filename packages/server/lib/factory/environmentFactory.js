@@ -18,10 +18,9 @@ module.exports = function environmentFactory({
   applicationFolder,
   processEnvironment,
 }) {
-  const environmentConfig = require(path.resolve(
-    applicationFolder,
-    './server/config/environment.js'
-  ));
+  const environmentConfig = require(
+    path.resolve(applicationFolder, './server/config/environment.js')
+  );
 
   let currentEnvironment = environmentConfig[env] || {};
   const $Language =

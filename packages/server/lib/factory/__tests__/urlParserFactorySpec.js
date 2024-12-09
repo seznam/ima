@@ -124,7 +124,6 @@ describe('urlParserFactory', () => {
         host: host || '',
       };
 
-      // eslint-disable-next-line jest/no-if
       if (header) {
         const [headerKey, headerValue] = Object.entries(header)[0];
         getCodeBook[headerKey] = headerValue;
@@ -344,7 +343,6 @@ describe('urlParserFactory', () => {
         host: HOST2,
       };
 
-      // eslint-disable-next-line jest/no-if
       if (headerKey) {
         getCodeBook[headerKey] = header[headerKey];
       }

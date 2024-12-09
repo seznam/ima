@@ -14,7 +14,7 @@ import { RouteParams } from '../router/AbstractRoute';
 export class AbstractController<
   S extends PageState = {},
   R extends RouteParams = {},
-  SS extends S = S
+  SS extends S = S,
 > extends Controller<S, R, SS> {
   protected _pageStateManager?: PageStateManager<SS>;
   protected _extensions: Map<
