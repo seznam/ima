@@ -39,7 +39,6 @@ export class PageRendererFactory {
    */
   getDocumentView(documentView: ComponentType) {
     if ($Debug) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = documentView.prototype;
 
       if (
@@ -70,7 +69,6 @@ export class PageRendererFactory {
    */
   getManagedRootView(managedRootView: ComponentType) {
     if ($Debug) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = managedRootView.prototype;
 
       if (
@@ -91,7 +89,6 @@ export class PageRendererFactory {
   private _isFunctionalComponent(component: unknown) {
     return (
       typeof component === 'function' &&
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       !(component.prototype && component.prototype.isReactComponent)
     );
   }

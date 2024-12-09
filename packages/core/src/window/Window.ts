@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WindowCustomEventsMap {}
 
 export type WindowEventTargets =
@@ -15,18 +14,18 @@ export type WindowEventTargetsMap<E extends WindowEventTargets> =
   (E extends Document
     ? DocumentEventMap
     : E extends globalThis.Window
-    ? WindowEventMap
-    : E extends HTMLBodyElement
-    ? HTMLBodyElementEventMap
-    : E extends SVGSVGElement
-    ? SVGSVGElementEventMap
-    : E extends SVGElement
-    ? SVGElementEventMap
-    : E extends HTMLMediaElement
-    ? HTMLMediaElementEventMap
-    : E extends HTMLVideoElement
-    ? HTMLVideoElementEventMap
-    : HTMLElementEventMap) &
+      ? WindowEventMap
+      : E extends HTMLBodyElement
+        ? HTMLBodyElementEventMap
+        : E extends SVGSVGElement
+          ? SVGSVGElementEventMap
+          : E extends SVGElement
+            ? SVGElementEventMap
+            : E extends HTMLMediaElement
+              ? HTMLMediaElementEventMap
+              : E extends HTMLVideoElement
+                ? HTMLVideoElementEventMap
+                : HTMLElementEventMap) &
     WindowCustomEventsMap;
 
 /**
@@ -311,7 +310,7 @@ export abstract class Window {
   bindEventListener<
     T extends WindowEventTargets,
     K extends keyof WindowEventTargetsMap<T>,
-    S = any
+    S = any,
   >(
     eventTarget: T,
     event: K,
@@ -346,7 +345,7 @@ export abstract class Window {
   unbindEventListener<
     T extends WindowEventTargets,
     K extends keyof WindowEventTargetsMap<T>,
-    S
+    S,
   >(
     eventTarget: T,
     event: K,

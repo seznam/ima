@@ -38,7 +38,7 @@ export type LoadedResources<T> = Intersection<
 export abstract class Controller<
   S extends PageState = {},
   R extends RouteParams = {},
-  SS extends S = S
+  SS extends S = S,
 > {
   static $name?: string;
   static $dependencies: Dependencies;

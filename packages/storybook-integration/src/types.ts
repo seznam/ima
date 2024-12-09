@@ -12,7 +12,6 @@ import type {
 import type { ReactRenderer } from '@storybook/react';
 import type { StoryContextForLoaders, StrictArgs } from '@storybook/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ImaStorybookArgs {}
 
 declare module '@storybook/types' {

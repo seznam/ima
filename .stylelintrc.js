@@ -6,17 +6,18 @@ module.exports = {
     '**/build/**',
     '**/docs/**',
     '**/.docusaurus/**',
-    '**/coverage/**', '**/*.js',
+    '**/coverage/**',
+    '**/*.js',
     '**/*.ts',
     '**/*.jsx',
     '**/*.tsx',
-    '**/*.json'
+    '**/*.json',
   ],
   extends: ['stylelint-config-standard', 'stylelint-config-css-modules'],
   plugins: [
     'stylelint-declaration-block-no-ignored-properties',
     'stylelint-order',
-    'stylelint-prettier'
+    'stylelint-prettier',
   ],
   rules: {
     'prettier/prettier': [
