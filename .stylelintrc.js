@@ -31,6 +31,10 @@ module.exports = {
     'no-duplicate-selectors': null,
     'no-descending-specificity': null,
     'declaration-no-important': [true, { severity: 'warning' }],
+    'declaration-block-no-duplicate-properties': [
+      true,
+      { ignore: 'consecutive-duplicates' },
+    ],
     'keyframe-declaration-no-important': [true, { severity: 'warning' }],
     'selector-max-id': 2,
     'import-notation': null,
