@@ -18,6 +18,7 @@ type WithDependencies = {
 export type OCInjectable<T> =
   | (Constructor<T> & WithDependencies)
   | (AbstractConstructor<T> & Partial<WithDependencies>)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   | (Function & { prototype: T } & Partial<WithDependencies>);
 
 export type Dependencies<T = any> = Dependency<T>[];

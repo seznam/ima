@@ -78,7 +78,6 @@ module.exports = typescriptEslint.config(
       'react/no-deprecated': 'off',
 
       // Import plugin
-      'import/named': 'off',
       'import/no-unresolved': [
         'warn',
         {
@@ -189,16 +188,25 @@ module.exports = typescriptEslint.config(
       ],
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-require-imports': 'off',
-      '@typescript-eslint/no-unsafe-function-type': 'off',
-      'import/named': 'off',
-      'import/namespace': 'off',
     },
   },
   // Type-checkd Typescript support
   // TODO gradually enable everywhere
   {
-    files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
+    files: ['packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
     extends: [...typescriptEslint.configs.recommendedTypeChecked],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  {
+    files: ['packages/devtools/**'],
+    rules: {
+      // Don't work properly with aliases
+      'import/named': 'off',
+      'import/namespace': 'off',
+    },
   },
   // Website/docs overrides
   {

@@ -88,6 +88,7 @@ export class ViewAdapter extends Component<ViewAdapterProps, State> {
 
   getContextValue(props: ViewAdapterProps, state: State) {
     return this.createContext(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
       ...this.contextSelectors.map(selector => selector(props, state))
     );
   }
