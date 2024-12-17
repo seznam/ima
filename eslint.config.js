@@ -121,9 +121,6 @@ module.exports = typescriptEslint.config(
       react: {
         version: 'detect',
       },
-      'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx'],
-      },
       'import/resolver': {
         node: {
           extensions: ['.js', '.jsx', '.mjs', '.json'],
@@ -163,6 +160,7 @@ module.exports = typescriptEslint.config(
       },
     },
     rules: {
+      'import/named': 'off', // @FIXME: Doesn't work properly when importing types - https://github.com/import-js/eslint-plugin-import/issues/3048
       '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
@@ -237,6 +235,13 @@ module.exports = typescriptEslint.config(
         chrome: true,
         FB: true,
       },
+    },
+  },
+  {
+    files: ['packages/create-ima-app/template/**'],
+    rules: {
+      // Template is generated dynamically and some imports are not resolvable at the time of linting
+      'import/no-unresolved': 'off',
     },
   }
 );
