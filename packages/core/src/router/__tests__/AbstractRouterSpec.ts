@@ -607,8 +607,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       expect(dispatcher.fire).toHaveBeenCalledWith(
         RouterEvents.BEFORE_HANDLE_ROUTE,
-        data,
-        true
+        data
       );
     });
 
@@ -633,8 +632,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
           RouterEvents.AFTER_HANDLE_ROUTE,
-          data,
-          true
+          data
         );
       });
     });
@@ -661,8 +659,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
           RouterEvents.AFTER_HANDLE_ROUTE,
-          data,
-          true
+          data
         );
       });
     });

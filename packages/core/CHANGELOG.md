@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.6.0
+
+### Minor Changes
+
+- f5f4be879: Added new settings `validateCookies` to enable/disable cookie validation. It validates cookie options and request url before saving cookie or sending it to the server. This means that path, subdomain and secure options must match between the request url and the cookie, otherwise the cookie is not saved or sent.
+
+### Patch Changes
+
+- 399f91f8b: Fixed cookie parsing from setCookie header when multiple cookies were sent to server. Previously only the first cookie was parsed while multiple set-cookies could alter the cookie settings
+
 ## 19.5.4
 
 ### Patch Changes

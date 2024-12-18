@@ -285,8 +285,7 @@ describe('ClientPageRenderer', () => {
 
       expect(dispatcher.fire).toHaveBeenLastCalledWith(
         RendererEvents.UPDATED,
-        expect.any(Object),
-        true
+        expect.any(Object)
       );
     });
   });

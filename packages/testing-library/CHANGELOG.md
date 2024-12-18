@@ -1,5 +1,11 @@
 # @ima/testing-library
 
+## 19.11.0
+
+### Minor Changes
+
+- 550793a9f: Add `renderHookWithContext`, see the [docs](https://imajs.io/basic-features/testing/#renderhookwithcontext) for more details.
+
 ## 19.10.0
 
 ### Minor Changes

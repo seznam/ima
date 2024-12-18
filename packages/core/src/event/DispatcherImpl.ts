@@ -1,4 +1,9 @@
-import { Dispatcher, DispatcherListener } from './Dispatcher';
+import {
+  Dispatcher,
+  DispatcherEventsMap,
+  DispatcherListener,
+  DispatcherListenerAll,
+} from './Dispatcher';
 import { GenericError } from '../error/GenericError';
 import { Dependencies } from '../oc/ObjectContainer';
 
@@ -24,6 +29,8 @@ export class DispatcherImpl extends Dispatcher {
     Map<DispatcherListener<any>, Set<unknown>>
   >;
 
+  protected _eventListenersAll: Map<DispatcherListenerAll<any>, Set<unknown>>;
+
   static $dependencies: Dependencies = [];
 
   /**
@@ -38,6 +45,7 @@ export class DispatcherImpl extends Dispatcher {
      * the event.
      */
     this._eventListeners = new Map();
+    this._eventListenersAll = new Map();
   }
 
   /**
@@ -83,6 +91,29 @@ export class DispatcherImpl extends Dispatcher {
   /**
    * @inheritDoc
    */
+  listenAll(listener: DispatcherListenerAll<any>, scope?: unknown) {
+    if ($Debug) {
+      if (typeof listener !== 'function') {
+        throw new GenericError(
+          `The listener must be a function, ${listener} provided.`
+        );
+      }
+    }
+
+    if (!this._eventListenersAll.has(listener)) {
+      const scopes = new Set();
+
+      this._eventListenersAll.set(listener, scopes);
+    }
+
+    this._eventListenersAll.get(listener)!.add(scope);
+
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
   unlisten(
     event: string,
     listener: DispatcherListener<any>,
@@ -120,25 +151,51 @@ export class DispatcherImpl extends Dispatcher {
     return this;
   }
 
+  unlistenAll(listener: DispatcherListenerAll<any>, scope?: unknown) {
+    const scopes = this._eventListenersAll.get(listener) ?? EMPTY_SET;
+
+    if ($Debug) {
+      if (!scopes.has(scope)) {
+        console.warn(
+          'ima.core.event.DispatcherImpl.unlistenAll(): the provided ' +
+            `listener '${listener}' is not registered for` +
+            `scope '${scope}'. Check ` +
+            `your workflow.`,
+          {
+            listener: listener,
+            scope: scope,
+          }
+        );
+      }
+    }
+
+    scopes.delete(scope);
+
+    if (!scopes.size) {
+      this._eventListenersAll.delete(listener);
+    }
+
+    return this;
+  }
+
   /**
    * @inheritDoc
    */
-  fire(event: string, data: any, imaInternalEvent = false): this {
+  fire<E extends string | keyof DispatcherEventsMap>(
+    event: E,
+    data: any
+  ): this {
     const listeners = this._getListenersOf(event);
-
-    if (!listeners?.size && !imaInternalEvent) {
-      console.warn(
-        `There are no event listeners registered for the ${event} ` + `event`,
-        {
-          event: event,
-          data: data,
-        }
-      );
-    }
 
     for (const [listener, scopes] of listeners) {
       for (const scope of scopes) {
         listener.bind(scope)(data);
+      }
+    }
+
+    for (const [listener, scopes] of this._eventListenersAll.entries()) {
+      for (const scope of scopes) {
+        listener.bind(scope)(event, data);
       }
     }
 
