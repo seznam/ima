@@ -44,7 +44,7 @@ class ManifestPlugin {
   #options: ManifestPluginOptions;
 
   static #generated: {
-    [key in ImaConfigurationContext['name']]?: boolean;
+    [key in ImaConfigurationContext['name']]?: number;
   } = {};
 
   constructor(options: ManifestPluginOptions) {
@@ -52,7 +52,7 @@ class ManifestPlugin {
     this.#options = options;
 
     // Track generated configurations status
-    ManifestPlugin.#generated[options.context.name] = false;
+    ManifestPlugin.#generated[options.context.name] = 0;
 
     // Validate options
     validate(schema as Schema, this.#options, {
@@ -118,14 +118,26 @@ class ManifestPlugin {
       });
 
     // Mark this configuration as generated
-    ManifestPlugin.#generated[compilationName] = true;
+    (ManifestPlugin.#generated[compilationName] as number)++;
+    const generatedValues = Object.values(ManifestPlugin.#generated);
 
-    if (Object.values(ManifestPlugin.#generated).every(v => v)) {
+    // If all configurations are generated the same amount of times then we can emit the manifest file
+    // If you are changing this code, please note:
+    // Using counter instead of boolean values prevents an issue, where configuration "A" is generated multiple times
+    // at the same time as configuration "B" is not generated at all.
+    // With boolean we would emit the manifest file once configuration "B" is generated for the first time.
+    // Emitting the manifest file resets the `generated` values and after the second configuration "B" is generated
+    // we get into inconsistent state, where we already consider configuration "B" to be ready for emitting,
+    // but it is not. The next manifest re-build is then triggered too early and we are stuck in this inconsistent state.
+    // In the end, when we run `ima dev` and we change some file, the manifest file is always one version behind for one of the configurations.
+    // It is very hard to debug this issue, because it is not deterministic and it is hard to reproduce.
+    if (generatedValues.every(v => v === generatedValues[0])) {
       // Reset tracking info
       Object.keys(ManifestPlugin.#generated).forEach(
         key =>
-          (ManifestPlugin.#generated[key as ImaConfigurationContext['name']] =
-            false)
+          (ManifestPlugin.#generated[
+            key as ImaConfigurationContext['name']
+          ] = 0)
       );
 
       // Emit compiled ima runner with embedded runtime codes
