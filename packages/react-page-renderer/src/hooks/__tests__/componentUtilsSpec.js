@@ -1,15 +1,13 @@
-import { renderHook } from '../../testUtils';
+import { renderHookWithContext } from '@ima/testing-library';
+
 import { useComponentUtils } from '../componentUtils';
 
 describe('useComponentUtils', () => {
-  let result;
-  let contextMock = { $Utils: { CustomContextHelper: {} } };
+  it('should return componentUtils', async () => {
+    const { result, contextValue } = await renderHookWithContext(() =>
+      useComponentUtils()
+    );
 
-  it('should return componentUtils', () => {
-    renderHook(() => {
-      result = useComponentUtils();
-    }, contextMock);
-
-    expect(Object.keys(result).includes('CustomContextHelper')).toBeTruthy();
+    expect(result.current).toBe(contextValue.$Utils);
   });
 });

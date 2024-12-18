@@ -1,22 +1,19 @@
-import { renderHook } from '../../testUtils';
+import { getContextValue, renderHookWithContext } from '@ima/testing-library';
+
 import { useLink } from '../link';
 
 describe('useLink', () => {
-  let result;
-  let contextMock = {
-    $Utils: {
-      $Router: {
-        link: () => '$Router.link() function',
-      },
-    },
-  };
+  it('should return shortcut to $Router.link utility', async () => {
+    const contextValue = await getContextValue();
 
-  it('should return shortcut to router link', () => {
-    renderHook(() => {
-      result = useLink();
-    }, contextMock);
+    contextValue.$Utils.$Router.link = jest
+      .fn()
+      .mockReturnValue('$Router.link');
 
-    expect(typeof result === 'function').toBe(true);
-    expect(result()).toBe('$Router.link() function');
+    const { result } = await renderHookWithContext(() => useLink(), {
+      contextValue,
+    });
+
+    expect(result.current()).toBe('$Router.link');
   });
 });

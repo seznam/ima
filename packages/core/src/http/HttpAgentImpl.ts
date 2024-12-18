@@ -246,7 +246,7 @@ export class HttpAgentImpl extends HttpAgent {
     data?: UnknownParameters,
     options?: Partial<HttpAgentRequestOptions>
   ): Promise<HttpAgentResponse<B>> {
-    const optionsWithDefault = this._prepareOptions(options);
+    const optionsWithDefault = this._prepareOptions(options, url);
 
     if (optionsWithDefault.cache) {
       const cachedData = this._getCachedData<B>(method, url, data);
@@ -433,7 +433,8 @@ export class HttpAgentImpl extends HttpAgent {
    *         internally.
    */
   _prepareOptions(
-    options: Partial<HttpAgentRequestOptions> = {}
+    options: Partial<HttpAgentRequestOptions> = {},
+    url: string
   ): HttpAgentRequestOptions {
     const composedOptions = {
       ...this._defaultRequestOptions,
@@ -455,7 +456,9 @@ export class HttpAgentImpl extends HttpAgent {
     if (composedOptions.fetchOptions?.credentials === 'include') {
       // mock default browser behavior for server-side (sending cookie with a fetch request)
       composedOptions.fetchOptions.headers.Cookie =
-        this._cookie.getCookiesStringForCookieHeader();
+        this._cookie.getCookiesStringForCookieHeader(
+          options.validateCookies ? url : undefined
+        );
     }
 
     return composedOptions;
@@ -497,10 +500,16 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _setCookiesFromResponse<B>(agentResponse: HttpAgentResponse<B>): void {
     if (agentResponse.headersRaw) {
-      const receivedCookies = agentResponse.headersRaw.get('set-cookie');
+      // @ts-expect-error this type is not part of older typescript distributions (needs TS update)
+      const receivedCookies = agentResponse.headersRaw.getSetCookie();
 
-      if (receivedCookies) {
-        this._cookie.parseFromSetCookieHeader(receivedCookies);
+      if (receivedCookies.length > 0) {
+        this._cookie.parseFromSetCookieHeader(
+          receivedCookies,
+          this._defaultRequestOptions.validateCookies
+            ? agentResponse.params.url
+            : undefined
+        );
       }
     }
   }

@@ -573,7 +573,7 @@ export abstract class AbstractRouter extends Router {
      */
     await this._pageManager.preManage();
 
-    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData, true);
+    this._dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, eventData);
 
     return this._pageManager
       .manage({
@@ -590,14 +590,10 @@ export abstract class AbstractRouter extends Router {
         }
 
         await autoYield();
-        this._dispatcher.fire(
-          RouterEvents.AFTER_HANDLE_ROUTE,
-          {
-            ...eventData,
-            response,
-          },
-          true
-        );
+        this._dispatcher.fire(RouterEvents.AFTER_HANDLE_ROUTE, {
+          ...eventData,
+          response,
+        });
 
         return response as void | StringParameters;
       })

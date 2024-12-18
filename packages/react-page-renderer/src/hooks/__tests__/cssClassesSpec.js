@@ -1,20 +1,17 @@
-import { renderHook } from '../../testUtils';
+import { getContextValue, renderHookWithContext } from '@ima/testing-library';
+
 import { useCssClasses } from '../cssClasses';
 
 describe('useCssClasses', () => {
-  let result;
-  let contextMock = {
-    $Utils: {
-      $CssClasses: () => '$CssClasses',
-    },
-  };
+  it('should return shortcut to $CssClasses utility', async () => {
+    const contextValue = await getContextValue();
 
-  it('should return shortcut to $CssClasses utility', () => {
-    renderHook(() => {
-      result = useCssClasses();
-    }, contextMock);
+    contextValue.$Utils.$CssClasses = jest.fn().mockReturnValue('$CssClasses');
 
-    expect(typeof result === 'function').toBe(true);
-    expect(result()).toBe('$CssClasses');
+    const { result } = await renderHookWithContext(() => useCssClasses(), {
+      contextValue,
+    });
+
+    expect(result.current()).toBe('$CssClasses');
   });
 });

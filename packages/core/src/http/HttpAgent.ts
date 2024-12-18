@@ -39,6 +39,7 @@ export interface HttpAgentRequestOptions {
   ) => HttpAgentResponse<B>)[];
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;
+  validateCookies?: boolean;
 }
 
 /**

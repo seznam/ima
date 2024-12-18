@@ -3,6 +3,9 @@ title: Fetching Data
 description: Tutorial > Fetching Data
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 In [last part](./adding-some-state) of this series we tidied up our HomeView component and split our render method
 into much smaller and manageable components thanks to react. In this part we're going to
 mock the data fetching from server and learn more about IMA.js object container.
@@ -60,6 +63,9 @@ to modify our API backend.
 Let's create the `app/model` and `app/model/post` directories and then a new
 file `app/model/post/PostEntity.js` with the following content:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 export default class PostEntity {
   constructor(data) {
@@ -72,6 +78,34 @@ export default class PostEntity {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { PostData } from 'app/page/home/HomeController';
+
+export class PostEntity {
+  declare id: number | null;
+  declare content: string;
+  declare author: string;
+
+  constructor(data: PostData) {
+    this.id = data.id;
+    this.content = data.content;
+    this.author = data.content;
+  }
+}
+```
+
+> **TypeScript:** Before we set the content of the data object to our fields,
+    we have to declare each field with its corresponding type.
+
+> We also used `PostData` type, that we already defined in the `HomeController`.
+    But keep in mind that there is no `id` attribute, so you have to add it to the type definition.
+
+  </TabItem>
+</Tabs>
+
 We've just created a new class, exported it, and that's it, no more is currently
 required. Our new entity class extracts the data obtained from a data object
 (for example obtained from a deserialized JSON) and sets it to its fields.
@@ -83,6 +117,9 @@ factory class will be used to create new entities from data objects and arrays
 of data objects** - but in our case, the latter will suffice for now.
 
 Create a new `app/model/post/PostFactory.js` file with the following content:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 import PostEntity from './PostEntity';
@@ -98,6 +135,27 @@ export default class PostFactory {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { PostEntity } from './PostEntity';
+import { Dependencies } from '@ima/core';
+import { PostData } from 'app/page/home/HomeController';
+
+export class PostFactory {
+  static $dependencies: Dependencies = [];
+
+  createList(entities: PostEntity[]): PostEntity[] {
+    return entities.map((entityData: PostData) => new PostEntity(entityData));
+  }
+}
+
+```
+
+  </TabItem>
+</Tabs>
+
 Our new factory class has just one method named `createList()`. The
 method takes an array of data objects and returns an array of post entities.
 
@@ -108,6 +166,9 @@ class represents our single point of access to a single REST API resource**
 (or entity collection, if you will). The sole purpose of a resource class is to
 provide a relatively low-level API for accessing the REST API resource. Create
 a new `app/model/post/PostResource.js` file with the following contents:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 import PostFactory from './PostFactory';
@@ -130,6 +191,45 @@ export default class PostResource {
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import MockHttpAgent from 'app/mock/MockHttpAgent';
+import { Dependencies } from '@ima/core';
+import { PostData } from 'app/page/home/HomeController';
+import { PostEntity } from 'app/model/post/PostEntity';
+import { PostFactory } from './PostFactory';
+
+type PostApiGetResponse = {
+  body: PostData[];
+};
+
+export class PostResource {
+  static $dependencies: Dependencies = ['$Http', PostFactory];
+
+  declare _http: string;
+  declare _factory: PostFactory;
+
+  constructor(http: string, factory: PostFactory) {
+    this._http = http;
+
+    this._factory = factory;
+  }
+
+  getEntityList(): Promise<PostEntity[]> {
+    return this._http
+      .get('http://localhost:3001/static/static/public/posts.json', {})
+      .then((response: PostApiGetResponse) =>
+        this._factory.createList(response.body)
+      );
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
 
 We defined the `getEntityList()` method in our resource class which we'll use
 to fetch the posts from the server. In a real-world application we would use
@@ -164,6 +264,9 @@ resolve to the constructed sequence of post entities.
 In our case, however, the service will be very plain. Create a new
 `app/model/post/PostService.js` file with the following content:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 import PostResource from './PostResource';
 
@@ -181,6 +284,32 @@ export default class PostService {
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { Dependencies } from '@ima/core';
+import { PostEntity } from 'app/model/post/PostEntity';
+import { PostResource } from './PostResource';
+
+export class PostService {
+  static $dependencies: Dependencies = [PostResource];
+
+  declare _resource: PostResource;
+
+  constructor(resource: PostResource) {
+    this._resource = resource;
+  }
+
+  getPosts(): Promise<PostEntity[]> {
+    return this._resource.getEntityList();
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
 
 Now that we have our entity, factory, resource and service, you may be thinking
 that this is a little too much code for something so simple. Well, that depends
@@ -204,6 +333,8 @@ Every class that wants to use DI has to define static getter which returns an ar
 we want to inject to the constructor in the same order as defined in the array itself. Real
 world example would then look something like this:
 
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 import HttpClient from 'http';
@@ -221,6 +352,30 @@ export default class PostResource {
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import HttpClient from 'http';
+import { PostFactory } from './PostFactory';
+
+export class PostResource {
+  static $dependencies: Dependencies = [HttpClient, PostFactory];
+
+  declare _http: HttpClient;
+  declare _factory: PostFactory;
+
+  constructor(http: HttpClient, factory: PostFactory) {
+    // http and factory contains instances of their respective classes
+    this._http = http;
+    this._factory = factory;
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
 
 The only condition to have DI working as expected is, that if you want to use any class as a dependency,
 **it has to define static getter** `$dependencies`. Even if it does not have any dependencies and returns
@@ -274,6 +429,9 @@ Next we modify the dependencies of the `app/page/home/HomeController.js` by addi
 `PostService` dependency using the static getter syntax. The resulting code looks
 as follows:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 import { AbstractController } from '@ima/core';
 import PostService from 'app/model/post/PostService';
@@ -293,9 +451,52 @@ export default class HomeController extends AbstractController {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import {
+  AbstractController,
+  Dependencies,
+  Dictionary,
+  LoadedResources,
+  MetaManager,
+  Router,
+  Settings,
+} from '@ima/core';
+import { PostService } from 'app/model/post/PostService';
+
+export type PostData = {
+  id: number | null;
+  content: string;
+  author: string;
+};
+export type HomeControllerState = {
+  posts: PostData[];
+};
+
+export class HomeController extends AbstractController<HomeControllerState> {
+  static $dependencies: Dependencies = [PostService];
+
+  constructor(postService: PostService) {
+    super();
+
+    this._postService = postService;
+  }
+
+  ...
+}
+```
+
+  </TabItem>
+</Tabs>
+
 This will push an instance of our post service as the first argument to the
 constructor of our home page controller. With the post service safely in our
 `_postService` field, we can use it to fetch the posts from the server in our `load()` method:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 return {
@@ -303,15 +504,44 @@ return {
 };
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+load(): HomeControllerState {
+  return {
+    posts: this._postService.getPosts(),
+  };
+}
+```
+
+  </TabItem>
+</Tabs>
+
 Finally, we can make use of our new post entities in the home controller's view
 (`app/page/home/HomeView.jsx`). Let's modify the `_renderPosts()` method to look
 like this:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```jsx
 return this.props.posts.map(post => {
   return <Post key={post.id} content={post.content} author={post.author} />;
 });
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```tsx
+return posts.map((post: PostData) => (
+  <Post key={post.id} content={post.content} author={post.author} />
+));
+```
+
+</TabItem>
+</Tabs>
 
 Notice how we use the `post.id` as the react element key here. Now go ahead,
 refresh the page and you'll see the posts still there,

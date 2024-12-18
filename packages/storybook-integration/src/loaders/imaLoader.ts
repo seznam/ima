@@ -20,6 +20,7 @@ async function destroyInstance(
   }
 
   app.oc.get('$Dispatcher').clear();
+  app.oc.get('$Observable').destroy();
   app.oc.get('$Router').unlisten();
   app.oc.get('$PageRenderer').unmount();
   await app.oc.get('$PageManager').destroy();
