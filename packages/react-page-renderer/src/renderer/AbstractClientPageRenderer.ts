@@ -296,7 +296,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     const Window = this._window.getWindow();
     let requestIdleCallback: (
       callback: IdleRequestCallback,
-      options?: IdleRequestOptions | undefined
+      options?: IdleRequestOptions
     ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
 
     if (Window && Window['requestIdleCallback']) {
