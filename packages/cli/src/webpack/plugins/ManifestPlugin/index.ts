@@ -121,16 +121,17 @@ class ManifestPlugin {
     (ManifestPlugin.#generated[compilationName] as number)++;
     const generatedValues = Object.values(ManifestPlugin.#generated);
 
-    // If all configurations are generated the same amount of times then we can emit the manifest file
-    // If you are changing this code, please note:
-    // Using counter instead of boolean values prevents an issue, where configuration "A" is generated multiple times
-    // at the same time as configuration "B" is not generated at all.
-    // With boolean we would emit the manifest file once configuration "B" is generated for the first time.
+    // Once all configurations are generated the same amount of times then we can emit the manifest file
+    // Beware! If you are changing this code, please note:
+    // Using counter instead of boolean values prevents an issue, where configuration "A" is compiled multiple times
+    // before configuration "B" is compiled even once.
+    // With boolean values, we would emit the manifest file once configuration "B" is compiled for the first time.
     // Emitting the manifest file resets the `generated` values and after the second configuration "B" is generated
     // we get into inconsistent state, where we already consider configuration "B" to be ready for emitting,
     // but it is not. The next manifest re-build is then triggered too early and we are stuck in this inconsistent state.
-    // In the end, when we run `ima dev` and we change some file, the manifest file is always one version behind for one of the configurations.
-    // It is very hard to debug this issue, because it is not deterministic and it is hard to reproduce.
+    // From the user perspective, when we run `ima dev` and we change some file, the manifest file is always one version
+    // behind for one of the configurations. It is very hard to debug this issue, because it is not deterministic
+    // and it is hard to reproduce.
     if (generatedValues.every(v => v === generatedValues[0])) {
       // Reset tracking info
       Object.keys(ManifestPlugin.#generated).forEach(
