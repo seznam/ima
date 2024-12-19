@@ -14,15 +14,19 @@ module.exports = function devUtilsFactory({ applicationFolder }) {
 
     if (Array.isArray(options?.dependencies)) {
       options?.dependencies.forEach(dependency =>
-        require(path.resolve(
-          path.join(applicationFolder, './build', assets[dependency].fileName)
-        ))
+        require(
+          path.resolve(
+            path.join(applicationFolder, './build', assets[dependency].fileName)
+          )
+        )
       );
     }
 
-    return require(path.resolve(
-      path.join(applicationFolder, './build', assets[module]?.fileName)
-    ));
+    return require(
+      path.resolve(
+        path.join(applicationFolder, './build', assets[module]?.fileName)
+      )
+    );
   }
 
   return { manifestRequire };

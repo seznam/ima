@@ -219,7 +219,7 @@ describe('ClientPageRenderer', () => {
     it('should patch promises to state', async () => {
       jest
         .spyOn(pageRenderer, '_patchPromisesToState' as never)
-        .mockImplementation(() => ({} as never));
+        .mockImplementation(() => ({}) as never);
 
       await pageRenderer.update(controller, () => null, params);
 

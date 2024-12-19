@@ -82,7 +82,7 @@ export class PageFactory {
    *         constructor.
    */
   createView<
-    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any)
+    V extends keyof OCAliasMap | Constructor<any> | ((...args: any[]) => any),
   >(view: V) {
     if (typeof view === 'function') {
       return view;

@@ -18,7 +18,7 @@ export interface BlankManagedRootViewProps {
 export class BlankManagedRootView<
   P extends BlankManagedRootViewProps = BlankManagedRootViewProps,
   S = unknown,
-  SS = unknown
+  SS = unknown,
 > extends Component<P, S, SS> {
   static get defaultProps() {
     return {

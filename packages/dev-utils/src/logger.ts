@@ -119,7 +119,6 @@ export class Logger {
 
   error(message: string | Error, options?: LoggerOptions) {
     if (message instanceof Error) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [_, ...stackLines] = message.stack?.split('\n') ?? '';
 
       // Print error name and message

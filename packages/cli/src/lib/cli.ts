@@ -17,7 +17,9 @@ function handlerFactory(handlerFn: HandlerFn) {
 
     // Force development env for dev
     process.env.NODE_ENV =
-      command === 'dev' ? 'development' : process.env.NODE_ENV ?? 'production';
+      command === 'dev'
+        ? 'development'
+        : (process.env.NODE_ENV ?? 'production');
 
     return await handlerFn({
       ...yargs,
@@ -65,7 +67,7 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
  * @param {ImaCliCommand} command Current CLI command identifier.
  * @returns {CommandBuilder} Object with shared args.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
   return {
     clean: {

@@ -10,7 +10,7 @@ import { PageContext } from '../PageContext';
 export abstract class AbstractPureComponent<
   P = unknown,
   S = unknown,
-  SS = unknown
+  SS = unknown,
 > extends PureComponent<P, S, SS> {
   static contextType = PageContext;
   declare context: ContextType<typeof PageContext>;

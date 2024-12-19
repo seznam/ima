@@ -422,8 +422,8 @@ export function createContexts(
         name === 'server'
           ? 'server'
           : name === 'client'
-          ? 'static/js'
-          : 'static/js.es',
+            ? 'static/js'
+            : 'static/js.es',
     },
     typescript: {
       enabled: !!tsconfigPath,

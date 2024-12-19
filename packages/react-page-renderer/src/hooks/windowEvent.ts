@@ -49,7 +49,7 @@ export type useWindowEventType = {
  */
 export function useWindowEvent<
   T extends WindowEventTargets,
-  K extends keyof WindowEventTargetsMap<T>
+  K extends keyof WindowEventTargetsMap<T>,
 >(
   eventTarget: T,
   event: K,

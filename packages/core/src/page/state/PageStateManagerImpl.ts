@@ -20,7 +20,7 @@ export interface PageStateDispatcherEvents {
  * The implementation of the {@link PageStateManager} interface.
  */
 export class PageStateManagerImpl<
-  S extends PageState = {}
+  S extends PageState = {},
 > extends PageStateManager<S> {
   private _cursor = -1;
   private _dispatcher: Dispatcher;

@@ -36,7 +36,7 @@ export const initSettings: InitSettingsFunction = (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          documentView: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+          documentView: () => {},
           masterElementId: 'page',
         },
       },

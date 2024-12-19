@@ -603,7 +603,7 @@ export class HttpProxy {
    * @private
    */
   _convertObjectToQueryString<
-    T extends Record<string, string | number | boolean>
+    T extends Record<string, string | number | boolean>,
   >(object: T | undefined): string | undefined {
     if (!object) {
       return undefined;

@@ -55,15 +55,15 @@ export interface ClientConfiguration {
 const clientConfiguration: ClientConfiguration = {
   useFakeDictionary: true,
   rootDir: process.cwd(),
-  beforeInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-  afterInitImaApp: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  beforeInitImaApp: () => {},
+  afterInitImaApp: () => {},
   getContextValue: app => ({
     $Utils: app.oc.get('$ComponentUtils').getUtils(),
   }),
-  beforeRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-  afterRenderWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-  beforeRenderHookWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-  afterRenderHookWithContext: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  beforeRenderWithContext: () => {},
+  afterRenderWithContext: () => {},
+  beforeRenderHookWithContext: () => {},
+  afterRenderHookWithContext: () => {},
 };
 
 /**

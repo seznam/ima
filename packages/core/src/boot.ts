@@ -41,7 +41,7 @@ export type Resource =
       {
         [attribute: string]: unknown;
         fallback: boolean;
-      }
+      },
     ];
 
 export interface Resources {

@@ -11,7 +11,6 @@ export type DictionaryData = {
 
 export type LocalizationFunction = (parameters: ObjectParameters) => string;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DictionaryMap {}
 
 /**

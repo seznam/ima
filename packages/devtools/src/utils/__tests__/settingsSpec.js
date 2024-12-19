@@ -3,7 +3,6 @@ import { getSettings, setSettings } from '../settings';
 
 let settingsStorage = {};
 
-// eslint-disable-next-line jest/require-top-level-describe
 beforeEach(() => {
   global.chrome = {
     storage: {
