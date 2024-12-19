@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.3
+
+### Patch Changes
+
+- 7e6a4de65: Fix link not working on linux environments in some edge cases
+
 ## 19.1.2
 
 ### Patch Changes
