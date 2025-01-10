@@ -187,15 +187,15 @@ export class DispatcherImpl extends Dispatcher {
   ): this {
     const listeners = this._getListenersOf(event);
 
-    for (const [listener, scopes] of listeners) {
-      for (const scope of scopes) {
-        listener.bind(scope)(data);
-      }
-    }
-
     for (const [listener, scopes] of this._eventListenersAll.entries()) {
       for (const scope of scopes) {
         listener.bind(scope)(event, data);
+      }
+    }
+
+    for (const [listener, scopes] of listeners) {
+      for (const scope of scopes) {
+        listener.bind(scope)(data);
       }
     }
 

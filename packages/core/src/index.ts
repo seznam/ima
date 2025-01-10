@@ -39,6 +39,8 @@ export {
   type DispatcherEventsMap,
 } from './event/Dispatcher';
 export { DispatcherImpl } from './event/DispatcherImpl';
+export { Observable } from './event/Observable';
+export { ObservableImpl } from './event/ObservableImpl';
 export {
   EventBus,
   type EventBusEventHandler,
