@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.1
+
+### Patch Changes
+
+- a80eb3a4f: Fixed order of dispatcher listeners (all listeners are called before specific listeners)
+
 ## 19.6.0
 
 ### Minor Changes
