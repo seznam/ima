@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.7.2
+
+### Patch Changes
+
+- 7e6a4de65: Fix `ima dev` watch re-build being one version behind the real changes in some random circumstances.
+
 ## 19.7.1
 
 ### Patch Changes

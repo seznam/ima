@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.1
+
+### Patch Changes
+
+- 43495e186: Update `swc_mut_cjs_exports` to latest version to fix `@swc/core` compatibility issue
+
 ## 19.3.0
 
 ### Minor Changes

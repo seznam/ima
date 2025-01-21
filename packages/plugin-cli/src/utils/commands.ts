@@ -179,7 +179,7 @@ export async function watch(args: Arguments) {
 
     // Dev watcher
     chokidar
-      .watch([path.join(inputDir, './**/*')], {
+      .watch([path.resolve(inputDir)], {
         ignoreInitial: false,
         ignored: config.exclude,
         persistent: true,
@@ -239,7 +239,7 @@ export async function watch(args: Arguments) {
       chokidar
         .watch(
           [
-            path.join(cwd, distBaseDir, '/**/*'),
+            path.join(cwd, distBaseDir),
             Array.isArray(parsedArgs?.additionalWatchPaths) &&
               parsedArgs?.additionalWatchPaths,
             Array.isArray(config?.additionalWatchPaths) &&
@@ -249,7 +249,7 @@ export async function watch(args: Arguments) {
             ignoreInitial: false,
             persistent: true,
             ignored: [
-              '**/tsconfig.tsbuildinfo/**',
+              '**/tsconfig.build.tsbuildinfo/**',
               '**/node_modules/**',
               '**/.DS_Store/**',
             ],
