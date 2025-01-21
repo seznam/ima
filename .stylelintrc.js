@@ -31,6 +31,7 @@ module.exports = {
     'no-duplicate-selectors': null,
     'no-descending-specificity': null,
     'declaration-no-important': [true, { severity: 'warning' }],
+    'declaration-property-value-no-unknown': null,
     'declaration-block-no-duplicate-properties': [
       true,
       { ignore: 'consecutive-duplicates' },
