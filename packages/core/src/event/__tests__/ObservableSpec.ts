@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import { RouterEvents } from '../../router/RouterEvents';
 import { DispatcherImpl } from '../DispatcherImpl';
 import { ObservableImpl } from '../ObservableImpl';
