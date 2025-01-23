@@ -156,12 +156,7 @@ module.exports = function serverAppFactory({
     }
 
     event = await emitter.emit(Event.AfterResponse, event);
-
-    try {
-      await emitter.emitParallel(Event.AfterResponseSend, event);
-    } catch (error) {
-      return errorHandler(error, event);
-    }
+    await emitter.emitParallel(Event.AfterResponseSend, event);
 
     return event;
   }
