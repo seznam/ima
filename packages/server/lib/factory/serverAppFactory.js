@@ -206,7 +206,12 @@ module.exports = function serverAppFactory({
 
       res.status(context.response.status);
       res.send(context.response.content);
-      await emitter.emitParallel(Event.AfterResponseSend, event);
+
+      try {
+        await emitter.emitParallel(Event.AfterResponseSend, event);
+      } catch (error) {
+        logger.error('Error in AfterResponseSend', error);
+      }
     }
 
     return event.context.response;
