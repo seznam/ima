@@ -210,7 +210,7 @@ module.exports = function serverAppFactory({
       try {
         await emitter.emitParallel(Event.AfterResponseSend, event);
       } catch (error) {
-        logger.error('Error in AfterResponseSend', error);
+        logger.error('Error in AfterResponseSend', { error });
       }
     }
 
