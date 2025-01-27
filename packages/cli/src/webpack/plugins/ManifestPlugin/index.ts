@@ -136,9 +136,8 @@ class ManifestPlugin {
       // Reset tracking info
       Object.keys(ManifestPlugin.#generated).forEach(
         key =>
-          (ManifestPlugin.#generated[
-            key as ImaConfigurationContext['name']
-          ] = 0)
+          (ManifestPlugin.#generated[key as ImaConfigurationContext['name']] =
+            0)
       );
 
       // Emit compiled ima runner with embedded runtime codes

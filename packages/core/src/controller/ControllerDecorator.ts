@@ -18,7 +18,7 @@ import { Router } from '../router/Router';
 export class ControllerDecorator<
   S extends PageState = {},
   R extends RouteParams = {},
-  SS extends S = S
+  SS extends S = S,
 > extends Controller<S, R, SS> {
   /**
    * The controller being decorated.

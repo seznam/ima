@@ -77,9 +77,7 @@ export async function generateRealDictionary(locale: string) {
   const langFileGlobs = languages[locale];
 
   await Promise.all(
-    (
-      await globby(langFileGlobs)
-    ).map(async file => {
+    (await globby(langFileGlobs)).map(async file => {
       try {
         const filename = path
           .basename(file)
@@ -123,11 +121,14 @@ function _deepMapValues(
     // Skip already mapped values
     return obj;
   } else if (typeof obj === 'object' && obj !== null) {
-    return Object.keys(obj).reduce((acc, current) => {
-      // @ts-expect-error I don't know how to type `obj[current]`, help me!
-      acc[current] = _deepMapValues(obj[current], fn);
-      return acc;
-    }, {} as Record<string, any>);
+    return Object.keys(obj).reduce(
+      (acc, current) => {
+        // @ts-expect-error I don't know how to type `obj[current]`, help me!
+        acc[current] = _deepMapValues(obj[current], fn);
+        return acc;
+      },
+      {} as Record<string, any>
+    );
   } else {
     return fn(obj);
   }

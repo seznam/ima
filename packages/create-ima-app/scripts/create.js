@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member */
+
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';

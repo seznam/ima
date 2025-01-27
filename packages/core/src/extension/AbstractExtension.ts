@@ -11,7 +11,7 @@ import { RouteParams } from '../router/AbstractRoute';
 export abstract class AbstractExtension<
   S extends PageState = {},
   R extends RouteParams = {},
-  SS extends S = S
+  SS extends S = S,
 > extends Extension<S, R, SS> {
   static $name?: string;
   static $dependencies: Dependencies;

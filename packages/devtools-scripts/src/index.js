@@ -69,7 +69,6 @@ function createDevtool(registerHook) {
     };
   }
 
-  //eslint-disable-line no-undef
   function emit(identifier, meta, options, overrides = {}) {
     const id = uid();
     const label = overrides.label

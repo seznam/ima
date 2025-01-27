@@ -37,7 +37,7 @@ function extractErrorLoc(errorLocation?: string): {
  */
 function extractFileUri(moduleIdentifier: string): string | undefined {
   return moduleIdentifier.includes('!')
-    ? moduleIdentifier.split('!').pop() ?? undefined
+    ? (moduleIdentifier.split('!').pop() ?? undefined)
     : moduleIdentifier;
 }
 

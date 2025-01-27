@@ -135,7 +135,6 @@ export const imaLoader: Loader = async args => {
     ima: typeof imaCore;
     getInitialAppConfigFunctions: () => imaCore.InitAppConfig;
     // @ts-expect-error this is handled in storybook context with aliases
-    // eslint-disable-next-line import/no-unresolved
   } = await import('app/main');
 
   lastImaParams = { ...parameters?.ima };
