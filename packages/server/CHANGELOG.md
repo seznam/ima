@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.5.0
+
+### Minor Changes
+
+- 2cf811d: Added new `AfterResponseSend` event.
+
+### Patch Changes
+
+- 2cf811d: `@esmj/emitter` dependency updated.
+
 ## 19.4.3
 
 ### Patch Changes
