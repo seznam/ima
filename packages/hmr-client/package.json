@@ -35,6 +35,6 @@
     "webpack": "^5.70.0"
   },
   "dependencies": {
-    "@esmj/emitter": "^0.3.0"
+    "@esmj/emitter": "^0.4.3"
   }
 }

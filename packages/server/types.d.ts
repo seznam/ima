@@ -17,6 +17,7 @@ declare module '@ima/server' {
     BeforeResponse = 'ima.server.beforeResponse',
     Response = 'ima.server.response',
     AfterResponse = 'ima.server.afterResponse',
+    AfterResponseSend = 'ima.server.afterResponseSend',
 
     CreateBootConfig = 'ima.server.bootConfig',
     CreateImaApp = 'ima.server.createApp',
