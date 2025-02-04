@@ -210,7 +210,7 @@ export type ImaConfig = {
     publicUrl?: string; // public url used to access static files [default=localhost:3101]
 
     /**
-     * Optional custom ima app origin (defaults to http://localhost:[environment.$Server.port])
+     * Optional custom ima app origin (defaults to http\://localhost:[environment.$Server.port])
      * this is used for CORS configuration.
      */
     origin?: string;

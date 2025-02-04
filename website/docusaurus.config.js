@@ -29,6 +29,7 @@ const config = {
           '../packages/dev-utils',
           '../packages/plugin-cli',
         ],
+        tsconfig: '../packages/plugin-cli/tsconfig.json',
         entryPointStrategy: 'packages',
         includeVersion: true,
         categorizeByGroup: true,
@@ -36,7 +37,7 @@ const config = {
         jsDocCompatibility: true,
         exclude: 'index',
         readme: 'none',
-        out: '../../docs/api',
+        out: '../docs/api',
         sidebar: {
           fullNames: true,
         },

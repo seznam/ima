@@ -60,18 +60,18 @@ There are mainly **three functions** that you can (and probably will) use in you
 
 This is the main hooks function, which defines which `target` should be wrapped in what proxy, defined by `pattern`.
 
-- `target` **{Class}** - JavaScript class/object constructor that is wrapped in proxy.
-- `pattern` **{object}** - result of `createHook` function.
+- `target` **\{Class}** - JavaScript @/object constructor that is wrapped in proxy.
+- `pattern` **\{object}** - result of `createHook` function.
 
 #### 2. `createHook(name, regular, callback)`
 
 Helper function that defines proxies on methods that match `regular` regular expression. It's essentially used
 in the **second argument** of `aop()` function.
 
-- `name` **{hookName}** - defines when the proxy content should be executed (e.g. event message sent to devtools).
-- `regular` **{(string\|function\|RegExp)}** - string or regexp that defines method names which should be wrapped in
+- `name` **\{hookName}** - defines when the proxy content should be executed (e.g. event message sent to devtools).
+- `regular` **\{(string\|function\|RegExp)}** - string or regexp that defines method names which should be wrapped in
    proxy or a function that returns true for given metadata.
-- `callback` **{function}** - callback that is executed, when proxy is called. Receives `meta` object as an argument.
+- `callback` **\{function}** - callback that is executed, when proxy is called. Receives `meta` object as an argument.
 
 Where `hookName` is defined as:
 
@@ -94,22 +94,22 @@ const hookName = Object.freeze({
 Helper function that sends passed in data to the devtools panel, while doing some pre-processing so the data
 can be displayed properly. It is used **at the end of `createHook` callback function**.
 
-- `identifier` **{string}** - name identifying sent message displayed in devtool panel.
+- `identifier` **\{string}** - name identifying sent message displayed in devtool panel.
   By default it corresponds to the name of the wrapped class, but it can be overridden in the `options`.
-- `meta` **{object}** - metadata describing received event. They're automatically created as a callback parameter
+- `meta` **\{object}** - metadata describing received event. They're automatically created as a callback parameter
   in the `createHook` function.
-- `options` **{object}** - additional options passed into the event payload. Currently only `{ color: 'color' }` is supported
+- `options` **\{object}** - additional options passed into the event payload. Currently only `{ color: 'color' }` is supported
   (for available colors, see below).
-- `overrides`  **{object}** - optional object with overrides, that is merged with the `meta` sent in second argument.
+- `overrides`  **\{object}** - optional object with overrides, that is merged with the `meta` sent in second argument.
 
 #### 4. `importIMAClass(path, module);`
 
 Utility function, used to import modules from `$IMA.Loader.modules`, that can be used in creating your own
 custom hooks.
 
-- `path` **{string}** - corresponds to absolute path to application's class from the `/app` directory. Or a package name
+- `path` **\{string}** - corresponds to absolute path to application's class from the `/app` directory. Or a package name
 in case of npm package.
-- `module` **{?string}** - used for named exports, can be left blank in case of default exports.
+- `module` **\{?string}** - used for named exports, can be left blank in case of default exports.
 
 ### Message colors
 
