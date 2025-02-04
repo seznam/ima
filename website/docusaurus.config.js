@@ -1,5 +1,3 @@
-const path = require('path');
-
 const themes = require('prism-react-renderer').themes;
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.palenight;
@@ -29,7 +27,6 @@ const config = {
           '../packages/dev-utils',
           '../packages/plugin-cli',
         ],
-        tsconfig: '../packages/plugin-cli/tsconfig.json',
         entryPointStrategy: 'packages',
         includeVersion: true,
         categorizeByGroup: true,
@@ -43,19 +40,6 @@ const config = {
         },
       },
     ],
-    () => ({
-      name: 'resolve-react',
-      configureWebpack() {
-        return {
-          resolve: {
-            alias: {
-              // Fix for webpack loading conflicting versions of react
-              react: path.resolve('./node_modules/react'),
-            },
-          },
-        };
-      },
-    }),
   ],
   presets: [
     [
