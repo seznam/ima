@@ -500,8 +500,6 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _setCookiesFromResponse<B>(agentResponse: HttpAgentResponse<B>): void {
     if (agentResponse.headersRaw) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - This is due to old typescript version in docusaurus, will be fixed with docusaurus v3 update
       const receivedCookies = agentResponse.headersRaw.getSetCookie();
 
       if (receivedCookies.length > 0) {

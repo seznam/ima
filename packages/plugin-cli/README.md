@@ -1,10 +1,9 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/logo.svg">
+  <img height="130" src="https://imajs.io/img/logo.svg" />
 </p>
 
 <h1 align="center">@ima/plugin-cli</h1>
-  <p align="center"><i><code>@ima/plugin-cli</code> takes care of building, linking and watching IMA.js plugins.</i>
-</p>
+<p align="center"><i><code>@ima/plugin-cli</code> takes care of building, linking and watching IMA.js plugins.</i></p>
 
 ---
 

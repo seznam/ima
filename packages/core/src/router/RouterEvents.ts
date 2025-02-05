@@ -5,9 +5,8 @@ export enum RouterEvents {
   /**
    * Router fire event `$IMA.$Router.beforeHandleRoute` before page
    * manager handle the route. Event's data contain
-   * `{ params: Object<string, string>`, route: ima.core.router.AbstractRoute,
-   * path: string, options: Object<string, *>}}. The `path` is current
-   * path, the `params` are params extracted from path, the
+   * `{ params: Object<string, string>, route: ima.core.router.AbstractRoute, path: string, options: Object<string, any>}`.
+   * The `path` is current path, the `params` are params extracted from path, the
    * `route` is handle route for path and the `options` is route
    * additional options.
    */
@@ -16,8 +15,8 @@ export enum RouterEvents {
   /**
    * Router fire event `$IMA.$Router.afterHandleRoute` after page
    * manager handle the route. Event's data contain
-   * `{response: Object<string, *>, params: Object<string, string>`,
-   * route: ima.core.router.AbstractRoute, path: string, options: Object<string, *>}}.
+   * `{response: Object<string, any>, params: Object<string, string>`,
+   * `route: ima.core.router.AbstractRoute, path: string, options: Object<string, *>}`.
    * The `response` is page render result. The `path` is current
    * path, the `params` are params extracted from path, the
    * `route` is handle route for path and the `options` is route

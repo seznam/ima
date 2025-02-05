@@ -1,10 +1,9 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/logo.svg">
+  <img height="130" src="https://imajs.io/img/logo.svg" />
 </p>
 
 <h1 align="center">@ima/dev-utils</h1>
-  <p align="center"><i>Used to share common methods and utils used across other dev packages (@ima/cli, @ima/error-overlay, etc.).</i>
-</p>
+<p align="center"><i>Used to share common methods and utils used across other dev packages (@ima/cli, @ima/error-overlay, etc.).</i></p>
 
 ---
 
