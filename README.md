@@ -27,7 +27,7 @@ We have prepared a complex tutorial for you:
 This tutorial covers the basics of creating isomorphic web applications using
 IMA.js, but you will encounter some more advanced concepts in there as well.
 
-For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/docs) and more on [imajs.io](https://imajs.io).
+For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/introduction/getting-started) and more on [imajs.io](https://imajs.io).
 
 ## Main IMA.js parts
 - **core** - it contains base classes and common classes for every day work which allows you server side rendering and hydrating application in browser.

@@ -1,5 +1,3 @@
-const path = require('path');
-
 const themes = require('prism-react-renderer').themes;
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.palenight;
@@ -36,25 +34,12 @@ const config = {
         jsDocCompatibility: true,
         exclude: 'index',
         readme: 'none',
-        out: '../../docs/api',
+        out: '../docs/api',
         sidebar: {
           fullNames: true,
         },
       },
     ],
-    () => ({
-      name: 'resolve-react',
-      configureWebpack() {
-        return {
-          resolve: {
-            alias: {
-              // Fix for webpack loading conflicting versions of react
-              react: path.resolve('./node_modules/react'),
-            },
-          },
-        };
-      },
-    }),
   ],
   presets: [
     [

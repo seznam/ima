@@ -200,25 +200,21 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
   protected _getHydrateCallback() {
     return () =>
-      this._dispatcher.fire(
-        RendererEvents.MOUNTED,
-        { type: RendererTypes.HYDRATE },
-        true
-      );
+      this._dispatcher.fire(RendererEvents.MOUNTED, {
+        type: RendererTypes.HYDRATE,
+      });
   }
 
   protected _getRenderCallback() {
     return () =>
-      this._dispatcher.fire(
-        RendererEvents.MOUNTED,
-        { type: RendererTypes.RENDER },
-        true
-      );
+      this._dispatcher.fire(RendererEvents.MOUNTED, {
+        type: RendererTypes.RENDER,
+      });
   }
 
   protected _getUpdateCallback(pageState: unknown) {
     return () => {
-      this._dispatcher.fire(RendererEvents.UPDATED, { pageState }, true);
+      this._dispatcher.fire(RendererEvents.UPDATED, { pageState });
     };
   }
 
@@ -280,11 +276,9 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
   }
 
   protected _runUnmountCallback() {
-    this._dispatcher.fire(
-      RendererEvents.UNMOUNTED,
-      { type: RendererTypes.UNMOUNT },
-      true
-    );
+    this._dispatcher.fire(RendererEvents.UNMOUNTED, {
+      type: RendererTypes.UNMOUNT,
+    });
   }
 
   /**
@@ -302,7 +296,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     const Window = this._window.getWindow();
     let requestIdleCallback: (
       callback: IdleRequestCallback,
-      options?: IdleRequestOptions | undefined
+      options?: IdleRequestOptions
     ) => void = (callback: IdleRequestCallback) => setTimeout(callback, 0);
 
     if (Window && Window['requestIdleCallback']) {
@@ -311,10 +305,21 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     }
 
     const handler = (resolve: () => void) => () => {
-      controller.commitStateTransaction();
+      if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+        // TODO IMA@20 - make this default behaviour
+        this._renderedOnChange = true;
+        controller.setState(controller.getState());
+      } else {
+        controller.commitStateTransaction();
+      }
 
       if (!hasResourcesLoaded) {
-        controller.beginStateTransaction();
+        if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+          this._renderedOnChange = false;
+        } else {
+          controller.beginStateTransaction();
+        }
+
         setTimeout(() => {
           requestIdleCallback(handler(resolve), options);
         }, 75);
@@ -323,7 +328,11 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
       }
     };
 
-    controller.beginStateTransaction();
+    if (this._settings?.$Page?.$Render?.batchResolveNoTransaction) {
+      this._renderedOnChange = false;
+    } else {
+      controller.beginStateTransaction();
+    }
     const batchPromise = new Promise<void>(resolve => {
       setTimeout(() => {
         requestIdleCallback(handler(resolve), options);
@@ -373,11 +382,7 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
         }" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 
-      this._dispatcher.fire(
-        RendererEvents.ERROR,
-        { message: errorMessage },
-        true
-      );
+      this._dispatcher.fire(RendererEvents.ERROR, { message: errorMessage });
 
       return Promise.reject(new Error(errorMessage));
     }

@@ -1,22 +1,17 @@
-import { shallow } from 'enzyme';
+import { renderHookWithContext } from '@ima/testing-library';
 
-import { mountHook } from '../../testUtils';
 import { useComponent, useOnce } from '../component';
 
 describe('useComponent', () => {
-  let result;
-
-  it('should return object of component utility functions', () => {
-    mountHook(() => {
-      result = useComponent();
-    }, {});
+  it('should return object of component utility functions', async () => {
+    const { result } = await renderHookWithContext(() => useComponent());
 
     expect(
       ['cssClasses', 'localize', 'link', 'fire', 'listen', 'unlisten'].every(
-        key => typeof result[key] === 'function'
+        key => typeof result.current[key] === 'function'
       )
     ).toBeTruthy();
-    expect(Object.keys(result)).toEqual([
+    expect(Object.keys(result.current)).toEqual([
       'utils',
       'cssClasses',
       'localize',
@@ -29,23 +24,17 @@ describe('useComponent', () => {
 });
 
 describe('useOnce', () => {
-  let wrapper;
-
-  it('should call callback only once', () => {
+  it('should call callback only once', async () => {
     let count = 0;
 
-    const TestComponent = () => {
-      useOnce(() => count++);
+    const { rerender } = await renderHookWithContext(() =>
+      useOnce(() => count++)
+    );
 
-      return null;
-    };
-
-    wrapper = shallow(<TestComponent />);
-
-    wrapper.setProps({});
-    wrapper.setProps({});
-    wrapper.setProps({});
-    wrapper.setProps({});
+    rerender();
+    rerender();
+    rerender();
+    rerender();
 
     expect(count).toBe(1);
   });

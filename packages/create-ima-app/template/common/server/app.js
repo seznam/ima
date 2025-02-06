@@ -15,7 +15,7 @@ const favicon = require('serve-favicon');
 
 const imaServer = createIMAServer();
 reactPageRendererHook(imaServer);
-const { serverApp, environment, logger, cache } = imaServer;
+const { serverApp, environment, logger, cache, emitter, Event } = imaServer;
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -41,24 +41,49 @@ process.on('unhandledRejection', error => {
   logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
 });
 
-function renderApp(req, res, next) {
-  if (req.headers['x-moz'] && req.headers['x-moz'] === 'prefetch') {
-    res.status(204);
-    res.send();
-
-    return;
-  }
-
-  if (req.method === 'GET') {
-    const cachedPage = cache.get(req);
-    if (cachedPage) {
-      res.status(200);
-      res.send(cachedPage);
-
-      return;
+emitter.on(
+  Event.BeforeRequest,
+  function skipIMARendering({ preventDefault, req }) {
+    if (req.headers['x-moz'] && req.headers['x-moz'] === 'prefetch') {
+      preventDefault();
     }
   }
+);
 
+emitter.on(
+  Event.BeforeRequest,
+  function checkCache({ req, context, preventDefault }) {
+    const cachedPage = cache.get(req);
+    if (cachedPage) {
+      context.response = {
+        ...context.response,
+        ...{
+          status: 200,
+          content: cachedPage,
+          cache: true,
+        },
+      };
+
+      preventDefault();
+    }
+  }
+);
+
+emitter.on(Event.AfterResponse, function saveToCache({ req, context }) {
+  const { response } = context;
+
+  if (
+    req.method === 'GET' &&
+    response.status === 200 &&
+    !response.SPA &&
+    !response.error &&
+    !response.cache
+  ) {
+    cache.set(req, response.content);
+  }
+});
+
+function renderApp(req, res, next) {
   serverApp
     .requestHandlerMiddleware(req, res)
     .then(
@@ -67,15 +92,6 @@ function renderApp(req, res, next) {
           logger.error('Application server error', {
             error: errorToJSON(response.error),
           });
-        }
-
-        if (
-          req.method === 'GET' &&
-          response.status === 200 &&
-          !response.SPA &&
-          !response.error
-        ) {
-          cache.set(req, response.content);
         }
       },
       error => {

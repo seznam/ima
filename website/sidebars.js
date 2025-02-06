@@ -60,6 +60,7 @@ const sidebars = {
         'basic-features/dictionary',
         'basic-features/error-handling',
         'basic-features/typescript',
+        'basic-features/testing',
       ],
     },
     {

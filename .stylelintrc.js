@@ -6,17 +6,18 @@ module.exports = {
     '**/build/**',
     '**/docs/**',
     '**/.docusaurus/**',
-    '**/coverage/**', '**/*.js',
+    '**/coverage/**',
+    '**/*.js',
     '**/*.ts',
     '**/*.jsx',
     '**/*.tsx',
-    '**/*.json'
+    '**/*.json',
   ],
   extends: ['stylelint-config-standard', 'stylelint-config-css-modules'],
   plugins: [
     'stylelint-declaration-block-no-ignored-properties',
     'stylelint-order',
-    'stylelint-prettier'
+    'stylelint-prettier',
   ],
   rules: {
     'prettier/prettier': [
@@ -30,6 +31,11 @@ module.exports = {
     'no-duplicate-selectors': null,
     'no-descending-specificity': null,
     'declaration-no-important': [true, { severity: 'warning' }],
+    'declaration-property-value-no-unknown': null,
+    'declaration-block-no-duplicate-properties': [
+      true,
+      { ignore: 'consecutive-duplicates' },
+    ],
     'keyframe-declaration-no-important': [true, { severity: 'warning' }],
     'selector-max-id': 2,
     'import-notation': null,

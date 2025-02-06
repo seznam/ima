@@ -32,7 +32,7 @@ function swcLoaderErrorParser(error: StatsError | Error): CompileError {
   if ((error as StatsError).moduleIdentifier) {
     // Parse filename from moduleIdentifier
     compileError.fileUri = (error as StatsError).moduleIdentifier?.includes('!')
-      ? (error as StatsError).moduleIdentifier?.split('!').pop() ?? undefined
+      ? ((error as StatsError).moduleIdentifier?.split('!').pop() ?? undefined)
       : (error as StatsError).moduleIdentifier;
   } else if (error.stack) {
     /**

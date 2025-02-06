@@ -18,6 +18,7 @@ import { HttpAgentImplCacheOptions } from './http/HttpAgentImpl';
 import { ns } from './Namespace';
 import { ObjectContainer } from './oc/ObjectContainer';
 import { pluginLoader } from './pluginLoader';
+import { RouteAction } from './router/Router';
 import { GlobalImaObject } from './types';
 
 export interface ManifestAsset extends AssetInfo {
@@ -40,7 +41,7 @@ export type Resource =
       {
         [attribute: string]: unknown;
         fallback: boolean;
-      }
+      },
     ];
 
 export interface Resources {
@@ -54,10 +55,10 @@ export interface Resources {
  */
 export interface Environment {
   [key: string]: unknown;
-  $Debug: GlobalImaObject['$Version'];
+  $Debug: GlobalImaObject['$Debug'];
   $Language: Record<string, string>;
   $Version: GlobalImaObject['$Version'];
-  $App: GlobalImaObject['$App'];
+  $App?: GlobalImaObject['$App'];
   $Resources?: (
     response: unknown,
     manifest: Manifest,
@@ -121,6 +122,7 @@ export interface AppEnvironment {
 
 export interface PageRendererSettings {
   batchResolve?: boolean;
+  batchResolveNoTransaction?: boolean;
   masterElementId: string;
   documentView: unknown;
   managedRootView?: unknown;
@@ -137,6 +139,7 @@ export interface Settings {
   };
   $Router?: {
     middlewareTimeout?: number;
+    isSPARouted?: (url: string, action?: RouteAction) => boolean;
   };
   $Cache?: {
     ttl?: number;
@@ -144,6 +147,9 @@ export interface Settings {
   };
   $Page: {
     $Render: PageRendererSettings;
+  };
+  $Observable?: {
+    maxHistoryLength?: number;
   };
 }
 

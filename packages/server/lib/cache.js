@@ -208,8 +208,8 @@ class Entry {
  * @return {string} The generated cache key.
  */
 function defaultKeyGenerator(request) {
-  let protocol = request.protocol;
-  let host = request.get('Host');
+  let protocol = request.res?.locals?.protocol ?? request.protocol;
+  let host = request.res?.locals?.host ?? request.get('Host');
   let url = request.originalUrl;
 
   return protocol + ':' + host + url;

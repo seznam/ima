@@ -1,10 +1,9 @@
 <p align="center">
-  <img height="130" src="https://imajs.io/img/logo.svg">
+  <img height="130" src="https://imajs.io/img/logo.svg" />
 </p>
 
 <h1 align="center">@ima/cli</h1>
-  <p align="center"><i><code>@ima/cli</code> takes care of building and running the IMA.js application in dev (watch) mode.</i>
-</p>
+<p align="center"><i><code>@ima/cli</code> takes care of building and running the IMA.js application in dev (watch) mode.</i></p>
 
 ---
 
@@ -19,7 +18,6 @@ For more information on how to customize ima apps though `ima.config.js` or how 
 ```
 npm install @ima/cli --save-dev
 ```
-
 
 ## Usage
 

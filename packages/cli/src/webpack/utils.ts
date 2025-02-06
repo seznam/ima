@@ -12,6 +12,7 @@ import webpackConfig from './config';
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
 
 export const IMA_CONF_FILENAME = 'ima.config.js';
+const TS_CONFIG_PATHS = ['tsconfig.build.json', 'tsconfig.json'];
 
 /**
  * Helper for finding rules with given loader in webpack config.
@@ -372,7 +373,6 @@ export function createContexts(
     !!imaConfig.sourceMaps || args.environment === 'development';
   const imaEnvironment = resolveEnvironment(rootDir);
   const appDir = path.join(rootDir, 'app');
-  const useTypescript = fs.existsSync(path.join(rootDir, './tsconfig.json'));
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
   const isDevEnv = environment === 'development';
   const mode = environment === 'production' ? 'production' : 'development';
@@ -381,6 +381,16 @@ export function createContexts(
       ? imaConfig.sourceMaps
       : 'source-map'
     : false;
+
+  let tsconfigPath: string | undefined = undefined;
+
+  // Find tsconfig path in rootDir based on priority set in TS_CONFIG_PATHS
+  for (const fileName of TS_CONFIG_PATHS) {
+    if (fs.existsSync(path.join(rootDir, fileName))) {
+      tsconfigPath = path.join(rootDir, fileName);
+      break;
+    }
+  }
 
   // es2018 targets (taken from 'browserslist-generator')
   const targets = [
@@ -412,10 +422,13 @@ export function createContexts(
         name === 'server'
           ? 'server'
           : name === 'client'
-          ? 'static/js'
-          : 'static/js.es',
+            ? 'static/js'
+            : 'static/js.es',
     },
-    useTypescript,
+    typescript: {
+      enabled: !!tsconfigPath,
+      tsconfigPath,
+    },
     imaEnvironment,
     appDir,
     useHMR: command === 'dev' && name === 'client.es',

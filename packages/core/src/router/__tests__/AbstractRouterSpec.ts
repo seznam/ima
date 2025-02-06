@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable jest/no-conditional-expect */
 import { toMockedInstance } from 'to-mock';
 
@@ -607,8 +606,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       expect(dispatcher.fire).toHaveBeenCalledWith(
         RouterEvents.BEFORE_HANDLE_ROUTE,
-        data,
-        true
+        data
       );
     });
 
@@ -633,8 +631,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
           RouterEvents.AFTER_HANDLE_ROUTE,
-          data,
-          true
+          data
         );
       });
     });
@@ -661,8 +658,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
           RouterEvents.AFTER_HANDLE_ROUTE,
-          data,
-          true
+          data
         );
       });
     });

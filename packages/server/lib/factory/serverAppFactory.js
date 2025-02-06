@@ -156,6 +156,7 @@ module.exports = function serverAppFactory({
     }
 
     event = await emitter.emit(Event.AfterResponse, event);
+    await emitter.emitParallel(Event.AfterResponseSend, event);
 
     return event;
   }
@@ -205,6 +206,12 @@ module.exports = function serverAppFactory({
 
       res.status(context.response.status);
       res.send(context.response.content);
+
+      try {
+        await emitter.emitParallel(Event.AfterResponseSend, event);
+      } catch (error) {
+        logger.error('Error in AfterResponseSend', { error });
+      }
     }
 
     return event.context.response;

@@ -1,5 +1,29 @@
 # Change Log
 
+## 19.3.1
+
+### Patch Changes
+
+- 43495e186: Update `swc_mut_cjs_exports` to latest version to fix `@swc/core` compatibility issue
+
+## 19.3.0
+
+### Minor Changes
+
+- f5f4be879: Added new settings `validateCookies` to enable/disable cookie validation. It validates cookie options and request url before saving cookie or sending it to the server. This means that path, subdomain and secure options must match between the request url and the cookie, otherwise the cookie is not saved or sent.
+
+## 19.2.0
+
+### Minor Changes
+
+- 03d109ad6: Use `@ima/testing-library` instead of `enzyme` by default.
+
+## 19.1.2
+
+### Patch Changes
+
+- 3d2a6f581: The logic for cache was rewritten to IMA server hooks.
+
 ## 19.1.1
 
 ### Patch Changes

@@ -107,16 +107,16 @@ export function resolveRevivalSettings({
   process.env.NODE_ENV = oldEnv;
 
   const revivalSettings = `(function (root) {
-    root.$Debug = ${env.$App.$Debug};
+    root.$Debug = ${env.$App?.$Debug};
     root.$IMA = root.$IMA || {};
     $IMA.Test = true;
     $IMA.SPA = true;
-    $IMA.$App = ${JSON.stringify(env.$App)};
+    $IMA.$App = ${JSON.stringify(env.$App || {})};
     $IMA.$PublicPath = "";
     $IMA.$RequestID = "storybook-request-id";
     $IMA.$Language = "${options.language ?? 'en'}";
     $IMA.$Env = "regression";
-    $IMA.$Debug = ${env.$App.$Debug};
+    $IMA.$Debug = ${env.$App?.$Debug};
     $IMA.$Version = "${env.$Version}";
     $IMA.$Protocol = "${options.https ? 'https:' : 'http:'}";
     $IMA.$Host = "${

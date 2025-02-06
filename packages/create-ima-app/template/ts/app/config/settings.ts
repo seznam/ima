@@ -24,6 +24,7 @@ export const initSettings: InitSettingsFunction = (ns, oc, config) => {
               'Accept-Language': config.$Language,
             },
           },
+          validateCookies: false, // Validate cookies when parsing from Set-Cookie header and when sending cookies from the server.
           cache: true, // if value exists in cache then returned it else make request to remote server.
         },
         cacheOptions: {

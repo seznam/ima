@@ -80,7 +80,7 @@ export class Request {
    * Returns the remote IP address of the request.
    */
   getIP(): string | null {
-    return this._request ? this._request.ip : null;
+    return this._request ? this._request.ip || null : null;
   }
 
   /**
@@ -89,6 +89,10 @@ export class Request {
    */
   getIPs(): string[] {
     return this._request ? this._request.ips || [] : [];
+  }
+
+  getMethod() {
+    return this._request ? this._request.method : '';
   }
 }
 // @endif

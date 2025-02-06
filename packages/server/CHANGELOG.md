@@ -1,5 +1,39 @@
 # Change Log
 
+## 19.5.0
+
+### Minor Changes
+
+- 2cf811d: Added new `AfterResponseSend` event.
+
+### Patch Changes
+
+- 2cf811d: `@esmj/emitter` dependency updated.
+
+## 19.4.3
+
+### Patch Changes
+
+- 03d109ad6: Fix some typing errors.
+
+## 19.4.2
+
+### Patch Changes
+
+- 2411b9920: The meta attribute names are also sanitized.
+
+## 19.4.1
+
+### Patch Changes
+
+- 9aee5e343: The default key generator for server cache use parsed value from urlParser method.
+
+## 19.4.0
+
+### Minor Changes
+
+- dacb7056e: Added new `sanitizeValue` function export.
+
 ## 19.3.3
 
 ### Patch Changes

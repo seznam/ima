@@ -31,7 +31,7 @@ describe('ima.core.http.HttpProxy', () => {
   let defaultOptions: HttpAgentRequestOptions;
   let proxy: HttpProxy;
   let response: Response;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   let fetchResult: Promise<Response>;
   let requestInit: RequestInit;
 
@@ -214,7 +214,6 @@ describe('ima.core.http.HttpProxy', () => {
       it('should not set any body to a GET/HEAD request', async () => {
         await proxy.request(method, API_URL, DATA, defaultOptions);
 
-        // eslint-disable-next-line jest/no-if
         if (['get', 'head'].includes(method) === true) {
           expect(requestInit.body).toBeUndefined();
         } else {

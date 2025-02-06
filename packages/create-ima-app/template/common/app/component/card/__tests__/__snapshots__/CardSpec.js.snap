@@ -2,10 +2,10 @@
 
 exports[`Card can render 1`] = `
 <div
-  className="card"
+  class="card"
 >
   <a
-    className="card-title"
+    class="card-title"
     href="https://www.seznam.cz"
     rel="noreferrer"
     target="_blank"
@@ -16,12 +16,9 @@ exports[`Card can render 1`] = `
     </h3>
   </a>
   <p
-    className="card-content"
-    dangerouslySetInnerHTML={
-      {
-        "__html": "Some content of the card.",
-      }
-    }
-  />
+    class="card-content"
+  >
+    Some content of the card.
+  </p>
 </div>
 `;

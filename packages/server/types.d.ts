@@ -17,12 +17,15 @@ declare module '@ima/server' {
     BeforeResponse = 'ima.server.beforeResponse',
     Response = 'ima.server.response',
     AfterResponse = 'ima.server.afterResponse',
+    AfterResponseSend = 'ima.server.afterResponseSend',
 
     CreateBootConfig = 'ima.server.bootConfig',
     CreateImaApp = 'ima.server.createApp',
   }
 
   export function createIMAServer(params: {
+    applicationFolder?: string;
+    processEnvironment?: (environment: Environment) => Environment;
     environment?: Environment;
     logger?: any;
     emitter?: Emitter;
@@ -30,6 +33,7 @@ declare module '@ima/server' {
     devUtils?: any;
   });
 
+  export function sanitizeValue(value: unknown): null | string;
   export function renderStyles(styles: any[]): string;
   export function renderScript(name: string, script: string): string;
   export function environmentFactory(args: {

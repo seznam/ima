@@ -1,5 +1,64 @@
 # Change Log
 
+## 19.6.1
+
+### Patch Changes
+
+- a80eb3a4f: Fixed order of dispatcher listeners (all listeners are called before specific listeners)
+
+## 19.6.0
+
+### Minor Changes
+
+- f5f4be879: Added new settings `validateCookies` to enable/disable cookie validation. It validates cookie options and request url before saving cookie or sending it to the server. This means that path, subdomain and secure options must match between the request url and the cookie, otherwise the cookie is not saved or sent.
+
+### Patch Changes
+
+- 399f91f8b: Fixed cookie parsing from setCookie header when multiple cookies were sent to server. Previously only the first cookie was parsed while multiple set-cookies could alter the cookie settings
+
+## 19.5.4
+
+### Patch Changes
+
+- 7453e0599: feat: add `getMethod` method to `Request` class
+- 864bfe2d3: fix: route params
+
+## 19.5.3
+
+### Patch Changes
+
+- 03d109ad6: Fix some typing errors.
+
+## 19.5.2
+
+### Patch Changes
+
+- 15a3b556c: Fixes matching path with trailing slash before question mark
+
+## 19.5.1
+
+### Patch Changes
+
+- f208d218b: Fixes router looping for specific request path and routes with more optional parameters
+
+## 19.5.0
+
+### Minor Changes
+
+- 9b8f0ccf9: Added ability to define custom $Router.isSPARouted function, which returns boolean and let's you override client routing, whenever the given URL is handled by IMA or browser
+
+## 19.4.0
+
+### Minor Changes
+
+- 93ab4553f: Adds flag `batchResolveNoTransaction` as a new `PageRendererSettings`. When it is true, transaction is not used in load phase to avoid getting obsolete state from getState.
+
+## 19.3.4
+
+### Patch Changes
+
+- 81bba0110: Security fixes in IMA CLI dev server CORS policy and error overlay
+
 ## 19.3.3
 
 ### Patch Changes

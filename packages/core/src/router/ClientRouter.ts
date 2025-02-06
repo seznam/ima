@@ -6,6 +6,7 @@ import { AbstractRouter } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteAction, RouteLocals, RouteOptions } from './Router';
+import { Settings } from '../boot';
 import { GenericError } from '../error/GenericError';
 import { Dispatcher } from '../event/Dispatcher';
 import { Dependencies } from '../oc/ObjectContainer';
@@ -61,7 +62,7 @@ export class ClientRouter extends AbstractRouter {
       RouteFactory,
       Dispatcher,
       Window,
-      '?$Settings.$Router.middlewareTimeout',
+      '?$Settings.$Router',
     ];
   }
 
@@ -73,16 +74,16 @@ export class ClientRouter extends AbstractRouter {
    * @param factory Factory for routes.
    * @param dispatcher Dispatcher fires events to app.
    * @param window The current global client-side APIs provider.
-   * @param middlewareTimeout Middleware timeout value in ms.
+   * @param settings $Router settings.
    */
   constructor(
     pageManager: PageManager,
     factory: RouteFactory,
     dispatcher: Dispatcher,
     window: Window,
-    middlewareTimeout: number | undefined
+    settings: Settings['$Router'] | number
   ) {
-    super(pageManager, factory, dispatcher, middlewareTimeout);
+    super(pageManager, factory, dispatcher, settings);
 
     /**
      * Helper for accessing the native client-side APIs.
@@ -171,7 +172,7 @@ export class ClientRouter extends AbstractRouter {
     action?: RouteAction,
     locals?: RouteLocals
   ): void {
-    if (this._isSameDomain(url)) {
+    if (this._isSameDomain(url) && this.#isSPARouted(url, action)) {
       let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
@@ -367,11 +368,19 @@ export class ClientRouter extends AbstractRouter {
     const isHashLink = this._isHashLink(anchorHref);
     const isLinkPrevented = event.defaultPrevented;
 
+    const routeAction: RouteAction = {
+      type: ActionTypes.CLICK,
+      event,
+      url: anchorHref,
+    };
+    const isSPARouted = this.#isSPARouted(anchorHref, routeAction);
+
     if (
       !isDefinedTargetHref ||
       isSetTarget ||
       !isLeftButton ||
       !isSameDomain ||
+      !isSPARouted ||
       isHashLink ||
       isCtrlPlusLeftButton ||
       isCMDPlusLeftButton ||
@@ -449,6 +458,19 @@ export class ClientRouter extends AbstractRouter {
    */
   _isSameDomain(url = '') {
     return new RegExp('^' + this.getBaseUrl()).test(url);
+  }
+
+  /**
+   * This option allows user to override how certain URLs are handled
+   * during SPA (client) routing. This adds possibility to opt-out
+   * of SPA routing for specific URLs and let them be handled by browser
+   * natively.
+   *
+   * @param [url=''] The URL.
+   * @return `true` if url routing should be handled by IMA.
+   */
+  #isSPARouted(url = '', action?: RouteAction) {
+    return this._isSPARouted?.(url, action) ?? true;
   }
 
   #handleMounted() {

@@ -1,61 +1,58 @@
-import React from 'react';
+import { getContextValue, renderHookWithContext } from '@ima/testing-library';
 
-import { mountHook } from '../../testUtils';
 import { useWindowEvent } from '../windowEvent';
 
 describe('useWindowEvent', () => {
-  let result;
+  let contextValue;
   let windowMock = {
     dispatchEvent: jest.fn(),
-  };
-
-  let contextMock = {
-    $Utils: {
-      $Window: {
-        getWindow: jest.fn().mockReturnValue(windowMock),
-        createCustomEvent: jest.fn(),
-        bindEventListener: jest.fn(),
-        unbindEventListener: jest.fn(),
-      },
-    },
   };
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  beforeEach(() => {
-    jest.spyOn(React, 'useEffect').mockImplementation(f => f());
+  beforeEach(async () => {
+    contextValue = await getContextValue();
+
+    contextValue.$Utils.$Window = {
+      getWindow: jest.fn().mockReturnValue(windowMock),
+      createCustomEvent: jest.fn(),
+      bindEventListener: jest.fn(),
+      unbindEventListener: jest.fn(),
+    };
   });
 
-  it('should return window and utility functions', () => {
-    mountHook(() => {
-      result = useWindowEvent('custom-target', 'custom-event', jest.fn());
+  it('should return window and utility functions', async () => {
+    const { result } = await renderHookWithContext(
+      () => useWindowEvent('custom-target', 'custom-event', jest.fn()),
+      { contextValue }
+    );
 
-      expect(result).toMatchInlineSnapshot(`
-        {
-          "createCustomEvent": [Function],
-          "dispatchEvent": [Function],
-          "window": {
-            "dispatchEvent": [MockFunction],
-          },
-        }
-      `);
-    }, contextMock);
+    expect(result.current).toMatchInlineSnapshot(`
+      {
+        "createCustomEvent": [Function],
+        "dispatchEvent": [Function],
+        "window": {
+          "dispatchEvent": [MockFunction],
+        },
+      }
+    `);
   });
 
-  it('should bind events correctly', () => {
+  it('should bind events correctly', async () => {
     let cb = jest.fn();
 
-    mountHook(() => {
-      result = useWindowEvent('custom-target', 'custom-event', cb, true);
+    await renderHookWithContext(
+      () => useWindowEvent('custom-target', 'custom-event', cb, true),
+      { contextValue }
+    );
 
-      expect(contextMock.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(
-        'custom-target',
-        'custom-event',
-        cb,
-        true
-      );
-    }, contextMock);
+    expect(contextValue.$Utils.$Window.bindEventListener).toHaveBeenCalledWith(
+      'custom-target',
+      'custom-event',
+      cb,
+      true
+    );
   });
 });

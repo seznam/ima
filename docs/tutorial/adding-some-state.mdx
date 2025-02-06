@@ -3,6 +3,9 @@ title: Adding Some State
 description: Tutorial > Adding Some State
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 In [previous section](/tutorial/static-view) of the tutorial, we prepared basic markup and custom styling
 thanks to the [Bootstrap CSS library](https://getbootstrap.com/).
 In this section, we're going to add some functionality to our application.
@@ -20,10 +23,13 @@ You can notice that by default, our bootstrapped application includes some pre-d
 methods along with very long JSDoc comments. Feel free to read through these comments
 but to make this tutorial simpler, we're going to replace contents of this file with following code:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 import { AbstractController } from '@ima/core';
 
-export default class HomeController extends AbstractController {
+export class HomeController extends AbstractController {
   static get $dependencies() {
     return [];
   }
@@ -41,6 +47,57 @@ export default class HomeController extends AbstractController {
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import {
+  AbstractController,
+  Dependencies,
+  Dictionary,
+  LoadedResources,
+  MetaManager,
+  Router,
+  Settings,
+} from '@ima/core';
+
+export type PostData = {
+  content: string;
+  author: string;
+};
+export type HomeControllerState = {
+  posts: PostData[];
+};
+
+export class HomeController extends AbstractController<HomeControllerState> {
+  static $dependencies: Dependencies = [];
+
+  constructor() {
+    super();
+  }
+
+  load(): HomeControllerState<HomeControllerState> {
+    return {};
+  }
+
+  setMetaParams(
+    loadedResources: LoadedResources,
+    metaManager: MetaManager,
+    router: Router,
+    dictionary: Dictionary,
+    settings: Settings
+  ): void {
+    metaManager.setTitle('Guestbook');
+  }
+}
+```
+
+> **TypeScript:** As you can see, the TypeScript code is a lot more complex.
+    The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
+
+  </TabItem>
+</Tabs>
 
 The `AbstractController` class defines some methods which are executed
 in different parts of it's lifecycle, you can [read more about this in the documentation](../basic-features/controller-lifecycle.md)
@@ -140,6 +197,9 @@ server and move the structure to an external JSON file.
 Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 `render()` method with the following code snippet:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```jsx
 render() {
   return (
@@ -198,6 +258,81 @@ _renderPosts() {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+import './homeView.less';
+import { PostData } from 'app/page/home/HomeController';
+import { usePageContext } from '@ima/react-page-renderer';
+
+type HomeViewProps = {
+  posts: PostData[];
+};
+
+export function HomeView({ posts }: HomeViewProps) {
+  const _pageContext = usePageContext();
+
+  const _renderPosts = () => {
+    return posts.map((post: PostData, index) => (
+      <div className='post card card-default' key={index}>
+        <div className='card-body'>{post.content}</div>
+        <div className='post-author card-footer'>{post.author}</div>
+      </div>
+    ));
+  };
+
+  return (
+    <div className='l-home container'>
+      <h1>Guestbook</h1>
+
+      <div className='posting-form card'>
+        <form action='' method='post'>
+          <h5 className='card-header'>Add a post</h5>
+          <div className='card-body'>
+            <div className='form-group'>
+              <label htmlFor='postForm-name'>Name:</label>
+              <input
+                id='postForm-name'
+                className='form-control'
+                type='text'
+                name='author'
+                placeholder='Your name'
+              />
+            </div>
+            <div className='form-group'>
+              <label htmlFor='postForm-content'>Post:</label>
+              <textarea
+                id='postForm-content'
+                className='form-control'
+                name='content'
+                placeholder='What would you like to tell us?'
+              />
+            </div>
+          </div>
+          <div className='card-footer'>
+            <button type='submit' className='btn btn btn-outline-primary'>
+              Submit
+              <div className='ripple-wrapper' />
+            </button>
+          </div>
+        </form>
+      </div>
+      <hr />
+      <div className='posts'>
+        <h2>Posts</h2>
+        {_renderPosts()}
+      </div>
+    </div>
+  );
+}
+```
+
+> **TypeScript: ** New type `HomeViewProps` has been used to correctly accept typed props in our `HomeView`.
+
+  </TabItem>
+</Tabs>
+
 We have replaced the old sequence of
 `<div className='post card card-default'>` tags with the
 `{this._renderPosts()}` expression, which tells React to insert the return
@@ -240,9 +375,14 @@ and `app/component/post/post.less` files.
 
 Put the following code into the `Post.jsx` file:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```jsx
 import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
+import './post.less';
+
 
 export default class Post extends AbstractComponent {
   render() {
@@ -258,6 +398,34 @@ export default class Post extends AbstractComponent {
 }
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```tsx
+import './post.less';
+
+type PostProps = {
+  content: string;
+  author: string;
+};
+
+export function Post({ content, author }: PostProps) {
+  return (
+    <div className='post card card-default'>
+      <div className='card-body'>{content}</div>
+      <div className='post-author card-footer'>{author}</div>
+    </div>
+  );
+}
+```
+
+> **TypeScript: ** With `PostProps` type, in TypeScript we can directly destructure the props in the function
+  parameters and use their single attributes in the return function.
+
+</TabItem>
+</Tabs>
+
+
 In this component we access the post content and author name in our `render()`
 method using the `this.props` object, which contains a hash object of
 properties passed to the React component by whatever code is using it.
@@ -265,18 +433,46 @@ properties passed to the React component by whatever code is using it.
 To use our new component, we need to update the `_renderPosts()` method in the
 `app/page/home/HomeView.jsx` file to the following code:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```jsx
 return posts.map((post, index) => {
   return <Post key={index} content={post.content} author={post.author} />;
 });
+  ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+return posts.map((post: PostData, index) => (
+  <Post key={index} content={post.content} author={post.author} />
+));
 ```
+
+  </TabItem>
+</Tabs>
 
 ...and import the `Post` component by adding the following import to the
 beginning of the file:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 import Post from 'app/component/post/Post';
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { Post } from 'app/component/post/Post';
+```
+
+  </TabItem>
+</Tabs>
 
 > **Note**: You can notice that so far we **haven't used relative imports** when importing
 our custom JS modules from inside of the app directory structure. This is
@@ -300,6 +496,9 @@ We can further improve our page view structure by refactoring-out the
 "new post" form to a separate component. Create the `app/component/postingForm`
 directory and the `app/component/postingForm/PostingForm.jsx` file. Then, put the
 following code into the `app/component/postingForm/PostingForm.jsx` file:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```jsx
 import { AbstractComponent } from '@ima/react-page-renderer';
@@ -345,10 +544,58 @@ export default class PostingForm extends AbstractComponent {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+export function PostingForm() {
+  return (
+    <div className='posting-form card'>
+      <form action='' method='post'>
+        <h5 className='card-header'>Add a post</h5>
+        <div className='card-body'>
+          <div className='form-group'>
+            <label htmlFor='postForm-name'>Name:</label>
+            <input
+              id='postForm-name'
+              className='form-control'
+              type='text'
+              name='author'
+              placeholder='Your name'
+            />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='postForm-content'>Post:</label>
+            <textarea
+              id='postForm-content'
+              className='form-control'
+              name='content'
+              placeholder='What would you like to tell us?'
+            />
+          </div>
+        </div>
+        <div className='card-footer'>
+          <button type='submit' className='btn btn btn-outline-primary'>
+            Submit
+            <div className='ripple-wrapper' />
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+```
+
+  </TabItem>
+</Tabs>
+
 Nothing new here, we just extracted the code from home controller's view and
 put it into a new React component.
 
 Now update the `render()` method in the home controller's view:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```jsx
 return (
@@ -366,11 +613,47 @@ return (
 );
 ```
 
+</TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+return (
+  <div className='l-home container'>
+    <h1>Guestbook</h1>
+    <PostingForm />
+
+    <hr />
+
+    <div className='posts'>
+      <h2>Posts</h2>
+      {_renderPosts()}
+    </div>
+  </div>
+);
+```
+
+  </TabItem>
+</Tabs>
+
 To finish up, import the posting form component:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 import PostingForm from 'app/component/postingForm/PostingForm';
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+import { PostingForm } from 'app/component/postingForm/PostingForm';
+```
+
+  </TabItem>
+</Tabs>
+
 
 So far we've been **only refactoring our code and moving few bits around** to make it cleaner.
 When you refresh the page, you should see the same page as you ended up with after the end of

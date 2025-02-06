@@ -1,6 +1,6 @@
 {
   "name": "@ima/hmr-client",
-  "version": "19.0.0",
+  "version": "19.0.1",
   "description": "IMA.js hmr client used to connect app with error overlay.",
   "keywords": [
     "IMA.js",
@@ -35,6 +35,6 @@
     "webpack": "^5.70.0"
   },
   "dependencies": {
-    "@esmj/emitter": "^0.3.0"
+    "@esmj/emitter": "^0.4.3"
   }
 }

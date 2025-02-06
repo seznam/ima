@@ -377,62 +377,67 @@ describe('ima.core.router.StaticRoute', function () {
         pathExpression: '/:userId',
         path: '/user12',
         params: { userId: 'user12' },
+        result: true,
       },
       {
         pathExpression: '/:category',
         path: '/89524174-white-roses',
         params: { category: '89524174-white-roses' },
+        result: true,
       },
       {
         pathExpression: '/:userId-',
         path: '/895174-bad-user',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?userId-',
         path: '/895174-bad-user',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:userId_',
         path: '/895174_bad-user',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?userId_',
         path: '/895174_bad-user',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:userId ',
         path: '/895174 bad-user',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?userId ',
         path: '/895174 bad-user',
-        params: {},
+        result: false,
       },
 
       {
         pathExpression: '/:catId-:catName',
         path: '/89524171-yellow-roses',
         params: { catId: '89524171', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:catId_:catName',
         path: '/89524171-yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:catId_:catName',
         path: '/89524171_yellow-roses',
         params: { catId: '89524171', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:catId-special-event-:catName',
         path: '/12-special-event-roses-mixed',
         params: { catId: '12', catName: 'roses-mixed' },
+        result: true,
       },
       {
         pathExpression: '/:detailId-:catId-:detailName',
@@ -442,192 +447,235 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '12',
           detailName: 'skoda-105',
         },
+        result: true,
       },
 
       {
         pathExpression: '/:?catId-:catName',
         path: '/89524171-yellow-roses',
         params: { catId: '89524171', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-:catName',
         path: '/-yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/89524171-yellow-roses',
         params: { catId: '89524171', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/89524171-',
-        params: { catId: '89524171' },
+        params: { catId: '89524171', catName: undefined },
+        result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/-yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-:?catName',
         path: '/-',
-        params: {},
+        params: { catId: undefined, catName: undefined },
+        result: true,
+      },
+      {
+        pathExpression: '/:?catId-:?catName/:?dogId/:?dog2Id',
+        path: '/-//',
+        result: false,
+      },
+      {
+        pathExpression: '/:?catId-:?catName/:?dogId/:?fishId',
+        path: '/-/777',
+        params: {
+          catId: undefined,
+          catName: undefined,
+          dogId: '777',
+          fishId: undefined,
+        },
+        result: true,
       },
 
       {
         pathExpression: '/:?catId_:catName',
         path: '/89524331_yellow-roses',
         params: { catId: '89524331', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_:catName',
         path: '/_yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_:catName',
         path: '/-yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId_:?catName',
         path: '/89524331_yellow-roses',
         params: { catId: '89524331', catName: 'yellow-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_:?catName',
         path: '/89524331_',
-        params: { catId: '89524331' },
+        params: { catId: '89524331', catName: undefined },
+        result: true,
       },
       {
         pathExpression: '/:?catId_:?catName',
         path: '/_yellow-roses',
-        params: { catName: 'yellow-roses' },
+        params: { catId: undefined, catName: 'yellow-roses' },
+        result: true,
       },
 
       {
         pathExpression: '/:?catId :catName',
         path: '/89524171 yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId :catName',
         path: '/ yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/89524171 yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/89524171 ',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/ yellow-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId :?catName',
         path: '/ ',
-        params: {},
+        result: false,
       },
 
       {
         pathExpression: '/:?catId-some-expected-string-:catName',
         path: '/89524221-some-expected-string-pink-roses',
         params: { catId: '89524221', catName: 'pink-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:catName',
         path: '/-some-expected-string-pink-roses',
-        params: { catName: 'pink-roses' },
+        params: { catId: undefined, catName: 'pink-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/89524221-some-expected-string-pink-roses',
         params: { catId: '89524221', catName: 'pink-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/89524221-some-unexpected-string-pink-roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/-some-expected-string-',
-        params: {},
+        params: { catId: undefined, catName: undefined },
+        result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/-some-expected-string-pink-roses',
-        params: { catName: 'pink-roses' },
+        params: { catId: undefined, catName: 'pink-roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId-some-expected-string-:?catName',
         path: '/89524221-some-expected-string-',
-        params: { catId: '89524221' },
+        params: { catId: '89524221', catName: undefined },
+        result: true,
       },
 
       {
         pathExpression: '/:?catId_some_expected_string_:catName',
         path: '/89524221_some_expected_string_pink_roses',
         params: { catId: '89524221', catName: 'pink_roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:catName',
         path: '/_some_expected_string_pink_roses',
-        params: { catName: 'pink_roses' },
+        params: { catId: undefined, catName: 'pink_roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/89524221_some_expected_string_pink_roses',
         params: { catId: '89524221', catName: 'pink_roses' },
+        result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/_some_expected_string_',
-        params: {},
+        params: { catId_some_expected_string: undefined, catName: undefined },
+        result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/_some_expected_string_pink_roses',
-        params: { catName: 'pink_roses' },
+        params: {
+          catId_some_expected_string: undefined,
+          catName: 'pink_roses',
+        },
+        result: true,
       },
       {
         pathExpression: '/:?catId_some_expected_string_:?catName',
         path: '/89524221_some_expected_string_',
-        params: { catId: '89524221' },
+        params: { catId_some_expected_string: undefined, catId: '89524221' },
+        result: true,
       },
 
       {
         pathExpression: '/:?catId some expected string :catName',
         path: '/89524521 some expected string pink roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId some expected string :catName',
         path: '/ some expected string pink roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/89524521 some expected string pink roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/ some expected string pink roses',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?catId some expected string :?catName',
         path: '/89524521 some expected string ',
-        params: {},
+        result: false,
       },
 
       {
@@ -639,11 +687,18 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '12',
           detailName: 'skoda-105',
         },
+        result: true,
       },
       {
         pathExpression: '/:catId-:catName/:?someId/:?anotherId',
         path: '/578742-roses',
-        params: { catId: '578742', catName: 'roses' },
+        params: {
+          catId: '578742',
+          catName: 'roses',
+          someId: undefined,
+          another: undefined,
+        },
+        result: true,
       },
       {
         pathExpression: '/:catId-:catName/:?someId/:?another',
@@ -652,7 +707,9 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '578742',
           catName: 'roses',
           someId: '8999',
+          another: undefined,
         },
+        result: true,
       },
       {
         pathExpression: '/:catId-:catName/:?someId/:?another',
@@ -663,11 +720,12 @@ describe('ima.core.router.StaticRoute', function () {
           someId: '8999',
           another: '75258-eoc',
         },
+        result: true,
       },
       {
         pathExpression: '/something/:group/:catId-:catName',
         path: '/something/flowers/',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/something/:group/:catId-:catName',
@@ -677,11 +735,12 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '89524175',
           catName: 'red-roses',
         },
+        result: true,
       },
       {
         pathExpression: multipleParamsExpr,
         path: '/offer/flowers/524175',
-        params: {},
+        result: false,
       },
       {
         pathExpression: multipleParamsExpr,
@@ -690,7 +749,10 @@ describe('ima.core.router.StaticRoute', function () {
           group: 'flowers',
           catId: '524175',
           catName: 'red-roses',
+          productId: undefined,
+          promo: undefined,
         },
+        result: true,
       },
       {
         pathExpression: multipleParamsExpr,
@@ -700,7 +762,9 @@ describe('ima.core.router.StaticRoute', function () {
           catId: '524175',
           catName: 'red-roses',
           productId: '120415247',
+          promo: undefined,
         },
+        result: true,
       },
       {
         pathExpression: multipleParamsExpr,
@@ -712,22 +776,25 @@ describe('ima.core.router.StaticRoute', function () {
           productId: '120415247',
           promo: 'winter2017',
         },
+        result: true,
       },
 
       {
         pathExpression: '/home/:userId/something/:somethingId',
         path: '/home/1/something/2',
         params: { userId: '1', somethingId: '2' },
+        result: true,
       },
       {
         pathExpression: '/home/:userId/something/:somethingId',
         path: '/home/1/something',
-        params: { userId: undefined, somethingId: undefined },
+        result: false,
       },
       {
         pathExpression: '/home/:userId/something/:somethingId',
         path: '/home/param1/something/param2',
         params: { userId: 'param1', somethingId: 'param2' },
+        result: true,
       },
 
       {
@@ -738,77 +805,127 @@ describe('ima.core.router.StaticRoute', function () {
           somethingId: 'param2',
           query: 'param3',
         },
+        result: true,
       },
 
       {
         pathExpression: '/:?userId',
         path: '/user12',
         params: { userId: 'user12' },
+        result: true,
       },
 
       {
         pathExpression: '/:userId/something/:?somethingId',
         path: 'user1/something',
-        params: { userId: 'user1' },
+        params: { userId: 'user1', somethingId: undefined },
+        result: true,
       },
       {
         pathExpression: '/:userId/something/:?somethingId',
         path: 'user1/something/param1',
         params: { userId: 'user1', somethingId: 'param1' },
+        result: true,
       },
       {
         pathExpression: '/something/:?somethingId/:?userId',
         path: '/something/param1',
-        params: { somethingId: 'param1' },
+        params: { somethingId: 'param1', userId: undefined },
+        result: true,
       },
       {
         pathExpression: '/something/:?somethingId/:?userId',
         path: '/something/param1/user1',
         params: { somethingId: 'param1', userId: 'user1' },
+        result: true,
       },
       {
         pathExpression: '/:encodeString',
         path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525',
         params: { encodeString: 'á/b?č#d:ě%25' },
+        result: true,
       },
 
       // not matched route
       {
         pathExpression: '/:catId-:catName/:?someParam/:?another',
         path: '/rondam/moje-inzeraty/nejlevneji',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:catId-:catName/:?someParam/:?another',
         path: '/rondam?name=moje-inzeraty&param=nejlevneji',
-        params: {},
+        result: false,
       },
 
       // invalid parameters order (required vs. optional)
       {
         pathExpression: '/:?userId/something/:someId',
         path: '/something/param1',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/:?userId/something/:someId',
         path: 'user1/something/param1',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/something/:?someId/:userId',
         path: '/something/user1',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/something/:?someId/:userId',
         path: '/something/param1/user1',
-        params: {},
+        result: false,
       },
       {
         pathExpression: '/test/:?param1/:?param2',
         path: '/test/xxx',
         params: { param1: 'xxx', param2: undefined },
+        result: true,
+      },
+      {
+        pathExpression:
+          '/media/gallery/select/:selectorId/:minSelectedItems-:maxSelectedItems/:?itemIds',
+        path: '/media/gallery/select/501bunk81da0q4o/1-1/?popupToken=ad9b331b2293ce37bfb&popupUid=517o5uvn79ga8mo',
+        params: {
+          selectorId: '501bunk81da0q4o',
+          minSelectedItems: '1',
+          maxSelectedItems: '1',
+          itemIds: undefined,
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
+        },
+        result: true,
+      },
+      {
+        pathExpression:
+          '/media/gallery/select/:selectorId/:minSelectedItems-:maxSelectedItems/:?itemIds',
+        path: '/media/gallery/select/501bunk81da0q4o/1-1/123/?popupToken=ad9b331b2293ce37bfb&popupUid=517o5uvn79ga8mo',
+        params: {
+          selectorId: '501bunk81da0q4o',
+          minSelectedItems: '1',
+          maxSelectedItems: '1',
+          itemIds: '123',
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
+        },
+        result: true,
+      },
+      {
+        pathExpression:
+          '/media/gallery/select/:selectorId/:minSelectedItems-:maxSelectedItems/:?itemIds',
+        path: '/media/gallery/select/501bunk81da0q4o/1-1/123?popupToken=ad9b331b2293ce37bfb&popupUid=517o5uvn79ga8mo',
+        params: {
+          selectorId: '501bunk81da0q4o',
+          minSelectedItems: '1',
+          maxSelectedItems: '1',
+          itemIds: '123',
+          popupToken: 'ad9b331b2293ce37bfb',
+          popupUid: '517o5uvn79ga8mo',
+        },
+        result: true,
       },
     ].forEach(value => {
       it(value.pathExpression, function () {
@@ -820,11 +937,19 @@ describe('ima.core.router.StaticRoute', function () {
           options
         );
 
+        expect(localStaticRoute.matches(value.path)).toBe(value.result);
+
+        if (!value.result) {
+          return;
+        }
+
         const routeParams = localStaticRoute.extractParameters(
           value.path,
           'https://imajs.io'
         );
         const keys = Object.keys(value.params);
+
+        expect(keys).toHaveLength(Object.keys(routeParams).length);
 
         keys.forEach(key => {
           // @ts-expect-error
@@ -1143,6 +1268,11 @@ describe('ima.core.router.StaticRoute', function () {
         result: true,
       },
       {
+        pathExpression: '/:shopSeo/:?sort/:?page',
+        path: '/shopper/123?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+        result: true,
+      },
+      {
         pathExpression: '/:categoryId-:categoryName',
         path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
         result: false,
@@ -1332,6 +1462,12 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/p1',
         result: false,
       },
+      {
+        pathExpression:
+          '/p/:?urlParam1/:?urlParam2/:?urlParam3/:?urlParam4/:?urlParam5/:?urlParam6/:?urlParam7',
+        path: '/p/fotosoutez/nejlepsi-letni-kolac-6)%22,%22label%22:%22%22,%22type%22:%22%22%7D,%22recommendedABVariant%22:0,%22recommendedCount%22:null,%22recommendedRequestId%22:%22jVDjfA0EOXr-202407310653%22,%22title%22:%22Proženy%22,%22titleUrl%22:%22https://www.prozeny.cz%22,%22typeId%22:%22prozeny%22,%22url%22:%22https://api-web.prozeny.cz/v1/timelines/58fdd6b461bf339ead884134?xml=rss%22,%22allowComments%22:true,%22items%22:[%7B%22alg%22:[%22tr%22,%22vw%22],%22authorName%22:null,%22authorUrl%22:null,%22commentsCount%22:null,%22contentRecommendationRequestId%22:%22jVDjfA0EOXr-202407310653%22,%22contentSummary%22:%22%22,%22designation%22:null,%22discussionId%22:%22www.prozeny.cz/clanek/95629%22,%22discussionUrl%22:%22https://www.prozeny.cz/diskuze/zdravi-a-zivotni-styl-zaujalo-nas-zivot-bolka-polivky-95629%22,%22id%22:%2295629%22,%22image%22:%22https://d50-a.sdn.cz/d_50/c_img_QK_8/2L2E/bolek-polivka.jpeg?fl=cro',
+        result: false,
+      },
     ].forEach(value => {
       const { path, result } = value;
       it(
@@ -1404,13 +1540,13 @@ describe('ima.core.router.StaticRoute', function () {
         path: '/:?someId',
         clearPathExpr: ':?someId',
         optionalParams: [':?someId'],
-        result: '(?:([^/?]+)?(?=/|$)?)?',
+        result: '(?:([^/?]+)(?=/|$|\\?))?',
       },
       {
         path: '/something/:?someId',
         clearPathExpr: 'something/:?someId',
         optionalParams: [':?someId'],
-        result: 'something/(?:([^/?]+)?(?=/|$)?)?',
+        result: 'something/(?:([^/?]+)(?=/|$|\\?))?',
       },
     ].forEach(value => {
       const { path, clearPathExpr, optionalParams, result } = value;

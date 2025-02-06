@@ -20,6 +20,7 @@ async function destroyInstance(
   }
 
   app.oc.get('$Dispatcher').clear();
+  app.oc.get('$Observable').destroy();
   app.oc.get('$Router').unlisten();
   app.oc.get('$PageRenderer').unmount();
   await app.oc.get('$PageManager').destroy();
@@ -134,7 +135,6 @@ export const imaLoader: Loader = async args => {
     ima: typeof imaCore;
     getInitialAppConfigFunctions: () => imaCore.InitAppConfig;
     // @ts-expect-error this is handled in storybook context with aliases
-    // eslint-disable-next-line import/no-unresolved
   } = await import('app/main');
 
   lastImaParams = { ...parameters?.ima };

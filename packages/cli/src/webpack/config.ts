@@ -13,11 +13,12 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import lessPluginGlob from 'less-plugin-glob';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import webpack, {
+import {
   Configuration,
   RuleSetRule,
   RuleSetUseItem,
   WebpackPluginInstance,
+  HotModuleReplacementPlugin,
 } from 'webpack';
 
 import { getLanguageEntryPoints } from './languages';
@@ -51,7 +52,7 @@ export default async (
     name,
     processCss,
     outputFolders,
-    useTypescript,
+    typescript,
     imaEnvironment,
     appDir,
     useHMR,
@@ -210,8 +211,8 @@ export default async (
     target: isServer
       ? 'node18'
       : isClientES
-      ? ['web', 'es2022']
-      : ['web', 'es2018'],
+        ? ['web', 'es2022']
+        : ['web', 'es2018'],
     mode,
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
@@ -253,8 +254,8 @@ export default async (
             ? isServer
               ? 'app.server'
               : isDevEnv
-              ? 'app.client'
-              : 'app.bundle'
+                ? 'app.client'
+                : 'app.bundle'
             : '[name]',
           '[contenthash]',
           'js',
@@ -304,6 +305,7 @@ export default async (
           minify: TerserPlugin.swcMinify,
           terserOptions: {
             ecma: isServer || isClientES ? 2020 : 2018,
+            module: true,
             mangle: {
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
@@ -424,7 +426,7 @@ export default async (
             /**
              * Handle app Typescript files
              */
-            useTypescript && {
+            typescript.enabled && {
               test: /\.(ts|tsx)$/,
               include: appDir,
               loader: require.resolve('swc-loader'),
@@ -582,8 +584,11 @@ export default async (
              * to show errors at least during build so it fails before going to production.
              */
             isClientES &&
-              useTypescript &&
+              typescript.enabled &&
               new ForkTsCheckerWebpackPlugin({
+                typescript: {
+                  configFile: typescript.tsconfigPath,
+                },
                 async: ctx.command === 'dev', // be async only in watch mode,
                 devServer: false,
                 // Custom formatter for async mode
@@ -613,7 +618,7 @@ export default async (
                         console.error(message);
                       }
                     },
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+
                     log: () => {},
                   },
                 }),
@@ -635,7 +640,7 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            useHMR && new webpack.HotModuleReplacementPlugin(),
+            useHMR && new HotModuleReplacementPlugin(),
             useHMR &&
               ctx.reactRefresh &&
               new ReactRefreshWebpackPlugin({

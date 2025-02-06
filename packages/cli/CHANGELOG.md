@@ -1,5 +1,29 @@
 # Change Log
 
+## 19.7.2
+
+### Patch Changes
+
+- 7e6a4de65: Fix `ima dev` watch re-build being one version behind the real changes in some random circumstances.
+
+## 19.7.1
+
+### Patch Changes
+
+- 029b480a7: Fixed @swc/core minimizer config
+
+## 19.7.0
+
+### Minor Changes
+
+- 33a703a9f: Added support for `tsconfig.build.json` config file, which is prioritized for tsChecker plugin in webpack. This allows to have separate tsconfig for build and code editor, which let's you opt out of checking some files not needed for build.
+
+## 19.6.4
+
+### Patch Changes
+
+- 81bba0110: Security fixes in IMA CLI dev server CORS policy and error overlay
+
 ## 19.6.3
 
 ### Patch Changes

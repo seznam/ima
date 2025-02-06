@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jest/no-conditional-expect */
 
 import { toMockedInstance } from 'to-mock';
 
@@ -329,14 +327,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
         RouterEvents.BEFORE_LOADING_ASYNC_ROUTE,
-        expect.objectContaining({ route: expect.anything() }),
-        true
+        expect.objectContaining({ route: expect.anything() })
       );
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         2,
         RouterEvents.AFTER_LOADING_ASYNC_ROUTE,
-        expect.objectContaining({ route: expect.anything() }),
-        true
+        expect.objectContaining({ route: expect.anything() })
       );
 
       expect(response).toBe('mounted');

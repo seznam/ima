@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TARGET_WEB_URL="http://localhost:3001/"
+PARALLEL_TEST_CONNECTIONS=300
+
 # Add customized environment configuration
 mv server/config/environment.js server/config/environment.orig.js
 cp "$ROOT_DIR_IMA/utils/tests/app/environment.js" server/config/environment.js
@@ -9,7 +12,7 @@ IMA_SKELETON_SERVER_PID=$!
 sleep 7
 
 echo "Run es-check"
-../ima/node_modules/.bin/es-check es2018 './build/static/js/**/*.js'
+$ROOT_DIR_IMA/node_modules/.bin/es-check es2018 './build/static/js/**/*.js'
 
 echo "Run benchmark test on create-ima-app"
 cd "$ROOT_DIR_IMA"

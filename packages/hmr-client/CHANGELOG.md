@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.0.1
+
+### Patch Changes
+
+- 2cf811d: `@esmj/emitter` dependency updated.
+
 ## 19.0.0
 
 ### Major Changes

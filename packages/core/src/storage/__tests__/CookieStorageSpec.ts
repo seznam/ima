@@ -342,4 +342,321 @@ describe('ima.storage.CookieStorage', () => {
       expect(cookie['_storage'].size).toBe(2);
     });
   });
+
+  describe('validateCookieSecurity', () => {
+    it('should return true for a cookie with matching domain and path', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/' },
+      };
+      const url = 'http://example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    it('should return true for a cookie with matching subdomain', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: '.example.com', path: '/' },
+      };
+      const url = 'http://sub.example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    it('should return false for a cookie with non-matching domain', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/' },
+      };
+      const url = 'http://otherdomain.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(false);
+    });
+
+    it('should return false for a secure cookie on non-https URL', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/', secure: true },
+      };
+      const url = 'http://example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(false);
+    });
+
+    it('should return true for a secure cookie on https URL', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/', secure: true },
+      };
+      const url = 'https://example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    it('should return false for a cookie with non-matching path', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/app' },
+      };
+      const url = 'http://example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(false);
+    });
+
+    it('should return true for a cookie with matching path prefix', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: 'example.com', path: '/app' },
+      };
+      const url = 'http://example.com/app/subpath';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    it('should return true for a cookie without domain restriction', () => {
+      const cookie = {
+        value: 'test',
+        options: { path: '/' },
+      };
+      const url = 'http://example.com/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    it('should return false for a cookie with ip address domain on non-matching ip', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: '192.168.1.1', path: '/' },
+      };
+      const url = 'http://192.168.1.2/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(false);
+    });
+
+    it('should return true for a cookie with ip address domain on matching ip', () => {
+      const cookie = {
+        value: 'test',
+        options: { domain: '192.168.1.1', path: '/' },
+      };
+      const url = 'http://192.168.1.1/';
+
+      expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+    });
+
+    describe('options that do not affect validation', () => {
+      it('should return true regardless of httpOnly flag', () => {
+        const cookie: Cookie = {
+          value: 'test',
+          options: {
+            domain: 'example.com',
+            path: '/',
+            httpOnly: true,
+            sameSite: 'strict',
+          },
+        };
+        const url = 'http://example.com/';
+
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+
+        cookie.options.httpOnly = false;
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+      });
+
+      it('should return true regardless of sameSite value', () => {
+        const cookie: Cookie = {
+          value: 'test',
+          options: {
+            domain: 'example.com',
+            path: '/',
+            sameSite: 'strict',
+          },
+        };
+        const url = 'http://example.com/';
+
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+
+        cookie.options.sameSite = 'lax';
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+
+        cookie.options.sameSite = 'none';
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+      });
+
+      it('should return true regardless of partitioned flag', () => {
+        const cookie = {
+          value: 'test',
+          options: {
+            domain: 'example.com',
+            path: '/',
+            partitioned: true,
+          },
+        };
+        const url = 'http://example.com/';
+
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+
+        cookie.options.partitioned = false;
+        expect(CookieStorage.validateCookieSecurity(cookie, url)).toBe(true);
+      });
+    });
+
+    describe('complex combinations', () => {
+      it('should validate multiple security attributes together', () => {
+        const cookie: Cookie = {
+          value: 'test',
+          options: {
+            domain: 'example.com',
+            path: '/app',
+            secure: true,
+            httpOnly: true,
+            sameSite: 'strict',
+          },
+        };
+
+        // Should fail - wrong protocol
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'http://example.com/app')
+        ).toBe(false);
+
+        // Should fail - wrong path
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'https://example.com/other'
+          )
+        ).toBe(false);
+
+        // Should fail - wrong domain
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'https://other.com/app')
+        ).toBe(false);
+
+        // Should pass - all conditions met
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'https://example.com/app'
+          )
+        ).toBe(true);
+      });
+
+      it('should handle subdomain with path and secure combinations', () => {
+        const cookie: Cookie = {
+          value: 'test',
+          options: {
+            domain: '.example.com',
+            path: '/api',
+            secure: true,
+            httpOnly: true,
+            sameSite: 'strict',
+          },
+        };
+
+        // Should fail - not secure
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'http://sub.example.com/api'
+          )
+        ).toBe(false);
+
+        // Should fail - wrong path
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'https://sub.example.com/app'
+          )
+        ).toBe(false);
+
+        // Should pass - subdomain with correct path and protocol
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'https://sub.example.com/api'
+          )
+        ).toBe(true);
+
+        // Should pass - main domain with correct path and protocol
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'https://example.com/api'
+          )
+        ).toBe(true);
+      });
+
+      it('should validate path hierarchy correctly', () => {
+        const cookie = {
+          value: 'test',
+          options: {
+            domain: 'example.com',
+            path: '/api',
+          },
+        };
+
+        // Should pass - exact path match
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'http://example.com/api')
+        ).toBe(true);
+
+        // Should pass - subpath
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'http://example.com/api/users'
+          )
+        ).toBe(true);
+
+        // Should fail - different path
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'http://example.com/app')
+        ).toBe(false);
+
+        // Should fail - partial path match but not at boundary
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'http://example.com/api-docs'
+          )
+        ).toBe(false);
+      });
+
+      it('should handle root path with various domains', () => {
+        const cookie = {
+          value: 'test',
+          options: {
+            domain: '.example.com',
+            path: '/',
+          },
+        };
+
+        // Should pass - root domain
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'http://example.com/')
+        ).toBe(true);
+
+        // Should pass - subdomain with any path
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'http://sub.example.com/any/path'
+          )
+        ).toBe(true);
+
+        // Should pass - deeper subdomain
+        expect(
+          CookieStorage.validateCookieSecurity(
+            cookie,
+            'http://deep.sub.example.com/'
+          )
+        ).toBe(true);
+
+        // Should fail - different domain
+        expect(
+          CookieStorage.validateCookieSecurity(cookie, 'http://example.org/')
+        ).toBe(false);
+      });
+    });
+  });
 });

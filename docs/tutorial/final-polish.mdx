@@ -3,6 +3,9 @@ title: Final Polish
 description: Tutorial > Final Polish
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 In the [5th part of the tutorial](/tutorial/writing-posts) we updated our application to be able to process
 input from user, learned something about ways different components can communicate with each other in IMA.js application
 and updated our guestbook API.
@@ -22,10 +25,13 @@ Let's start by adding validation to the posting form.
 Start by extending our constructor in the posting form component (`app/component/postingForm/PostingForm.jsx`)
 with 2 new state keys:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 constructor(props, context) {
   super(props, context);
-
+  ...
   this.state = {
     author: '',
     content: '',
@@ -35,9 +41,35 @@ constructor(props, context) {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+type Post = {
+  author: string;
+  content: string;
+  authorValid: boolean;
+  contentValid: boolean;
+};
+
+export function PostingForm() {
+  const [post, setPost] = useState<Post>({
+    author: '',
+    content: '',
+    authorValid: true,
+    contentValid: true,
+  });
+```
+
+  </TabItem>
+</Tabs>
+
 Next we need to update our form elements to visually correspond to the validity of the input
 by updating their CSS classes. To achieve this we're going to use `is-invalid` class which is
 taken from the Bootstrap CSS library we're using and will apply red shadow to the input if it's invalid:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```jsx
 <input
@@ -66,6 +98,50 @@ taken from the Bootstrap CSS library we're using and will apply red shadow to th
 />
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+const cssClasses = useCssClasses();
+
+return(
+  ...
+
+  <input
+    id='postForm-name'
+    className={cssClasses({
+      'form-control': true,
+      'is-invalid': !post.authorValid,
+    })}
+    type='text'
+    name='author'
+    value={post.author}
+    onChange={e => handleChange(e)}
+    placeholder='Your name'
+  />
+  ...
+  <textarea
+    id='postForm-content'
+    className={cssClasses({
+      'form-control': true,
+      'is-invalid': !post.contentValid,
+    })}
+    name='content'
+    value={post.content}
+    onChange={e => handleChange(e)}
+    placeholder='What would you like to tell us?'
+  />
+
+  ...
+)
+```
+
+> **TypeScript: ** As you definitely noticed, again we got access to the functionality from the `AbstractComponent`
+  by using another IMA hook, this time `useCssClasses`, that gives us direct access to the IMA CssClases.
+
+  </TabItem>
+</Tabs>
+
 **The expression in the `className` attribute will set the CSS class** `is-invalid`
 on the form element depending on the current state of the `authorValid` or
 `contentValid` flag, while any changes made by the user will trigger the
@@ -82,6 +158,9 @@ First we're going to implement our validation method, which checks if given inpu
 the result of validation to corresponding state key while also returning the result of validation, which
 we'll use later in `_onSubmit` method:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 _validate(inputName, value) {
   const validStateKey = `${inputName}Valid`;
@@ -97,11 +176,33 @@ _validate(inputName, value) {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+const validate = (inputName: string, value: string): boolean => {
+  const validStateKey = `${inputName}Valid`;
+  const isValid = !!value;
+
+  if (post[validStateKey as keyof Post] !== isValid) {
+    setPost({ ...post, [validStateKey]: isValid });
+  }
+
+  return isValid;
+};
+```
+
+  </TabItem>
+</Tabs>
+
 Through the use of **ES2015 dynamic properties**, we're able to handle validation for
 both inputs in one method.
 
 Now that we have our validation method, we can hook it up to the `_onChange` handler.
 The updated handler with the validation will look like this:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 _onChange({ target: { name, value }}) {
@@ -112,8 +213,25 @@ _onChange({ target: { name, value }}) {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+const handleChange = (event: any): void => {
+  validate(event.target.name as string, event.target.value as string);
+  setPost({ ...post, [event.target.name]: event.target.value });
+};
+```
+
+
+  </TabItem>
+</Tabs>
+
 Finally, we need to prevent the user from submitting the form if any of the
 inputs are invalid. To do that, update the `onSubmit(event)` method's content:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 _onSubmit(event) {
@@ -128,7 +246,7 @@ _onSubmit(event) {
     return;
   }
 
-  this.fire('postSubmitted', {
+  this.fire(this.#containerRef.current, 'postSubmitted', {
     author: this.state.author,
     content: this.state.content
   });
@@ -140,6 +258,29 @@ _onSubmit(event) {
   });
 }
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+const handleSubmit = (event: any): void => {
+  event.preventDefault();
+
+  // Validate on submit to also cover the initial submission
+  const { author, content } = post;
+  if (!validate('author', author) || !validate('content', content)) {
+    return;
+  }
+
+  fire(containerRef.current as EventTarget, 'postSubmitted', post);
+
+  // Reset the state after submitting
+  setPost({ ...post, author: '', content: '' });
+};
+```
+
+  </TabItem>
+</Tabs>
 
 With this, the form validation is complete. Feel free to check this in your own application
 and you should see red input fields if the inputs are empty, while the submit button should prevent
@@ -169,9 +310,49 @@ We'll start by adding an extra field to our **post entity**
 (`app/model/post/PostEntity.js`) by adding the following line to the
 **constructor**:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 this.isSaved = data.isSaved;
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { PostData } from 'app/page/home/HomeController';
+
+export class PostEntity {
+  declare id: number | null;
+  declare content: string;
+  declare author: string;
+  declare isSaved: boolean;
+
+  constructor(data: PostData) {
+    this.id = data.id;
+    this.content = data.content;
+    this.author = data.content;
+    this.isSaved = data.isSaved;
+  }
+}
+```
+
+
+> **TypeScript:** In Typescript also change the `PostData` type in `app/page/home/HomeController` to:
+
+```typescript
+export type PostData = {
+  id: number | null;
+  content: string;
+  author: string;
+  isSaved: boolean;
+};
+```
+
+  </TabItem>
+</Tabs>
+
 
 We will use the `isSaved` flag to determine whether the post has been saved at
 the server or not.
@@ -179,15 +360,37 @@ the server or not.
 Next we need to update the `getEntityList()` method in the **post resource** class
 (`app/model/post/PostResource.js`):
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/static/public/posts.json', {})
   .then(response => {
     response.body.forEach(post => (post.isSaved = true));
     return response.body;
   })
   .then(postsData => this._factory.createList(postsData));
 ```
+
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+getEntityList(): Promise<PostEntity[]> {
+  return this._http
+    .get('http://localhost:3001/static/static/public/posts.json', {})
+    .then((response: PostApiGetResponse) => {
+      response.body.forEach(post => (post.isSaved = true));
+      return response.body;
+    })
+    .then((postsData: PostData[]) => this._factory.createList(postsData));
+}
+```
+
+  </TabItem>
+</Tabs>
+
 
 This modification sets the `isSaved` flag on posts retrieved from the server,
 marking them as saved.
@@ -196,6 +399,9 @@ Next we need to update our **home page controller**
 (`app/page/home/HomeController.js`) by modifying the body of the `load()`
 method to the following snippet:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```javascript
 return {
   posts: this._postService.getPosts(),
@@ -203,11 +409,40 @@ return {
 };
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+export type HomeControllerState = {
+  posts: PostData[];
+  pendingPosts: PostData[];
+};
+
+export class HomeController extends AbstractController<HomeControllerState> {
+  ...
+
+  load(): HomeControllerState {
+    return {
+      posts: this._postService.getPosts(),
+      pendingPosts: [],
+    };
+  }
+}
+```
+
+> **TypeScript:** Do not forget to update the `HomeControllerState` type.
+
+  </TabItem>
+</Tabs>
+
 We added the `pendingPosts` field to our state, which we'll use to keep track
 of the posts that are being submitted to the server. We'll need the **post
 factory** in **our home controller** to create the entities representing the pending
 posts, so let's modify controller's the constructor by adding a new parameter
 and a field for the post factory:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 constructor(postService, postFactory) {
@@ -218,9 +453,28 @@ constructor(postService, postFactory) {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+constructor(postService: PostService, postFactory: PostFactory) {
+  super();
+
+  this._postService = postService;
+  this._postFactory = postFactory;
+}
+```
+
+  </TabItem>
+</Tabs>
+
+
 And, of course, we need to update the `$dependencies` list so OC can inject
 PostFactory instance to our constructor as a second argument. so modify the dependencies of the **home
 page controller** (`app/page/home/HomeController.js`) to the following:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 import PostFactory from 'app/model/post/PostFactory';
@@ -230,11 +484,30 @@ static get $dependencies() {
 }
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+import { PostFactory } from 'app/model/post/PostFactory';
+
+export class HomeController extends AbstractController<HomeControllerState> {
+  static $dependencies: Dependencies = [PostService, PostFactory];
+
+  ...
+}
+```
+
+  </TabItem>
+</Tabs>
+
 #### Displaying pending posts
 
 Now we need to display both the pending posts and saved posts. To do that,
 we need to "patch" our controller's state to in the `onPostSubmitted()` event
 listener after submitting the new post to update our UI:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```javascript
 let pendingPost = this._postFactory.createEntity(
@@ -280,6 +553,58 @@ this._postService
   });
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```typescript
+onPostSubmitted(eventData: PostData) {
+  let pendingPost: PostData = this._postFactory.createEntity(
+    Object.assign(
+      {
+        id: null,
+        isSaved: false,
+      },
+      eventData
+    )
+  );
+
+  const state = this.getState();
+  const pendingPosts = state.pendingPosts.slice();
+  pendingPosts.unshift(pendingPost);
+
+  this.setState({
+    pendingPosts,
+  });
+
+  this._postService
+    .createPost(eventData)
+    .then((savedPost: PostData) => {
+      // update the state in place
+      pendingPost.isSaved = true;
+      pendingPost.id = savedPost.id;
+
+      // update the UI
+      const state = this.getState();
+      this.setState({
+        pendingPosts: state.pendingPosts,
+      });
+
+      return this._postService.getPosts();
+    })
+    .then((posts: PostData[]) => {
+      const state = this.getState();
+
+      this.setState({
+        posts: posts,
+        pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+      });
+    });
+}
+```
+
+  </TabItem>
+</Tabs>
+
 Woa, that's a lot of code! Don't worry, we'll break it down.
 
 #### Recap
@@ -303,6 +628,9 @@ Now that our state contains both the pending and saved posts, we can move to
 the view. Open the controller's view (`app/page/home/HomeView.jsx`) and update
 the `_renderPosts()` method:
 
+<Tabs>
+  <TabItem value="JavaScript">
+
 ```jsx
 let allPosts = this.props.pendingPosts.concat(this.props.posts);
 
@@ -318,6 +646,25 @@ return allPosts.map(post => {
 });
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```tsx
+const allPosts = pendingPosts.concat(posts);
+
+return allPosts.map((post: PostData) => (
+  <Post
+    key={post.id}
+    content={post.content}
+    author={post.author}
+    isSaved={post.isSaved}
+  />
+));
+```
+
+</TabItem>
+</Tabs>
+
 We concatenate the pending posts and saved posts into a single `allPosts`
 array and then render it using our `Post` component. Notice that we added the
 `isSaved` attribute - we'll use that in a moment.
@@ -325,6 +672,9 @@ array and then render it using our `Post` component. Notice that we added the
 So let's turn our attention to the post component
 (`app/component/post/Post.jsx`). Update the `render()` method to the following
 snippet:
+
+<Tabs>
+  <TabItem value="JavaScript">
 
 ```jsx
 const { content, author, isSaved } = this.props;
@@ -343,11 +693,46 @@ return (
 );
 ```
 
+  </TabItem>
+  <TabItem value="TypeScript">
+
+```tsx
+import './post.less';
+import { useCssClasses } from '@ima/react-page-renderer';
+
+type PostProps = {
+  content: string;
+  author: string;
+  isSaved: boolean;
+};
+
+export function Post({ content, author, isSaved }: PostProps) {
+  const cssClasses = useCssClasses();
+
+  return (
+    <div
+      className={cssClasses({
+        post: true,
+        card: true,
+        'card-default': true,
+        'post-pending': !isSaved,
+      })}
+    >
+      <div className='card-body'>{content}</div>
+      <div className='post-author card-footer'>{author}</div>
+    </div>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
 Nothing really new here, we're just adding the `post-pending` CSS class on our
 post's root element if the post is not saved yet.
 
 Open the post's style file (`app/component/post/post.less`) and add the
-following the content:
+following content:
 
 ```scss
 .post-pending .card-body {
@@ -364,12 +749,28 @@ React considers them to be the same post ([remember how we use the post ID to id
 To fix that we introduce a new field to our home page controller
 (`app/page/home/HomeController.js`) in the constructor:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 this._lastPendingPostId = 0;
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+this._lastPendingPostId = 0;
+```
+
+</TabItem>
+</Tabs>
+
 ...and use it in the `onPostSubmitted()` method by replacing the
 `let pendingPost = ...` with the following:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 let pendingPost = this._postFactory.createEntity(
@@ -382,6 +783,24 @@ let pendingPost = this._postFactory.createEntity(
   )
 );
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```tsx
+const pendingPost: PostData = this._postFactory.createEntity(
+  Object.assign(
+    {
+      id: `pending-${this._lastPendingPostId++}`,
+      isSaved: false,
+    },
+    eventData
+  )
+);
+```
+
+</TabItem>
+</Tabs>
 
 This will ensure that all our pending posts will have unique IDs, which will be
 also prefixed with `pending-` to prevent possible collisions with the IDs
@@ -406,16 +825,54 @@ So, to start, add a new field in the home page controller's
 (`app/page/home/HomeController.js`) constructor which will hold information
 about an interval we'll use to pool our API:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 this._refreshIntervalId = null;
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+declare _refreshIntervalId:
+  | ReturnType<typeof setTimeout>
+  | number
+  | null
+  | undefined;
+
+constructor(postService: PostService, postFactory: PostFactory) {
+  super();
+
+  ...
+
+  this._refreshIntervalId = null;
+}
+```
+
+</TabItem>
+</Tabs>
+
 Next add the following configuration constant below the `import ...`
 declaration at the beginning of the file:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 const REFRESH_DELAY = 2000; // milliseconds
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+const REFRESH_DELAY = 2000; // milliseconds
+```
+
+</TabItem>
+</Tabs>
 
 To initialize our refresh cycle, we'll use one of the **lifecycle methods** that
 each IMA.js Controller has, an `activate()` method. To learn more about the
@@ -423,13 +880,31 @@ lifecycle of Controller and it's methods,
 [take a look at the documentation](../basic-features/controller-lifecycle.md). In our case
 the activate method will look like this:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 activate() {
   this._refreshIntervalId = setInterval(() => this._refresh(), REFRESH_DELAY);
 }
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+activate(): void {
+  this._refreshIntervalId = setInterval(() => this._refresh(), REFRESH_DELAY);
+}
+```
+
+</TabItem>
+</Tabs>
+
 To clear a pending refresh timeout, we'll use the `deactivate()` method:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 deactivate() {
@@ -439,7 +914,24 @@ deactivate() {
 }
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+deactivate(): void {
+  if (this._refreshIntervalId) {
+    clearInterval(this._refreshIntervalId);
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
 And, finally, we can implement our `_refresh()` method:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 _refresh() {
@@ -448,6 +940,20 @@ _refresh() {
   });
 }
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+_refresh(): void {
+  this._postService.getPosts().then((posts: PostData[]) => {
+    this.setState({ posts });
+  });
+}
+```
+
+</TabItem>
+</Tabs>
 
 You won't see it because our HTTP communication is only mocked, but the posts
 are now being refreshed every 2 seconds. But since we **do** want to see
@@ -625,7 +1131,6 @@ Next we need to update the constructor along with it's `$dependencies`:
 
 ```javascript
 import PostGenerator from 'app/mock/PostGenerator';
-
 ...
 
 static get $dependencies() {
@@ -708,6 +1213,9 @@ the `onPostSubmitted()` method by replacing the
 `this._postService.createPost(eventData)...` expression with the following
 code:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 this._postService
   .createPost(eventData)
@@ -722,6 +1230,55 @@ this._postService
   });
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+export type PostData = {
+  id: number | null;
+  content: string;
+  author: string;
+  isSaved: boolean;
+};
+export type PostsApiData = {
+  generated: number;
+  posts: PostData[];
+};
+export type HomeControllerState = {
+  posts: PostsApiData;
+  pendingPosts: PostData[];
+};
+
+...
+
+
+onPostSubmitted(eventData: PostData) {
+  ...
+
+  this._postService
+    .createPost(eventData)
+    .then(() => this._postService.getPosts())
+    .then((posts: PostsApiData) => {
+      const state = this.getState();
+
+      if (posts.generated < state.posts.generated) {
+        posts = state.posts;
+      }
+
+      this.setState({
+        posts: posts,
+        pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+      });
+    });
+}
+```
+
+> **TypeScript:** As you can see, we have to completely refactor our types to match our input data.
+  This is how it might look like in an actual app.
+
+</TabItem>
+</Tabs>
+
 What we did here is that we removed the logic that updated the state (and, as a
 result, the UI) when the post is saved. Now the state (and UI) is updated only
 when we fetch the posts from the server (or the HTTP agent mock in our case).
@@ -731,7 +1288,7 @@ With this issue taken care of, let's resolve the posts refresh race condition.
 ### Posts refresh race condition
 
 To fix our refresh race condition, we'll envelope the server responses and add a timestamp at which
-the response has been generated. Open the `app/assets/static/api/posts.json`
+the response has been generated. Open the `app/public/posts.json`
 file and update its contents as follows:
 
 ```json
@@ -804,9 +1361,12 @@ fields as a response instead of just a plain array of data objects.
 Next update the `getEntityList()` method of the post resource
 (`app/model/post/PostResource.js`):
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/api/posts.json', {})
+  .get('http://localhost:3001/static/static/public/posts.json', {})
   .then(response => {
     response.body.posts.forEach(post => (post.isSaved = true));
 
@@ -816,6 +1376,35 @@ return this._http
     return posts;
   });
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+type PostApiGetResponse = {
+  body: PostsApiData;
+};
+
+...
+
+getEntityList(): Promise<PostsApiData> {
+  return this._http
+    .get('http://localhost:3001/static/static/public/posts.json', {})
+    .then((response: PostApiGetResponse) => {
+      response.body.posts.forEach((post: PostData) => (post.isSaved = true));
+      const posts: PostsApiData = {
+        posts: this._factory.createList(response.body.posts),
+        generated: response.body.generated,
+      };
+
+      return posts;
+    });
+}
+```
+
+</TabItem>
+</Tabs>
+
 
 What we do here is that we "unpack" the server response and set the `generated`
 timestamp on the posts array directly (note that a custom entity representing
@@ -828,6 +1417,9 @@ Finally, we just need to check in our home page controller
 `app/page/home/HomeController.js` whether the posts list we just received is not
 stale. Update the `_refresh()` method:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 this._postService.getPosts().then(posts => {
   let state = this.getState();
@@ -839,8 +1431,28 @@ this._postService.getPosts().then(posts => {
 });
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+this._postService.getPosts().then((posts: PostsApiData) => {
+  const state = this.getState();
+  if (posts.generated < state.posts.generated) {
+    return;
+  }
+
+  this.setState({ posts });
+});
+```
+
+</TabItem>
+</Tabs>
+
 ...and update the body of the last `then` callback in the `onPostSubmitted()`
 method:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 let state = this.getState();
@@ -854,6 +1466,44 @@ this.setState({
   pendingPosts: state.pendingPosts.filter(post => post !== pendingPost)
 });
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+.then((posts: PostsApiData) => {
+  const state = this.getState();
+
+  if (posts.generated < state.posts.generated) {
+    posts = state.posts;
+  }
+
+  this.setState({
+    posts: posts,
+    pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+  });
+});
+```
+
+> **TypeScript:** Note that in TypeScript we have to also slightly adjust the rendering of the posts in `app/page/home/HomeView.tsx`
+
+```tsx
+const _renderPosts = () => {
+  const allPosts = pendingPosts.concat(posts.posts);
+
+  return allPosts.map((post: PostData) => (
+    <Post
+      key={post.id}
+      content={post.content}
+      author={post.author}
+      isSaved={post.isSaved}
+    />
+  ));
+};
+```
+
+</TabItem>
+</Tabs>
 
 We added simple checks that **compares** the `generated` timestamps of the received
 posts with our current posts, and **discards** the received posts if they are
@@ -889,11 +1539,27 @@ Rename the `_lastPendingPostId` field declared in the constructor to
 `_lastLocalPostId` as it better suits our new use. After that, create the
 `_localPostIds` in the constructor:
 
+<Tabs>
+<TabItem value="JavaScript">
+
 ```javascript
 this._localPostIds = new Map();
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+this._localPostIds = new Map();
+```
+
+</TabItem>
+</Tabs>
+
 Next update the `onPostSubmitted()` method:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 let pendingPost = this._postFactory.createEntity(
@@ -939,7 +1605,60 @@ this._postService
   });
 ```
 
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+const pendingPost: PostData = this._postFactory.createEntity(
+  Object.assign(
+    {
+      id: `local-${++this._lastLocalPostId}`,
+      isSaved: false,
+    },
+    eventData
+  )
+);
+
+const state = this.getState();
+const pendingPosts = state.pendingPosts.slice();
+pendingPosts.unshift(pendingPost);
+this.setState({
+  pendingPosts,
+});
+
+this._postService
+  .createPost(eventData)
+  .then((createdPost: PostData) => {
+    this._localPostIds.set(createdPost.id, pendingPost.id);
+    return this._postService.getPosts();
+  })
+  .then((posts: PostsApiData) => {
+    const state = this.getState();
+
+    if (posts.generated < state.posts.generated) {
+      posts = state.posts;
+    }
+
+    posts.posts.forEach(post => {
+      if (this._localPostIds.has(post.id)) {
+        post.id = this._localPostIds.get(post.id);
+      }
+    });
+
+    this.setState({
+      posts: posts,
+      pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+    });
+  });
+```
+
+</TabItem>
+</Tabs>
+
 Finally, update the `_refresh()` method:
+
+<Tabs>
+<TabItem value="JavaScript">
 
 ```javascript
 this._postService.getPosts().then(posts => {
@@ -957,6 +1676,29 @@ this._postService.getPosts().then(posts => {
   this.setState({ posts });
 });
 ```
+
+</TabItem>
+<TabItem value="TypeScript">
+
+```typescript
+this._postService.getPosts().then((posts: PostsApiData) => {
+  const state = this.getState();
+  if (posts.generated < state.posts.generated) {
+    return;
+  }
+
+  posts.posts.forEach(post => {
+    if (this._localPostIds.has(post.id)) {
+      post.id = this._localPostIds.get(post.id);
+    }
+  });
+
+  this.setState({ posts });
+});
+```
+
+</TabItem>
+</Tabs>
 
 The posts created by the user viewing the page will now maintain their IDs and
 see a soft transition of the post's background once the post is saved at the
