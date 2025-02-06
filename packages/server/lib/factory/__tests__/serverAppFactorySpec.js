@@ -75,6 +75,7 @@ describe('Server App Factory', () => {
   let pageManager = null;
   let pageStateManager = null;
   let pageRenderer = null;
+  let OCCleared = null;
   let emitter = new Emitter();
   let performance = createMonitoring();
 
@@ -110,6 +111,7 @@ describe('Server App Factory', () => {
       status: 500,
     }));
     languageLoader = jest.fn();
+    OCCleared = jest.fn();
     applicationFolder = '';
 
     router = toMockedInstance(ServerRouter, {
@@ -198,7 +200,9 @@ describe('Server App Factory', () => {
                     return dispatcher;
                   }
                 },
-                clear() {},
+                clear() {
+                  OCCleared();
+                },
               },
             };
           }),
@@ -346,6 +350,48 @@ describe('Server App Factory', () => {
       expect(response.status).toBe(500);
       expect(response.content).toBe('read file content');
       expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 500 static page and then 200 ima app page', async () => {
+      environment.$Server.staticConcurrency = 0;
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+        route: {
+          getName() {
+            return 'home ';
+          },
+        },
+      });
+      jest
+        .spyOn(router, 'route')
+        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
+      pageStateManager.getState.mockImplementation(() => {
+        throw new Error('State error');
+      });
+
+      let response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(500);
+      expect(response.content).toBe('read file content');
+      expect(response.cache).toBeFalsy();
+      expect(OCCleared).toHaveBeenCalledTimes(1);
+
+      jest.resetAllMocks();
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('app html');
+      expect(response.cache).toBeFalsy();
+      expect(OCCleared).toHaveBeenCalledTimes(1);
     });
 
     it('should render 500 static page for ima app route ERROR which exceeds static thresholds', async () => {
