@@ -222,7 +222,6 @@ export function getClientBootConfig(
       router: {
         $Protocol: $IMA.$Protocol,
         $Host: $IMA.$Host,
-        $Path: $IMA.$Path,
         $Root: $IMA.$Root,
         $LanguagePartPath: $IMA.$LanguagePartPath,
       },
@@ -237,7 +236,6 @@ export function getClientBootConfig(
       $Protocol: $IMA.$Protocol,
       $Language: $IMA.$Language,
       $Host: $IMA.$Host,
-      $Path: $IMA.$Path,
       $Root: $IMA.$Root,
       $LanguagePartPath: $IMA.$LanguagePartPath,
     },
