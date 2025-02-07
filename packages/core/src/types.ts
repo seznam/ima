@@ -56,7 +56,6 @@ export interface GlobalImaObject {
   $Debug: boolean;
   $Protocol: 'http:' | 'https:';
   $Host: string;
-  $Path: string;
   $Root: string;
   $LanguagePartPath: string;
   Runner: object;

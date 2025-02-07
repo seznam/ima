@@ -89,7 +89,6 @@ export type BootSettings = Pick<
   | '$Protocol'
   | '$Language'
   | '$Host'
-  | '$Path'
   | '$Root'
   | '$LanguagePartPath'
 >;
@@ -102,7 +101,6 @@ export interface BootServices {
   router: {
     $Protocol: GlobalImaObject['$Protocol'];
     $Host: GlobalImaObject['$Host'];
-    $Path: GlobalImaObject['$Path'];
     $Root: GlobalImaObject['$Root'];
     $LanguagePartPath: GlobalImaObject['$LanguagePartPath'];
   };

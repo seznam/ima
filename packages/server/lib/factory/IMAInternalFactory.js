@@ -102,20 +102,13 @@ module.exports = function IMAInternalFactory({
     }
 
     const dummyApp = serverGlobal.get(GLOBAL.DUMMY_APP);
-    const {
-      protocol,
-      host,
-      path: urlPath,
-      root,
-      languagePartPath,
-    } = res.locals;
+    const { protocol, host, root, languagePartPath } = res.locals;
 
     dummyApp.oc.get('$Request').init(req);
     dummyApp.oc.get('$Response').init(res);
     dummyApp.oc.get('$Router').init({
       $Protocol: protocol,
       $Host: host,
-      $Path: urlPath,
       $Root: root,
       $LanguagePartPath: languagePartPath,
     });
@@ -177,7 +170,6 @@ module.exports = function IMAInternalFactory({
     let languagePartPath = res.locals.languagePartPath;
     let host = res.locals.host;
     let root = res.locals.root;
-    let urlPath = res.locals.path;
     let protocol = res.locals.protocol;
 
     let dictionary = language ? languageLoader(language) : {};
@@ -194,7 +186,6 @@ module.exports = function IMAInternalFactory({
         router: {
           $Protocol: protocol,
           $Host: host,
-          $Path: urlPath,
           $Root: root,
           $LanguagePartPath: languagePartPath,
         },
@@ -208,7 +199,6 @@ module.exports = function IMAInternalFactory({
         $Protocol: protocol,
         $Language: language,
         $Host: host,
-        $Path: urlPath,
         $Root: root,
         $LanguagePartPath: languagePartPath,
       },
