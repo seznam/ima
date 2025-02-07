@@ -37,7 +37,6 @@ const settings = {
   $Host: undefined,
   $Language: undefined,
   $LanguagePartPath: undefined,
-  $Path: undefined,
   $Page: {
     $Render: {
       documentView: DocumentView,

@@ -406,7 +406,6 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
       $IMA.$App = undefined;
       $IMA.$Protocol = "undefined";
       $IMA.$Host = "undefined";
-      $IMA.$Path = "undefined";
       $IMA.$Root = "undefined";
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
@@ -431,7 +430,6 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
       $IMA.$App = undefined;
       $IMA.$Protocol = "undefined";
       $IMA.$Host = "undefined";
-      $IMA.$Path = "undefined";
       $IMA.$Root = "undefined";
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
@@ -452,7 +450,6 @@ exports[`responseUtilsFactory processContent should interpolate revival scripts 
       $IMA.$App = undefined;
       $IMA.$Protocol = "undefined";
       $IMA.$Host = "undefined";
-      $IMA.$Path = "undefined";
       $IMA.$Root = "undefined";
       $IMA.$LanguagePartPath = "undefined";
     })(typeof window !== 'undefined' && window !== null ? window : global);
