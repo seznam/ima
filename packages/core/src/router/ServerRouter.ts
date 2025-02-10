@@ -77,6 +77,13 @@ export class ServerRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
+  unlistenAll() {
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
   redirect(url = '/', options?: Partial<RouteOptions>) {
     this.#response.redirect(url, { httpStatus: 302, ...options });
   }

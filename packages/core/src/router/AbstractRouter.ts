@@ -320,6 +320,13 @@ export abstract class AbstractRouter extends Router {
   /**
    * @inheritDoc
    */
+  unlistenAll() {
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
   redirect(
     url: string,
     options?: Partial<RouteOptions>,
