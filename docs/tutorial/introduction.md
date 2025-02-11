@@ -12,8 +12,9 @@ write new posts.
 Through the course of this tutorial, we will work with
 [git](http://git-scm.com/), [gulp](http://gulpjs.com/),
 [ES2015 (ES6)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla),
-[Less CSS](http://lesscss.org/) and
-[React](https://facebook.github.io/react/). Feel free to familiarize yourself
+[Less CSS](http://lesscss.org/),
+[React](https://facebook.github.io/react/) and optionally
+[Typescript](https://www.typescriptlang.org/). Feel free to familiarize yourself
 with any of these tools upfront if you are not already. Don't worry though,
 we'll take things slow and assume no prior knowledge of these tools in this
 tutorial.
@@ -57,7 +58,7 @@ npm run dev
 As you can already see from the command line, if everything went well, you can view the basic "hello world"
 application by opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
 
-![](/img/tutorial/introduction-run-dev.jpg)
+![](/img/tutorial/introduction-run-dev.png)
 
 ### Dev server
 By running `npm run dev` you start your application in development mode with a dev server.
