@@ -214,7 +214,7 @@ export class ClientWindow extends Window {
     eventTarget: T,
     event: string,
     listener: (event: E) => void,
-    options: boolean | EventListenerOptions = false,
+    options: boolean | AddEventListenerOptions = false,
     scope?: S
   ): void {
     if (!eventTarget.addEventListener) {
@@ -241,7 +241,10 @@ export class ClientWindow extends Window {
         }
 
         const scopedListeners = this.#scopedListeners.get(eventTarget);
-        scopedListeners.set([event, listener, options, scope], scopedListener);
+        scopedListeners.set(
+          [event, listener, this._getListenerCapture(options), scope],
+          scopedListener
+        );
       }
     }
 
@@ -309,12 +312,12 @@ export class ClientWindow extends Window {
     const scopedListeners = this.#scopedListeners.get(eventTarget);
 
     for (const key of scopedListeners.keys()) {
-      const [scopedEvent, scopedListener, scopedOptions, scopedScope] = key;
+      const [scopedEvent, scopedListener, scopedCapture, scopedScope] = key;
 
       if (
         event === scopedEvent &&
         listener === scopedListener &&
-        options === scopedOptions &&
+        this._getListenerCapture(options) === scopedCapture &&
         scope === scopedScope
       ) {
         const usedListener = scopedListeners.get(key);
@@ -330,6 +333,12 @@ export class ClientWindow extends Window {
         return usedListener;
       }
     }
+  }
+
+  private _getListenerCapture(
+    options: boolean | EventListenerOptions
+  ): boolean {
+    return typeof options === 'boolean' ? options : (options.capture ?? false);
   }
 }
 // @endif
