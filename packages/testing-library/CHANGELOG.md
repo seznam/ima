@@ -1,5 +1,11 @@
 # @ima/testing-library
 
+## 19.11.1
+
+### Patch Changes
+
+- 5c50ea4: Fix Windows compatibility when using this package as a Jest preset
+
 ## 19.11.0
 
 ### Minor Changes
