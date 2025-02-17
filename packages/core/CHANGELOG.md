@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.3
+
+### Patch Changes
+
+- 5dd3fe5: fix: update event listener options type to AddEventListenerOptions
+
 ## 19.6.2
 
 ### Patch Changes
