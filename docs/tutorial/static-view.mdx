@@ -25,7 +25,6 @@ Now let's replace the contents of the file with a blank view:
 
 ```jsx
 import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
-import React from 'react';
 import './homeView.less';
 
 export class HomeView extends AbstractComponent {
@@ -43,21 +42,19 @@ export class HomeView extends AbstractComponent {
 <TabItem value="TypeScript">
 
 ```tsx
-import { usePageContext } from '@ima/react-page-renderer';
+import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
 import './homeView.less';
 
-export function HomeView() {
-  const _pageContext = usePageContext();
+export class HomeView extends AbstractComponent {
+  static get contextType() {
+    return PageContext;
+  }
 
-  return null;
+  render() {
+    return null;
+  }
 }
 ```
-> **TypeScript: ** With functional components we have to use `usePageContext()` hook,
-  that provides us direct access to the IMA Page context. You can find more about the hooks provided by IMA at
-  [@ima/react-hooks](https://www.npmjs.com/package/@ima/react-hooks).
-
-> There is also no need for any constructor or render method, so we do not have to worry about implementing the
-  `AbstractComponent` class to our functional component, and we can directly output the content with `return`.
 
 </TabItem>
 </Tabs>
@@ -71,18 +68,18 @@ The `constructor()` is the class constructor (an object initializer, if you
 will) that sets the component's initial properties (`props`) and context. The
 `props` object represents the properties set on our view component by the
 code using it (_the properties are set using the element attributes in JSX,
-you can find our more about this
-[here](http://facebook.github.io/react/docs/getting-started.html)_). The
+you can find out more about this
+[here](https://react.dev/learn#writing-markup-with-jsx)_). The
 context is an object representing the "globals" for the React components in
 the application. IMA.js uses the context to pass view utils to components,
 you can find out more about it
-[here](https://facebook.github.io/react/docs/context.html).
+[here](https://react.dev/learn/passing-data-deeply-with-context).
 
 There's also static getter `contextType()` which returns `PageContext`, that
 by default provides the component access to global `$Utils` object in the component context.
 This object is very useful as we can bind custom helper methods to it in the
 `bind.js`file with the help of Object Container. But we'll talk about this a bit more
-[later in this tutorial](./fetching-data.md#dependency-injection)
+[later in this tutorial](./fetching-data/#dependency-injection)
 
 The `render()` method creates and returns a React element that represents the
 view in the UI. Our `render()` method returns `null` because our component does
@@ -95,14 +92,14 @@ the `render()` method with the following code:
 <TabItem value="JavaScript">
 
 ```jsx
-return <div className="l-home container">Hello {'World'}!</div>;
+return <div className='l-home container'>Hello {'World'}!</div>;
 ```
 
 </TabItem>
 <TabItem value="TypeScript">
 
 ```tsx
-return <div className="l-home container">Hello {'World'}!</div>;
+return <div className='l-home container'>Hello {'World'}!</div>;
 ```
 
 </TabItem>
@@ -114,7 +111,7 @@ JSX transformer into ordinary JavaScript expressions creating React elements
 (React's virtual DOM allowing rendering at both the client and the server side).
 This combination of JavaScript and XML is commonly referred to as JSX and you
 can find out more about it
-[here](http://facebook.github.io/react/docs/jsx-in-depth.html).
+[here](https://react.dev/learn/writing-markup-with-jsx).
 
 The `render()` method must always return a React element (or a similar plain
 object, or `null`), so it can be properly rendered at both the client and
@@ -138,148 +135,141 @@ Let's modify the return value of the `render` method to look like this:
 
 ```jsx
 return (
-      <div className="l-home container">
-        <h1>Guestbook</h1>
+	<div className='l-home container'>
+		<h1>Guestbook</h1>
 
-        <div className="posting-form card">
-          <form action="" method="post">
-            <h5 className="card-header">Add a post</h5>
-            <div className="card-body">
-              <div className="form-group">
-                <label htmlFor="postForm-name">Name:</label>
-                <input
-                  id="postForm-name"
-                  className="form-control"
-                  type="text"
-                  name="author"
-                  placeholder="Your name"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="postForm-content">Post:</label>
-                <textarea
-                  id="postForm-content"
-                  className="form-control"
-                  name="content"
-                  placeholder="What would you like to tell us?"
-                />
-              </div>
-            </div>
-            <div className="card-footer">
-              <button type="submit" className="btn btn btn-outline-primary">
-                Submit
-                <div className="ripple-wrapper" />
-              </button>
-            </div>
-          </form>
-        </div>
-        <hr />
-        <div className="posts">
-          <h2>Posts</h2>
-          <div className="post card card-default">
-            <div className="card-body">Never mistake motion for action.</div>
-            <div className="post-author card-footer">Ernest Hemingway</div>
-          </div>
-          <div className="post card card-default">
-            <div className="card-body">
-              Quality means doing it right when no one is looking.
-            </div>
-            <div className="post-author card-footer">Henry Ford</div>
-          </div>
-          <div className="post card card-default">
-            <div className="card-body">
-              We are what we repeatedly do. Excellence, then, is not an act, but
-              a habit.
-            </div>
-            <div className="post-author card-footer">Aristotle</div>
-          </div>
-          <div className="post card card-default">
-            <div className="card-body">
-              Reality is merely an illusion, albeit a very persistent one.
-            </div>
-            <div className="post-author card-footer">Albert Einstein</div>
-          </div>
-        </div>
-      </div>
-    );
+		<div className='posting-form card'>
+			<form action='' method='post'>
+				<h5 className='card-header'>Add a post</h5>
+				<div className='card-body'>
+					<div className='form-group'>
+						<label htmlFor='postForm-name'>Name:</label>
+						<input
+							id='postForm-name'
+							className='form-control'
+							type='text'
+							name='author'
+							placeholder='Your name'
+						/>
+					</div>
+					<div className='form-group'>
+						<label htmlFor='postForm-content'>Post:</label>
+						<textarea
+							id='postForm-content'
+							className='form-control'
+							name='content'
+							placeholder='What would you like to tell us?'
+						/>
+					</div>
+				</div>
+				<div className='card-footer'>
+					<button type='submit' className='btn btn btn-outline-primary'>
+						Submit
+						<div className='ripple-wrapper' />
+					</button>
+				</div>
+			</form>
+		</div>
+		<hr />
+		<div className='posts'>
+			<h2>Posts</h2>
+			<div className='post card card-default'>
+				<div className='card-body'>Never mistake motion for action.</div>
+				<div className='post-author card-footer'>Ernest Hemingway</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Quality means doing it right when no one is looking.
+				</div>
+				<div className='post-author card-footer'>Henry Ford</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					We are what we repeatedly do. Excellence, then, is not an act, but
+					a habit.
+				</div>
+				<div className='post-author card-footer'>Aristotle</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Reality is merely an illusion, albeit a very persistent one.
+				</div>
+				<div className='post-author card-footer'>Albert Einstein</div>
+			</div>
+		</div>
+	</div>
+);
 ```
 
 </TabItem>
 <TabItem value="TypeScript">
 
 ```tsx
-import { usePageContext } from '@ima/react-page-renderer';
-import './homeView.less';
+return (
+	<div className='l-home container'>
+		<h1>Guestbook</h1>
 
-export function HomeView() {
-  const _pageContext = usePageContext();
-
-  return (
-    <div className='l-home container'>
-      <h1>Guestbook</h1>
-
-      <div className='posting-form card'>
-        <form action='' method='post'>
-          <h5 className='card-header'>Add a post</h5>
-          <div className='card-body'>
-            <div className='form-group'>
-              <label htmlFor='postForm-name'>Name:</label>
-              <input
-                id='postForm-name'
-                className='form-control'
-                type='text'
-                name='author'
-                placeholder='Your name'
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='postForm-content'>Post:</label>
-              <textarea
-                id='postForm-content'
-                className='form-control'
-                name='content'
-                placeholder='What would you like to tell us?'
-              />
-            </div>
-          </div>
-          <div className='card-footer'>
-            <button type='submit' className='btn btn btn-outline-primary'>
-              Submit
-              <div className='ripple-wrapper' />
-            </button>
-          </div>
-        </form>
-      </div>
-      <hr />
-      <div className='posts'>
-        <h2>Posts</h2>
-        <div className='post card card-default'>
-          <div className='card-body'>Never mistake motion for action.</div>
-          <div className='post-author card-footer'>Ernest Hemingway</div>
-        </div>
-        <div className='post card card-default'>
-          <div className='card-body'>
-          Quality means doing it right when no one is looking.
-          </div>
-          <div className='post-author card-footer'>Henry Ford</div>
-        </div>
-        <div className='post card card-default'>
-          <div className='card-body'>
-          We are what we repeatedly do. Excellence, then, is not an act, but a
-          habit.
-          </div>
-          <div className='post-author card-footer'>Aristotle</div>
-        </div>
-        <div className='post card card-default'>
-          <div className='card-body'>
-          Reality is merely an illusion, albeit a very persistent one.
-          </div>
-          <div className='post-author card-footer'>Albert Einstein</div>
-        </div>
-      </div>
-    </div>
-  );
-}
+		<div className='posting-form card'>
+			<form action='' method='post'>
+				<h5 className='card-header'>Add a post</h5>
+				<div className='card-body'>
+					<div className='form-group'>
+						<label htmlFor='postForm-name'>Name:</label>
+						<input
+							id='postForm-name'
+							className='form-control'
+							type='text'
+							name='author'
+							placeholder='Your name'
+						/>
+					</div>
+					<div className='form-group'>
+						<label htmlFor='postForm-content'>Post:</label>
+						<textarea
+							id='postForm-content'
+							className='form-control'
+							name='content'
+							placeholder='What would you like to tell us?'
+						/>
+					</div>
+				</div>
+				<div className='card-footer'>
+					<button type='submit' className='btn btn btn-outline-primary'>
+						Submit
+						<div className='ripple-wrapper' />
+					</button>
+				</div>
+			</form>
+		</div>
+		<hr />
+		<div className='posts'>
+			<h2>Posts</h2>
+			<div className='post card card-default'>
+				<div className='card-body'>Never mistake motion for action.</div>
+				<div className='post-author card-footer'>Ernest Hemingway</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Quality means doing it right when no one is looking.
+				</div>
+				<div className='post-author card-footer'>Henry Ford</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					We are what we repeatedly do. Excellence, then, is not an act, but
+					a habit.
+				</div>
+				<div className='post-author card-footer'>Aristotle</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Reality is merely an illusion, albeit a very persistent one.
+				</div>
+				<div className='post-author card-footer'>Albert Einstein</div>
+			</div>
+		</div>
+	</div>
+);
 ```
 
 </TabItem>
@@ -326,10 +316,10 @@ the Bootstrap CSS library:
 
 ```xml
 <link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-  crossOrigin="anonymous"
+	rel='stylesheet'
+	href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+	integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T'
+	crossOrigin='anonymous'
 />
 ```
 
@@ -413,7 +403,7 @@ Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
 will not be covered by this tutorial, but you can learn more about its interface
-in the API [/api/meta/meta-meta-manager](../api/classes/ima_core.MetaManager.md)).
+in the API [/basic-features/seo-and-meta-manager](../basic-features/seo-and-meta-manager.md)).
 
 For more information about `DocumentView` and whole rendering process of IMA.js
 application, [take a look at the documentation](../basic-features/rendering-process.md).
@@ -424,7 +414,7 @@ Starting with version 15 of IMA.js namespaces were deprecated in favor of ES2015
 modules. Mainly because ES modules are now more widespread and have better support
 in many IDEs thus don't pose such a problem when it comes to refactoring.
 
-Previously almost all of the JavaScript files in your IMA.js application included
+Previously almost all the JavaScript files in your IMA.js application included
 a snippet of code like this one near the beginning:
 
 ```javascript
