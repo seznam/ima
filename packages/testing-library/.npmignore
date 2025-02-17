@@ -1,3 +1,4 @@
 *
 !dist/**/*
+!jest-preset.js
 !package.json
