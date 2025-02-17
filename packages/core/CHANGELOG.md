@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.2
+
+### Patch Changes
+
+- 11ac5cc: Fixed an issue where scoped event listeners were not properly removed.
+
 ## 19.6.1
 
 ### Patch Changes
