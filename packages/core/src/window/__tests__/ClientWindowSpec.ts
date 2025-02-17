@@ -111,4 +111,63 @@ describe('ima.window.ClientWindow', () => {
       )
     ).toBeUndefined();
   });
+
+  it('should unbind scoped event listener only when matching capture', () => {
+    eventTarget.clear();
+    const options = { capture: true };
+
+    clientWindow.bindEventListener(
+      eventTarget as unknown as EventTarget,
+      event,
+      listener,
+      options,
+      scope
+    );
+
+    expect(
+      clientWindow._findScopedListener(
+        eventTarget as unknown as EventTarget,
+        event,
+        listener,
+        options,
+        scope
+      )
+    ).toEqual(eventTarget.listener);
+
+    clientWindow.unbindEventListener(
+      eventTarget as unknown as EventTarget,
+      event,
+      listener,
+      false,
+      scope
+    );
+
+    expect(
+      clientWindow._findScopedListener(
+        eventTarget as unknown as EventTarget,
+        event,
+        listener,
+        options,
+        scope
+      )
+    ).toEqual(eventTarget.listener);
+
+    clientWindow.unbindEventListener(
+      eventTarget as unknown as EventTarget,
+      event,
+      listener,
+      true,
+      scope
+    );
+
+    expect(
+      clientWindow._findScopedListener(
+        eventTarget as unknown as EventTarget,
+        event,
+        listener,
+        options,
+        scope
+      )
+    ).toBeUndefined();
+  });
 });
