@@ -322,7 +322,7 @@ export abstract class Window {
     eventTarget: T,
     event: string,
     listener: (event: E) => void,
-    options?: boolean | EventListenerOptions,
+    options?: boolean | AddEventListenerOptions,
     scope?: S
   ): void;
   bindEventListener(): void {
