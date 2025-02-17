@@ -47,6 +47,8 @@ export class ClientRouter extends AbstractRouter {
   protected _boundHandlePopState = (event: Event) =>
     this._handlePopState(event as PopStateEvent);
 
+  protected _routerRoots: EventTarget[] = [];
+
   /**
    * Mounted promise to prevent routing until app is fully mounted.
    */
@@ -124,17 +126,21 @@ export class ClientRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  listen() {
-    const nativeWindow = this._window.getWindow();
+  listen(target?: EventTarget) {
+    const eventTarget = target ?? this._window.getWindow()!;
+
+    if (target) {
+      this._routerRoots.push(eventTarget);
+    }
 
     this._window.bindEventListener(
-      nativeWindow as EventTarget,
+      eventTarget,
       Events.POP_STATE,
       this._boundHandlePopState
     );
 
     this._window.bindEventListener(
-      nativeWindow as EventTarget,
+      eventTarget,
       Events.CLICK,
       this._boundHandleClick
     );
@@ -145,20 +151,45 @@ export class ClientRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  unlisten() {
-    const nativeWindow = this._window.getWindow();
+  unlisten(target?: EventTarget) {
+    const eventTarget = target ?? this._window.getWindow()!;
 
-    this._window.unbindEventListener(
-      nativeWindow as EventTarget,
-      Events.POP_STATE,
-      this._boundHandlePopState
-    );
+    try {
+      this._window.unbindEventListener(
+        eventTarget,
+        Events.POP_STATE,
+        this._boundHandlePopState
+      );
 
-    this._window.unbindEventListener(
-      nativeWindow as EventTarget,
-      Events.CLICK,
-      this._boundHandleClick
-    );
+      this._window.unbindEventListener(
+        eventTarget,
+        Events.CLICK,
+        this._boundHandleClick
+      );
+    } catch (error) {
+      if ($Debug) {
+        console.warn('Failed to unbind router events:', error);
+      }
+    }
+
+    // Clear the reference
+    if (target) {
+      this._routerRoots = this._routerRoots.filter(
+        root => root !== eventTarget
+      );
+    }
+
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  unlistenAll(): this {
+    this._routerRoots.forEach(root => this.unlisten(root));
+
+    // We also need to call unlisten on the window object
+    this.unlisten();
 
     return this;
   }
