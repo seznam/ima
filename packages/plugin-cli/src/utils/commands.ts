@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time } from '@ima/dev-utils/logger';
+import { logger, time, printTime } from '@ima/dev-utils/logger';
 import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
@@ -56,7 +56,7 @@ export async function parsePkgJson(basePath: string): Promise<{
 }
 
 function errorHandler(error: Error) {
-  logger.error('An error occurred while wathing files');
+  logger.error('An error occurred while watching files');
   console.error(error);
 }
 
@@ -187,6 +187,8 @@ export async function watch(args: Arguments) {
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
+
+        logger.write(`${printTime()} ${chalk.green(eventName)}: ${filePath}`);
 
         batch(async () => {
           switch (eventName) {
