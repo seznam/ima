@@ -5,8 +5,8 @@
     "test": "jest",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "dev": "ima dev",
-    "build": "NODE_ENV=production ima build",
-    "start": "NODE_ENV=production node server/server.js"
+    "build": "ima build",
+    "start": "ima start"
   },
   "keywords": [
     "IMA.js",
