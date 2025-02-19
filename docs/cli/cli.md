@@ -3,7 +3,7 @@ title: 'Introduction to @ima/cli'
 description: 'CLI > Introduction to @ima/cli'
 ---
 
-The **IMA.js CLI** allows you to build and watch your application for changes during development. These features are handle by the only two currently supported commands `build` and `dev`.
+The **IMA.js CLI** allows you to build, run and watch your application for changes during development. These features are handled by the following commands: `build`, `dev`, and `start`.
 
 You can always list available commands by running:
 
@@ -25,6 +25,7 @@ Usage: ima <command>
 Commands:
   ima build  Build an application for production
   ima dev    Run application in development watch mode
+  ima start  Start the application in production mode
 
 Options:
   --version  Show version number  [boolean]
@@ -88,6 +89,36 @@ Options:
   --verbose         Use default webpack CLI output instead of custom one  [boolean]
   --ignoreWarnings  Webpack will no longer print warnings during compilation  [boolean]
   --profile         Turn on profiling support in production  [boolean] [default: false]
+```
+
+## Start
+
+The `npx ima start` command starts the application server. This command is designed to run your application after it has been built using the `build` command in production.
+
+```
+ima start
+
+Start the application in production mode
+
+Options:
+  --version  Show version number  [boolean]
+  --help     Show help  [boolean]
+  --server   Custom path to the server file (relative to project root)  [string] [default: "server/server.js"]
+```
+
+The start command will:
+1. Run your application in production mode (by default)
+2. Handle process signals (SIGTERM, SIGINT) for graceful shutdown
+3. Provide proper error handling and logging
+
+By default, the command looks for the server file at `server/server.js` in your project root. You can customize this path using the `--server` option:
+
+```bash
+# Using default server path
+npx ima start
+
+# Using custom server path
+npx ima start --server custom/path/to/server.js
 ```
 
 ## CLI options

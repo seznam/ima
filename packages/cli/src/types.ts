@@ -22,7 +22,7 @@ declare global {
 /**
  * Ima CLI commands.
  */
-export type ImaCliCommand = 'build' | 'dev';
+export type ImaCliCommand = 'build' | 'dev' | 'start';
 
 /**
  * Arguments generated from ima CLI commands.
@@ -48,6 +48,7 @@ export interface ImaCliArgs {
   reactRefresh?: boolean;
   forceLegacy?: boolean;
   lazyServer?: boolean;
+  server?: string;
 }
 
 /**
