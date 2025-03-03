@@ -79,7 +79,7 @@ async load() {
 ## `setMetaParams()` *@server/client*
 
 Callback used to configure the meta attribute manager. The method is
-called after the the controller's state has been patched with the all
+called after the controller's state has been patched with the all
 loaded resources from the [`load()`](#load-serverclient) method and the view has been rendered.
 
 `setMetaParams()` method receives following arguments:
