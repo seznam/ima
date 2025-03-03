@@ -188,17 +188,23 @@ export async function watch(args: Arguments) {
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
 
-        logger.write(`${printTime()} ${chalk.green(eventName)}: ${filePath}`);
+        logger.write(`${printTime()} watahel `);
 
         batch(async () => {
           switch (eventName) {
             case 'add':
             case 'change':
+              logger.write(
+                `${printTime()} ${chalk.green(eventName)}: ${filePath}`
+              );
               await process(filePath);
               break;
 
             case 'unlink':
             case 'unlinkDir':
+              logger.write(
+                `${printTime()} ${chalk.green(eventName)}: ${filePath}`
+              );
               await processOutput(
                 config,
                 async outputPath => {
@@ -212,6 +218,7 @@ export async function watch(args: Arguments) {
                 },
                 cwd
               );
+
               break;
 
             default:
