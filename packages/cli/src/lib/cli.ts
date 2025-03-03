@@ -1,3 +1,5 @@
+import { spawn } from 'child_process';
+
 import { Arguments, CommandBuilder } from 'yargs';
 
 import { ImaCliArgs, HandlerFn, ImaCliCommand } from '../types';
@@ -90,4 +92,24 @@ function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
   };
 }
 
-export { handlerFactory, resolveCliPluginArgs, sharedArgsFactory };
+/**
+ * Runs a command and waits for it to finish.
+ */
+function runCommand(command: string, args: string[], env = {}): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      stdio: 'inherit',
+      env: { ...process.env, ...env },
+    });
+
+    child.on('close', code => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Command failed with code ${code}`));
+      }
+    });
+  });
+}
+
+export { handlerFactory, resolveCliPluginArgs, sharedArgsFactory, runCommand };
