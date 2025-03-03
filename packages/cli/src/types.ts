@@ -22,7 +22,7 @@ declare global {
 /**
  * Ima CLI commands.
  */
-export type ImaCliCommand = 'build' | 'dev' | 'start';
+export type ImaCliCommand = 'build' | 'dev' | 'start' | 'prerender';
 
 /**
  * Arguments generated from ima CLI commands.
@@ -42,6 +42,7 @@ export interface ImaCliArgs {
   profile?: boolean;
   port?: number;
   hostname?: string;
+  paths?: string | string[];
   publicUrl?: string;
   environment: 'development' | 'production' | string;
   writeToDisk?: boolean;
@@ -49,6 +50,7 @@ export interface ImaCliArgs {
   forceLegacy?: boolean;
   lazyServer?: boolean;
   server?: string;
+  preRenderMode: 'spa' | 'ssr';
 }
 
 /**

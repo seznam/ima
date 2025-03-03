@@ -121,6 +121,51 @@ npx ima start
 npx ima start --server custom/path/to/server.js
 ```
 
+## Prerender
+
+The `npx ima prerender` command allows you to generate static HTML files for your application routes. It can be used to generate static spa templates or completely prerender SSR content.
+
+```
+ima prerender
+
+Prerender application as static HTML
+
+Options:
+  --version       Show version number  [boolean]
+  --help         Show help  [boolean]
+  --preRenderMode  Prerender mode (spa or ssr)  [string] [choices: "spa", "ssr"] [default: "spa"]
+  --paths        Path(s) to prerender (defaults to /)  [array]
+```
+
+The prerender command will:
+1. Build your application in production mode
+2. Start the server in the specified mode (SPA or SSR)
+3. Generate static HTML files for specified paths
+4. Save the generated files in the `build` directory
+
+You can use the command in several ways:
+
+```bash
+# Prerender just the root path (default)
+npx ima prerender
+
+# Prerender a single path
+npx ima prerender --paths /about
+
+# Prerender multiple paths
+npx ima prerender --paths / --paths /about --paths /contact
+
+# Prerender in SSR mode
+npx ima prerender --preRenderMode ssr --paths / --paths /about
+```
+
+The generated files will be named according to the path and mode:
+- `/` -> `{mode}.html`
+- `/about` -> `{mode}-about.html`
+- `/blog/post-1` -> `{mode}-blog_post-1.html`
+
+where `{mode}` is either `spa` or `ssr` based on the `--preRenderMode` option.
+
 ## CLI options
 
 Most of the following options are available for both `dev` and `build` commands, however some may be exclusive to only one of them. You can always use the `--help` argument to show all available options for each command.
