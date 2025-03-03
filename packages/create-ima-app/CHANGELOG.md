@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.4.0
+
+### Minor Changes
+
+- 39fc3f2: Update `express` to version `5` and other dependecies.
+
 ## 19.3.1
 
 ### Patch Changes
