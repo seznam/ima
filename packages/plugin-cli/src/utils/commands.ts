@@ -187,30 +187,26 @@ export async function watch(args: Arguments) {
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
-
-        logger.write(`${printTime()} watahel `);
+        const fileName = path.basename(filePath);
 
         batch(async () => {
           switch (eventName) {
             case 'add':
             case 'change':
-              logger.write(
-                `${printTime()} ${chalk.green(eventName)}: ${filePath}`
-              );
               await process(filePath);
               break;
 
             case 'unlink':
             case 'unlinkDir':
-              logger.write(
-                `${printTime()} ${chalk.green(eventName)}: ${filePath}`
-              );
               await processOutput(
                 config,
                 async outputPath => {
                   const outputContextPath = path.join(outputPath, contextPath);
 
                   if (fs.existsSync(outputContextPath)) {
+                    logger.write(
+                      `${printTime()} ${chalk.green('Unlink')}: ${fileName}`
+                    );
                     await fs.promises.rm(outputContextPath, {
                       recursive: true,
                     });
