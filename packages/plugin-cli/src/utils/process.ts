@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/logger';
+import { logger, printTime } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 
 import {
@@ -255,6 +255,12 @@ export async function createProcessingPipeline(ctx: Context) {
           filePath,
           outputDir,
         };
+        const outputFilename = path.join(outputDir, fileName);
+
+        ctx.command === 'link' &&
+          logger.write(
+            `${printTime()} ${chalk.green('Linking')}: ${outputFilename}`
+          );
 
         // Process transforms
         source = await processTransformers(
