@@ -61,7 +61,7 @@ for debugging) and allows us to add various computed properties without having
 to modify our API backend.
 
 Let's create the `app/model` and `app/model/post` directories and then a new
-file `app/model/post/PostEntity.js` with the following content:
+file `app/model/post/PostEntity.js` (or `.ts`) with the following content:
 
 <Tabs>
   <TabItem value="JavaScript">
@@ -116,7 +116,7 @@ So, with our entity class ready, let's take a look at the **factory** class. **T
 factory class will be used to create new entities from data objects and arrays
 of data objects** - but in our case, the latter will suffice for now.
 
-Create a new `app/model/post/PostFactory.js` file with the following content:
+Create a new `app/model/post/PostFactory.js` (or `.ts`) file with the following content:
 
 <Tabs>
   <TabItem value="JavaScript">
@@ -146,11 +146,10 @@ import { PostData } from 'app/page/home/HomeController';
 export class PostFactory {
   static $dependencies: Dependencies = [];
 
-  createList(entities: PostEntity[]): PostEntity[] {
+  createList(entities: PostData[]): PostEntity[] {
     return entities.map((entityData: PostData) => new PostEntity(entityData));
   }
 }
-
 ```
 
   </TabItem>
@@ -165,7 +164,7 @@ We have our entity and factory, now we need a resource class. **The resource
 class represents our single point of access to a single REST API resource**
 (or entity collection, if you will). The sole purpose of a resource class is to
 provide a relatively low-level API for accessing the REST API resource. Create
-a new `app/model/post/PostResource.js` file with the following contents:
+a new `app/model/post/PostResource.js` (or `.ts`) file with the following contents:
 
 <Tabs>
   <TabItem value="JavaScript">
@@ -186,7 +185,7 @@ export default class PostResource {
 
   getEntityList() {
     return this._http
-      .get('http://localhost:3001/static/static/public/posts.json', {})
+      .get('http://localhost:3001/static/static/public/api/posts.json', {})
       .then(response => this._factory.createList(response.body));
   }
 }
@@ -196,7 +195,6 @@ export default class PostResource {
   <TabItem value="TypeScript">
 
 ```typescript
-import MockHttpAgent from 'app/mock/MockHttpAgent';
 import { Dependencies } from '@ima/core';
 import { PostData } from 'app/page/home/HomeController';
 import { PostEntity } from 'app/model/post/PostEntity';
@@ -209,10 +207,10 @@ type PostApiGetResponse = {
 export class PostResource {
   static $dependencies: Dependencies = ['$Http', PostFactory];
 
-  declare _http: string;
+  declare _http: any;
   declare _factory: PostFactory;
 
-  constructor(http: string, factory: PostFactory) {
+  constructor(http: any, factory: PostFactory) {
     this._http = http;
 
     this._factory = factory;
@@ -220,13 +218,21 @@ export class PostResource {
 
   getEntityList(): Promise<PostEntity[]> {
     return this._http
-      .get('http://localhost:3001/static/static/public/posts.json', {})
+      .get('http://localhost:3001/static/static/public/api/posts.json', {})
       .then((response: PostApiGetResponse) =>
         this._factory.createList(response.body)
       );
   }
 }
 ```
+
+> **TypeScript:** Right now we are using `any` type for `_http` field.
+		Adding correct types here would be too complicated right now.
+		Moreover we will fix this in the next part of the tutorial.
+
+> Depending on your IDE, you may see an eslint error on `getEntityList` return statement due to unspecified return type.
+		We will address this in the next part of the tutorial.
+		If you want, you can temporarily disable eslint for this line by adding `// eslint-disable-next-line` comment.
 
   </TabItem>
 </Tabs>
@@ -262,7 +268,7 @@ would fetch the necessary pages from the REST API, construct the result and
 resolve to the constructed sequence of post entities.
 
 In our case, however, the service will be very plain. Create a new
-`app/model/post/PostService.js` file with the following content:
+`app/model/post/PostService.js` (or `.ts`) file with the following content:
 
 <Tabs>
   <TabItem value="JavaScript">
@@ -333,9 +339,6 @@ Every class that wants to use DI has to define static getter which returns an ar
 we want to inject to the constructor in the same order as defined in the array itself. Real
 world example would then look something like this:
 
-<Tabs>
-  <TabItem value="JavaScript">
-
 ```javascript
 import HttpClient from 'http';
 import PostFactory from './PostFactory';
@@ -352,30 +355,6 @@ export default class PostResource {
   }
 }
 ```
-
-  </TabItem>
-  <TabItem value="TypeScript">
-
-```typescript
-import HttpClient from 'http';
-import { PostFactory } from './PostFactory';
-
-export class PostResource {
-  static $dependencies: Dependencies = [HttpClient, PostFactory];
-
-  declare _http: HttpClient;
-  declare _factory: PostFactory;
-
-  constructor(http: HttpClient, factory: PostFactory) {
-    // http and factory contains instances of their respective classes
-    this._http = http;
-    this._factory = factory;
-  }
-}
-```
-
-  </TabItem>
-</Tabs>
 
 The only condition to have DI working as expected is, that if you want to use any class as a dependency,
 **it has to define static getter** `$dependencies`. Even if it does not have any dependencies and returns
@@ -500,7 +479,7 @@ constructor of our home page controller. With the post service safely in our
 
 ```javascript
 return {
-  posts: this._postService.getPosts()
+  posts: this._postService.getPosts(),
 };
 ```
 
@@ -508,11 +487,9 @@ return {
   <TabItem value="TypeScript">
 
 ```typescript
-load(): HomeControllerState {
-  return {
-    posts: this._postService.getPosts(),
-  };
-}
+return {
+	posts: this._postService.getPosts(),
+};
 ```
 
   </TabItem>
@@ -526,9 +503,11 @@ like this:
   <TabItem value="JavaScript">
 
 ```jsx
-return this.props.posts.map(post => {
-  return <Post key={post.id} content={post.content} author={post.author} />;
-});
+const { posts } = this.props;
+
+return posts.map(post => (
+	<Post key={post.id} content={post.content} author={post.author} />
+));
 ```
 
 </TabItem>
@@ -550,7 +529,7 @@ but this time fetched from the server! Or are they?
 ## Server-side rendering
 
 If you open your browsers's developer tools, you may notice that the network log does
-not show any request to `http://localhost:3001/static/static/public/posts.json`.
+not show any request to `http://localhost:3001/static/static/public/api/posts.json`.
 
 You may remember that IMA.js is an isomorphic JavaScript application stack.
 This means that our application gets rendered at the server first, then it is
@@ -560,5 +539,5 @@ application is "reanimated" at the client-side using the state information.
 IMA.js caches the requests we make using the HTTP service at the server-side
 and sends the serialized cache to the client. The cache is then deserialized at
 the client-side, so the request to
-`http://localhost:3001/static/static/public/posts.json` we do in our post resource will
+`http://localhost:3001/static/static/public/api/posts.json` we do in our post resource will
 be resolved from the cache, leading to no additional HTTP request being made.
