@@ -66,42 +66,42 @@ file `app/model/post/PostEntity.js` (or `.ts`) with the following content:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-export default class PostEntity {
-  constructor(data) {
-    this.id = data.id;
+		```javascript
+		export default class PostEntity {
+			constructor(data) {
+				this.id = data.id;
 
-    this.content = data.content;
+				this.content = data.content;
 
-    this.author = data.author;
-  }
-}
-```
+				this.author = data.author;
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { PostData } from 'app/page/home/HomeController';
+		```typescript
+		import { PostData } from 'app/page/home/HomeController';
 
-export class PostEntity {
-  declare id: number | null;
-  declare content: string;
-  declare author: string;
+		export class PostEntity {
+			declare id: number | null;
+			declare content: string;
+			declare author: string;
 
-  constructor(data: PostData) {
-    this.id = data.id;
-    this.content = data.content;
-    this.author = data.content;
-  }
-}
-```
+			constructor(data: PostData) {
+				this.id = data.id;
+				this.content = data.content;
+				this.author = data.content;
+			}
+		}
+		```
 
-> **TypeScript:** Before we set the content of the data object to our fields,
-    we have to declare each field with its corresponding type.
+		> **TypeScript:** Before we set the content of the data object to our fields,
+				we have to declare each field with its corresponding type.
 
-> We also used `PostData` type, that we already defined in the `HomeController`.
-    But keep in mind that there is no `id` attribute, so you have to add it to the type definition.
+		> We also used `PostData` type, that we already defined in the `HomeController`.
+				But keep in mind that there is no `id` attribute, so you have to add it to the type definition.
 
   </TabItem>
 </Tabs>
@@ -121,36 +121,36 @@ Create a new `app/model/post/PostFactory.js` (or `.ts`) file with the following 
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import PostEntity from './PostEntity';
+		```javascript
+		import PostEntity from './PostEntity';
 
-export default class PostFactory {
-  static get $dependencies() {
-    return [];
-  }
+		export default class PostFactory {
+			static get $dependencies() {
+				return [];
+			}
 
-  createList(entities) {
-    return entities.map(entityData => new PostEntity(entityData));
-  }
-}
-```
+			createList(entities) {
+				return entities.map(entityData => new PostEntity(entityData));
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { PostEntity } from './PostEntity';
-import { Dependencies } from '@ima/core';
-import { PostData } from 'app/page/home/HomeController';
+		```typescript
+		import { PostEntity } from './PostEntity';
+		import { Dependencies } from '@ima/core';
+		import { PostData } from 'app/page/home/HomeController';
 
-export class PostFactory {
-  static $dependencies: Dependencies = [];
+		export class PostFactory {
+			static $dependencies: Dependencies = [];
 
-  createList(entities: PostData[]): PostEntity[] {
-    return entities.map((entityData: PostData) => new PostEntity(entityData));
-  }
-}
-```
+			createList(entities: PostData[]): PostEntity[] {
+				return entities.map((entityData: PostData) => new PostEntity(entityData));
+			}
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -169,70 +169,70 @@ a new `app/model/post/PostResource.js` (or `.ts`) file with the following conten
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import PostFactory from './PostFactory';
+		```javascript
+		import PostFactory from './PostFactory';
 
-export default class PostResource {
-  static get $dependencies() {
-    return ['$Http', PostFactory];
-  }
+		export default class PostResource {
+			static get $dependencies() {
+				return ['$Http', PostFactory];
+			}
 
-  constructor(http, factory) {
-    this._http = http;
+			constructor(http, factory) {
+				this._http = http;
 
-    this._factory = factory;
-  }
+				this._factory = factory;
+			}
 
-  getEntityList() {
-    return this._http
-      .get('http://localhost:3001/static/static/public/api/posts.json', {})
-      .then(response => this._factory.createList(response.body));
-  }
-}
-```
+			getEntityList() {
+				return this._http
+					.get('http://localhost:3001/static/static/public/api/posts.json', {})
+					.then(response => this._factory.createList(response.body));
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { Dependencies } from '@ima/core';
-import { PostData } from 'app/page/home/HomeController';
-import { PostEntity } from 'app/model/post/PostEntity';
-import { PostFactory } from './PostFactory';
+		```typescript
+		import { Dependencies } from '@ima/core';
+		import { PostData } from 'app/page/home/HomeController';
+		import { PostEntity } from 'app/model/post/PostEntity';
+		import { PostFactory } from './PostFactory';
 
-type PostApiGetResponse = {
-  body: PostData[];
-};
+		type PostApiGetResponse = {
+			body: PostData[];
+		};
 
-export class PostResource {
-  static $dependencies: Dependencies = ['$Http', PostFactory];
+		export class PostResource {
+			static $dependencies: Dependencies = ['$Http', PostFactory];
 
-  declare _http: any;
-  declare _factory: PostFactory;
+			declare _http: any;
+			declare _factory: PostFactory;
 
-  constructor(http: any, factory: PostFactory) {
-    this._http = http;
+			constructor(http: any, factory: PostFactory) {
+				this._http = http;
 
-    this._factory = factory;
-  }
+				this._factory = factory;
+			}
 
-  getEntityList(): Promise<PostEntity[]> {
-    return this._http
-      .get('http://localhost:3001/static/static/public/api/posts.json', {})
-      .then((response: PostApiGetResponse) =>
-        this._factory.createList(response.body)
-      );
-  }
-}
-```
+			getEntityList(): Promise<PostEntity[]> {
+				return this._http
+					.get('http://localhost:3001/static/static/public/api/posts.json', {})
+					.then((response: PostApiGetResponse) =>
+						this._factory.createList(response.body)
+					);
+			}
+		}
+		```
 
-> **TypeScript:** Right now we are using `any` type for `_http` field.
-		Adding correct types here would be too complicated right now.
-		Moreover we will fix this in the next part of the tutorial.
+		> **TypeScript:** Right now we are using `any` type for `_http` field.
+				Adding correct types here would be too complicated right now.
+				Moreover we will fix this in the next part of the tutorial.
 
-> Depending on your IDE, you may see an eslint error on `getEntityList` return statement due to unspecified return type.
-		We will address this in the next part of the tutorial.
-		If you want, you can temporarily disable eslint for this line by adding `// eslint-disable-next-line` comment.
+		> Depending on your IDE, you may see an eslint error on `getEntityList` return statement due to unspecified return type.
+				We will address this in the next part of the tutorial.
+				If you want, you can temporarily disable eslint for this line by adding `// eslint-disable-next-line` comment.
 
   </TabItem>
 </Tabs>
@@ -273,46 +273,46 @@ In our case, however, the service will be very plain. Create a new
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import PostResource from './PostResource';
+		```javascript
+		import PostResource from './PostResource';
 
-export default class PostService {
-  static get $dependencies() {
-    return [PostResource];
-  }
+		export default class PostService {
+			static get $dependencies() {
+				return [PostResource];
+			}
 
-  constructor(resource) {
-    this._resource = resource;
-  }
+			constructor(resource) {
+				this._resource = resource;
+			}
 
-  getPosts() {
-    return this._resource.getEntityList();
-  }
-}
-```
+			getPosts() {
+				return this._resource.getEntityList();
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { Dependencies } from '@ima/core';
-import { PostEntity } from 'app/model/post/PostEntity';
-import { PostResource } from './PostResource';
+		```typescript
+		import { Dependencies } from '@ima/core';
+		import { PostEntity } from 'app/model/post/PostEntity';
+		import { PostResource } from './PostResource';
 
-export class PostService {
-  static $dependencies: Dependencies = [PostResource];
+		export class PostService {
+			static $dependencies: Dependencies = [PostResource];
 
-  declare _resource: PostResource;
+			declare _resource: PostResource;
 
-  constructor(resource: PostResource) {
-    this._resource = resource;
-  }
+			constructor(resource: PostResource) {
+				this._resource = resource;
+			}
 
-  getPosts(): Promise<PostEntity[]> {
-    return this._resource.getEntityList();
-  }
-}
-```
+			getPosts(): Promise<PostEntity[]> {
+				return this._resource.getEntityList();
+			}
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -411,61 +411,62 @@ as follows:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import { AbstractController } from '@ima/core';
-import PostService from 'app/model/post/PostService';
+		```javascript
+		import { AbstractController } from '@ima/core';
+		import PostService from 'app/model/post/PostService';
 
-export default class HomeController extends AbstractController {
-  static get $dependencies() {
-    return [PostService];
-  }
+		export default class HomeController extends AbstractController {
+			static get $dependencies() {
+				return [PostService];
+			}
 
-  constructor(postService) {
-    super();
+			constructor(postService) {
+				super();
 
-    this._postService = postService;
-  }
+				this._postService = postService;
+			}
 
-  ...
-}
-```
+			...
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import {
-  AbstractController,
-  Dependencies,
-  Dictionary,
-  LoadedResources,
-  MetaManager,
-  Router,
-  Settings,
-} from '@ima/core';
-import { PostService } from 'app/model/post/PostService';
+		```typescript
+		import {
+			AbstractController,
+			Dependencies,
+			Dictionary,
+			LoadedResources,
+			MetaManager,
+			Router,
+			Settings,
+		} from '@ima/core';
+		import { PostService } from 'app/model/post/PostService';
 
-export type PostData = {
-  id: number | null;
-  content: string;
-  author: string;
-};
-export type HomeControllerState = {
-  posts: PostData[];
-};
+		export type PostData = {
+			id: number | null;
+			content: string;
+			author: string;
+		};
+		export type HomeControllerState = {
+			posts: PostData[];
+		};
 
-export class HomeController extends AbstractController<HomeControllerState> {
-  static $dependencies: Dependencies = [PostService];
+		export class HomeController extends AbstractController<HomeControllerState> {
+			static $dependencies: Dependencies = [PostService];
+			_postService: PostService;
 
-  constructor(postService: PostService) {
-    super();
+			constructor(postService: PostService) {
+				super();
 
-    this._postService = postService;
-  }
+				this._postService = postService;
+			}
 
-  ...
-}
-```
+			...
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -477,20 +478,20 @@ constructor of our home page controller. With the post service safely in our
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-return {
-  posts: this._postService.getPosts(),
-};
-```
+		```javascript
+		return {
+			posts: this._postService.getPosts(),
+		};
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-return {
-	posts: this._postService.getPosts(),
-};
-```
+		```typescript
+		return {
+			posts: this._postService.getPosts(),
+		};
+		```
 
   </TabItem>
 </Tabs>
@@ -502,22 +503,22 @@ like this:
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-const { posts } = this.props;
+		```jsx
+		const { posts } = this.props;
 
-return posts.map(post => (
-	<Post key={post.id} content={post.content} author={post.author} />
-));
-```
+		return posts.map(post => (
+			<Post key={post.id} content={post.content} author={post.author} />
+		));
+		```
 
 </TabItem>
 <TabItem value="TypeScript">
 
-```tsx
-return posts.map((post: PostData) => (
-  <Post key={post.id} content={post.content} author={post.author} />
-));
-```
+		```tsx
+		return posts.map((post: PostData) => (
+			<Post key={post.id} content={post.content} author={post.author} />
+		));
+		```
 
 </TabItem>
 </Tabs>

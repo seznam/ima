@@ -26,75 +26,75 @@ but to make this tutorial simpler, we're going to replace contents of this file 
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import { AbstractController } from '@ima/core';
+		```javascript
+		import { AbstractController } from '@ima/core';
 
-export class HomeController extends AbstractController {
-  static get $dependencies() {
-    return [];
-  }
+		export class HomeController extends AbstractController {
+			static get $dependencies() {
+				return [];
+			}
 
-  constructor() {
-    super();
-  }
+			constructor() {
+				super();
+			}
 
-  load() {
-    return {};
-  }
+			load() {
+				return {};
+			}
 
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-    metaManager.setTitle('Guestbook');
-  }
-}
-```
+			setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+				metaManager.setTitle('Guestbook');
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import {
-  AbstractController,
-  Dependencies,
-  Dictionary,
-  LoadedResources,
-  MetaManager,
-  Router,
-  Settings,
-} from '@ima/core';
+		```typescript
+		import {
+			AbstractController,
+			Dependencies,
+			Dictionary,
+			LoadedResources,
+			MetaManager,
+			Router,
+			Settings,
+		} from '@ima/core';
 
-export type PostData = {
-  content: string;
-  author: string;
-};
-export type HomeControllerState = {
-  posts: PostData[];
-};
+		export type PostData = {
+			content: string;
+			author: string;
+		};
+		export type HomeControllerState = {
+			posts: PostData[];
+		};
 
-export class HomeController extends AbstractController<HomeControllerState> {
-  static $dependencies: Dependencies = [];
+		export class HomeController extends AbstractController<HomeControllerState> {
+			static $dependencies: Dependencies = [];
 
-  constructor() {
-    super();
-  }
+			constructor() {
+				super();
+			}
 
-  load(): HomeControllerState {
-    return {};
-  }
+			load(): HomeControllerState {
+				return {};
+			}
 
-  setMetaParams(
-    loadedResources: LoadedResources<HomeControllerState>,
-    metaManager: MetaManager,
-    router: Router,
-    dictionary: Dictionary,
-    settings: Settings
-  ): void {
-    metaManager.setTitle('Guestbook');
-  }
-}
-```
+			setMetaParams(
+				loadedResources: LoadedResources<HomeControllerState>,
+				metaManager: MetaManager,
+				router: Router,
+				dictionary: Dictionary,
+				settings: Settings
+			): void {
+				metaManager.setTitle('Guestbook');
+			}
+		}
+		```
 
-> **TypeScript:** As you can see, the TypeScript code is a lot more complex.
-    The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
+		> **TypeScript:** As you can see, the TypeScript code is a lot more complex.
+				The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
 
   </TabItem>
 </Tabs>
@@ -200,140 +200,140 @@ Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-render() {
-  return (
-    <div className='l-home container'>
-      <h1>Guestbook</h1>
-      <div className='posting-form card'>
-        <form action='' method='post'>
-          <h5 className='card-header'>Add a post</h5>
-          <div className='card-body'>
-            <div className='form-group'>
-              <label htmlFor='postForm-name'>Name:</label>
-              <input
-                id='postForm-name'
-                className='form-control'
-                type='text'
-                name='author'
-                placeholder='Your name'
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='postForm-content'>Post:</label>
-              <textarea
-                id='postForm-content'
-                className='form-control'
-                name='content'
-                placeholder='What would you like to tell us?'
-              />
-            </div>
-          </div>
-          <div className='card-footer'>
-            <button type='submit' className='btn btn btn-outline-primary'>
-              Submit
-              <div className='ripple-wrapper' />
-            </button>
-          </div>
-        </form>
-      </div>
-      <hr />
-      <div className='posts'>
-        <h2>Posts</h2>
-        {this._renderPosts()}
-      </div>
-    </div>
-  );
-}
+		```jsx
+		render() {
+			return (
+				<div className='l-home container'>
+					<h1>Guestbook</h1>
+					<div className='posting-form card'>
+						<form action='' method='post'>
+							<h5 className='card-header'>Add a post</h5>
+							<div className='card-body'>
+								<div className='form-group'>
+									<label htmlFor='postForm-name'>Name:</label>
+									<input
+										id='postForm-name'
+										className='form-control'
+										type='text'
+										name='author'
+										placeholder='Your name'
+									/>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='postForm-content'>Post:</label>
+									<textarea
+										id='postForm-content'
+										className='form-control'
+										name='content'
+										placeholder='What would you like to tell us?'
+									/>
+								</div>
+							</div>
+							<div className='card-footer'>
+								<button type='submit' className='btn btn btn-outline-primary'>
+									Submit
+									<div className='ripple-wrapper' />
+								</button>
+							</div>
+						</form>
+					</div>
+					<hr />
+					<div className='posts'>
+						<h2>Posts</h2>
+						{this._renderPosts()}
+					</div>
+				</div>
+			);
+		}
 
-_renderPosts() {
-  const { posts } = this.props;
+		_renderPosts() {
+			const { posts } = this.props;
 
-  return posts.map((post, index) => (
-    <div className='post card card-default' key={index}>
-      <div className='card-body'>{post.content}</div>
-      <div className='post-author card-footer'>{post.author}</div>
-    </div>
-  ));
-}
-```
+			return posts.map((post, index) => (
+				<div className='post card card-default' key={index}>
+					<div className='card-body'>{post.content}</div>
+					<div className='post-author card-footer'>{post.author}</div>
+				</div>
+			));
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
-import { PostData } from 'app/page/home/HomeController';
-import './homeView.less';
+		```tsx
+		import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
+		import { PostData } from 'app/page/home/HomeController';
+		import './homeView.less';
 
-type HomeViewProps = {
-  posts: PostData[];
-};
+		type HomeViewProps = {
+			posts: PostData[];
+		};
 
-export class HomeView extends AbstractComponent<{ posts: PostData[] }> {
-	static get contextType() {
-		return PageContext;
-	}
+		export class HomeView extends AbstractComponent<{ posts: PostData[] }> {
+			static get contextType() {
+				return PageContext;
+			}
 
-  render() {
-		return (
-		  <div className='l-home container'>
-		    <h1>Guestbook</h1>
-		    <div className='posting-form card'>
-					<form action='' method='post'>
-						<h5 className='card-header'>Add a post</h5>
-						<div className='card-body'>
-							<div className='form-group'>
-								<label htmlFor='postForm-name'>Name:</label>
-									<input
-									id='postForm-name'
-									className='form-control'
-									type='text'
-									name='author'
-									placeholder='Your name'
-									/>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='postForm-content'>Post:</label>
-								<textarea
-								id='postForm-content'
-								className='form-control'
-								name='content'
-								placeholder='What would you like to tell us?'
-								/>
-							</div>
+			render() {
+				return (
+					<div className='l-home container'>
+						<h1>Guestbook</h1>
+						<div className='posting-form card'>
+							<form action='' method='post'>
+								<h5 className='card-header'>Add a post</h5>
+								<div className='card-body'>
+									<div className='form-group'>
+										<label htmlFor='postForm-name'>Name:</label>
+											<input
+											id='postForm-name'
+											className='form-control'
+											type='text'
+											name='author'
+											placeholder='Your name'
+											/>
+									</div>
+									<div className='form-group'>
+										<label htmlFor='postForm-content'>Post:</label>
+										<textarea
+										id='postForm-content'
+										className='form-control'
+										name='content'
+										placeholder='What would you like to tell us?'
+										/>
+									</div>
+								</div>
+								<div className='card-footer'>
+									<button type='submit' className='btn btn btn-outline-primary'>
+										Submit
+										<div className='ripple-wrapper' />
+									</button>
+								</div>
+							</form>
 						</div>
-						<div className='card-footer'>
-							<button type='submit' className='btn btn btn-outline-primary'>
-								Submit
-								<div className='ripple-wrapper' />
-							</button>
+						<hr />
+						<div className='posts'>
+							<h2>Posts</h2>
+							{this._renderPosts()}
 						</div>
-					</form>
-		    </div>
-		    <hr />
-		    <div className='posts'>
-		      <h2>Posts</h2>
-	        {this._renderPosts()}
-	      </div>
-      </div>
-    );
-  }
+					</div>
+				);
+			}
 
-	_renderPosts() {
-		const { posts } = this.props;
+			_renderPosts() {
+				const { posts } = this.props;
 
-		return posts.map((post, index) => (
-			<div className='post card card-default' key={index}>
-				<div className='card-body'>{post.content}</div>
-				<div className='post-author card-footer'>{post.author}</div>
-			</div>
-		));
-	}
-}
-```
+				return posts.map((post, index) => (
+					<div className='post card card-default' key={index}>
+						<div className='card-body'>{post.content}</div>
+						<div className='post-author card-footer'>{post.author}</div>
+					</div>
+				));
+			}
+		}
+		```
 
-> **TypeScript: ** New type `HomeViewProps` has been used to correctly accept typed props in our `HomeView`.
+		> **TypeScript: ** New type `HomeViewProps` has been used to correctly accept typed props in our `HomeView`.
 
   </TabItem>
 </Tabs>
@@ -381,53 +381,53 @@ and `app/component/post/post.less` files.
 Put the following code into the `Post.jsx` (or `Post.tsx`) file:
 
 <Tabs>
-<TabItem value="JavaScript">
+	<TabItem value="JavaScript">
 
-```jsx
-import { AbstractComponent } from '@ima/react-page-renderer';
-import './post.less';
+		```jsx
+		import { AbstractComponent } from '@ima/react-page-renderer';
+		import './post.less';
 
-export default class Post extends AbstractComponent {
-  render() {
-    const { content, author } = this.props;
+		export default class Post extends AbstractComponent {
+			render() {
+				const { content, author } = this.props;
 
-    return (
-      <div className='post card card-default'>
-        <div className='card-body'>{content}</div>
-        <div className='post-author card-footer'>{author}</div>
-      </div>
-    );
-  }
-}
-```
+				return (
+					<div className='post card card-default'>
+						<div className='card-body'>{content}</div>
+						<div className='post-author card-footer'>{author}</div>
+					</div>
+				);
+			}
+		}
+		```
 
-</TabItem>
-<TabItem value="TypeScript">
+	</TabItem>
+	<TabItem value="TypeScript">
 
-```tsx
-import { AbstractComponent } from '@ima/react-page-renderer';
-import './post.less';
+		```tsx
+		import { AbstractComponent } from '@ima/react-page-renderer';
+		import './post.less';
 
-type PostProps = {
-	content: string;
-	author: string;
-};
+		type PostProps = {
+			content: string;
+			author: string;
+		};
 
-export class Post extends AbstractComponent<PostProps> {
-	render() {
-		const { content, author } = this.props;
+		export class Post extends AbstractComponent<PostProps> {
+			render() {
+				const { content, author } = this.props;
 
-		return (
-			<div className='post card card-default'>
-			<div className='card-body'>{content}</div>
-			<div className='post-author card-footer'>{author}</div>
-			</div>
-		);
-	}
-}
-```
+				return (
+					<div className='post card card-default'>
+					<div className='card-body'>{content}</div>
+					<div className='post-author card-footer'>{author}</div>
+					</div>
+				);
+			}
+		}
+		```
 
-</TabItem>
+	</TabItem>
 </Tabs>
 
 
@@ -441,20 +441,20 @@ To use our new component, we need to update the `_renderPosts()` method in the
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-return posts.map((post, index) => (
-	<Post key={index} content={post.content} author={post.author} />
-));
-```
+		```jsx
+		return posts.map((post, index) => (
+			<Post key={index} content={post.content} author={post.author} />
+		));
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-return posts.map((post: PostData, index) => (
-  <Post key={index} content={post.content} author={post.author} />
-));
-```
+		```tsx
+		return posts.map((post: PostData, index) => (
+			<Post key={index} content={post.content} author={post.author} />
+		));
+		```
 
   </TabItem>
 </Tabs>
@@ -465,16 +465,16 @@ beginning of the file:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import Post from 'app/component/post/Post';
-```
+		```javascript
+		import Post from 'app/component/post/Post';
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { Post } from 'app/component/post/Post';
-```
+		```typescript
+		import { Post } from 'app/component/post/Post';
+		```
 
   </TabItem>
 </Tabs>
@@ -505,93 +505,93 @@ following code into the newly created file:
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-import { AbstractComponent } from '@ima/react-page-renderer';
-import React from 'react';
+		```jsx
+		import { AbstractComponent } from '@ima/react-page-renderer';
+		import React from 'react';
 
-export default class PostingForm extends AbstractComponent {
-  render() {
-    return (
-      <div className='posting-form card'>
-        <form action='' method='post'>
-          <h5 className='card-header'>Add a post</h5>
-          <div className='card-body'>
-            <div className='form-group'>
-              <label htmlFor='postForm-name'>Name:</label>
-              <input
-                id='postForm-name'
-                className='form-control'
-                type='text'
-                name='author'
-                placeholder='Your name'
-              />
-            </div>
-            <div className='form-group'>
-              <label htmlFor='postForm-content'>Post:</label>
-              <textarea
-                id='postForm-content'
-                className='form-control'
-                name='content'
-                placeholder='What would you like to tell us?'
-              />
-            </div>
-          </div>
-          <div className='card-footer'>
-            <button type='submit' className='btn btn btn-outline-primary'>
-              Submit
-              <div className='ripple-wrapper' />
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
-```
+		export default class PostingForm extends AbstractComponent {
+			render() {
+				return (
+					<div className='posting-form card'>
+						<form action='' method='post'>
+							<h5 className='card-header'>Add a post</h5>
+							<div className='card-body'>
+								<div className='form-group'>
+									<label htmlFor='postForm-name'>Name:</label>
+									<input
+										id='postForm-name'
+										className='form-control'
+										type='text'
+										name='author'
+										placeholder='Your name'
+									/>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='postForm-content'>Post:</label>
+									<textarea
+										id='postForm-content'
+										className='form-control'
+										name='content'
+										placeholder='What would you like to tell us?'
+									/>
+								</div>
+							</div>
+							<div className='card-footer'>
+								<button type='submit' className='btn btn btn-outline-primary'>
+									Submit
+									<div className='ripple-wrapper' />
+								</button>
+							</div>
+						</form>
+					</div>
+				);
+			}
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-export default class PostingForm extends AbstractComponent  {
-	render() {
-		return (
-			<div className='posting-form card'>
-				<form action='' method='post'>
-					<h5 className='card-header'>Add a post</h5>
-					<div className='card-body'>
-						<div className='form-group'>
-							<label htmlFor='postForm-name'>Name:</label>
-							<input
-							id='postForm-name'
-							className='form-control'
-							type='text'
-							name='author'
-							placeholder='Your name'
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='postForm-content'>Post:</label>
-							<textarea
-							id='postForm-content'
-							className='form-control'
-							name='content'
-							placeholder='What would you like to tell us?'
-							/>
-						</div>
+		```tsx
+		export default class PostingForm extends AbstractComponent  {
+			render() {
+				return (
+					<div className='posting-form card'>
+						<form action='' method='post'>
+							<h5 className='card-header'>Add a post</h5>
+							<div className='card-body'>
+								<div className='form-group'>
+									<label htmlFor='postForm-name'>Name:</label>
+									<input
+									id='postForm-name'
+									className='form-control'
+									type='text'
+									name='author'
+									placeholder='Your name'
+									/>
+								</div>
+								<div className='form-group'>
+									<label htmlFor='postForm-content'>Post:</label>
+									<textarea
+									id='postForm-content'
+									className='form-control'
+									name='content'
+									placeholder='What would you like to tell us?'
+									/>
+								</div>
+							</div>
+							<div className='card-footer'>
+								<button type='submit' className='btn btn btn-outline-primary'>
+									Submit
+									<div className='ripple-wrapper' />
+								</button>
+							</div>
+						</form>
 					</div>
-					<div className='card-footer'>
-						<button type='submit' className='btn btn btn-outline-primary'>
-							Submit
-							<div className='ripple-wrapper' />
-						</button>
-					</div>
-				</form>
-			</div>
-		);
-	}
-}
-```
+				);
+			}
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -604,40 +604,40 @@ Now update the `render()` method in the home controller's view:
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-return (
-  <div className='l-home container'>
-    <h1>Guestbook</h1>
-    <PostingForm />
+		```jsx
+		return (
+			<div className='l-home container'>
+				<h1>Guestbook</h1>
+				<PostingForm />
 
-    <hr />
+				<hr />
 
-    <div className='posts'>
-      <h2>Posts</h2>
-      {this._renderPosts()}
-    </div>
-  </div>
-);
-```
+				<div className='posts'>
+					<h2>Posts</h2>
+					{this._renderPosts()}
+				</div>
+			</div>
+		);
+		```
 
 </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-return (
-  <div className='l-home container'>
-    <h1>Guestbook</h1>
-    <PostingForm />
+		```tsx
+		return (
+			<div className='l-home container'>
+				<h1>Guestbook</h1>
+				<PostingForm />
 
-    <hr />
+				<hr />
 
-    <div className='posts'>
-      <h2>Posts</h2>
-      {this._renderPosts()}
-    </div>
-  </div>
-);
-```
+				<div className='posts'>
+					<h2>Posts</h2>
+					{this._renderPosts()}
+				</div>
+			</div>
+		);
+		```
 
   </TabItem>
 </Tabs>
@@ -647,16 +647,16 @@ To finish up, import the posting form component:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import PostingForm from 'app/component/postingForm/PostingForm';
-```
+		```javascript
+		import PostingForm from 'app/component/postingForm/PostingForm';
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-import { PostingForm } from 'app/component/postingForm/PostingForm';
-```
+		```tsx
+		import { PostingForm } from 'app/component/postingForm/PostingForm';
+		```
 
   </TabItem>
 </Tabs>
