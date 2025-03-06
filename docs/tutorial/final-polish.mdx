@@ -28,38 +28,41 @@ with 2 new state keys:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-constructor(props, context) {
-  super(props, context);
-  ...
-  this.state = {
-    author: '',
-    content: '',
-    authorValid: true,
-    contentValid: true
-  };
-}
-```
+		```javascript
+		constructor(props, context) {
+			super(props, context);
+			...
+			this.state = {
+				author: '',
+				content: '',
+				authorValid: true,
+				contentValid: true,
+			};
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-type Post = {
-  author: string;
-  content: string;
-  authorValid: boolean;
-  contentValid: boolean;
-};
+		```typescript
+		type Post = {
+			author: string;
+			content: string;
+			authorValid: boolean;
+			contentValid: boolean;
+		};
 
-export function PostingForm() {
-  const [post, setPost] = useState<Post>({
-    author: '',
-    content: '',
-    authorValid: true,
-    contentValid: true,
-  });
-```
+		constructor(props, context) {
+			super(props, context);
+			...
+			this.state = {
+				author: '',
+				content: '',
+				authorValid: true,
+				contentValid: true,
+			};
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -71,73 +74,62 @@ taken from the Bootstrap CSS library we're using and will apply red shadow to th
 <Tabs>
   <TabItem value="JavaScript">
 
-```jsx
-<input
-  id="postForm-name"
-  className={this.cssClasses({
-    'form-control': true,
-    'is-invalid': !this.state.authorValid
-  })}
-  type="text"
-  name="author"
-  value={this.state.author}
-  onChange={e => this._onChange(e)}
-  placeholder="Your name"
-/>
-...
-<textarea
-  id="postForm-content"
-  className={this.cssClasses({
-    'form-control': true,
-    'is-invalid': !this.state.contentValid
-  })}
-  name="content"
-  value={this.state.content}
-  onChange={e => this._onChange(e)}
-  placeholder="What would you like to tell us?"
-/>
-```
+		```jsx
+		<input
+			id='postForm-name'
+			className={this.cssClasses({
+				'form-control': true,
+				'is-invalid': !this.state.authorValid,
+			})}
+			type='text'
+			name='author'
+			value={this.state.author}
+			onChange={e => this._onChange(e)}
+			placeholder='Your name'
+		/>
+		...
+		<textarea
+			id='postForm-content'
+			className={this.cssClasses({
+				'form-control': true,
+				'is-invalid': !this.state.contentValid,
+			})}
+			name='content'
+			value={this.state.content}
+			onChange={e => this._onChange(e)}
+			placeholder='What would you like to tell us?'
+		/>
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```tsx
-const cssClasses = useCssClasses();
-
-return(
-  ...
-
-  <input
-    id='postForm-name'
-    className={cssClasses({
-      'form-control': true,
-      'is-invalid': !post.authorValid,
-    })}
-    type='text'
-    name='author'
-    value={post.author}
-    onChange={e => handleChange(e)}
-    placeholder='Your name'
-  />
-  ...
-  <textarea
-    id='postForm-content'
-    className={cssClasses({
-      'form-control': true,
-      'is-invalid': !post.contentValid,
-    })}
-    name='content'
-    value={post.content}
-    onChange={e => handleChange(e)}
-    placeholder='What would you like to tell us?'
-  />
-
-  ...
-)
-```
-
-> **TypeScript: ** As you definitely noticed, again we got access to the functionality from the `AbstractComponent`
-  by using another IMA hook, this time `useCssClasses`, that gives us direct access to the IMA CssClases.
+		```tsx
+		<input
+			id='postForm-name'
+			className={this.cssClasses({
+				'form-control': true,
+				'is-invalid': !this.state.authorValid,
+			})}
+			type='text'
+			name='author'
+			value={this.state.author}
+			onChange={e => this._onChange(e)}
+			placeholder='Your name'
+		/>
+		...
+		<textarea
+			id='postForm-content'
+			className={this.cssClasses({
+				'form-control': true,
+				'is-invalid': !this.state.contentValid,
+			})}
+			name='content'
+			value={this.state.content}
+			onChange={e => this._onChange(e)}
+			placeholder='What would you like to tell us?'
+		/>
+		```
 
   </TabItem>
 </Tabs>
@@ -161,36 +153,38 @@ we'll use later in `_onSubmit` method:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-_validate(inputName, value) {
-  const validStateKey = `${inputName}Valid`;
-  let isValid = !!value;
+		```javascript
+		_validate(inputName, value) {
+			const validStateKey = `${inputName}Valid`;
+			const isValid = !!value;
 
-  if (this.state[validStateKey] !== isValid) {
-    this.setState({
-      [validStateKey]: isValid
-    });
-  }
+			if (this.state[validStateKey] !== isValid) {
+				this.setState({
+					[validStateKey]: isValid,
+				});
+			}
 
-  return isValid;
-}
-```
+			return isValid;
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-const validate = (inputName: string, value: string): boolean => {
-  const validStateKey = `${inputName}Valid`;
-  const isValid = !!value;
+		```typescript
+		_validate(inputName: string, value: string) {
+			const validStateKey = `${inputName}Valid`;
+			const isValid = !!value;
 
-  if (post[validStateKey as keyof Post] !== isValid) {
-    setPost({ ...post, [validStateKey]: isValid });
-  }
+			if (this.state[validStateKey as keyof Post] !== isValid) {
+				this.setState({
+					[validStateKey]: isValid,
+				} as Omit<Post, 'author' | 'content'>);
+			}
 
-  return isValid;
-};
-```
+			return isValid;
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -204,24 +198,28 @@ The updated handler with the validation will look like this:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-_onChange({ target: { name, value }}) {
-  this._validate(name, value);
-  this.setState({
-    [name]: value
-  });
-}
-```
+		```javascript
+		_onChange({ target: { name, value } }) {
+			this._validate(name, value);
+			this.setState({
+				[name]: value,
+			});
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-const handleChange = (event: any): void => {
-  validate(event.target.name as string, event.target.value as string);
-  setPost({ ...post, [event.target.name]: event.target.value });
-};
-```
+		```typescript
+			_onChange({
+				target: { name, value },
+			}: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+				this._validate(name, value);
+				this.setState({
+					[name]: value,
+				} as Pick<Post, 'author' | 'content'>);
+			}
+		```
 
 
   </TabItem>
@@ -233,51 +231,60 @@ inputs are invalid. To do that, update the `onSubmit(event)` method's content:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-_onSubmit(event) {
-  event.preventDefault();
+		```javascript
+		_onSubmit(event) {
+			event.preventDefault();
 
-  // Validate on submit to also cover the initial submission
-  const { author, content } = this.state;
-  if (
-    !this._validate('author', author) ||
-    !this._validate('content', content)
-  ) {
-    return;
-  }
+			// Validate on submit to also cover the initial submission
+			const { author, content } = this.state;
+			if (
+				!this._validate('author', author) ||
+				!this._validate('content', content)
+			) {
+				return;
+			}
 
-  this.fire(this.#containerRef.current, 'postSubmitted', {
-    author: this.state.author,
-    content: this.state.content
-  });
+			this.fire(this.#containerRef.current, 'postSubmitted', {
+				author: this.state.author,
+				content: this.state.content,
+			});
 
-  // Reset the state after submitting
-  this.setState({
-    author: '',
-    content: ''
-  });
-}
-```
+			// Reset the state after submitting
+			this.setState({
+				author: '',
+				content: '',
+			});
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-const handleSubmit = (event: any): void => {
-  event.preventDefault();
+		```typescript
+		_onSubmit(event: FormEvent<HTMLFormElement>) {
+			event.preventDefault();
 
-  // Validate on submit to also cover the initial submission
-  const { author, content } = post;
-  if (!validate('author', author) || !validate('content', content)) {
-    return;
-  }
+			// Validate on submit to also cover the initial submission
+			const { author, content } = this.state;
+			if (
+				!this._validate('author', author) ||
+				!this._validate('content', content)
+				) {
+				return;
+			}
 
-  fire(containerRef.current as EventTarget, 'postSubmitted', post);
+			this.fire(this.#containerRef.current!, 'postSubmitted', {
+				author: this.state.author,
+				content: this.state.content,
+			});
 
-  // Reset the state after submitting
-  setPost({ ...post, author: '', content: '' });
-};
-```
+			// Reset the state after submitting
+			this.setState({
+				author: '',
+				content: '',
+			});
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -307,52 +314,44 @@ the UI, so that the user will be aware that the post has not yet been saved.
 #### Updating the service classes & home controller
 
 We'll start by adding an extra field to our **post entity**
-(`app/model/post/PostEntity.js`) by adding the following line to the
+(`app/model/post/PostEntity.js`) by adding the following line(s) to the
 **constructor**:
 
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-this.isSaved = data.isSaved;
-```
+		```javascript
+		this.isSaved = data.isSaved;
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { PostData } from 'app/page/home/HomeController';
+		```typescript
+		export class PostEntity {
+			...
+			declare isSaved: boolean;
 
-export class PostEntity {
-  declare id: number | null;
-  declare content: string;
-  declare author: string;
-  declare isSaved: boolean;
+			constructor(data: PostData) {
+				...
+				this.isSaved = data.isSaved;
+			}
+		}
+		```
 
-  constructor(data: PostData) {
-    this.id = data.id;
-    this.content = data.content;
-    this.author = data.content;
-    this.isSaved = data.isSaved;
-  }
-}
-```
+		> **TypeScript:** In Typescript also change the `PostData` type in `app/page/home/HomeController` to:
 
-
-> **TypeScript:** In Typescript also change the `PostData` type in `app/page/home/HomeController` to:
-
-```typescript
-export type PostData = {
-  id: number | null;
-  content: string;
-  author: string;
-  isSaved: boolean;
-};
-```
+		```typescript
+		export type PostData = {
+			id: number | null;
+			content: string;
+			author: string;
+			isSaved: boolean;
+		};
+		```
 
   </TabItem>
 </Tabs>
-
 
 We will use the `isSaved` flag to determine whether the post has been saved at
 the server or not.
@@ -363,30 +362,30 @@ Next we need to update the `getEntityList()` method in the **post resource** cla
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-return this._http
-  .get('http://localhost:3001/static/static/public/posts.json', {})
-  .then(response => {
-    response.body.forEach(post => (post.isSaved = true));
-    return response.body;
-  })
-  .then(postsData => this._factory.createList(postsData));
-```
+		```javascript
+		return this._http
+			.get('http://localhost:3001/static/static/public/api/posts.json', {})
+			.then(response => {
+				response.body.forEach(post => (post.isSaved = true));
+				return response.body;
+			})
+			.then(postsData => this._factory.createList(postsData));
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-getEntityList(): Promise<PostEntity[]> {
-  return this._http
-    .get('http://localhost:3001/static/static/public/posts.json', {})
-    .then((response: PostApiGetResponse) => {
-      response.body.forEach(post => (post.isSaved = true));
-      return response.body;
-    })
-    .then((postsData: PostData[]) => this._factory.createList(postsData));
-}
-```
+		```typescript
+		getEntityList(): Promise<PostEntity[]> {
+			return this._http
+				.get('http://localhost:3001/static/static/public/api/posts.json', {})
+				.then((response: PostApiGetResponse) => {
+					response.body.forEach(post => (post.isSaved = true));
+					return response.body;
+				})
+				.then((postsData: PostData[]) => this._factory.createList(postsData));
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -402,35 +401,35 @@ method to the following snippet:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-return {
-  posts: this._postService.getPosts(),
-  pendingPosts: []
-};
-```
+		```javascript
+		return {
+			posts: this._postService.getPosts(),
+			pendingPosts: [],
+		};
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-export type HomeControllerState = {
-  posts: PostData[];
-  pendingPosts: PostData[];
-};
+		```typescript
+		export type HomeControllerState = {
+			posts: PostData[];
+			pendingPosts: PostData[];
+		};
 
-export class HomeController extends AbstractController<HomeControllerState> {
-  ...
+		export class HomeController extends AbstractController<HomeControllerState> {
+			...
 
-  load(): HomeControllerState {
-    return {
-      posts: this._postService.getPosts(),
-      pendingPosts: [],
-    };
-  }
-}
-```
+			load(): HomeControllerState {
+				return {
+					posts: this._postService.getPosts(),
+					pendingPosts: [],
+				};
+			}
+		}
+		```
 
-> **TypeScript:** Do not forget to update the `HomeControllerState` type.
+		> **TypeScript:** Do not forget to update the `HomeControllerState` type.
 
   </TabItem>
 </Tabs>
@@ -444,30 +443,29 @@ and a field for the post factory:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-constructor(postService, postFactory) {
-  super();
+		```javascript
+		constructor(postService, postFactory) {
+			super();
 
-  this._postService = postService;
-  this._postFactory = postFactory;
-}
-```
+			this._postService = postService;
+			this._postFactory = postFactory;
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-constructor(postService: PostService, postFactory: PostFactory) {
-  super();
+		```typescript
+		constructor(postService: PostService, postFactory: PostFactory) {
+			super();
 
-  this._postService = postService;
-  this._postFactory = postFactory;
-}
-```
+			this._postService = postService;
+			this._postFactory = postFactory;
+		}
+		```
 
   </TabItem>
 </Tabs>
-
 
 And, of course, we need to update the `$dependencies` list so OC can inject
 PostFactory instance to our constructor as a second argument. so modify the dependencies of the **home
@@ -476,26 +474,26 @@ page controller** (`app/page/home/HomeController.js`) to the following:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-import PostFactory from 'app/model/post/PostFactory';
-...
-static get $dependencies() {
-  return [PostService, PostFactory];
-}
-```
+		```javascript
+		import PostFactory from 'app/model/post/PostFactory';
+		...
+		static get $dependencies() {
+			return [PostService, PostFactory];
+		}
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-import { PostFactory } from 'app/model/post/PostFactory';
+		```typescript
+		import { PostFactory } from 'app/model/post/PostFactory';
 
-export class HomeController extends AbstractController<HomeControllerState> {
-  static $dependencies: Dependencies = [PostService, PostFactory];
+		export class HomeController extends AbstractController<HomeControllerState> {
+			static $dependencies: Dependencies = [PostService, PostFactory];
 
-  ...
-}
-```
+			...
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -509,98 +507,98 @@ listener after submitting the new post to update our UI:
 <Tabs>
   <TabItem value="JavaScript">
 
-```javascript
-let pendingPost = this._postFactory.createEntity(
-  Object.assign(
-    {
-      id: null,
-      isSaved: false
-    },
-    eventData
-  )
-);
+		```javascript
+		let pendingPost = this._postFactory.createEntity(
+			Object.assign(
+				{
+					id: null,
+					isSaved: false,
+				},
+				eventData
+			)
+		);
 
-let state = this.getState();
-let pendingPosts = state.pendingPosts.slice();
-pendingPosts.unshift(pendingPost);
+		let state = this.getState();
+		let pendingPosts = state.pendingPosts.slice();
+		pendingPosts.unshift(pendingPost);
 
-this.setState({
-  pendingPosts
-});
+		this.setState({
+			pendingPosts,
+		});
 
-this._postService
-  .createPost(eventData)
-  .then(savedPost => {
-    // update the state in place
-    pendingPost.isSaved = true;
-    pendingPost.id = savedPost.id;
+		this._postService
+			.createPost(eventData)
+			.then(savedPost => {
+				// update the state in place
+				pendingPost.isSaved = true;
+				pendingPost.id = savedPost.id;
 
-    // update the UI
-    let state = this.getState();
-    this.setState({
-      pendingPosts: state.pendingPosts
-    });
+				// update the UI
+				let state = this.getState();
+				this.setState({
+					pendingPosts: state.pendingPosts,
+				});
 
-    return this._postService.getPosts();
-  })
-  .then(posts => {
-    let state = this.getState();
+				return this._postService.getPosts();
+			})
+			.then(posts => {
+				let state = this.getState();
 
-    this.setState({
-      posts: posts,
-      pendingPosts: state.pendingPosts.filter(post => post !== pendingPost)
-    });
-  });
-```
+				this.setState({
+					posts: posts,
+					pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+				});
+			});
+		```
 
   </TabItem>
   <TabItem value="TypeScript">
 
-```typescript
-onPostSubmitted(eventData: PostData) {
-  let pendingPost: PostData = this._postFactory.createEntity(
-    Object.assign(
-      {
-        id: null,
-        isSaved: false,
-      },
-      eventData
-    )
-  );
+		```typescript
+		onPostSubmitted(eventData: PostData) {
+			let pendingPost: PostData = this._postFactory.createEntity(
+				Object.assign(
+					{
+						id: null,
+						isSaved: false,
+					},
+					eventData
+				)
+			);
 
-  const state = this.getState();
-  const pendingPosts = state.pendingPosts.slice();
-  pendingPosts.unshift(pendingPost);
+			const state = this.getState();
+			const pendingPosts = state.pendingPosts.slice();
+			pendingPosts.unshift(pendingPost);
 
-  this.setState({
-    pendingPosts,
-  });
+			this.setState({
+				pendingPosts,
+			});
 
-  this._postService
-    .createPost(eventData)
-    .then((savedPost: PostData) => {
-      // update the state in place
-      pendingPost.isSaved = true;
-      pendingPost.id = savedPost.id;
+			this._postService
+				.createPost(eventData)
+				.then((savedPost: PostData) => {
+					// update the state in place
+					pendingPost.isSaved = true;
+					pendingPost.id = savedPost.id;
 
-      // update the UI
-      const state = this.getState();
-      this.setState({
-        pendingPosts: state.pendingPosts,
-      });
+					// update the UI
+					const state = this.getState();
+					this.setState({
+						pendingPosts: state.pendingPosts,
+					});
 
-      return this._postService.getPosts();
-    })
-    .then((posts: PostData[]) => {
-      const state = this.getState();
+					return this._postService.getPosts();
+				})
+				.then((posts: PostData[]) => {
+					const state = this.getState();
 
-      this.setState({
-        posts: posts,
-        pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
-      });
-    });
-}
-```
+					this.setState({
+						posts: posts,
+						pendingPosts: state.pendingPosts.filter(post => post !== pendingPost),
+					});
+				});
+		}
+		```
 
   </TabItem>
 </Tabs>
@@ -1366,7 +1364,7 @@ Next update the `getEntityList()` method of the post resource
 
 ```javascript
 return this._http
-  .get('http://localhost:3001/static/static/public/posts.json', {})
+  .get('http://localhost:3001/static/static/public/api/posts.json', {})
   .then(response => {
     response.body.posts.forEach(post => (post.isSaved = true));
 
@@ -1389,7 +1387,7 @@ type PostApiGetResponse = {
 
 getEntityList(): Promise<PostsApiData> {
   return this._http
-    .get('http://localhost:3001/static/static/public/posts.json', {})
+    .get('http://localhost:3001/static/static/public/api/posts.json', {})
     .then((response: PostApiGetResponse) => {
       response.body.posts.forEach((post: PostData) => (post.isSaved = true));
       const posts: PostsApiData = {
