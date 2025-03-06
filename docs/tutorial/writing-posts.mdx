@@ -237,7 +237,7 @@ Our `_onChange()` handler will look like this:
 		_onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
 			this.setState({
 				[event.target.name]: event.target.value,
-			} as Pick<Post, keyof Post>);
+			} as Pick<Post, 'author' | 'content'>);
 		}
 		```
 
@@ -403,7 +403,7 @@ Now add the following method for creating new posts to the post resource
 		```javascript
 		createPost(postData) {
 			return this._http
-				.post('http://localhost:3001/static/static/public/posts.json', postData)
+				.post('http://localhost:3001/static/static/public/api/posts.json', postData)
 				.then(response => this._factory.createEntity(response.body));
 		}
 		```
@@ -421,7 +421,7 @@ Now add the following method for creating new posts to the post resource
 
 			createPost(postData: PostData): Promise<PostEntity> {
 				return this._http
-					.post('http://localhost:3001/static/static/public/posts.json', postData)
+					.post('http://localhost:3001/static/static/public/api/posts.json', postData)
 					.then((response: PostApiCreateResponse) =>
 						this._factory.createEntity(response.body)
 					);
