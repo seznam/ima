@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.1.4
+
+### Patch Changes
+
+- a5e48e1: Add watch event detail about eventName and its target
+
 ## 19.1.3
 
 ### Patch Changes
