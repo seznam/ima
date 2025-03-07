@@ -646,7 +646,8 @@ To wire up our HTTP mock into our application, we need to update the dependencie
 			...
 		}
 		```
-		> **TypeScript:** Because we are using only mock HttpAgent, we won't bother with proper typing.
+		> **TypeScript:** Because we are using only mock HttpAgent written in plain JavaScript
+		(it would be quite difficult to properly typed that), we need to use `@ts-expect-error` to suppress TypeScript error.
 
 	</TabItem>
 </Tabs>
