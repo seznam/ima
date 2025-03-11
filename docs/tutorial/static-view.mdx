@@ -23,38 +23,38 @@ Now let's replace the contents of the file with a blank view:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```jsx
-		import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
-		import './homeView.less';
+```jsx
+import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
+import './homeView.less';
 
-		export class HomeView extends AbstractComponent {
-			static get contextType() {
-				return PageContext;
-			}
+export class HomeView extends AbstractComponent {
+	static get contextType() {
+		return PageContext;
+	}
 
-			render() {
-				return null;
-			}
-		}
-		```
+	render() {
+		return null;
+	}
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
-		import './homeView.less';
+```tsx
+import { PageContext, AbstractComponent } from '@ima/react-page-renderer';
+import './homeView.less';
 
-		export class HomeView extends AbstractComponent {
-			static get contextType() {
-				return PageContext;
-			}
+export class HomeView extends AbstractComponent {
+	static get contextType() {
+		return PageContext;
+	}
 
-			render() {
-				return null;
-			}
-		}
-		```
+	render() {
+		return null;
+	}
+}
+```
 
 	</TabItem>
 </Tabs>
@@ -91,16 +91,16 @@ the `render()` method with the following code:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```jsx
-		return <div className='l-home container'>Hello {'World'}!</div>;
-		```
+```jsx
+return <div className='l-home container'>Hello {'World'}!</div>;
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		return <div className='l-home container'>Hello {'World'}!</div>;
-		```
+```tsx
+return <div className='l-home container'>Hello {'World'}!</div>;
+```
 
 </TabItem>
 </Tabs>
@@ -133,144 +133,144 @@ Let's modify the return value of the `render` method to look like this:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```jsx
-		return (
-			<div className='l-home container'>
-				<h1>Guestbook</h1>
+```jsx
+return (
+	<div className='l-home container'>
+		<h1>Guestbook</h1>
 
-				<div className='posting-form card'>
-					<form action='' method='post'>
-						<h5 className='card-header'>Add a post</h5>
-						<div className='card-body'>
-							<div className='form-group'>
-								<label htmlFor='postForm-name'>Name:</label>
-								<input
-									id='postForm-name'
-									className='form-control'
-									type='text'
-									name='author'
-									placeholder='Your name'
-								/>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='postForm-content'>Post:</label>
-								<textarea
-									id='postForm-content'
-									className='form-control'
-									name='content'
-									placeholder='What would you like to tell us?'
-								/>
-							</div>
-						</div>
-						<div className='card-footer'>
-							<button type='submit' className='btn btn btn-outline-primary'>
-								Submit
-								<div className='ripple-wrapper' />
-							</button>
-						</div>
-					</form>
-				</div>
-				<hr />
-				<div className='posts'>
-					<h2>Posts</h2>
-					<div className='post card card-default'>
-						<div className='card-body'>Never mistake motion for action.</div>
-						<div className='post-author card-footer'>Ernest Hemingway</div>
+		<div className='posting-form card'>
+			<form action='' method='post'>
+				<h5 className='card-header'>Add a post</h5>
+				<div className='card-body'>
+					<div className='form-group'>
+						<label htmlFor='postForm-name'>Name:</label>
+						<input
+							id='postForm-name'
+							className='form-control'
+							type='text'
+							name='author'
+							placeholder='Your name'
+						/>
 					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							Quality means doing it right when no one is looking.
-						</div>
-						<div className='post-author card-footer'>Henry Ford</div>
-					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							We are what we repeatedly do. Excellence, then, is not an act, but
-							a habit.
-						</div>
-						<div className='post-author card-footer'>Aristotle</div>
-					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							Reality is merely an illusion, albeit a very persistent one.
-						</div>
-						<div className='post-author card-footer'>Albert Einstein</div>
+					<div className='form-group'>
+						<label htmlFor='postForm-content'>Post:</label>
+						<textarea
+							id='postForm-content'
+							className='form-control'
+							name='content'
+							placeholder='What would you like to tell us?'
+						/>
 					</div>
 				</div>
+				<div className='card-footer'>
+					<button type='submit' className='btn btn btn-outline-primary'>
+						Submit
+						<div className='ripple-wrapper' />
+					</button>
+				</div>
+			</form>
+		</div>
+		<hr />
+		<div className='posts'>
+			<h2>Posts</h2>
+			<div className='post card card-default'>
+				<div className='card-body'>Never mistake motion for action.</div>
+				<div className='post-author card-footer'>Ernest Hemingway</div>
 			</div>
-		);
-		```
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Quality means doing it right when no one is looking.
+				</div>
+				<div className='post-author card-footer'>Henry Ford</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					We are what we repeatedly do. Excellence, then, is not an act, but
+					a habit.
+				</div>
+				<div className='post-author card-footer'>Aristotle</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Reality is merely an illusion, albeit a very persistent one.
+				</div>
+				<div className='post-author card-footer'>Albert Einstein</div>
+			</div>
+		</div>
+	</div>
+);
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		return (
-			<div className='l-home container'>
-				<h1>Guestbook</h1>
+```tsx
+return (
+	<div className='l-home container'>
+		<h1>Guestbook</h1>
 
-				<div className='posting-form card'>
-					<form action='' method='post'>
-						<h5 className='card-header'>Add a post</h5>
-						<div className='card-body'>
-							<div className='form-group'>
-								<label htmlFor='postForm-name'>Name:</label>
-								<input
-									id='postForm-name'
-									className='form-control'
-									type='text'
-									name='author'
-									placeholder='Your name'
-								/>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='postForm-content'>Post:</label>
-								<textarea
-									id='postForm-content'
-									className='form-control'
-									name='content'
-									placeholder='What would you like to tell us?'
-								/>
-							</div>
-						</div>
-						<div className='card-footer'>
-							<button type='submit' className='btn btn btn-outline-primary'>
-								Submit
-								<div className='ripple-wrapper' />
-							</button>
-						</div>
-					</form>
-				</div>
-				<hr />
-				<div className='posts'>
-					<h2>Posts</h2>
-					<div className='post card card-default'>
-						<div className='card-body'>Never mistake motion for action.</div>
-						<div className='post-author card-footer'>Ernest Hemingway</div>
+		<div className='posting-form card'>
+			<form action='' method='post'>
+				<h5 className='card-header'>Add a post</h5>
+				<div className='card-body'>
+					<div className='form-group'>
+						<label htmlFor='postForm-name'>Name:</label>
+						<input
+							id='postForm-name'
+							className='form-control'
+							type='text'
+							name='author'
+							placeholder='Your name'
+						/>
 					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							Quality means doing it right when no one is looking.
-						</div>
-						<div className='post-author card-footer'>Henry Ford</div>
-					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							We are what we repeatedly do. Excellence, then, is not an act, but
-							a habit.
-						</div>
-						<div className='post-author card-footer'>Aristotle</div>
-					</div>
-					<div className='post card card-default'>
-						<div className='card-body'>
-							Reality is merely an illusion, albeit a very persistent one.
-						</div>
-						<div className='post-author card-footer'>Albert Einstein</div>
+					<div className='form-group'>
+						<label htmlFor='postForm-content'>Post:</label>
+						<textarea
+							id='postForm-content'
+							className='form-control'
+							name='content'
+							placeholder='What would you like to tell us?'
+						/>
 					</div>
 				</div>
+				<div className='card-footer'>
+					<button type='submit' className='btn btn btn-outline-primary'>
+						Submit
+						<div className='ripple-wrapper' />
+					</button>
+				</div>
+			</form>
+		</div>
+		<hr />
+		<div className='posts'>
+			<h2>Posts</h2>
+			<div className='post card card-default'>
+				<div className='card-body'>Never mistake motion for action.</div>
+				<div className='post-author card-footer'>Ernest Hemingway</div>
 			</div>
-		);
-		```
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Quality means doing it right when no one is looking.
+				</div>
+				<div className='post-author card-footer'>Henry Ford</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					We are what we repeatedly do. Excellence, then, is not an act, but
+					a habit.
+				</div>
+				<div className='post-author card-footer'>Aristotle</div>
+			</div>
+			<div className='post card card-default'>
+				<div className='card-body'>
+					Reality is merely an illusion, albeit a very persistent one.
+				</div>
+				<div className='post-author card-footer'>Albert Einstein</div>
+			</div>
+		</div>
+	</div>
+);
+```
 
 	</TabItem>
 </Tabs>
