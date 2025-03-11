@@ -43,16 +43,16 @@ listener:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```jsx
-		<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
-		```
+```jsx
+<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
-		```
+```tsx
+<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
+```
 
 	</TabItem>
 </Tabs>
@@ -63,50 +63,50 @@ those input to the state of our `PostingForm` component.
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```jsx
-		<input
-			id='postForm-name'
-			className='form-control'
-			type='text'
-			name='author'
-			value={this.state.author}
-			onChange={e => this._onChange(e)}
-			placeholder='Your name'
-		/>
-		...
-		<textarea
-			id='postForm-content'
-			className='form-control'
-			name='content'
-			value={this.state.content}
-			onChange={e => this._onChange(e)}
-			placeholder='What would you like to tell us?'
-		/>
-		```
+```jsx
+<input
+	id='postForm-name'
+	className='form-control'
+	type='text'
+	name='author'
+	value={this.state.author}
+	onChange={e => this._onChange(e)}
+	placeholder='Your name'
+/>
+...
+<textarea
+	id='postForm-content'
+	className='form-control'
+	name='content'
+	value={this.state.content}
+	onChange={e => this._onChange(e)}
+	placeholder='What would you like to tell us?'
+/>
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		<input
-			id='postForm-name'
-			className='form-control'
-			type='text'
-			name='author'
-			value={this.state.author}
-			onChange={e => this._onChange(e)}
-			placeholder='Your name'
-		/>
-		...
-		<textarea
-			id='postForm-content'
-			className='form-control'
-			name='content'
-			value={this.state.content}
-			onChange={e => this._onChange(e)}
-			placeholder='What would you like to tell us?'
-		/>
-		```
+```tsx
+<input
+	id='postForm-name'
+	className='form-control'
+	type='text'
+	name='author'
+	value={this.state.author}
+	onChange={e => this._onChange(e)}
+	placeholder='Your name'
+/>
+...
+<textarea
+	id='postForm-content'
+	className='form-control'
+	name='content'
+	value={this.state.content}
+	onChange={e => this._onChange(e)}
+	placeholder='What would you like to tell us?'
+/>
+```
 
 	</TabItem>
 </Tabs>
@@ -116,47 +116,47 @@ We can't forget to define the default state for these two keys:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		#containerRef;
+```javascript
+#containerRef;
 
-		constructor(props, context) {
-			super(props, context);
+constructor(props, context) {
+	super(props, context);
 
-			this.#containerRef = createRef();
+	this.#containerRef = createRef();
 
-			this.state = {
-				author: '',
-				content: '',
-			};
-		}
-		```
+	this.state = {
+		author: '',
+		content: '',
+	};
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		type Post = {
-			author: string;
-			content: string;
+```tsx
+type Post = {
+	author: string;
+	content: string;
+};
+
+export class PostingForm extends AbstractComponent<{}, Post> {
+	#containerRef: RefObject<HTMLDivElement>;
+
+	constructor(props: Post, context: Context<PageContextType>) {
+		super(props, context);
+		this.#containerRef = createRef();
+
+		this.state = {
+			author: '',
+			content: '',
 		};
+	}
+	...
+}
+```
 
-		export class PostingForm extends AbstractComponent<{}, Post> {
-			#containerRef: RefObject<HTMLDivElement>;
-
-			constructor(props: Post, context: Context<PageContextType>) {
-				super(props, context);
-				this.#containerRef = createRef();
-
-				this.state = {
-					author: '',
-					content: '',
-				};
-			}
-			...
-		}
-		```
-
-		> **TypeScript:** You need to also import `PageContextType` from '@ima/react-page-renderer'.
+> **TypeScript:** You need to also import `PageContextType` from '@ima/react-page-renderer'.
 
 	</TabItem>
 </Tabs>
@@ -167,18 +167,18 @@ beginning of the file:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		import { createRef } from 'react';
-		```
+```javascript
+import { createRef } from 'react';
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		import { RefObject, createRef, Context } from 'react';
-		```
+```typescript
+import { RefObject, createRef, Context } from 'react';
+```
 
-		> **TypeScript:** For Typescript we need to import some additional types.
+> **TypeScript:** For Typescript we need to import some additional types.
 
 	</TabItem>
 </Tabs>
@@ -188,25 +188,25 @@ beginning of the file:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		...
-		render() {
-				return (
-					<div className='posting-form card' ref={this.#containerRef}>
-						<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
-							...
-		```
-
-	</TabItem>
-	<TabItem value="TypeScript">
-
-		```tsx
-		...
+```javascript
+...
+render() {
 		return (
 			<div className='posting-form card' ref={this.#containerRef}>
 				<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
 					...
-		```
+```
+
+	</TabItem>
+	<TabItem value="TypeScript">
+
+```tsx
+...
+return (
+	<div className='posting-form card' ref={this.#containerRef}>
+		<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
+			...
+```
 
 	</TabItem>
 </Tabs>
@@ -222,28 +222,28 @@ Our `_onChange()` handler will look like this:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		_onChange(event) {
-			this.setState({
-				[event.target.name]: event.target.value,
-			});
-		}
-		```
+```javascript
+_onChange(event) {
+	this.setState({
+		[event.target.name]: event.target.value,
+	});
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```tsx
-		_onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-			this.setState({
-				[event.target.name]: event.target.value,
-			} as Pick<Post, 'author' | 'content'>);
-		}
-		```
+```tsx
+_onChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+	this.setState({
+		[event.target.name]: event.target.value,
+	} as Pick<Post, 'author' | 'content'>);
+}
+```
 
-		> **TypeScript: ** You need to import `ChangeEvent` from 'react'.
-		We know that `event.target.name` is a key of our `Post` type, therefore we can cast it to `Pick<Post, keyof Post>` to avoid type errors.
-		In real applications, we would make the typing better.
+> **TypeScript: ** You need to import `ChangeEvent` from 'react'.
+We know that `event.target.name` is a key of our `Post` type, therefore we can cast it to `Pick<Post, keyof Post>` to avoid type errors.
+In real applications, we would make the typing better.
 
 	</TabItem>
 </Tabs>
@@ -253,45 +253,45 @@ The only thing that remains is to define the `_onSubmit()` in our component:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		_onSubmit(event) {
-			event.preventDefault();
+```javascript
+_onSubmit(event) {
+	event.preventDefault();
 
-			this.fire(this.#containerRef.current, 'postSubmitted', {
-				author: this.state.author,
-				content: this.state.content,
-			});
+	this.fire(this.#containerRef.current, 'postSubmitted', {
+		author: this.state.author,
+		content: this.state.content,
+	});
 
-			// Reset the state after submitting
-			this.setState({
-				author: '',
-				content: '',
-			});
-		}
-		```
+	// Reset the state after submitting
+	this.setState({
+		author: '',
+		content: '',
+	});
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
+```typescript
 
-		_onSubmit(event: FormEvent<HTMLFormElement>) {
-			event.preventDefault();
+_onSubmit(event: FormEvent<HTMLFormElement>) {
+	event.preventDefault();
 
-			this.fire(this.#containerRef.current!, 'postSubmitted', {
-				author: this.state.author,
-				content: this.state.content,
-			});
+	this.fire(this.#containerRef.current!, 'postSubmitted', {
+		author: this.state.author,
+		content: this.state.content,
+	});
 
-			// Reset the state after submitting
-			this.setState({
-				author: '',
-				content: '',
-			});
-		}
-		```
+	// Reset the state after submitting
+	this.setState({
+		author: '',
+		content: '',
+	});
+}
+```
 
-		> **TypeScript: ** You need to import `FormEvent` from 'react'.
+> **TypeScript: ** You need to import `FormEvent` from 'react'.
 
 	</TabItem>
 </Tabs>
@@ -321,20 +321,20 @@ following method:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		onPostSubmitted(eventData) {
-			// TODO
-		}
-		```
+```javascript
+onPostSubmitted(eventData) {
+	// TODO
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		onPostSubmitted(eventData: PostData) {
-			// TODO
-		}
-		```
+```typescript
+onPostSubmitted(eventData: PostData) {
+	// TODO
+}
+```
 
 	</TabItem>
 </Tabs>
@@ -356,20 +356,20 @@ and add the following method for creating a single post:
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		createEntity(entityData) {
-			return new PostEntity(entityData);
-		}
-		```
+```javascript
+createEntity(entityData) {
+	return new PostEntity(entityData);
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		createEntity(entityData: PostData): PostEntity {
-			return new PostEntity(entityData);
-		}
-		```
+```typescript
+createEntity(entityData: PostData): PostEntity {
+	return new PostEntity(entityData);
+}
+```
 
 	</TabItem>
 </Tabs>
@@ -380,16 +380,16 @@ Since we don't like to repeat ourselves, update the `return` statement in the
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		return entities.map(entityData => this.createEntity(entityData));
-		```
+```javascript
+return entities.map(entityData => this.createEntity(entityData));
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		return entities.map((entityData: PostData) => this.createEntity(entityData));
-		```
+```typescript
+return entities.map((entityData: PostData) => this.createEntity(entityData));
+```
 
 	</TabItem>
 </Tabs>
@@ -400,34 +400,34 @@ Now add the following method for creating new posts to the post resource
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		createPost(postData) {
-			return this._http
-				.post('http://localhost:3001/static/static/public/api/posts.json', postData)
-				.then(response => this._factory.createEntity(response.body));
-		}
-		```
+```javascript
+createPost(postData) {
+	return this._http
+		.post('http://localhost:3001/static/static/public/api/posts.json', postData)
+		.then(response => this._factory.createEntity(response.body));
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		type PostApiCreateResponse = {
-			body: PostData;
-		};
+```typescript
+type PostApiCreateResponse = {
+	body: PostData;
+};
 
-		export class PostResource {
-			...
+export class PostResource {
+	...
 
-			createPost(postData: PostData): Promise<PostEntity> {
-				return this._http
-					.post('http://localhost:3001/static/static/public/api/posts.json', postData)
-					.then((response: PostApiCreateResponse) =>
-						this._factory.createEntity(response.body)
-					);
-			}
-		}
-		```
+	createPost(postData: PostData): Promise<PostEntity> {
+		return this._http
+			.post('http://localhost:3001/static/static/public/api/posts.json', postData)
+			.then((response: PostApiCreateResponse) =>
+				this._factory.createEntity(response.body)
+			);
+	}
+}
+```
 
 	</TabItem>
 </Tabs>
@@ -444,27 +444,27 @@ Next we need to create a method for creating posts in our post service
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		createPost(postData) {
-			postData.id = null;
-			return this._resource.createPost(postData);
-		}
-		```
+```javascript
+createPost(postData) {
+	postData.id = null;
+	return this._resource.createPost(postData);
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		import { PostData } from 'app/page/home/HomeController';
+```typescript
+import { PostData } from 'app/page/home/HomeController';
 
-		export class PostService {
-			...
-			createPost(postData: PostData): Promise<PostEntity> {
-				postData.id = null;
-				return this._resource.createPost(postData);
-			}
-		}
-		```
+export class PostService {
+	...
+	createPost(postData: PostData): Promise<PostEntity> {
+		postData.id = null;
+		return this._resource.createPost(postData);
+	}
+}
+```
 
 	</TabItem>
 </Tabs>
@@ -482,22 +482,22 @@ event listener in the home page controller (`app/page/home/HomeController.js`):
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		this._postService
-			.createPost(eventData)
-			.then(() => this._postService.getPosts())
-			.then(posts => this.setState({ posts }));
-		```
+```javascript
+this._postService
+	.createPost(eventData)
+	.then(() => this._postService.getPosts())
+	.then(posts => this.setState({ posts }));
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		this._postService
-			.createPost(eventData)
-			.then(() => this._postService.getPosts())
-			.then((posts: PostData[]) => this.setState({ posts }));
-		```
+```typescript
+this._postService
+	.createPost(eventData)
+	.then(() => this._postService.getPosts())
+	.then((posts: PostData[]) => this.setState({ posts }));
+```
 
 	</TabItem>
 </Tabs>
@@ -615,39 +615,39 @@ To wire up our HTTP mock into our application, we need to update the dependencie
 <Tabs>
 	<TabItem value="JavaScript">
 
-		```javascript
-		import PostFactory from './PostFactory';
-		import MockHttpAgent from 'app/mock/MockHttpAgent';
+```javascript
+import PostFactory from './PostFactory';
+import MockHttpAgent from 'app/mock/MockHttpAgent';
 
-		export default class PostResource {
-			static get $dependencies() {
-				return [MockHttpAgent, PostFactory];
-			}
+export default class PostResource {
+	static get $dependencies() {
+		return [MockHttpAgent, PostFactory];
+	}
 
-			...
-		}
-		```
+	...
+}
+```
 
 	</TabItem>
 	<TabItem value="TypeScript">
 
-		```typescript
-		import MockHttpAgent from 'app/mock/MockHttpAgent';
+```typescript
+import MockHttpAgent from 'app/mock/MockHttpAgent';
 
-		export class PostResource {
-			// @ts-expect-error
-			static $dependencies: Dependencies = [MockHttpAgent, PostFactory];
+export class PostResource {
+	// @ts-expect-error
+	static $dependencies: Dependencies = [MockHttpAgent, PostFactory];
 
-			declare _http: MockHttpAgent;
-			...
-			constructor(http: MockHttpAgent, factory: PostFactory) {
-				...
-			}
-			...
-		}
-		```
-		> **TypeScript:** Because we are using only mock HttpAgent written in plain JavaScript
-		(it would be quite difficult to properly typed that), we need to use `@ts-expect-error` to suppress TypeScript error.
+	declare _http: MockHttpAgent;
+	...
+	constructor(http: MockHttpAgent, factory: PostFactory) {
+		...
+	}
+	...
+}
+```
+> **TypeScript:** Because we are using only mock HttpAgent written in plain JavaScript
+(it would be quite difficult to properly typed that), we need to use `@ts-expect-error` to suppress TypeScript error.
 
 	</TabItem>
 </Tabs>
