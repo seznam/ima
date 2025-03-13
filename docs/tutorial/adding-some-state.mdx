@@ -30,21 +30,21 @@ but to make this tutorial simpler, we're going to replace contents of this file 
 import { AbstractController } from '@ima/core';
 
 export class HomeController extends AbstractController {
-    static get $dependencies() {
-        return [];
-    }
+  static get $dependencies() {
+    return [];
+  }
 
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    load() {
-        return {};
-    }
+  load() {
+    return {};
+  }
 
-    setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-        metaManager.setTitle('Guestbook');
-    }
+  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+    metaManager.setTitle('Guestbook');
+  }
 }
 ```
 
