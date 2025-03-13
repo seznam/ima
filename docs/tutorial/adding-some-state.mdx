@@ -30,21 +30,21 @@ but to make this tutorial simpler, we're going to replace contents of this file 
 import { AbstractController } from '@ima/core';
 
 export class HomeController extends AbstractController {
- static get $dependencies() {
-  return [];
- }
+  static get $dependencies() {
+    return [];
+  }
 
- constructor() {
-  super();
- }
+  constructor() {
+    super();
+  }
 
- load() {
-  return {};
- }
+  load() {
+    return {};
+  }
 
- setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-  metaManager.setTitle('Guestbook');
- }
+  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+    metaManager.setTitle('Guestbook');
+  }
 }
 ```
 
@@ -53,48 +53,48 @@ export class HomeController extends AbstractController {
 
 ```typescript
 import {
-	AbstractController,
-	Dependencies,
-	Dictionary,
-	LoadedResources,
-	MetaManager,
-	Router,
-	Settings,
+  AbstractController,
+  Dependencies,
+  Dictionary,
+  LoadedResources,
+  MetaManager,
+  Router,
+  Settings,
 } from '@ima/core';
 
 export type PostData = {
-	content: string;
-	author: string;
+  content: string;
+  author: string;
 };
 export type HomeControllerState = {
-	posts: PostData[];
+  posts: PostData[];
 };
 
 export class HomeController extends AbstractController<HomeControllerState> {
-	static $dependencies: Dependencies = [];
+  static $dependencies: Dependencies = [];
 
-	constructor() {
-		super();
-	}
+  constructor() {
+    super();
+  }
 
-	load(): HomeControllerState {
-		return {};
-	}
+  load(): HomeControllerState {
+    return {};
+  }
 
-	setMetaParams(
-		loadedResources: LoadedResources<HomeControllerState>,
-		metaManager: MetaManager,
-		router: Router,
-		dictionary: Dictionary,
-		settings: Settings
-	): void {
-		metaManager.setTitle('Guestbook');
-	}
+  setMetaParams(
+    loadedResources: LoadedResources<HomeControllerState>,
+    metaManager: MetaManager,
+    router: Router,
+    dictionary: Dictionary,
+    settings: Settings
+  ): void {
+    metaManager.setTitle('Guestbook');
+  }
 }
 ```
 
 > **TypeScript:** As you can see, the TypeScript code is a lot more complex.
-		The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
+  The main reason is adding types `PostData` and `HomeControllerState` that we will use later in this course.
 
   </TabItem>
 </Tabs>
@@ -202,59 +202,59 @@ Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 
 ```jsx
 render() {
-	return (
-		<div className='l-home container'>
-			<h1>Guestbook</h1>
-			<div className='posting-form card'>
-				<form action='' method='post'>
-					<h5 className='card-header'>Add a post</h5>
-					<div className='card-body'>
-						<div className='form-group'>
-							<label htmlFor='postForm-name'>Name:</label>
-							<input
-								id='postForm-name'
-								className='form-control'
-								type='text'
-								name='author'
-								placeholder='Your name'
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='postForm-content'>Post:</label>
-							<textarea
-								id='postForm-content'
-								className='form-control'
-								name='content'
-								placeholder='What would you like to tell us?'
-							/>
-						</div>
-					</div>
-					<div className='card-footer'>
-						<button type='submit' className='btn btn btn-outline-primary'>
-							Submit
-							<div className='ripple-wrapper' />
-						</button>
-					</div>
-				</form>
-			</div>
-			<hr />
-			<div className='posts'>
-				<h2>Posts</h2>
-				{this._renderPosts()}
-			</div>
-		</div>
-	);
+  return (
+    <div className='l-home container'>
+      <h1>Guestbook</h1>
+      <div className='posting-form card'>
+        <form action='' method='post'>
+          <h5 className='card-header'>Add a post</h5>
+          <div className='card-body'>
+            <div className='form-group'>
+              <label htmlFor='postForm-name'>Name:</label>
+              <input
+                id='postForm-name'
+                className='form-control'
+                type='text'
+                name='author'
+                placeholder='Your name'
+              />
+            </div>
+            <div className='form-group'>
+              <label htmlFor='postForm-content'>Post:</label>
+              <textarea
+                id='postForm-content'
+                className='form-control'
+                name='content'
+                placeholder='What would you like to tell us?'
+              />
+            </div>
+          </div>
+          <div className='card-footer'>
+            <button type='submit' className='btn btn btn-outline-primary'>
+              Submit
+              <div className='ripple-wrapper' />
+            </button>
+          </div>
+        </form>
+      </div>
+      <hr />
+      <div className='posts'>
+        <h2>Posts</h2>
+        {this._renderPosts()}
+      </div>
+    </div>
+  );
 }
 
 _renderPosts() {
-	const { posts } = this.props;
+  const { posts } = this.props;
 
-	return posts.map((post, index) => (
-		<div className='post card card-default' key={index}>
-			<div className='card-body'>{post.content}</div>
-			<div className='post-author card-footer'>{post.author}</div>
-		</div>
-	));
+  return posts.map((post, index) => (
+    <div className='post card card-default' key={index}>
+      <div className='card-body'>{post.content}</div>
+      <div className='post-author card-footer'>{post.author}</div>
+    </div>
+  ));
 }
 ```
 
@@ -267,69 +267,69 @@ import { PostData } from 'app/page/home/HomeController';
 import './homeView.less';
 
 type HomeViewProps = {
-	posts: PostData[];
+  posts: PostData[];
 };
 
 export class HomeView extends AbstractComponent<{ posts: PostData[] }> {
-	static get contextType() {
-		return PageContext;
-	}
+  static get contextType() {
+    return PageContext;
+  }
 
-	render() {
-		return (
-			<div className='l-home container'>
-				<h1>Guestbook</h1>
-				<div className='posting-form card'>
-					<form action='' method='post'>
-						<h5 className='card-header'>Add a post</h5>
-						<div className='card-body'>
-							<div className='form-group'>
-								<label htmlFor='postForm-name'>Name:</label>
-									<input
-									id='postForm-name'
-									className='form-control'
-									type='text'
-									name='author'
-									placeholder='Your name'
-									/>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='postForm-content'>Post:</label>
-								<textarea
-								id='postForm-content'
-								className='form-control'
-								name='content'
-								placeholder='What would you like to tell us?'
-								/>
-							</div>
-						</div>
-						<div className='card-footer'>
-							<button type='submit' className='btn btn btn-outline-primary'>
-								Submit
-								<div className='ripple-wrapper' />
-							</button>
-						</div>
-					</form>
-				</div>
-				<hr />
-				<div className='posts'>
-					<h2>Posts</h2>
-					{this._renderPosts()}
-				</div>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className='l-home container'>
+        <h1>Guestbook</h1>
+        <div className='posting-form card'>
+          <form action='' method='post'>
+            <h5 className='card-header'>Add a post</h5>
+            <div className='card-body'>
+              <div className='form-group'>
+                <label htmlFor='postForm-name'>Name:</label>
+                  <input
+                  id='postForm-name'
+                  className='form-control'
+                  type='text'
+                  name='author'
+                  placeholder='Your name'
+                  />
+              </div>
+              <div className='form-group'>
+                <label htmlFor='postForm-content'>Post:</label>
+                <textarea
+                id='postForm-content'
+                className='form-control'
+                name='content'
+                placeholder='What would you like to tell us?'
+                />
+              </div>
+            </div>
+            <div className='card-footer'>
+              <button type='submit' className='btn btn btn-outline-primary'>
+                Submit
+                <div className='ripple-wrapper' />
+              </button>
+            </div>
+          </form>
+        </div>
+        <hr />
+        <div className='posts'>
+          <h2>Posts</h2>
+          {this._renderPosts()}
+        </div>
+      </div>
+    );
+  }
 
-	_renderPosts() {
-		const { posts } = this.props;
+  _renderPosts() {
+    const { posts } = this.props;
 
-		return posts.map((post, index) => (
-			<div className='post card card-default' key={index}>
-				<div className='card-body'>{post.content}</div>
-				<div className='post-author card-footer'>{post.author}</div>
-			</div>
-		));
-	}
+    return posts.map((post, index) => (
+      <div className='post card card-default' key={index}>
+        <div className='card-body'>{post.content}</div>
+        <div className='post-author card-footer'>{post.author}</div>
+      </div>
+    ));
+  }
 }
 ```
 
@@ -388,46 +388,46 @@ import { AbstractComponent } from '@ima/react-page-renderer';
 import './post.less';
 
 export default class Post extends AbstractComponent {
-	render() {
-		const { content, author } = this.props;
+  render() {
+    const { content, author } = this.props;
 
-		return (
-			<div className='post card card-default'>
-				<div className='card-body'>{content}</div>
-				<div className='post-author card-footer'>{author}</div>
-			</div>
-		);
-	}
+    return (
+      <div className='post card card-default'>
+        <div className='card-body'>{content}</div>
+        <div className='post-author card-footer'>{author}</div>
+      </div>
+    );
+  }
 }
 ```
 
-	</TabItem>
-	<TabItem value="TypeScript">
+  </TabItem>
+  <TabItem value="TypeScript">
 
 ```tsx
 import { AbstractComponent } from '@ima/react-page-renderer';
 import './post.less';
 
 type PostProps = {
-	content: string;
-	author: string;
+  content: string;
+  author: string;
 };
 
 export class Post extends AbstractComponent<PostProps> {
-	render() {
-		const { content, author } = this.props;
+  render() {
+    const { content, author } = this.props;
 
-		return (
-			<div className='post card card-default'>
-			<div className='card-body'>{content}</div>
-			<div className='post-author card-footer'>{author}</div>
-			</div>
-		);
-	}
+    return (
+      <div className='post card card-default'>
+      <div className='card-body'>{content}</div>
+      <div className='post-author card-footer'>{author}</div>
+      </div>
+    );
+  }
 }
 ```
 
-	</TabItem>
+  </TabItem>
 </Tabs>
 
 
@@ -452,7 +452,7 @@ return posts.map((post, index) => (
 
 ```tsx
 return posts.map((post: PostData, index) => (
-	<Post key={index} content={post.content} author={post.author} />
+  <Post key={index} content={post.content} author={post.author} />
 ));
 ```
 
@@ -510,42 +510,42 @@ import { AbstractComponent } from '@ima/react-page-renderer';
 import React from 'react';
 
 export default class PostingForm extends AbstractComponent {
-	render() {
-		return (
-			<div className='posting-form card'>
-				<form action='' method='post'>
-					<h5 className='card-header'>Add a post</h5>
-					<div className='card-body'>
-						<div className='form-group'>
-							<label htmlFor='postForm-name'>Name:</label>
-							<input
-								id='postForm-name'
-								className='form-control'
-								type='text'
-								name='author'
-								placeholder='Your name'
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='postForm-content'>Post:</label>
-							<textarea
-								id='postForm-content'
-								className='form-control'
-								name='content'
-								placeholder='What would you like to tell us?'
-							/>
-						</div>
-					</div>
-					<div className='card-footer'>
-						<button type='submit' className='btn btn btn-outline-primary'>
-							Submit
-							<div className='ripple-wrapper' />
-						</button>
-					</div>
-				</form>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className='posting-form card'>
+        <form action='' method='post'>
+          <h5 className='card-header'>Add a post</h5>
+          <div className='card-body'>
+            <div className='form-group'>
+              <label htmlFor='postForm-name'>Name:</label>
+              <input
+                id='postForm-name'
+                className='form-control'
+                type='text'
+                name='author'
+                placeholder='Your name'
+              />
+            </div>
+            <div className='form-group'>
+              <label htmlFor='postForm-content'>Post:</label>
+              <textarea
+                id='postForm-content'
+                className='form-control'
+                name='content'
+                placeholder='What would you like to tell us?'
+              />
+            </div>
+          </div>
+          <div className='card-footer'>
+            <button type='submit' className='btn btn btn-outline-primary'>
+              Submit
+              <div className='ripple-wrapper' />
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 }
 ```
 
@@ -554,42 +554,42 @@ export default class PostingForm extends AbstractComponent {
 
 ```tsx
 export default class PostingForm extends AbstractComponent  {
-	render() {
-		return (
-			<div className='posting-form card'>
-				<form action='' method='post'>
-					<h5 className='card-header'>Add a post</h5>
-					<div className='card-body'>
-						<div className='form-group'>
-							<label htmlFor='postForm-name'>Name:</label>
-							<input
-							id='postForm-name'
-							className='form-control'
-							type='text'
-							name='author'
-							placeholder='Your name'
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='postForm-content'>Post:</label>
-							<textarea
-							id='postForm-content'
-							className='form-control'
-							name='content'
-							placeholder='What would you like to tell us?'
-							/>
-						</div>
-					</div>
-					<div className='card-footer'>
-						<button type='submit' className='btn btn btn-outline-primary'>
-							Submit
-							<div className='ripple-wrapper' />
-						</button>
-					</div>
-				</form>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className='posting-form card'>
+        <form action='' method='post'>
+          <h5 className='card-header'>Add a post</h5>
+          <div className='card-body'>
+            <div className='form-group'>
+              <label htmlFor='postForm-name'>Name:</label>
+              <input
+              id='postForm-name'
+              className='form-control'
+              type='text'
+              name='author'
+              placeholder='Your name'
+              />
+            </div>
+            <div className='form-group'>
+              <label htmlFor='postForm-content'>Post:</label>
+              <textarea
+              id='postForm-content'
+              className='form-control'
+              name='content'
+              placeholder='What would you like to tell us?'
+              />
+            </div>
+          </div>
+          <div className='card-footer'>
+            <button type='submit' className='btn btn btn-outline-primary'>
+              Submit
+              <div className='ripple-wrapper' />
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 }
 ```
 
@@ -606,17 +606,17 @@ Now update the `render()` method in the home controller's view:
 
 ```jsx
 return (
-	<div className='l-home container'>
-		<h1>Guestbook</h1>
-		<PostingForm />
+  <div className='l-home container'>
+    <h1>Guestbook</h1>
+    <PostingForm />
 
-		<hr />
+    <hr />
 
-		<div className='posts'>
-			<h2>Posts</h2>
-			{this._renderPosts()}
-		</div>
-	</div>
+    <div className='posts'>
+      <h2>Posts</h2>
+      {this._renderPosts()}
+    </div>
+  </div>
 );
 ```
 
@@ -625,17 +625,17 @@ return (
 
 ```tsx
 return (
-	<div className='l-home container'>
-		<h1>Guestbook</h1>
-		<PostingForm />
+  <div className='l-home container'>
+    <h1>Guestbook</h1>
+    <PostingForm />
 
-		<hr />
+    <hr />
 
-		<div className='posts'>
-			<h2>Posts</h2>
-			{this._renderPosts()}
-		</div>
-	</div>
+    <div className='posts'>
+      <h2>Posts</h2>
+      {this._renderPosts()}
+    </div>
+  </div>
 );
 ```
 
