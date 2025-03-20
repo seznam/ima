@@ -3,7 +3,7 @@ title: 'Events'
 description: 'Server > Events'
 ---
 
-The IMA.js server exposes `emitter` and `Event` objects that can be used to listen to events and adjust the server behavior.
+The IMA.js server exposes `emitter` and `Event` objects that can be used to handle events and adjust the server behavior.
 
 You can listen to any of the events below by calling `emitter.on(eventName, event => {})`. See the [`@esmj/emitter` documentation](https://github.com/mjancarik/esmj-emitter) for more details.
 
