@@ -90,6 +90,12 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Server',
+      collapsed: false,
+      items: ['server/events'],
+    },
+    {
+      type: 'category',
       label: 'Plugins',
       collapsed: false,
       items: ['plugins/plugin-api', 'plugins/available-plugins'],
