@@ -91,8 +91,18 @@ export class Request {
     return this._request ? this._request.ips || [] : [];
   }
 
+  /**
+   * Returns the HTTP method of the request.
+   */
   getMethod() {
     return this._request ? this._request.method : '';
+  }
+
+  /**
+   * Returns the raw request.
+   */
+  getRequest(): ExpressRequest | undefined {
+    return this._request;
   }
 }
 // @endif
