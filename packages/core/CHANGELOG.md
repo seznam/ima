@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.4
+
+### Patch Changes
+
+- 3a43baf: add getMethod and getRequest methods to Request class; add getResponse method to Response class
+
 ## 19.6.3
 
 ### Patch Changes
