@@ -175,5 +175,12 @@ export class Response {
       headers: this._internalHeadersStorage,
     };
   }
+
+  /**
+   * Returns the ExpressJS response object.
+   */
+  getResponse(): ExpressResponse | undefined {
+    return this._response;
+  }
 }
 // @endif
