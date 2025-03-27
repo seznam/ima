@@ -47,9 +47,9 @@ function timeNow() {
   return chalk.gray(`[${h}:${m}:${s}]`);
 }
 
-function createWatcher(name, baseDir, paths, destFolder, options = {}) {
+function createWatcher(name, baseDir, destFolder, options = {}) {
   try {
-    const watcher = chokidar.watch(path.join(baseDir, paths), {
+    const watcher = chokidar.watch([baseDir], {
       persistent: true,
       cwd: baseDir,
       ignored: [...IGNORED],
@@ -115,10 +115,6 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
           });
 
           break;
-
-        case 'unlink':
-          fs.unlink(dest, callback);
-          break;
       }
 
       // Restart ima server in host application
@@ -176,7 +172,7 @@ function watchChanges(destFolder, pkgDirs) {
     }
 
     // Create file watcher
-    createWatcher(name, pkgDir, '/**/*', destPkgDir);
+    createWatcher(name, pkgDir, destPkgDir);
   });
 }
 
