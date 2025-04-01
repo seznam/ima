@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.2
+
+### Patch Changes
+
+- 1054755: Bump versions with support for express>=4
+
 ## 19.5.1
 
 ### Patch Changes
