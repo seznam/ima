@@ -73,6 +73,99 @@ describe('ima.core.router.ClientRouter', () => {
     expect(window.bindEventListener).toHaveBeenCalledTimes(2);
   });
 
+  it('should add listener to popState event, click event on custom element', () => {
+    jest.spyOn(window, 'bindEventListener').mockImplementation();
+    const customElement = document.createElement('div');
+
+    router.listen(customElement);
+
+    expect(window.bindEventListener).toHaveBeenCalledTimes(2);
+    expect(window.bindEventListener).toHaveBeenCalledWith(
+      customElement,
+      'popstate',
+      expect.any(Function)
+    );
+    expect(window.bindEventListener).toHaveBeenCalledWith(
+      customElement,
+      'click',
+      expect.any(Function)
+    );
+  });
+
+  it('should store custom element reference in routerRoots array', () => {
+    const customElement = document.createElement('div');
+    router.listen(customElement);
+
+    expect(router['_routerRoots']).toContain(customElement);
+  });
+
+  it('should store multiple custom elements in routerRoots array', () => {
+    const customElement1 = document.createElement('div');
+    const customElement2 = document.createElement('div');
+
+    router.listen(customElement1);
+    router.listen(customElement2);
+
+    expect(router['_routerRoots']).toContain(customElement1);
+    expect(router['_routerRoots']).toContain(customElement2);
+    expect(router['_routerRoots']).toHaveLength(2);
+  });
+
+  it('should cleanup listeners from specific custom element', () => {
+    jest.spyOn(window, 'unbindEventListener').mockImplementation();
+    const customElement1 = document.createElement('div');
+    const customElement2 = document.createElement('div');
+
+    router.listen(customElement1);
+    router.listen(customElement2);
+    router.unlisten(customElement1);
+
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement1,
+      'popstate',
+      expect.any(Function)
+    );
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement1,
+      'click',
+      expect.any(Function)
+    );
+    expect(router['_routerRoots']).not.toContain(customElement1);
+    expect(router['_routerRoots']).toContain(customElement2);
+  });
+
+  it('should cleanup all listeners with unlistenAll', () => {
+    jest.spyOn(window, 'unbindEventListener').mockImplementation();
+    const customElement1 = document.createElement('div');
+    const customElement2 = document.createElement('div');
+
+    router.listen(customElement1);
+    router.listen(customElement2);
+    router.unlistenAll();
+
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement1,
+      'popstate',
+      expect.any(Function)
+    );
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement1,
+      'click',
+      expect.any(Function)
+    );
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement2,
+      'popstate',
+      expect.any(Function)
+    );
+    expect(window.unbindEventListener).toHaveBeenCalledWith(
+      customElement2,
+      'click',
+      expect.any(Function)
+    );
+    expect(router['_routerRoots']).toHaveLength(0);
+  });
+
   it('should remove listener to popState event, click event', () => {
     jest.spyOn(window, 'unbindEventListener').mockImplementation();
 

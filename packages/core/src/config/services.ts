@@ -36,7 +36,7 @@ export const initServices: InitServicesFunction = (ns, oc, config) => {
     window.__IMA_HMR?.emitter?.once('destroy', async () => {
       oc.get('$Dispatcher').clear();
       oc.get('$Observable').destroy();
-      oc.get('$Router').unlisten();
+      oc.get('$Router').unlistenAll();
       oc.get('$PageRenderer').unmount();
       await oc.get('$PageManager').destroy();
     });
