@@ -1,5 +1,14 @@
 import clone from 'clone';
 
+// Usage on service:
+//entitiesWithContent: labelCallback((value) => [...value, 'abc']);
+
+const CALLBACK_LABEL_SYMBOL = Symbol('callbackLabelSymbol');
+function withLabel(callbackFunction) {
+  callbackFunction[CALLBACK_LABEL_SYMBOL] = true;
+  return callbackFunction;
+}
+
 const PROTECTED_FIELDS = ['__proto__', 'prototype', 'constructor'];
 function assign(target, source, parentField = null, ignoreMeta = true) {
   let fieldList = [];
@@ -17,7 +26,9 @@ function assign(target, source, parentField = null, ignoreMeta = true) {
     const fieldPath = parentField ? parentField + '.' + field : field;
     fieldList.push(fieldPath);
 
-    if (value instanceof Array) {
+    if (typeof value === 'function' && value[CALLBACK_LABEL_SYMBOL]) {
+      target[field] = value(target[field]);
+    } else if (value instanceof Array) {
       target[field] = clone(value);
     } else if (
       value instanceof Object &&
@@ -125,5 +136,6 @@ export {
   allPromiseHash,
   escapeRegExp,
   resolveEnvironmentSetting,
+  withLabel,
   clone,
 };
