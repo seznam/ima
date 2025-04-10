@@ -26,7 +26,7 @@ function assign(target, source, parentField = null, ignoreMeta = true) {
     const fieldPath = parentField ? parentField + '.' + field : field;
     fieldList.push(fieldPath);
 
-    if (typeof value === 'function' && value[CALLBACK_LABEL_SYMBOL]) {
+    if (value instanceof Function && value[CALLBACK_LABEL_SYMBOL]) {
       target[field] = value(target[field]);
     } else if (value instanceof Array) {
       target[field] = clone(value);
