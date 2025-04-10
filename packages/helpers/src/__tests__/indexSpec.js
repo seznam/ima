@@ -34,19 +34,19 @@ describe('helper', () => {
       expect(target).toStrictEqual({ a: 1 });
     });
 
-    it('should use withLabel callback to append a value to an array', () => {
+    it('should use withLabel callback to append values', () => {
       const target = {
-        a: ['old item'],
+        a: ['1'],
       };
 
       const source = {
-        a: helpers.withLabel(value => [...value, 'new item']),
+        a: helpers.withLabel(value => [...value, '2', 3, { b: 4 }]),
       };
 
       helpers.assignRecursively(target, source);
 
       expect(target).toStrictEqual({
-        a: ['old item', 'new item'],
+        a: ['1', '2', 3, { b: 4 }],
       });
     });
   });
