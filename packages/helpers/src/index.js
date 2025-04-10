@@ -1,8 +1,5 @@
 import clone from 'clone';
 
-// Usage on service:
-//entitiesWithContent: labelCallback((value) => [...value, 'abc']);
-
 const CALLBACK_LABEL_SYMBOL = Symbol('callbackLabelSymbol');
 function withLabel(callbackFunction) {
   callbackFunction[CALLBACK_LABEL_SYMBOL] = true;
