@@ -1,7 +1,7 @@
 import clone from 'clone';
 
 const CALLBACK_LABEL_SYMBOL = Symbol('callbackLabelSymbol');
-function withLabel(callbackFunction) {
+function assignTransformation(callbackFunction) {
   callbackFunction[CALLBACK_LABEL_SYMBOL] = true;
   return callbackFunction;
 }
@@ -133,6 +133,6 @@ export {
   allPromiseHash,
   escapeRegExp,
   resolveEnvironmentSetting,
-  withLabel,
+  assignTransformation,
   clone,
 };

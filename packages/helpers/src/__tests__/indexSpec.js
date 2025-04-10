@@ -34,13 +34,13 @@ describe('helper', () => {
       expect(target).toStrictEqual({ a: 1 });
     });
 
-    it('should use withLabel callback to append values', () => {
+    it('should use assignTransformation callback to append values', () => {
       const target = {
         a: ['1'],
       };
 
       const source = {
-        a: helpers.withLabel(value => [...value, '2', 3, { b: 4 }]),
+        a: helpers.assignTransformation(value => [...value, '2', 3, { b: 4 }]),
       };
 
       helpers.assignRecursively(target, source);
