@@ -15,4 +15,4 @@ export function assignRecursively(target, ...sources);
 export function assignRecursivelyWithTracking(referrer);
 export function resolveEnvironmentSetting(setting, currentEnv: string);
 export function escapeRegExp(string: string): string;
-export function assignTransformation(callbackFunction: (value) => [...value]);
+export function assignTransformation(callbackFunction: (value) => typeof value);
