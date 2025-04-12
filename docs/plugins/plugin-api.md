@@ -63,6 +63,26 @@ You can probably already see the pattern here. This function should return an ob
 
 These settings are then **merged with your application settings** a possible conflicts are overridden with the application settings. This allows you to **define defaults for your plugin**, which can be easily overridden in your application.
 
+### Settings merging
+
+When instead of overriding, you want to transform the existing values of settings, you may the use helper ```assignTransformation()```.
+
+It allows you to provide a custom transformation function that will replace the behaviour of the assign function by accepting a callback function that will be invoked as a transformation when merging settings.
+
+```javascript
+assignTransformation(callbackFunction: (value) => typeof value);
+```
+
+Example use case might be adding new values to an existing array: 
+
+```javascript
+return {
+    enviroment: {
+        ...
+        entitiesWithContent: assignTransformation((value) => [...value, 'additional value']),
+    }
+}
+```
 
 ### Examples
 
