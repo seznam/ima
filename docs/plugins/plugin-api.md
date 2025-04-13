@@ -65,9 +65,9 @@ These settings are then **merged with your application settings** a possible con
 
 ### Settings merging
 
-When instead of overriding, you want to transform the existing values of settings, you may the use helper ```assignTransformation()```.
+When instead of overriding, you want to transform the existing values of settings, you may use the helper ```assignTransformation()```.
 
-It allows you to provide a custom transformation function that will replace the behaviour of the assign function by accepting a callback function that will be invoked as a transformation when merging settings.
+It allows you to provide a custom transformation function that will replace the behaviour of the assign function that overrides the old values with new ones. It accepts a callback function that will be invoked as a transformation when merging settings.
 
 ```javascript
 assignTransformation(callbackFunction: (value) => typeof value);
