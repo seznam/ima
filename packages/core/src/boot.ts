@@ -320,7 +320,7 @@ export function onLoad() {
     document.addEventListener(
       'DOMContentLoaded',
       () => {
-        return autoYield().then(resolve);
+        return nextFrameYield().then(resolve);
       },
       {
         once: true,
