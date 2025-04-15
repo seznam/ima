@@ -50,7 +50,7 @@ export interface ImaCliArgs {
   forceLegacy?: boolean;
   lazyServer?: boolean;
   server?: string;
-  preRenderMode: 'spa' | 'ssr';
+  preRenderMode?: 'spa' | 'ssr';
 }
 
 /**

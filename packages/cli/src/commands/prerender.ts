@@ -83,6 +83,11 @@ const prerender: HandlerFn = async args => {
 
     // Start the server with appropriate mode
     const { preRenderMode } = args;
+
+    if (!preRenderMode) {
+      throw new Error('Prerender mode is required');
+    }
+
     logger.info(`Starting server in ${preRenderMode.toUpperCase()} mode...`);
 
     const port = environment.$Server.port ?? 3001;
