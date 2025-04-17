@@ -261,7 +261,7 @@ export abstract class Router {
    *
    * @return This router.
    */
-  listen() {
+  listen(routerRoot?: EventTarget) {
     return this;
   }
 
@@ -283,6 +283,13 @@ export abstract class Router {
    * @return This router.
    */
   unlisten() {
+    return this;
+  }
+
+  /**
+   * Handles the cleanup and unregisters all registered router listeners.
+   */
+  unlistenAll() {
     return this;
   }
 
