@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.3.1
+
+### Patch Changes
+
+- 92327d5: Update @esmj/task module to the newest version, which support scheduler.yield for autoYield and requestAnimationFrame for nextFrame.
+
 ## 19.3.0
 
 ### Minor Changes
