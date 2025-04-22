@@ -33,6 +33,22 @@ describe('helper', () => {
 
       expect(target).toStrictEqual({ a: 1 });
     });
+
+    it('should use assignTransformation callback to append values', () => {
+      const target = {
+        a: ['1'],
+      };
+
+      const source = {
+        a: helpers.assignTransformation(value => [...value, '2', 3, { b: 4 }]),
+      };
+
+      helpers.assignRecursively(target, source);
+
+      expect(target).toStrictEqual({
+        a: ['1', '2', 3, { b: 4 }],
+      });
+    });
   });
 
   describe('assignRecursivelyWithTracking', () => {
