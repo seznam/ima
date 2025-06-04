@@ -55,7 +55,6 @@
   "overrides": {
     "enzyme": {
       "cheerio": "1.0.0-rc.12"
-    },
-    "express": "^5.0.0"
+    }
   }
 }
