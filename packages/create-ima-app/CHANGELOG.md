@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.5.0
+
+### Minor Changes
+
+- 6436874: Update to node 24
+
 ## 19.4.0
 
 ### Minor Changes
