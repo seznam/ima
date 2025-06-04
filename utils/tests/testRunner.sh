@@ -43,7 +43,7 @@ for PACKAGE in $PACKAGES ; do
     fi
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
-    npm publish
+    npm publish --tag next
 done
 
 cd "$ROOT_DIR_IMA"
