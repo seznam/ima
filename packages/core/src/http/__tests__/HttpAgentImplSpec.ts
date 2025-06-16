@@ -14,7 +14,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const proxy = toMockedInstance(HttpProxy);
   const cache = toMockedInstance(CacheImpl);
   const cookie = toMockedInstance(CookieStorage);
-  let options = null;
+  let options: any = null;
   let data: HttpAgentResponse<unknown>;
   // @ts-ignore
   let httpConfig = null;
@@ -320,4 +320,62 @@ describe('ima.core.http.HttpAgentImpl', () => {
       /* eslint-enable jest/no-done-callback */
     }
   );
+
+  describe('Failed request caching', () => {
+    beforeEach(() => {
+      options.cacheFailedRequest = true;
+      options.ttl = 1000;
+    });
+
+    describe.each([['get', 'post', 'put', 'patch', 'delete']])(
+      '%s method with caching of failed request',
+      method => {
+        let error: GenericError;
+
+        beforeEach(() => {
+          error = new GenericError('Request failed', data.params);
+        });
+
+        it('should cache failed request', async () => {
+          jest.spyOn(proxy, 'request').mockImplementation(() => {
+            return Promise.reject(error);
+          });
+
+          jest.spyOn(cache, 'set');
+
+          // @ts-ignore
+          await http[method](data.params.url, data.params.data, options).catch(
+            (rejectedError: any) => {
+              expect(rejectedError).toBeInstanceOf(GenericError);
+            }
+          );
+          expect(cache.set).toHaveBeenCalledWith(
+            expect.stringContaining('http.'),
+            expect.any(GenericError),
+            options.ttl
+          );
+        });
+
+        it('should return cached error', async () => {
+          const cacheKey = http.getCacheKey(
+            'get',
+            data.params.url,
+            data.params.data
+          );
+
+          jest.spyOn(cache, 'has').mockReturnValue(true);
+          jest.spyOn(cache, 'get').mockReturnValue(error);
+
+          // @ts-ignore
+          await http[method](data.params.url, data.params.data, options).catch(
+            (rejectedError: any) => {
+              expect(rejectedError).toBe(error);
+            }
+          );
+          expect(cache.has).toHaveBeenCalledWith(cacheKey);
+          expect(cache.get).toHaveBeenCalledWith(cacheKey);
+        });
+      }
+    );
+  });
 });
