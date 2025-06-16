@@ -26,7 +26,7 @@ export interface HttpAgentImplConfig {
  */
 export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<HttpAgentResponse<unknown>>;
+  protected _cache: Cache<HttpAgentResponse<unknown> | GenericError>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -289,7 +289,13 @@ export class HttpAgentImpl extends HttpAgent {
     }
 
     if (this._cache.has(cacheKey)) {
-      const cacheData = this._cache.get(cacheKey) as HttpAgentResponse<B>;
+      const cacheData = this._cache.get(cacheKey) as
+        | HttpAgentResponse<B>
+        | GenericError;
+
+      if (cacheData instanceof GenericError) {
+        return Promise.reject(cacheData);
+      }
 
       return Promise.resolve<HttpAgentResponse<B>>(cacheData);
     }
@@ -418,6 +424,10 @@ export class HttpAgentImpl extends HttpAgent {
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
+
+      if (options.cacheFailedRequests) {
+        this._cache.set(cacheKey, agentError, options.ttl);
+      }
 
       return Promise.reject(agentError);
     }
