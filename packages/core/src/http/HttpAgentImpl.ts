@@ -425,7 +425,7 @@ export class HttpAgentImpl extends HttpAgent {
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
 
-      if (options.cacheFailedRequests) {
+      if (options.cacheFailedRequest) {
         this._cache.set(cacheKey, agentError, options.ttl);
       }
 
