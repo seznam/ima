@@ -580,6 +580,8 @@ export class HttpAgentImpl extends HttpAgent {
    *
    * Create a copy of agentError without AbortController and AbortController signal and postProcessors.
    * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crashing.
+   *
+   * @param agentError the error from the server
    */
   _cleanError(
     agentError: GenericError<HttpProxyErrorParams>
