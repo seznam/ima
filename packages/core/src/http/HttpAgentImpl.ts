@@ -426,6 +426,10 @@ export class HttpAgentImpl extends HttpAgent {
       const agentError = new GenericError(errorMessage, errorParams);
 
       if (options.cacheFailedRequest) {
+        /**
+         * Cleans error response from data (abort controller, postProcessors), that cannot be persisted
+         * before saving the error to the cache.
+         */
         const pureError = this._cleanError(agentError);
 
         this._cache.set(cacheKey, pureError, options.ttl);
@@ -575,13 +579,12 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Cleans error response from data (abort controller, postProcessors), that cannot be persisted
-   * before saving the error to the cache.
-   *
    * Create a copy of agentError without AbortController and AbortController signal and postProcessors.
    * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crashing.
    *
    * @param agentError the error from the server
+   *
+   * @return Pure copy of agentError without non-persistent data
    */
   _cleanError(
     agentError: GenericError<HttpProxyErrorParams>
