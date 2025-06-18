@@ -427,7 +427,7 @@ export class HttpAgentImpl extends HttpAgent {
 
       if (options.cacheFailedRequest) {
         /**
-         * Cleans error response from data (abort controller, postProcessors), that cannot be persisted
+         * Clean error response from data (abort controller, postProcessors), that cannot be persisted
          * before saving the error to the cache.
          */
         const pureError = this._cleanError(agentError);
