@@ -588,9 +588,7 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _cleanError(
     agentError: GenericError<HttpProxyErrorParams>
-  ): GenericError<
-    Omit<HttpProxyErrorParams, 'abortController' | 'signal' | 'postProcessors'>
-  > {
+  ): GenericError<HttpProxyErrorParams> {
     const params = agentError.getParams();
 
     const { signal, ...fetchOptions } = params.options.fetchOptions || {};
