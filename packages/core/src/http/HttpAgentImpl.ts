@@ -427,7 +427,7 @@ export class HttpAgentImpl extends HttpAgent {
 
       if (options.cacheFailedRequest) {
         /**
-         * Clean error response from data (abort controller, postProcessors), that cannot be persisted
+         * Cleans error response from data (abort controller, postProcessors), that cannot be persisted
          * before saving the error to the cache.
          */
         const pureError = this._cleanError(agentError);
@@ -600,9 +600,11 @@ export class HttpAgentImpl extends HttpAgent {
       options.fetchOptions.headers = {};
     }
 
-    return new GenericError(agentError.message, {
+    const newParams: HttpProxyErrorParams = {
       ...params,
       options,
-    });
+    };
+
+    return new GenericError(agentError.message, newParams);
   }
 }
