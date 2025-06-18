@@ -579,7 +579,7 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Create a copy of agentError without AbortController and AbortController signal and postProcessors.
+   * Create a copy of agentError without AbortController, AbortController signal and postProcessors.
    * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crashing.
    *
    * @param agentError the error from the server
@@ -588,7 +588,9 @@ export class HttpAgentImpl extends HttpAgent {
    */
   _cleanError(
     agentError: GenericError<HttpProxyErrorParams>
-  ): GenericError<HttpProxyErrorParams> {
+  ): GenericError<
+    Omit<HttpProxyErrorParams, 'abortController' | 'signal' | 'postProcessors'>
+  > {
     const params = agentError.getParams();
 
     const { signal, ...fetchOptions } = params.options.fetchOptions || {};
@@ -600,11 +602,9 @@ export class HttpAgentImpl extends HttpAgent {
       options.fetchOptions.headers = {};
     }
 
-    const newParams: HttpProxyErrorParams = {
+    return new GenericError(agentError.message, {
       ...params,
       options,
-    };
-
-    return new GenericError(agentError.message, newParams);
+    });
   }
 }
