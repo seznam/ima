@@ -425,17 +425,17 @@ export class HttpAgentImpl extends HttpAgent {
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
 
-      if (options.cacheFailedRequest) {
-        /**
-         * Cleans error response from data (abort controller, postProcessors), that cannot be persisted
-         * before saving the error to the cache.
-         */
-        const pureError = this._cleanError(agentError);
+      /**
+       * Cleans error response from data (abort controller, postProcessors, error cause response)
+       * that cannot be persisted, before saving the error to the cache.
+       */
+      const pureError = this._cleanError(agentError);
 
+      if (options.cacheFailedRequest) {
         this._cache.set(cacheKey, pureError, options.ttl);
       }
 
-      return Promise.reject(agentError);
+      return Promise.reject(pureError);
     }
   }
 
@@ -579,8 +579,8 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Create a copy of agentError without AbortController, AbortController signal and postProcessors.
-   * Setting agentResponse with AbortController or signal or postProcessors into cache would result in crashing.
+   * Create a copy of agentError without AbortController, AbortController signal, postProcessors and error cause Response.
+   * Setting agentResponse with AbortController or signal or postProcessors or error cause response into cache would result in crashing.
    *
    * @param agentError the error from the server
    *
@@ -590,7 +590,6 @@ export class HttpAgentImpl extends HttpAgent {
     agentError: GenericError<HttpProxyErrorParams>
   ): GenericError<HttpProxyErrorParams> {
     const params = agentError.getParams();
-
     const { signal, ...fetchOptions } = params.options.fetchOptions || {};
     const { abortController, postProcessors, ...options } =
       params.options || {};
@@ -600,11 +599,13 @@ export class HttpAgentImpl extends HttpAgent {
       options.fetchOptions.headers = {};
     }
 
-    const newParams: HttpProxyErrorParams = {
+    const safeParams = {
       ...params,
-      options,
+      options: { ...options },
     };
 
-    return new GenericError(agentError.message, newParams);
+    const serializedParams = JSON.parse(JSON.stringify(safeParams));
+
+    return new GenericError(agentError.message, serializedParams);
   }
 }
