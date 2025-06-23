@@ -14,7 +14,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   const proxy = toMockedInstance(HttpProxy);
   const cache = toMockedInstance(CacheImpl);
   const cookie = toMockedInstance(CookieStorage);
-  let options: any = null;
+  let options: HttpAgentRequestOptions;
   let data: HttpAgentResponse<unknown>;
   // @ts-ignore
   let httpConfig = null;
