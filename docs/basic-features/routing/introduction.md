@@ -362,28 +362,20 @@ Custom response headers.
 By default, the router listens for navigation events (clicks on links and browser history changes) on the window object. However, you can also specify custom elements to listen on within the initialization function in `main.js`:
 
 ```javascript
-const router = oc.get('$Router');
-const appRoot = document.querySelector('#my-app-root');
+ima
+  .onLoad()
+  .then(() => {
+    // Listen for navigation events within specific elements
+    const appRoot = document.querySelector('#my-app-root');
 
-// Listen for navigation events within specific elements
-  ima
-    .onLoad()
-    .then(() => {
-      ima.reviveClientApp(getInitialAppConfigFunctions(), appRoot);
-    })
-    .catch(error => {
-      if ($Debug && typeof window !== 'undefined') {
-        window.__IMA_HMR?.emitter?.emit('error', { error });
-        console.error(error);
-      }
-    });
-
-// ...
-// Stop listening on a specific element
-router.unlisten(appRoot);
-
-// Stop listening on all elements
-router.unlistenAll();
+    ima.reviveClientApp(getInitialAppConfigFunctions(), appRoot);
+  })
+  .catch(error => {
+    if ($Debug && typeof window !== 'undefined') {
+      window.__IMA_HMR?.emitter?.emit('error', { error });
+      console.error(error);
+    }
+  });
 ```
 
 This is particularly useful when you want to:
