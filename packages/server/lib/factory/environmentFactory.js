@@ -62,6 +62,15 @@ const defaultEnvironment = {
   },
 };
 
+/**
+ * @param {{
+ *   applicationFolder: string,
+ *   processEnvironment: (
+ *     env: import('@ima/core').ParsedEnvironment
+ *   ) => import('@ima/core').ParsedEnvironment
+ * }} config
+ * @returns {import('@ima/core').ParsedEnvironment}
+ */
 module.exports = function environmentFactory({
   applicationFolder,
   processEnvironment,

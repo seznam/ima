@@ -176,6 +176,7 @@ export {
   type ManifestAsset,
   type Resource,
   type Resources,
+  type ParsedEnvironment,
 } from './boot';
 export {
   type Utils,
