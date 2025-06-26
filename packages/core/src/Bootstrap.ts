@@ -6,7 +6,7 @@ import {
 import { PartialDeep } from 'type-fest';
 
 import { DictionaryConfig } from '.';
-import { AppSettings, Settings } from './boot';
+import { AppSettings, DefaultSettings, Settings } from './boot';
 import { Namespace, ns } from './Namespace';
 import { BindingState } from './oc/BindingState';
 import { ObjectContainer } from './oc/ObjectContainer';
@@ -182,7 +182,38 @@ export class Bootstrap {
    * as default values for configuration items in other environments.
    */
   _initSettings() {
-    const currentApplicationSettings: Settings = {} as Settings;
+    /**
+     * Default settings for the application.
+     */
+    const currentApplicationSettings: DefaultSettings = {
+      $Http: {
+        defaultRequestOptions: {
+          timeout: 15000,
+          repeatRequest: 1,
+          ttl: 60000,
+          fetchOptions: {
+            mode: 'cors',
+            headers: {
+              Accept: 'application/json',
+            },
+          },
+          validateCookies: false,
+          cache: true,
+        },
+        cacheOptions: {
+          prefix: 'http.',
+        },
+      },
+      $Router: {
+        middlewareTimeout: 30000,
+      },
+      $Cache: {
+        enabled: true,
+        ttl: 60000,
+      },
+    };
+
+    const settings = {} as Settings;
     const plugins = this._config.plugins.concat([
       {
         name: BindingState.App,
@@ -201,6 +232,7 @@ export class Bootstrap {
         );
 
         helpers.assignRecursivelyWithTracking(name)(
+          settings,
           currentApplicationSettings,
           helpers.resolveEnvironmentSetting(
             allPluginSettings,
@@ -211,7 +243,7 @@ export class Bootstrap {
 
     this._config.bind = {
       ...this._config.bind,
-      ...currentApplicationSettings,
+      ...settings,
       ...this._config.settings,
     };
   }

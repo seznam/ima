@@ -14,6 +14,54 @@ if (env === 'production') {
   env = prod;
 }
 
+/**
+ * Env default values
+ */
+const defaultEnvironment = {
+  prod: {
+    $Debug: false,
+    $Language: {
+      '//*:*': 'en',
+    },
+    $Server: {
+      port: 3001,
+      staticPath: '/static',
+      concurrency: 100,
+      staticConcurrency: 100,
+      overloadConcurrency: 100,
+      clusters: null,
+      serveSPA: {
+        allow: true,
+        blackList: userAgent =>
+          new RegExp('Googlebot|SeznamBot').test(userAgent),
+      },
+      cache: {
+        enabled: false,
+        cacheKeyGenerator: null,
+        entryTtl: 60 * 60 * 1000,
+        unusedEntryTtl: 15 * 60 * 1000,
+        maxEntries: 500,
+      },
+      logger: {
+        formatting: 'simple',
+      },
+    },
+  },
+
+  dev: {
+    $Debug: true,
+    $Language: {
+      '//*:*': 'en',
+    },
+    $Server: {
+      concurrency: 1,
+      logger: {
+        formatting: 'dev',
+      },
+    },
+  },
+};
+
 module.exports = function environmentFactory({
   applicationFolder,
   processEnvironment,
@@ -22,15 +70,18 @@ module.exports = function environmentFactory({
     path.resolve(applicationFolder, './server/config/environment.js')
   );
 
-  let currentEnvironment = environmentConfig[env] || {};
+  // Merge defaults with resolved env config
+  const baseEnvConfig = helpers.assignRecursively(
+    defaultEnvironment,
+    environmentConfig
+  );
+
+  let currentEnvironment = baseEnvConfig[env] || {};
   const $Language =
     currentEnvironment.$Language &&
     Object.assign({}, currentEnvironment.$Language);
 
-  currentEnvironment = helpers.resolveEnvironmentSetting(
-    environmentConfig,
-    env
-  );
+  currentEnvironment = helpers.resolveEnvironmentSetting(baseEnvConfig, env);
 
   if ($Language) {
     currentEnvironment.$Language = $Language;
