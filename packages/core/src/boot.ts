@@ -1,6 +1,6 @@
 import { autoYield, nextFrameYield } from '@esmj/task';
 import { Request as ExpressRequest } from 'express';
-import { PartialDeep, SetRequiredDeep } from 'type-fest';
+import { PartialDeep, RequiredDeep } from 'type-fest';
 import { AssetInfo } from 'webpack';
 
 import {
@@ -228,28 +228,7 @@ export interface Environment {
  * The optional properties are made required since the environmentFactory
  * sets default values for them.
  */
-export type ParsedEnvironment = SetRequiredDeep<
-  Environment,
-  | '$Debug'
-  | '$Language'
-  | '$Server'
-  | '$Server.concurrency'
-  | '$Server.logger'
-  | '$Server.port'
-  | '$Server.staticPath'
-  | '$Server.staticConcurrency'
-  | '$Server.overloadConcurrency'
-  | '$Server.clusters'
-  | '$Server.serveSPA'
-  | '$Server.serveSPA.allow'
-  | '$Server.serveSPA.blackList'
-  | '$Server.cache'
-  | '$Server.cache.enabled'
-  | '$Server.cache.cacheKeyGenerator'
-  | '$Server.cache.entryTtl'
-  | '$Server.cache.unusedEntryTtl'
-  | '$Server.cache.maxEntries'
->;
+export interface ParsedEnvironment extends RequiredDeep<Environment> {}
 
 /**
  * App Environment structure, used in ./server/config/environment.js
