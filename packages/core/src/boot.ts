@@ -253,9 +253,9 @@ export interface PageRendererSettings {
  * App settings for single env key.
  */
 export interface Settings {
-  $Http: {
-    defaultRequestOptions: Omit<HttpAgentRequestOptions, 'abortController'>;
-    cacheOptions: HttpAgentImplCacheOptions;
+  $Http?: {
+    defaultRequestOptions?: Omit<HttpAgentRequestOptions, 'abortController'>;
+    cacheOptions?: HttpAgentImplCacheOptions;
   };
   $Router?: {
     /**
