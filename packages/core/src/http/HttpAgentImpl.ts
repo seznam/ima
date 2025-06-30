@@ -425,17 +425,19 @@ export class HttpAgentImpl extends HttpAgent {
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
 
-      /**
-       * Cleans error response from data (abort controller, postProcessors, error cause response)
-       * that cannot be persisted before saving the error to the cache.
-       */
-      const pureError = this._cleanError(agentError);
-
       if (options.cacheFailedRequest) {
+        /**
+         * Cleans error response from data (abort controller, postProcessors, error cause response)
+         * that cannot be persisted before saving the error to the cache.
+         */
+        const pureError = this._cleanError(agentError);
+
         this._cache.set(cacheKey, pureError, options.ttl);
+
+        return Promise.reject(pureError);
       }
 
-      return Promise.reject(pureError);
+      return Promise.reject(agentError);
     }
   }
 
