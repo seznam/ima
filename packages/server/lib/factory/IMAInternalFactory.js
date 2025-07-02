@@ -12,7 +12,7 @@ module.exports = function IMAInternalFactory({
     DUMMY_APP: 'dummyApp',
   };
 
-  function _createDummyApp({ environment, language }) {
+  async function _createDummyApp({ environment, language }) {
     // TODO IMA@18 doc dummy APP
     // BETTER 404 detection
     const event = createEvent('createDummyApp', {
@@ -89,7 +89,8 @@ module.exports = function IMAInternalFactory({
       appMain.ima.getInitialPluginConfig(),
       appMain.ima.getInitialImaConfigFunctions()
     );
-    event.context.app.bootstrap.run(bootConfig);
+
+    await event.context.app.bootstrap.run(bootConfig);
 
     return event.context.app;
   }
@@ -135,7 +136,7 @@ module.exports = function IMAInternalFactory({
     res.locals.routeName = routeName;
   }
 
-  function _importAppMainSync({ res, environment, context = {} }) {
+  async function _importAppMainAsync({ res, environment, context = {} }) {
     let appMain = serverGlobal.has(GLOBAL.APP_MAIN)
       ? serverGlobal.get(GLOBAL.APP_MAIN)
       : appFactory();
@@ -150,7 +151,7 @@ module.exports = function IMAInternalFactory({
       serverGlobal.set(GLOBAL.APP_MAIN, appMain);
       serverGlobal.set(
         GLOBAL.DUMMY_APP,
-        _createDummyApp({ environment, language: res.locals.language })
+        await _createDummyApp({ environment, language: res.locals.language })
       );
 
       instanceRecycler.init(
@@ -214,7 +215,7 @@ module.exports = function IMAInternalFactory({
     return event.context.bootConfig;
   }
 
-  function _initApp(event) {
+  async function _initApp(event) {
     let { context } = event;
     let bootConfig = createBootConfig(event);
     context.app = instanceRecycler.getInstance();
@@ -228,7 +229,7 @@ module.exports = function IMAInternalFactory({
       context.appMain.ima.getInitialImaConfigFunctions()
     );
 
-    context.app.bootstrap.run(bootConfig);
+    await context.app.bootstrap.run(bootConfig);
 
     return context.app;
   }
@@ -242,7 +243,7 @@ module.exports = function IMAInternalFactory({
   return {
     _initApp,
     createBootConfig,
-    _importAppMainSync,
+    _importAppMainAsync,
     _createDummyApp,
     _getRouteInfo,
     _addImaToResponse,

@@ -1,3 +1,4 @@
+import { autoYield } from '@esmj/task';
 import * as helpers from '@ima/helpers';
 import {
   Response as ExpressResponse,
@@ -148,13 +149,20 @@ export class Bootstrap {
    * @param config The application environment
    *        configuration for the current environment.
    */
-  run(config: BootConfig) {
+  async run(config: BootConfig) {
     this._config = config;
 
     this._initSettings();
-    this._bindDependencies();
-    this._initServices();
+    await autoYield();
+
+    await this._bindDependencies();
+    await autoYield();
+
+    await this._initServices();
+    await autoYield();
+
     this._initRoutes();
+    await autoYield();
   }
 
   /**
@@ -164,14 +172,19 @@ export class Bootstrap {
    * @param name Plugin name.
    * @param plugin Plugin interface (object with init functions).
    */
-  initPlugin(name: string, plugin?: InitPluginConfig) {
+  async initPlugin(name: string, plugin?: InitPluginConfig) {
     if (!plugin) {
       return;
     }
 
     this._initPluginSettings(name, plugin);
+    await autoYield();
+
     this._bindPluginDependencies(name, plugin);
+    await autoYield();
+
     this._initPluginServices(plugin);
+    await autoYield();
   }
 
   /**
@@ -261,7 +274,7 @@ export class Bootstrap {
    * Binds the constants, service providers and class dependencies to the
    * object container.
    */
-  _bindDependencies() {
+  async _bindDependencies() {
     this._oc.setBindingState(BindingState.IMA);
     this._config.initBindIma(
       ns,
@@ -270,12 +283,15 @@ export class Bootstrap {
       BindingState.IMA
     );
 
-    this._config.plugins
-      .filter(({ plugin }) => typeof plugin.initBind === 'function')
-      .forEach(({ name, plugin }) => {
-        this._oc.setBindingState(BindingState.Plugin, name);
-        plugin.initBind!(ns, this._oc, this._config.bind!, false);
-      });
+    const filteredPlugins = this._config.plugins.filter(
+      ({ plugin }) => typeof plugin.initBind === 'function'
+    );
+
+    for (const { name, plugin } of filteredPlugins) {
+      this._oc.setBindingState(BindingState.Plugin, name);
+      plugin.initBind!(ns, this._oc, this._config.bind!, false);
+      await autoYield();
+    }
 
     this._oc.setBindingState(BindingState.App);
     this._config.initBindApp(
@@ -314,14 +330,17 @@ export class Bootstrap {
   /**
    * Initializes the basic application services.
    */
-  _initServices() {
+  async _initServices() {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
-    this._config.plugins
-      .filter(({ plugin }) => typeof plugin.initServices === 'function')
-      .forEach(({ plugin }) => {
-        plugin.initServices!(ns, this._oc, this._config.services, false);
-      });
+    const filteredPlugins = this._config.plugins.filter(
+      ({ plugin }) => typeof plugin.initServices === 'function'
+    );
+
+    for (const { plugin } of filteredPlugins) {
+      plugin.initServices!(ns, this._oc, this._config.services, false);
+      await autoYield();
+    }
 
     this._config.initServicesApp(ns, this._oc, this._config.services);
   }
