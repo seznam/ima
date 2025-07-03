@@ -196,12 +196,12 @@ export interface Environment {
       cacheKeyGenerator?: (req: ExpressRequest) => string;
 
       /**
-       * The maximum time a cache entry is kept.
+       * The maximum time a cache entry is kept. [ms]
        */
       entryTtl?: number;
 
       /**
-       * The time after which the unused entries are discarded.
+       * The time after which the unused entries are discarded. [ms]
        */
       unusedEntryTtl?: number;
 
@@ -260,19 +260,19 @@ export interface Settings {
   $Router?: {
     /**
      * Middleware execution timeout, see https://imajs.io/basic-features/routing/middlewares#execution-timeout
-     * for more information.
+     * for more information. [ms]
      */
     middlewareTimeout?: number;
     isSPARouted?: (url: string, action?: RouteAction) => boolean;
   };
   $Cache?: {
     /**
-     * Default time to live for cached value in ms.
+     * Default time to live for cached value. [ms]
      */
     ttl?: number;
 
     /**
-     * Enable cache for all applications.
+     * Turn on/off cache for all application. [ms]
      */
     enabled?: boolean;
   };
