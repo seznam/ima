@@ -266,14 +266,17 @@ export function bootClientApp(
   return app;
 }
 
-export function routeClientApp(app: {
-  bootstrap: Bootstrap;
-  oc: ObjectContainer;
-}) {
+export function routeClientApp(
+  app: {
+    bootstrap: Bootstrap;
+    oc: ObjectContainer;
+  },
+  routerRoot?: EventTarget
+) {
   const router = app.oc.get('$Router');
 
   return router
-    .listen()
+    .listen(routerRoot)
     .route(router.getPath())
     .catch((error: GenericError) => {
       if (typeof $IMA.fatalErrorHandler === 'function') {
@@ -287,7 +290,8 @@ export function routeClientApp(app: {
 }
 
 export async function reviveClientApp(
-  initialAppConfigFunctions: InitAppConfig
+  initialAppConfigFunctions: InitAppConfig,
+  routerRoot?: EventTarget
 ) {
   await autoYield();
   const root = _getRoot();
@@ -302,7 +306,7 @@ export async function reviveClientApp(
   app = bootClientApp(app, bootConfig);
 
   await autoYield();
-  return routeClientApp(app).then(pageInfo => {
+  return routeClientApp(app, routerRoot).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
 }
