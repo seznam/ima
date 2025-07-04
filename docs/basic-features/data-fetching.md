@@ -53,3 +53,20 @@ controller.abort();
 The time out requests still throw the same timeout error, however they are not canceled (aborted). This is the only difference between the two forementioned methods.
 
 :::
+
+## Caching failed requests
+
+As well as normal caching, `HttpAgent` also supports caching of failed requests using the `cacheFailedRequest` option.
+When enabled, the agent will cache the error when a request fails, and for each subsequent request with the same parameters, it will return the cached error response until the cache expires.
+
+The `cacheFailedRequest` option is disabled by default. You can enable it likewise: 
+
+
+```javascript
+httpAgent.get('<uri>', '<data>', {
+    cacheFailedRequest: true,
+});
+```
+
+This option is useful to keep the responses consistent throughout the server and client side, and by that prevent mishmash-dom errors, when the page renders differently on server and client.
+
