@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time } from '@ima/dev-utils/logger';
+import { logger, time, printTime } from '@ima/dev-utils/logger';
 import anymatch from 'anymatch';
 import chalk from 'chalk';
 import chokidar from 'chokidar';
@@ -56,7 +56,7 @@ export async function parsePkgJson(basePath: string): Promise<{
 }
 
 function errorHandler(error: Error) {
-  logger.error('An error occurred while wathing files');
+  logger.error('An error occurred while watching files');
   console.error(error);
 }
 
@@ -187,6 +187,7 @@ export async function watch(args: Arguments) {
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
+        const fileName = path.basename(filePath);
 
         batch(async () => {
           switch (eventName) {
@@ -203,6 +204,9 @@ export async function watch(args: Arguments) {
                   const outputContextPath = path.join(outputPath, contextPath);
 
                   if (fs.existsSync(outputContextPath)) {
+                    logger.write(
+                      `${printTime()} ${chalk.green('Unlink')}: ${fileName}`
+                    );
                     await fs.promises.rm(outputContextPath, {
                       recursive: true,
                     });
@@ -210,6 +214,7 @@ export async function watch(args: Arguments) {
                 },
                 cwd
               );
+
               break;
 
             default:
@@ -235,6 +240,16 @@ export async function watch(args: Arguments) {
         pkgJson.name
       );
       const linkedDistPath = path.join(linkedBasePath, distBaseDir);
+
+      // Create package.json link to be able to link new packages or changes package keys (like bin, main, etc.)
+      if (!config.additionalWatchPaths) {
+        config.additionalWatchPaths = ['./package.json'];
+      } else {
+        config.additionalWatchPaths = [
+          ...config.additionalWatchPaths,
+          './package.json',
+        ];
+      }
 
       chokidar
         .watch(

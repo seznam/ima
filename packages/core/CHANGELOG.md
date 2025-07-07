@@ -1,5 +1,29 @@
 # Change Log
 
+## 19.6.5
+
+### Patch Changes
+
+- 92327d5: Update @esmj/task module to the newest version, which support scheduler.yield for autoYield and requestAnimationFrame for nextFrame.
+
+## 19.6.4
+
+### Patch Changes
+
+- 3a43baf: add getMethod and getRequest methods to Request class; add getResponse method to Response class
+
+## 19.6.3
+
+### Patch Changes
+
+- 5dd3fe5: fix: update event listener options type to AddEventListenerOptions
+
+## 19.6.2
+
+### Patch Changes
+
+- 11ac5cc: Fixed an issue where scoped event listeners were not properly removed.
+
 ## 19.6.1
 
 ### Patch Changes

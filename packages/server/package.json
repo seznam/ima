@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "19.5.0",
+  "version": "19.5.2",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -33,13 +33,11 @@
     "memoize-one": "^6.0.0",
     "winston": "^3.8.2"
   },
-  "devDependencies": {
-    "express": "^4.17.3"
-  },
   "peerDependencies": {
     "@ima/core": ">=19.0.0",
     "@ima/dev-utils": ">=19.0.0",
-    "@ima/helpers": ">=19.0.3"
+    "@ima/helpers": ">=19.0.3",
+    "express": ">=4.0.0"
   },
   "publishConfig": {
     "access": "public",
