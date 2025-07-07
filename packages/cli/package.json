@@ -75,8 +75,7 @@
     "webpack": "^5.75.0",
     "webpack-dev-middleware": "^6.0.1",
     "webpack-hot-middleware": "^2.25.3",
-    "yargs": "^17.5.1",
-    "node-fetch": "^2.6.9"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.0",
