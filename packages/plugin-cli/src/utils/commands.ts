@@ -241,6 +241,16 @@ export async function watch(args: Arguments) {
       );
       const linkedDistPath = path.join(linkedBasePath, distBaseDir);
 
+      // Create package.json link to be able to link new packages or changes package keys (like bin, main, etc.)
+      if (!config.additionalWatchPaths) {
+        config.additionalWatchPaths = ['./package.json'];
+      } else {
+        config.additionalWatchPaths = [
+          ...config.additionalWatchPaths,
+          './package.json',
+        ];
+      }
+
       chokidar
         .watch(
           [
