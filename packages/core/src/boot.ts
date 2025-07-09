@@ -249,14 +249,14 @@ export function getClientBootConfig(
   };
 }
 
-export function bootClientApp(
+export async function bootClientApp(
   app: {
     bootstrap: Bootstrap;
     oc: ObjectContainer;
   },
   bootConfig: BootConfig
 ) {
-  app.bootstrap.run(bootConfig);
+  await app.bootstrap.run(bootConfig);
 
   const cache = app.oc.get('$Cache');
   cache.deserialize(($IMA.Cache || {}) as SerializedData);
@@ -297,7 +297,7 @@ export async function reviveClientApp(
   const bootConfig = getClientBootConfig(initialAppConfigFunctions);
 
   await autoYield();
-  app = bootClientApp(app, bootConfig);
+  app = await bootClientApp(app, bootConfig);
 
   await autoYield();
   return routeClientApp(app).then(pageInfo => {

@@ -30,7 +30,7 @@ module.exports = function serverAppFactory({
   const {
     _initApp,
     createBootConfig,
-    _importAppMainSync,
+    _importAppMainAsync,
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,
@@ -75,7 +75,7 @@ module.exports = function serverAppFactory({
     renderStaticClientErrorPage,
     urlParser,
     _initApp,
-    _importAppMainSync,
+    _importAppMainAsync,
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,

@@ -18,7 +18,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
     "@ima/cli": "^19.0.1",
-    "@ima/plugin-testing-integration": "4.1.0",
+    "@ima/plugin-testing-integration": "5.2.0",
     "@ima/testing-library": "^19.8.0",
     "@swc/jest": "^0.2.20",
     "@testing-library/dom": "^10.4.0",
