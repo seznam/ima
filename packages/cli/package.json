@@ -24,7 +24,7 @@
     "ima": "./dist/bin/ima.js"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },

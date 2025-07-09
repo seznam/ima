@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
@@ -89,7 +89,7 @@ export function findRules(
  */
 export function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
-): Environment {
+): ParsedEnvironment {
   return environmentFactory({ applicationFolder: rootDir });
 }
 
