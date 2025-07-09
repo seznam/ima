@@ -10,6 +10,7 @@ module.exports = function hooksFactory({
   urlParser,
   _initApp,
   _importAppMainAsync,
+  _clearApp,
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
@@ -351,19 +352,8 @@ module.exports = function hooksFactory({
       res.send(context.response.content);
     });
 
-    emitter.on(Event.AfterResponse, async ({ context }) => {
-      if (context.app) {
-        const { oc } = context.app;
-        oc.get('$Dispatcher').clear();
-        oc.get('$Cache').clear();
-
-        oc.get('$PageRenderer').unmount();
-        oc.get('$PageManager').destroy();
-        oc.clear();
-
-        instanceRecycler.clearInstance(context.app);
-        context.app = null;
-      }
+    emitter.on(Event.AfterResponse, async event => {
+      _clearApp(event);
     });
   }
 

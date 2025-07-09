@@ -29,6 +29,7 @@ module.exports = function serverAppFactory({
 
   const {
     _initApp,
+    _clearApp,
     createBootConfig,
     _importAppMainAsync,
     _addImaToResponse,
@@ -76,6 +77,7 @@ module.exports = function serverAppFactory({
     urlParser,
     _initApp,
     _importAppMainAsync,
+    _clearApp,
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,
@@ -190,10 +192,7 @@ module.exports = function serverAppFactory({
       error.cause = event.error;
       const { res, context } = event;
 
-      if (context.app) {
-        instanceRecycler.clearInstance(context.app);
-        context.app = null;
-      }
+      _clearApp(event);
 
       if (res.headersSent) {
         return context.response;

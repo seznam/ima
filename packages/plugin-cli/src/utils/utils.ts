@@ -82,8 +82,8 @@ export function createBatcher(title: string, timeout = 150) {
 
       logger.write(
         `${printTime()} ${title} ${chalk.green.bold(
-          `✓ ${stats['added']}`
-        )} ${chalk.black('|')} ${chalk.red.bold(`⛌ ${stats['deleted']}`)}`
+          `✓ ${stats['added']} added`
+        )} ${chalk.black('|')} ${chalk.red.bold(`⛌ ${stats['deleted']} deleted`)}`
       );
     }, timeout);
   };

@@ -65,7 +65,7 @@ export class HomeController extends AbstractController {
 
   /**
    * Callback used to configure the meta attribute manager. The method is called
-   * after the the controller's state has been patched with the loaded
+   * after the controller's state has been patched with the loaded
    * resources, the view has been rendered and (if at the client-side) the
    * controller has been provided with the rendered view.
    *

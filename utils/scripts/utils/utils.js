@@ -115,6 +115,11 @@ function createWatcher(name, baseDir, destFolder, options = {}) {
           });
 
           break;
+
+        // Causes issues with unlinking files
+        // case 'unlink':
+        //   fs.unlink(dest, callback);
+        //   break;
       }
 
       // Restart ima server in host application

@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.5.2
+
+### Patch Changes
+
+- 1054755: Bump versions with support for express>=4
+
+## 19.5.1
+
+### Patch Changes
+
+- 2b2878e: The ima app instance must be always cleared before storing for next usage. We fixed edge case specific error which could lead to zombie app.
+
 ## 19.5.0
 
 ### Minor Changes

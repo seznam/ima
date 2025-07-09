@@ -240,8 +240,24 @@ module.exports = function IMAInternalFactory({
     return router.route(router.getPath());
   }
 
+  function _clearApp({ context }) {
+    if (context.app) {
+      const { oc } = context.app;
+      oc.get('$Dispatcher').clear();
+      oc.get('$Cache').clear();
+
+      oc.get('$PageRenderer').unmount();
+      oc.get('$PageManager').destroy();
+      oc.clear();
+
+      instanceRecycler.clearInstance(context.app);
+      context.app = null;
+    }
+  }
+
   return {
     _initApp,
+    _clearApp,
     createBootConfig,
     _importAppMainAsync,
     _createDummyApp,

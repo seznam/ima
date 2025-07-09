@@ -1,5 +1,45 @@
 # Change Log
 
+## 19.7.0
+
+### Minor Changes
+
+- 25a1777: Added support for custom event targets in Router's listen methods. This enables better control over routing behavior by allowing you to:
+
+  - Scope navigation handling to specific parts of your application
+  - Handle multiple independent routed sections on a page
+  - Better integrate IMA.js routing into existing applications
+
+  Changes:
+
+  - Modified `listen(target?: EventTarget)` method to allow for optional target
+  - Modified `unlisten(target?: EventTarget)` method to allow for optional target
+  - Added new `unlistenAll()` method to cleanup all event listeners at once
+
+## 19.6.5
+
+### Patch Changes
+
+- 92327d5: Update @esmj/task module to the newest version, which support scheduler.yield for autoYield and requestAnimationFrame for nextFrame.
+
+## 19.6.4
+
+### Patch Changes
+
+- 3a43baf: add getMethod and getRequest methods to Request class; add getResponse method to Response class
+
+## 19.6.3
+
+### Patch Changes
+
+- 5dd3fe5: fix: update event listener options type to AddEventListenerOptions
+
+## 19.6.2
+
+### Patch Changes
+
+- 11ac5cc: Fixed an issue where scoped event listeners were not properly removed.
+
 ## 19.6.1
 
 ### Patch Changes
