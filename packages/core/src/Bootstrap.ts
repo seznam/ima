@@ -152,17 +152,17 @@ export class Bootstrap {
   async run(config: BootConfig) {
     this._config = config;
 
+    await autoYield();
     this._initSettings();
-    await autoYield();
 
+    await autoYield();
     await this._bindDependencies();
-    await autoYield();
 
+    await autoYield();
     await this._initServices();
-    await autoYield();
 
-    this._initRoutes();
     await autoYield();
+    this._initRoutes();
   }
 
   /**
@@ -177,14 +177,14 @@ export class Bootstrap {
       return;
     }
 
+    await autoYield();
     this._initPluginSettings(name, plugin);
-    await autoYield();
 
+    await autoYield();
     this._bindPluginDependencies(name, plugin);
-    await autoYield();
 
-    this._initPluginServices(plugin);
     await autoYield();
+    this._initPluginServices(plugin);
   }
 
   /**
@@ -288,9 +288,9 @@ export class Bootstrap {
     );
 
     for (const { name, plugin } of filteredPlugins) {
+      await autoYield();
       this._oc.setBindingState(BindingState.Plugin, name);
       plugin.initBind!(ns, this._oc, this._config.bind!, false);
-      await autoYield();
     }
 
     this._oc.setBindingState(BindingState.App);
@@ -338,8 +338,8 @@ export class Bootstrap {
     );
 
     for (const { plugin } of filteredPlugins) {
-      plugin.initServices!(ns, this._oc, this._config.services, false);
       await autoYield();
+      plugin.initServices!(ns, this._oc, this._config.services, false);
     }
 
     this._config.initServicesApp(ns, this._oc, this._config.services);
