@@ -35,6 +35,7 @@
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky",
     "release": "npm run release:prepare && npm run release:push",
+    "release:create-releases": "node utils/scripts/create-releases.mjs",
     "release:prepare": "npm run check:uncommited:changes && changeset version && npm i --package-lock-only --ignore-scripts",
     "release:push": "git add .changeset package-lock.json packages/*/CHANGELOG.md packages/*/package.json && git commit -m 'Publish' && changeset tag && git push --follow-tags",
     "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
@@ -54,6 +55,8 @@
     "**/*.{css,less}": "stylelint"
   },
   "devDependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
     "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.26.5",
     "@babel/preset-env": "^7.26.0",
