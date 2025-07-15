@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
@@ -32,7 +32,7 @@ import {
  * (all changes in server/ folder), to automatically restart the application
  * server in case any change is detected.
  */
-function startNodemon(args: ImaCliArgs, environment: Environment) {
+function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
   nodemon({

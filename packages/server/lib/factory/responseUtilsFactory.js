@@ -57,7 +57,6 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
         settings.$Protocol && encodeHTMLEntities(settings.$Protocol)
       }";
       $IMA.$Host = "${settings.$Host && encodeHTMLEntities(settings.$Host)}";
-      $IMA.$Path = "${settings.$Path && encodeHTMLEntities(settings.$Path)}";
       $IMA.$Root = "${settings.$Root && encodeHTMLEntities(settings.$Root)}";
       $IMA.$LanguagePartPath = "${
         settings.$LanguagePartPath &&
