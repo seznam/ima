@@ -26,7 +26,7 @@ export interface HttpAgentImplConfig {
  */
 export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<HttpAgentResponse<unknown>>;
+  protected _cache: Cache<HttpAgentResponse<unknown> | GenericError>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -289,7 +289,13 @@ export class HttpAgentImpl extends HttpAgent {
     }
 
     if (this._cache.has(cacheKey)) {
-      const cacheData = this._cache.get(cacheKey) as HttpAgentResponse<B>;
+      const cacheData = this._cache.get(cacheKey) as
+        | HttpAgentResponse<B>
+        | GenericError;
+
+      if (cacheData instanceof GenericError) {
+        return Promise.reject(cacheData);
+      }
 
       return Promise.resolve<HttpAgentResponse<B>>(cacheData);
     }
@@ -418,6 +424,18 @@ export class HttpAgentImpl extends HttpAgent {
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       const agentError = new GenericError(errorMessage, errorParams);
+
+      if (options.cacheFailedRequest) {
+        /**
+         * Cleans error response from data (abort controller, postProcessors, error cause response)
+         * that cannot be persisted before saving the error to the cache.
+         */
+        const pureError = this._cleanError(agentError);
+
+        this._cache.set(cacheKey, pureError, options.ttl);
+
+        return Promise.reject(pureError);
+      }
 
       return Promise.reject(agentError);
     }
@@ -560,5 +578,36 @@ export class HttpAgentImpl extends HttpAgent {
     }
 
     return pureResponse;
+  }
+
+  /**
+   * Create a copy of agentError without AbortController, AbortController signal, postProcessors and error cause Response.
+   * Setting agentResponse with AbortController or signal or postProcessors or error cause response into cache would result in crashing.
+   *
+   * @param agentError the error from the server.
+   *
+   * @return Pure copy of agentError without non-persistent data.
+   */
+  _cleanError(
+    agentError: GenericError<HttpProxyErrorParams>
+  ): GenericError<HttpProxyErrorParams> {
+    const params = agentError.getParams();
+    const { signal, ...fetchOptions } = params.options.fetchOptions || {};
+    const { abortController, postProcessors, ...options } =
+      params.options || {};
+    options.fetchOptions = fetchOptions;
+
+    if (!options.keepSensitiveHeaders) {
+      options.fetchOptions.headers = {};
+    }
+
+    const safeParams = {
+      ...params,
+      options: { ...options },
+    };
+
+    const serializedParams = JSON.parse(JSON.stringify(safeParams));
+
+    return new GenericError(agentError.message, serializedParams);
   }
 }

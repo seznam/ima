@@ -33,6 +33,7 @@ export interface HttpAgentRequestOptions {
   repeatRequest: number;
   fetchOptions: ImaRequestInit;
   cache: boolean;
+  cacheFailedRequest?: boolean;
   responseType?: 'json' | 'blob' | 'text' | 'arrayBuffer' | 'formData';
   postProcessors?: (<B = unknown>(
     response: HttpAgentResponse<B>
