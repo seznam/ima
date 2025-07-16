@@ -53,6 +53,6 @@ jobs:
         run: npm run release:publish
 
       - name: Create GitHub Releases
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run release:create-releases
+        uses: seznam/changeset-create-release@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
