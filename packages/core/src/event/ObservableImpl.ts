@@ -80,7 +80,7 @@ export class ObservableImpl extends Observable {
   /**
    * @inheritDoc
    */
-  registerPersistenEvent(event: keyof DispatcherEventsMap | string) {
+  registerPersistentEvent(event: keyof DispatcherEventsMap | string) {
     this._persistentEvents.add(event);
 
     return this;
@@ -93,7 +93,7 @@ export class ObservableImpl extends Observable {
     event: keyof DispatcherEventsMap | string,
     observer: DispatcherListener<any>,
     scope?: unknown
-  ) {
+  ): this {
     if (!this._observers.has(event)) {
       this._observers.set(event, new Map());
     }
@@ -120,7 +120,7 @@ export class ObservableImpl extends Observable {
     event: keyof DispatcherEventsMap | string,
     observer: DispatcherListener<any>,
     scope?: unknown
-  ) {
+  ): this {
     if (!this._observers.has(event)) {
       return this;
     }
