@@ -214,8 +214,7 @@ export abstract class AbstractPageManager extends PageManager {
     await this._initPageSource();
 
     const response = await this._loadPageSource();
-    await this._runPostManageHandlers(this._previousManagedPage, action);
-    this._previousManagedPage = this._getInitialManagedPage();
+    await this._runPostManageHandlers(this._previousManagedPage, action);   
 
     return response;
   }
@@ -223,6 +222,8 @@ export abstract class AbstractPageManager extends PageManager {
   postManage() {
     setTimeout(() => {
       this._managedPage.state.page.resolve();
+      this._previousManagedPage.state.page.resolve();
+      this._previousManagedPage = this._getInitialManagedPage();
     }, 0);
   }
 
