@@ -89,6 +89,18 @@ export class ObservableImpl extends Observable {
   /**
    * @inheritDoc
    */
+  registerPersistenEvent(event: keyof DispatcherEventsMap | string) {
+    console.warn(
+      'registerPersistenEvent is deprecated, please use the correctly-named registerPersistentEvent instead.'
+    );
+    this.registerPersistentEvent(event);
+
+    return this;
+  }
+
+  /**
+   * @inheritDoc
+   */
   subscribe(
     event: keyof DispatcherEventsMap | string,
     observer: DispatcherListener<any>,

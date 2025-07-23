@@ -49,6 +49,17 @@ export abstract class Observable {
   }
 
   /**
+   * @deprecated Use the correctly spelled `registerPersistentEvent` method instead.
+   *
+   * @param event
+   * @returns
+   */
+  registerPersistenEvent<E extends keyof DispatcherEventsMap>(event: E): this;
+  registerPersistenEvent(event: string): this {
+    return this;
+  }
+
+  /**
    * Subscribes an observer to a specific event. When the event is dispatched,
    * the observer will be notified and executed within the provided scope.
    * If the event has already occurred, the observer will be immediately
