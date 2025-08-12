@@ -109,6 +109,7 @@ export default class PresetEntry extends React.PureComponent {
   }
 
   onClick(e) {
+    console.log('onClick', e);
     e.preventDefault();
     e.stopPropagation();
 

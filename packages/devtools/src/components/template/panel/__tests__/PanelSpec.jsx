@@ -1,22 +1,24 @@
 /* eslint-disable import/order */
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { shallow } from 'enzyme';
 
 import { Actions } from '@/constants';
 
-jest.mock('@/utils');
+vi.mock('@/utils');
 import * as utils from '@/utils';
 
 import Panel from '../Panel';
 
 describe('Panel template', () => {
   const props = {
-    alive: jest.fn(),
-    dead: jest.fn(),
-    unsupported: jest.fn(),
-    reload: jest.fn(),
-    clearEntries: jest.fn(),
-    selectNext: jest.fn(),
-    selectPrevious: jest.fn(),
+    alive: vi.fn(),
+    dead: vi.fn(),
+    unsupported: vi.fn(),
+    reload: vi.fn(),
+    clearEntries: vi.fn(),
+    selectNext: vi.fn(),
+    selectPrevious: vi.fn(),
   };
 
   let wrapper, instance, disconnectCallback;
@@ -24,31 +26,31 @@ describe('Panel template', () => {
   const createPort = ({ name }) => ({
     name,
     onMessage: {
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
     },
-    disconnect: jest.fn(),
+    disconnect: vi.fn(),
     onDisconnect: {
-      addListener: jest
+      addListener: vi
         .fn()
         .mockImplementation(callback => (disconnectCallback = callback)),
     },
   });
 
-  global.chrome = {
+  globalThis.chrome = {
     runtime: {
-      connect: jest.fn().mockImplementation(details => createPort(details)),
+      connect: vi.fn().mockImplementation(details => createPort(details)),
     },
   };
 
-  jest.spyOn(utils, 'getCurrentTab').mockImplementation().mockResolvedValue({
+  vi.spyOn(utils, 'getCurrentTab').mockImplementation().mockResolvedValue({
     tabId: 123,
   });
 
   beforeEach(() => {
     wrapper = shallow(<Panel {...props} />);
     instance = wrapper.instance();
-    jest.spyOn(instance, 'setState').mockImplementation();
+    vi.spyOn(instance, 'setState').mockImplementation();
   });
 
   it('should render with loader', () => {
@@ -100,8 +102,8 @@ describe('Panel template', () => {
 
   describe('componentWillUnmount', () => {
     it('should disconnect port and remove listeners', () => {
-      jest.spyOn(window, 'removeEventListener').mockImplementation();
-      jest.spyOn(instance.port, 'disconnect').mockImplementation();
+      vi.spyOn(window, 'removeEventListener').mockImplementation();
+      vi.spyOn(instance.port, 'disconnect').mockImplementation();
 
       instance.componentWillUnmount();
 
@@ -160,8 +162,8 @@ describe('Panel template', () => {
     });
 
     it('should cache and add message on message action', () => {
-      jest.spyOn(instance.cachedEntries, 'push').mockImplementation();
-      jest.spyOn(instance, '_batchAddEntries').mockImplementation();
+      vi.spyOn(instance.cachedEntries, 'push').mockImplementation();
+      vi.spyOn(instance, '_batchAddEntries').mockImplementation();
 
       instance.onMessage({ action: Actions.MESSAGE });
 

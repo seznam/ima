@@ -38,6 +38,7 @@
   },
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix",
     "stylelint": "stylelint './**/*.less'"
   },
   "dependencies": {

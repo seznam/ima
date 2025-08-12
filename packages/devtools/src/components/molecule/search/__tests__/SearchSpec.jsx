@@ -1,12 +1,13 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import Search from '../Search';
 
 describe('Search molecule', () => {
   const props = {
-    onSelect: jest.fn(),
-    clearEntries: jest.fn(),
-    setSearchQuery: jest.fn(),
+    onSelect: vi.fn(),
+    clearEntries: vi.fn(),
+    setSearchQuery: vi.fn(),
     searchQuery: 'search query',
   };
 
@@ -15,7 +16,7 @@ describe('Search molecule', () => {
   beforeEach(() => {
     wrapper = shallow(<Search {...props} />);
     instance = wrapper.instance();
-    jest.spyOn(instance, 'setState').mockImplementation();
+    vi.spyOn(instance, 'setState').mockImplementation();
   });
 
   it('should have .input--invalid class on input with invalid search queries', () => {
@@ -26,7 +27,7 @@ describe('Search molecule', () => {
   });
 
   it('should update state query on input change', () => {
-    jest.spyOn(instance, 'onChange').mockImplementation();
+    vi.spyOn(instance, 'onChange').mockImplementation();
     instance.forceUpdate();
 
     wrapper
@@ -42,7 +43,7 @@ describe('Search molecule', () => {
   });
 
   it('should clear query on clear button click', () => {
-    jest.spyOn(instance, 'onClear').mockImplementation();
+    vi.spyOn(instance, 'onClear').mockImplementation();
     instance.forceUpdate();
 
     wrapper.find('button').at(2).simulate('click');
@@ -76,7 +77,7 @@ describe('Search molecule', () => {
       expect(instance.state.query).toBe('search query');
 
       instance.onClear({
-        preventDefault: jest.fn(),
+        preventDefault: vi.fn(),
       });
 
       expect(instance.props.setSearchQuery.mock.calls).toHaveLength(1);

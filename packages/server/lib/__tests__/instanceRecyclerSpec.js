@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 const instanceRecycler = require('../instanceRecycler.js');
 
 describe('instranceRecycler', () => {

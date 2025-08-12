@@ -31,7 +31,8 @@
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "to-aop": "^0.5.4"

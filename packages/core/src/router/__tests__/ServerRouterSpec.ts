@@ -1,4 +1,5 @@
 import { toMockedInstance } from 'to-mock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Dispatcher } from '../../event/Dispatcher';
 import { PageManager } from '../../page/manager/PageManager';
@@ -38,7 +39,7 @@ describe('ima.core.router.ServerRouter', () => {
   });
 
   it('should be return actual path', () => {
-    jest.spyOn(request, 'getPath').mockReturnValue('');
+    vi.spyOn(request, 'getPath').mockReturnValue('');
 
     router.getPath();
 
@@ -52,7 +53,7 @@ describe('ima.core.router.ServerRouter', () => {
       headers: { 'Custom-header': 'Some custom value' },
     };
 
-    jest.spyOn(response, 'redirect').mockImplementation();
+    vi.spyOn(response, 'redirect').mockImplementation();
 
     router.redirect(url, options);
 

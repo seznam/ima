@@ -1,4 +1,5 @@
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SerialBatch } from '../../../execution/SerialBatch';
 import { ManagedPage, PageAction } from '../../PageTypes';
@@ -10,16 +11,16 @@ describe('ima.core.page.handler.PageHandlerRegistry', () => {
   const pageManagerHandler: PageHandler = toMockedInstance(PageHandler);
 
   beforeEach(() => {
-    jest
-      .spyOn(pageManagerHandler, 'handlePreManagedState')
-      .mockImplementation(() => {
+    vi.spyOn(pageManagerHandler, 'handlePreManagedState').mockImplementation(
+      () => {
         return;
-      });
-    jest
-      .spyOn(pageManagerHandler, 'handlePostManagedState')
-      .mockImplementation(() => {
+      }
+    );
+    vi.spyOn(pageManagerHandler, 'handlePostManagedState').mockImplementation(
+      () => {
         return;
-      });
+      }
+    );
     registry = new PageHandlerRegistry(pageManagerHandler);
     registry.init();
   });

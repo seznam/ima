@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { Namespace } from '../Namespace';
 
 describe('namespace', () => {

@@ -8,6 +8,7 @@ import {
 } from '@ima/core';
 import * as Helper from '@ima/helpers';
 import { toMockedInstance } from 'to-mock';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { AbstractPureComponent } from '../../component/AbstractPureComponent';
 import { BlankManagedRootView } from '../../component/BlankManagedRootView';

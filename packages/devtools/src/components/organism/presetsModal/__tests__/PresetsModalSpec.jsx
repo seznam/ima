@@ -1,12 +1,14 @@
 /* eslint-disable import/order */
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { shallow } from 'enzyme';
 
-jest.mock('@/utils');
+vi.mock('@/utils');
 import * as settings from '@/utils';
 
 import PresetsModal from '../PresetsModal';
 
-jest.mock('easy-uid');
+vi.mock('easy-uid');
 // eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
@@ -14,7 +16,7 @@ describe('PresetsModal organism', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn(),
+    preventDefault: vi.fn(),
   };
 
   const props = {
@@ -27,10 +29,10 @@ describe('PresetsModal organism', () => {
       },
     },
     selectedPresetId: '0',
-    addPreset: jest.fn(),
-    selectPreset: jest.fn(),
-    alertSuccess: jest.fn(),
-    onClose: jest.fn(),
+    addPreset: vi.fn(),
+    selectPreset: vi.fn(),
+    alertSuccess: vi.fn(),
+    onClose: vi.fn(),
     opened: true,
   };
 
@@ -42,7 +44,7 @@ describe('PresetsModal organism', () => {
 
   describe('onCreatePreset', () => {
     it('should call props.addPreset with blank preset', () => {
-      jest
+      vi
         .spyOn(instance, '_createPreset')
         .mockImplementation()
         .mockReturnValue('newPreset');
@@ -58,7 +60,7 @@ describe('PresetsModal organism', () => {
 
   describe('onSaveChanges', () => {
     it('should save changes to chrome.local.storage', () => {
-      jest.spyOn(settings, 'setSettings').mockImplementation();
+      vi.spyOn(settings, 'setSettings').mockImplementation();
 
       instance.onSaveChanges(event);
 

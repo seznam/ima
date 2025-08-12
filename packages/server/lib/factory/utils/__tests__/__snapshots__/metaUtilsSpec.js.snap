@@ -1,4 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`metaUtils > renderMeta > should generate meta tags while filtering out invalid values 1`] = `"<title>Page title</title><link data-ima-meta rel="stylesheet" href="/media/examples/link-element-example.css" /><meta data-ima-meta name="description" content="meta description" /><meta data-ima-meta name="keywords" content="ima core cli" data-custom-attr="custom-attribute" /><meta data-ima-meta property="og:description" /><meta data-ima-meta property="og:keywords" content="ima core cli" data-custom-attr="custom-attribute" />"`;
+
+exports[`metaUtils > renderMeta > should generate meta tags while prevent XSS 1`] = `"<title>&lt;script>alert(1)&lt;/script></title><link data-ima-meta rel="stylesheet" href="&quot;>&lt;script>alert(1)&lt;/script>" /><meta data-ima-meta name="description" content="&quot;>&lt;script>alert(1)&lt;/script>" /><meta data-ima-meta name="keywords" content="&quot;>&lt;script>alert(1)&lt;/script>" data-custom-attr="custom-attribute" /><meta data-ima-meta name="&quot;>&lt;script>alert(1)&lt;/script>" content="&quot;>&lt;script>alert(1)&lt;/script>" data-custom-attr="custom-attribute" /><meta data-ima-meta property="og:description" /><meta data-ima-meta property="og:keywords" content="&quot;>&lt;script>alert(1)&lt;/script>" data-custom-attr="custom-attribute" />"`;
 
 exports[`metaUtils renderMeta should generate meta tags while filtering out invalid values 1`] = `"<title>Page title</title><link data-ima-meta rel="stylesheet" href="/media/examples/link-element-example.css" /><meta data-ima-meta name="description" content="meta description" /><meta data-ima-meta name="keywords" content="ima core cli" data-custom-attr="custom-attribute" /><meta data-ima-meta property="og:description" /><meta data-ima-meta property="og:keywords" content="ima core cli" data-custom-attr="custom-attribute" />"`;
 

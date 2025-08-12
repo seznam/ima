@@ -3,6 +3,7 @@ import {
   setGlobalKeepUnmock,
   setGlobalMockMethod,
 } from 'to-mock';
+import { vi } from 'vitest';
 
-setGlobalMockMethod(jest.fn);
+setGlobalMockMethod(vi.fn);
 setGlobalKeepUnmock(objectKeepUnmock);

@@ -1,4 +1,5 @@
 import { toMockedInstance } from 'to-mock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { PageStateManagerDecorator } from '../PageStateManagerDecorator';
@@ -23,7 +24,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should call method clear', () => {
-    jest.spyOn(pageStateManager, 'clear').mockImplementation();
+    vi.spyOn(pageStateManager, 'clear').mockImplementation();
 
     decoratedPageStateManager.clear();
 
@@ -31,7 +32,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should return current page state', () => {
-    jest.spyOn(pageStateManager, 'getState').mockReturnValue(state);
+    vi.spyOn(pageStateManager, 'getState').mockReturnValue(state);
 
     decoratedPageStateManager.getState();
 
@@ -39,7 +40,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should return all history of states', () => {
-    jest.spyOn(pageStateManager, 'getAllStates').mockReturnValue([state]);
+    vi.spyOn(pageStateManager, 'getAllStates').mockReturnValue([state]);
 
     expect(decoratedPageStateManager.getAllStates()).toStrictEqual([state]);
   });
@@ -66,7 +67,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
         allow: 0,
       };
 
-      jest.spyOn(pageStateManager, 'setState').mockImplementation();
+      vi.spyOn(pageStateManager, 'setState').mockImplementation();
 
       decoratedPageStateManager.setState(patchState);
 

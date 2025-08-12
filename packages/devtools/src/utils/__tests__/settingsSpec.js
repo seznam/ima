@@ -1,19 +1,21 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import defaultSettings from '../defaultSettings';
 import { getSettings, setSettings } from '../settings';
 
 let settingsStorage = {};
 
 beforeEach(() => {
-  global.chrome = {
+  globalThis.chrome = {
     storage: {
       local: {
-        set: jest.fn().mockImplementation(value => {
+        set: vi.fn().mockImplementation(value => {
           return (settingsStorage = {
             ...settingsStorage,
             ...value,
           });
         }),
-        get: jest.fn().mockImplementation((key, callback) => {
+        get: vi.fn().mockImplementation((key, callback) => {
           callback(settingsStorage);
         }),
       },

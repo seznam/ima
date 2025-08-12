@@ -1,4 +1,5 @@
 import { getContextValue, renderHookWithContext } from '@ima/testing-library';
+import { describe, expect, it, vi } from 'vitest';
 
 import { useEventBus } from '../eventBus';
 
@@ -10,15 +11,15 @@ import { useEventBus } from '../eventBus';
 function mockEventBus(contextValue) {
   let listener = null;
   const eventBus = {
-    fire: jest.fn(() => {
+    fire: vi.fn(() => {
       if (listener) {
         listener();
       }
     }),
-    listen: jest.fn((_, __, fn) => {
+    listen: vi.fn((_, __, fn) => {
       listener = fn;
     }),
-    unlisten: jest.fn(),
+    unlisten: vi.fn(),
   };
 
   contextValue.$Utils.$EventBus = eventBus;
@@ -34,7 +35,7 @@ describe('useEventBus', () => {
   });
 
   it('should call listen/unlisten/fire methods', async () => {
-    const listener = jest.fn();
+    const listener = vi.fn();
     const listenerArgs = ['eventTarget', 'eventName'];
     const contextValue = await getContextValue();
 

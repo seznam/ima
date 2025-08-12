@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { SerialBatch } from '../SerialBatch';
 
 describe('ima.core.execution.AbstractExecution', () => {
@@ -34,7 +36,7 @@ describe('ima.core.execution.AbstractExecution', () => {
 
   describe('_validateJob() method', () => {
     it("should validate a job before it's appended", () => {
-      const jobValidationSpy = jest.spyOn(execution, '_validateJob');
+      const jobValidationSpy = vi.spyOn(execution, '_validateJob');
 
       execution.append(asyncFunction);
 

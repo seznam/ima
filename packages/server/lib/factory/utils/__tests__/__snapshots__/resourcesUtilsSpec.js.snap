@@ -1,4 +1,235 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`resourcesUtils > prepareDefaultResources > should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
+{
+  "esScripts": [
+    [
+      "/static/js.es/app.client.2106a34c6b8bbad8.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/locale/en.371127fdbfbe93d2.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/vendors.a873907f25297544.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+  ],
+  "esStyles": [
+    [
+      "/static/css/app.d0ad44d05f82db5f.css",
+      {
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
+  "scripts": [
+    [
+      "/static/js/app.client.8dc14fd2c9e52eef.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js/vendors.0e456297851f0a3a.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+  ],
+  "styles": [],
+}
+`;
+
+exports[`resourcesUtils > prepareDefaultResources > should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath 1`] = `
+{
+  "esScripts": [
+    [
+      "cdn://static/js.es/app.client.2106a34c6b8bbad8.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js.es/app.client.2106a34c6b8bbad8.js",
+      },
+    ],
+    [
+      "cdn://static/js.es/locale/en.371127fdbfbe93d2.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js.es/locale/en.371127fdbfbe93d2.js",
+      },
+    ],
+    [
+      "cdn://static/js.es/vendors.a873907f25297544.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js.es/vendors.a873907f25297544.js",
+      },
+    ],
+  ],
+  "esStyles": [
+    [
+      "cdn://static/css/app.d0ad44d05f82db5f.css",
+      {
+        "fallback": "/pro/static/static/css/app.d0ad44d05f82db5f.css",
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
+  "scripts": [
+    [
+      "cdn://static/js/app.client.8dc14fd2c9e52eef.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js/app.client.8dc14fd2c9e52eef.js",
+      },
+    ],
+    [
+      "cdn://static/js/locale/en.3c6a5e7a55bb2ab4.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js/locale/en.3c6a5e7a55bb2ab4.js",
+      },
+    ],
+    [
+      "cdn://static/js/vendors.0e456297851f0a3a.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+        "fallback": "/pro/static/static/js/vendors.0e456297851f0a3a.js",
+      },
+    ],
+  ],
+  "styles": [],
+}
+`;
+
+exports[`resourcesUtils > prepareDefaultResources > should prepare default sources structure from provided manifest file 1`] = `
+{
+  "esScripts": [
+    [
+      "/static/js.es/app.client.2106a34c6b8bbad8.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/locale/en.371127fdbfbe93d2.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/vendors.a873907f25297544.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+  ],
+  "esStyles": [
+    [
+      "/static/css/app.d0ad44d05f82db5f.css",
+      {
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
+  "scripts": [
+    [
+      "/static/js/app.client.8dc14fd2c9e52eef.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js/locale/en.3c6a5e7a55bb2ab4.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js/vendors.0e456297851f0a3a.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+  ],
+  "styles": [],
+}
+`;
+
+exports[`resourcesUtils > prepareDefaultResources > should skip compilations without assets 1`] = `
+{
+  "esScripts": [
+    [
+      "/static/js.es/app.client.2106a34c6b8bbad8.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/locale/en.371127fdbfbe93d2.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+    [
+      "/static/js.es/vendors.a873907f25297544.js",
+      {
+        "async": "",
+        "crossorigin": "anonymous",
+      },
+    ],
+  ],
+  "esStyles": [
+    [
+      "/static/css/app.d0ad44d05f82db5f.css",
+      {
+        "preload": true,
+        "rel": "stylesheet",
+      },
+    ],
+  ],
+  "scripts": [],
+  "styles": [],
+}
+`;
+
+exports[`resourcesUtils > renderScript > should wrap script contents in script tag 1`] = `"<script id="ima-revival-settings">function () {}</script>"`;
 
 exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
 {

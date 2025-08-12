@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import {
   presetsInitialState,
   presetsActions,
@@ -5,7 +7,7 @@ import {
   presetsSelectors,
 } from '../presets';
 
-jest.mock('easy-uid');
+vi.mock('easy-uid');
 // eslint-disable-next-line import/order
 import uid from 'easy-uid';
 

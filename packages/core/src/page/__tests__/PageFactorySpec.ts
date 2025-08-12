@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { AbstractExtension } from '../..';
 import { AbstractController } from '../../controller/AbstractController';
 import { Extension } from '../../extension/Extension';

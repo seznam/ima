@@ -1,9 +1,11 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { Actions, State } from '@/constants';
 
 import { TabConnection, CACHE_SIZE } from '../TabConnection';
 
-jest.mock('@/utils', () => ({
-  setIcon: jest.fn(),
+vi.mock('@/utils', () => ({
+  setIcon: vi.fn(),
 }));
 
 // // eslint-disable-next-line import/order
@@ -14,22 +16,22 @@ describe('TabConnection', () => {
   const tabId = 123;
   const mockPort = name => ({
     name,
-    postMessage: jest.fn(),
-    disconnect: jest.fn(),
+    postMessage: vi.fn(),
+    disconnect: vi.fn(),
     onMessage: {
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      hasListeners: jest.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      hasListeners: vi.fn(),
     },
     onDisconnect: {
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      hasListeners: jest.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      hasListeners: vi.fn(),
     },
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('constructor', () => {
@@ -49,11 +51,10 @@ describe('TabConnection', () => {
   describe('addPort', () => {
     beforeEach(() => {
       instance = new TabConnection(tabId);
-      jest.spyOn(instance, '_onDisconnect').mockImplementation();
-      jest.spyOn(instance, '_reviveDevtools').mockImplementation();
-      jest.spyOn(instance, '_notifyPopup').mockImplementation();
-      jest
-        .spyOn(instance, '_createPipe')
+      vi.spyOn(instance, '_onDisconnect').mockImplementation();
+      vi.spyOn(instance, '_reviveDevtools').mockImplementation();
+      vi.spyOn(instance, '_notifyPopup').mockImplementation();
+      vi.spyOn(instance, '_createPipe')
         .mockImplementation()
         .mockImplementation(() => (instance.ports.pipeCreated = true));
     });
@@ -104,8 +105,7 @@ describe('TabConnection', () => {
     it('should remove additional callbacks in contentScript onDisconnect', () => {
       let disconnectListener;
       let port = mockPort('contentScript');
-      jest
-        .spyOn(port.onDisconnect, 'addListener')
+      vi.spyOn(port.onDisconnect, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           disconnectListener = listener;
@@ -150,8 +150,7 @@ describe('TabConnection', () => {
     it('should remove additional callbacks in popup onDisconnect', () => {
       let disconnectListener;
       let port = mockPort('popup');
-      jest
-        .spyOn(port.onDisconnect, 'addListener')
+      vi.spyOn(port.onDisconnect, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           disconnectListener = listener;
@@ -208,12 +207,10 @@ describe('TabConnection', () => {
     it('should notify only those ports that have any onMessage listener registered', () => {
       instance.ports.panel = mockPort('panel');
       instance.ports.popup = mockPort('popup');
-      jest
-        .spyOn(instance.ports.panel.onMessage, 'hasListeners')
+      vi.spyOn(instance.ports.panel.onMessage, 'hasListeners')
         .mockImplementation()
         .mockImplementation(() => true);
-      jest
-        .spyOn(instance.ports.popup.onMessage, 'hasListeners')
+      vi.spyOn(instance.ports.popup.onMessage, 'hasListeners')
         .mockImplementation()
         .mockImplementation(() => false);
 
@@ -268,7 +265,7 @@ describe('TabConnection', () => {
     });
 
     it('should call notify with reloading action', () => {
-      jest.spyOn(instance, 'notify').mockImplementation();
+      vi.spyOn(instance, 'notify').mockImplementation();
 
       instance.reload('domain');
 
@@ -339,8 +336,7 @@ describe('TabConnection', () => {
     it('should resend cache content to panel', () => {
       let receivedCache = [];
       instance.cache = [1, 2, 3, 4];
-      jest
-        .spyOn(instance.ports.panel, 'postMessage')
+      vi.spyOn(instance.ports.panel, 'postMessage')
         .mockImplementation()
         .mockImplementation(value => receivedCache.push(value));
 
@@ -408,32 +404,28 @@ describe('TabConnection', () => {
 
     beforeEach(() => {
       instance = new TabConnection(tabId);
-      jest.spyOn(instance, '_onDisconnect').mockImplementation();
-      jest.spyOn(instance, 'resendCache').mockImplementation();
+      vi.spyOn(instance, '_onDisconnect').mockImplementation();
+      vi.spyOn(instance, 'resendCache').mockImplementation();
       instance.ports.contentScript = mockPort('contentScript');
       instance.ports.panel = mockPort('panel');
 
       // Catch created listeners
-      jest
-        .spyOn(instance.ports.contentScript.onMessage, 'addListener')
+      vi.spyOn(instance.ports.contentScript.onMessage, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           resendContentScript = listener;
         });
-      jest
-        .spyOn(instance.ports.panel.onMessage, 'addListener')
+      vi.spyOn(instance.ports.panel.onMessage, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           resendPanel = listener;
         });
-      jest
-        .spyOn(instance.ports.contentScript.onDisconnect, 'addListener')
+      vi.spyOn(instance.ports.contentScript.onDisconnect, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           shutdownContentScript = listener;
         });
-      jest
-        .spyOn(instance.ports.panel.onDisconnect, 'addListener')
+      vi.spyOn(instance.ports.panel.onDisconnect, 'addListener')
         .mockImplementation()
         .mockImplementation(listener => {
           shutdownPanel = listener;
@@ -512,8 +504,7 @@ describe('TabConnection', () => {
     beforeEach(() => {
       instance = new TabConnection(tabId);
       instance.ports.popup = mockPort('popup');
-      jest
-        .spyOn(instance.ports.popup.onMessage, 'hasListeners')
+      vi.spyOn(instance.ports.popup.onMessage, 'hasListeners')
         .mockImplementation()
         .mockImplementation(() => true);
     });
@@ -558,8 +549,7 @@ describe('TabConnection', () => {
     it('should clear cache if no other ports are opened', () => {
       instance.cache = [1, 2, 3, 4];
       instance.ports.popup.onMessage.hasListeners = () => false;
-      jest
-        .spyOn(instance, 'isEmpty')
+      vi.spyOn(instance, 'isEmpty')
         .mockImplementation()
         .mockImplementation(() => true);
 
@@ -573,12 +563,11 @@ describe('TabConnection', () => {
 
     it('should execute empty listener with tabId if no other ports are opened', () => {
       instance.ports.popup.onMessage.hasListeners = () => false;
-      jest
-        .spyOn(instance, 'isEmpty')
+      vi.spyOn(instance, 'isEmpty')
         .mockImplementation()
         .mockImplementation(() => true);
 
-      instance._emptyListener = jest.fn();
+      instance._emptyListener = vi.fn();
       instance._onDisconnect('popup');
 
       expect(instance.ports.popup).toBeNull();
@@ -591,7 +580,7 @@ describe('TabConnection', () => {
   // FIXME memory leak
   // describe('_settingsCallback', () => {
   //   beforeEach(() => {
-  //     instance._settingsListener = jest.fn();
+  //     instance._settingsListener = vi.fn();
   //   });
 
   //   it('should not do anything if action is not settings action', () => {
@@ -617,8 +606,8 @@ describe('TabConnection', () => {
   // describe('_aliveCallback', () => {
   //   beforeEach(() => {
   //     instance = new TabConnection(tabId);
-  //     jest.spyOn(instance, '_reviveDevtools').mockImplementation();
-  //     jest.spyOn(instance, '_notifyPopup').mockImplementation();
+  //     vi.spyOn(instance, '_reviveDevtools').mockImplementation();
+  //     vi.spyOn(instance, '_notifyPopup').mockImplementation();
   //     instance.ports.popup = mockPort('popup');
   //     instance.ports.devtools = mockPort('devtools');
   //     instance.ports.contentScript = mockPort('contentScript');

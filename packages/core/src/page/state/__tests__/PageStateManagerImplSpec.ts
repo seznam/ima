@@ -1,4 +1,5 @@
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DispatcherImpl } from '../../../event/DispatcherImpl';
 import { PageStateManagerImpl } from '../PageStateManagerImpl';
@@ -19,7 +20,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should clear history', () => {
@@ -43,10 +44,10 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
   describe('setState method', () => {
     beforeEach(() => {
-      jest.spyOn(stateManager, '_eraseExcessHistory').mockImplementation();
-      jest.spyOn(stateManager, '_pushToHistory').mockImplementation();
-      jest.spyOn(stateManager, '_callOnChangeCallback');
-      jest.spyOn(dispatcher, 'fire').mockImplementation(() => {
+      vi.spyOn(stateManager, '_eraseExcessHistory').mockImplementation();
+      vi.spyOn(stateManager, '_pushToHistory').mockImplementation();
+      vi.spyOn(stateManager, '_callOnChangeCallback');
+      vi.spyOn(dispatcher, 'fire').mockImplementation(() => {
         return;
       });
     });
@@ -89,7 +90,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   describe('beginTransaction method', () => {
     it('should show warning for another ongoing transaction', () => {
       stateManager['_ongoingTransaction'] = true;
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation();
 
       stateManager.beginTransaction();
 
@@ -107,7 +108,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   describe('commitTransaction method', () => {
     it('should show warning for no active transaction', () => {
       stateManager['_ongoingTransaction'] = false;
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation();
 
       stateManager.commitTransaction();
 
@@ -125,7 +126,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       stateManager.setState(queuedPatchState1);
       stateManager.setState(queuedPatchState2);
 
-      jest.spyOn(stateManager, 'setState');
+      vi.spyOn(stateManager, 'setState');
 
       stateManager.commitTransaction();
 

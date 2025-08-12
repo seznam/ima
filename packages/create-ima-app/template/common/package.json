@@ -4,6 +4,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix",
     "dev": "ima dev",
     "build": "ima build",
     "start": "ima start"

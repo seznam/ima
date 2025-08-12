@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 const CacheFactory = require('../lib/cache.js');
 
 describe('cache', () => {
@@ -20,7 +22,7 @@ describe('cache', () => {
         },
       });
 
-      jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
+      vi.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
     it('should be set page to cache', () => {

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import PresetEntry from '../PresetEntry';
@@ -6,8 +7,8 @@ describe('PresetEntry molecule', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn(),
-    stopPropagation: jest.fn(),
+    preventDefault: vi.fn(),
+    stopPropagation: vi.fn(),
   };
 
   const props = {
@@ -19,12 +20,12 @@ describe('PresetEntry molecule', () => {
       selected: true,
       hooks: {},
     },
-    onClick: jest.fn(),
-    renamePreset: jest.fn(),
-    copyPreset: jest.fn(),
-    deletePreset: jest.fn(),
-    alertSuccess: jest.fn(),
-    showConfirmModal: jest.fn(),
+    onClick: vi.fn(),
+    renamePreset: vi.fn(),
+    copyPreset: vi.fn(),
+    deletePreset: vi.fn(),
+    alertSuccess: vi.fn(),
+    showConfirmModal: vi.fn(),
   };
 
   beforeEach(() => {
@@ -36,7 +37,7 @@ describe('PresetEntry molecule', () => {
   });
 
   it('should trigger onClick when clicked on entry item', () => {
-    jest.spyOn(instance, 'onClick').mockImplementation();
+    vi.spyOn(instance, 'onClick').mockImplementation();
     wrapper.first().simulate('click');
 
     expect(instance.onClick.mock.calls).toHaveLength(1);
@@ -44,7 +45,7 @@ describe('PresetEntry molecule', () => {
 
   describe('onChange', () => {
     it('should set value to state name', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       instance.onChange({
         target: {
@@ -89,7 +90,7 @@ describe('PresetEntry molecule', () => {
   describe('onConfirm', () => {
     it('should rename preset and set editable to false', () => {
       wrapper.setState({ name: 'newName' });
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       instance.onConfirm(event);
 
@@ -123,7 +124,7 @@ describe('PresetEntry molecule', () => {
 
   describe('onEdit', () => {
     it('should set state editable to true', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
       instance.onEdit(event);
 
       expect(event.preventDefault.mock.calls).toHaveLength(1);
@@ -157,7 +158,7 @@ describe('PresetEntry molecule', () => {
 
   describe('onDiscard', () => {
     it('should discard the state and set editable to false', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       instance.onDiscard(event);
 

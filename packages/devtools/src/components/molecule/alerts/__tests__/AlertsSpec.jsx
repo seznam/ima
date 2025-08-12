@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import Alerts from '../Alerts';
@@ -13,7 +14,7 @@ describe('Alerts molecule', () => {
         type: 'default',
       },
     },
-    removeAlert: jest.fn(),
+    removeAlert: vi.fn(),
   };
 
   let wrapper = shallow(<Alerts {...props} />);

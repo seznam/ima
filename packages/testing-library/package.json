@@ -23,6 +23,7 @@
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest -c jest.config.js"
   },
   "exports": {

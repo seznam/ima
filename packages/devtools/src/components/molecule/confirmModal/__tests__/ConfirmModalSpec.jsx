@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import ConfirmModal from '../ConfirmModal';
@@ -6,15 +7,15 @@ describe('ConfirmModal molecule', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn(),
+    preventDefault: vi.fn(),
   };
 
   const props = {
     body: '',
     opened: true,
-    accept: jest.fn(),
-    cancel: jest.fn(),
-    hideConfirmModal: jest.fn(),
+    accept: vi.fn(),
+    cancel: vi.fn(),
+    hideConfirmModal: vi.fn(),
   };
 
   beforeEach(() => {
@@ -27,7 +28,7 @@ describe('ConfirmModal molecule', () => {
   });
 
   it('should call onConfirm  after clicking confirm btn', () => {
-    jest.spyOn(instance, 'onConfirm').mockImplementation();
+    vi.spyOn(instance, 'onConfirm').mockImplementation();
     wrapper.find('Button').at(0).simulate('click', event);
 
     expect(instance.onConfirm.mock.calls).toHaveLength(1);
@@ -35,7 +36,7 @@ describe('ConfirmModal molecule', () => {
   });
 
   it('should call onCancel after clicking cancel btn', () => {
-    jest.spyOn(instance, 'onCancel').mockImplementation();
+    vi.spyOn(instance, 'onCancel').mockImplementation();
     wrapper.find('Button').at(1).simulate('click', event);
 
     expect(instance.onCancel.mock.calls).toHaveLength(1);

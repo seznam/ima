@@ -1,15 +1,15 @@
-/* eslint-disable import/order */
+import { beforeEach, describe, expect, it, vi, beforeAll, afterEach } from "vitest";
 import { shallow } from 'enzyme';
 
-jest.mock('@/utils', () => ({
-  setSettings: jest.fn(),
-  getSettings: jest.fn().mockReturnValue(Promise.resolve({})),
+vi.mock('@/utils', () => ({
+  setSettings: vi.fn(),
+  getSettings: vi.fn().mockReturnValue(Promise.resolve({})),
 }));
 import * as utils from '@/utils';
 
 import Options from '../Options';
 
-jest.mock('easy-uid');
+vi.mock('easy-uid');
 // eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
@@ -17,7 +17,7 @@ describe('Options template', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn(),
+    preventDefault: vi.fn(),
   };
 
   const props = {
@@ -29,18 +29,18 @@ describe('Options template', () => {
         selected: false,
       },
     },
-    setPresets: jest.fn(),
-    addHook: jest.fn(),
-    alertSuccess: jest.fn(),
+    setPresets: vi.fn(),
+    addHook: vi.fn(),
+    alertSuccess: vi.fn(),
     selectedPresetId: '0',
     hookIds: ['1', '2', '3'],
   };
 
   beforeAll(() => {
-    global.chrome = {
+    globalThis.chrome = {
       storage: {
         local: {
-          get: jest.fn(),
+          get: vi.fn(),
         },
       },
     };
@@ -56,7 +56,7 @@ describe('Options template', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('get isEditable', () => {
@@ -89,7 +89,7 @@ describe('Options template', () => {
 
   describe('componentDidMount', () => {
     it('should fetch and set settings on mount', async () => {
-      jest.spyOn(utils, 'getSettings').mockImplementation(() =>
+      vi.spyOn(utils, 'getSettings').mockImplementation(() =>
         Promise.resolve({
           presets: 'settingsPresets',
           selectedPresetId: '0',
@@ -109,7 +109,7 @@ describe('Options template', () => {
 
   describe('onAdd', () => {
     it('should call props.addHook with generated hook', () => {
-      jest.spyOn(instance, '_createHook').mockReturnValue('newHook');
+      vi.spyOn(instance, '_createHook').mockReturnValue('newHook');
 
       instance.onAdd(event);
 
@@ -122,7 +122,7 @@ describe('Options template', () => {
 
   describe('onLoadPreset', () => {
     it('should open presets modal window', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       instance.onLoadPreset(event);
 
@@ -136,7 +136,7 @@ describe('Options template', () => {
 
   describe('onModalClose', () => {
     it('should closeModalWindow', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       instance.onModalClose();
 
@@ -149,10 +149,10 @@ describe('Options template', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      jest.spyOn(utils, 'setSettings').mockImplementation();
-      global.FormData = function () {
+      vi.spyOn(utils, 'setSettings').mockImplementation();
+      globalThis.FormData = function () {
         return {
-          entries: jest.fn().mockImplementation(() => {
+          entries: vi.fn().mockImplementation(() => {
             return [['name__0', 'newName']];
           }),
         };

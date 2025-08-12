@@ -1,5 +1,5 @@
-/* eslint-disable jest/no-conditional-expect */
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GenericError } from '../../error/GenericError';
 import { DispatcherImpl } from '../../event/DispatcherImpl';
@@ -13,16 +13,16 @@ import { RouteAction } from '../Router';
 import { RouterEvents } from '../RouterEvents';
 
 class MockedAbstractRouter extends AbstractRouter {
-  getPath = jest.fn();
-  listen = jest.fn();
-  redirect = jest.fn();
-  unlisten = jest.fn();
+  getPath = vi.fn();
+  listen = vi.fn();
+  redirect = vi.fn();
+  unlisten = vi.fn();
 }
 
 class MockedPageManager extends PageManager {
-  init = jest.fn();
-  destroy = jest.fn();
-  manage = jest.fn();
+  init = vi.fn();
+  destroy = vi.fn();
+  manage = vi.fn();
 }
 
 describe('ima.core.router.AbstractRouter', () => {
@@ -44,8 +44,8 @@ describe('ima.core.router.AbstractRouter', () => {
     viewAdapter: null,
     middlewares: [],
   };
-  const globalMiddleware = jest.fn();
-  const homeRouteMiddleware = jest.fn();
+  const globalMiddleware = vi.fn();
+  const homeRouteMiddleware = vi.fn();
   const action: RouteAction = {
     type: ActionTypes.REDIRECT,
   };
@@ -74,7 +74,7 @@ describe('ima.core.router.AbstractRouter', () => {
       30000
     );
 
-    jest.spyOn(router, 'getPath').mockReturnValue(currentRoutePath);
+    vi.spyOn(router, 'getPath').mockReturnValue(currentRoutePath);
 
     router.init(config);
 
@@ -86,7 +86,7 @@ describe('ima.core.router.AbstractRouter', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should have 2 routes in Array and 1 global middleware', () => {
@@ -124,7 +124,7 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should create new ima.core.Route', () => {
-      jest.spyOn(routeFactory, 'createRoute');
+      vi.spyOn(routeFactory, 'createRoute');
 
       router.add('routeName', '/newRoutePath', Controller, View, options);
 
@@ -140,7 +140,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('use method', () => {
     it('should add new ima.core.router.RouterMiddleware', () => {
-      jest.spyOn(router['_routeHandlers'], 'set');
+      vi.spyOn(router['_routeHandlers'], 'set');
 
       router.use(globalMiddleware);
 
@@ -177,10 +177,11 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should return current route information', () => {
       router.getPath.mockReturnValue(path);
-      jest
-        .spyOn(router, 'getRouteHandlersByPath')
-        .mockReturnValue({ route, middlewares: [] });
-      jest.spyOn(route, 'extractParameters').mockReturnValue(params);
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route,
+        middlewares: [],
+      });
+      vi.spyOn(route, 'extractParameters').mockReturnValue(params);
 
       expect(router.getCurrentRouteInfo()).toStrictEqual({
         route,
@@ -204,13 +205,13 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should return link for valid route with params', () => {
-      jest.spyOn(router, 'getBaseUrl').mockReturnValue(baseUrl);
+      vi.spyOn(router, 'getBaseUrl').mockReturnValue(baseUrl);
 
       expect(router.link(routeName, {})).toBe(baseUrl + path);
     });
 
     it('should throw Error for not valid route with params', () => {
-      jest.spyOn(router['_routeHandlers'], 'has').mockReturnValue(false);
+      vi.spyOn(router['_routeHandlers'], 'has').mockReturnValue(false);
 
       expect(() => {
         router.link('xxx', {});
@@ -222,7 +223,7 @@ describe('ima.core.router.AbstractRouter', () => {
     const routeName = 'link';
     const path = '/link';
     let route: InstanceType<typeof AbstractRoute>;
-    const routeMiddleware = jest.fn();
+    const routeMiddleware = vi.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(routeName, path, Controller, View, {
@@ -231,14 +232,14 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should handle valid route path', async () => {
-      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route,
         middlewares: [],
       });
 
-      jest.spyOn(router, '_handle').mockImplementation();
+      vi.spyOn(router, '_handle').mockImplementation();
 
-      jest.spyOn(route, 'extractParameters');
+      vi.spyOn(route, 'extractParameters');
 
       await router.route(path, options, action);
 
@@ -249,15 +250,15 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should handle valid route path with middlewares', async () => {
       const middlewaresMock = [globalMiddleware];
-      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route,
         middlewares: middlewaresMock,
       });
 
-      jest.spyOn(router, '_handle').mockImplementation();
-      jest.spyOn(router, '_runMiddlewares');
+      vi.spyOn(router, '_handle').mockImplementation();
+      vi.spyOn(router, '_runMiddlewares');
 
-      jest.spyOn(route, 'extractParameters');
+      vi.spyOn(route, 'extractParameters');
 
       await router.route(path, options, action);
 
@@ -280,9 +281,9 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should handle "not-found" route', async () => {
       // @ts-expect-error
-      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({});
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({});
 
-      jest.spyOn(router, 'handleNotFound').mockImplementation(params => {
+      vi.spyOn(router, 'handleNotFound').mockImplementation(params => {
         return Promise.resolve(params);
       });
 
@@ -297,7 +298,7 @@ describe('ima.core.router.AbstractRouter', () => {
     const path = '/error';
     let route: InstanceType<typeof AbstractRoute>;
     let originalRoute: InstanceType<typeof AbstractRoute>;
-    const routeMiddleware = jest.fn();
+    const routeMiddleware = vi.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(
@@ -324,14 +325,14 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "error" route', async () => {
       const params = { error: new GenericError('test') };
 
-      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
-      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+      vi.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
         middlewares: [],
       });
-      jest.spyOn(router, '_runMiddlewares');
+      vi.spyOn(router, '_runMiddlewares');
 
-      jest.spyOn(router, '_handle').mockReturnValue(
+      vi.spyOn(router, '_handle').mockReturnValue(
         Promise.resolve({
           content: '',
           status: 200,
@@ -370,7 +371,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should reject promise with error for undefined "error" route', async () => {
       const params = { error: new GenericError('test') };
 
-      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
+      vi.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
       await router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
@@ -382,7 +383,7 @@ describe('ima.core.router.AbstractRouter', () => {
     const path = '/not-found';
     let route: InstanceType<typeof AbstractRoute>;
     let originalRoute: InstanceType<typeof AbstractRoute>;
-    const routeMiddleware = jest.fn();
+    const routeMiddleware = vi.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(
@@ -409,14 +410,14 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "notFound" route', async () => {
       const params = { error: new GenericError('test') };
 
-      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
-      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+      vi.spyOn(router['_routeHandlers'], 'get').mockReturnValue(route);
+      vi.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
         route: originalRoute,
         middlewares: [],
       });
-      jest.spyOn(router, '_runMiddlewares');
+      vi.spyOn(router, '_runMiddlewares');
 
-      jest.spyOn(router, '_handle').mockReturnValue(
+      vi.spyOn(router, '_handle').mockReturnValue(
         Promise.resolve({
           content: '',
           status: 200,
@@ -455,7 +456,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should reject promise with error for undefined "error" route', async () => {
       const params = { error: new GenericError('test') };
 
-      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
+      vi.spyOn(router['_routeHandlers'], 'get').mockReturnValue(undefined);
 
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
@@ -528,14 +529,14 @@ describe('ima.core.router.AbstractRouter', () => {
         options,
         []
       );
-      jest.spyOn(router, '_getCurrentlyRoutedPath').mockReturnValue(routePath);
+      vi.spyOn(router, '_getCurrentlyRoutedPath').mockReturnValue(routePath);
     });
 
     it('should call preManage', async () => {
-      jest.spyOn(pageManager, 'preManage');
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve({ content: null, status: 200 }));
+      vi.spyOn(pageManager, 'preManage');
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve({ content: null, status: 200 })
+      );
 
       await router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith({
@@ -550,11 +551,11 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should call postManage', async () => {
-      jest.spyOn(pageManager, 'preManage');
-      jest.spyOn(pageManager, 'postManage');
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve({ content: null, status: 409 }));
+      vi.spyOn(pageManager, 'preManage');
+      vi.spyOn(pageManager, 'postManage');
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve({ content: null, status: 409 })
+      );
 
       await router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith({
@@ -570,10 +571,10 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should call page manager', async () => {
       router.getPath.mockReturnValue(routePath);
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve({ content: null, status: 200 }));
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve({ content: null, status: 200 })
+      );
+      vi.spyOn(dispatcher, 'fire').mockImplementation();
 
       await router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith({
@@ -597,10 +598,10 @@ describe('ima.core.router.AbstractRouter', () => {
       };
 
       router.getPath.mockReturnValue(routePath);
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve(response));
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve(response)
+      );
+      vi.spyOn(dispatcher, 'fire').mockImplementation();
 
       await router._handle(route, params, options);
 
@@ -615,10 +616,10 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = {};
 
       router.getPath.mockReturnValue(routePath);
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve(Object.assign({}, response)));
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve(Object.assign({}, response))
+      );
+      vi.spyOn(dispatcher, 'fire').mockImplementation();
 
       await router._handle(route, params, options).then(() => {
         const data = {
@@ -641,10 +642,10 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = { error: new Error('test') };
 
       router.getPath.mockReturnValue(routePath);
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve(Object.assign({}, response)));
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve(Object.assign({}, response))
+      );
+      vi.spyOn(dispatcher, 'fire').mockImplementation();
 
       // @ts-expect-error error param is not typed properly
       await router._handle(route, params, options).then(() => {
@@ -668,9 +669,9 @@ describe('ima.core.router.AbstractRouter', () => {
       const params = {};
 
       router.getPath.mockReturnValue(routePath);
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve(Object.assign({}, response)));
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve(Object.assign({}, response))
+      );
 
       await router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toStrictEqual(response);
@@ -683,9 +684,9 @@ describe('ima.core.router.AbstractRouter', () => {
 
       router.getPath.mockReturnValue(routePath);
 
-      jest
-        .spyOn(pageManager, 'manage')
-        .mockReturnValue(Promise.resolve(Object.assign({}, response)));
+      vi.spyOn(pageManager, 'manage').mockReturnValue(
+        Promise.resolve(Object.assign({}, response))
+      );
 
       // @ts-expect-error error param is not typed properly
       await router._handle(route, params, options).then(handleResponse => {
@@ -709,7 +710,7 @@ describe('ima.core.router.AbstractRouter', () => {
         dispatcher,
         30000
       );
-      jest.spyOn(router, 'getPath').mockReturnValue(path);
+      vi.spyOn(router, 'getPath').mockReturnValue(path);
     });
 
     it('should clear root from path', () => {
@@ -742,8 +743,8 @@ describe('ima.core.router.AbstractRouter', () => {
   });
 
   describe('getRouteHandlersByPath method', () => {
-    const endMiddleware = jest.fn();
-    const afterHomeMiddleware = jest.fn();
+    const endMiddleware = vi.fn();
+    const afterHomeMiddleware = vi.fn();
     let middlewareRouter: MockedAbstractRouter;
 
     beforeEach(() => {
@@ -754,7 +755,7 @@ describe('ima.core.router.AbstractRouter', () => {
         30000
       );
 
-      jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
+      vi.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
       middlewareRouter.init(config);
 
       middlewareRouter
@@ -779,8 +780,8 @@ describe('ima.core.router.AbstractRouter', () => {
   });
 
   describe('_getMiddlewaresForRoute method', () => {
-    const endMiddleware = jest.fn();
-    const afterHomeMiddleware = jest.fn();
+    const endMiddleware = vi.fn();
+    const afterHomeMiddleware = vi.fn();
     let middlewareRouter: MockedAbstractRouter;
 
     beforeEach(() => {
@@ -791,7 +792,7 @@ describe('ima.core.router.AbstractRouter', () => {
         30000
       );
 
-      jest.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
+      vi.spyOn(middlewareRouter, 'getPath').mockReturnValue(currentRoutePath);
       middlewareRouter.init(config);
 
       middlewareRouter
@@ -836,7 +837,7 @@ describe('ima.core.router.AbstractRouter', () => {
       const middlewareLocals = { middleware: 'locals' };
       const results: { middleware: string; locals: unknown }[] = [];
 
-      const m1 = jest.fn((params, locals) => {
+      const m1 = vi.fn((params, locals) => {
         results.push({
           middleware: 'm1',
           locals: { ...locals },
@@ -844,7 +845,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         return { m1: true };
       });
-      const m2 = jest.fn().mockImplementation(async (params, locals) => {
+      const m2 = vi.fn().mockImplementation(async (params, locals) => {
         results.push({
           middleware: 'm2',
           locals: { ...locals },
@@ -852,7 +853,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
         return { m2: true };
       });
-      const m3 = jest.fn((params, locals, next) => {
+      const m3 = vi.fn((params, locals, next) => {
         results.push({
           middleware: 'm3',
           locals: { ...locals },
@@ -908,9 +909,9 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should timeout when there are long promises still running', async () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
-      const m1 = jest.fn(async () => {
+      const m1 = vi.fn(async () => {
         new Promise<void>(resolve => {
           setTimeout(() => {
             resolve();
@@ -921,11 +922,11 @@ describe('ima.core.router.AbstractRouter', () => {
       });
 
       const middlewaresPromise = router._runMiddlewares([m1], {}, {});
-      jest.advanceTimersByTime(50_000);
+      vi.advanceTimersByTime(50_000);
 
       await expect(middlewaresPromise).rejects.toBeInstanceOf(GenericError);
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 });

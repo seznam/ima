@@ -23,6 +23,7 @@
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix",
     "stylelint": "stylelint './**/*.less'"
   },
   "devDependencies": {

@@ -14,8 +14,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:jest/recommended',
-    'plugin:jest/style',
     'plugin:prettier/recommended',
     'plugin:import/recommended',
   ],
@@ -46,20 +44,6 @@ module.exports = {
         jsxSingleQuote: true,
         bracketSameLine: false,
         arrowParens: 'avoid',
-      },
-    ],
-
-    // Jest plugin overrides
-    'jest/no-mocks-import': 'off',
-    'jest/valid-title': 'off',
-    'jest/no-done-callback': 'warn',
-    'jest/no-disabled-tests': 'warn',
-    'jest/no-conditional-expect': 'warn',
-    'jest/prefer-expect-resolves': 'warn',
-    'jest/prefer-lowercase-title': [
-      'warn',
-      {
-        ignore: ['describe'],
       },
     ],
 

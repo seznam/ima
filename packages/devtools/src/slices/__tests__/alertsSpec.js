@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { alertsInitialState, alertsReducer, alertsActions } from '../alerts';
 
 describe('alertsReducer', () => {
