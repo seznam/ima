@@ -3,8 +3,9 @@
  */
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable jest/no-conditional-expect */
+
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GenericError } from '../../error/GenericError';
 import { UnknownParameters } from '../../types';
@@ -15,7 +16,7 @@ import { HttpStatusCode } from '../HttpStatusCode';
 import { UrlTransformer } from '../UrlTransformer';
 
 describe('ima.core.http.HttpProxy', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   const API_URL = 'http://localhost:3001/api/';
   const DATA = {
@@ -36,7 +37,7 @@ describe('ima.core.http.HttpProxy', () => {
   let requestInit: RequestInit;
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
@@ -62,7 +63,7 @@ describe('ima.core.http.HttpProxy', () => {
 
     fetchResult = Promise.resolve(response);
 
-    global.fetch = jest.fn((_, init) => {
+    global.fetch = vi.fn((_, init) => {
       // @ts-ignore
       requestInit = init;
 
@@ -127,7 +128,7 @@ describe('ima.core.http.HttpProxy', () => {
 
       it('should be timeouted for longer request then options.timeout', async () => {
         try {
-          jest.useFakeTimers();
+          vi.useFakeTimers();
 
           await proxy.request(method, API_URL, DATA, defaultOptions);
         } catch (error) {
@@ -286,10 +287,10 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should call provided abortController.abort on timeout', async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
 
         const abortController = new AbortController();
-        const abortControllerSpy = jest.spyOn(abortController, 'abort');
+        const abortControllerSpy = vi.spyOn(abortController, 'abort');
         const options = { ...defaultOptions, timeout: 1, abortController };
 
         fetchResult = new Promise(resolve =>
@@ -303,8 +304,8 @@ describe('ima.core.http.HttpProxy', () => {
             DATA,
             options as HttpAgentRequestOptions
           );
-          jest.advanceTimersByTime(1000);
-          jest.runOnlyPendingTimers();
+          vi.advanceTimersByTime(1000);
+          vi.runOnlyPendingTimers();
           await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
 
@@ -313,7 +314,7 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should create AbortController when not provided and abort it on timeout', async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const options = { ...defaultOptions, timeout: 1 };
 
         fetchResult = new Promise(resolve =>
@@ -327,8 +328,8 @@ describe('ima.core.http.HttpProxy', () => {
             DATA,
             options as HttpAgentRequestOptions
           );
-          jest.advanceTimersByTime(1000);
-          jest.runOnlyPendingTimers();
+          vi.advanceTimersByTime(1000);
+          vi.runOnlyPendingTimers();
           await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
 
@@ -338,7 +339,7 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should redefine abort controller if repeatRequest is > 0', async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const options = { ...defaultOptions, timeout: 1, repeatRequest: 1 };
 
         fetchResult = new Promise(resolve =>
@@ -352,8 +353,8 @@ describe('ima.core.http.HttpProxy', () => {
             DATA,
             options as HttpAgentRequestOptions
           );
-          jest.advanceTimersByTime(1000);
-          jest.runOnlyPendingTimers();
+          vi.advanceTimersByTime(1000);
+          vi.runOnlyPendingTimers();
           await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
 
@@ -371,8 +372,8 @@ describe('ima.core.http.HttpProxy', () => {
             DATA,
             options as HttpAgentRequestOptions
           );
-          jest.advanceTimersByTime(1000);
-          jest.runOnlyPendingTimers();
+          vi.advanceTimersByTime(1000);
+          vi.runOnlyPendingTimers();
           await result;
         }).rejects.toThrow(TIMEOUT_ERROR);
 
@@ -382,7 +383,7 @@ describe('ima.core.http.HttpProxy', () => {
       });
 
       it('should throw Abort error when aborted externally; with other reason', async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const abortController = new AbortController();
         const options = {
           ...defaultOptions,
@@ -401,7 +402,7 @@ describe('ima.core.http.HttpProxy', () => {
             options as HttpAgentRequestOptions
           );
           abortController.abort('Aborted');
-          jest.runAllTimers();
+          vi.runAllTimers();
           await result;
         }).rejects.toThrow();
 
@@ -511,7 +512,7 @@ describe('ima.core.http.HttpProxy', () => {
     });
 
     it('should return null for requests with no body', () => {
-      jest.spyOn(proxy, '_shouldRequestHaveBody').mockReturnValue(false);
+      vi.spyOn(proxy, '_shouldRequestHaveBody').mockReturnValue(false);
 
       expect(
         proxy._getContentType(

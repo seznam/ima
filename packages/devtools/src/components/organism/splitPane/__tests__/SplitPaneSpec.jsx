@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { shallow } from 'enzyme';
 
 import SplitPane from '../SplitPane';

@@ -1,5 +1,5 @@
 const path = require('path');
-global.appRoot = path.resolve(__dirname);
+globalThis.appRoot = path.resolve(__dirname);
 
 const reactPageRendererHook = require('@ima/react-page-renderer/hook/server');
 const { createIMAServer } = require('@ima/server');

@@ -22,7 +22,9 @@
   "types": "./types.d.ts",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest"
+    "lint:fix": "npm run lint -- --fix",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@esmj/emitter": "^0.4.3",

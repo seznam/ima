@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import {
   extractDomainFromUrl,
   getCurrentTab,
@@ -15,9 +17,9 @@ describe('setIcon', () => {
     };
   };
 
-  global.chrome = {
+  globalThis.chrome = {
     browserAction: {
-      setIcon: jest.fn(),
+      setIcon: vi.fn(),
     },
   };
 
@@ -59,8 +61,8 @@ describe('setIcon', () => {
 describe('toggleClass', () => {
   const element = {
     classList: {
-      add: jest.fn(),
-      remove: jest.fn(),
+      add: vi.fn(),
+      remove: vi.fn(),
     },
   };
 
@@ -96,7 +98,7 @@ describe('toggleClass', () => {
 
 describe('getCurrentTab', () => {
   it('should get tabId from inspected window if devtools object is available', async () => {
-    global.chrome = {
+    globalThis.chrome = {
       devtools: {
         inspectedWindow: 20,
       },
@@ -107,9 +109,9 @@ describe('getCurrentTab', () => {
   });
 
   it('should query for tabId on active current window, if devtools object is not available', async () => {
-    global.chrome = {
+    globalThis.chrome = {
       tabs: {
-        query: jest
+        query: vi
           .fn()
           .mockImplementation((details, callback) => callback([30])),
       },

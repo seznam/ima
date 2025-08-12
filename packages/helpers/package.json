@@ -20,8 +20,10 @@
   "module": "./dist/esm/index.js",
   "types": "./types.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
+    "lint:fix": "npm run lint -- --fix",
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link"

@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { BootConfig, Bootstrap, InitPluginConfig } from '../Bootstrap';
 import { ns } from '../Namespace';
 import { ObjectContainer } from '../oc/ObjectContainer';
@@ -16,20 +18,20 @@ describe('pluginLoader', () => {
 
     bootstrap['_config'] = bootConfig;
 
-    jest.spyOn(bootstrap, 'initPlugin');
+    vi.spyOn(bootstrap, 'initPlugin');
   });
 
   describe('register method', () => {
     it('should register plugins to loader', () => {
-      pluginLoader.register('plugin-1', jest.fn());
-      pluginLoader.register('plugin-2', jest.fn());
-      pluginLoader.register('plugin-3', jest.fn());
+      pluginLoader.register('plugin-1', vi.fn());
+      pluginLoader.register('plugin-2', vi.fn());
+      pluginLoader.register('plugin-3', vi.fn());
 
       expect(Object.values(pluginLoader['_plugins'])).toHaveLength(3);
     });
 
     it('should call register function on plugins', () => {
-      const registerFunction = jest.fn();
+      const registerFunction = vi.fn();
 
       pluginLoader.register('plugin-name', registerFunction);
 
@@ -40,7 +42,7 @@ describe('pluginLoader', () => {
 
     it('should dynamically load plugins if the app is already bootstrapped', () => {
       const pluginInterface = {} as InitPluginConfig;
-      const registerFunction = jest.fn(() => pluginInterface);
+      const registerFunction = vi.fn(() => pluginInterface);
 
       pluginLoader.init(bootstrap);
       pluginLoader.register('plugin-name', registerFunction);

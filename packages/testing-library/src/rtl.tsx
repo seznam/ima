@@ -3,8 +3,9 @@ import { render, renderHook } from '@testing-library/react';
 import type { RenderOptions, RenderHookOptions } from '@testing-library/react';
 import type { ReactElement } from 'react';
 
-// import of app/main is resolved by the jest moduleNameMapper
 import { ima, getInitialAppConfigFunctions } from 'app/main';
+
+// import of app/main is resolved by the jest moduleNameMapper
 
 import { getImaTestingLibraryClientConfig } from './client/configuration';
 import { generateDictionary } from './localization';

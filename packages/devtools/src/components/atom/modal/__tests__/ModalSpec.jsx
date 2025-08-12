@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
-
 import Modal, { BODY_STYLES, HIDE_ANIMATION_DURATION } from '../Modal';
 
 describe('Modal atom', () => {
@@ -7,7 +7,7 @@ describe('Modal atom', () => {
   const props = {
     opened: false,
     title: '',
-    onClose: jest.fn(),
+    onClose: vi.fn(),
   };
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('Modal atom', () => {
     instance = wrapper.instance();
     instance.props.onClose.mockClear();
 
-    Object.defineProperty(global, document, {
+    Object.defineProperty(globalThis, document, {
       body: {
         style: {
           cssText: null,
@@ -23,8 +23,8 @@ describe('Modal atom', () => {
       },
     });
 
-    jest
-      .spyOn(global, 'setTimeout')
+    vi
+      .spyOn(globalThis, 'setTimeout')
       .mockImplementation()
       .mockImplementation(cb => cb());
   });
@@ -82,7 +82,7 @@ describe('Modal atom', () => {
 
   describe('componentDidMount', () => {
     it('should set keyDown window listeners', () => {
-      jest.spyOn(window, 'addEventListener').mockImplementation();
+      vi.spyOn(window, 'addEventListener').mockImplementation();
 
       instance.componentDidMount();
 
@@ -94,7 +94,7 @@ describe('Modal atom', () => {
 
   describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
-      jest.spyOn(window, 'removeEventListener').mockImplementation();
+      vi.spyOn(window, 'removeEventListener').mockImplementation();
 
       instance.componentWillUnmount();
 
@@ -112,8 +112,8 @@ describe('Modal atom', () => {
       wrapper.setProps({ opened: false });
       instance = wrapper.instance();
 
-      jest.spyOn(instance, '_addBodyStyles').mockImplementation();
-      jest.spyOn(instance, '_removeBodyStyles').mockImplementation();
+      vi.spyOn(instance, '_addBodyStyles').mockImplementation();
+      vi.spyOn(instance, '_removeBodyStyles').mockImplementation();
 
       expect(instance._addBodyStyles.mock.calls).toHaveLength(0);
       expect(instance._removeBodyStyles.mock.calls).toHaveLength(0);
@@ -122,7 +122,7 @@ describe('Modal atom', () => {
     it('should add body styles if modal window has been opened', () => {
       wrapper = shallow(<Modal opened={false} />);
       instance = wrapper.instance();
-      jest.spyOn(instance, '_addBodyStyles').mockImplementation();
+      vi.spyOn(instance, '_addBodyStyles').mockImplementation();
 
       wrapper.setProps({ opened: true });
 
@@ -132,8 +132,8 @@ describe('Modal atom', () => {
     it('should remove body styles if modal window has been closed and handle animation', () => {
       wrapper = shallow(<Modal opened={true} />);
       instance = wrapper.instance();
-      jest.spyOn(instance, '_removeBodyStyles').mockImplementation();
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, '_removeBodyStyles').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
 
       wrapper.setProps({ opened: false });
 

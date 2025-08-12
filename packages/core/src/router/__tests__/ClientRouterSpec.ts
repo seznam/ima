@@ -3,6 +3,7 @@
  */
 
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Settings } from '../..';
 import { Dispatcher } from '../../event/Dispatcher';
@@ -39,18 +40,18 @@ describe('ima.core.router.ClientRouter', () => {
       settings
     );
 
-    jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
+    vi.spyOn(router, 'getPath').mockReturnValue('/routePath');
 
     router.init(routerConfig);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return actual path', () => {
-    jest.restoreAllMocks();
-    jest.spyOn(window, 'getPath').mockReturnValue('');
+    vi.restoreAllMocks();
+    vi.spyOn(window, 'getPath').mockReturnValue('');
 
     router.getPath();
 
@@ -58,7 +59,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should be return actual url', () => {
-    jest.spyOn(window, 'getUrl').mockImplementation();
+    vi.spyOn(window, 'getUrl').mockImplementation();
 
     router.getUrl();
 
@@ -66,7 +67,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should add listener to popState event, click event', () => {
-    jest.spyOn(window, 'bindEventListener').mockImplementation();
+    vi.spyOn(window, 'bindEventListener').mockImplementation();
 
     router.listen();
 
@@ -74,7 +75,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should add listener to popState event, click event on custom element', () => {
-    jest.spyOn(window, 'bindEventListener').mockImplementation();
+    vi.spyOn(window, 'bindEventListener').mockImplementation();
     const customElement = document.createElement('div');
 
     router.listen(customElement);
@@ -112,7 +113,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should cleanup listeners from specific custom element', () => {
-    jest.spyOn(window, 'unbindEventListener').mockImplementation();
+    vi.spyOn(window, 'unbindEventListener').mockImplementation();
     const customElement1 = document.createElement('div');
     const customElement2 = document.createElement('div');
 
@@ -135,7 +136,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should cleanup all listeners with unlistenAll', () => {
-    jest.spyOn(window, 'unbindEventListener').mockImplementation();
+    vi.spyOn(window, 'unbindEventListener').mockImplementation();
     const customElement1 = document.createElement('div');
     const customElement2 = document.createElement('div');
 
@@ -167,7 +168,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   it('should remove listener to popState event, click event', () => {
-    jest.spyOn(window, 'unbindEventListener').mockImplementation();
+    vi.spyOn(window, 'unbindEventListener').mockImplementation();
 
     router.unlisten();
 
@@ -180,7 +181,7 @@ describe('ima.core.router.ClientRouter', () => {
       const url = protocol + '//' + host + path;
       const options = { httpStatus: 302 };
 
-      jest.spyOn(router, 'route').mockImplementation();
+      vi.spyOn(router, 'route').mockImplementation();
 
       router.redirect(url, options);
 
@@ -199,7 +200,7 @@ describe('ima.core.router.ClientRouter', () => {
     it('return null for non exist route', () => {
       const url = 'http://example.com/somePath/1';
 
-      jest.spyOn(window, 'redirect').mockImplementation();
+      vi.spyOn(window, 'redirect').mockImplementation();
 
       router.init(routerConfig);
       router.redirect(url);
@@ -210,7 +211,7 @@ describe('ima.core.router.ClientRouter', () => {
     it('should redirect using native window methods when custom isSPARouted method is provided', () => {
       const url = 'http://example.com/somePath/2';
 
-      jest.spyOn(window, 'redirect').mockImplementation();
+      vi.spyOn(window, 'redirect').mockImplementation();
 
       router = new ClientRouter(
         pageRenderer,
@@ -243,9 +244,9 @@ describe('ima.core.router.ClientRouter', () => {
         }
       );
 
-      jest.spyOn(router, 'getPath').mockReturnValue('/routePath');
-      jest.spyOn(router, 'route').mockImplementation();
-      jest.spyOn(window, 'redirect').mockImplementation();
+      vi.spyOn(router, 'getPath').mockReturnValue('/routePath');
+      vi.spyOn(router, 'route').mockImplementation();
+      vi.spyOn(window, 'redirect').mockImplementation();
 
       router.init(routerConfig);
       router.redirect(url, options);
@@ -266,7 +267,7 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('route method', () => {
     it('should call handleError for throwing error in super.router', async () => {
-      jest.spyOn(router, 'handleError').mockReturnValue(Promise.resolve());
+      vi.spyOn(router, 'handleError').mockReturnValue(Promise.resolve());
 
       await router.route('/something').then(() => {
         expect(router.handleError).toHaveBeenCalled();
@@ -276,9 +277,9 @@ describe('ima.core.router.ClientRouter', () => {
 
   describe('handleNotFound method', () => {
     it('should be call router.handleError function for throwing error', async () => {
-      jest
-        .spyOn(router, 'handleError')
-        .mockReturnValue(Promise.resolve({ status: 'ok' }));
+      vi.spyOn(router, 'handleError').mockReturnValue(
+        Promise.resolve({ status: 'ok' })
+      );
 
       await router.handleNotFound({ path: '/path' }).then(() => {
         expect(router.handleError).toHaveBeenCalled();
@@ -344,7 +345,7 @@ describe('ima.core.router.ClientRouter', () => {
           ' return ' +
           value.result,
         () => {
-          jest.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl as string);
+          vi.spyOn(window, 'getUrl').mockReturnValue(value.baseUrl as string);
 
           expect(router._isHashLink(value.targetUrl as string)).toStrictEqual(
             value.result

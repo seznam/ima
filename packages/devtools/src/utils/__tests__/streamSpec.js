@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { createEntry } from '../stream';
 
 describe('createEntry', () => {
@@ -13,7 +15,7 @@ describe('createEntry', () => {
   });
 
   it('should return error message if the input is not JSON serializable', () => {
-    global.JSON.stringify = () => '{"foo":bar"}';
+    globalThis.JSON.stringify = () => '{"foo":bar"}';
     const result = createEntry(data);
 
     // Stringify here is used to catch the error correctly

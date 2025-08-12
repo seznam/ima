@@ -1,4 +1,10 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PageMetaHandlerSpec > handlePostManagedState > should render meta tags from meta manager into document.head 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://styles.css"><meta data-ima-meta="" name="description" content="Test Page" value="value"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params">"`;
+
+exports[`PageMetaHandlerSpec > handlePostManagedState > should replace old meta with new set 1`] = `"<title></title><link data-ima-meta="" rel="preload" href="https://api.com">"`;
+
+exports[`PageMetaHandlerSpec > handlePostManagedState > should update existing meta tags with updated values 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://new-styles.css"><meta data-ima-meta="" name="description" content="Test Page"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params" andwith="another-additional-params">"`;
 
 exports[`PageMetaHandlerSpec handlePostManagedState should render meta tags from meta manager into document.head 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://styles.css"><meta data-ima-meta="" name="description" content="Test Page" value="value"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params">"`;
 

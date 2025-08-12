@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbstractController } from '../../../controller/AbstractController';
 import { Controller } from '../../../controller/Controller';
@@ -85,15 +86,15 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     );
 
     // Resolve page promise in timeout
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
   }
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     controllerMock = new ControllerMock([]);
     extensionMock = new ExtensionMock();
     pageRenderer = toMockedInstance(PageRenderer, {
-      mount: jest.fn().mockResolvedValue('mounted'),
+      mount: vi.fn().mockResolvedValue('mounted'),
     });
     pageStateManager = new PageStateManagerMock();
     handlerRegistry = new PageHandlerRegistry(
@@ -101,10 +102,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     );
     routeFactory = new RouteFactory();
     dispatcher = toMockedInstance(DispatcherImpl, {
-      fire: jest.fn(),
+      fire: vi.fn(),
     });
     pageFactory = toMockedInstance(PageFactory, {
-      createController: jest.fn().mockReturnValue(controllerMock),
+      createController: vi.fn().mockReturnValue(controllerMock),
       decorateController: (controller: IController) => controller,
       decoratePageStateManager: (pageStateManger: PageStateManager) =>
         pageStateManger,
@@ -112,9 +113,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     // Mock extensions getter
-    jest
-      .spyOn(controllerMock, 'getExtensions')
-      .mockReturnValue([extensionMock]);
+    vi.spyOn(controllerMock, 'getExtensions').mockReturnValue([extensionMock]);
 
     pageManager = new PageManagerMock(
       pageFactory as unknown as PageFactory,
@@ -145,12 +144,12 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('init()', () => {
     it('should init page handlers', () => {
-      jest.spyOn(handlerRegistry, 'init');
+      vi.spyOn(handlerRegistry, 'init');
 
       pageManager.init();
 
@@ -178,18 +177,18 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   describe('manage()', () => {
     it('should only update last managed controller and view', async () => {
       pageManager['_managedPage'].state.mounted = true;
-      jest
-        .spyOn(pageManager, '_hasOnlyUpdate' as never)
-        .mockReturnValue(true as never);
-      jest
-        .spyOn(pageManager, '_runPreManageHandlers' as never)
-        .mockReturnValue(Promise.resolve() as never);
-      jest
-        .spyOn(pageManager, '_runPostManageHandlers' as never)
-        .mockReturnValue(Promise.resolve() as never);
-      jest
-        .spyOn(pageManager, '_updatePageSource' as never)
-        .mockReturnValue(Promise.resolve() as never);
+      vi.spyOn(pageManager, '_hasOnlyUpdate' as never).mockReturnValue(
+        true as never
+      );
+      vi.spyOn(pageManager, '_runPreManageHandlers' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
+      vi.spyOn(pageManager, '_runPostManageHandlers' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
+      vi.spyOn(pageManager, '_updatePageSource' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
 
       const pagePromise = pageManager.manage({
         route,
@@ -197,7 +196,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         action: {},
       });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
       await pagePromise;
 
       expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
@@ -206,31 +205,30 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should mount new controller and view', async () => {
-      jest
-        .spyOn(pageManager, '_hasOnlyUpdate' as never)
-        .mockReturnValue(false as never);
-      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
-      jest
-        .spyOn(pageManager, '_runPreManageHandlers' as never)
-        .mockReturnValue(Promise.resolve() as never);
-      jest
-        .spyOn(pageManager, '_runPostManageHandlers' as never)
-        .mockReturnValue(Promise.resolve() as never);
-      jest
-        .spyOn(pageManager, '_deactivatePageSource' as never)
-        .mockImplementation();
-      jest
-        .spyOn(pageManager, '_destroyPageSource' as never)
-        .mockImplementation();
-      jest.spyOn(pageStateManager, 'clear').mockImplementation();
-      jest.spyOn(pageManager, '_clearComponentState').mockImplementation();
-      jest.spyOn(pageManager, '_constructManagedPageValue' as never);
-      jest.spyOn(pageManager, '_initPageSource' as never).mockImplementation();
-      jest
-        .spyOn(pageManager, '_loadPageSource' as never)
-        .mockReturnValue(Promise.resolve() as never);
+      vi.spyOn(pageManager, '_hasOnlyUpdate' as never).mockReturnValue(
+        false as never
+      );
+      vi.spyOn(pageManager, '_getInitialManagedPage' as never);
+      vi.spyOn(pageManager, '_runPreManageHandlers' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
+      vi.spyOn(pageManager, '_runPostManageHandlers' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
+      vi.spyOn(
+        pageManager,
+        '_deactivatePageSource' as never
+      ).mockImplementation();
+      vi.spyOn(pageManager, '_destroyPageSource' as never).mockImplementation();
+      vi.spyOn(pageStateManager, 'clear').mockImplementation();
+      vi.spyOn(pageManager, '_clearComponentState').mockImplementation();
+      vi.spyOn(pageManager, '_constructManagedPageValue' as never);
+      vi.spyOn(pageManager, '_initPageSource' as never).mockImplementation();
+      vi.spyOn(pageManager, '_loadPageSource' as never).mockReturnValue(
+        Promise.resolve() as never
+      );
 
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
       const pagePromise = pageManager.manage({
         route,
@@ -238,7 +236,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         action: {},
       });
 
-      jest.runAllTimers();
+      vi.runAllTimers();
       await pagePromise;
 
       expect(pageManager['_runPreManageHandlers']).toHaveBeenCalled();
@@ -263,13 +261,13 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         ),
         options,
       });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       const preManageOld = pageManager.preManage();
       const oldResponse = await oldPagePromise;
 
       pageManager.postManage();
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
       await preManageOld;
 
       expect(pageManager['_managedPage']).toMatchInlineSnapshot(`
@@ -309,7 +307,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should fire router events for async route handlers', async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       const pagePromise = pageManager.manage({
         route: routeFactory.createRoute(
           routeName,
@@ -322,7 +320,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       const response = await pagePromise;
       pageManager.postManage();
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       expect(dispatcher.fire).toHaveBeenNthCalledWith(
         1,
@@ -348,10 +346,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       // Resolve page promise in timeout
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       // @ts-expect-error
-      jest.spyOn(pageManager, '_hasOnlyUpdate').mockReturnValue(true);
+      vi.spyOn(pageManager, '_hasOnlyUpdate').mockReturnValue(true);
       const updatedResponse = await pageManager.manage({
         route,
         options,
@@ -359,7 +357,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       // Resolve page promise in timeout
       pageManager.postManage();
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       await expect(
         pageManager['_managedPage'].state.page.promise
@@ -376,7 +374,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       // Resolve page promise in timeout
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       expect(JSON.stringify(pageManager['_previousManagedPage'])).toBe(
         JSON.stringify(pageManager['_getInitialManagedPage']())
@@ -392,9 +390,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       pageManager.postManage();
 
       // Resolve page promise in timeout
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
       await pageManager.preManage();
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       class StuckController extends ControllerMock {
         async init() {
@@ -402,9 +400,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         }
       }
 
-      jest
-        .spyOn(pageFactory, 'createController')
-        .mockReturnValue(new StuckController([]));
+      vi.spyOn(pageFactory, 'createController').mockReturnValue(
+        new StuckController([])
+      );
 
       const oldPagePromise = pageManager.manage({
         route,
@@ -412,7 +410,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       // Resolve page promise in timeout
-      jest.advanceTimersByTime(50);
+      vi.advanceTimersByTime(50);
 
       const preManageOld = pageManager.preManage();
       const oldResponse = await oldPagePromise;
@@ -422,13 +420,13 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       pageManager.postManage();
 
       // Resolve page promise in timeout
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
       await preManageOld;
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
-      jest
-        .spyOn(pageFactory, 'createController')
-        .mockReturnValue(new ControllerMock([]));
+      vi.spyOn(pageFactory, 'createController').mockReturnValue(
+        new ControllerMock([])
+      );
 
       const newPagePromise = pageManager.manage({
         route: routeFactory.createRoute(
@@ -443,7 +441,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       // Resolve page promise in timeout
       const newPageResponse = await newPagePromise;
       pageManager.postManage();
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
 
       await expect(
         pageManager['_managedPage'].state.page.promise
@@ -455,7 +453,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('destroy()()', () => {
     it('should clear managed page value', async () => {
-      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
+      vi.spyOn(pageManager, '_getInitialManagedPage' as never);
 
       await pageManager.destroy();
 
@@ -469,9 +467,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should deactivate page source', async () => {
-      jest
-        .spyOn(pageManager, '_deactivatePageSource' as never)
-        .mockImplementation();
+      vi.spyOn(
+        pageManager,
+        '_deactivatePageSource' as never
+      ).mockImplementation();
 
       await pageManager.destroy();
 
@@ -479,9 +478,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should destroy page source', async () => {
-      jest
-        .spyOn(pageManager, '_destroyPageSource' as never)
-        .mockImplementation();
+      vi.spyOn(pageManager, '_destroyPageSource' as never).mockImplementation();
 
       await pageManager.destroy();
 
@@ -489,7 +486,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should clear page state manager', async () => {
-      jest.spyOn(pageStateManager, 'clear').mockImplementation();
+      vi.spyOn(pageStateManager, 'clear').mockImplementation();
 
       await pageManager.destroy();
 
@@ -499,8 +496,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_initPageSource()', () => {
     it('should initialize page source', async () => {
-      jest.spyOn(pageManager, '_initController' as never).mockImplementation();
-      jest.spyOn(pageManager, '_initExtensions' as never).mockImplementation();
+      vi.spyOn(pageManager, '_initController' as never).mockImplementation();
+      vi.spyOn(pageManager, '_initExtensions' as never).mockImplementation();
 
       await pageManager['_initPageSource']();
 
@@ -515,7 +512,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set route params to controller instance', async () => {
-      jest.spyOn(controllerMock, 'setRouteParams').mockImplementation();
+      vi.spyOn(controllerMock, 'setRouteParams').mockImplementation();
 
       await pageManager['_initController']();
 
@@ -523,7 +520,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call init function on controller instance', async () => {
-      jest.spyOn(controllerMock, 'init').mockImplementation();
+      vi.spyOn(controllerMock, 'init').mockImplementation();
 
       await pageManager['_initController']();
 
@@ -537,7 +534,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set route params to extension instance', async () => {
-      jest.spyOn(extensionMock, 'setRouteParams').mockImplementation();
+      vi.spyOn(extensionMock, 'setRouteParams').mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -545,7 +542,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call init function on controller instance', async () => {
-      jest.spyOn(extensionMock, 'init').mockImplementation();
+      vi.spyOn(extensionMock, 'init').mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -556,9 +553,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   describe('_activatePageSource()', () => {
     beforeEach(async () => {
       // @ts-expect-error
-      jest.spyOn(pageManager, '_activateController').mockImplementation();
+      vi.spyOn(pageManager, '_activateController').mockImplementation();
       // @ts-expect-error
-      jest.spyOn(pageManager, '_activateExtensions').mockImplementation();
+      vi.spyOn(pageManager, '_activateExtensions').mockImplementation();
 
       await runManage();
     });
@@ -583,7 +580,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_clearComponentState()', () => {
     it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
-      jest.spyOn(pageRenderer, 'unmount').mockImplementation();
+      vi.spyOn(pageRenderer, 'unmount').mockImplementation();
 
       pageManager._clearComponentState({} as RouteOptions);
 
@@ -599,11 +596,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     it('should return value from onlyUpdate function', () => {
       const newOptions: RouteOptions = {
         ...options,
-        onlyUpdate: jest.fn().mockReturnValue(true),
+        onlyUpdate: vi.fn().mockReturnValue(true),
       };
 
       // @ts-expect-error
-      const spy = jest.spyOn(newOptions, 'onlyUpdate');
+      const spy = vi.spyOn(newOptions, 'onlyUpdate');
       const mockSpyWrapper = (...args: unknown[]) => {
         // @ts-expect-error
         return spy(...args);
@@ -643,7 +640,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call destroy on extension instance', async () => {
-      jest.spyOn(extensionMock, 'destroy').mockImplementation();
+      vi.spyOn(extensionMock, 'destroy').mockImplementation();
 
       await runManage();
 
@@ -651,7 +648,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should unset pageStateManager to extension', async () => {
-      jest.spyOn(extensionMock, 'setPageStateManager').mockImplementation();
+      vi.spyOn(extensionMock, 'setPageStateManager').mockImplementation();
 
       await runManage();
 
@@ -666,9 +663,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
     it('should destroy page resource', async () => {
       // @ts-expect-error
-      jest.spyOn(pageManager, '_destroyController').mockImplementation();
+      vi.spyOn(pageManager, '_destroyController').mockImplementation();
       // @ts-expect-error
-      jest.spyOn(pageManager, '_destroyExtensions').mockImplementation();
+      vi.spyOn(pageManager, '_destroyExtensions').mockImplementation();
 
       await runManage();
 
@@ -683,7 +680,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call deactivate method on controller', async () => {
-      jest.spyOn(controllerMock, 'deactivate').mockImplementation();
+      vi.spyOn(controllerMock, 'deactivate').mockImplementation();
       pageManager['_managedPage'].state.activated = true;
 
       await runManage();
@@ -698,8 +695,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call extensions update method', async () => {
-      jest.spyOn(extensionMock, 'getRouteParams').mockReturnValue(routeParams);
-      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+      vi.spyOn(extensionMock, 'getRouteParams').mockReturnValue(routeParams);
+      vi.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
 
       await pageManager['_getUpdatedExtensionsState']();
 
@@ -707,10 +704,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set restricted pageStateManager to extension instance', async () => {
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
-      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+      vi.spyOn(
+        pageManager,
+        '_setRestrictedPageStateManager'
+      ).mockImplementation();
+      vi.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
 
       await pageManager['_getUpdatedExtensionsState']();
 
@@ -721,10 +719,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      jest.spyOn(extensionMock, 'setPartialState').mockImplementation();
-      jest.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
-      jest.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
-      jest.spyOn(pageStateManager, 'getState').mockReturnValue({ foo: 'bar' });
+      vi.spyOn(extensionMock, 'setPartialState').mockImplementation();
+      vi.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
+      vi.spyOn(extensionMock, 'update').mockReturnValue({ state: 'state' });
+      vi.spyOn(pageStateManager, 'getState').mockReturnValue({ foo: 'bar' });
 
       await pageManager['_getUpdatedExtensionsState']({ foobar: 'bazfoo' });
 
@@ -738,12 +736,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should return extensions state together with active controller state', async () => {
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
-      jest
-        .spyOn(extensionMock, 'update')
-        .mockReturnValue({ extension: 'state' });
+      vi.spyOn(
+        pageManager,
+        '_setRestrictedPageStateManager'
+      ).mockImplementation();
+      vi.spyOn(extensionMock, 'update').mockReturnValue({ extension: 'state' });
 
       const result = await pageManager['_getUpdatedExtensionsState']({
         controller: 'state',
@@ -753,9 +750,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should switch extensions to PageStateManager after all resources are updated', async () => {
-      jest
-        .spyOn(pageManager, '_switchToPageStateManagerAfterLoaded')
-        .mockImplementation();
+      vi.spyOn(
+        pageManager,
+        '_switchToPageStateManagerAfterLoaded'
+      ).mockImplementation();
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -770,9 +768,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       await runManage();
 
       // @ts-expect-error
-      jest.spyOn(pageManager, '_deactivateController').mockImplementation();
+      vi.spyOn(pageManager, '_deactivateController').mockImplementation();
       // @ts-expect-error
-      jest.spyOn(pageManager, '_deactivateExtensions').mockImplementation();
+      vi.spyOn(pageManager, '_deactivateExtensions').mockImplementation();
     });
 
     it('should activate controller and extensions', async () => {
@@ -798,7 +796,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call deactivate method on extensions', async () => {
-      jest.spyOn(extensionMock, 'deactivate').mockImplementation();
+      vi.spyOn(extensionMock, 'deactivate').mockImplementation();
       pageManager['_managedPage'].state.activated = true;
 
       await runManage();
@@ -813,8 +811,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should calls controller update method', () => {
-      jest.spyOn(controllerMock, 'update').mockImplementation();
-      jest.spyOn(controllerMock, 'getRouteParams').mockReturnValue(routeParams);
+      vi.spyOn(controllerMock, 'update').mockImplementation();
+      vi.spyOn(controllerMock, 'getRouteParams').mockReturnValue(routeParams);
 
       pageManager['_getUpdatedControllerState']();
 
@@ -824,19 +822,15 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_updatePageSource()', () => {
     beforeEach(async () => {
-      jest
-        // @ts-expect-error
-        .spyOn(pageManager, '_getUpdatedControllerState')
+      vi.spyOn(pageManager, '_getUpdatedControllerState')
         // @ts-expect-error
         .mockReturnValue({ controller: 'state' });
 
-      jest
-        // @ts-expect-error
-        .spyOn(pageManager, '_getUpdatedExtensionsState')
+      vi.spyOn(pageManager, '_getUpdatedExtensionsState')
         // @ts-expect-error
         .mockReturnValue({ extension: 'state' });
 
-      jest.spyOn(pageRenderer, 'update').mockReturnValue(Promise.resolve());
+      vi.spyOn(pageRenderer, 'update').mockReturnValue(Promise.resolve());
 
       await runManage();
     });
@@ -863,7 +857,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call activate method on controller', async () => {
-      jest.spyOn(controllerMock, 'activate').mockImplementation();
+      vi.spyOn(controllerMock, 'activate').mockImplementation();
 
       await pageManager['_activateController']();
 
@@ -877,7 +871,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call activate method on extensions', async () => {
-      jest.spyOn(extensionMock, 'activate').mockImplementation();
+      vi.spyOn(extensionMock, 'activate').mockImplementation();
 
       await pageManager['_activateExtensions']();
 
@@ -896,8 +890,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
-      jest.spyOn(extensionMock, 'switchToStateManager').mockImplementation();
-      jest.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
+      vi.spyOn(extensionMock, 'switchToStateManager').mockImplementation();
+      vi.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
         resolver();
       });
 
@@ -911,7 +905,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should clear partial state if resource is not loaded successfully', async () => {
-      jest.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
+      vi.spyOn(extensionMock, 'clearPartialState').mockImplementation(() => {
         resolver();
       });
 
@@ -930,7 +924,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call extensions load method', async () => {
-      jest.spyOn(extensionMock, 'load').mockReturnValue({});
+      vi.spyOn(extensionMock, 'load').mockReturnValue({});
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -938,10 +932,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set restricted pageStateManager to extension instance', async () => {
-      jest.spyOn(extensionMock, 'load').mockReturnValue({});
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
+      vi.spyOn(extensionMock, 'load').mockReturnValue({});
+      vi.spyOn(
+        pageManager,
+        '_setRestrictedPageStateManager'
+      ).mockImplementation();
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -952,9 +947,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it("should call extension's setPartialState method and switch extension to partial state", async () => {
-      jest.spyOn(extensionMock, 'setPartialState').mockImplementation();
-      jest.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
-      jest.spyOn(extensionMock, 'load').mockReturnValue({});
+      vi.spyOn(extensionMock, 'setPartialState').mockImplementation();
+      vi.spyOn(extensionMock, 'switchToPartialState').mockImplementation();
+      vi.spyOn(extensionMock, 'load').mockReturnValue({});
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -963,10 +958,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should return extensions state together with active controller state', async () => {
-      jest.spyOn(extensionMock, 'load');
-      jest
-        .spyOn(pageManager, '_setRestrictedPageStateManager')
-        .mockImplementation();
+      vi.spyOn(extensionMock, 'load');
+      vi.spyOn(
+        pageManager,
+        '_setRestrictedPageStateManager'
+      ).mockImplementation();
 
       const result = await pageManager['_getLoadedExtensionsState']({
         controller: 'state',
@@ -978,9 +974,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should switch extensions to PageStateManager after all resources are loaded', async () => {
-      jest
-        .spyOn(pageManager, '_switchToPageStateManagerAfterLoaded')
-        .mockImplementation();
+      vi.spyOn(
+        pageManager,
+        '_switchToPageStateManagerAfterLoaded'
+      ).mockImplementation();
 
       await pageManager['_getLoadedExtensionsState']();
 
@@ -996,7 +993,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should calls controller load method', async () => {
-      jest.spyOn(controllerMock, 'load').mockImplementation();
+      vi.spyOn(controllerMock, 'load').mockImplementation();
 
       await pageManager['_getLoadedControllerState']();
 
@@ -1004,7 +1001,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set pageStateManager to controller instance', async () => {
-      jest.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
+      vi.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
 
       await pageManager['_getLoadedControllerState']();
 
@@ -1020,7 +1017,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should set route params to extension instance', async () => {
-      jest.spyOn(extensionMock, 'setRouteParams').mockImplementation();
+      vi.spyOn(extensionMock, 'setRouteParams').mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -1028,7 +1025,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call init function on controller instance', async () => {
-      jest.spyOn(extensionMock, 'init').mockImplementation();
+      vi.spyOn(extensionMock, 'init').mockImplementation();
 
       await pageManager['_initExtensions']();
 
@@ -1038,18 +1035,14 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_loadPageSource method', () => {
     beforeEach(async () => {
-      jest
-        // @ts-expect-error
-        .spyOn(pageManager, '_getLoadedControllerState')
+      vi.spyOn(pageManager, '_getLoadedControllerState')
         // @ts-expect-error
         .mockReturnValue({ controller: 'state' });
 
-      jest
-        // @ts-expect-error
-        .spyOn(pageManager, '_getLoadedExtensionsState')
+      vi.spyOn(pageManager, '_getLoadedExtensionsState')
         // @ts-expect-error
         .mockReturnValue({ extension: 'state' });
-      jest.spyOn(pageRenderer, 'mount').mockReturnValue(Promise.resolve());
+      vi.spyOn(pageRenderer, 'mount').mockReturnValue(Promise.resolve());
 
       await runManage();
     });
@@ -1072,7 +1065,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should call destroy on controller instance', async () => {
-      jest.spyOn(controllerMock, 'destroy').mockImplementation();
+      vi.spyOn(controllerMock, 'destroy').mockImplementation();
 
       await runManage();
 
@@ -1080,7 +1073,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should unset pageStateManager to controller', async () => {
-      jest.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
+      vi.spyOn(controllerMock, 'setPageStateManager').mockImplementation();
 
       await runManage();
 
@@ -1095,17 +1088,16 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     );
 
     beforeEach(async () => {
-      jest
-        .spyOn(extensionMock, 'getAllowedStateKeys')
-        .mockReturnValue(allowedStateKeys);
+      vi.spyOn(extensionMock, 'getAllowedStateKeys').mockReturnValue(
+        allowedStateKeys
+      );
 
-      jest
-        .spyOn(pageFactory, 'decoratePageStateManager')
+      vi.spyOn(pageFactory, 'decoratePageStateManager')
         // @ts-expect-error
         .mockReturnValue(pageStateManager);
 
       (
-        jest.spyOn(extensionMock, 'setPageStateManager') as jest.SpyInstance
+        vi.spyOn(extensionMock, 'setPageStateManager') as jest.SpyInstance
       ).mockImplementation();
 
       await runManage();

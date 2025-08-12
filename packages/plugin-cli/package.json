@@ -28,7 +28,8 @@
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "@ima/dev-utils": "^19.0.0",

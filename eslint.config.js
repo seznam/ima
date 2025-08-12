@@ -1,7 +1,6 @@
 const babelParser = require('@babel/eslint-parser');
 const js = require('@eslint/js');
 const importPlugin = require('eslint-plugin-import');
-const jest = require('eslint-plugin-jest');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const reactPlugin = require('eslint-plugin-react');
 const globals = require('globals');
@@ -23,8 +22,6 @@ module.exports = typescriptEslint.config(
   js.configs.recommended,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
-  jest.configs['flat/recommended'],
-  jest.configs['flat/style'],
   eslintPluginPrettierRecommended,
   importPlugin.flatConfigs.recommended,
   {
@@ -56,20 +53,6 @@ module.exports = typescriptEslint.config(
           jsxSingleQuote: true,
           bracketSameLine: false,
           arrowParens: 'avoid',
-        },
-      ],
-
-      // Jest plugin overrides
-      'jest/no-mocks-import': 'off',
-      'jest/valid-title': 'off',
-      'jest/no-done-callback': 'warn',
-      'jest/no-disabled-tests': 'warn',
-      'jest/no-conditional-expect': 'warn',
-      'jest/prefer-expect-resolves': 'warn',
-      'jest/prefer-lowercase-title': [
-        'warn',
-        {
-          ignore: ['describe'],
         },
       ],
 

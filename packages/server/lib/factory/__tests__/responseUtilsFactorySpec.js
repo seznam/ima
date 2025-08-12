@@ -1,16 +1,16 @@
-'use strict';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const responseUtilsFactory = require('../responseUtilsFactory.js');
 
 const manifestMock = require('../__mocks__/manifest.json');
 
-jest.mock('crypto', () => ({
+vi.mock('crypto', () => ({
   randomUUID: () => 'UUID',
 }));
 
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
+vi.mock('fs', () => {
+  const { toMockedInstance } = vi.requireActual('to-mock');
+  const originalModule = vi.requireActual('fs');
 
   return {
     ...toMockedInstance(originalModule, {
@@ -29,8 +29,8 @@ jest.mock('fs', () => {
 });
 
 describe('responseUtilsFactory', () => {
-  const nowMock = jest.spyOn(global.Date, 'now').mockReturnValue('now');
-  const randomMock = jest.spyOn(global.Math, 'random').mockReturnValue(0);
+  const nowMock = vi.spyOn(global.Date, 'now').mockReturnValue('now');
+  const randomMock = vi.spyOn(global.Math, 'random').mockReturnValue(0);
 
   const {
     processContent,
@@ -47,8 +47,8 @@ describe('responseUtilsFactory', () => {
   beforeEach(() => {
     event = {
       res: {
-        cookie: jest.fn(),
-        set: jest.fn(),
+        cookie: vi.fn(),
+        set: vi.fn(),
         locals: {},
       },
       context: {
@@ -68,7 +68,7 @@ describe('responseUtilsFactory', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('_prepareCookieOptionsForExpress', () => {

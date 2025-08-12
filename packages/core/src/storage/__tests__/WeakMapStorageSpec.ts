@@ -1,3 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
 import { WeakMapStorage } from '../WeakMapStorage';
 
 describe('ima.storage.WeakMapStorage', () => {

@@ -1,4 +1,87 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`responseUtilsFactory > createContentVariables > should generate base set of content variables 1`] = `
+{
+  "_": {
+    "manifest": {},
+    "resources": {
+      "esScripts": [],
+      "esStyles": [],
+      "scripts": [],
+      "styles": [],
+    },
+  },
+  "meta": "",
+  "revivalCache": "<script id="ima-revival-cache">(function (root) {
+      root.$IMA = root.$IMA || {};
+      $IMA.Cache = {};
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script>",
+  "revivalSettings": "<script id="ima-revival-settings">(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-12f4c553-a5f3-4545-ba03-ff938fb8f943";
+      $IMA.$Language = "en";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script>",
+  "runner": "<script id="ima-runner"></script>",
+  "scriptResources": "{\\"scripts\\":[],\\"esScripts\\":[]}",
+  "styles": "",
+}
+`;
+
+exports[`responseUtilsFactory > processContent > should allow overrides through custom $Source definition 1`] = `
+"<html><script id="ima-revival-settings">(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-b8aecc4d-e429-4bba-a42f-b3ec11a57703";
+      $IMA.$Language = "en";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script><script id="ima-runner"></script></html>"
+`;
+
+exports[`responseUtilsFactory > processContent > should interpolate revival scripts into page content 1`] = `
+"<html><script id="ima-revival-settings">(function (root) {
+      root.$Debug = true;
+      root.$IMA = root.$IMA || {};
+      $IMA.SPA = false;
+      $IMA.$PublicPath = "";
+      $IMA.$RequestID = "now-0-6e45a64b-29c1-4bad-8c1a-9a53987c8b88";
+      $IMA.$Language = "en";
+      $IMA.$Env = "undefined";
+      $IMA.$Debug = true;
+      $IMA.$Version = "undefined";
+      $IMA.$App = undefined;
+      $IMA.$Protocol = "undefined";
+      $IMA.$Host = "undefined";
+      $IMA.$Path = "undefined";
+      $IMA.$Root = "undefined";
+      $IMA.$LanguagePartPath = "undefined";
+    })(typeof window !== 'undefined' && window !== null ? window : global);
+    </script><script id="ima-runner"></script></html>"
+`;
 
 exports[`responseUtilsFactory createContentVariables should generate base set of content variables 1`] = `
 {

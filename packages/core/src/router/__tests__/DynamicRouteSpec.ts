@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { StringParameters } from '../../types';
 import { DynamicRoute, RoutePathExpression } from '../DynamicRoute';
 import { RouteOptions } from '../Router';

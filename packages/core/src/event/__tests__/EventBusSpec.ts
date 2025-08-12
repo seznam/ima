@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { toMockedInstance } from 'to-mock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ClientWindow } from '../../window/ClientWindow';
 import { EventBusImpl, IMA_EVENT } from '../EventBusImpl';
@@ -38,11 +39,9 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('listen method', () => {
     it('should bind listener for specific event', () => {
-      jest
-        .spyOn(windowInterface, 'bindEventListener')
-        .mockImplementation(() => {
-          return;
-        });
+      vi.spyOn(windowInterface, 'bindEventListener').mockImplementation(() => {
+        return;
+      });
 
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener1);
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener2);
@@ -69,11 +68,9 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('listenAll method', () => {
     it('should bind listener for any event', () => {
-      jest
-        .spyOn(windowInterface, 'bindEventListener')
-        .mockImplementation(() => {
-          return;
-        });
+      vi.spyOn(windowInterface, 'bindEventListener').mockImplementation(() => {
+        return;
+      });
 
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener1);
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener2);
@@ -100,14 +97,14 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for listeners', () => {
-      jest.spyOn(eventSource, 'dispatchEvent').mockImplementation(() => {
+      vi.spyOn(eventSource, 'dispatchEvent').mockImplementation(() => {
         return;
       });
-      jest
-        .spyOn(windowInterface, 'createCustomEvent')
-        .mockImplementation((name: string, options) => {
+      vi.spyOn(windowInterface, 'createCustomEvent').mockImplementation(
+        (name: string, options) => {
           return options as unknown as CustomEvent;
-        });
+        }
+      );
 
       const event = 'event1';
       const data = { data: '' };
@@ -141,11 +138,11 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('unlisten method', () => {
     it('should unbind bound listeners', () => {
-      jest
-        .spyOn(windowInterface, 'unbindEventListener')
-        .mockImplementation(() => {
+      vi.spyOn(windowInterface, 'unbindEventListener').mockImplementation(
+        () => {
           return;
-        });
+        }
+      );
 
       eventBus.listen(eventTarget as EventTarget, event, listeners.listener1);
       eventBus.unlisten(eventTarget as EventTarget, event, listeners.listener1);
@@ -165,11 +162,11 @@ describe('ima.core.event.EventBusImpl', () => {
 
   describe('unlistenAll method', () => {
     it('should unbind bound listeners', () => {
-      jest
-        .spyOn(windowInterface, 'unbindEventListener')
-        .mockImplementation(() => {
+      vi.spyOn(windowInterface, 'unbindEventListener').mockImplementation(
+        () => {
           return;
-        });
+        }
+      );
 
       eventBus.listenAll(eventTarget as EventTarget, listeners.listener1);
       eventBus.unlistenAll(eventTarget as EventTarget, listeners.listener1);

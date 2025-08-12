@@ -1,3 +1,5 @@
+import { describe } from 'vitest';
+
 const { defineInlineTest } = require('jscodeshift/src/testUtils');
 
 const transform = require('../context-api-v17');

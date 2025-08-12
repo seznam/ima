@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { ClientWindow } from '../../window/ClientWindow';
 import { SessionStorage } from '../SessionStorage';
 
@@ -31,7 +33,7 @@ describe('ima.storage.SessionStorage', () => {
     window = new ClientWindow();
 
     // @ts-ignore
-    jest.spyOn(window, 'getWindow').mockReturnValue({ sessionStorage });
+    vi.spyOn(window, 'getWindow').mockReturnValue({ sessionStorage });
 
     session = new SessionStorage(window);
 
@@ -98,15 +100,12 @@ describe('ima.storage.SessionStorage', () => {
     for (const item of session.keys()) {
       switch (index++) {
         case 0:
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(item).toBe('item1');
           break;
         case 1:
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(item).toBe('item2');
           break;
         default:
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(item).toBe('item3');
           break;
       }

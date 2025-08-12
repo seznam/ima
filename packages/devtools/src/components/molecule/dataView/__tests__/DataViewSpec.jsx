@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import { JsonView } from '@/components/atom';
@@ -80,7 +81,7 @@ describe('DataView molecule', () => {
 
   describe('componentDidMount', () => {
     it('should add keyDown window listeners', () => {
-      jest.spyOn(window, 'addEventListener').mockImplementation();
+      vi.spyOn(window, 'addEventListener').mockImplementation();
 
       instance.componentDidMount();
 
@@ -92,7 +93,7 @@ describe('DataView molecule', () => {
 
   describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
-      jest.spyOn(window, 'removeEventListener').mockImplementation();
+      vi.spyOn(window, 'removeEventListener').mockImplementation();
 
       instance.componentWillUnmount();
 
@@ -106,7 +107,7 @@ describe('DataView molecule', () => {
 
   describe('onKeyDown', () => {
     beforeEach(() => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
     });
 
     it('should not do anything if neither left or right arrow were clicked', () => {

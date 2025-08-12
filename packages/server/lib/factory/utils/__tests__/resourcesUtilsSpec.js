@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 const {
   renderStyles,
   prepareDefaultResources,
@@ -6,9 +8,9 @@ const {
 
 const manifestMock = require('../../__mocks__/manifest.json');
 
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
+vi.mock('fs', () => {
+  const { toMockedInstance } = vi.requireActual('to-mock');
+  const originalModule = vi.requireActual('fs');
 
   return {
     ...toMockedInstance(originalModule, {

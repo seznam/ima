@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import HookEntry from '../HookEntry';
@@ -6,8 +7,8 @@ describe('HookEntry molecule', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn(),
-    stopPropagation: jest.fn(),
+    preventDefault: vi.fn(),
+    stopPropagation: vi.fn(),
   };
 
   const props = {
@@ -18,11 +19,11 @@ describe('HookEntry molecule', () => {
       enabled: true,
       opened: false,
     },
-    toggleHook: jest.fn(),
-    deleteHook: jest.fn(),
-    alertSuccess: jest.fn(),
-    openHook: jest.fn(),
-    showConfirmModal: jest.fn(),
+    toggleHook: vi.fn(),
+    deleteHook: vi.fn(),
+    alertSuccess: vi.fn(),
+    openHook: vi.fn(),
+    showConfirmModal: vi.fn(),
     editable: true,
   };
 
@@ -35,7 +36,7 @@ describe('HookEntry molecule', () => {
 
   describe('onChange', () => {
     it('should extract name form input and set value to state', () => {
-      jest.spyOn(instance, 'setState').mockImplementation();
+      vi.spyOn(instance, 'setState').mockImplementation();
       instance.onChange({
         target: {
           name: 'name__0',

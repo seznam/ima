@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { DispatcherImpl } from '../DispatcherImpl';
 
 describe('ima.core.event.DispatcherImpl', () => {
@@ -22,11 +24,11 @@ describe('ima.core.event.DispatcherImpl', () => {
     dispatcher = new DispatcherImpl();
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('listen method', () => {
@@ -115,7 +117,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for undefined event', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.unlisten(event, handlers.handler1);
 
@@ -123,7 +125,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for undefined handler for event', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.listen(event, handlers.handler1);
       dispatcher.unlisten(event, handlers.handler2);
@@ -134,8 +136,8 @@ describe('ima.core.event.DispatcherImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for handlers', () => {
-      const handler1Spy = jest.spyOn(handlers, 'handler1');
-      const handler2Spy = jest.spyOn(handlers, 'handler2');
+      const handler1Spy = vi.spyOn(handlers, 'handler1');
+      const handler2Spy = vi.spyOn(handlers, 'handler2');
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
       const handler1SpyWrapper = (...args: unknown[]) => {
@@ -157,8 +159,8 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should fire event for all handlers', () => {
-      const handler1Spy = jest.spyOn(handlers, 'handler1');
-      const handler2Spy = jest.spyOn(handlers, 'handler2');
+      const handler1Spy = vi.spyOn(handlers, 'handler1');
+      const handler2Spy = vi.spyOn(handlers, 'handler2');
 
       //Instance of mocked Jest function !== Function, wrapper is needed =>  https://github.com/facebook/jest/issues/6329
       const handler1SpyWrapper = (...args: unknown[]) => {
@@ -182,7 +184,7 @@ describe('ima.core.event.DispatcherImpl', () => {
 
   describe('clear method', () => {
     it('should clear dispatcher', () => {
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
       dispatcher.listen(event, handlers.handler1, handlers);
       dispatcher.listen(event, handlers.handler2, handlers);
 
@@ -278,7 +280,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for undefined listener', () => {
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.listen(event, handlers.handler1);
       dispatcher.unlisten(event, handlers.handler2);

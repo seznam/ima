@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { AbstractRoute } from '../AbstractRoute';
 import { RouteOptions } from '../Router';
 
@@ -125,8 +127,8 @@ describe('ima.core.router.AbstractRoute', function () {
       options as unknown as RouteOptions
     );
 
-    jest.spyOn(route, 'getView');
-    jest.spyOn(route, 'getController');
+    vi.spyOn(route, 'getView');
+    vi.spyOn(route, 'getController');
 
     const [resultController, resultView] = await route.preload();
 

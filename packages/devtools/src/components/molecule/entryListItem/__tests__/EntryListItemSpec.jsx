@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { shallow } from 'enzyme';
 
 import EntryListItem from '../EntryListItem';
@@ -30,10 +31,10 @@ describe('EntryListItem molecule', () => {
     },
     zeroTime: 1124214100000,
     zeroId: '0',
-    setSelected: jest.fn(),
+    setSelected: vi.fn(),
   };
 
-  jest
+  vi
     .spyOn(global, 'Date')
     .mockImplementation()
     .mockImplementation(() => ({

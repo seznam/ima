@@ -1,4 +1,5 @@
 import { toMockedInstance } from 'to-mock';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ObjectContainer } from '../../../oc/ObjectContainer';
 import { ComponentUtils } from '../ComponentUtils';
@@ -16,7 +17,7 @@ describe('componentUtils', () => {
     componentUtils = new ComponentUtils(oc);
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('register() method', () => {
@@ -46,11 +47,9 @@ describe('componentUtils', () => {
 
   describe('getUtils() method.', () => {
     beforeEach(() => {
-      jest
-        .spyOn(oc, 'get')
-        .mockImplementation(entity =>
-          typeof entity === 'function' ? new entity() : entity
-        );
+      vi.spyOn(oc, 'get').mockImplementation(entity =>
+        typeof entity === 'function' ? new entity() : entity
+      );
 
       componentUtils.register({
         SomeMockHelper,
@@ -59,11 +58,11 @@ describe('componentUtils', () => {
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
     });
 
     it('should return $Utils constant from OC if created.', () => {
-      jest.spyOn(oc, 'has').mockImplementation(entity => entity === '$Utils');
+      vi.spyOn(oc, 'has').mockImplementation(entity => entity === '$Utils');
 
       componentUtils.getUtils();
 
@@ -83,7 +82,7 @@ describe('componentUtils', () => {
     it('should not create instances again.', () => {
       // @ts-expect-error error expected
       const utils = (componentUtils['_utilities'] = {});
-      jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
+      vi.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 
       expect(componentUtils.getUtils()).toBe(utils);
       expect(componentUtils._createUtilityInstance).not.toHaveBeenCalled();

@@ -1,5 +1,15 @@
-jest.mock('path', () => ({
-  resolve: jest.fn().mockImplementation(() => './__mocks__/ima.config.js'),
+import {
+  afterAll,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+
+vi.mock('path', () => ({
+  resolve: vi.fn().mockImplementation(() => './__mocks__/ima.config.js'),
 }));
 
 const urlParserFactory = require('../urlParserFactory.js');
@@ -44,7 +54,7 @@ describe('urlParserFactory', () => {
 
   const RES = Object.freeze({
     locals: {},
-    redirect: jest.fn(),
+    redirect: vi.fn(),
   });
 
   const defaultRes = Object.assign({}, RES);
@@ -215,7 +225,6 @@ describe('urlParserFactory', () => {
             res: usedRes,
           });
         } catch (exception) {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(exception.name).toMatch(/^TypeError/);
         }
 
@@ -511,9 +520,7 @@ describe('urlParserFactory', () => {
               res: usedRes,
             });
           } catch (error) {
-            // eslint-disable-next-line jest/no-conditional-expect
             expect(usedRes.locals).toStrictEqual({});
-            // eslint-disable-next-line jest/no-conditional-expect
             expect(error.getParams()).toStrictEqual({
               status: 302,
               url: redirectTo,

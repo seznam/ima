@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { ClientWindow, MetaManager, MetaManagerImpl, Window } from '../../../';
 import { PageMetaHandler, IMA_META_DATA_ATTR } from '../PageMetaHandler';
 
@@ -28,7 +30,7 @@ describe('PageMetaHandlerSpec', () => {
 
   afterEach(() => {
     global.document.head.innerHTML = '';
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('handlePreManagedState', () => {

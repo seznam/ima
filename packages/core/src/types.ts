@@ -71,10 +71,8 @@ export interface GlobalImaObject {
 }
 
 declare global {
-  /* eslint-disable no-var */
   var $Debug: boolean;
   var $IMA: GlobalImaObject;
-  /* eslint-enable no-var */
 
   interface Window {
     $IMA: GlobalImaObject;

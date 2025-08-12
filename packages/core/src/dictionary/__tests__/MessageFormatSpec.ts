@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { MessageFormatDictionary } from '../MessageFormatDictionary';
 
 describe('ima.core.dictionary.MessageFormatDictionary', () => {

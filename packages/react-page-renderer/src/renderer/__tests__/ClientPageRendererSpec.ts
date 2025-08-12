@@ -13,6 +13,7 @@ import * as Helper from '@ima/helpers';
 import { render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { toMockedInstance } from 'to-mock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbstractPureComponent } from '../../component/AbstractPureComponent';
 import { BlankManagedRootView } from '../../component/BlankManagedRootView';
@@ -131,18 +132,19 @@ describe('ClientPageRenderer', () => {
 
   describe('mount method', () => {
     beforeEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
 
-      jest
-        .spyOn(pageRenderer, '_separatePromisesAndValues' as never)
-        .mockReturnValue({
-          values: { param1: params.param1 },
-          promises: { param2: params.param2 },
-        } as never);
+      vi.spyOn(
+        pageRenderer,
+        '_separatePromisesAndValues' as never
+      ).mockReturnValue({
+        values: { param1: params.param1 },
+        promises: { param2: params.param2 },
+      } as never);
     });
 
     it('should set default page state values', async () => {
-      jest.spyOn(controller, 'setState').mockImplementation();
+      vi.spyOn(controller, 'setState').mockImplementation();
 
       await pageRenderer.mount(controller, () => null, {}, routeOptions);
 
@@ -150,9 +152,10 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should patch promises to state', async () => {
-      jest
-        .spyOn(pageRenderer, '_patchPromisesToState' as never)
-        .mockImplementation();
+      vi.spyOn(
+        pageRenderer,
+        '_patchPromisesToState' as never
+      ).mockImplementation();
 
       pageRenderer['_viewContainer'] = document.getElementById(
         settings.$Page.$Render.masterElementId as string
@@ -168,8 +171,8 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should set page meta params', async () => {
-      jest.spyOn(controller, 'setMetaParams').mockImplementation();
-      jest.spyOn(controller, 'getState').mockReturnValue(pageState);
+      vi.spyOn(controller, 'setMetaParams').mockImplementation();
+      vi.spyOn(controller, 'getState').mockReturnValue(pageState);
 
       await pageRenderer.mount(controller, () => null, {}, routeOptions);
 
@@ -177,8 +180,8 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should return resolved promise with object of property status and pageState', async () => {
-      jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
-      jest.spyOn(controller, 'getState').mockReturnValue(params);
+      vi.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
+      vi.spyOn(controller, 'getState').mockReturnValue(params);
 
       const response = await pageRenderer.mount(
         controller,
@@ -196,18 +199,19 @@ describe('ClientPageRenderer', () => {
 
   describe('update method', () => {
     beforeEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
 
-      jest
-        .spyOn(pageRenderer, '_separatePromisesAndValues' as never)
-        .mockReturnValue({
-          values: { param1: params.param1 },
-          promises: { param2: params.param2 },
-        } as never);
+      vi.spyOn(
+        pageRenderer,
+        '_separatePromisesAndValues' as never
+      ).mockReturnValue({
+        values: { param1: params.param1 },
+        promises: { param2: params.param2 },
+      } as never);
     });
 
     it('should set default page state values', async () => {
-      jest.spyOn(controller, 'setState').mockImplementation();
+      vi.spyOn(controller, 'setState').mockImplementation();
 
       await pageRenderer.update(controller, () => null, params);
 
@@ -217,9 +221,10 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should patch promises to state', async () => {
-      jest
-        .spyOn(pageRenderer, '_patchPromisesToState' as never)
-        .mockImplementation(() => ({}) as never);
+      vi.spyOn(
+        pageRenderer,
+        '_patchPromisesToState' as never
+      ).mockImplementation(() => ({}) as never);
 
       await pageRenderer.update(controller, () => null, params);
 
@@ -232,8 +237,8 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should set page meta params', async () => {
-      jest.spyOn(controller, 'setMetaParams').mockImplementation();
-      jest.spyOn(controller, 'getState').mockReturnValue(params);
+      vi.spyOn(controller, 'setMetaParams').mockImplementation();
+      vi.spyOn(controller, 'getState').mockReturnValue(params);
 
       await pageRenderer.update(controller, () => null, params);
 
@@ -241,8 +246,8 @@ describe('ClientPageRenderer', () => {
     });
 
     it('should return resolved promise with object of property status and pageState', async () => {
-      jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
-      jest.spyOn(controller, 'getState').mockReturnValue(params);
+      vi.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
+      vi.spyOn(controller, 'getState').mockReturnValue(params);
 
       const response = await pageRenderer.update(
         controller,
@@ -259,9 +264,10 @@ describe('ClientPageRenderer', () => {
 
   describe('_renderPageViewToDOM method', () => {
     it('should render react component to defined element', async () => {
-      jest
-        .spyOn(pageRenderer, '_renderViewAdapter' as never)
-        .mockImplementation();
+      vi.spyOn(
+        pageRenderer,
+        '_renderViewAdapter' as never
+      ).mockImplementation();
 
       viewContainer.replaceChildren();
       pageRenderer['_mounted'] = Promise.resolve();
@@ -280,7 +286,7 @@ describe('ClientPageRenderer', () => {
       const state = { state: 'state' };
 
       await pageRenderer.mount(controller, () => null, {}, routeOptions);
-      jest.spyOn(dispatcher, 'fire').mockImplementation();
+      vi.spyOn(dispatcher, 'fire').mockImplementation();
       await pageRenderer.setState(state);
 
       expect(dispatcher.fire).toHaveBeenLastCalledWith(
@@ -295,11 +301,11 @@ describe('ClientPageRenderer', () => {
     const state = { state: 'state', pageView: () => null };
 
     beforeEach(() => {
-      jest.spyOn(controller, 'getState').mockReturnValue(state);
+      vi.spyOn(controller, 'getState').mockReturnValue(state);
     });
 
     it('should set $Utils to props', async () => {
-      jest.spyOn(pageRendererFactory, 'getUtils').mockReturnValue(utils);
+      vi.spyOn(pageRendererFactory, 'getUtils').mockReturnValue(utils);
 
       await pageRenderer.mount(controller, () => null, {}, routeOptions);
 
@@ -315,7 +321,7 @@ describe('ClientPageRenderer', () => {
 
   describe('_getDocumentView method', () => {
     beforeEach(() => {
-      jest.spyOn(pageRendererFactory, 'getDocumentView').mockImplementation();
+      vi.spyOn(pageRendererFactory, 'getDocumentView').mockImplementation();
     });
 
     it('should return default document view which is set in settings.$Page.$Render.documentView', () => {
