@@ -20,7 +20,7 @@ export interface HttpAgentImplConfig {
   defaultRequestOptions: HttpAgentRequestOptions;
 }
 
-type GenericErrorCacheData = {
+type ErrorCacheData = {
   cachedError: true;
   errorMessage: string;
   errorParams: HttpProxyErrorParams;
@@ -32,7 +32,7 @@ type GenericErrorCacheData = {
  */
 export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<HttpAgentResponse<unknown> | GenericErrorCacheData>;
+  protected _cache: Cache<HttpAgentResponse<unknown> | ErrorCacheData>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -297,7 +297,7 @@ export class HttpAgentImpl extends HttpAgent {
     if (this._cache.has(cacheKey)) {
       const cacheData = this._cache.get(cacheKey) as
         | HttpAgentResponse<B>
-        | GenericErrorCacheData;
+        | ErrorCacheData;
 
       if ('cachedError' in cacheData) {
         const error = new GenericError(
