@@ -29,6 +29,8 @@ export type LoadedResources<T> = Intersection<
   Required<Pick<T, NonMatching<T, Promise<any>>>>
 >;
 
+export type ControllerResponseType = 'html' | 'json';
+
 /**
  * Interface defining the common API of page controllers. A page controller is
  * used to manage the overall state and view of a single application page, and
@@ -43,6 +45,13 @@ export abstract class Controller<
   static $name?: string;
   static $dependencies: Dependencies;
   static $extensions?: Dependencies<Extension>;
+
+  /**
+   * The type of response to send to the client. The default is 'html'. When the
+   * value is equal to 'json', the result from 'load' method is returned as a
+   * JSON object in JSON response.
+   */
+  static $responseType?: ControllerResponseType;
 
   [key: PropertyKey]: any | EventBusEventHandler;
 
