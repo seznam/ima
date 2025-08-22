@@ -516,6 +516,18 @@ export default async (
         },
         {
           /**
+           * This loader strips server-only controller logic from client bundles
+           * based on the 'use server' directive.
+           */
+          test: /\.(js|mjs|jsx|cjs|ts|tsx)$/,
+          loader: 'use-server-loader',
+          include: appDir,
+          options: {
+            environment: isServer ? 'server' : 'client',
+          },
+        },
+        {
+          /**
            * Allow interop import of .mjs modules.
            */
           test: /\.m?js$/,
