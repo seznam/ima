@@ -20,13 +20,19 @@ export interface HttpAgentImplConfig {
   defaultRequestOptions: HttpAgentRequestOptions;
 }
 
+type GenericErrorCacheData = {
+  cachedError: true;
+  errorMessage: string;
+  errorParams: HttpProxyErrorParams;
+};
+
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
 export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<HttpAgentResponse<unknown> | GenericError>;
+  protected _cache: Cache<HttpAgentResponse<unknown> | GenericErrorCacheData>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -291,10 +297,14 @@ export class HttpAgentImpl extends HttpAgent {
     if (this._cache.has(cacheKey)) {
       const cacheData = this._cache.get(cacheKey) as
         | HttpAgentResponse<B>
-        | GenericError;
+        | GenericErrorCacheData;
 
-      if (cacheData instanceof GenericError) {
-        return Promise.reject(cacheData);
+      if ('cachedError' in cacheData) {
+        const error = new GenericError(
+          cacheData.errorMessage,
+          cacheData.errorParams
+        );
+        return Promise.reject(error);
       }
 
       return Promise.resolve<HttpAgentResponse<B>>(cacheData);
@@ -423,19 +433,29 @@ export class HttpAgentImpl extends HttpAgent {
 
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
-      const agentError = new GenericError(errorMessage, errorParams);
 
       if (options.cacheFailedRequest) {
         /**
          * Cleans error response from data (abort controller, postProcessors, error cause response)
          * that cannot be persisted before saving the error to the cache.
          */
-        const pureError = this._cleanError(agentError);
 
-        this._cache.set(cacheKey, pureError, options.ttl);
+        // const pureError = this._cleanError(agentError);
 
-        return Promise.reject(pureError);
+        const pureErrorParams = this._cleanErrorParams(errorParams);
+
+        const errorData = {
+          cachedError: true as const,
+          errorMessage,
+          errorParams: pureErrorParams,
+        };
+
+        this._cache.set(cacheKey, errorData, options.ttl);
+
+        // return Promise.reject(pureError);
       }
+
+      const agentError = new GenericError(errorMessage, errorParams);
 
       return Promise.reject(agentError);
     }
@@ -581,17 +601,14 @@ export class HttpAgentImpl extends HttpAgent {
   }
 
   /**
-   * Create a copy of agentError without AbortController, AbortController signal, postProcessors and error cause Response.
-   * Setting agentResponse with AbortController or signal or postProcessors or error cause response into cache would result in crashing.
+   * Create a copy of response errorParams without AbortController, AbortController signal, postProcessors and error cause Response.
+   * Setting errorParams with AbortController or signal or postProcessors or error cause response into cache would result in crashing.
    *
-   * @param agentError the error from the server.
+   * @param params the error params.
    *
-   * @return Pure copy of agentError without non-persistent data.
+   * @return Pure copy of errorParams without non-persistent data.
    */
-  _cleanError(
-    agentError: GenericError<HttpProxyErrorParams>
-  ): GenericError<HttpProxyErrorParams> {
-    const params = agentError.getParams();
+  _cleanErrorParams(params: HttpProxyErrorParams): HttpProxyErrorParams {
     const { signal, ...fetchOptions } = params.options.fetchOptions || {};
     const { abortController, postProcessors, ...options } =
       params.options || {};
@@ -606,8 +623,6 @@ export class HttpAgentImpl extends HttpAgent {
       options: { ...options },
     };
 
-    const serializedParams = JSON.parse(JSON.stringify(safeParams));
-
-    return new GenericError(agentError.message, serializedParams);
+    return JSON.parse(JSON.stringify(safeParams));
   }
 }
