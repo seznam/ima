@@ -9,8 +9,8 @@ module.exports = function hooksFactory({
   renderStaticClientErrorPage,
   urlParser,
   _initApp,
+  _importAppMainAsync,
   _clearApp,
-  _importAppMainSync,
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
@@ -221,7 +221,7 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      _hasToLoadApp(event) && _importAppMainSync(event);
+      _hasToLoadApp(event) && (await _importAppMainAsync(event));
       _addImaToResponse(event);
     });
   }
@@ -257,7 +257,7 @@ module.exports = function hooksFactory({
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
-      _initApp(event);
+      await _initApp(event);
 
       event.stopPropagation();
       return _generateAppResponse(event);
