@@ -225,6 +225,7 @@ describe('Server App Factory', () => {
       status: jest.fn(),
       send: jest.fn(),
       set: jest.fn(),
+      setHeader: jest.fn(),
       redirect: jest.fn(),
       locals: {},
       headerSent: false,
@@ -574,6 +575,38 @@ describe('Server App Factory', () => {
       expect(response.content).toBeNull();
       expect(RES.send).not.toHaveBeenCalled();
       expect(RES.status).not.toHaveBeenCalled();
+    });
+
+    it('should return JSON response for controllers with json response type', async () => {
+      const state = { json: 'data' };
+      pageStateManager.getState.mockReturnValue(state);
+
+      const controller = { $responseType: 'json' };
+
+      const route = {
+        getName() {
+          return 'jsonRoute';
+        },
+        getController: jest.fn().mockResolvedValue(controller),
+      };
+
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({ route });
+      jest.spyOn(router, 'route').mockResolvedValue({
+        status: 200,
+        content: 'html content that should be ignored',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.status).toBe(200);
+      expect(response.content).toBe(JSON.stringify(state));
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.cache).toBeFalsy();
+      expect(RES.setHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/json'
+      );
     });
   });
 
