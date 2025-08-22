@@ -112,13 +112,6 @@ export class ClientRouter extends AbstractRouter {
   /**
    * @inheritDoc
    */
-  getUrl() {
-    return this._window.getUrl();
-  }
-
-  /**
-   * @inheritDoc
-   */
   getPath() {
     return this._extractRoutePath(this._window.getPath());
   }
