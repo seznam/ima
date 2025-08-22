@@ -337,8 +337,6 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
 
         it('should cache failed request', async () => {
-          let result;
-
           jest.spyOn(proxy, 'request').mockImplementation(() => {
             return Promise.reject(error);
           });
@@ -346,14 +344,15 @@ describe('ima.core.http.HttpAgentImpl', () => {
 
           // @ts-ignore
           await http[method](data.params.url, data.params.data, options).catch(
-            (rejectedError: any) => {
-              result = rejectedError;
-            }
+            () => {}
           );
-          expect(result).toBeInstanceOf(GenericError);
           expect(cache.set).toHaveBeenCalledWith(
             expect.stringContaining('http.'),
-            expect.any(GenericError),
+            expect.objectContaining({
+              cachedError: true,
+              errorMessage: expect.stringContaining('Request failed'),
+              errorParams: expect.any(Object),
+            }),
             options.ttl
           );
         });
@@ -366,8 +365,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
             data.params.url,
             data.params.data
           );
+          const cachedErrorData = {
+            cachedError: true,
+            errorMessage: 'Request failed',
+            errorParams: data.params,
+          };
+
           jest.spyOn(cache, 'has').mockReturnValue(true);
-          jest.spyOn(cache, 'get').mockReturnValue(error);
+          jest.spyOn(cache, 'get').mockReturnValue(cachedErrorData);
 
           // @ts-ignore
           await http[method](data.params.url, data.params.data, options).catch(
@@ -375,7 +380,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
               result = rejectedError;
             }
           );
-          expect(result).toBe(error);
+          expect(result).toBeInstanceOf(GenericError);
           expect(cache.has).toHaveBeenCalledWith(cacheKey);
           expect(cache.get).toHaveBeenCalledWith(cacheKey);
         });
