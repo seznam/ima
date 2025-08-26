@@ -23,13 +23,19 @@ export interface HttpAgentImplConfig {
   defaultRequestOptions: HttpAgentRequestOptions;
 }
 
+type ErrorCacheData = {
+  cachedError: true;
+  errorMessage: string;
+  errorParams: HttpProxyErrorParams;
+};
+
 /**
  * Implementation of the {@link HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
  */
 export class HttpAgentImpl extends HttpAgent {
   protected _proxy: HttpProxy;
-  protected _cache: Cache<HttpAgentResponse<unknown>>;
+  protected _cache: Cache<HttpAgentResponse<unknown> | ErrorCacheData>;
   protected _cookie: CookieStorage;
   protected _cacheOptions: HttpAgentImplCacheOptions;
   protected _defaultRequestOptions: HttpAgentRequestOptions;
@@ -292,7 +298,17 @@ export class HttpAgentImpl extends HttpAgent {
     }
 
     if (this._cache.has(cacheKey)) {
-      const cacheData = this._cache.get(cacheKey) as HttpAgentResponse<B>;
+      const cacheData = this._cache.get(cacheKey) as
+        | HttpAgentResponse<B>
+        | ErrorCacheData;
+
+      if ('cachedError' in cacheData) {
+        const error = new GenericError(
+          cacheData.errorMessage,
+          cacheData.errorParams
+        );
+        return Promise.reject(error);
+      }
 
       return Promise.resolve<HttpAgentResponse<B>>(cacheData);
     }
@@ -420,6 +436,23 @@ export class HttpAgentImpl extends HttpAgent {
 
       const errorName = errorParams.errorName;
       const errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
+
+      if (options.cacheFailedRequest) {
+        /**
+         * Cleans error params from data (abort controller, postProcessors, error cause response)
+         * that cannot be persisted before saving the error to the cache.
+         */
+        const pureErrorParams = this._cleanErrorParams(errorParams);
+
+        const errorData = {
+          cachedError: true as const,
+          errorMessage,
+          errorParams: pureErrorParams,
+        };
+
+        this._cache.set(cacheKey, errorData, options.ttl);
+      }
+
       const agentError = new GenericError(errorMessage, errorParams);
 
       return Promise.reject(agentError);
@@ -563,5 +596,31 @@ export class HttpAgentImpl extends HttpAgent {
     }
 
     return pureResponse;
+  }
+
+  /**
+   * Create a copy of response errorParams without AbortController, AbortController signal, postProcessors and error cause Response.
+   * Setting errorParams with AbortController or signal or postProcessors or error cause response into cache would result in crashing.
+   *
+   * @param params the error params.
+   *
+   * @return Pure copy of errorParams without non-persistent data.
+   */
+  _cleanErrorParams(params: HttpProxyErrorParams): HttpProxyErrorParams {
+    const { signal, ...fetchOptions } = params.options.fetchOptions || {};
+    const { abortController, postProcessors, ...options } =
+      params.options || {};
+    options.fetchOptions = fetchOptions;
+
+    if (!options.keepSensitiveHeaders) {
+      options.fetchOptions.headers = {};
+    }
+
+    const safeParams = {
+      ...params,
+      options: { ...options },
+    };
+
+    return JSON.parse(JSON.stringify(safeParams));
   }
 }

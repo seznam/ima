@@ -42,8 +42,20 @@ export abstract class Observable {
    * @param event - The name of the event to be registered as persistent. This can be a key from the DispatcherEventsMap or any string.
    * @returns The instance of the Observable for chaining.
    */
+  registerPersistentEvent<E extends keyof DispatcherEventsMap>(event: E): this;
+  registerPersistentEvent(event: string): this;
+  registerPersistentEvent(event: string): this {
+    return this;
+  }
+
+  /**
+   * @deprecated Use the correctly spelled `registerPersistentEvent` method instead.
+   *
+   * @param event
+   * @returns
+   */
   registerPersistenEvent<E extends keyof DispatcherEventsMap>(event: E): this;
-  registerPersistenEvent(event: string) {
+  registerPersistenEvent(event: string): this {
     return this;
   }
 
@@ -62,10 +74,19 @@ export abstract class Observable {
    */
   subscribe<E extends keyof DispatcherEventsMap>(
     event: E,
+    observer: DispatcherListener<DispatcherEventsMap[E]>,
+    scope?: unknown
+  ): this;
+  subscribe(
+    event: string,
     observer: DispatcherListener<any>,
     scope?: unknown
   ): this;
-  subscribe(event: string, observer: DispatcherListener<any>, scope?: unknown) {
+  subscribe(
+    event: string,
+    observer: DispatcherListener<any>,
+    scope?: unknown
+  ): this {
     return this;
   }
 
@@ -86,7 +107,12 @@ export abstract class Observable {
     event: string,
     observer: DispatcherListener<any>,
     scope?: unknown
-  ) {
+  ): this;
+  unsubscribe(
+    event: string,
+    observer: DispatcherListener<any>,
+    scope?: unknown
+  ): this {
     return this;
   }
 }

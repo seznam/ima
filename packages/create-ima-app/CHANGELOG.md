@@ -1,5 +1,12 @@
 # Change Log
 
+## 19.6.0
+
+### Minor Changes
+
+- 9062257: Added new `start` command to the CLI that is used to start the application server.
+- 398d550: Added new prerender command to IMA CLI
+
 ## 19.5.0
 
 ### Minor Changes
