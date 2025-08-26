@@ -52,6 +52,7 @@ export interface HttpAgentRequestOptions {
    * Enable caching for the requests.
    */
   cache: boolean;
+  cacheFailedRequest?: boolean;
   responseType?: 'json' | 'blob' | 'text' | 'arrayBuffer' | 'formData';
   postProcessors?: (<B = unknown>(
     response: HttpAgentResponse<B>
