@@ -28,7 +28,12 @@ for PACKAGE in $PACKAGES ; do
 
     # Get the generated tarball path in the root directory
     SANITIZED_PACKAGE_NAME=$(echo "$PACKAGE" | sed 's#@ima/#ima-#g')
-    PACKAGE_PATH="$ROOT_DIR_IMA/`echo $SANITIZED_PACKAGE_NAME-*.tgz`"
+    PACKAGE_PATH=$(find "$ROOT_DIR_IMA" -maxdepth 1 -name "$SANITIZED_PACKAGE_NAME-*.tgz" | head -n 1)
+
+    if [ -z "$PACKAGE_PATH" ]; then
+        echo "Error: Could not find packed file for $PACKAGE"
+        exit 1
+    fi
 
     # Update the template package.json to use local tarball
     sed -i "s#\"$PACKAGE\":\s\".*\"#\"$PACKAGE\": \"$PACKAGE_PATH\"#" $CREATE_IMA_APP_DIR/template/common/package.json
