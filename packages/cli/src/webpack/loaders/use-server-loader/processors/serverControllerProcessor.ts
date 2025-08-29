@@ -1,5 +1,5 @@
-import traverse from '@babel/traverse';
-import * as t from '@babel/types';
+import traverse, { NodePath } from '@babel/traverse';
+import * as b from '@babel/types';
 
 import { UseServerProcessor } from '../types';
 
@@ -10,26 +10,26 @@ import { UseServerProcessor } from '../types';
  * know if they are extending the `AbstractController` class.
  */
 function isControllerClass(
-  node: t.ClassDeclaration | t.ClassExpression
+  node: b.ClassDeclaration | b.ClassExpression
 ): boolean {
   return !!(
     node.superClass &&
-    t.isIdentifier(node.superClass) &&
+    b.isIdentifier(node.superClass) &&
     node.superClass.name.toLowerCase().includes('controller')
   );
 }
 
 function createThrowingLoadMethod() {
-  return t.classMethod(
+  return b.classMethod(
     'method',
-    t.identifier('load'),
+    b.identifier('load'),
     [],
-    t.blockStatement([
-      t.throwStatement(
-        t.newExpression(t.identifier('GenericError'), [
-          t.stringLiteral('Route not found.'),
-          t.objectExpression([
-            t.objectProperty(t.identifier('status'), t.numericLiteral(404)),
+    b.blockStatement([
+      b.throwStatement(
+        b.newExpression(b.identifier('GenericError'), [
+          b.stringLiteral('Route not found.'),
+          b.objectExpression([
+            b.objectProperty(b.identifier('status'), b.numericLiteral(404)),
           ]),
         ])
       ),
@@ -37,38 +37,33 @@ function createThrowingLoadMethod() {
   );
 }
 
-function hasGenericErrorImport(ast: t.File): boolean {
-  let hasImport = false;
+function hasGenericErrorImport(
+  importPath: NodePath<b.ImportDeclaration>
+): boolean {
+  if (
+    importPath.node.source.value === '@ima/core' &&
+    importPath.node.specifiers.some(
+      spec =>
+        b.isImportSpecifier(spec) &&
+        b.isIdentifier(spec.imported) &&
+        spec.imported.name === 'GenericError'
+    )
+  ) {
+    return true;
+  }
 
-  traverse(ast, {
-    ImportDeclaration(path) {
-      if (
-        path.node.source.value === '@ima/core' &&
-        path.node.specifiers.some(
-          spec =>
-            t.isImportSpecifier(spec) &&
-            t.isIdentifier(spec.imported) &&
-            spec.imported.name === 'GenericError'
-        )
-      ) {
-        hasImport = true;
-        path.stop();
-      }
-    },
-  });
-
-  return hasImport;
+  return false;
 }
 
 function addOrReplaceLoadMethod(
-  classNode: t.ClassDeclaration | t.ClassExpression
+  classNode: b.ClassDeclaration | b.ClassExpression
 ) {
   let loadMethodExists = false;
 
   classNode.body.body = classNode.body.body.map(member => {
     if (
-      t.isClassMethod(member) &&
-      t.isIdentifier(member.key) &&
+      b.isClassMethod(member) &&
+      b.isIdentifier(member.key) &&
       member.key.name === 'load'
     ) {
       loadMethodExists = true;
@@ -91,6 +86,7 @@ function addOrReplaceLoadMethod(
 export const serverControllerProcessor: UseServerProcessor = ast => {
   const imports = new Set();
   let needsGenericErrorImport = false;
+  let alreadyHasGenericErrorImport = false;
 
   traverse(ast, {
     ClassDeclaration(path) {
@@ -107,19 +103,20 @@ export const serverControllerProcessor: UseServerProcessor = ast => {
     },
     ImportDeclaration(path) {
       imports.add(path.node);
+      alreadyHasGenericErrorImport = hasGenericErrorImport(path);
     },
   });
 
-  if (needsGenericErrorImport && !hasGenericErrorImport(ast)) {
+  if (needsGenericErrorImport && alreadyHasGenericErrorImport) {
     ast.program.body.unshift(
-      t.importDeclaration(
+      b.importDeclaration(
         [
-          t.importSpecifier(
-            t.identifier('GenericError'),
-            t.identifier('GenericError')
+          b.importSpecifier(
+            b.identifier('GenericError'),
+            b.identifier('GenericError')
           ),
         ],
-        t.stringLiteral('@ima/core')
+        b.stringLiteral('@ima/core')
       )
     );
   }

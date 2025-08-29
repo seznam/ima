@@ -1,7 +1,21 @@
-import traverse from '@babel/traverse';
+import traverse, { NodePath } from '@babel/traverse';
 import * as b from '@babel/types';
 
 import { UseServerProcessor } from '../types';
+
+/**
+ * Checks if the import path is for the super class.
+ */
+function isImportsForSuperClass(
+  importPath: NodePath<b.ImportDeclaration>,
+  superName: string
+) {
+  return importPath.node.specifiers.some(
+    spec =>
+      (b.isImportSpecifier(spec) && spec.local.name === superName) ||
+      (b.isImportDefaultSpecifier(spec) && spec.local.name === superName)
+  );
+}
 
 /**
  * Process the body of a class. We're looking for $dependencies static field
@@ -154,15 +168,7 @@ export const stubProcessor: UseServerProcessor = ast => {
 
           program.traverse({
             ImportDeclaration(importPath) {
-              if (
-                importPath.node.specifiers.some(
-                  spec =>
-                    (b.isImportSpecifier(spec) &&
-                      spec.local.name === superName) ||
-                    (b.isImportDefaultSpecifier(spec) &&
-                      spec.local.name === superName)
-                )
-              ) {
+              if (isImportsForSuperClass(importPath, superName)) {
                 imports.add(importPath.node);
               }
             },
@@ -231,15 +237,7 @@ export const stubProcessor: UseServerProcessor = ast => {
 
         program.traverse({
           ImportDeclaration(importPath) {
-            if (
-              importPath.node.specifiers.some(
-                spec =>
-                  (b.isImportSpecifier(spec) &&
-                    spec.local.name === superName) ||
-                  (b.isImportDefaultSpecifier(spec) &&
-                    spec.local.name === superName)
-              )
-            ) {
+            if (isImportsForSuperClass(importPath, superName)) {
               imports.add(importPath.node);
             }
           },
