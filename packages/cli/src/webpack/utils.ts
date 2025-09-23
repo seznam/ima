@@ -392,8 +392,8 @@ export function createContexts(
     }
   }
 
-  // es2018 targets (taken from 'browserslist-generator')
-  const targets = [
+  // targets (taken from 'browserslist-generator')
+  const es2018Targets = [
     'and_chr >= 63',
     'chrome >= 63',
     'and_ff >= 58',
@@ -404,6 +404,18 @@ export function createContexts(
     'ios_saf >= 11.4',
     'opera >= 50',
     'firefox >= 58',
+  ];
+
+  const es2024Targets = [
+    'and_chr >= 119',
+    'chrome >= 119',
+    'android >= 119',
+    'edge >= 119',
+    'samsung >= 25',
+    'safari >= 18',
+    'ios_saf >= 18',
+    'opera >= 105',
+    'firefox >= 122',
   ];
 
   return configurationNames.map(name => ({
@@ -437,7 +449,12 @@ export function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets: name === 'client' ? targets : [],
+    targets:
+      name === 'client'
+        ? es2018Targets
+        : name === 'client.es'
+          ? es2024Targets
+          : [],
   }));
 }
 
