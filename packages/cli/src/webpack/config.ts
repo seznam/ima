@@ -89,6 +89,10 @@ export default async (
             coreJs: coreJsVersion,
             bugfixes: true,
             dynamicImport: true,
+            ...(isClientES
+              ? // these two polyfills are ES2025, we dont need them for ES2024 target
+                { exclude: ['es.iterator.constructor', 'es.iterator.map'] }
+              : {}),
           },
         }),
         isModule: true,
