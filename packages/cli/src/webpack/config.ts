@@ -145,29 +145,20 @@ export default async (
               !stringOutput && {
                 loader: MiniCssExtractPlugin.loader,
               },
-            // For string output, use our custom string loader instead of css-loader
-            stringOutput
-              ? {
-                  loader: require.resolve('./loaders/css-string-loader'),
-                  options: {
-                    includeSourceMap: useSourceMaps,
-                    minify: !isDevEnv,
+            !stringOutput && {
+              loader: require.resolve('css-loader'),
+              options: {
+                ...(useCssModules && {
+                  modules: {
+                    exportOnlyLocals: !processCss || stringOutput,
+                    localIdentName: isDevEnv
+                      ? '[path][name]__[local]--[hash:base64:5]'
+                      : '[hash:base64]',
                   },
-                }
-              : {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    ...(useCssModules && {
-                      modules: {
-                        exportOnlyLocals: !processCss || stringOutput,
-                        localIdentName: isDevEnv
-                          ? '[path][name]__[local]--[hash:base64:5]'
-                          : '[hash:base64]',
-                      },
-                    }),
-                    sourceMap: useSourceMaps,
-                  },
-                },
+                }),
+                sourceMap: useSourceMaps,
+              },
+            },
           ]
         : []),
       {
