@@ -179,6 +179,250 @@ import IndexSource from './index.html';
 import IndexURL from './index.html?external';
 ```
 
+## Source Imports
+
+IMA.js CLI supports importing JavaScript, TypeScript, CSS, and LESS files as **compiled strings** using the `?source` query parameter. This feature allows you to dynamically inject scripts and styles into your application without bundling them into the main bundle.
+
+### JavaScript and TypeScript as Strings
+
+You can import compiled JavaScript or TypeScript code as strings, which is useful for creating dynamic content, iframes with custom scripts, or conditional loading of code.
+
+```js
+// Import compiled JavaScript as string
+import scriptCode from './analytics.js?source';
+import widgetCode from './widget.ts?source';
+
+// Use in React component
+function AnalyticsWidget() {
+  useEffect(() => {
+    // Inject script dynamically
+    const script = document.createElement('script');
+    script.textContent = scriptCode;
+    document.head.appendChild(script);
+  }, []);
+
+  return <div id="analytics-widget" />;
+}
+```
+
+### CSS and LESS as Strings
+
+Import compiled CSS or LESS as strings for dynamic styling, iframe content, or component-specific styles that shouldn't be in the main bundle.
+
+```js
+// Import compiled CSS/LESS as strings
+import widgetStyles from './widget.less?source';
+import componentCSS from './component.css?source';
+
+// Use for dynamic styling
+function CustomWidget() {
+  useEffect(() => {
+    // Inject styles dynamically
+    const style = document.createElement('style');
+    style.textContent = widgetStyles;
+    document.head.appendChild(style);
+  }, []);
+
+  return <div className="custom-widget">Widget content</div>;
+}
+```
+
+### Iframe with Inline Content
+
+A common use case is creating iframes with custom HTML, CSS, and JavaScript content without external files:
+
+```jsx
+import adScript from './ad-tracker.js?source';
+import adStyles from './ad-banner.less?source';
+import adContent from './content.txt';
+
+function AdBanner() {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      const iframeDoc = iframeRef.current.contentDocument;
+
+      // Create complete HTML document
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>${adStyles}</style>
+          </head>
+          <body>
+            <div class="ad-container">
+              ${adContent}
+            </div>
+            <script>${adScript}</script>
+          </body>
+        </html>
+      `;
+
+      iframeDoc.open();
+      iframeDoc.write(htmlContent);
+      iframeDoc.close();
+    }
+  }, [adContent]);
+
+  return (
+    <iframe
+      ref={iframeRef}
+      width="300"
+      height="250"
+      frameBorder="0"
+      sandbox="allow-scripts allow-same-origin"
+    />
+  );
+}
+```
+
+### Dynamic Loading with Code Splitting
+
+Source imports work with dynamic imports for code splitting, allowing you to load scripts and styles only when needed:
+
+```js
+// Lazy load widget code and styles
+async function loadWidget() {
+  const [
+    { default: widgetScript },
+    { default: widgetStyles }
+  ] = await Promise.all([
+    import('./widget.js?source'),
+    import('./widget.less?source')
+  ]);
+
+  // Inject styles
+  const style = document.createElement('style');
+  style.textContent = widgetStyles;
+  document.head.appendChild(style);
+
+  // Execute widget script
+  const script = document.createElement('script');
+  script.textContent = widgetScript;
+  document.head.appendChild(script);
+}
+
+function LazyWidget() {
+  const [loaded, setLoaded] = useState(false);
+
+  const handleLoad = async () => {
+    await loadWidget();
+    setLoaded(true);
+  };
+
+  return (
+    <div>
+      {!loaded && <button onClick={handleLoad}>Load Widget</button>}
+      <div id="widget-container" />
+    </div>
+  );
+}
+```
+
+### Important Notes
+
+- **Compilation**: Source imports go through the same compilation pipeline as regular imports (SWC for JS/TS, PostCSS + LESS for styles)
+- **Source Maps**: Source maps are included when `useSourceMaps` is enabled in development
+- **Minification**: CSS is automatically minified in production builds
+- **CSS Modules**: CSS Modules work with source imports, though the class names are included in the string
+- **Dependencies**: External dependencies (npm packages) are **not automatically included** in source imports due to webpack's code splitting
+
+### Handling External Dependencies
+
+When using external dependencies in source imports for iframe usage, you have several options:
+
+#### Option 1: Use CDN Dependencies in Iframe
+
+```jsx
+import widgetScript from './widget.js?source'; // Contains: import _ from 'lodash';
+
+function IframeWidget() {
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      const iframeDoc = iframeRef.current.contentDocument;
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <!-- Load dependencies from CDN -->
+            <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+          </head>
+          <body>
+            <div id="widget-container"></div>
+            <script>
+              // Your compiled widget code can now use lodash
+              ${widgetScript}
+            </script>
+          </body>
+        </html>
+      `;
+
+      iframeDoc.open();
+      iframeDoc.write(htmlContent);
+      iframeDoc.close();
+    }
+  }, []);
+
+  return <iframe ref={iframeRef} width="300" height="250" />;
+}
+```
+
+#### Option 2: Create Self-Contained Modules
+
+Avoid external dependencies in source imports by creating self-contained utilities:
+
+```js
+// utils.js?source - Self-contained, no external dependencies
+export function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
+}
+
+export function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+```
+
+#### Option 3: Bundle Dependencies Externally
+
+Load both the dependencies and your code separately:
+
+```jsx
+// Load vendor bundle and your code separately
+function IframeWidget() {
+  useEffect(() => {
+    const iframe = document.createElement('iframe');
+
+    iframe.srcdoc = `
+      <html>
+        <body>
+          <script src="/static/js/vendors.js"></script>
+          <script>${widgetScript}</script>
+        </body>
+      </html>
+    `;
+
+    document.body.appendChild(iframe);
+  }, []);
+}
+```
+
+This feature provides powerful flexibility for creating dynamic content, third-party widgets, email templates, and any scenario where you need compiled code as strings rather than executed modules.
+
 ### `./app/public` folder
 
 Everything in this folder is copied to the `./build/static/public` and available through the express static files route (`http://localhost:3001/static/public/`).
