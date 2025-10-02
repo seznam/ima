@@ -62,12 +62,6 @@ In the [Compiler features](./compiler-features.md#server-and-client-bundles) sec
 1. We're still able to support pretty much **every currently supported browser version** (in case of the `es2018` version).
 2. We're also serving the latest native version to the modern browsers that support's it (`es2024` version). This **bundle is also much smaller** since it contains very low amount of `core-js` polyfills and should have **better performance**, because native implementations of existing APIs are usually faster than provided polyfills.
 
-:::note
-
-**Note:** Polyfills for `es.iterator.constructor` and `es.iterator.map` are intentionally excluded for `es2024` build, as they are part of the ECMAScript 2025 specification.
-
-:::
-
 You can customize source files for both versions in the `$Source` option of the [app environment](https://github.com/seznam/ima/blob/next/packages/create-ima-app/template/server/config/environment.js#L29) configuration file. This sources definition is then used by the IMA.js Runner, which then **chooses** (*on the client side before app init*) **the most suitable version** for the current browser environment and **injects associated scripts into the DOM**.
 
 This is done by executing few small scripts, where each script target's certain ECMAScript feature. Based on these results, the runner injects the best version of client bundle suitable for that concrete browser environment. It also makes sure to wait until all scripts have loaded before executing the webpack runtime.

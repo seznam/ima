@@ -406,18 +406,6 @@ export function createContexts(
     'firefox >= 58',
   ];
 
-  const es2024Targets = [
-    'and_chr >= 119',
-    'chrome >= 119',
-    'android >= 119',
-    'edge >= 119',
-    'samsung >= 25',
-    'safari >= 18',
-    'ios_saf >= 18',
-    'opera >= 105',
-    'firefox >= 122',
-  ];
-
   return configurationNames.map(name => ({
     ...args,
     name,
@@ -449,12 +437,7 @@ export function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets:
-      name === 'client'
-        ? es2018Targets
-        : name === 'client.es'
-          ? es2024Targets
-          : [],
+    targets: name === 'client' ? es2018Targets : [],
   }));
 }
 

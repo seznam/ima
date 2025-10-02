@@ -82,17 +82,13 @@ export default async (
     return imaConfig.swc(
       {
         // We use core-js only for lower ES version build
-        ...((isClient || isClientES) && {
+        ...(isClient && {
           env: {
             targets,
             mode: 'usage',
             coreJs: coreJsVersion,
             bugfixes: true,
             dynamicImport: true,
-            ...(isClientES
-              ? // these two polyfills are ES2025, we dont need them for ES2024 target
-                { exclude: ['es.iterator.constructor', 'es.iterator.map'] }
-              : {}),
           },
         }),
         isModule: true,
@@ -100,7 +96,7 @@ export default async (
           type: 'es6',
         },
         jsc: {
-          ...(isClient || isClientES ? {} : { target: 'es2024' }),
+          ...(isClient ? {} : { target: 'es2024' }),
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
