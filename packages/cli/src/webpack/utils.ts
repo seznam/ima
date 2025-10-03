@@ -392,8 +392,8 @@ export function createContexts(
     }
   }
 
-  // es2018 targets (taken from 'browserslist-generator')
-  const targets = [
+  // targets (taken from 'browserslist-generator')
+  const es2018Targets = [
     'and_chr >= 63',
     'chrome >= 63',
     'and_ff >= 58',
@@ -437,7 +437,7 @@ export function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets: name === 'client' ? targets : [],
+    targets: name === 'client' ? es2018Targets : [],
   }));
 }
 

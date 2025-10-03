@@ -13,7 +13,7 @@ function createWebpackConfig(callback) {
   };
 
   const config = {
-    target: ['web', 'es2022'],
+    target: ['web', 'es2024'],
     mode: ctx.isProduction ? 'production' : 'development',
     stats: 'minimal',
     output: {

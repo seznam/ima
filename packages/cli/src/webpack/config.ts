@@ -96,7 +96,7 @@ export default async (
           type: 'es6',
         },
         jsc: {
-          ...(isClient ? {} : { target: 'es2022' }),
+          ...(isClient ? {} : { target: 'es2024' }),
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -211,7 +211,7 @@ export default async (
     target: isServer
       ? 'node18'
       : isClientES
-        ? ['web', 'es2022']
+        ? ['web', 'es2024']
         : ['web', 'es2018'],
     mode,
     devtool: useHMR
