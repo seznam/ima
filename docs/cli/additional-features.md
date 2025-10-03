@@ -60,7 +60,7 @@ Both files are **optional**, this means that you can use, either one of those or
 In the [Compiler features](./compiler-features.md#server-and-client-bundles) section, we mentioned that the CLI is compiling 3 separate bundles, mainly two distinct client bundles, where each targets certain `ECMAScript` version. This approach has 2 main advantages:
 
 1. We're still able to support pretty much **every currently supported browser version** (in case of the `es2018` version).
-2. We're also serving the latest native version to the modern browsers that support's it (`es2022` version). This **bundle is also much smaller** since it contains very low amount of `core-js` polyfills and should have **better performance**, because native implementations of existing APIs are usually faster than provided polyfills.
+2. We're also serving the latest native version to the modern browsers that support's it (`es2024` version). This **bundle is also much smaller** since it contains very low amount of `core-js` polyfills and should have **better performance**, because native implementations of existing APIs are usually faster than provided polyfills.
 
 You can customize source files for both versions in the `$Source` option of the [app environment](https://github.com/seznam/ima/blob/next/packages/create-ima-app/template/server/config/environment.js#L29) configuration file. This sources definition is then used by the IMA.js Runner, which then **chooses** (*on the client side before app init*) **the most suitable version** for the current browser environment and **injects associated scripts into the DOM**.
 

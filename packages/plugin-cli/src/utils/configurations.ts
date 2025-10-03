@@ -5,7 +5,7 @@ const stylesRe = /\.(less|css)$/i;
 
 export const defaultConfig: ImaPluginConfig = {
   inputDir: './src',
-  target: 'es2022',
+  target: 'es2024',
   output: [
     {
       dir: './dist/esm',

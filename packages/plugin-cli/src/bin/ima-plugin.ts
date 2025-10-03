@@ -51,7 +51,7 @@ yargs
   })
   .option('additionalWatchPaths', {
     alias: 'w',
-    desc: 'Array of additional watch paths to use when linking package.',
+    desc: 'Array of additional watch paths to use when linking package. Can be either directories or files (globs are not supported).',
     type: 'array',
   })
   .command('build', 'Build ima plugin at current directory', {}, build)

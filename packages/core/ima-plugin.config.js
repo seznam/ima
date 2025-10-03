@@ -5,9 +5,5 @@ const { clientServerConfig } = require('@ima/plugin-cli');
  */
 module.exports = {
   ...clientServerConfig,
-  additionalWatchPaths: [
-    './transform/**/*',
-    './polyfill/**/*',
-    './setupJest.js',
-  ],
+  additionalWatchPaths: ['./transform', './polyfill', './setupJest.js'],
 };

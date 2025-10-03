@@ -9,8 +9,8 @@ module.exports = function hooksFactory({
   renderStaticClientErrorPage,
   urlParser,
   _initApp,
+  _importAppMainAsync,
   _clearApp,
-  _importAppMainSync,
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
@@ -221,7 +221,7 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      _hasToLoadApp(event) && _importAppMainSync(event);
+      _hasToLoadApp(event) && (await _importAppMainAsync(event));
       _addImaToResponse(event);
     });
   }
@@ -257,7 +257,7 @@ module.exports = function hooksFactory({
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
-      _initApp(event);
+      await _initApp(event);
 
       event.stopPropagation();
       return _generateAppResponse(event);
@@ -294,6 +294,44 @@ module.exports = function hooksFactory({
   }
 
   function useResponseHook() {
+    /**
+     * Special hook for handling JSON responses defined using
+     * $responseType property on the controller.
+     */
+    emitter.prependListener(Event.BeforeResponse, async event => {
+      if (!_isValidResponse(event)) {
+        return;
+      }
+
+      const { context, req, res } = event;
+      const isAppExists = context.app && typeof context.app !== 'function';
+
+      if (!isAppExists) {
+        return;
+      }
+
+      const routeInfo = await _getRouteInfo({ req, res });
+
+      if (!routeInfo?.route?.getController) {
+        return;
+      }
+
+      const controller = await routeInfo.route.getController();
+      const responseType = controller.$responseType;
+
+      // Bail when the response type is not JSON.
+      if (responseType !== 'json') {
+        return;
+      }
+
+      const state = context.app.oc.get('$PageStateManager').getState();
+
+      res.setHeader('Content-Type', 'application/json');
+      context.response.content = JSON.stringify(state);
+
+      event.stopPropagation();
+    });
+
     emitter.on(Event.BeforeResponse, async event => {
       if (!_isValidResponse(event)) {
         return;
