@@ -122,31 +122,35 @@ export default async (
    * CSS loaders function generator. Contains postcss-loader
    * and optional less loaders.
    */
-  const getStyleLoaders = async (
-    useCssModules = false
-  ): Promise<RuleSetUseItem[]> => {
+  const getStyleLoaders = async (options?: {
+    useCssModules?: boolean;
+    stringOutput?: boolean;
+  }): Promise<RuleSetUseItem[]> => {
+    const { useCssModules = false, stringOutput = false } = options ?? {};
+
     /**
      * Return null-loader in contexts that don't process styles while
      * not using css-modules, since we don't need to compile the styles at all.
      * This improves build performance significantly in applications with
      * large amounts of style files.
      */
-    if (!useCssModules && !processCss) {
+    if (!useCssModules && !processCss && !stringOutput) {
       return [{ loader: 'null-loader' }];
     }
 
     return [
       ...(!imaConfig.experiments?.css
         ? [
-            processCss && {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
+            processCss &&
+              !stringOutput && {
+                loader: MiniCssExtractPlugin.loader,
+              },
+            !stringOutput && {
               loader: require.resolve('css-loader'),
               options: {
                 ...(useCssModules && {
                   modules: {
-                    exportOnlyLocals: !processCss,
+                    exportOnlyLocals: !processCss || stringOutput,
                     localIdentName: isDevEnv
                       ? '[path][name]__[local]--[hash:base64:5]'
                       : '[hash:base64]',
@@ -420,8 +424,27 @@ export default async (
             {
               test: /\.(mjs|js|jsx)$/,
               include: appDir,
-              loader: require.resolve('swc-loader'),
-              options: await getSwcLoader('ecmascript'),
+              oneOf: [
+                {
+                  resourceQuery: /source/, // foo.js?source
+                  use: [
+                    {
+                      loader: require.resolve('./loaders/js-string-loader'),
+                      options: {
+                        includeSourceMap: useSourceMaps,
+                      },
+                    },
+                    {
+                      loader: require.resolve('swc-loader'),
+                      options: await getSwcLoader('ecmascript'),
+                    },
+                  ],
+                },
+                {
+                  loader: require.resolve('swc-loader'),
+                  options: await getSwcLoader('ecmascript'),
+                },
+              ],
             },
             /**
              * Handle app Typescript files
@@ -429,8 +452,27 @@ export default async (
             typescript.enabled && {
               test: /\.(ts|tsx)$/,
               include: appDir,
-              loader: require.resolve('swc-loader'),
-              options: await getSwcLoader('typescript'),
+              oneOf: [
+                {
+                  resourceQuery: /source/, // foo.ts?source
+                  use: [
+                    {
+                      loader: require.resolve('./loaders/js-string-loader'),
+                      options: {
+                        includeSourceMap: useSourceMaps,
+                      },
+                    },
+                    {
+                      loader: require.resolve('swc-loader'),
+                      options: await getSwcLoader('typescript'),
+                    },
+                  ],
+                },
+                {
+                  loader: require.resolve('swc-loader'),
+                  options: await getSwcLoader('typescript'),
+                },
+              ],
             },
             /**
              * Run vendor paths through swc for lower client versions
@@ -477,15 +519,34 @@ export default async (
              */
             {
               test: /\.module\.(c|le)ss$/,
-              sideEffects: true,
-              use: await getStyleLoaders(true),
-              ...(imaConfig.experiments?.css && { type: 'css' }),
+              oneOf: [
+                {
+                  resourceQuery: /source/, // foo.module.css?source
+                  use: await getStyleLoaders({
+                    useCssModules: true,
+                    stringOutput: true,
+                  }),
+                },
+                {
+                  sideEffects: true,
+                  use: await getStyleLoaders({ useCssModules: true }),
+                  ...(imaConfig.experiments?.css && { type: 'css' }),
+                },
+              ],
             },
             {
               test: /\.(c|le)ss$/,
-              sideEffects: true,
-              use: await getStyleLoaders(),
-              ...(imaConfig.experiments?.css && { type: 'css' }),
+              oneOf: [
+                {
+                  resourceQuery: /source/, // foo.css?source or foo.less?source
+                  use: await getStyleLoaders({ stringOutput: true }),
+                },
+                {
+                  sideEffects: true,
+                  use: await getStyleLoaders(),
+                  ...(imaConfig.experiments?.css && { type: 'css' }),
+                },
+              ],
             },
             /**
              * Fallback loader for all modules, that don't match any
