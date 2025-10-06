@@ -75,6 +75,50 @@ module.exports = function hooksFactory({
     return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
   }
 
+  /**
+   * Checks if the server should serve a SPA prefetch page
+   * based on different conditions like:
+   * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
+   * - Degradation config
+   * - Environment settings, including blacklists
+   */
+  function _hasToServeSPAPrefetch(event) {
+    if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
+      return true;
+    }
+
+    const { req, environment } = event;
+    const spaPrefetchConfig = environment.$Server.serveSPAPrefetch;
+
+    // Do not serve when SPA prefetch is disabled
+    if (!spaPrefetchConfig || !spaPrefetchConfig.allow) {
+      return false;
+    }
+
+    let shouldUseSPAPrefetch =
+      instanceRecycler.hasReachedMaxConcurrentRequests();
+
+    /**
+     * When degradation is enabled, use the degradation config
+     * to determine if we should serve a SPA prefetch page.
+     */
+    if (environment.$Server.degradation) {
+      shouldUseSPAPrefetch =
+        environment.$Server.degradation?.isSPAPrefetch?.(event) ?? false;
+
+      return shouldUseSPAPrefetch;
+    }
+
+    const userAgent = req.headers['user-agent'] || '';
+    const isAllowedUserAgent = !(
+      spaPrefetchConfig.blackList &&
+      typeof spaPrefetchConfig.blackList === 'function' &&
+      spaPrefetchConfig.blackList(userAgent)
+    );
+
+    return shouldUseSPAPrefetch && isAllowedUserAgent;
+  }
+
   function _hasToLoadApp(event) {
     const { environment } = event;
 
@@ -228,6 +272,13 @@ module.exports = function hooksFactory({
 
   function userPerformanceOptimizationRequestHook() {
     emitter.on(Event.Request, async event => {
+      if (_hasToServeSPAPrefetch(event)) {
+        event.context.spaPrefetch = true;
+
+        // Continue as usual for SPA prefetch
+        return;
+      }
+
       if (_hasToServeSPA(event)) {
         event.stopPropagation();
         return renderStaticSPAPage(event);
