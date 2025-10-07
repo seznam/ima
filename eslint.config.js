@@ -142,7 +142,7 @@ module.exports = typescriptEslint.config(
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2022,
+        ...globals.es2024,
         $Debug: true,
         $IMA: true,
       },

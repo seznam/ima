@@ -76,6 +76,16 @@ metaManager.setMetaProperty('og:image', order.thumbnailUrl, {
 
 :::
 
+:::caution
+
+Be cautious when using headers or the 'http-equiv' meta attribute.
+
+Using **MetaManager does not automatically protect you against Open Redirect** attack in case you're using values taken from any unsafe sources.
+
+Ensure that all values are properly sanitized, validated and safe to use, so they can not redirect your users to potentially malicious sites.
+
+:::
+
 ## Meta value getters
 
 Each setter has corresponding getter returning and object with key-value pairs representing the meta tag values. Additionally you can use key and value iterator methods.
