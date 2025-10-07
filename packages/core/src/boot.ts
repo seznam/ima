@@ -182,6 +182,27 @@ export interface Environment {
     };
 
     /**
+     * SPA Prefetch mode is a performance optimization that serves the SPA template
+     * with pre-fetched application state and cache, reducing server CPU load from SSR
+     * while maintaining fast initial page loads. The client boots instantly with the
+     * pre-fetched state and takes over with full client-side interactivity.
+     */
+    serveSPAPrefetch?: {
+      /**
+       * When enabled, and the server reaches the configured concurrency limit,
+       * requests will be served in SPA Prefetch mode (SPA template with pre-fetched data)
+       * instead of full SSR.
+       */
+      allow?: boolean;
+
+      /**
+       * Optional function to blacklist specific user agents (e.g., search engine bots)
+       * from receiving SPA Prefetch mode. Return true to prevent SPA Prefetch for the agent.
+       */
+      blackList?: (userAgent: string) => boolean;
+    };
+
+    /**
      * Cache configuration.
      */
     cache?: {

@@ -58,6 +58,7 @@ Options:
   --legacy          Runs application in legacy mode  [boolean] [default: false]
   --forceLegacy     Forces runner.js to execute legacy client code  [boolean] [default: false]
   --forceSPA        Forces application to run in SPA mode  [boolean] [default: false]
+  --forceSPAPrefetch Forces application to run in SPA prefetch mode  [boolean] [default: false]
   --writeToDisk     Write static files to disk, instead of serving it from memory  [boolean] [default: false]
   --reactRefresh    Enable/disable react fast refresh for React components [boolean] [default: true]
   --lazyServer      Enable/disable lazy init of server app factory [boolean] [default: true]
@@ -259,6 +260,12 @@ Enables `legacy` mode and forces runner.js to load legacy code even if targeted 
 > `boolean = false`
 
 Forces the application to run in SPA mode.
+
+### --forceSPAPrefetch
+
+> `boolean = false`
+
+Forces the application to run in SPA prefetch mode. Unlike pure SPA mode, SPA prefetch performs full server-side initialization including data fetching and controller execution, but serves the SPA template with pre-fetched state. This allows the client to boot instantly with all data already available.
 
 ### --profile
 
