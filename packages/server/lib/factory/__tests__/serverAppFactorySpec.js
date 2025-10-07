@@ -442,6 +442,95 @@ describe('Server App Factory', () => {
       expect(appFactory).not.toHaveBeenCalled();
     });
 
+    it('should render SPA prefetch page when concurrency limit is reached', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.page.state).toEqual({ page: 'state' });
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render SPA prefetch page with forced flag', async () => {
+      process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+
+      delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
+    });
+
+    it('should respect blacklist in SPA prefetch mode', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+        blackList: userAgent => /Googlebot/i.test(userAgent),
+      };
+
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      // Test with bot user agent
+      REQ.headers = {
+        'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)',
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should render SPA page instead of SPA prefetch for bots
+      expect(response.SPA).toBeTruthy();
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.static).toBeTruthy();
+    });
+
+    it('should not render SPA prefetch when disabled', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: false,
+      };
+
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should fall back to SPA mode
+      expect(response.SPA).toBeTruthy();
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.static).toBeTruthy();
+    });
+
     it('should render overloaded message', async () => {
       environment.$Server.overloadConcurrency = 0;
 
