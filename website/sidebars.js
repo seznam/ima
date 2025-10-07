@@ -51,6 +51,7 @@ const sidebars = {
         },
         'basic-features/extensions',
         'basic-features/object-container',
+        'basic-features/json-controllers',
         'basic-features/rendering-process',
         'basic-features/handling-scripts-and-styles',
         'basic-features/page-manager',

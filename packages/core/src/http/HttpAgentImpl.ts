@@ -12,6 +12,9 @@ import { CookieStorage } from '../storage/CookieStorage';
 import { UnknownParameters } from '../types';
 
 export interface HttpAgentImplCacheOptions {
+  /**
+   * Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+   */
   prefix: string;
 }
 

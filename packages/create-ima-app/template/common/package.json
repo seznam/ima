@@ -15,10 +15,10 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@babel/eslint-parser": "^7.26.8",
-    "@babel/preset-react": "^7.26.3",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
+    "@ima/plugin-testing-integration": "5.2.0",
     "@ima/cli": "^19.7.2",
-    "@ima/plugin-testing-integration": "5.1.6",
     "@ima/testing-library": "^19.11.1",
     "@swc/jest": "^0.2.37",
     "@testing-library/dom": "^10.4.0",

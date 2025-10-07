@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
@@ -89,7 +89,7 @@ export function findRules(
  */
 export function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
-): Environment {
+): ParsedEnvironment {
   return environmentFactory({ applicationFolder: rootDir });
 }
 
@@ -392,8 +392,8 @@ export function createContexts(
     }
   }
 
-  // es2018 targets (taken from 'browserslist-generator')
-  const targets = [
+  // targets (taken from 'browserslist-generator')
+  const es2018Targets = [
     'and_chr >= 63',
     'chrome >= 63',
     'and_ff >= 58',
@@ -437,7 +437,7 @@ export function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets: name === 'client' ? targets : [],
+    targets: name === 'client' ? es2018Targets : [],
   }));
 }
 
