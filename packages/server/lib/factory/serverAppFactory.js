@@ -46,6 +46,7 @@ module.exports = function serverAppFactory({
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
   } = staticPageFactory({
@@ -72,6 +73,7 @@ module.exports = function serverAppFactory({
   } = hooksFactory({
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
     urlParser,

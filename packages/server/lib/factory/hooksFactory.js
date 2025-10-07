@@ -7,6 +7,7 @@ module.exports = function hooksFactory({
   renderStaticSPAPage,
   renderStaticServerErrorPage,
   renderStaticClientErrorPage,
+  renderStaticSPAPrefetchPage,
   urlParser,
   _initApp,
   _importAppMainAsync,
@@ -273,7 +274,14 @@ module.exports = function hooksFactory({
   function userPerformanceOptimizationRequestHook() {
     emitter.on(Event.Request, async event => {
       if (_hasToServeSPAPrefetch(event)) {
-        event.context.spaPrefetch = true;
+        // Track SPA prefetch render mode
+        event.context = {
+          ...event.context,
+          flags: {
+            ...event.context.flags,
+            spaPrefetch: true,
+          },
+        };
 
         // Continue as usual for SPA prefetch
         return;
@@ -383,6 +391,10 @@ module.exports = function hooksFactory({
       event.stopPropagation();
     });
 
+    /**
+     * Serialize the page state and cache, when SPA-prefetch is enabled
+     * we also render the SPA template for the prefetch page.
+     */
     emitter.on(Event.BeforeResponse, async event => {
       if (!_isValidResponse(event)) {
         return;
@@ -402,8 +414,21 @@ module.exports = function hooksFactory({
           ...context.response.page,
           ...{ state, cache, headers, cookie },
         };
-      }
 
+        // Handle SPA prefetch
+        if (context?.flags?.spaPrefetch) {
+          context.response = {
+            ...context.response,
+            ...renderStaticSPAPrefetchPage(event),
+          };
+        }
+      }
+    });
+
+    /**
+     * Handle server SPA templates Content Variables preprocessing.
+     */
+    emitter.on(Event.BeforeResponse, async event => {
       // Store copy of BeforeResponse result before emitting new event
       const beforeResponseResult = { ...event.result };
 

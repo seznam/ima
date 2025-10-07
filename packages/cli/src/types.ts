@@ -39,6 +39,7 @@ export interface ImaCliArgs {
   openUrl?: string;
   legacy?: boolean;
   forceSPA?: boolean;
+  forceSPAPrefetch?: boolean;
   profile?: boolean;
   port?: number;
   hostname?: string;
