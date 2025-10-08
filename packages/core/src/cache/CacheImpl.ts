@@ -19,6 +19,12 @@ import { UnknownParameters } from '../types';
  * }
  */
 export class CacheImpl<V> extends Cache<V> {
+  /**
+   * Pre-compiled regex for escaping </script tags in serialized output.
+   * This avoids recompiling the regex on every serialize() call.
+   */
+  private static readonly SCRIPT_TAG_REGEX = /<\/script/gi;
+
   protected _cache: Storage<CacheEntry<V>>;
   protected _factory: CacheFactory<V>;
   protected _Helper: typeof Helpers;
@@ -142,7 +148,11 @@ export class CacheImpl<V> extends Cache<V> {
    * @inheritDoc
    */
   serialize(): string {
-    const dataToSerialize: Record<string, SerializedCacheEntry<V>> = {};
+    // Use Object.create(null) to avoid prototype chain overhead
+    const dataToSerialize: Record<
+      string,
+      SerializedCacheEntry<V>
+    > = Object.create(null);
 
     for (const key of this._cache.keys()) {
       const currentValue = this._cache.get(key);
@@ -172,7 +182,12 @@ export class CacheImpl<V> extends Cache<V> {
       }
     }
 
-    return JSON.stringify(dataToSerialize).replace(/<\/script/gi, '<\\/script');
+    const serialized = JSON.stringify(dataToSerialize);
+
+    // Use pre-compiled regex and only replace if needed
+    return serialized.includes('</script')
+      ? serialized.replace(CacheImpl.SCRIPT_TAG_REGEX, '<\\/script')
+      : serialized;
   }
 
   /**
@@ -181,14 +196,12 @@ export class CacheImpl<V> extends Cache<V> {
   deserialize(serializedData: {
     [key: string]: SerializedCacheEntry<V>;
   }): void {
-    for (const key of Object.keys(serializedData)) {
+    for (const key in serializedData) {
       const cacheEntryItem = serializedData[key];
+      const ttl =
+        cacheEntryItem.ttl === 'Infinity' ? Infinity : cacheEntryItem.ttl;
 
-      if (cacheEntryItem.ttl === 'Infinity') {
-        cacheEntryItem.ttl = Infinity;
-      }
-
-      this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
+      this.set(key, cacheEntryItem.value, ttl);
     }
   }
 
@@ -200,21 +213,32 @@ export class CacheImpl<V> extends Cache<V> {
    *         `false` otherwise.
    */
   private _canSerializeValue(value: unknown): boolean {
+    // Early exit for primitives
+    const valueType = typeof value;
+
+    if (
+      value === null ||
+      value === undefined ||
+      valueType === 'string' ||
+      valueType === 'number' ||
+      valueType === 'boolean'
+    ) {
+      return true;
+    }
+
+    // Check for non-serializable types
     if (
       value instanceof Date ||
       value instanceof RegExp ||
       value instanceof Promise ||
-      typeof value === 'function'
+      valueType === 'function'
     ) {
       console.warn('The provided value is not serializable: ', value);
 
       return false;
     }
 
-    if (!value) {
-      return true;
-    }
-
+    // Handle arrays
     if (value.constructor === Array) {
       for (const element of value as Array<unknown>) {
         if (!this._canSerializeValue(element)) {
@@ -223,9 +247,12 @@ export class CacheImpl<V> extends Cache<V> {
           return false;
         }
       }
+
+      return true;
     }
 
-    if (typeof value === 'object') {
+    // Handle objects
+    if (valueType === 'object') {
       for (const propertyName of Object.keys(value)) {
         if (
           !this._canSerializeValue((value as UnknownParameters)[propertyName])
@@ -254,11 +281,15 @@ export class CacheImpl<V> extends Cache<V> {
    *         cloned.
    */
   private _clone(value: V): V {
-    if (
-      value !== null &&
-      typeof value === 'object' &&
-      !(value instanceof Promise)
-    ) {
+    // Early exit for null and primitives
+    if (value == null) {
+      return value;
+    }
+
+    const valueType = typeof value;
+
+    // Only clone objects (arrays, plain objects, etc.)
+    if (valueType === 'object' && !(value instanceof Promise)) {
       return this._Helper.clone(value);
     }
 
