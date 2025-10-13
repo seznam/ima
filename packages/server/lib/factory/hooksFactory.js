@@ -295,7 +295,6 @@ module.exports = function hooksFactory({
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
-      // Using start/end to measure duration
       event.context?.perf?.start('hooks.initApp');
       await _initApp(event);
       event.context?.perf?.end('hooks.initApp');
@@ -320,10 +319,9 @@ module.exports = function hooksFactory({
 
   function useUrlParserBeforeRequestHook() {
     emitter.on(Event.BeforeRequest, async event => {
-      event.context?.perf?.measure('hooks.urlParser', () => urlParser(event), {
-        url: event.req?.url,
-        method: event.req?.method,
-      });
+      event.context?.perf?.start('hooks.urlParser');
+      urlParser(event);
+      event.context?.perf?.end('hooks.urlParser');
     });
   }
 
@@ -333,10 +331,9 @@ module.exports = function hooksFactory({
         return event.result;
       }
 
-      const variables = event.context?.perf?.measure(
-        'hooks.createContentVariables',
-        () => createContentVariables(event)
-      );
+      event.context?.perf?.start('hooks.createContentVariables');
+      const variables = createContentVariables(event);
+      event.context?.perf?.end('hooks.createContentVariables');
 
       return {
         ...event.result,
@@ -377,12 +374,12 @@ module.exports = function hooksFactory({
         return;
       }
 
-      context?.perf?.measure('hooks.serializeJsonResponse', () => {
-        const state = context.app.oc.get('$PageStateManager').getState();
+      context?.perf?.start('hooks.serializeJsonResponse');
+      const state = context.app.oc.get('$PageStateManager').getState();
 
-        res.setHeader('Content-Type', 'application/json');
-        context.response.content = JSON.stringify(state);
-      });
+      res.setHeader('Content-Type', 'application/json');
+      context.response.content = JSON.stringify(state);
+      context?.perf?.end('hooks.serializeJsonResponse');
 
       event.stopPropagation();
       event.context?.perf?.track('hooks.checkJsonResponse.complete');
@@ -397,7 +394,6 @@ module.exports = function hooksFactory({
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (isAppExists) {
-        // Using start/end to measure serialization
         context?.perf?.track('hooks.serializePageState.start');
         const state = context.app.oc.get('$PageStateManager').getState();
 
@@ -430,10 +426,9 @@ module.exports = function hooksFactory({
       event.result = beforeResponseResult;
 
       // Interpolate contentVariables into the response content
-      event.context.response.content = context?.perf?.measure(
-        'hooks.processContent',
-        () => processContent(event)
-      );
+      event.context?.perf?.start('hooks.processContent');
+      event.context.response.content = processContent(event);
+      event.context?.perf?.end('hooks.processContent');
     });
 
     emitter.on(Event.Response, async event => {
@@ -471,7 +466,9 @@ module.exports = function hooksFactory({
     });
 
     emitter.on(Event.AfterResponse, async event => {
-      event.context?.perf?.measure('hooks.clearApp', () => _clearApp(event));
+      event.context?.perf?.start('hooks.clearApp');
+      _clearApp(event);
+      event.context?.perf?.end('hooks.clearApp');
     });
   }
 
