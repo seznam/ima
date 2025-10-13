@@ -184,6 +184,12 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
+    event.context?.perf?.start('hooks.renderError', {
+      errorType: event.error?.constructor?.name,
+      isClientError: event.error?.isClientError?.(),
+      isRedirection: event.error?.isRedirection?.(),
+    });
+
     if (
       environment.$Debug &&
       process.env.IMA_CLI_WATCH &&
@@ -198,13 +204,20 @@ module.exports = function hooksFactory({
           context.app.oc.get('$Cache').clear();
         }
 
+        let result;
         if (error.isClientError?.()) {
-          return _applyNotFound(event);
+          context?.perf?.track('hooks.renderError.applyNotFound');
+          result = await _applyNotFound(event);
         } else if (error.isRedirection?.()) {
-          return _applyRedirect(event);
+          context?.perf?.track('hooks.renderError.applyRedirect');
+          result = await _applyRedirect(event);
         } else {
-          return _applyError(event);
+          context?.perf?.track('hooks.renderError.applyError');
+          result = await _applyError(event);
         }
+
+        context?.perf?.end('hooks.renderError');
+        return result;
       } catch (e) {
         e.cause = event.error;
 
@@ -221,29 +234,52 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      _hasToLoadApp(event) && (await _importAppMainAsync(event));
+      if (_hasToLoadApp(event)) {
+        event.context?.perf?.start('hooks.importAppMain');
+        await _importAppMainAsync(event);
+        event.context?.perf?.end('hooks.importAppMain');
+      }
       _addImaToResponse(event);
     });
   }
 
   function userPerformanceOptimizationRequestHook() {
     emitter.on(Event.Request, async event => {
+      event.context?.perf?.start('hooks.performanceCheck', {
+        concurrentRequests: instanceRecycler.getConcurrentRequests(),
+        hasReachedMax: instanceRecycler.hasReachedMaxConcurrentRequests(),
+      });
+
       if (_hasToServeSPA(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveSPA',
+          reason: 'server-busy',
+        });
         event.stopPropagation();
         return renderStaticSPAPage(event);
       }
 
       if (_isServerOverloaded(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveOverloaded',
+          concurrentRequests: instanceRecycler.getConcurrentRequests(),
+        });
         event.stopPropagation();
         return renderOverloadedPage(event);
       }
 
       if (_hasToServeStaticBadRequest(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveStaticBadRequest',
+        });
         event.stopPropagation();
         return renderStaticClientErrorPage(event);
       }
 
       if (_hasToServeStaticServerError(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveStaticServerError',
+        });
         event.stopPropagation();
         return renderStaticServerErrorPage({
           ...event,
@@ -252,15 +288,23 @@ module.exports = function hooksFactory({
             new Error('The App error route exceed static thresholds.'),
         });
       }
+
+      event.context?.perf?.end('hooks.performanceCheck', { result: 'passed' });
     });
   }
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
+      // Using start/end to measure duration
+      event.context?.perf?.start('hooks.initApp');
       await _initApp(event);
+      event.context?.perf?.end('hooks.initApp');
 
+      event.context?.perf?.start('hooks.generateAppResponse');
       event.stopPropagation();
-      return _generateAppResponse(event);
+      const result = _generateAppResponse(event);
+      event.context?.perf?.end('hooks.generateAppResponse');
+      return result;
     });
   }
 
@@ -276,7 +320,10 @@ module.exports = function hooksFactory({
 
   function useUrlParserBeforeRequestHook() {
     emitter.on(Event.BeforeRequest, async event => {
-      urlParser(event);
+      event.context?.perf?.measure('hooks.urlParser', () => urlParser(event), {
+        url: event.req?.url,
+        method: event.req?.method,
+      });
     });
   }
 
@@ -286,9 +333,14 @@ module.exports = function hooksFactory({
         return event.result;
       }
 
+      const variables = event.context?.perf?.measure(
+        'hooks.createContentVariables',
+        () => createContentVariables(event)
+      );
+
       return {
         ...event.result,
-        ...createContentVariables(event),
+        ...variables,
       };
     });
   }
@@ -303,6 +355,7 @@ module.exports = function hooksFactory({
         return;
       }
 
+      event.context?.perf?.track('hooks.checkJsonResponse.start');
       const { context, req, res } = event;
       const isAppExists = context.app && typeof context.app !== 'function';
 
@@ -324,12 +377,15 @@ module.exports = function hooksFactory({
         return;
       }
 
-      const state = context.app.oc.get('$PageStateManager').getState();
+      context?.perf?.measure('hooks.serializeJsonResponse', () => {
+        const state = context.app.oc.get('$PageStateManager').getState();
 
-      res.setHeader('Content-Type', 'application/json');
-      context.response.content = JSON.stringify(state);
+        res.setHeader('Content-Type', 'application/json');
+        context.response.content = JSON.stringify(state);
+      });
 
       event.stopPropagation();
+      event.context?.perf?.track('hooks.checkJsonResponse.complete');
     });
 
     emitter.on(Event.BeforeResponse, async event => {
@@ -341,8 +397,14 @@ module.exports = function hooksFactory({
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (isAppExists) {
+        // Using start/end to measure serialization
+        context?.perf?.track('hooks.serializePageState.start');
         const state = context.app.oc.get('$PageStateManager').getState();
+
+        context?.perf?.start('hooks.serializeCache');
         const cache = context.app.oc.get('$Cache').serialize();
+        context?.perf?.end('hooks.serializeCache');
+
         const { headers, cookie } = context.app.oc
           .get('$Response')
           .getResponseParams();
@@ -351,6 +413,8 @@ module.exports = function hooksFactory({
           ...context.response.page,
           ...{ state, cache, headers, cookie },
         };
+
+        context?.perf?.track('hooks.serializePageState.complete');
       }
 
       // Store copy of BeforeResponse result before emitting new event
@@ -366,7 +430,10 @@ module.exports = function hooksFactory({
       event.result = beforeResponseResult;
 
       // Interpolate contentVariables into the response content
-      event.context.response.content = processContent(event);
+      event.context.response.content = context?.perf?.measure(
+        'hooks.processContent',
+        () => processContent(event)
+      );
     });
 
     emitter.on(Event.Response, async event => {
@@ -375,6 +442,13 @@ module.exports = function hooksFactory({
         return;
       }
 
+      context?.perf?.start('hooks.sendResponse', {
+        status: context.response.status,
+        isRedirect:
+          context.response.status >= 300 && context.response.status < 400,
+        contentLength: context.response.content?.length || 0,
+      });
+
       sendResponseHeaders({ res, context });
 
       if (
@@ -382,16 +456,22 @@ module.exports = function hooksFactory({
         context.response.status < 400 &&
         context.response.url
       ) {
+        context?.perf?.track('hooks.sendRedirect', {
+          status: context.response.status,
+          url: context.response.url,
+        });
         res.redirect(context.response.status, context.response.url);
+        context?.perf?.end('hooks.sendResponse', { type: 'redirect' });
         return;
       }
 
       res.status(context.response.status);
       res.send(context.response.content);
+      context?.perf?.end('hooks.sendResponse', { type: 'content' });
     });
 
     emitter.on(Event.AfterResponse, async event => {
-      _clearApp(event);
+      event.context?.perf?.measure('hooks.clearApp', () => _clearApp(event));
     });
   }
 
