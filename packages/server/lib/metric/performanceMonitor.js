@@ -19,10 +19,8 @@ const DEFAULT_OPTIONS = {
 
   // PerformanceTracker options
   slowThreshold: 50, // ms
-  memoryThreshold: 10, // MB
-  trackMemory: true,
   includeMetadata: true,
-  useNativeMarks: false, // Enable for APM integration
+  useNativeMarks: false, // Use native performance marks
   useNativeMeasures: false,
 
   // Auto-tracking
@@ -92,8 +90,6 @@ function instrumentEmitter(emitter, userOptions = {}) {
         event.context.perf = new PerformanceTracker({
           enabled: options.enabled,
           slowThreshold: options.slowThreshold,
-          memoryThreshold: options.memoryThreshold,
-          trackMemory: options.trackMemory,
           includeMetadata: options.includeMetadata,
           useNativeMarks: options.useNativeMarks,
           useNativeMeasures: options.useNativeMeasures,
@@ -131,10 +127,7 @@ function instrumentEmitter(emitter, userOptions = {}) {
 
         // Log to console
         if (options.logToConsole) {
-          event.context.perf.logReport({
-            method: event.req?.method || 'UNKNOWN',
-            url: event.req?.url || 'unknown',
-          });
+          event.context.perf.logReport();
         }
 
         // Call completion callback with report

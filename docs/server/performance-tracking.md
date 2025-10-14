@@ -29,7 +29,6 @@ The performance tracking system provides:
 - **Automatic tracking** of all IMA server events
 - **Context-based tracking** - tracker available throughout the request lifecycle
 - **Timeline visualization** - see exactly where time is spent
-- **Memory tracking** - monitor heap usage and detect memory spikes
 - **Slow operation detection** - automatically flag performance bottlenecks
 - **APM integration** - export data to monitoring services like Datadog, New Relic
 - **Zero overhead** - when disabled, tracking code is skipped entirely
@@ -140,23 +139,22 @@ The tracker provides beautiful, color-coded timeline output:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 Performance Timeline (GET /articles/my-post)
+🔍 Performance Timeline
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Summary:
   Total Duration: 123.45ms
-  Total Memory Delta: +12.34MB
   Events Tracked: 15
   Slow Events: 2 ⚠️
 
 Timeline: (showing time each operation took)
-├─ request.received: 0.12ms [@0.12ms] +0.10MB
-├─ ima.server.beforeRequest: 1.23ms [@1.35ms] +0.05MB
-├─ cache.get: 2.34ms [@3.69ms] +0.02MB
-├─ database.query: 52.10ms [@55.79ms] +8.50MB ⚠️
+├─ request.received: 0.12ms [@0.12ms]
+├─ ima.server.beforeRequest: 1.23ms [@1.35ms]
+├─ cache.get: 2.34ms [@3.69ms]
+├─ database.query: 52.10ms [@55.79ms] ⚠️
 │  [{"table":"articles","rows":150,"duration":52.10}]
-├─ render: 38.90ms [@94.69ms] +3.20MB
+├─ render: 38.90ms [@94.69ms]
 │  [{"componentCount":42}]
-└─ ima.server.afterResponseSend: 0.56ms [@95.25ms] +0.03MB
+└─ ima.server.afterResponseSend: 0.56ms [@95.25ms]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ⚠️  Slow Operations Detected:
@@ -166,9 +164,7 @@ Timeline: (showing time each operation took)
 **Reading the timeline:**
 - First number: Time the operation took (gap between events)
 - `[@X.XXms]`: Cumulative time since request start (dimmed)
-- `+X.XXMB`: Memory delta since last event
 - ⚠️: Operation exceeded slowThreshold
-- 💾: Memory spike detected
 
 ## Configuration
 
@@ -188,10 +184,8 @@ instrumentEmitter(emitter, {
 
   // Thresholds
   slowThreshold: 50,        // ms - warn about slow operations
-  memoryThreshold: 10,      // MB - warn about memory spikes
 
   // Tracking options
-  trackMemory: true,        // Track heap usage
   includeMetadata: true,    // Include metadata in reports
 
   // Auto-tracking
@@ -219,8 +213,6 @@ import { PerformanceTracker } from '@ima/server';
 const tracker = new PerformanceTracker({
   enabled: true,
   slowThreshold: 50,
-  memoryThreshold: 10,
-  trackMemory: true,
   includeMetadata: true,
   maxEvents: 1000,
   timestampPrecision: 2,
@@ -299,6 +291,7 @@ instrumentEmitter(emitter, {
   onComplete: isProd ? (report) => {
     // Send to monitoring service
     reportClient.timing('ima.request.duration', report.totalDuration);
+    reportClient.gauge('ima.request.event_count', report.eventCount);
 
     report.events.forEach(event => {
       reportClient.timing(`ima.event.${event.name}`, event.gap);
@@ -340,7 +333,6 @@ The `onComplete` callback receives a detailed report:
 {
   enabled: true,
   totalDuration: 123.45,        // Total request time (ms)
-  totalMemoryDelta: 12.34,      // Total heap change (MB)
   eventCount: 15,               // Number of tracked events
 
   events: [                     // All tracked events
@@ -353,12 +345,6 @@ The `onComplete` callback receives a detailed report:
         table: 'articles',
         rows: 150,
         duration: 52.10        // Included by start/end
-      },
-      memory: {
-        heapUsed: 8.50,        // Total heap delta from start
-        heapDelta: 8.50,       // Delta since last event
-        external: 0.45,        // External memory
-        rss: 56.78            // Resident set size
       }
     }
   ],
@@ -367,13 +353,8 @@ The `onComplete` callback receives a detailed report:
     { name: 'database.query', duration: 55.79, gap: 52.10 }
   ],
 
-  memorySpikes: [               // Memory spikes
-    { name: 'render', heapDelta: 15.2 }
-  ],
-
   thresholds: {
-    slow: 50,
-    memory: 10
+    slow: 50
   },
 
   request: {                    // Request context
@@ -407,15 +388,6 @@ Ensure `samplingRate` is between 0.0 and 1.0:
 - `1.0` = 100% (track all requests)
 - `0.1` = 10% (track 10% of requests)
 - `0.01` = 1% (track 1% of requests)
-
-### High memory usage
-
-If memory tracking causes issues:
-```javascript
-instrumentEmitter(emitter, {
-  trackMemory: false, // Disable memory tracking
-});
-```
 
 ## See Also
 
