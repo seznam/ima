@@ -44,6 +44,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
       root.$Debug = ${settings.$Debug};
       root.$IMA = root.$IMA || {};
       $IMA.SPA = ${response?.SPA ?? false};
+      $IMA.SPAPrefetch = ${response?.spaPrefetch ?? false};
       $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
       $IMA.$RequestID = "${requestID}";
       $IMA.$Language = "${
