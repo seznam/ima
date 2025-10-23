@@ -352,17 +352,21 @@ module.exports = function hooksFactory({
         return;
       }
 
-      event.context?.perf?.track('hooks.checkJsonResponse.start');
+      event.context?.perf?.start('hooks.checkJsonResponse');
       const { context, req, res } = event;
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (!isAppExists) {
+        event.context?.perf?.end('hooks.checkJsonResponse');
+
         return;
       }
 
       const routeInfo = await _getRouteInfo({ req, res });
 
       if (!routeInfo?.route?.getController) {
+        event.context?.perf?.end('hooks.checkJsonResponse');
+
         return;
       }
 
@@ -371,8 +375,12 @@ module.exports = function hooksFactory({
 
       // Bail when the response type is not JSON.
       if (responseType !== 'json') {
+        event.context?.perf?.end('hooks.checkJsonResponse');
+
         return;
       }
+
+      event.context?.perf?.end('hooks.checkJsonResponse');
 
       context?.perf?.start('hooks.serializeJsonResponse');
       const state = context.app.oc.get('$PageStateManager').getState();
@@ -394,7 +402,7 @@ module.exports = function hooksFactory({
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (isAppExists) {
-        context?.perf?.track('hooks.serializePageState.start');
+        context?.perf?.start('hooks.serializePageState');
         const state = context.app.oc.get('$PageStateManager').getState();
 
         context?.perf?.start('hooks.serializeCache');
@@ -410,7 +418,7 @@ module.exports = function hooksFactory({
           ...{ state, cache, headers, cookie },
         };
 
-        context?.perf?.track('hooks.serializePageState.complete');
+        context?.perf?.end('hooks.serializePageState');
       }
 
       // Store copy of BeforeResponse result before emitting new event
@@ -462,7 +470,17 @@ module.exports = function hooksFactory({
 
       res.status(context.response.status);
       res.send(context.response.content);
-      context?.perf?.end('hooks.sendResponse', { type: 'content' });
+      context?.perf?.end('hooks.sendResponse', {
+        type: 'content',
+        contentLength: context.response.content?.length || 0,
+        status: context.response.status,
+        static: context.response.static,
+        spa: context.response.SPA,
+        cache: context.response.page.cache,
+        spaPrefetch: context.response.static,
+        error: context.response.error,
+        errorPage: context.response.errorPage,
+      });
     });
 
     emitter.on(Event.AfterResponse, async event => {

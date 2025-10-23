@@ -115,11 +115,11 @@ class PerformanceTracker {
     const totalDuration =
       this.events.length > 0 ? this.events[this.events.length - 1].duration : 0;
 
-    const slowEvents = this.events.filter(
-      event =>
-        event.duration > this.options.slowThreshold ||
-        event.gap > this.options.slowThreshold
-    );
+    const slowEvents = this.events.filter(event => {
+      // Get actual event duration (from start/end) or fall back to gap (from track)
+      const eventDuration = event.metadata?.duration || event.gap;
+      return eventDuration > this.options.slowThreshold;
+    });
 
     return {
       enabled: this.enabled,
@@ -130,8 +130,9 @@ class PerformanceTracker {
       events: this.events,
       slowEvents: slowEvents.map(e => ({
         name: e.name,
-        duration: e.duration,
-        gap: e.gap,
+        // Use actual event duration from metadata, or fall back to gap
+        eventDuration: e.metadata?.duration || e.gap,
+        cumulativeDuration: e.duration,
       })),
       thresholds: {
         slow: this.options.slowThreshold,
@@ -166,42 +167,159 @@ class PerformanceTracker {
       console.log(`  Slow Events: ${chalk.red(report.slowEvents.length)} ⚠️`);
     }
 
-    // Event timeline (showing operation duration, not cumulative)
+    // Event timeline showing start/end boundaries
     console.log(
       '\n' +
         chalk.bold('Timeline:') +
-        chalk.dim(' (showing time each operation took)')
+        chalk.dim(' (showing event boundaries and nesting)')
     );
 
-    this.events.forEach((event, index) => {
-      const isLast = index === this.events.length - 1;
-      const prefix = isLast ? '└─' : '├─';
-      const isSlow = event.gap > this.options.slowThreshold;
+    // Build timeline entries with start/end markers
+    const timelineEntries = [];
+    this.events.forEach(event => {
+      const eventDuration = event.metadata?.duration;
+      const isImaEvent = event.name.startsWith('ima.server.');
 
-      // Show gap (actual operation time) as the primary metric
-      let line = `${prefix} ${chalk.bold(event.name)}: `;
-      line += `${this.#formatDuration(event.gap, isSlow)}`;
+      // Determine if this is a duration event (has metadata.duration from start/end)
+      // or an instant event (just track())
+      if (eventDuration !== undefined) {
+        // Duration event: create start/end pairs
+        const isDurationSlow = eventDuration > this.options.slowThreshold;
+        const endTime = event.duration;
+        const startTime = endTime - eventDuration;
 
-      // Show cumulative time as secondary info in gray
-      line += chalk.dim(
-        ` [@${event.duration.toFixed(this.options.timestampPrecision)}ms]`
+        // Add START entry
+        timelineEntries.push({
+          timestamp: startTime,
+          type: 'start',
+          name: event.name,
+          isImaEvent,
+          metadata: event.metadata,
+        });
+
+        // Add END entry
+        timelineEntries.push({
+          timestamp: endTime,
+          type: 'end',
+          name: event.name,
+          duration: eventDuration,
+          isDurationSlow,
+          isImaEvent,
+        });
+      } else {
+        // Instant event: single point in time
+        timelineEntries.push({
+          timestamp: event.duration,
+          type: 'instant',
+          name: event.name,
+          isImaEvent,
+          metadata: event.metadata,
+        });
+      }
+    });
+
+    // Calculate column widths
+    const maxTimestampLength = Math.max(
+      ...timelineEntries.map(
+        entry => this.#formatTimestamp(entry.timestamp).length
+      )
+    );
+
+    // Track active events for indentation
+    const activeEvents = [];
+
+    // Print timeline
+    timelineEntries.forEach(entry => {
+      const timestamp = this.#formatTimestamp(entry.timestamp).padStart(
+        maxTimestampLength
       );
 
-      if (isSlow) {
-        line += ' ⚠️';
-      }
+      if (entry.type === 'start') {
+        // Add to active events stack
+        activeEvents.push(entry.name);
+        const indent = '  '.repeat(Math.max(0, activeEvents.length - 1));
 
-      console.log(line);
+        // Format event name with special color for IMA events
+        const eventName = entry.isImaEvent
+          ? chalk.magenta.bold(entry.name)
+          : chalk.bold(entry.name);
 
-      // Metadata (if present and enabled)
-      if (
-        this.options.includeMetadata &&
-        event.metadata &&
-        Object.keys(event.metadata).length > 0
-      ) {
-        const metadataStr = JSON.stringify(event.metadata);
-        const indent = isLast ? '   ' : '│  ';
-        console.log(indent + chalk.dim(`[${metadataStr}]`));
+        const marker = entry.isImaEvent
+          ? chalk.magenta('▶')
+          : chalk.green('▶');
+        console.log(
+          `${chalk.cyan(timestamp)} ${chalk.dim('│')} ${marker} ${indent}${eventName}`
+        );
+
+        // Show metadata for start events
+        if (
+          this.options.includeMetadata &&
+          entry.metadata &&
+          Object.keys(entry.metadata).length > 0
+        ) {
+          const { duration: _, ...displayMetadata } = entry.metadata;
+          if (Object.keys(displayMetadata).length > 0) {
+            const metadataStr = JSON.stringify(displayMetadata);
+            const timestampCol = ' '.repeat(maxTimestampLength);
+            console.log(
+              `${timestampCol} ${chalk.dim('│')}   ${indent}${chalk.dim(`└─ ${metadataStr}`)}`
+            );
+          }
+        }
+      } else if (entry.type === 'end') {
+        // Remove from active events stack
+        const stackIndex = activeEvents.indexOf(entry.name);
+        if (stackIndex !== -1) {
+          activeEvents.splice(stackIndex, 1);
+        }
+
+        const indent = '  '.repeat(Math.max(0, activeEvents.length));
+
+        // Format event name and duration
+        const eventName = entry.isImaEvent
+          ? chalk.magenta(entry.name)
+          : entry.name;
+
+        const durationColored = this.#formatDuration(
+          entry.duration,
+          entry.isDurationSlow
+        );
+
+        const marker = entry.isImaEvent
+          ? chalk.magenta('◼')
+          : chalk.blue('◼');
+        let line = `${chalk.cyan(timestamp)} ${chalk.dim('│')} ${marker} ${indent}${eventName} ${chalk.dim('→')} ${durationColored}`;
+
+        if (entry.isDurationSlow) {
+          line += ' ⚠️';
+        }
+
+        console.log(line);
+      } else {
+        // Instant event - single point in time
+        const indent = '  '.repeat(Math.max(0, activeEvents.length));
+
+        const eventName = entry.isImaEvent
+          ? chalk.magenta(entry.name)
+          : entry.name;
+
+        const marker = chalk.gray('◆');
+        console.log(
+          `${chalk.cyan(timestamp)} ${chalk.dim('│')} ${marker} ${indent}${eventName}`
+        );
+
+        // Show metadata for instant events
+        if (
+          this.options.includeMetadata &&
+          entry.metadata &&
+          Object.keys(entry.metadata).length > 0
+        ) {
+          const metadataStr = JSON.stringify(entry.metadata);
+          const timestampCol = ' '.repeat(maxTimestampLength);
+          console.log(
+            `${timestampCol} ${chalk.dim('│')}   ${indent}${chalk.dim(`└─ ${metadataStr}`)}`
+          );
+        }
       }
     });
 
@@ -213,7 +331,9 @@ class PerformanceTracker {
       console.log(chalk.yellow.bold('⚠️  Slow Operations Detected:'));
       report.slowEvents.forEach(event => {
         console.log(
-          chalk.yellow(`  • ${event.name}: took ${event.gap.toFixed(2)}ms`)
+          chalk.yellow(
+            `  • ${event.name}: took ${event.eventDuration.toFixed(2)}ms`
+          )
         );
       });
       console.log();
@@ -500,6 +620,23 @@ class PerformanceTracker {
     } else {
       return chalk.green(formatted);
     }
+  }
+
+  /**
+   * Format timestamp as ss:mmm.nn (seconds:milliseconds.decimals)
+   * Examples: "00:005.12", "01:234.56", "12:345.67"
+   */
+  #formatTimestamp(ms) {
+    const seconds = Math.floor(ms / 1000);
+    const remainingMs = ms % 1000;
+    const milliseconds = Math.floor(remainingMs);
+    const decimals = Math.floor((remainingMs - milliseconds) * 100);
+
+    const ss = String(seconds).padStart(2, '0');
+    const mmm = String(milliseconds).padStart(3, '0');
+    const nn = String(decimals).padStart(2, '0');
+
+    return `${ss}:${mmm}.${nn}`;
   }
 }
 

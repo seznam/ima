@@ -78,8 +78,8 @@ function instrumentEmitter(emitter, userOptions = {}) {
     const isFirstEvent = eventName === START_EVENT;
     const isLastEvent = eventName === (options.logEvent || END_EVENT);
 
-    // Create timing tracker listener
-    const timingListener = function PerformanceTrackerListener(event) {
+    // Start listener - runs BEFORE all event handlers
+    const startListener = function PerformanceTrackerStartListener(event) {
       // Initialize context if needed
       if (!event.context) {
         event.context = {};
@@ -95,7 +95,7 @@ function instrumentEmitter(emitter, userOptions = {}) {
           useNativeMeasures: options.useNativeMeasures,
         });
 
-        // Track request start
+        // Track request start as a point-in-time event
         if (options.autoTrackEvents) {
           event.context.perf.track('request.received', {
             method: event.req?.method,
@@ -107,24 +107,26 @@ function instrumentEmitter(emitter, userOptions = {}) {
         }
       }
 
-      // Auto-track this event (if not first event and tracker exists)
-      if (!isFirstEvent && options.autoTrackEvents && event.context.perf) {
-        event.context.perf.track(eventName, {
-          hasError: !!event.error,
-          statusCode: event.res?.statusCode,
-        });
+      // Start timing this event's handlers
+      if (options.autoTrackEvents && event.context.perf) {
+        event.context.perf.start(eventName);
+      }
+    };
+
+    // End listener - runs AFTER all event handlers
+    const endListener = function PerformanceTrackerEndListener(event) {
+      if (!options.autoTrackEvents || !event.context?.perf) {
+        return;
       }
 
-      // Last event: Log report and call completion callback
-      if (isLastEvent && event.context.perf) {
-        // Track the final event
-        if (options.autoTrackEvents) {
-          event.context.perf.track(eventName, {
-            statusCode: event.res?.statusCode,
-            hasError: !!event.error,
-          });
-        }
+      // End timing this event's handlers
+      event.context.perf.end(eventName, {
+        hasError: !!event.error,
+        statusCode: event.res?.statusCode,
+      });
 
+      // Last event: Log report and call completion callback
+      if (isLastEvent) {
         // Log to console
         if (options.logToConsole) {
           event.context.perf.logReport();
@@ -133,6 +135,7 @@ function instrumentEmitter(emitter, userOptions = {}) {
         // Call completion callback with report
         if (options.onComplete && typeof options.onComplete === 'function') {
           const report = event.context.perf.getReport();
+
           if (report) {
             // Add request context to report
             report.request = {
@@ -141,6 +144,7 @@ function instrumentEmitter(emitter, userOptions = {}) {
               statusCode: event.res?.statusCode,
               timestamp: new Date().toISOString(),
             };
+
             options.onComplete(report);
           }
         }
@@ -155,8 +159,11 @@ function instrumentEmitter(emitter, userOptions = {}) {
     // Get existing listeners or create new array
     const existingListeners = emitter._events.get(eventName) || [];
 
-    // Insert timing listener at the beginning
-    existingListeners.unshift(timingListener);
+    // Insert start listener at the beginning (runs FIRST)
+    existingListeners.unshift(startListener);
+
+    // Append end listener at the end (runs LAST)
+    existingListeners.push(endListener);
 
     // Set the updated listeners array
     emitter._events.set(eventName, existingListeners);
