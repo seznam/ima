@@ -30,7 +30,8 @@ module.exports = {
   prod: {
     $Server: {
       serveSPAPrefetch: {
-        // Enable SPA prefetch mode
+        // Enable SPA prefetch mode - when true, all requests will use SPA prefetch
+        // (unless blacklisted or controlled by degradation logic)
         allow: true,
 
         // Optional: Blacklist specific user agents (e.g., search engine bots)
@@ -49,7 +50,7 @@ module.exports = {
 
 > `boolean = false`
 
-Enables SPA prefetch mode. When `true` and the server reaches the configured concurrency limit, requests will be served in SPA prefetch mode instead of full SSR.
+Enables SPA prefetch mode. When `true`, requests will be served in SPA prefetch mode instead of full SSR. If a degradation function is configured, it can be used to conditionally enable or disable SPA prefetch based on custom logic.
 
 #### blackList
 
@@ -69,7 +70,7 @@ This sets the `IMA_CLI_FORCE_SPA_PREFETCH` environment variable, bypassing all c
 
 ## Custom Degradation
 
-For more advanced control over when to use SPA or SPA prefetch mode, implement a custom degradation function:
+For advanced control over when to use SPA or SPA prefetch mode, you can optionally implement custom degradation functions. This gives you full control based on your application's needs.
 
 ```javascript title="server/config/environment.js"
 module.exports = {
@@ -82,17 +83,19 @@ module.exports = {
         allow: true
       },
       degradation: {
-        // Custom logic to determine when to serve SPA
+        // Optional: Custom logic to determine when to serve SPA
         isSPA: (event) => {
           const { req } = event;
-          // Your custom logic here
+          // Your custom logic here (e.g., based on server load, request type, etc.)
           return false;
         },
 
-        // Custom logic to determine when to serve SPA prefetch
+        // Optional: Custom logic to determine when to serve SPA prefetch
         isSPAPrefetch: (event) => {
           const { req } = event;
-          // Your custom logic here (e.g., based on request headers, time of day, etc.)
+          // Your custom logic here (e.g., based on request headers, time of day, server metrics, etc.)
+          // Example: Enable based on CPU usage, request rate, or other runtime metrics
+          // When not defined, SPA prefetch will be enabled for all requests (subject to blacklist)
           return false;
         }
       }
@@ -101,4 +104,4 @@ module.exports = {
 };
 ```
 
-The degradation functions receive the request event and should return `true` when the respective mode should be used. When degradation is configured, it takes precedence over the default concurrency-based logic.
+The degradation functions receive the request event and should return `true` when the respective mode should be used. If degradation functions are not configured, SPA prefetch will be enabled by default (when `allow` is `true`), and only the blacklist will be checked.

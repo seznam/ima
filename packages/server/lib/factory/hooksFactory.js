@@ -80,7 +80,7 @@ module.exports = function hooksFactory({
    * Checks if the server should serve a SPA prefetch page
    * based on different conditions like:
    * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
-   * - Degradation config
+   * - Degradation config (optional)
    * - Environment settings, including blacklists
    */
   function _hasToServeSPAPrefetch(event) {
@@ -96,20 +96,23 @@ module.exports = function hooksFactory({
       return false;
     }
 
-    let shouldUseSPAPrefetch =
-      instanceRecycler.hasReachedMaxConcurrentRequests();
+    let shouldUseSPAPrefetch = true;
 
     /**
      * When degradation is enabled, use the degradation config
      * to determine if we should serve a SPA prefetch page.
+     * If degradation is not configured, SPA prefetch is allowed by default.
      */
     if (environment.$Server.degradation) {
       shouldUseSPAPrefetch =
         environment.$Server.degradation?.isSPAPrefetch?.(event) ?? false;
 
-      return shouldUseSPAPrefetch;
+      if (!shouldUseSPAPrefetch) {
+        return false;
+      }
     }
 
+    // Check blacklist
     const userAgent = req.headers['user-agent'] || '';
     const isAllowedUserAgent = !(
       spaPrefetchConfig.blackList &&
@@ -117,7 +120,7 @@ module.exports = function hooksFactory({
       spaPrefetchConfig.blackList(userAgent)
     );
 
-    return shouldUseSPAPrefetch && isAllowedUserAgent;
+    return isAllowedUserAgent;
   }
 
   function _hasToLoadApp(event) {

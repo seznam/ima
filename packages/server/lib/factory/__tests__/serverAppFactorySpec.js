@@ -442,14 +442,13 @@ describe('Server App Factory', () => {
       expect(appFactory).not.toHaveBeenCalled();
     });
 
-    it('should render SPA prefetch page when concurrency limit is reached', async () => {
+    it('should render SPA prefetch page when degradation logic indicates', async () => {
       environment.$Server.serveSPAPrefetch = {
         allow: true,
       };
-
-      jest
-        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-        .mockReturnValue(true);
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => true,
+      };
 
       jest.spyOn(router, 'route').mockReturnValue({
         status: 200,
@@ -491,10 +490,11 @@ describe('Server App Factory', () => {
         allow: true,
         blackList: userAgent => /Googlebot/i.test(userAgent),
       };
-
-      jest
-        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-        .mockReturnValue(true);
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => true,
+        // When SPA prefetch is blocked, fall back to SPA mode
+        isSPA: () => true,
+      };
 
       // Test with bot user agent
       REQ.headers = {
@@ -518,10 +518,10 @@ describe('Server App Factory', () => {
       environment.$Server.serveSPAPrefetch = {
         allow: false,
       };
-
-      jest
-        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-        .mockReturnValue(true);
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => true,
+        isSPA: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -529,6 +529,48 @@ describe('Server App Factory', () => {
       expect(response.SPA).toBeTruthy();
       expect(response.spaPrefetch).toBeFalsy();
       expect(response.static).toBeTruthy();
+    });
+
+    it('should render SPA prefetch without degradation logic', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+      // No degradation config set - should still work
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should render SPA prefetch even without degradation
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.page.state).toEqual({ page: 'state' });
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should not render SPA prefetch when degradation logic returns false', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => false,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should render normal page, not SPA prefetch
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
     });
 
     it('should render overloaded message', async () => {
