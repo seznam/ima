@@ -55,13 +55,13 @@ describe('bootstrap', () => {
   });
 
   describe('run method', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       jest.spyOn(bootstrap, '_initSettings').mockImplementation();
       jest.spyOn(bootstrap, '_bindDependencies').mockImplementation();
       jest.spyOn(bootstrap, '_initServices').mockImplementation();
       jest.spyOn(bootstrap, '_initRoutes').mockImplementation();
 
-      bootstrap.run(bootConfig);
+      await bootstrap.run(bootConfig);
     });
 
     it('should initialize settings', () => {
@@ -165,20 +165,20 @@ describe('bootstrap', () => {
   });
 
   describe('_bindDependencies method', () => {
-    it('should set ima binding state to object container', () => {
+    it('should set ima binding state to object container', async () => {
       jest.spyOn(objectContainer, 'setBindingState');
 
-      bootstrap._bindDependencies();
+      await bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
         BindingState.IMA
       );
     });
 
-    it('should set plugin binding state to object container', () => {
+    it('should set plugin binding state to object container', async () => {
       jest.spyOn(objectContainer, 'setBindingState');
 
-      bootstrap._bindDependencies();
+      await bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
         BindingState.Plugin,
@@ -186,20 +186,20 @@ describe('bootstrap', () => {
       );
     });
 
-    it('should set app binding state to object container', () => {
+    it('should set app binding state to object container', async () => {
       jest.spyOn(objectContainer, 'setBindingState');
 
-      bootstrap._bindDependencies();
+      await bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
         BindingState.App
       );
     });
 
-    it('should bind ima', () => {
+    it('should bind ima', async () => {
       jest.spyOn(bootConfig, 'initBindIma');
 
-      bootstrap._bindDependencies();
+      await bootstrap._bindDependencies();
 
       expect(bootConfig.initBindIma).toHaveBeenCalledWith(
         ns,
@@ -209,8 +209,8 @@ describe('bootstrap', () => {
       );
     });
 
-    it('should bind ima plugin', () => {
-      bootstrap._bindDependencies();
+    it('should bind ima plugin', async () => {
+      await bootstrap._bindDependencies();
 
       expect(plugin.initBind).toHaveBeenCalledWith(
         ns,
@@ -220,10 +220,10 @@ describe('bootstrap', () => {
       );
     });
 
-    it('should bind app', () => {
+    it('should bind app', async () => {
       jest.spyOn(bootConfig, 'initBindApp');
 
-      bootstrap._bindDependencies();
+      await bootstrap._bindDependencies();
 
       expect(bootConfig.initBindApp).toHaveBeenCalledWith(
         ns,
