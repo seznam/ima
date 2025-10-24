@@ -20,16 +20,22 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
     window = new ClientWindow();
 
     // Mock requestAnimationFrame for double RAF pattern
-    const rafCallbacks: Array<() => void> = [];
+    const rafCallbacks: (() => void)[] = [];
+
     mockBrowserWindow = {
       history: { scrollRestoration: 'auto' },
       requestAnimationFrame: jest.fn((callback: () => void) => {
         rafCallbacks.push(callback);
+
         // Execute callbacks immediately in tests to simulate frame completion
         setTimeout(() => {
           const cb = rafCallbacks.shift();
-          if (cb) cb();
+
+          if (cb) {
+            cb();
+          }
         }, 0);
+
         return rafCallbacks.length;
       }),
     };
