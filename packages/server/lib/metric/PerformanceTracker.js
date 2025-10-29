@@ -371,9 +371,10 @@ class PerformanceTracker {
 
     const pending = this._pendingOperations.get(name);
 
+    // No matching start() call, don't do anything but warn user.
     if (!pending) {
-      // No matching start() call - just track as regular event
-      this.track(`${name}.end`, { ...metadata, warning: 'no-matching-start' });
+      console.warn(`No matching start() call for ${name}`);
+
       return null;
     }
 

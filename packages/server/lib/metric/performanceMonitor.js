@@ -151,22 +151,9 @@ function instrumentEmitter(emitter, userOptions = {}) {
       }
     };
 
-    // Ensure _events Map exists
-    if (!emitter._events) {
-      emitter._events = new Map();
-    }
-
-    // Get existing listeners or create new array
-    const existingListeners = emitter._events.get(eventName) || [];
-
-    // Insert start listener at the beginning (runs FIRST)
-    existingListeners.unshift(startListener);
-
-    // Append end listener at the end (runs LAST)
-    existingListeners.push(endListener);
-
-    // Set the updated listeners array
-    emitter._events.set(eventName, existingListeners);
+    // Append and prepend start/end listeners to the emitter
+    emitter.prependListener(eventName, startListener);
+    emitter.on(eventName, endListener);
   });
 
   return emitter;
