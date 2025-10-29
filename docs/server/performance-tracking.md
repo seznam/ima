@@ -22,6 +22,8 @@ instrumentEmitter(emitter, {
 
 That's it! The tracker is now available in all event handlers via `event.context.perf`.Best Practices
 
+![](/img/docs/performance-timeline.jpg)
+
 ## Overview
 
 The performance tracking system provides:

@@ -195,6 +195,8 @@ module.exports = function hooksFactory({
       process.env.IMA_CLI_WATCH &&
       !event.error.isRedirection?.()
     ) {
+      event.context?.perf?.end('hooks.renderError');
+
       return devErrorPage(event);
     } else {
       try {
@@ -217,9 +219,11 @@ module.exports = function hooksFactory({
         }
 
         context?.perf?.end('hooks.renderError');
+
         return result;
       } catch (e) {
         e.cause = event.error;
+        event.context?.perf?.end('hooks.renderError');
 
         return renderStaticServerErrorPage({ ...event, error: e });
       }
@@ -253,7 +257,6 @@ module.exports = function hooksFactory({
       if (_hasToServeSPA(event)) {
         event.context?.perf?.end('hooks.performanceCheck', {
           result: 'serveSPA',
-          reason: 'server-busy',
         });
         event.stopPropagation();
         return renderStaticSPAPage(event);
@@ -262,7 +265,6 @@ module.exports = function hooksFactory({
       if (_isServerOverloaded(event)) {
         event.context?.perf?.end('hooks.performanceCheck', {
           result: 'serveOverloaded',
-          concurrentRequests: instanceRecycler.getConcurrentRequests(),
         });
         event.stopPropagation();
         return renderOverloadedPage(event);
@@ -447,8 +449,6 @@ module.exports = function hooksFactory({
 
       context?.perf?.start('hooks.sendResponse', {
         status: context.response.status,
-        isRedirect:
-          context.response.status >= 300 && context.response.status < 400,
         contentLength: context.response.content?.length || 0,
       });
 
@@ -463,13 +463,20 @@ module.exports = function hooksFactory({
           status: context.response.status,
           url: context.response.url,
         });
+
         res.redirect(context.response.status, context.response.url);
-        context?.perf?.end('hooks.sendResponse', { type: 'redirect' });
+
+        context?.perf?.end('hooks.sendResponse', {
+          type: 'redirect',
+          url: context.response.url,
+        });
+
         return;
       }
 
       res.status(context.response.status);
       res.send(context.response.content);
+
       context?.perf?.end('hooks.sendResponse', {
         type: 'content',
         contentLength: context.response.content?.length || 0,
@@ -477,9 +484,8 @@ module.exports = function hooksFactory({
         static: context.response.static,
         spa: context.response.SPA,
         cache: context.response.page.cache,
-        spaPrefetch: context.response.static,
+        spaPrefetch: context.response.spaPrefetch,
         error: context.response.error,
-        errorPage: context.response.errorPage,
       });
     });
 
