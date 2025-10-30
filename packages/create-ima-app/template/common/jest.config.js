@@ -14,7 +14,7 @@ module.exports = {
       {
         jsc: {
           experimental: {
-            plugins: [['swc_mut_cjs_exports', {}]],
+            plugins: [['@swc-contrib/mut-cjs-exports', {}]],
           },
           parser: {
             syntax: 'ecmascript',
@@ -33,7 +33,7 @@ module.exports = {
       {
         jsc: {
           experimental: {
-            plugins: [['swc_mut_cjs_exports', {}]],
+            plugins: [['@swc-contrib/mut-cjs-exports', {}]],
           },
           parser: {
             syntax: 'typescript',
