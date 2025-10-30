@@ -12,6 +12,7 @@ type RendererContext = {
     reactDOM: typeof reactDOM;
     status: number;
     viewAdapter?: react.ReactElement;
+    spaPrefetch?: boolean;
   };
 };
 
@@ -29,6 +30,11 @@ module.exports = function createReactRenderer({
   });
 
   emitter.prependListener(Event.BeforeResponse, event => {
+    // Skip rendering for SPA prefetch
+    if ((event.context as RendererContext).response.spaPrefetch) {
+      return;
+    }
+
     const { documentView, documentViewProps, react, reactDOM, viewAdapter } = (
       event.context as RendererContext
     ).response;

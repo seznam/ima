@@ -49,7 +49,9 @@ function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
         `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
           !serverHasStarted && args.forceSPA
             ? ` in ${chalk.black.bgCyan('SPA mode')}`
-            : ''
+            : args.forceSPAPrefetch
+              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
+              : ''
         }...`
       );
 
@@ -96,6 +98,11 @@ const dev: HandlerFn = async args => {
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     process.env.IMA_CLI_FORCE_SPA = 'true';
+  }
+
+  // Set force SPA flag so server can react accordingly
+  if (args.forceSPAPrefetch) {
+    process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
   }
 
   // Set lazy server flag according to CLI args
@@ -212,6 +219,11 @@ export const builder: CommandBuilder = {
   },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
+    type: 'boolean',
+    default: false,
+  },
+  forceSPAPrefetch: {
+    desc: 'Forces application to run in SPA prefetch mode',
     type: 'boolean',
     default: false,
   },
