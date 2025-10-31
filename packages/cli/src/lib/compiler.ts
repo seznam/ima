@@ -8,7 +8,7 @@ import {
 } from './formatStats';
 import { ImaCliArgs, ImaConfig } from '../types';
 import { getProgress } from '../webpack/plugins/ProgressPlugin';
-import { runImaPluginsHook } from '../webpack/utils';
+import { runImaPluginsHook } from '../webpack/utils/utils';
 
 /**
  * Cli Error handler.

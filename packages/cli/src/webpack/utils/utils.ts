@@ -6,80 +6,13 @@ import { Environment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
-import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import { Configuration } from 'webpack';
 
-import webpackConfig from './config';
-import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
+import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../../types';
+import webpackConfig from '../config';
 
 export const IMA_CONF_FILENAME = 'ima.config.js';
 const TS_CONFIG_PATHS = ['tsconfig.build.json', 'tsconfig.json'];
-
-/**
- * Helper for finding rules with given loader in webpack config.
- */
-export function findRules(
-  config: Configuration,
-  testString: string,
-  loader?: string
-): RuleSetRule[] | RuleSetUseItem[] {
-  const foundRules = [];
-  const rules = config.module?.rules;
-
-  if (!rules) {
-    return [];
-  }
-
-  (function recurseFindRules(rule: RuleSetRule | RuleSetRule[]): void {
-    if (Array.isArray(rule)) {
-      for (const r of rule) {
-        recurseFindRules(r);
-      }
-
-      return;
-    }
-
-    if (rule.oneOf) {
-      return recurseFindRules(rule.oneOf as RuleSetRule);
-    }
-
-    if (
-      rule.test &&
-      ((typeof rule.test === 'function' && rule.test(testString)) ||
-        (rule.test instanceof RegExp && rule.test.test(testString)) ||
-        (typeof rule.test === 'string' && rule.test === testString))
-    ) {
-      foundRules.push(rule);
-    }
-  })(rules as RuleSetRule[]);
-
-  if (!loader) {
-    return foundRules;
-  }
-
-  return foundRules.reduce<RuleSetUseItem[]>((acc, cur) => {
-    if (
-      (cur.loader && cur.loader.includes(loader)) ||
-      (typeof cur.use === 'string' && cur.use.includes(loader))
-    ) {
-      acc.push(cur);
-    }
-
-    cur;
-
-    if (Array.isArray(cur.use)) {
-      cur.use.forEach(r => {
-        if (
-          (typeof r === 'string' && r.includes(loader)) ||
-          (typeof r === 'object' && r && r.loader && r.loader.includes(loader))
-        ) {
-          acc.push(r);
-        }
-      });
-    }
-
-    return acc;
-  }, []);
-}
 
 /**
  * Loads application IMA.js environment from server/config/environment.js

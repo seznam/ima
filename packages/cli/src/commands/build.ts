@@ -15,7 +15,7 @@ import {
   createWebpackConfig,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils';
+} from '../webpack/utils/utils';
 
 /**
  * Builds ima application.
