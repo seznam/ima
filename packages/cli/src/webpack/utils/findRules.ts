@@ -10,38 +10,45 @@ export function findLoader(
   if (Array.isArray(rule)) {
     // Flatten all loader results from recursive calls
     const results: RuleSetUseItem[] = [];
+
     for (const r of rule) {
       const loaderResults = findLoader(r, loader);
+
       if (loaderResults) {
         results.push(...loaderResults);
       }
     }
+
     return results.length > 0 ? results : null;
   }
 
+  // Return the loader configuration object, not the whole rule
   if (rule.loader?.includes(loader)) {
-    // Return the loader configuration object, not the whole rule
     return [rule.loader as RuleSetUseItem];
   }
 
+  // Flatten all loader results from oneOf
   if (rule.oneOf) {
-    // Flatten all loader results from oneOf
     const results: RuleSetUseItem[] = [];
+
     for (const r of rule.oneOf) {
       if (Array.isArray(r)) {
         for (const subRule of r) {
           const loaderResults = findLoader(subRule, loader);
+
           if (loaderResults) {
             results.push(...loaderResults);
           }
         }
       } else if (typeof r === 'object' && r) {
         const loaderResults = findLoader(r, loader);
+
         if (loaderResults) {
           results.push(...loaderResults);
         }
       }
     }
+
     return results.length > 0 ? results : null;
   }
 
@@ -53,6 +60,7 @@ export function findLoader(
       ) {
         return true;
       }
+
       return false;
     }) as RuleSetUseItem[];
 
