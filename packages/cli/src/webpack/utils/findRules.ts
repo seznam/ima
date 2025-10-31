@@ -56,7 +56,7 @@ export function findLoader(
     const result = rule.use.filter(r => {
       if (
         (typeof r === 'string' && r.includes(loader)) ||
-        (typeof r === 'object' && r && r.loader && r.loader.includes(loader))
+        (typeof r === 'object' && r?.loader?.includes(loader))
       ) {
         return true;
       }
