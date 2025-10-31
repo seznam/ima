@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.9.1
+
+### Patch Changes
+
+- 6d8e60c: Fixed compatibility issues with findRules function after new additions to webpack config in @ima/cli@19.9.0
+
 ## 19.9.0
 
 ### Minor Changes
