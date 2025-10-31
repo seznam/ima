@@ -11,6 +11,7 @@
       "core",
       "better-opn",
       "preprocess",
+      "jest",
       "server",
       "less-plugin-glob",
       "webpack-env",

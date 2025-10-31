@@ -22,6 +22,7 @@ import {
 } from 'webpack';
 
 import { getLanguageEntryPoints } from './languages';
+import { ImaConfigurationContext, ImaConfig } from '../types';
 import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
@@ -31,8 +32,7 @@ import {
   createPolyfillEntry,
   createDevServerConfig,
   getCurrentCoreJsVersion,
-} from './utils';
-import { ImaConfigurationContext, ImaConfig } from '../types';
+} from './utils/utils';
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -519,6 +519,7 @@ export default async (
              */
             {
               test: /\.module\.(c|le)ss$/,
+              sideEffects: true,
               oneOf: [
                 {
                   resourceQuery: /source/, // foo.module.css?source
@@ -528,7 +529,6 @@ export default async (
                   }),
                 },
                 {
-                  sideEffects: true,
                   use: await getStyleLoaders({ useCssModules: true }),
                   ...(imaConfig.experiments?.css && { type: 'css' }),
                 },
@@ -536,13 +536,13 @@ export default async (
             },
             {
               test: /\.(c|le)ss$/,
+              sideEffects: true,
               oneOf: [
                 {
                   resourceQuery: /source/, // foo.css?source or foo.less?source
                   use: await getStyleLoaders({ stringOutput: true }),
                 },
                 {
-                  sideEffects: true,
                   use: await getStyleLoaders(),
                   ...(imaConfig.experiments?.css && { type: 'css' }),
                 },

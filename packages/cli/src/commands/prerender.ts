@@ -12,7 +12,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { HandlerFn } from '../types';
-import { resolveEnvironment } from '../webpack/utils';
+import { resolveEnvironment } from '../webpack/utils/utils';
 
 /**
  * Wait for the server to start.

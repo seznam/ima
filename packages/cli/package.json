@@ -26,7 +26,9 @@
   "scripts": {
     "build": "tsc -b",
     "dev": "tsc -w --preserveWatchOutput",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js",
+    "test:watch": "npm run test -- --watch"
   },
   "dependencies": {
     "@ima/dev-utils": "^19.0.0",
