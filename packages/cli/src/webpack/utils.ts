@@ -6,7 +6,12 @@ import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
-import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import {
+  Configuration,
+  MultiConfiguration,
+  RuleSetRule,
+  RuleSetUseItem,
+} from 'webpack';
 
 import webpackConfig from './config';
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../types';
@@ -448,12 +453,12 @@ export function createContexts(
  *
  * @param {ImaCliArgs} args Parsed CLI and build arguments.
  * @param {ImaConfig} imaConfig Loaded ima config.
- * @returns {Promise<Configuration[]>}
+ * @returns {Promise<MultiConfiguration>}
  */
 export async function createWebpackConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
-): Promise<Configuration[]> {
+): Promise<MultiConfiguration> {
   // Create configuration contexts
   logger.info(
     `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
@@ -521,13 +526,13 @@ export async function createWebpackConfig(
         config = await imaConfig.webpack(config, ctx, imaConfig);
       }
 
-      return config;
+      return config as MultiConfiguration;
     })
   ).then(config => {
     // Print elapsed time
     logger.endTracking();
 
-    return config;
+    return config as unknown as MultiConfiguration;
   });
 }
 
