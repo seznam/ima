@@ -265,6 +265,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       //new handling during BeforeHandleRoute phase
       const preManagePromise = new Promise<boolean>(resolve => {
         setTimeout(async () => {
+          // in Jest there is probelm catch async cancellation rejection
+          pageManager['_previousManagedPage'].state.abort = undefined;
           await pageManager.preManage();
           resolve(true);
         }, 0);
