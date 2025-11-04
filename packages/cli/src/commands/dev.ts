@@ -25,7 +25,7 @@ import {
   resolveEnvironment,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils';
+} from '../webpack/utils/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes

@@ -1,5 +1,31 @@
 # Change Log
 
+## 19.8.2
+
+### Patch Changes
+
+- accf8e3: Fixed issue, where scrollTo when navigating back was triggered too early, which resulted in invalid scroll position.
+
+## 19.8.1
+
+### Patch Changes
+
+- 3f96af4: Fix caching of failed requests
+
+  - **What** Remove caching instance of GenericError object. Instead we are now caching only its data and alter, after getting the data from cache, we create instance of GenericError and reject it.
+  - **What** Serializing of cache modified GenericError instance, that was no longer an error, so was not rejected by following requests.
+  - **What** Nothing.
+
+## 19.8.0
+
+### Minor Changes
+
+- a6a3812: Observable
+
+  - **What?** Change `Observable` to resemble the structure and usage of `Dispatcher` more closely - use the abstract class for typing `Utils`, use method overloading the same way, etc. Remove typo in `registerPersistenEvent` method name and rename to `registerPersistentEvent` (note the `t`). Old method has been retained for backwards compatibility and marked as deprecated, it will be removed in the next major version.
+  - **Why?** Avoid typing issues and potential grief with correctly-but-incorrectly named method.
+  - **How?** Please migrate from `registerPersistenEvent` to `registerPersistentMethod`.
+
 ## 19.7.1
 
 ### Patch Changes

@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 import { Arguments, CommandBuilder } from 'yargs';
 
 import { ImaCliArgs, HandlerFn, ImaCliCommand } from '../types';
-import { requireImaConfig } from '../webpack/utils';
+import { requireImaConfig } from '../webpack/utils/utils';
 
 /**
  * Initializes cli script handler function, which takes cli arguments,

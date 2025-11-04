@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.6.1
+
+### Patch Changes
+
+- 81c7c3a: Fixed dependencies to support @swc/core@1.14
+
 ## 19.6.0
 
 ### Minor Changes
