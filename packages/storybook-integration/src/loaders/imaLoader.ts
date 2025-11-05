@@ -1,7 +1,7 @@
 import type * as imaCore from '@ima/core';
 import { Loader, Parameters, ReactRenderer } from '@storybook/react';
-import { StoryContextForLoaders, StrictArgs } from '@storybook/types';
-import merge from 'ts-deepmerge';
+import { StorybookContext, StrictArgs } from '@storybook/types';
+import { merge } from 'ts-deepmerge';
 
 import { getImaInitializers } from '../utils/initializer.js';
 
@@ -59,7 +59,7 @@ function updateState(
  * Extend app boot config with parameter overrides + custom initializers.
  */
 export function extendBootConfig(
-  storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>,
+  storybookArgs: StorybookContext<ReactRenderer, StrictArgs>,
   appConfigFunctions: imaCore.InitAppConfig,
   extendedConfig?: Parameters['ima']
 ): imaCore.InitAppConfig {
