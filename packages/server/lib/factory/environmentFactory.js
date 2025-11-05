@@ -35,8 +35,6 @@ const defaultEnvironment = {
       clusters: null,
       serveSPA: {
         allow: true,
-        blackList: userAgent =>
-          new RegExp('Googlebot|SeznamBot').test(userAgent),
       },
       cache: {
         enabled: false,

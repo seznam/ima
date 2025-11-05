@@ -2,6 +2,49 @@ const { RouteNames } = require('@ima/core');
 
 const { Event } = require('../emitter.js');
 
+const DegradationStatus = {
+  Degraded: 'degraded',
+  NotDegraded: 'notDegraded',
+  NotDefined: 'notDefined',
+};
+
+/**
+ * Looks at the degradation configuration, processes potential degradation functions
+ * in order to determine if the degradation was triggered or not.
+ *
+ * Returns one of three possible string values:
+ *  - 'degraded'        : the degradation was triggered
+ *  - 'notDegraded'     : the degradation was NOT triggered
+ *  - 'notDefined'      : no degradation function is defined
+ *
+ * @returns {'degraded'|'notDegraded'|'notDefined'}
+ */
+function resolveDegradation(lookupKey, event) {
+  const { environment } = event;
+  const degradationFn = environment.$Server.degradation?.[lookupKey];
+
+  if (!degradationFn) {
+    return DegradationStatus.NotDefined;
+  }
+
+  /**
+   * Degradation function can be an array of functions.
+   */
+  if (Array.isArray(degradationFn)) {
+    for (const fn of degradationFn) {
+      if (fn(event)) {
+        return DegradationStatus.Degraded;
+      }
+    }
+
+    return DegradationStatus.NotDegraded;
+  }
+
+  return degradationFn(event)
+    ? DegradationStatus.Degraded
+    : DegradationStatus.NotDegraded;
+}
+
 module.exports = function hooksFactory({
   renderOverloadedPage,
   renderStaticSPAPage,
@@ -25,10 +68,14 @@ module.exports = function hooksFactory({
 }) {
   function _isServerOverloaded(event) {
     const { environment } = event;
-    if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isOverloaded?.(event) ?? false;
+    const degradationResult = resolveDegradation('isOverloaded', event);
+
+    // Prioritize degradation logic
+    if (degradationResult !== DegradationStatus.NotDefined) {
+      return degradationResult === DegradationStatus.Degraded;
     }
 
+    // Fallback to concurency check
     return (
       environment.$Server.overloadConcurrency !== undefined &&
       instanceRecycler.getConcurrentRequests() + 1 >
@@ -54,26 +101,24 @@ module.exports = function hooksFactory({
     if (process.env.IMA_CLI_FORCE_SPA) {
       return true;
     }
-    const { req, environment } = event;
+    const { environment } = event;
+    const isSpaAllowed = !!environment.$Server.serveSPA?.allow;
 
-    const spaConfig = environment.$Server.serveSPA;
-    const isAllowedServeSPA = spaConfig.allow;
-    let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
-
-    if (environment.$Server.degradation) {
-      isServerBusy = environment.$Server.degradation?.isSPA?.(event) ?? false;
-
-      return isAllowedServeSPA && isServerBusy;
+    // Do not serve when SPA is disabled
+    if (!isSpaAllowed) {
+      return false;
     }
 
-    const userAgent = req.headers['user-agent'] || '';
-    const isAllowedUserAgent = !(
-      spaConfig.blackList &&
-      typeof spaConfig.blackList === 'function' &&
-      spaConfig.blackList(userAgent)
-    );
+    const isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
+    const degradationResult = resolveDegradation('isSPA', event);
 
-    return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
+    // Prioritize degradation logic
+    if (degradationResult === DegradationStatus.Degraded) {
+      return true;
+    }
+
+    // Fallback to concurency check when degradation is not defined
+    return isServerBusy;
   }
 
   /**
@@ -81,46 +126,29 @@ module.exports = function hooksFactory({
    * based on different conditions like:
    * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
    * - Degradation config (optional)
-   * - Environment settings, including blacklists
    */
   function _hasToServeSPAPrefetch(event) {
     if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
       return true;
     }
 
-    const { req, environment } = event;
-    const spaPrefetchConfig = environment.$Server.serveSPAPrefetch;
+    const { environment } = event;
+    const isSpaPrefetchAllowed = !!environment.$Server.serveSPAPrefetch?.allow;
 
     // Do not serve when SPA prefetch is disabled
-    if (!spaPrefetchConfig || !spaPrefetchConfig.allow) {
+    if (!isSpaPrefetchAllowed) {
       return false;
     }
 
-    let shouldUseSPAPrefetch = true;
+    // Resolve degradation logic for SPA prefetch.
+    const degradationResult = resolveDegradation('isSPAPrefetch', event);
 
-    /**
-     * When degradation is enabled, use the degradation config
-     * to determine if we should serve a SPA prefetch page.
-     * If degradation is not configured, SPA prefetch is allowed by default.
-     */
-    if (environment.$Server.degradation) {
-      shouldUseSPAPrefetch =
-        environment.$Server.degradation?.isSPAPrefetch?.(event) ?? false;
-
-      if (!shouldUseSPAPrefetch) {
-        return false;
-      }
+    // When degradation is not defined, default to enabled (when allow is true)
+    if (degradationResult === DegradationStatus.NotDefined) {
+      return true;
     }
 
-    // Check blacklist
-    const userAgent = req.headers['user-agent'] || '';
-    const isAllowedUserAgent = !(
-      spaPrefetchConfig.blackList &&
-      typeof spaPrefetchConfig.blackList === 'function' &&
-      spaPrefetchConfig.blackList(userAgent)
-    );
-
-    return isAllowedUserAgent;
+    return degradationResult === DegradationStatus.Degraded;
   }
 
   function _hasToLoadApp(event) {
@@ -136,8 +164,8 @@ module.exports = function hooksFactory({
   function _hasToServeStatic(event) {
     const { environment } = event;
 
-    if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isStatic?.(event) ?? false;
+    if (resolveDegradation('isStatic', event) === DegradationStatus.Degraded) {
+      return true;
     }
 
     return (

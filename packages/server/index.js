@@ -5,6 +5,7 @@ const path = require('path');
 const defaultApplicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
+const degradation = require('./lib/degradation.js');
 const { Emitter, Event } = require('./lib/emitter.js');
 const environmentFactory = require('./lib/factory/environmentFactory');
 const urlParserFactory = require('./lib/factory/urlParserFactory');
@@ -104,4 +105,5 @@ module.exports = {
   urlParserFactory,
   sanitizeValue,
   Event,
+  ...degradation,
 };

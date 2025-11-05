@@ -174,11 +174,6 @@ export interface Environment {
        * the server will serve the application in SPA mode (without server-side rendering)
        */
       allow?: boolean;
-
-      /**
-       * These user agents will always be served a server-rendered page.
-       */
-      blackList?: (userAgent: string) => boolean;
     };
 
     /**
@@ -194,12 +189,6 @@ export interface Environment {
        * instead of full SSR.
        */
       allow?: boolean;
-
-      /**
-       * Optional function to blacklist specific user agents (e.g., search engine bots)
-       * from receiving SPA Prefetch mode. Return true to prevent SPA Prefetch for the agent.
-       */
-      blackList?: (userAgent: string) => boolean;
     };
 
     /**

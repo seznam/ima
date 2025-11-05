@@ -485,35 +485,6 @@ describe('Server App Factory', () => {
       delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
     });
 
-    it('should respect blacklist in SPA prefetch mode', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-        blackList: userAgent => /Googlebot/i.test(userAgent),
-      };
-      environment.$Server.degradation = {
-        isSPAPrefetch: () => true,
-        // When SPA prefetch is blocked, fall back to SPA mode
-        isSPA: () => true,
-      };
-
-      // Test with bot user agent
-      REQ.headers = {
-        'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)',
-      };
-
-      jest.spyOn(router, 'route').mockReturnValue({
-        status: 200,
-        content: 'app html',
-      });
-
-      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-      // Should render SPA page instead of SPA prefetch for bots
-      expect(response.SPA).toBeTruthy();
-      expect(response.spaPrefetch).toBeFalsy();
-      expect(response.static).toBeTruthy();
-    });
-
     it('should not render SPA prefetch when disabled', async () => {
       environment.$Server.serveSPAPrefetch = {
         allow: false,
@@ -573,6 +544,74 @@ describe('Server App Factory', () => {
       expect(appFactory).toHaveBeenCalled();
     });
 
+    it('should render SPA prefetch page with array degradation functions - first returns true', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+      environment.$Server.degradation = {
+        isSPAPrefetch: [
+          () => true, // First function returns true
+          () => false, // Second function should not be called
+        ],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render SPA prefetch page with array degradation functions - second returns true', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+      environment.$Server.degradation = {
+        isSPAPrefetch: [
+          () => false, // First function returns false
+          () => true, // Second function returns true
+        ],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should not render SPA prefetch when all array degradation functions return false', async () => {
+      environment.$Server.serveSPAPrefetch = {
+        allow: true,
+      };
+      environment.$Server.degradation = {
+        isSPAPrefetch: [() => false, () => false, () => false],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
     it('should render overloaded message', async () => {
       environment.$Server.overloadConcurrency = 0;
 
@@ -580,6 +619,115 @@ describe('Server App Factory', () => {
 
       expect(response.SPA).toBeFalsy();
       expect(response.status).toBe(503);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render overloaded message when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isOverloaded: () => true,
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(503);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should not render overloaded message when degradation logic returns false', async () => {
+      environment.$Server.overloadConcurrency = 0;
+      environment.$Server.degradation = {
+        isOverloaded: () => false,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('app html');
+    });
+
+    it('should render overloaded message with array degradation functions', async () => {
+      environment.$Server.degradation = {
+        isOverloaded: [
+          () => false,
+          () => true, // Second function triggers overload
+        ],
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(503);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render SPA page when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isSPA: () => true,
+      };
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render SPA page with array degradation functions', async () => {
+      environment.$Server.degradation = {
+        isSPA: [
+          () => false,
+          () => false,
+          () => true, // Third function triggers SPA
+        ],
+      };
+      jest
+        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
+        .mockReturnValue(true);
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render static page when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isStatic: () => true,
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(404);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render static page with array degradation functions', async () => {
+      environment.$Server.degradation = {
+        isStatic: [
+          () => false,
+          () => true, // Second function triggers static
+        ],
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(404);
       expect(response.static).toBeTruthy();
       expect(response.cache).toBeFalsy();
     });
