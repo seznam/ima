@@ -14,6 +14,8 @@ const {
   renderStyles,
   renderScript,
 } = require('./lib/factory/utils/resourcesUtils');
+const { instrumentEmitter } = require('./lib/metric/performanceMonitor');
+const { PerformanceTracker } = require('./lib/metric/PerformanceTracker');
 
 function createIMAServer({
   environment,
@@ -78,7 +80,6 @@ function createIMAServer({
     require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
-
   serverApp.useIMADefaultHook();
 
   // Lazy init app factory
@@ -104,6 +105,8 @@ module.exports = {
   environmentFactory,
   urlParserFactory,
   sanitizeValue,
+  PerformanceTracker,
+  instrumentEmitter,
   Event,
   ...degradation,
 };
