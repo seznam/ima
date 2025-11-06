@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 import { ActionTypes } from '../../../router/ActionTypes';
 import { ClientWindow } from '../../../window/ClientWindow';
 import { ManagedPage, PageAction } from '../../PageTypes';
@@ -16,13 +14,33 @@ jest.useFakeTimers();
 describe('ima.core.page.handler.PageNavigationHandler', () => {
   let handler: PageNavigationHandler;
   let window: ClientWindow;
+  let mockBrowserWindow: any;
 
   beforeEach(() => {
     window = new ClientWindow();
-    jest.spyOn(window, 'getWindow').mockReturnValue({
-      // @ts-ignore
+
+    // Mock requestAnimationFrame for double RAF pattern
+    const rafCallbacks: (() => void)[] = [];
+
+    mockBrowserWindow = {
       history: { scrollRestoration: 'auto' },
-    });
+      requestAnimationFrame: jest.fn((callback: () => void) => {
+        rafCallbacks.push(callback);
+
+        // Execute callbacks immediately in tests to simulate frame completion
+        setTimeout(() => {
+          const cb = rafCallbacks.shift();
+
+          if (cb) {
+            cb();
+          }
+        }, 0);
+
+        return rafCallbacks.length;
+      }),
+    };
+
+    jest.spyOn(window, 'getWindow').mockReturnValue(mockBrowserWindow);
 
     handler = new PageNavigationHandler(window);
     handler.init();

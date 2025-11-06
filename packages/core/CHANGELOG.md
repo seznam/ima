@@ -1,5 +1,11 @@
 # Change Log
 
+## 19.8.2
+
+### Patch Changes
+
+- accf8e3: Fixed issue, where scrollTo when navigating back was triggered too early, which resulted in invalid scroll position.
+
 ## 19.8.1
 
 ### Patch Changes

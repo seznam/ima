@@ -1,6 +1,6 @@
 {
   "name": "@ima/storybook-integration",
-  "version": "19.6.2",
+  "version": "19.6.3",
   "description": "Storybook integration addon for IMA.js applications.",
   "type": "module",
   "keywords": [
@@ -22,7 +22,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest --config jest.config.cjs"
   },
   "exports": {
     ".": {

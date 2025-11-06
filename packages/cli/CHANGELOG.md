@@ -1,5 +1,17 @@
 # Change Log
 
+## 19.9.1
+
+### Patch Changes
+
+- 6d8e60c: Fixed compatibility issues with findRules function after new additions to webpack config in @ima/cli@19.9.0
+
+## 19.9.0
+
+### Minor Changes
+
+- fa06708: Added support for `?source` imports, allowing users to import code or styles as string, so they can be used in iframes, email templates or other stuff
+
 ## 19.8.0
 
 ### Minor Changes
