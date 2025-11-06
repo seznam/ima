@@ -25,7 +25,7 @@ import {
   resolveEnvironment,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils';
+} from '../webpack/utils/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
@@ -159,6 +159,10 @@ const dev: HandlerFn = async args => {
 
     // Create compiler
     const compiler = webpack(config);
+
+    if (!compiler) {
+      throw new Error('Failed to create webpack compiler');
+    }
 
     // Start watch compiler & HMR dev server
     await Promise.all([

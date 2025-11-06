@@ -1,5 +1,15 @@
 # Change Log
 
+## 19.6.0
+
+### Minor Changes
+
+- fbe4214: Added support for `IMA_ENV` environment variable to determine which environment settings/configurations to use for the application runtime.
+
+### Patch Changes
+
+- 5acdba4: Update @esmj/monitor to `^0.6.0`
+
 ## 19.5.2
 
 ### Patch Changes

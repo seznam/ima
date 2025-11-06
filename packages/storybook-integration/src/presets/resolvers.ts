@@ -175,21 +175,29 @@ export function resolveSWC({
 }: ResolverParams): Configuration {
   const jsRules = (
     [
-      ...findRules(imaWebpackConfig, 'test.js', 'swc'),
-      ...findRules(imaWebpackConfig, 'test.ts', 'swc'),
+      ...findRules(imaWebpackConfig, 'test.js'),
+      ...findRules(imaWebpackConfig, 'test.ts'),
     ] as RuleSetRule[]
-  ).map(rule => {
-    // Update include path
-    rule.include = [args.rootDir];
-    rule.exclude = /node_modules/;
+  )
+    .filter(
+      rule =>
+        rule.loader?.includes('swc') ||
+        rule?.oneOf?.some(
+          oneOf => typeof oneOf === 'object' && oneOf?.loader?.includes('swc')
+        )
+    )
+    .map(rule => {
+      // Update include path
+      rule.include = [args.rootDir];
+      rule.exclude = /node_modules/;
 
-    // Disable react refresh
-    if ((rule?.options as any)?.jsc?.transform?.react) {
-      (rule.options as any).jsc.transform.react.refresh = false;
-    }
+      // Disable react refresh
+      if ((rule?.options as any)?.jsc?.transform?.react) {
+        (rule.options as any).jsc.transform.react.refresh = false;
+      }
 
-    return rule;
-  });
+      return rule;
+    });
 
   // Remove existing babel rules
   removeRule(config, 'test.js');

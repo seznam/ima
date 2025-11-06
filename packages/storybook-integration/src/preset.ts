@@ -87,7 +87,7 @@ export const webpackFinal = async (
     acc = resolver({
       config,
       imaConfig,
-      imaWebpackConfig: clientConfig,
+      imaWebpackConfig: clientConfig as Configuration,
       args: mockArgs,
       options,
     });

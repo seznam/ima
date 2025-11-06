@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,

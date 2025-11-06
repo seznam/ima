@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "19.8.0",
+  "version": "19.9.1",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -26,7 +26,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js",
+    "test:watch": "npm run test -- --watch"
   },
   "dependencies": {
     "@babel/generator": "^7.24.8",
