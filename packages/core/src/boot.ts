@@ -144,18 +144,6 @@ export interface Environment {
     concurrency?: number;
 
     /**
-     * When the number of concurrent connection exceeds the `staticConcurrency`,
-     * the server response with static files for 4xx and 5xx.
-     */
-    staticConcurrency?: number;
-
-    /**
-     * When the number of concurrent connection exceeds the `overloadConcurrency`,
-     * the server response with 503 status code.
-     */
-    overloadConcurrency?: number;
-
-    /**
      * Define the number of server processes you want to start.
      * Use `null` for the current number of available CPU cores.
      */

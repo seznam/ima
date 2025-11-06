@@ -10,11 +10,13 @@ SPA prefetch mode is a performance optimization technique that provides a middle
 ### How It Works
 
 When enabled, the server:
+
 1. Executes the full application lifecycle (controller, data fetching, etc.)
 2. Serializes the page state and cache
 3. Serves the SPA template with pre-fetched data included
 
 The client then:
+
 1. Boots instantly with the SPA template
 2. Uses the pre-fetched state (no additional API calls needed)
 3. Takes over with full client-side interactivity
@@ -32,23 +34,22 @@ module.exports = {
       serveSPAPrefetch: {
         // Enable SPA prefetch mode - when true, all requests will use SPA prefetch
         allow: true,
-      }
+      },
       degradation: {
         isSPAPrefetch: (event) => {
           const userAgent = event.req.get('user-agent') || '';
 
           return /Googlebot|Bingbot|SeznamBot/i.test(userAgent);
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
 ```
 
 :::important
 Note that the degradation function **MUST be defined** in order to use SPA prefetch mode.
 :::
-
 
 ### Configuration Options
 
@@ -90,10 +91,10 @@ module.exports = {
   prod: {
     $Server: {
       serveSPA: {
-        allow: true
+        allow: true,
       },
       serveSPAPrefetch: {
-        allow: true
+        allow: true,
       },
       degradation: {
         // Serve SPA prefetch for bots to improve SEO
@@ -106,9 +107,11 @@ module.exports = {
         // Serve SPA when server is under heavy load
         isSPA: (event) => {
           const { environment } = event;
-          const cpuUsage = process.cpuUsage();
 
-          return cpuUsage.user > 1000000; // Custom threshold
+          // Example using @esmj/monitor - https://github.com/mjancarik/esmj-monitor
+          const { level } = severity.getThreats();
+
+          return level === 'high' || level === 'critical';
         },
 
         // Show overload page for very high concurrency
@@ -119,10 +122,10 @@ module.exports = {
         // Serve static error pages during maintenance
         isStatic: (event) => {
           return process.env.MAINTENANCE_MODE === 'true';
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -135,7 +138,7 @@ module.exports = {
   prod: {
     $Server: {
       serveSPAPrefetch: {
-        allow: true
+        allow: true,
       },
       degradation: {
         isSPAPrefetch: [
@@ -158,11 +161,11 @@ module.exports = {
             const userAgent = event.req.get('user-agent') || '';
 
             return /Mobile|Android|iPhone/i.test(userAgent);
-          }
-        ]
-      }
-    }
-  }
+          },
+        ],
+      },
+    },
+  },
 };
 ```
 
@@ -188,16 +191,18 @@ module.exports = {
   prod: {
     $Server: {
       serveSPAPrefetch: {
-        allow: true
+        allow: true,
       },
       degradation: {
         // Serve SPA prefetch for bots
-        isSPAPrefetch: createUserAgentDegradation(/Googlebot|Bingbot|SeznamBot/i),
+        isSPAPrefetch: createUserAgentDegradation(
+          /Googlebot|Bingbot|SeznamBot/i,
+        ),
 
         // Serve SPA for API endpoints only during POST requests
         isSPA: combineAnd(
           createPathDegradation(/^\/api\//),
-          (event) => event.req.method === 'POST'
+          (event) => event.req.method === 'POST',
         ),
 
         // Show overload during peak hours OR for 25% of traffic
@@ -207,17 +212,17 @@ module.exports = {
 
             return hour >= 9 && hour <= 17; // 9 AM - 5 PM UTC
           },
-          (event) => Math.random() * 100 < 25 // Sampling 25% of requests
+          (event) => Math.random() * 100 < 25, // Sampling 25% of requests
         ),
 
         // Serve static pages for heavy operations, but not for authenticated users
         isStatic: combineAnd(
           createPathDegradation('/heavy-operation'),
-          invert(createHeaderDegradation('authorization'))
-        )
-      }
-    }
-  }
+          invert(createHeaderDegradation('authorization')),
+        ),
+      },
+    },
+  },
 };
 ```
 
@@ -229,7 +234,9 @@ Checks user agent string against a pattern (RegExp or function):
 
 ```javascript
 // Using RegExp
-const botDegradation = createUserAgentDegradation(/Googlebot|Bingbot|SeznamBot/i);
+const botDegradation = createUserAgentDegradation(
+  /Googlebot|Bingbot|SeznamBot/i,
+);
 
 // Using function
 const customDegradation = createUserAgentDegradation((userAgent) => {
@@ -266,10 +273,16 @@ Checks request headers:
 const hasAuthDegradation = createHeaderDegradation('authorization');
 
 // Check header value (string)
-const jsonDegradation = createHeaderDegradation('content-type', 'application/json');
+const jsonDegradation = createHeaderDegradation(
+  'content-type',
+  'application/json',
+);
 
 // Check header value (RegExp)
-const mobileDegradation = createHeaderDegradation('user-agent', /Mobile|Android|iPhone/i);
+const mobileDegradation = createHeaderDegradation(
+  'user-agent',
+  /Mobile|Android|iPhone/i,
+);
 
 // Check header value (function)
 const customHeaderDegradation = createHeaderDegradation('x-custom', (value) => {
@@ -284,7 +297,7 @@ Combines functions with AND logic (all must return `true`):
 ```javascript
 const combinedDegradation = combineAnd(
   createUserAgentDegradation(/Googlebot/i),
-  createPathDegradation('/products')
+  createPathDegradation('/products'),
 );
 ```
 
@@ -295,7 +308,7 @@ Combines functions with OR logic (any must return `true`):
 ```javascript
 const combinedDegradation = combineOr(
   createUserAgentDegradation(/Bot/i),
-  createPathDegradation('/static')
+  createPathDegradation('/static'),
 );
 ```
 
@@ -304,9 +317,7 @@ const combinedDegradation = combineOr(
 Inverts a degradation function:
 
 ```javascript
-const notBot = invert(
-  createUserAgentDegradation(/Bot/i)
-);
+const notBot = invert(createUserAgentDegradation(/Bot/i));
 ```
 
 ### Sharing Degradation Logic
@@ -314,16 +325,23 @@ const notBot = invert(
 You can create your own degradation helpers and share them across projects:
 
 ```javascript title="shared/degradation.js"
-const { createUserAgentDegradation, combineOr } = require('@ima/server/degradation');
+const {
+  createUserAgentDegradation,
+  combineOr,
+} = require('@ima/server/degradation');
 
 // Custom helper for your organization
 function createSEOBotDegradation() {
-  return createUserAgentDegradation(/Googlebot|Bingbot|SeznamBot|DuckDuckBot|Baiduspider|YandexBot/i);
+  return createUserAgentDegradation(
+    /Googlebot|Bingbot|SeznamBot|DuckDuckBot|Baiduspider|YandexBot/i,
+  );
 }
 
 // Custom helper for mobile detection
 function createMobileDeviceDegradation() {
-  return createUserAgentDegradation(/Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
+  return createUserAgentDegradation(
+    /Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i,
+  );
 }
 
 // Export for reuse
@@ -336,23 +354,26 @@ module.exports = {
 Then use them in your environment configuration:
 
 ```javascript title="server/config/environment.js"
-const { createSEOBotDegradation, createMobileDeviceDegradation } = require('../shared/degradation');
+const {
+  createSEOBotDegradation,
+  createMobileDeviceDegradation,
+} = require('../shared/degradation');
 const { combineOr } = require('@ima/server/degradation');
 
 module.exports = {
   prod: {
     $Server: {
       serveSPAPrefetch: {
-        allow: true
+        allow: true,
       },
       degradation: {
         // Serve SPA prefetch for SEO bots OR mobile devices
         isSPAPrefetch: combineOr(
           createSEOBotDegradation(),
-          createMobileDeviceDegradation()
-        )
-      }
-    }
-  }
+          createMobileDeviceDegradation(),
+        ),
+      },
+    },
+  },
 };
 ```

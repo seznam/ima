@@ -2,29 +2,18 @@ const { RouteNames } = require('@ima/core');
 
 const { Event } = require('../emitter.js');
 
-const DegradationStatus = {
-  Degraded: 'degraded',
-  NotDegraded: 'notDegraded',
-  NotDefined: 'notDefined',
-};
-
 /**
  * Looks at the degradation configuration, processes potential degradation functions
  * in order to determine if the degradation was triggered or not.
  *
- * Returns one of three possible string values:
- *  - 'degraded'        : the degradation was triggered
- *  - 'notDegraded'     : the degradation was NOT triggered
- *  - 'notDefined'      : no degradation function is defined
- *
- * @returns {'degraded'|'notDegraded'|'notDefined'}
+ * @returns {boolean} true when the degradation was triggered, false otherwise.
  */
-function resolveDegradation(lookupKey, event) {
+function isDegraded(lookupKey, event) {
   const { environment } = event;
   const degradationFn = environment.$Server.degradation?.[lookupKey];
 
   if (!degradationFn) {
-    return DegradationStatus.NotDefined;
+    return false;
   }
 
   /**
@@ -33,16 +22,14 @@ function resolveDegradation(lookupKey, event) {
   if (Array.isArray(degradationFn)) {
     for (const fn of degradationFn) {
       if (fn(event)) {
-        return DegradationStatus.Degraded;
+        return true;
       }
     }
 
-    return DegradationStatus.NotDegraded;
+    return false;
   }
 
-  return degradationFn(event)
-    ? DegradationStatus.Degraded
-    : DegradationStatus.NotDegraded;
+  return degradationFn(event);
 }
 
 module.exports = function hooksFactory({
@@ -67,112 +54,11 @@ module.exports = function hooksFactory({
   environment,
 }) {
   function _isServerOverloaded(event) {
-    const { environment } = event;
-    const degradationResult = resolveDegradation('isOverloaded', event);
-
-    // Prioritize degradation logic
-    if (degradationResult !== DegradationStatus.NotDefined) {
-      return degradationResult === DegradationStatus.Degraded;
-    }
-
-    // Fallback to concurency check
-    return (
-      environment.$Server.overloadConcurrency !== undefined &&
-      instanceRecycler.getConcurrentRequests() + 1 >
-        environment.$Server.overloadConcurrency
-    );
-  }
-
-  function _isValidResponse(event) {
-    const { res, context } = event;
-    const isRedirectResponse =
-      context.response.status >= 300 &&
-      context.response.status < 400 &&
-      context.response.url;
-
-    if (res.headersSent || isRedirectResponse || !context.response) {
-      return false;
-    }
-
-    return true;
-  }
-
-  function _hasToServeSPA(event) {
-    if (process.env.IMA_CLI_FORCE_SPA) {
-      return true;
-    }
-    const { environment } = event;
-    const isSpaAllowed = !!environment.$Server.serveSPA?.allow;
-
-    // Do not serve when SPA is disabled
-    if (!isSpaAllowed) {
-      return false;
-    }
-
-    const isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
-    const degradationResult = resolveDegradation('isSPA', event);
-
-    // Prioritize degradation logic
-    if (degradationResult === DegradationStatus.Degraded) {
-      return true;
-    }
-
-    // Fallback to concurency check when degradation is not defined
-    return isServerBusy;
-  }
-
-  /**
-   * Checks if the server should serve a SPA prefetch page
-   * based on different conditions like:
-   * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
-   * - Degradation config (optional)
-   */
-  function _hasToServeSPAPrefetch(event) {
-    if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
-      return true;
-    }
-
-    const { environment } = event;
-    const isSpaPrefetchAllowed = !!environment.$Server.serveSPAPrefetch?.allow;
-
-    // Do not serve when SPA prefetch is disabled
-    if (!isSpaPrefetchAllowed) {
-      return false;
-    }
-
-    // Resolve degradation logic for SPA prefetch.
-    const degradationResult = resolveDegradation('isSPAPrefetch', event);
-
-    // When degradation is not defined, default to enabled (when allow is true)
-    if (degradationResult === DegradationStatus.NotDefined) {
-      return true;
-    }
-
-    return degradationResult === DegradationStatus.Degraded;
-  }
-
-  function _hasToLoadApp(event) {
-    const { environment } = event;
-
-    return !(
-      (environment.$Server.serveSPA?.allow &&
-        environment.$Server.concurrency === 0) ||
-      process.env.IMA_CLI_FORCE_SPA
-    );
+    return isDegraded('isOverloaded', event);
   }
 
   function _hasToServeStatic(event) {
-    const { environment } = event;
-
-    if (resolveDegradation('isStatic', event) === DegradationStatus.Degraded) {
-      return true;
-    }
-
-    return (
-      environment.$Server.staticConcurrency !== undefined &&
-      instanceRecycler.getConcurrentRequests() + 1 >
-        environment.$Server.staticConcurrency
-    );
+    return isDegraded('isStatic', event);
   }
 
   function _hasToServeStaticBadRequest(event) {
@@ -194,6 +80,69 @@ module.exports = function hooksFactory({
       routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
 
     return isServerError && _hasToServeStatic(event);
+  }
+
+  function _hasToServeSPA(event) {
+    if (process.env.IMA_CLI_FORCE_SPA) {
+      return true;
+    }
+    const { environment } = event;
+    const isSpaAllowed = !!environment.$Server.serveSPA?.allow;
+
+    // Do not serve when SPA is disabled
+    if (!isSpaAllowed) {
+      return false;
+    }
+
+    // Fallback to concurency check when degradation is not defined
+    return isDegraded('isSPA', event);
+  }
+
+  /**
+   * Checks if the server should serve a SPA prefetch page
+   * based on different conditions like:
+   * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
+   * - Degradation config (optional)
+   */
+  function _hasToServeSPAPrefetch(event) {
+    if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
+      return true;
+    }
+
+    const { environment } = event;
+    const isSpaPrefetchAllowed = !!environment.$Server.serveSPAPrefetch?.allow;
+
+    // Do not serve when SPA prefetch is disabled
+    if (!isSpaPrefetchAllowed) {
+      return false;
+    }
+
+    // Serve SPA prefetch when degradation logic indicates
+    return isDegraded('isSPAPrefetch', event);
+  }
+
+  function _hasToLoadApp(event) {
+    const { environment } = event;
+
+    return !(
+      (environment.$Server.serveSPA?.allow &&
+        environment.$Server.concurrency === 0) ||
+      process.env.IMA_CLI_FORCE_SPA
+    );
+  }
+
+  function _isValidResponse(event) {
+    const { res, context } = event;
+    const isRedirectResponse =
+      context.response.status >= 300 &&
+      context.response.status < 400 &&
+      context.response.url;
+
+    if (res.headersSent || isRedirectResponse || !context.response) {
+      return false;
+    }
+
+    return true;
   }
 
   async function _applyError(event) {

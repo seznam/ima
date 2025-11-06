@@ -28,10 +28,6 @@ const defaultEnvironment = {
       staticPath: '/static',
       // Max number of app instances to recycle (pool size)
       concurrency: 100,
-      // Threshold for serving static error pages
-      staticConcurrency: 100,
-      // Threshold for showing overload message
-      overloadConcurrency: 100,
       clusters: null,
       serveSPA: {
         allow: true,
