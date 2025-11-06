@@ -6,10 +6,6 @@ environment.prod = {
     ...environment.prod?.$Server,
     clusters: 1,
     overloadConcurrency: undefined,
-    serveSPA: {
-      ...environment.prod?.$Server?.serveSPA,
-      allow: false,
-    },
     cache: {
       ...environment.prod?.$Server?.cache,
       enabled: false,

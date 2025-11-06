@@ -68,7 +68,6 @@ module.exports = function hooksFactory({
     const isBadRequest =
       routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
 
-    // TODO IMA@19 documentation badRequestConcurrency
     return isBadRequest && _hasToServeStatic(event);
   }
 
@@ -86,35 +85,14 @@ module.exports = function hooksFactory({
     if (process.env.IMA_CLI_FORCE_SPA) {
       return true;
     }
-    const { environment } = event;
-    const isSpaAllowed = !!environment.$Server.serveSPA?.allow;
-
-    // Do not serve when SPA is disabled
-    if (!isSpaAllowed) {
-      return false;
-    }
 
     // Fallback to concurency check when degradation is not defined
     return isDegraded('isSPA', event);
   }
 
-  /**
-   * Checks if the server should serve a SPA prefetch page
-   * based on different conditions like:
-   * - ENV variable override (IMA_CLI_FORCE_SPA_PREFETCH)
-   * - Degradation config (optional)
-   */
   function _hasToServeSPAPrefetch(event) {
     if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
       return true;
-    }
-
-    const { environment } = event;
-    const isSpaPrefetchAllowed = !!environment.$Server.serveSPAPrefetch?.allow;
-
-    // Do not serve when SPA prefetch is disabled
-    if (!isSpaPrefetchAllowed) {
-      return false;
     }
 
     // Serve SPA prefetch when degradation logic indicates
@@ -280,6 +258,10 @@ module.exports = function hooksFactory({
       });
 
       if (_hasToServeSPAPrefetch(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveSPAPrefetch',
+        });
+
         // Track SPA prefetch render mode
         event.context = {
           ...event.context,

@@ -25,17 +25,14 @@ This approach reduces server CPU load from HTML rendering while maintaining fast
 
 ### Configuration
 
-Enable SPA prefetch mode in your server environment configuration:
+Enable SPA prefetch mode by defining the `isSPAPrefetch` degradation function in your server environment configuration:
 
 ```javascript title="server/config/environment.js"
 module.exports = {
   prod: {
     $Server: {
-      serveSPAPrefetch: {
-        // Enable SPA prefetch mode - when true, all requests will use SPA prefetch
-        allow: true,
-      },
       degradation: {
+        // Define degradation function to enable SPA prefetch mode
         isSPAPrefetch: (event) => {
           const userAgent = event.req.get('user-agent') || '';
 
@@ -48,16 +45,8 @@ module.exports = {
 ```
 
 :::important
-Note that the degradation function **MUST be defined** in order to use SPA prefetch mode.
+The degradation function **MUST be defined** in order to use SPA prefetch mode. Simply defining the function enables the feature, and the function's return value determines when SPA prefetch mode is used.
 :::
-
-### Configuration Options
-
-#### allow
-
-> `boolean = false`
-
-Enables SPA prefetch mode. When `true`, requests will be served in SPA prefetch mode instead of full SSR. If a degradation function is configured, it can be used to conditionally enable or disable SPA prefetch based on custom logic.
 
 ### Force SPA Prefetch in Development
 
@@ -71,16 +60,16 @@ This sets the `IMA_CLI_FORCE_SPA_PREFETCH` environment variable, bypassing all c
 
 ## Degradation
 
-Degradation functions provide fine-grained control over server rendering behavior. They allow you to conditionally switch between different rendering modes (SSR, SPA, SPA prefetch, static pages) based on runtime conditions like server load, user agents, request paths, or any custom logic.
+Degradation functions provide fine-grained control over server rendering behavior. They are **required** to enable different rendering modes (SSR, SPA, SPA prefetch, static pages) and allow you to conditionally switch between them based on runtime conditions like server load, user agents, request paths, or any custom logic.
 
 ### Degradation Keys
 
-The server supports the following degradation keys:
+The server supports the following degradation keys. **Defining a degradation function enables that mode**, and the function's return value determines when it's used:
 
-- **`isSPAPrefetch`**: Controls when to serve SPA prefetch pages (executes app lifecycle but renders SPA template with pre-fetched data)
-- **`isSPA`**: Controls when to serve pure SPA pages (no server-side execution)
-- **`isOverloaded`**: Controls when to show server overload message (503 status)
-- **`isStatic`**: Controls when to serve static error pages
+- **`isSPAPrefetch`**: Enables and controls when to serve SPA prefetch pages (executes app lifecycle but renders SPA template with pre-fetched data)
+- **`isSPA`**: Enables and controls when to serve pure SPA pages (no server-side execution)
+- **`isOverloaded`**: Enables and controls when to show server overload message (503 status)
+- **`isStatic`**: Enables and controls when to serve static error pages
 
 ### Basic Usage
 
@@ -90,12 +79,6 @@ Degradation functions receive an event object containing `req`, `res`, `context`
 module.exports = {
   prod: {
     $Server: {
-      serveSPA: {
-        allow: true,
-      },
-      serveSPAPrefetch: {
-        allow: true,
-      },
       degradation: {
         // Serve SPA prefetch for bots to improve SEO
         isSPAPrefetch: (event) => {
@@ -137,9 +120,6 @@ You can provide an **array of degradation functions** for more complex logic. Fu
 module.exports = {
   prod: {
     $Server: {
-      serveSPAPrefetch: {
-        allow: true,
-      },
       degradation: {
         isSPAPrefetch: [
           // First check: Serve SPA prefetch for bots
@@ -190,9 +170,6 @@ const {
 module.exports = {
   prod: {
     $Server: {
-      serveSPAPrefetch: {
-        allow: true,
-      },
       degradation: {
         // Serve SPA prefetch for bots
         isSPAPrefetch: createUserAgentDegradation(
@@ -363,9 +340,6 @@ const { combineOr } = require('@ima/server/degradation');
 module.exports = {
   prod: {
     $Server: {
-      serveSPAPrefetch: {
-        allow: true,
-      },
       degradation: {
         // Serve SPA prefetch for SEO bots OR mobile devices
         isSPAPrefetch: combineOr(

@@ -92,9 +92,6 @@ describe('Server App Factory', () => {
         cache: {
           enabled: true,
         },
-        serveSPA: {
-          allow: true,
-        },
       },
     };
     devErrorPage = jest.fn(({ error }) => ({
@@ -428,9 +425,6 @@ describe('Server App Factory', () => {
     });
 
     it('should render SPA prefetch page when degradation logic indicates', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       environment.$Server.degradation = {
         isSPAPrefetch: () => true,
       };
@@ -451,9 +445,6 @@ describe('Server App Factory', () => {
 
     it('should render SPA prefetch page with forced flag', async () => {
       process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
 
       jest.spyOn(router, 'route').mockReturnValue({
         status: 200,
@@ -470,10 +461,7 @@ describe('Server App Factory', () => {
       delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
     });
 
-    it('should not render SPA prefetch when disabled', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: false,
-      };
+    it('should fall back to SPA mode when both degradation functions return true', async () => {
       environment.$Server.degradation = {
         isSPAPrefetch: () => true,
         isSPA: () => true,
@@ -481,16 +469,13 @@ describe('Server App Factory', () => {
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      // Should fall back to SPA mode
+      // Should fall back to SPA mode (isSPA takes precedence)
       expect(response.SPA).toBeTruthy();
       expect(response.spaPrefetch).toBeFalsy();
       expect(response.static).toBeTruthy();
     });
 
     it('should not render SPA prefetch without degradation logic', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       // No degradation config set - should not render SPA prefetch
 
       jest.spyOn(router, 'route').mockReturnValue({
@@ -508,9 +493,6 @@ describe('Server App Factory', () => {
     });
 
     it('should not render SPA prefetch when degradation logic returns false', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       environment.$Server.degradation = {
         isSPAPrefetch: () => false,
       };
@@ -529,9 +511,6 @@ describe('Server App Factory', () => {
     });
 
     it('should render SPA prefetch page with array degradation functions - first returns true', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       environment.$Server.degradation = {
         isSPAPrefetch: [
           () => true, // First function returns true
@@ -553,9 +532,6 @@ describe('Server App Factory', () => {
     });
 
     it('should render SPA prefetch page with array degradation functions - second returns true', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       environment.$Server.degradation = {
         isSPAPrefetch: [
           () => false, // First function returns false
@@ -577,9 +553,6 @@ describe('Server App Factory', () => {
     });
 
     it('should not render SPA prefetch when all array degradation functions return false', async () => {
-      environment.$Server.serveSPAPrefetch = {
-        allow: true,
-      };
       environment.$Server.degradation = {
         isSPAPrefetch: [() => false, () => false, () => false],
       };

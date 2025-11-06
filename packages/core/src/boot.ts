@@ -150,36 +150,6 @@ export interface Environment {
     clusters?: null | number;
 
     /**
-     * SPA mode means, that the server-side-render is completely disabled
-     * and clients receive base template generated from spa.ejs file
-     * with app root html and static files, which initialize the app
-     * only on client-side. This negates some performance impacts of SSR
-     * on the app server.
-     */
-    serveSPA?: {
-      /**
-       * When enabled, and the number of concurrent connection exceeds the concurrency,
-       * the server will serve the application in SPA mode (without server-side rendering)
-       */
-      allow?: boolean;
-    };
-
-    /**
-     * SPA Prefetch mode is a performance optimization that serves the SPA template
-     * with pre-fetched application state and cache, reducing server CPU load from SSR
-     * while maintaining fast initial page loads. The client boots instantly with the
-     * pre-fetched state and takes over with full client-side interactivity.
-     */
-    serveSPAPrefetch?: {
-      /**
-       * When enabled, and the server reaches the configured concurrency limit,
-       * requests will be served in SPA Prefetch mode (SPA template with pre-fetched data)
-       * instead of full SSR.
-       */
-      allow?: boolean;
-    };
-
-    /**
      * Cache configuration.
      */
     cache?: {

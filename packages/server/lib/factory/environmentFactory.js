@@ -35,9 +35,6 @@ const defaultEnvironment = {
       // Max number of app instances to recycle (pool size)
       concurrency: 100,
       clusters: null,
-      serveSPA: {
-        allow: true,
-      },
       cache: {
         enabled: false,
         cacheKeyGenerator: null,
