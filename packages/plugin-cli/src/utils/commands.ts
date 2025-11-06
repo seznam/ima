@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger, time, printTime } from '@ima/dev-utils/logger';
-import anymatch from 'anymatch';
+import anymatch, { Matcher as AnymatchMatcher } from 'anymatch';
 import chalk from 'chalk';
-import chokidar from 'chokidar';
+import { watch as chokidarWatch } from 'chokidar';
 import globby from 'globby';
 import { Arguments } from 'yargs';
 
@@ -55,7 +55,7 @@ export async function parsePkgJson(basePath: string): Promise<{
   );
 }
 
-function errorHandler(error: Error) {
+function errorHandler(error: unknown) {
   logger.error('An error occurred while watching files');
   console.error(error);
 }
@@ -104,7 +104,7 @@ export async function build(args: Arguments) {
         const matcher =
           typeof config.exclude === 'function'
             ? config.exclude
-            : anymatch(config.exclude);
+            : anymatch(config.exclude as AnymatchMatcher);
 
         files = files.filter(filePath => !matcher(filePath));
       }
@@ -178,16 +178,25 @@ export async function watch(args: Arguments) {
     const process = await createProcessingPipeline(context);
 
     // Dev watcher
-    chokidar
-      .watch([path.resolve(inputDir)], {
-        ignoreInitial: false,
-        ignored: config.exclude,
-        persistent: true,
-      })
+    chokidarWatch([path.resolve(inputDir)], {
+      ignoreInitial: false,
+      ignored: config.exclude,
+      persistent: true,
+    })
       .on('error', errorHandler)
       .on('all', async (eventName, filePath) => {
         const contextPath = path.relative(inputDir, filePath);
         const fileName = path.basename(filePath);
+
+        // Skip unsupported event names
+        if (
+          eventName === 'all' ||
+          eventName === 'ready' ||
+          eventName === 'raw' ||
+          eventName === 'error'
+        ) {
+          return;
+        }
 
         batch(async () => {
           switch (eventName) {
@@ -251,25 +260,24 @@ export async function watch(args: Arguments) {
         ];
       }
 
-      chokidar
-        .watch(
-          [
-            path.join(cwd, distBaseDir),
-            Array.isArray(parsedArgs?.additionalWatchPaths) &&
-              parsedArgs?.additionalWatchPaths,
-            Array.isArray(config?.additionalWatchPaths) &&
-              config?.additionalWatchPaths,
-          ].filter(Boolean) as string[],
-          {
-            ignoreInitial: false,
-            persistent: true,
-            ignored: [
-              '**/tsconfig.build.tsbuildinfo/**',
-              '**/node_modules/**',
-              '**/.DS_Store/**',
-            ],
-          }
-        )
+      chokidarWatch(
+        [
+          path.join(cwd, distBaseDir),
+          Array.isArray(parsedArgs?.additionalWatchPaths) &&
+            parsedArgs?.additionalWatchPaths,
+          Array.isArray(config?.additionalWatchPaths) &&
+            config?.additionalWatchPaths,
+        ].filter(Boolean) as string[],
+        {
+          ignoreInitial: false,
+          persistent: true,
+          ignored: [
+            '**/tsconfig.build.tsbuildinfo/**',
+            '**/node_modules/**',
+            '**/.DS_Store/**',
+          ],
+        }
+      )
         .on('error', errorHandler)
         .on('all', (eventName, filePath) => {
           // Handler to link additional non-dist files
@@ -283,6 +291,16 @@ export async function watch(args: Arguments) {
             contextPath
           );
           const linkedOutputDir = path.dirname(linkedOutputPath);
+
+          // Skip unsupported event names
+          if (
+            eventName === 'all' ||
+            eventName === 'ready' ||
+            eventName === 'raw' ||
+            eventName === 'error'
+          ) {
+            return;
+          }
 
           batch(async () => {
             switch (eventName) {

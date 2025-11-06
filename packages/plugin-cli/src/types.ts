@@ -1,5 +1,5 @@
 import { JscTarget, ModuleConfig, ReactConfig } from '@swc/core';
-import { WatchOptions } from 'chokidar';
+import { ChokidarOptions } from 'chokidar';
 
 export type Transformer = ({
   source,
@@ -58,7 +58,7 @@ export interface ImaPluginConfig {
   inputDir: string;
   output: ImaPluginOutputConfig[];
   target: JscTarget;
-  exclude?: WatchOptions['ignored'];
+  exclude?: ChokidarOptions['ignored'];
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
   transformers?: TransformerDefinition[] | '...';
