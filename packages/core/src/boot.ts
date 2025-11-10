@@ -185,6 +185,16 @@ export interface Environment {
        */
       formatting?: 'simple' | 'dev' | 'JSON';
     };
+
+    /**
+     * Degradation functions for the server.
+     */
+    degradation?: {
+      isSPA?: (event: any) => boolean;
+      isSPAPrefetch?: (event: any) => boolean;
+      isOverloaded?: (event: any) => boolean;
+      isStatic?: (event: any) => boolean;
+    };
   };
 }
 
