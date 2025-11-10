@@ -461,7 +461,7 @@ describe('Server App Factory', () => {
       delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
     });
 
-    it('should fall back to SPA mode when both degradation functions return true', async () => {
+    it('should fall back to SPA Prefetch mode when both degradation functions return true', async () => {
       environment.$Server.degradation = {
         isSPAPrefetch: () => true,
         isSPA: () => true,
@@ -469,9 +469,9 @@ describe('Server App Factory', () => {
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
-      // Should fall back to SPA mode (isSPA takes precedence)
-      expect(response.SPA).toBeTruthy();
-      expect(response.spaPrefetch).toBeFalsy();
+      // Should fall back to prefetched SPA mode (isSPAPrefetch takes precedence)
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.SPA).toBeFalsy();
       expect(response.static).toBeTruthy();
     });
 

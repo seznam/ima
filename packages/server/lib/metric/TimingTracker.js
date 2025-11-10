@@ -17,12 +17,12 @@ const DEFAULT_OPTIONS = {
 };
 
 /**
- * PerformanceTracker - Context-based performance tracking for IMA.js server
+ * TimingTracker - Context-based performance tracking for IMA.js server
  *
  * This class provides a flexible performance tracking system that can be passed
  * through the event context to track timing throughout the request lifecycle.
  */
-class PerformanceTracker {
+class TimingTracker {
   /**
    * @param {Object} options - Configuration options
    * @param {boolean} [options.enabled=true] - Enable/disable tracking
@@ -54,7 +54,8 @@ class PerformanceTracker {
   }
 
   /**
-   * Track a performance event
+   * Track a timing event
+   *
    * @param {string} name - Event name
    * @param {Object} [metadata={}] - Optional metadata for the event
    */
@@ -105,7 +106,7 @@ class PerformanceTracker {
   }
 
   /**
-   * Get structured performance report
+   * Get structured timing report
    */
   getReport() {
     if (!this.enabled || this.events.length === 0) {
@@ -141,7 +142,7 @@ class PerformanceTracker {
   }
 
   /**
-   * Log formatted performance report to console
+   * Log formatted timing report to console
    */
   logReport() {
     if (!this.enabled || this.events.length === 0) {
@@ -152,7 +153,7 @@ class PerformanceTracker {
 
     // Header
     console.log('\n' + chalk.cyan('━'.repeat(80)));
-    console.log(chalk.bold.cyan(`🔍 Performance Timeline`));
+    console.log(chalk.bold.cyan(`Timing Performance Timeline`));
     console.log(chalk.cyan('━'.repeat(80)));
 
     // Summary
@@ -447,7 +448,7 @@ class PerformanceTracker {
   }
 
   /**
-   * Wrap a function to automatically track its performance on each call
+   * Wrap a function to automatically track its timing on each call
    * Returns a new function that tracks start/end automatically
    *
    * This provides rich tracking with metadata, memory usage, and timeline integration.
@@ -456,7 +457,7 @@ class PerformanceTracker {
    * @param {string} name - Operation name for tracking
    * @param {Function} fn - Function to wrap
    * @param {Object} [metadata={}] - Optional static metadata (included in every call)
-   * @returns {Function} Wrapped function that tracks performance
+   * @returns {Function} Wrapped function that tracks timing
    *
    * @example
    * const trackedFn = tracker.wrap('myOperation', originalFunction);
@@ -524,7 +525,7 @@ class PerformanceTracker {
   }
 
   /**
-   * Get all native performance entries (marks and measures)
+   * Get all native timing entries (marks and measures)
    * Useful for querying marks/measures created by the tracker or manually
    *
    * @param {string} [type] - Optional type filter ('mark', 'measure')
@@ -642,6 +643,6 @@ class PerformanceTracker {
 }
 
 module.exports = {
-  PerformanceTracker,
+  TimingTracker,
   DEFAULT_OPTIONS,
 };
