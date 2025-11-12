@@ -27,15 +27,7 @@ module.exports = createWebpackConfig(baseConfig => {
     loader: require.resolve('style-loader'),
     options: {
       injectType: 'lazyStyleTag',
-      /**
-       * Allows optional lazy insert to custom document element.
-       */
-      // Allows custom insert using `styles.use({ target: this.shadowRoot })`;
-      insert: (element, options) => {
-        const parent = options.target || document.head;
-
-        parent.appendChild(element);
-      },
+      insert: require.resolve('./insert-styles.js'),
     },
   };
 

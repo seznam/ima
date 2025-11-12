@@ -6,7 +6,7 @@ import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
 import nodemon from 'nodemon';
-import webpack from 'webpack';
+import webpack, { MultiConfiguration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 import { createDevServer } from '../dev-server/devServer';
@@ -158,7 +158,11 @@ const dev: HandlerFn = async args => {
     );
 
     // Create compiler
-    const compiler = webpack(config);
+    const compiler = webpack(config as MultiConfiguration);
+
+    if (!compiler) {
+      throw new Error('Failed to create compiler');
+    }
 
     if (!compiler) {
       throw new Error('Failed to create webpack compiler');
