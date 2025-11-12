@@ -20,7 +20,7 @@
     "@ima/plugin-testing-integration": "5.2.0",
     "@ima/cli": "^19.9.1",
     "@ima/testing-library": "^19.11.1",
-    "@swc-contrib/mut-cjs-exports": "^12.0.0",
+    "@swc-contrib/mut-cjs-exports": "^13.0.0",
     "@swc/jest": "^0.2.39",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
