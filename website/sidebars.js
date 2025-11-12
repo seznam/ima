@@ -93,7 +93,7 @@ const sidebars = {
       type: 'category',
       label: 'Server',
       collapsed: false,
-      items: ['server/events'],
+      items: ['server/events', 'server/performance-tracking'],
     },
     {
       type: 'category',

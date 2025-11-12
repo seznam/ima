@@ -117,11 +117,26 @@ export class PageNavigationHandler extends PageHandler {
 
   /**
    * Scrolls to give coordinates on a page.
+   * Uses requestAnimationFrame to ensure React has finished rendering
+   * and the browser has completed layout/paint before scrolling.
    */
   _scrollTo({ x = 0, y = 0 }) {
-    setTimeout(() => {
-      this._window.scrollTo(x, y);
-    }, 0);
+    const browserWindow = this._window.getWindow();
+
+    if (!browserWindow) {
+      return;
+    }
+
+    /**
+     * Use double RAF to ensure browser has completed layout and paint
+     * - First RAF: scheduled for next frame
+     * - Second RAF: ensures layout is complete and stable
+     */
+    browserWindow.requestAnimationFrame(() => {
+      browserWindow.requestAnimationFrame(() => {
+        this._window.scrollTo(x, y);
+      });
+    });
   }
 
   /**

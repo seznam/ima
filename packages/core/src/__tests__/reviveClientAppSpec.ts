@@ -90,7 +90,6 @@ describe('revive client application', () => {
       $Version: 1,
     });
 
-    // @ts-expect-error
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
 
@@ -134,6 +133,7 @@ describe('revive client application', () => {
 
           oc.bind('$Window', Window);
 
+          // @ts-expect-error
           oc.bind('$CssClasses', function () {
             return cssClassNameProcessor;
           });
@@ -143,6 +143,7 @@ describe('revive client application', () => {
           });
 
           oc.inject(PageRendererFactory, [ComponentUtils]);
+          // @ts-expect-error
           oc.bind('$PageRendererFactory', PageRendererFactory);
 
           global.$Debug = false;
@@ -170,6 +171,7 @@ describe('revive client application', () => {
       }
     );
 
+    // @ts-expect-error
     const response = await reviveClientApp(bootConfig);
 
     expect(response.status).toBe(200);

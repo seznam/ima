@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@ima/dev-utils": "^19.0.1",
-    "@swc/core": "^1.14.0",
+    "@swc/core": "^1.15.1",
     "chalk": "^4.1.2",
     "chokidar": "^4.0.3",
     "globby": "^11.1.0",

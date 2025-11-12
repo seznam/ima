@@ -25,3 +25,20 @@ function extend(ChildClass, ParentClass) {
   ChildClass.prototype = new ParentClass();
   ChildClass.prototype.constructor = ChildClass;
 }
+
+global.window = global.window || {};
+global.window.MessageChannel = jest.fn().mockImplementation(() => {
+  let onmessage;
+  return {
+    port1: {
+      set onmessage(cb) {
+        onmessage = cb;
+      },
+    },
+    port2: {
+      postMessage: data => {
+        onmessage?.({ data });
+      },
+    },
+  };
+});

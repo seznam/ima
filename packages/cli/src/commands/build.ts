@@ -15,7 +15,7 @@ import {
   createWebpackConfig,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils';
+} from '../webpack/utils/utils';
 
 /**
  * Builds ima application.
@@ -48,7 +48,7 @@ const build: HandlerFn = async args => {
     const compiler = webpack(config);
 
     if (!compiler) {
-      throw new Error('Failed to create compiler');
+      throw new Error('Failed to create webpack compiler');
     }
 
     await runCompiler(compiler, args, imaConfig);

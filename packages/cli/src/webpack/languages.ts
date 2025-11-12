@@ -280,7 +280,7 @@ export async function compileLanguages(
         .on('error', error => {
           logger.error(
             new Error(
-              `Unexpected error occurred while watching language files\n\n${error.message}`
+              `Unexpected error occurred while watching language files\n\n${(error as Error)?.message}`
             )
           );
         });
