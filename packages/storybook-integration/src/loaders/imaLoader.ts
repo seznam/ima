@@ -1,7 +1,6 @@
 import type * as imaCore from '@ima/core';
-import { Loader, Parameters, ReactRenderer } from '@storybook/react';
-import { StoryContextForLoaders, StrictArgs } from '@storybook/types';
-import merge from 'ts-deepmerge';
+import { Loader, Parameters, StoryContext } from '@storybook/react';
+import { merge } from 'ts-deepmerge';
 
 import { getImaInitializers } from '../utils/initializer.js';
 
@@ -31,7 +30,10 @@ async function destroyInstance(
  */
 function initRevivalSettings(parameters: Parameters): void {
   window.$Debug = true;
-  window.$IMA = merge(window.$IMA, parameters?.ima?.$IMA ?? {});
+  window.$IMA = merge(
+    window.$IMA,
+    parameters?.ima?.$IMA ?? {}
+  ) as unknown as imaCore.GlobalImaObject;
 }
 
 /**
@@ -59,7 +61,7 @@ function updateState(
  * Extend app boot config with parameter overrides + custom initializers.
  */
 export function extendBootConfig(
-  storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>,
+  storybookArgs: StoryContext,
   appConfigFunctions: imaCore.InitAppConfig,
   extendedConfig?: Parameters['ima']
 ): imaCore.InitAppConfig {
@@ -88,7 +90,7 @@ export function extendBootConfig(
           return merge(acc, cur?.initSettings?.(...args) ?? {});
         }, {}),
         extendedConfig?.initSettings?.(...args, storybookArgs) ?? {}
-      );
+      ) as unknown as imaCore.AppSettings;
     },
   };
 }
@@ -106,7 +108,6 @@ export const imaLoader: Loader = async args => {
       'initSettings',
       '$IMA',
       'args',
-      // @ts-expect-error
     ].some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
   ) {
     // Destroy old instance

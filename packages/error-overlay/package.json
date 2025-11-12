@@ -26,18 +26,18 @@
     "stylelint": "stylelint './**/*.less'"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^19.0.0",
-    "@ima/hmr-client": "^19.0.0",
-    "@types/prismjs": "^1.26.0",
-    "@types/react": "^18.0.33",
-    "@types/react-dom": "^18.0.5",
-    "clsx": "^1.1.1",
+    "@ima/dev-utils": "^19.0.1",
+    "@ima/hmr-client": "^19.0.1",
+    "@types/prismjs": "^1.26.5",
+    "@types/react": "^18.3.26",
+    "@types/react-dom": "^18.3.7",
+    "clsx": "^1.2.1",
     "compression-webpack-plugin": "^10.0.0",
-    "prismjs": "^1.28.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-json-tree": "^0.18.0",
-    "stacktrace-parser": "^0.1.10"
+    "prismjs": "^1.30.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-json-tree": "^0.20.0",
+    "stacktrace-parser": "^0.1.11"
   },
   "publishConfig": {
     "access": "public",

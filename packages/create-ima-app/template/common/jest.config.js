@@ -16,6 +16,7 @@ module.exports = {
           experimental: {
             plugins: [['@swc-contrib/mut-cjs-exports', {}]],
           },
+          target: 'es2024',
           parser: {
             syntax: 'ecmascript',
             jsx: true,
@@ -35,6 +36,7 @@ module.exports = {
           experimental: {
             plugins: [['@swc-contrib/mut-cjs-exports', {}]],
           },
+          target: 'es2024',
           parser: {
             syntax: 'typescript',
             tsx: true,

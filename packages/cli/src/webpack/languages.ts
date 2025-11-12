@@ -8,7 +8,7 @@ import compileModule, {
   StringStructure,
 } from '@messageformat/core/lib/compile-module';
 import chalk from 'chalk';
-import chokidar from 'chokidar';
+import { watch as chokidarWatch } from 'chokidar';
 import globby from 'globby';
 
 import { ImaConfig } from '../types';
@@ -238,11 +238,10 @@ export async function compileLanguages(
       }
 
       // Create chokidar instance for every language in watch mode
-      chokidar
-        .watch(imaConfig.languages[locale], {
-          ignoreInitial: true,
-          cwd: rootDir,
-        })
+      chokidarWatch(imaConfig.languages[locale], {
+        ignoreInitial: true,
+        cwd: rootDir,
+      })
         .on('all', async (eventName, changedRelativePath) => {
           if (!['unlink', 'add', 'change'].includes(eventName)) {
             return;

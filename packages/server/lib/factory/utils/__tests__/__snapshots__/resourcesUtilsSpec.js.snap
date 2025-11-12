@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
 {
