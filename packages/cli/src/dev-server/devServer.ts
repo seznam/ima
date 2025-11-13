@@ -57,7 +57,7 @@ export async function createDevServer({
         return config.devServer.origin;
       }
 
-      return `${getProtocol(req)}//localhost:${environment.$Server.port}`;
+      return `${getProtocol(req as any)}//localhost:${environment.$Server.port}`;
     }
 
     app

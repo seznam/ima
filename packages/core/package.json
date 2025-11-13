@@ -62,20 +62,20 @@
   "dependencies": {
     "@esmj/task": "^0.5.2",
     "@ima/helpers": "^19.0.4",
-    "@types/node": "^20.19.25",
+    "@types/node": "^24.10.1",
     "@types/webpack": "^5.28.5",
     "@types/yargs": "^17.0.34",
     "classnames": "^2.5.1",
     "memoize-one": "^6.0.0",
-    "type-fest": "^4.41.0"
+    "type-fest": "^5.2.0"
   },
   "devDependencies": {
     "@ima/plugin-cli": "^19.2.0",
     "@types/express": "^5.0.5",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/merge-deep": "^3.0.3",
-    "@types/multer": "^1.4.13",
-    "jscodeshift": "^0.16.1"
+    "@types/multer": "^2.0.0",
+    "jscodeshift": "^17.3.0"
   },
   "publishConfig": {
     "access": "public",
