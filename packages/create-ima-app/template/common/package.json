@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
-    "@ima/plugin-testing-integration": "5.2.0",
+    "@ima/plugin-testing-integration": "5.2.1",
     "@ima/cli": "/Users/jsimck/Projects/ima/ima-cli-19.9.1.tgz",
     "@ima/testing-library": "/Users/jsimck/Projects/ima/ima-testing-library-19.11.1.tgz",
     "@swc-contrib/mut-cjs-exports": "^13.0.0",
