@@ -5,6 +5,7 @@ const path = require('path');
 const defaultApplicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
+const degradation = require('./lib/degradation.js');
 const { Emitter, Event } = require('./lib/emitter.js');
 const environmentFactory = require('./lib/factory/environmentFactory');
 const urlParserFactory = require('./lib/factory/urlParserFactory');
@@ -13,8 +14,8 @@ const {
   renderStyles,
   renderScript,
 } = require('./lib/factory/utils/resourcesUtils');
-const { instrumentEmitter } = require('./lib/metric/performanceMonitor');
-const { PerformanceTracker } = require('./lib/metric/PerformanceTracker');
+const { instrumentEmitterWithTimings } = require('./lib/metric/timingMonitor');
+const { TimingTracker } = require('./lib/metric/TimingTracker');
 
 function createIMAServer({
   environment,
@@ -104,7 +105,8 @@ module.exports = {
   environmentFactory,
   urlParserFactory,
   sanitizeValue,
-  PerformanceTracker,
-  instrumentEmitter,
+  TimingTracker,
+  instrumentEmitterWithTimings,
   Event,
+  ...degradation,
 };

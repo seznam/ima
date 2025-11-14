@@ -1,8 +1,11 @@
 /* eslint-disable no-console */
 const { Event } = require('../../emitter');
-const { instrumentEmitter, DEFAULT_OPTIONS } = require('../performanceMonitor');
+const {
+  instrumentEmitterWithTimings,
+  DEFAULT_OPTIONS,
+} = require('../timingMonitor');
 
-describe('performanceMonitor', () => {
+describe('timingTracker', () => {
   let mockEmitter;
   let mockEvent;
 
@@ -37,9 +40,11 @@ describe('performanceMonitor', () => {
     jest.clearAllMocks();
   });
 
-  describe('instrumentEmitter function', () => {
+  describe('instrumentEmitterWithTimings function', () => {
     it('should return emitter unchanged when disabled', () => {
-      const result = instrumentEmitter(mockEmitter, { enabled: false });
+      const result = instrumentEmitterWithTimings(mockEmitter, {
+        enabled: false,
+      });
 
       expect(result).toBe(mockEmitter);
       // Should not call prependListener or on when disabled
@@ -50,7 +55,9 @@ describe('performanceMonitor', () => {
     it('should apply sampling rate and skip when random > rate', () => {
       jest.spyOn(Math, 'random').mockReturnValue(0.8); // 0.8 > 0.5
 
-      const result = instrumentEmitter(mockEmitter, { samplingRate: 0.5 });
+      const result = instrumentEmitterWithTimings(mockEmitter, {
+        samplingRate: 0.5,
+      });
 
       expect(result).toBe(mockEmitter);
       expect(Math.random).toHaveBeenCalledTimes(1);
@@ -62,7 +69,9 @@ describe('performanceMonitor', () => {
     it('should apply sampling rate and continue when random <= rate', () => {
       jest.spyOn(Math, 'random').mockReturnValue(0.3); // 0.3 <= 0.5
 
-      const result = instrumentEmitter(mockEmitter, { samplingRate: 0.5 });
+      const result = instrumentEmitterWithTimings(mockEmitter, {
+        samplingRate: 0.5,
+      });
 
       expect(result).toBe(mockEmitter);
       expect(Math.random).toHaveBeenCalledTimes(1);
@@ -74,7 +83,7 @@ describe('performanceMonitor', () => {
     });
 
     it('should add listeners for all DEFAULT_IMA_EVENTS', () => {
-      instrumentEmitter(mockEmitter);
+      instrumentEmitterWithTimings(mockEmitter);
 
       // Should call prependListener and on for each event
       expect(mockEmitter.prependListener).toHaveBeenCalledTimes(
@@ -84,7 +93,7 @@ describe('performanceMonitor', () => {
     });
 
     it('should prepend start listener and append end listener', () => {
-      instrumentEmitter(mockEmitter);
+      instrumentEmitterWithTimings(mockEmitter);
 
       // Check that prependListener is called before on for each event
       const events = Object.values(Event);
@@ -104,10 +113,10 @@ describe('performanceMonitor', () => {
 
   describe('event tracking behavior', () => {
     beforeEach(() => {
-      instrumentEmitter(mockEmitter);
+      instrumentEmitterWithTimings(mockEmitter);
     });
 
-    it('should initialize PerformanceTracker on first event (BeforeRequest)', () => {
+    it('should initialize TimingTracker on first event (BeforeRequest)', () => {
       // Get the BeforeRequest start listener (first call to prependListener)
       const beforeRequestCalls = mockEmitter.prependListener.mock.calls.filter(
         call => call[0] === Event.BeforeRequest
@@ -118,9 +127,7 @@ describe('performanceMonitor', () => {
       startListener(mockEvent);
 
       expect(mockEvent.context.perf).toBeDefined();
-      expect(mockEvent.context.perf.constructor.name).toBe(
-        'PerformanceTracker'
-      );
+      expect(mockEvent.context.perf.constructor.name).toBe('TimingTracker');
     });
 
     it('should track request.received on first event', () => {
@@ -221,7 +228,7 @@ describe('performanceMonitor', () => {
         on: jest.fn(),
       };
 
-      instrumentEmitter(freshMockEmitter, {
+      instrumentEmitterWithTimings(freshMockEmitter, {
         autoTrackEvents: false,
       });
 
@@ -282,7 +289,7 @@ describe('performanceMonitor', () => {
         on: jest.fn(),
       };
 
-      instrumentEmitter(freshMockEmitter, {
+      instrumentEmitterWithTimings(freshMockEmitter, {
         onComplete: mockCallback,
       });
 
@@ -321,7 +328,7 @@ describe('performanceMonitor', () => {
         on: jest.fn(),
       };
 
-      instrumentEmitter(freshMockEmitter);
+      instrumentEmitterWithTimings(freshMockEmitter);
 
       const beforeRequestCalls =
         freshMockEmitter.prependListener.mock.calls.filter(
@@ -347,7 +354,9 @@ describe('performanceMonitor', () => {
         on: jest.fn(),
       };
 
-      instrumentEmitter(freshMockEmitter, { logEvent: customLogEvent });
+      instrumentEmitterWithTimings(freshMockEmitter, {
+        logEvent: customLogEvent,
+      });
 
       const afterRequestEndCalls = freshMockEmitter.on.mock.calls.filter(
         call => call[0] === customLogEvent
@@ -374,7 +383,7 @@ describe('performanceMonitor', () => {
     });
 
     it('should handle null/undefined onComplete callback', () => {
-      instrumentEmitter(mockEmitter, { onComplete: null });
+      instrumentEmitterWithTimings(mockEmitter, { onComplete: null });
 
       const endListener = mockEmitter.on.mock.calls.find(
         call => call[0] === Event.AfterResponseSend
@@ -389,7 +398,9 @@ describe('performanceMonitor', () => {
     });
 
     it('should handle invalid onComplete callback type', () => {
-      instrumentEmitter(mockEmitter, { onComplete: 'not-a-function' });
+      instrumentEmitterWithTimings(mockEmitter, {
+        onComplete: 'not-a-function',
+      });
 
       const endListener = mockEmitter.on.mock.calls.find(
         call => call[0] === Event.AfterResponseSend

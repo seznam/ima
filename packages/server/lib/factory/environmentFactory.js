@@ -32,15 +32,9 @@ const defaultEnvironment = {
     $Server: {
       port: 3001,
       staticPath: '/static',
+      // Max number of app instances to recycle (pool size)
       concurrency: 100,
-      staticConcurrency: 100,
-      overloadConcurrency: 100,
       clusters: null,
-      serveSPA: {
-        allow: true,
-        blackList: userAgent =>
-          new RegExp('Googlebot|SeznamBot').test(userAgent),
-      },
       cache: {
         enabled: false,
         cacheKeyGenerator: null,
@@ -60,6 +54,7 @@ const defaultEnvironment = {
       '//*:*': 'en',
     },
     $Server: {
+      // Max number of app instances to recycle (pool size)
       concurrency: 1,
       logger: {
         formatting: 'dev',

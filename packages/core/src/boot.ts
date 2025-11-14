@@ -144,42 +144,10 @@ export interface Environment {
     concurrency?: number;
 
     /**
-     * When the number of concurrent connection exceeds the `staticConcurrency`,
-     * the server response with static files for 4xx and 5xx.
-     */
-    staticConcurrency?: number;
-
-    /**
-     * When the number of concurrent connection exceeds the `overloadConcurrency`,
-     * the server response with 503 status code.
-     */
-    overloadConcurrency?: number;
-
-    /**
      * Define the number of server processes you want to start.
      * Use `null` for the current number of available CPU cores.
      */
     clusters?: null | number;
-
-    /**
-     * SPA mode means, that the server-side-render is completely disabled
-     * and clients receive base template generated from spa.ejs file
-     * with app root html and static files, which initialize the app
-     * only on client-side. This negates some performance impacts of SSR
-     * on the app server.
-     */
-    serveSPA?: {
-      /**
-       * When enabled, and the number of concurrent connection exceeds the concurrency,
-       * the server will serve the application in SPA mode (without server-side rendering)
-       */
-      allow?: boolean;
-
-      /**
-       * These user agents will always be served a server-rendered page.
-       */
-      blackList?: (userAgent: string) => boolean;
-    };
 
     /**
      * Cache configuration.
@@ -216,6 +184,16 @@ export interface Environment {
        * with source-mapping of error stacks. This is usefull in development.
        */
       formatting?: 'simple' | 'dev' | 'JSON';
+    };
+
+    /**
+     * Degradation functions for the server.
+     */
+    degradation?: {
+      isSPA?: (event: any) => boolean;
+      isSPAPrefetch?: (event: any) => boolean;
+      isOverloaded?: (event: any) => boolean;
+      isStatic?: (event: any) => boolean;
     };
   };
 }

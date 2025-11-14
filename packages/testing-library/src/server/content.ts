@@ -23,8 +23,8 @@ export async function getIMAResponseContent(): Promise<string> {
         $Server: {
           ...currentEnvironment.$Server,
           concurrency: 0,
-          serveSPA: {
-            allow: true,
+          degradation: {
+            isSPA: () => true,
           },
         },
         $Debug: true,

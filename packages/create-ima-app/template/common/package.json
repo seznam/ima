@@ -17,9 +17,9 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
-    "@ima/plugin-testing-integration": "5.2.0",
-    "@ima/cli": "/Users/jsimck/Projects/ima/ima-cli-19.9.1.tgz",
-    "@ima/testing-library": "/Users/jsimck/Projects/ima/ima-testing-library-19.11.1.tgz",
+    "@ima/plugin-testing-integration": "5.2.1",
+    "@ima/cli": "/Users/jsimck/Projects/ima/ima-cli-20.0.0-rc.0.tgz",
+    "@ima/testing-library": "/Users/jsimck/Projects/ima/ima-testing-library-20.0.0-rc.0.tgz",
     "@swc-contrib/mut-cjs-exports": "^13.0.0",
     "@swc/jest": "^0.2.39",
     "@testing-library/dom": "^10.4.1",
@@ -37,7 +37,7 @@
     "prettier": "^2.8.8"
   },
   "dependencies": {
-    "@ima/core": "/Users/jsimck/Projects/ima/ima-core-19.8.2.tgz",
+    "@ima/core": "/Users/jsimck/Projects/ima/ima-core-20.0.0-rc.0.tgz",
     "@ima/react-page-renderer": "/Users/jsimck/Projects/ima/ima-react-page-renderer-19.3.1.tgz",
     "@ima/server": "/Users/jsimck/Projects/ima/ima-server-19.6.0.tgz",
     "compression": "1.8.1",
