@@ -18,5 +18,14 @@
     "@ima/testing-library": "19.11.1",
     "@ima/docs": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "fifty-bikes-hide",
+    "giant-bears-know",
+    "lazy-garlics-teach",
+    "nine-hotels-matter",
+    "purple-trees-decide",
+    "shiny-bananas-hide",
+    "short-rules-begin",
+    "wet-dingos-brush"
+  ]
 }

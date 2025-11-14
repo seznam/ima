@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "19.9.1",
+  "version": "20.0.0-rc.0",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -88,8 +88,8 @@
     "@types/express": "^5.0.5"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0",
-    "@ima/server": ">=19.0.0",
+    "@ima/core": ">=20.0.0-rc.0",
+    "@ima/server": ">=20.0.0-rc.0",
     "express": ">=4"
   },
   "publishConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "19.6.0",
+  "version": "20.0.0-rc.0",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -34,7 +34,7 @@
     "winston": "^3.18.3"
   },
   "peerDependencies": {
-    "@ima/core": ">=19.0.0",
+    "@ima/core": ">=20.0.0-rc.0",
     "@ima/dev-utils": ">=19.0.0",
     "@ima/helpers": ">=19.0.3",
     "express": ">=4.0.0"
