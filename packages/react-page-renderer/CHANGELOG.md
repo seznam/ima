@@ -1,5 +1,26 @@
 # Change Log
 
+## 20.0.0-rc.0
+
+### Major Changes
+
+- a03390d: Removed $IMA.$Path without any replacements since it imposed security riscs
+- 3f6ee97: Moved most of the default settings and environemnt config from the CIA template to the core. This means that most of the settings have defaults and don't need to be defined in the config.
+
+  This is not necessarily a breaking change, but it is a major change because it changes the default behavior of the app.
+
+### Patch Changes
+
+- Updated dependencies [f9120bf]
+- Updated dependencies [b2e0eee]
+- Updated dependencies [cdb1471]
+- Updated dependencies [01d15d8]
+- Updated dependencies [cac7d53]
+- Updated dependencies [a03390d]
+- Updated dependencies [3f6ee97]
+  - @ima/core@20.0.0-rc.0
+  - @ima/server@20.0.0-rc.0
+
 ## 19.3.1
 
 ### Patch Changes

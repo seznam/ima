@@ -1,6 +1,6 @@
 {
   "name": "@ima/plugin-cli",
-  "version": "19.2.0",
+  "version": "20.0.0-rc.0",
   "description": "IMA.js Plugin CLI tool to build, link, develop IMA.js plugins.",
   "keywords": [
     "IMA",
@@ -37,10 +37,10 @@
     "chokidar": "^4.0.3",
     "globby": "^11.1.0",
     "preprocess": "^3.2.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.19.130",
+    "@types/node": "^24.10.1",
     "@types/yargs": "^17.0.34"
   },
   "peerDependencies": {

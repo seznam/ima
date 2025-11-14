@@ -6,7 +6,6 @@ import { logger } from '@ima/dev-utils/logger';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { ParserConfig } from '@swc/core';
 import CompressionPlugin from 'compression-webpack-plugin';
-// eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';

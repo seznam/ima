@@ -1,5 +1,19 @@
 # Change Log
 
+## 20.0.0-rc.0
+
+### Patch Changes
+
+- Updated dependencies [f9120bf]
+- Updated dependencies [b2e0eee]
+- Updated dependencies [01d15d8]
+- Updated dependencies [cac7d53]
+- Updated dependencies [a03390d]
+- Updated dependencies [3f6ee97]
+  - @ima/core@20.0.0-rc.0
+  - @ima/cli@20.0.0-rc.0
+  - @ima/react-page-renderer@20.0.0-rc.0
+
 ## 19.6.3
 
 ### Patch Changes
@@ -11,13 +25,11 @@
 ### Patch Changes
 
 - 25a1777: Added support for custom event targets in Router's listen methods. This enables better control over routing behavior by allowing you to:
-
   - Scope navigation handling to specific parts of your application
   - Handle multiple independent routed sections on a page
   - Better integrate IMA.js routing into existing applications
 
   Changes:
-
   - Modified `listen(target?: EventTarget)` method to allow for optional target
   - Modified `unlisten(target?: EventTarget)` method to allow for optional target
   - Added new `unlistenAll()` method to cleanup all event listeners at once
