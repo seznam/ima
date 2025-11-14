@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 import { build, watch } from '../utils/commands';
 
-yargs
+yargs(hideBin(process.argv))
   .scriptName(chalk.green.bold('ima-plugin'))
   // .description('CLI helper to build ima plugins')
   .usage('Usage: $0 <command>')

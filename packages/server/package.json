@@ -29,7 +29,7 @@
     "@esmj/monitor": "^0.6.1",
     "chalk": "^4.1.2",
     "ejs": "^3.1.10",
-    "http-proxy-middleware": "^2.0.9",
+    "http-proxy-middleware": "^3.0.5",
     "memoize-one": "^6.0.0",
     "winston": "^3.18.3"
   },
