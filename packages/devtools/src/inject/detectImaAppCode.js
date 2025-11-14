@@ -1,6 +1,5 @@
-import { SENTINEL_TO_EXTENSION } from '@/utils';
-
 import { Actions } from '@/constants';
+import { SENTINEL_TO_EXTENSION } from '@/utils';
 
 function detectImaAppCode() {
   return `(() => {

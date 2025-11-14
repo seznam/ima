@@ -1,6 +1,5 @@
-import { setIcon } from '@/utils';
-
 import { Actions, State } from '@/constants';
+import { setIcon } from '@/utils';
 
 const CACHE_SIZE = 2048;
 
