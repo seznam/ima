@@ -17,6 +17,7 @@ module.exports = function IMAInternalFactory({
     // BETTER 404 detection
     const event = createEvent('createDummyApp', {
       context: {},
+      imaInternal: {},
       environment,
       res: {
         app: {},
@@ -95,11 +96,15 @@ module.exports = function IMAInternalFactory({
     return event.context.app;
   }
 
-  function _getRouteInfo({ req, res }) {
+  function _getRouteInfo({ req, res, imaInternal }) {
     let routeInfo = null;
 
     if (!serverGlobal.has(GLOBAL.DUMMY_APP)) {
       return routeInfo;
+    }
+
+    if (imaInternal?.routeInfo) {
+      return imaInternal.routeInfo;
     }
 
     const dummyApp = serverGlobal.get(GLOBAL.DUMMY_APP);
@@ -122,13 +127,15 @@ module.exports = function IMAInternalFactory({
       });
     }
 
+    imaInternal.routeInfo = routeInfo;
+
     return routeInfo;
   }
 
-  function _addImaToResponse({ req, res }) {
+  function _addImaToResponse({ req, res, imaInternal }) {
     let routeName = 'other';
 
-    let routeInfo = _getRouteInfo({ req, res });
+    let routeInfo = _getRouteInfo({ req, res, imaInternal });
     if (routeInfo) {
       routeName = routeInfo.route.getName();
     }
@@ -252,6 +259,7 @@ module.exports = function IMAInternalFactory({
 
       instanceRecycler.clearInstance(context.app);
       context.app = null;
+      delete context.internal;
     }
   }
 

@@ -100,8 +100,8 @@ module.exports = function hooksFactory({
   }
 
   function _hasToServeStaticBadRequest(event) {
-    const { req, res } = event;
-    const routeInfo = _getRouteInfo({ req, res });
+    const { req, res, imaInternal } = event;
+    const routeInfo = _getRouteInfo({ req, res, imaInternal });
 
     const isBadRequest =
       routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
@@ -111,8 +111,8 @@ module.exports = function hooksFactory({
   }
 
   function _hasToServeStaticServerError(event) {
-    const { req, res } = event;
-    const routeInfo = _getRouteInfo({ req, res });
+    const { req, res, imaInternal } = event;
+    const routeInfo = _getRouteInfo({ req, res, imaInternal });
 
     const isServerError =
       routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
@@ -254,14 +254,6 @@ module.exports = function hooksFactory({
         hasReachedMax: instanceRecycler.hasReachedMaxConcurrentRequests(),
       });
 
-      if (_hasToServeSPA(event)) {
-        event.context?.perf?.end('hooks.performanceCheck', {
-          result: 'serveSPA',
-        });
-        event.stopPropagation();
-        return renderStaticSPAPage(event);
-      }
-
       if (_isServerOverloaded(event)) {
         event.context?.perf?.end('hooks.performanceCheck', {
           result: 'serveOverloaded',
@@ -289,6 +281,14 @@ module.exports = function hooksFactory({
             event.error ??
             new Error('The App error route exceed static thresholds.'),
         });
+      }
+
+      if (_hasToServeSPA(event)) {
+        event.context?.perf?.end('hooks.performanceCheck', {
+          result: 'serveSPA',
+        });
+        event.stopPropagation();
+        return renderStaticSPAPage(event);
       }
 
       event.context?.perf?.end('hooks.performanceCheck', { result: 'passed' });
@@ -355,7 +355,7 @@ module.exports = function hooksFactory({
       }
 
       event.context?.perf?.start('hooks.checkJsonResponse');
-      const { context, req, res } = event;
+      const { context, req, res, imaInternal } = event;
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (!isAppExists) {
@@ -364,7 +364,7 @@ module.exports = function hooksFactory({
         return;
       }
 
-      const routeInfo = await _getRouteInfo({ req, res });
+      const routeInfo = await _getRouteInfo({ req, res, imaInternal });
 
       if (!routeInfo?.route?.getController) {
         event.context?.perf?.end('hooks.checkJsonResponse');

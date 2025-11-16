@@ -53,6 +53,7 @@ jest.mock('../devErrorPageFactory.js', () => {
       error,
       content: 'dev error page',
       status: 500,
+      imaInternal: {},
     }));
   };
 });
@@ -109,6 +110,7 @@ describe('Server App Factory', () => {
       error,
       content: 'dev error page',
       status: 500,
+      imaInternal: {},
     }));
     languageLoader = jest.fn();
     OCCleared = jest.fn();
@@ -320,7 +322,7 @@ describe('Server App Factory', () => {
     it('should render 500 ima app page', async () => {
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Custom error messages')));
+        .mockRejectedValue(new Error('Custom error messages'));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -342,7 +344,7 @@ describe('Server App Factory', () => {
       });
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
+        .mockRejectedValue(new Error('Static 500 error'));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -364,7 +366,7 @@ describe('Server App Factory', () => {
       });
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
+        .mockRejectedValue(new Error('Static 500 error'));
       pageStateManager.getState.mockImplementation(() => {
         throw new Error('State error');
       });
@@ -481,13 +483,11 @@ describe('Server App Factory', () => {
     });
 
     it('should redirect page with 301 status for exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
+      jest.spyOn(router, 'route').mockRejectedValue(
+        new GenericError('Redirect', {
+          status: 301,
+          url: 'https://imajs.io',
+        })
       );
       jest.spyOn(router, 'isRedirection').mockReturnValue(true);
       jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
@@ -511,13 +511,11 @@ describe('Server App Factory', () => {
     });
 
     it('should redirect page with 301 status for not exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
+      jest.spyOn(router, 'route').mockRejectedValue(
+        new GenericError('Redirect', {
+          status: 301,
+          url: 'https://imajs.io',
+        })
       );
       jest.spyOn(router, 'isRedirection').mockReturnValue(true);
       environment.$Server.staticConcurrency = 100;

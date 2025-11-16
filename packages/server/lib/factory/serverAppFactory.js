@@ -125,6 +125,7 @@ module.exports = function serverAppFactory({
       res,
       environment,
       performance,
+      imaInternal: {},
     };
 
     try {
@@ -224,6 +225,7 @@ module.exports = function serverAppFactory({
       res,
       environment,
       performance,
+      imaInternal: {},
     };
 
     return errorHandler(error, event);
