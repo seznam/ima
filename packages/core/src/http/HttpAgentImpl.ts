@@ -15,7 +15,7 @@ export interface HttpAgentImplCacheOptions {
   /**
    * Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
    */
-  prefix: string;
+  prefix?: string;
 }
 
 export interface HttpAgentImplConfig {
@@ -426,7 +426,7 @@ export class HttpAgentImpl extends HttpAgent {
       options.fetchOptions?.signal?.aborted ||
       options.abortController?.signal.aborted;
 
-    if (!isAborted && options.repeatRequest > 0) {
+    if (!isAborted && options.repeatRequest && options.repeatRequest > 0) {
       options.repeatRequest--;
 
       return this._request(method, url, data, options);
@@ -591,7 +591,11 @@ export class HttpAgentImpl extends HttpAgent {
 
     if (pureResponse.params.options.keepSensitiveHeaders !== true) {
       pureResponse.headers = {};
-      pureResponse.params.options.fetchOptions.headers = {};
+
+      if (pureResponse.params.options.fetchOptions) {
+        pureResponse.params.options.fetchOptions.headers = {};
+      }
+
       delete pureResponse.headersRaw;
     }
 

@@ -31,27 +31,27 @@ export interface HttpAgentRequestOptions {
   /**
    * Specifies the request timeout in milliseconds.
    */
-  timeout: number;
+  timeout?: number;
 
   /**
    * Specified how long the request may be cached in milliseconds.
    */
-  ttl: number;
+  ttl?: number;
 
   /**
    * Specifies the maximum number of tries to repeat the request if the request fails.
    */
-  repeatRequest: number;
+  repeatRequest?: number;
 
   /**
    * Default fetch options.
    */
-  fetchOptions: ImaRequestInit;
+  fetchOptions?: ImaRequestInit;
 
   /**
    * Enable caching for the requests.
    */
-  cache: boolean;
+  cache?: boolean;
   cacheFailedRequest?: boolean;
   responseType?: 'json' | 'blob' | 'text' | 'arrayBuffer' | 'formData';
   postProcessors?: (<B = unknown>(
