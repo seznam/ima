@@ -243,7 +243,7 @@ module.exports = {
     $Server: {
       port: 3001,                     // Default: 3001
       staticPath: '/static',          // Default: '/static'
-      concurrency: 100,               // Default: 100 (prod), 1 (dev)
+      concurrency: 5,               // Default: 5 (prod), 1 (dev)
       clusters: null,                 // Default: null
       cache: {
         enabled: false,               // Default: false

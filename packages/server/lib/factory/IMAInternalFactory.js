@@ -10,6 +10,7 @@ module.exports = function IMAInternalFactory({
   const GLOBAL = {
     APP_MAIN: 'appMain',
     DUMMY_APP: 'dummyApp',
+    DUMMY_APP_PROMISE: 'dummyAppPromise',
   };
 
   async function _createDummyApp({ environment, language }) {
@@ -150,21 +151,29 @@ module.exports = function IMAInternalFactory({
 
     if (environment.$Env === 'dev') {
       appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? appFactory() : appMain;
+      serverGlobal.delete(GLOBAL.DUMMY_APP_PROMISE);
+      serverGlobal.delete(GLOBAL.DUMMY_APP);
 
       instanceRecycler.clear();
     }
 
     if (!instanceRecycler.isInitialized()) {
       serverGlobal.set(GLOBAL.APP_MAIN, appMain);
-      serverGlobal.set(
-        GLOBAL.DUMMY_APP,
-        await _createDummyApp({ environment, language: res.locals.language })
-      );
 
-      instanceRecycler.init(
-        appMain.ima.createImaApp,
-        environment.$Server.concurrency
-      );
+      if (!serverGlobal.has(GLOBAL.DUMMY_APP_PROMISE)) {
+        serverGlobal.set(
+          GLOBAL.DUMMY_APP_PROMISE,
+          _createDummyApp({ environment, language: res.locals.language })
+        );
+      }
+      await serverGlobal.get(GLOBAL.DUMMY_APP_PROMISE);
+
+      if (!instanceRecycler.isInitialized()) {
+        instanceRecycler.init(
+          appMain.ima.createImaApp,
+          environment.$Server.concurrency
+        );
+      }
     }
 
     context.appMain = appMain;
