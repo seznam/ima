@@ -32,12 +32,9 @@ jest.mock('chalk', () => ({
   dim: mockChalkFn,
 }));
 
-const {
-  PerformanceTracker,
-  DEFAULT_OPTIONS,
-} = require('../PerformanceTracker');
+const { TimingTracker, DEFAULT_OPTIONS } = require('../TimingTracker');
 
-describe('PerformanceTracker', () => {
+describe('TimingTracker', () => {
   let tracker;
 
   beforeEach(() => {
@@ -60,7 +57,7 @@ describe('PerformanceTracker', () => {
 
   describe('constructor', () => {
     it('should initialize with default options', () => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
 
       expect(tracker.options).toEqual(DEFAULT_OPTIONS);
       expect(tracker.enabled).toBe(true);
@@ -75,7 +72,7 @@ describe('PerformanceTracker', () => {
         includeMetadata: false,
       };
 
-      tracker = new PerformanceTracker(customOptions);
+      tracker = new TimingTracker(customOptions);
 
       expect(tracker.options.enabled).toBe(false);
       expect(tracker.options.slowThreshold).toBe(100);
@@ -84,7 +81,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should bail early when disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
       tracker.track('testEvent');
 
       expect(tracker.enabled).toBe(false);
@@ -92,7 +89,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should create initial native mark when useNativeMarks is true', () => {
-      tracker = new PerformanceTracker({ useNativeMarks: true });
+      tracker = new TimingTracker({ useNativeMarks: true });
 
       expect(mockPerformance.mark).toHaveBeenCalledWith(
         expect.stringContaining('ima-perf-')
@@ -100,7 +97,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should not create native marks when useNativeMarks is false', () => {
-      tracker = new PerformanceTracker({ useNativeMarks: false });
+      tracker = new TimingTracker({ useNativeMarks: false });
 
       expect(mockPerformance.mark).not.toHaveBeenCalled();
     });
@@ -108,7 +105,7 @@ describe('PerformanceTracker', () => {
 
   describe('track method', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
     });
 
     it('should add event to events array', () => {
@@ -125,7 +122,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should exclude metadata when includeMetadata is false', () => {
-      tracker = new PerformanceTracker({ includeMetadata: false });
+      tracker = new TimingTracker({ includeMetadata: false });
 
       tracker.track('testEvent', { foo: 'bar' });
 
@@ -133,7 +130,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should create native performance mark when enabled', () => {
-      tracker = new PerformanceTracker({ useNativeMarks: true });
+      tracker = new TimingTracker({ useNativeMarks: true });
 
       tracker.track('testEvent');
 
@@ -147,7 +144,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should create native measure between marks when enabled', () => {
-      tracker = new PerformanceTracker({
+      tracker = new TimingTracker({
         useNativeMarks: true,
         useNativeMeasures: true,
       });
@@ -163,7 +160,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should not add events beyond maxEvents limit', () => {
-      tracker = new PerformanceTracker({ maxEvents: 2 });
+      tracker = new TimingTracker({ maxEvents: 2 });
 
       tracker.track('event1');
       tracker.track('event2');
@@ -173,7 +170,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should do nothing when tracker is disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
 
       tracker.track('testEvent');
 
@@ -184,7 +181,7 @@ describe('PerformanceTracker', () => {
 
   describe('start and end methods', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
     });
 
     it('should start timing an operation', () => {
@@ -229,7 +226,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should do nothing when tracker is disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
 
       tracker.start('testOp');
       const result = tracker.end('testOp');
@@ -242,7 +239,7 @@ describe('PerformanceTracker', () => {
 
   describe('measure method', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
     });
 
     it('should measure synchronous function execution', () => {
@@ -286,7 +283,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should return original function when disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
       const mockFn = jest.fn(() => 'result');
 
       const result = tracker.measure('disabledOp', mockFn);
@@ -299,7 +296,7 @@ describe('PerformanceTracker', () => {
 
   describe('wrap method', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
     });
 
     it('should return wrapped function that tracks each call', () => {
@@ -360,7 +357,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should return original function when disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
       const originalFn = jest.fn(() => 'result');
 
       const wrappedFn = tracker.wrap('disabledWrap', originalFn);
@@ -371,7 +368,7 @@ describe('PerformanceTracker', () => {
 
   describe('reporting methods', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker({ slowThreshold: 50 });
+      tracker = new TimingTracker({ slowThreshold: 50 });
       tracker.track('fastEvent');
       tracker.track('evt', { customData: true });
       tracker.track('anotherEvent');
@@ -379,7 +376,7 @@ describe('PerformanceTracker', () => {
 
     describe('getReport', () => {
       it('should return null when disabled', () => {
-        tracker = new PerformanceTracker({ enabled: false });
+        tracker = new TimingTracker({ enabled: false });
 
         const report = tracker.getReport();
 
@@ -387,7 +384,7 @@ describe('PerformanceTracker', () => {
       });
 
       it('should return null when no events', () => {
-        tracker = new PerformanceTracker();
+        tracker = new TimingTracker();
 
         const report = tracker.getReport();
 
@@ -412,7 +409,7 @@ describe('PerformanceTracker', () => {
 
     describe('logReport', () => {
       it('should do nothing when disabled', () => {
-        tracker = new PerformanceTracker({ enabled: false });
+        tracker = new TimingTracker({ enabled: false });
 
         tracker.logReport();
 
@@ -420,7 +417,7 @@ describe('PerformanceTracker', () => {
       });
 
       it('should do nothing when no events', () => {
-        tracker = new PerformanceTracker();
+        tracker = new TimingTracker();
 
         tracker.logReport();
 
@@ -438,7 +435,7 @@ describe('PerformanceTracker', () => {
 
     describe('getSummary', () => {
       it('should return null when disabled', () => {
-        tracker = new PerformanceTracker({ enabled: false });
+        tracker = new TimingTracker({ enabled: false });
 
         const summary = tracker.getSummary();
 
@@ -462,7 +459,7 @@ describe('PerformanceTracker', () => {
 
   describe('native performance API methods', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
     });
 
     describe('getNativeEntries', () => {
@@ -487,7 +484,7 @@ describe('PerformanceTracker', () => {
       });
 
       it('should return empty array when disabled', () => {
-        tracker = new PerformanceTracker({ enabled: false });
+        tracker = new TimingTracker({ enabled: false });
 
         const entries = tracker.getNativeEntries();
 
@@ -504,7 +501,7 @@ describe('PerformanceTracker', () => {
       });
 
       it('should do nothing when disabled', () => {
-        tracker = new PerformanceTracker({ enabled: false });
+        tracker = new TimingTracker({ enabled: false });
 
         tracker.clearNativeEntries();
 
@@ -516,7 +513,7 @@ describe('PerformanceTracker', () => {
 
   describe('clear method', () => {
     beforeEach(() => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
       tracker.track('testEvent');
       tracker.start('pendingOp');
     });
@@ -538,7 +535,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should recreate initial mark when useNativeMarks is true', () => {
-      tracker = new PerformanceTracker({ useNativeMarks: true });
+      tracker = new TimingTracker({ useNativeMarks: true });
       const initialMarkCount = mockPerformance.mark.mock.calls.length;
 
       tracker.clear();
@@ -547,7 +544,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should do nothing when disabled', () => {
-      tracker = new PerformanceTracker({ enabled: false });
+      tracker = new TimingTracker({ enabled: false });
       tracker.events = ['should not change'];
 
       tracker.clear();
@@ -558,7 +555,7 @@ describe('PerformanceTracker', () => {
 
   describe('edge cases and error handling', () => {
     it('should handle measure with non-promise return value', () => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
       const mockFn = jest.fn(() => ({ then: 'not a function' }));
 
       const result = tracker.measure('edgeCase', mockFn);
@@ -568,7 +565,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should handle wrap with this context correctly', () => {
-      tracker = new PerformanceTracker();
+      tracker = new TimingTracker();
 
       class TestClass {
         constructor() {
@@ -592,7 +589,7 @@ describe('PerformanceTracker', () => {
     });
 
     it('should handle native performance measure failures gracefully', () => {
-      tracker = new PerformanceTracker({
+      tracker = new TimingTracker({
         useNativeMarks: true,
         useNativeMeasures: true,
       });

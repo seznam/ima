@@ -1,5 +1,5 @@
 const { Event } = require('../emitter');
-const { PerformanceTracker } = require('./PerformanceTracker');
+const { TimingTracker } = require('./TimingTracker');
 
 /**
  * Default IMA server events to track
@@ -17,7 +17,7 @@ const DEFAULT_OPTIONS = {
   logToConsole: true, // Log timeline to console
   logEvent: Event.AfterResponseSend, // Event that triggers console output
 
-  // PerformanceTracker options
+  // TimingTracker options
   slowThreshold: 50, // ms
   includeMetadata: true,
   useNativeMarks: false, // Use native performance marks
@@ -36,7 +36,7 @@ const END_EVENT = Event.AfterResponseSend;
 /**
  * Instrument emitter with timing tracking
  *
- * Injects PerformanceTracker into event.context.perf on the first event,
+ * Injects TimingTracker into event.context.perf on the first event,
  * making it available throughout the request lifecycle.
  *
  * @param {Object} emitter - Event emitter instance
@@ -45,7 +45,7 @@ const END_EVENT = Event.AfterResponseSend;
  *
  * @example
  * const emitter = new Emitter();
- * instrumentEmitter(emitter, {
+ * instrumentEmitterWithTimings(emitter, {
  *   enabled: true,
  *   logToConsole: true,
  *   slowThreshold: 50,
@@ -61,7 +61,7 @@ const END_EVENT = Event.AfterResponseSend;
  *   event.context.perf.track('customEvent', { foo: 'bar' });
  * });
  */
-function instrumentEmitter(emitter, userOptions = {}) {
+function instrumentEmitterWithTimings(emitter, userOptions = {}) {
   const options = { ...DEFAULT_OPTIONS, ...userOptions };
 
   if (!options.enabled) {
@@ -79,15 +79,15 @@ function instrumentEmitter(emitter, userOptions = {}) {
     const isLastEvent = eventName === (options.logEvent || END_EVENT);
 
     // Start listener - runs BEFORE all event handlers
-    const startListener = function PerformanceTrackerStartListener(event) {
+    const startListener = function TimingTrackerStartListener(event) {
       // Initialize context if needed
       if (!event.context) {
         event.context = {};
       }
 
-      // First event: Create PerformanceTracker
+      // First event: Create TimingTracker
       if (isFirstEvent) {
-        event.context.perf = new PerformanceTracker({
+        event.context.perf = new TimingTracker({
           enabled: options.enabled,
           slowThreshold: options.slowThreshold,
           includeMetadata: options.includeMetadata,
@@ -114,7 +114,7 @@ function instrumentEmitter(emitter, userOptions = {}) {
     };
 
     // End listener - runs AFTER all event handlers
-    const endListener = function PerformanceTrackerEndListener(event) {
+    const endListener = function TimingTrackerEndListener(event) {
       if (!options.autoTrackEvents || !event.context?.perf) {
         return;
       }
@@ -160,8 +160,8 @@ function instrumentEmitter(emitter, userOptions = {}) {
 }
 
 module.exports = {
-  instrumentEmitter,
-  PerformanceTracker,
+  instrumentEmitterWithTimings,
+  TimingTracker,
   DEFAULT_OPTIONS,
   DEFAULT_IMA_EVENTS,
 };

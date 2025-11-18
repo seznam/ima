@@ -99,6 +99,21 @@ module.exports = function staticTemplateFactory({
     };
   }
 
+  /**
+   * Renders the SPA prefetch page. Similar to SPA static page renderer,
+   * but since the app is already booted, we do not need to re-create
+   * the boot config again.
+   */
+  function renderStaticSPAPrefetchPage(event) {
+    const content = templateSPA(event);
+
+    return {
+      content,
+      static: true,
+      spaPrefetch: true,
+    };
+  }
+
   function renderOverloadedPage(event) {
     const requests = instanceRecycler.getConcurrentRequests() + 2;
     const error = new Error(
@@ -114,6 +129,7 @@ module.exports = function staticTemplateFactory({
   return {
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
   };

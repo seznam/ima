@@ -1,19 +1,19 @@
 ---
-title: 'Performance Tracking'
-description: 'Server > Performance Tracking'
+title: 'Timing Performance Tracking'
+description: 'Server > timing Tracking'
 ---
 
-The IMA.js server provides a built-in **Performance Tracking** system that helps you monitor and optimize your server-side rendering performance. The system consists of two main components: `PerformanceTracker` for tracking metrics and `instrumentEmitter` for automatic integration with the IMA.js event system.
+The IMA.js server provides a built-in **Timing Performance Tracking** system that helps you monitor and optimize your server-side rendering performance. The system consists of two main components: `TimingTracker` for tracking metrics and `instrumentEmitterWithTimings` for automatic integration with the IMA.js event system.
 
 ## Quick Start
 
-Enable performance tracking with a single line of code:
+Enable timing tracking with a single line of code:
 
 ```javascript
 // server/server.js
-import { instrumentEmitter } from '@ima/server';
+import { instrumentEmitterWithTimings } from '@ima/server';
 
-instrumentEmitter(emitter, {
+instrumentEmitterWithTimings(emitter, {
   enabled: true,
   logToConsole: true,
   slowThreshold: 50, // Warn about operations taking longer than 50ms
@@ -26,7 +26,7 @@ That's it! The tracker is now available in all event handlers via `event.context
 
 ## Overview
 
-The performance tracking system provides:
+The timing tracking system provides:
 
 - **Automatic tracking** of all IMA server events
 - **Context-based tracking** - tracker available throughout the request lifecycle
@@ -42,9 +42,9 @@ The performance tracking system provides:
 Once instrumented, all IMA server events are tracked automatically:
 
 ```javascript
-import { instrumentEmitter } from '@ima/server';
+import { instrumentEmitterWithTimings } from '@ima/server';
 
-instrumentEmitter(emitter, {
+instrumentEmitterWithTimings(emitter, {
   enabled: true,
   logToConsole: true,
 });
@@ -71,7 +71,7 @@ emitter.on(Event.Request, async (event) => {
 
 ## Tracking Methods
 
-The `PerformanceTracker` provides three methods for tracking performance:
+The `TimingTracker` provides three methods for tracking timing:
 
 ### 1. `track()` - Manual Timestamps
 
@@ -137,11 +137,11 @@ const result = await perf.measure(
 
 ## Console Output
 
-The tracker provides beautiful, color-coded timeline output:
+The tracker provides color-coded timing performance timeline output:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 Performance Timeline
+Timing Performance Timeline
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Summary:
   Total Duration: 123.45ms
@@ -170,10 +170,10 @@ Timeline: (showing time each operation took)
 
 ## Configuration
 
-### instrumentEmitter Options
+### instrumentEmitterWithTimings Options
 
 ```javascript
-instrumentEmitter(emitter, {
+instrumentEmitterWithTimings(emitter, {
   // Enable/disable tracking
   enabled: true,
 
@@ -205,14 +205,14 @@ instrumentEmitter(emitter, {
 });
 ```
 
-### PerformanceTracker Options
+### TimingTracker Options
 
 When creating a tracker manually:
 
 ```javascript
-import { PerformanceTracker } from '@ima/server';
+import { TimingTracker } from '@ima/server';
 
-const tracker = new PerformanceTracker({
+const tracker = new TimingTracker({
   enabled: true,
   slowThreshold: 50,
   includeMetadata: true,
@@ -285,7 +285,7 @@ emitter.on(Event.Request, async (event) => {
 ```javascript
 const isProd = process.env.NODE_ENV === 'production';
 
-instrumentEmitter(emitter, {
+instrumentEmitterWithTimings(emitter, {
   enabled: true,
   logToConsole: !isProd,
   samplingRate: isProd ? 0.1 : 1.0,  // Track 10% in prod, 100% in dev
@@ -311,7 +311,7 @@ instrumentEmitter(emitter, {
 Enable native marks for APM agents:
 
 ```javascript
-instrumentEmitter(emitter, {
+instrumentEmitterWithTimings(emitter, {
   enabled: true,
   useNativeMarks: true,
   useNativeMeasures: true,
@@ -373,7 +373,7 @@ The `onComplete` callback receives a detailed report:
 ### Tracker not available in context
 
 Make sure:
-1. You called `instrumentEmitter()` before events are fired
+1. You called `instrumentEmitterWithTimings()` before events are fired
 2. Your event is in the configured events list
 3. The first event (`BeforeRequest`) has been fired
 
