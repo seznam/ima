@@ -13,9 +13,7 @@ let getInitialAppConfigFunctions = () => {
 if (!$IMA.Test) {
   ima
     .onLoad()
-    .then(() => {
-      ima.reviveClientApp(getInitialAppConfigFunctions());
-    })
+    .then(() => ima.reviveClientApp(getInitialAppConfigFunctions()))
     .catch(error => {
       if ($Debug && typeof window !== 'undefined') {
         window.__IMA_HMR?.emitter?.emit('error', { error });

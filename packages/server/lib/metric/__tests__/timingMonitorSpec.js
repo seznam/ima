@@ -126,8 +126,8 @@ describe('timingTracker', () => {
 
       startListener(mockEvent);
 
-      expect(mockEvent.context.perf).toBeDefined();
-      expect(mockEvent.context.perf.constructor.name).toBe('TimingTracker');
+      expect(mockEvent.context.timing).toBeDefined();
+      expect(mockEvent.context.timing.constructor.name).toBe('TimingTracker');
     });
 
     it('should track request.received on first event', () => {
@@ -140,8 +140,8 @@ describe('timingTracker', () => {
       startListener(mockEvent);
 
       // Check that an event was tracked with request data
-      expect(mockEvent.context.perf.events).toHaveLength(1);
-      expect(mockEvent.context.perf.events[0]).toMatchObject({
+      expect(mockEvent.context.timing.events).toHaveLength(1);
+      expect(mockEvent.context.timing.events[0]).toMatchObject({
         name: 'request.received',
         metadata: {
           method: 'GET',
@@ -167,18 +167,18 @@ describe('timingTracker', () => {
 
       // Check initial state
       const initialPendingCount =
-        mockEvent.context.perf._pendingOperations.size;
+        mockEvent.context.timing._pendingOperations.size;
 
       // Now test other event timing
       startListener(mockEvent);
 
       // Should have added a pending operation
-      expect(mockEvent.context.perf._pendingOperations.size).toBe(
+      expect(mockEvent.context.timing._pendingOperations.size).toBe(
         initialPendingCount + 1
       );
-      expect(mockEvent.context.perf._pendingOperations.has(Event.Request)).toBe(
-        true
-      );
+      expect(
+        mockEvent.context.timing._pendingOperations.has(Event.Request)
+      ).toBe(true);
     });
 
     it('should end timing for events when autoTrackEvents is true', () => {
@@ -202,14 +202,18 @@ describe('timingTracker', () => {
       const startListener = requestStartCalls[0][1];
       startListener(mockEvent);
 
-      const initialEventCount = mockEvent.context.perf.events.length;
+      const initialEventCount = mockEvent.context.timing.events.length;
 
       endListener(mockEvent);
 
       // Should have added an event with duration metadata
-      expect(mockEvent.context.perf.events).toHaveLength(initialEventCount + 1);
+      expect(mockEvent.context.timing.events).toHaveLength(
+        initialEventCount + 1
+      );
       const lastEvent =
-        mockEvent.context.perf.events[mockEvent.context.perf.events.length - 1];
+        mockEvent.context.timing.events[
+          mockEvent.context.timing.events.length - 1
+        ];
       expect(lastEvent.name).toBe(Event.Request);
       expect(lastEvent.metadata).toHaveProperty('duration');
       expect(lastEvent.metadata).toEqual(
@@ -249,9 +253,9 @@ describe('timingTracker', () => {
       // Now test other event timing - should initialize tracker but not auto-track
       startListener(mockEvent);
 
-      expect(mockEvent.context.perf).toBeDefined();
+      expect(mockEvent.context.timing).toBeDefined();
       // Should not have added any pending operations for auto-tracking when disabled
-      expect(mockEvent.context.perf._pendingOperations.size).toBe(0);
+      expect(mockEvent.context.timing._pendingOperations.size).toBe(0);
     });
 
     it('should log report on last event (AfterResponseSend)', () => {
@@ -268,7 +272,7 @@ describe('timingTracker', () => {
       firstStartListener(mockEvent);
 
       // Add some events to the tracker so logReport has something to log
-      mockEvent.context.perf.track('testEvent');
+      mockEvent.context.timing.track('testEvent');
 
       endListener(mockEvent);
 
@@ -337,10 +341,10 @@ describe('timingTracker', () => {
       const startListener = beforeRequestCalls[0][1];
       startListener(mockEvent);
 
-      expect(mockEvent.context.perf.options.enabled).toBe(
+      expect(mockEvent.context.timing.options.enabled).toBe(
         DEFAULT_OPTIONS.enabled
       );
-      expect(mockEvent.context.perf.options.slowThreshold).toBe(
+      expect(mockEvent.context.timing.options.slowThreshold).toBe(
         DEFAULT_OPTIONS.slowThreshold
       );
     });
@@ -372,7 +376,7 @@ describe('timingTracker', () => {
       firstStartListener(mockEvent);
 
       // Add some events to the tracker
-      mockEvent.context.perf.track('testEvent');
+      mockEvent.context.timing.track('testEvent');
 
       endListener(mockEvent);
 

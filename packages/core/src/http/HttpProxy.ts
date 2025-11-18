@@ -138,9 +138,16 @@ export class HttpProxy {
           options.abortController?.abort();
 
           // Reset timeout abort controller for another attempt
-          if (isTimeoutAbortDefined && options.repeatRequest > 0) {
+          if (
+            isTimeoutAbortDefined &&
+            options.repeatRequest &&
+            options.repeatRequest > 0
+          ) {
             options.abortController = new AbortController();
-            options.fetchOptions.signal = options.abortController?.signal;
+            options.fetchOptions = {
+              ...options.fetchOptions,
+              signal: options.abortController?.signal,
+            };
           }
 
           return reject(

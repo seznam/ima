@@ -20,7 +20,7 @@ instrumentEmitterWithTimings(emitter, {
 });
 ```
 
-That's it! The tracker is now available in all event handlers via `event.context.perf`.Best Practices
+That's it! The tracker is now available in all event handlers via `event.context.timing`.Best Practices
 
 ![](/img/docs/performance-timeline.jpg)
 
@@ -58,13 +58,13 @@ Track custom operations anywhere in your event handlers:
 
 ```javascript
 emitter.on(Event.Request, async (event) => {
-  const { perf } = event.context;
+  const { timing } = event.context;
 
   // Simple tracking
-  perf.track('database.connect', { driver: 'postgres' });
+  timing.track('database.connect', { driver: 'postgres' });
   await connectToDatabase();
 
-  perf.track('database.query', { table: 'users' });
+  timing.track('database.query', { table: 'users' });
   const users = await db.query('SELECT * FROM users');
 });
 ```
@@ -78,7 +78,7 @@ The `TimingTracker` provides three methods for tracking timing:
 Track individual events with optional metadata:
 
 ```javascript
-perf.track('operation.name', { metadata: 'value' });
+timing.track('operation.name', { metadata: 'value' });
 ```
 
 **Best for:** Marking specific points in time, milestones.
@@ -89,13 +89,13 @@ Automatically measure operation duration:
 
 ```javascript
 // Start timing
-perf.start('database.query', { table: 'users' });
+timing.start('database.query', { table: 'users' });
 
 // ... perform operation ...
 const users = await db.query('SELECT * FROM users');
 
 // End timing - duration is automatically calculated
-perf.end('database.query', { rows: users.length });
+timing.end('database.query', { rows: users.length });
 // Metadata includes: { table: 'users', rows: 42, duration: 15.23 }
 ```
 
@@ -107,7 +107,7 @@ Wrap functions for automatic tracking:
 
 ```javascript
 // Wrap the function once
-const trackedQuery = perf.wrap('database.query', queryFn, {
+const trackedQuery = timing.wrap('database.query', queryFn, {
   driver: 'postgres'
 });
 
@@ -123,7 +123,7 @@ const posts = await trackedQuery('SELECT * FROM posts');
 Measure the duration of a function execution:
 
 ```javascript
-const result = await perf.measure(
+const result = await timing.measure(
   'fetch.users',
   async () => {
     const response = await fetch('/api/users');
@@ -227,10 +227,10 @@ const tracker = new TimingTracker({
 
 ```javascript
 emitter.on(Event.Request, async (event) => {
-  const { perf } = event.context;
+  const { timing } = event.context;
 
   // Wrap database functions for automatic tracking
-  const trackedQuery = perf.wrap('database.query', db.query.bind(db));
+  const trackedQuery = timing.wrap('database.query', db.query.bind(db));
 
   // Each call is tracked automatically
   const users = await trackedQuery('SELECT * FROM users');
@@ -242,22 +242,22 @@ emitter.on(Event.Request, async (event) => {
 
 ```javascript
 emitter.on(Event.Request, async (event) => {
-  const { perf } = event.context;
+  const { timing } = event.context;
 
-  perf.start('cache.lookup', { key });
+  timing.start('cache.lookup', { key });
   const cached = await cache.get(key);
 
   if (cached) {
-    perf.end('cache.lookup', { result: 'hit' });
+    timing.end('cache.lookup', { result: 'hit' });
     return cached;
   }
 
-  perf.end('cache.lookup', { result: 'miss' });
+  timing.end('cache.lookup', { result: 'miss' });
 
   // Fetch and cache
-  perf.start('data.fetch');
+  timing.start('data.fetch');
   const data = await fetchData();
-  perf.end('data.fetch', { size: data.length });
+  timing.end('data.fetch', { size: data.length });
 
   await cache.set(key, data);
 });
@@ -267,9 +267,9 @@ emitter.on(Event.Request, async (event) => {
 
 ```javascript
 emitter.on(Event.Request, async (event) => {
-  const { perf } = event.context;
+  const { timing } = event.context;
 
-  const result = await perf.measure(
+  const result = await timing.measure(
     'external.api.call',
     async () => {
       const response = await fetch('https://api.example.com/data');
@@ -317,8 +317,8 @@ instrumentEmitterWithTimings(emitter, {
   useNativeMeasures: true,
   onComplete: (report) => {
     // Native marks can be read by APM agents
-    const marks = event.context.perf.getNativeEntries('mark');
-    const measures = event.context.perf.getNativeEntries('measure');
+    const marks = event.context.timing.getNativeEntries('mark');
+    const measures = event.context.timing.getNativeEntries('measure');
 
     measures.forEach(measure => {
       client.recordTiming(measure.name, measure.duration);
