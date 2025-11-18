@@ -36,7 +36,7 @@ const END_EVENT = Event.AfterResponseSend;
 /**
  * Instrument emitter with timing tracking
  *
- * Injects TimingTracker into event.context.perf on the first event,
+ * Injects TimingTracker into event.context.timing on the first event,
  * making it available throughout the request lifecycle.
  *
  * @param {Object} emitter - Event emitter instance
@@ -58,7 +58,7 @@ const END_EVENT = Event.AfterResponseSend;
  * // Access tracker in your event handlers
  * emitter.listen('ima.server.request', (event) => {
  *   // Tracker is available in context
- *   event.context.perf.track('customEvent', { foo: 'bar' });
+ *   event.context.timing.track('customEvent', { foo: 'bar' });
  * });
  */
 function instrumentEmitterWithTimings(emitter, userOptions = {}) {
@@ -87,7 +87,7 @@ function instrumentEmitterWithTimings(emitter, userOptions = {}) {
 
       // First event: Create TimingTracker
       if (isFirstEvent) {
-        event.context.perf = new TimingTracker({
+        event.context.timing = new TimingTracker({
           enabled: options.enabled,
           slowThreshold: options.slowThreshold,
           includeMetadata: options.includeMetadata,
@@ -97,7 +97,7 @@ function instrumentEmitterWithTimings(emitter, userOptions = {}) {
 
         // Track request start as a point-in-time event
         if (options.autoTrackEvents) {
-          event.context.perf.track('request.received', {
+          event.context.timing.track('request.received', {
             method: event.req?.method,
             url: event.req?.url,
             headers: event.req?.headers
@@ -108,19 +108,19 @@ function instrumentEmitterWithTimings(emitter, userOptions = {}) {
       }
 
       // Start timing this event's handlers
-      if (options.autoTrackEvents && event.context.perf) {
-        event.context.perf.start(eventName);
+      if (options.autoTrackEvents && event.context.timing) {
+        event.context.timing.start(eventName);
       }
     };
 
     // End listener - runs AFTER all event handlers
     const endListener = function TimingTrackerEndListener(event) {
-      if (!options.autoTrackEvents || !event.context?.perf) {
+      if (!options.autoTrackEvents || !event.context?.timing) {
         return;
       }
 
       // End timing this event's handlers
-      event.context.perf.end(eventName, {
+      event.context.timing.end(eventName, {
         hasError: !!event.error,
         statusCode: event.res?.statusCode,
       });
@@ -129,12 +129,12 @@ function instrumentEmitterWithTimings(emitter, userOptions = {}) {
       if (isLastEvent) {
         // Log to console
         if (options.logToConsole) {
-          event.context.perf.logReport();
+          event.context.timing.logReport();
         }
 
         // Call completion callback with report
         if (options.onComplete && typeof options.onComplete === 'function') {
-          const report = event.context.perf.getReport();
+          const report = event.context.timing.getReport();
 
           if (report) {
             // Add request context to report
