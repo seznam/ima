@@ -166,7 +166,8 @@ module.exports = function IMAInternalFactory({
           _createDummyApp({ environment, language: res.locals.language })
         );
       }
-      await serverGlobal.get(GLOBAL.DUMMY_APP_PROMISE);
+      const dummyApp = await serverGlobal.get(GLOBAL.DUMMY_APP_PROMISE);
+      serverGlobal.set(GLOBAL.DUMMY_APP, dummyApp);
 
       if (!instanceRecycler.isInitialized()) {
         instanceRecycler.init(
