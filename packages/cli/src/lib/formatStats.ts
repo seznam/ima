@@ -158,7 +158,7 @@ function printAssetInfo(
 
   // Prints brotli and gzip sizes
   Object.values(asset?.info?.related ?? {})
-    .map(assetName => extractAssetPaths(assetName.toString(), outDir))
+    .map(assetName => extractAssetPaths(assetName?.toString() ?? '', outDir))
     .filter(({ fullPath }) => fs.existsSync(fullPath))
     .forEach(({ fileName, fullPath }) => {
       result += '\n';

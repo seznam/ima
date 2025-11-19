@@ -1,12 +1,12 @@
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
 import nodemon from 'nodemon';
-import webpack from 'webpack';
+import webpack, { MultiConfiguration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 import { createDevServer } from '../dev-server/devServer';
@@ -32,7 +32,7 @@ import {
  * (all changes in server/ folder), to automatically restart the application
  * server in case any change is detected.
  */
-function startNodemon(args: ImaCliArgs, environment: Environment) {
+function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
   nodemon({
@@ -49,7 +49,9 @@ function startNodemon(args: ImaCliArgs, environment: Environment) {
         `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
           !serverHasStarted && args.forceSPA
             ? ` in ${chalk.black.bgCyan('SPA mode')}`
-            : ''
+            : args.forceSPAPrefetch
+              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
+              : ''
         }...`
       );
 
@@ -96,6 +98,11 @@ const dev: HandlerFn = async args => {
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     process.env.IMA_CLI_FORCE_SPA = 'true';
+  }
+
+  // Set force SPA flag so server can react accordingly
+  if (args.forceSPAPrefetch) {
+    process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
   }
 
   // Set lazy server flag according to CLI args
@@ -151,7 +158,15 @@ const dev: HandlerFn = async args => {
     );
 
     // Create compiler
-    const compiler = webpack(config);
+    const compiler = webpack(config as MultiConfiguration);
+
+    if (!compiler) {
+      throw new Error('Failed to create compiler');
+    }
+
+    if (!compiler) {
+      throw new Error('Failed to create webpack compiler');
+    }
 
     // Start watch compiler & HMR dev server
     await Promise.all([
@@ -212,6 +227,11 @@ export const builder: CommandBuilder = {
   },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
+    type: 'boolean',
+    default: false,
+  },
+  forceSPAPrefetch: {
+    desc: 'Forces application to run in SPA prefetch mode',
     type: 'boolean',
     default: false,
   },

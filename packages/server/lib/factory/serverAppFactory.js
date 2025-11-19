@@ -31,7 +31,7 @@ module.exports = function serverAppFactory({
     _initApp,
     _clearApp,
     createBootConfig,
-    _importAppMainSync,
+    _importAppMainAsync,
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,
@@ -46,6 +46,7 @@ module.exports = function serverAppFactory({
   const {
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
   } = staticPageFactory({
@@ -72,12 +73,13 @@ module.exports = function serverAppFactory({
   } = hooksFactory({
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
     urlParser,
     _initApp,
+    _importAppMainAsync,
     _clearApp,
-    _importAppMainSync,
     _addImaToResponse,
     _getRouteInfo,
     _generateAppResponse,
@@ -93,6 +95,7 @@ module.exports = function serverAppFactory({
   const defaultResponse = {
     SPA: false,
     static: false,
+    spaPrefetch: false,
     status: 204,
     content: null,
     page: {

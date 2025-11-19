@@ -44,6 +44,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
       root.$Debug = ${settings.$Debug};
       root.$IMA = root.$IMA || {};
       $IMA.SPA = ${response?.SPA ?? false};
+      $IMA.SPAPrefetch = ${response?.spaPrefetch ?? false};
       $IMA.$PublicPath = "${process.env.IMA_PUBLIC_PATH ?? ''}";
       $IMA.$RequestID = "${requestID}";
       $IMA.$Language = "${
@@ -57,7 +58,6 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
         settings.$Protocol && encodeHTMLEntities(settings.$Protocol)
       }";
       $IMA.$Host = "${settings.$Host && encodeHTMLEntities(settings.$Host)}";
-      $IMA.$Path = "${settings.$Path && encodeHTMLEntities(settings.$Path)}";
       $IMA.$Root = "${settings.$Root && encodeHTMLEntities(settings.$Root)}";
       $IMA.$LanguagePartPath = "${
         settings.$LanguagePartPath &&

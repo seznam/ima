@@ -19,13 +19,13 @@ Now create `tsconfig.json` file (that may look something like this):
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "ES2022",
+    "target": "ES2024",
     "lib": [
-      "ES2022",
+      "ES2024",
       "DOM",
       "DOM.Iterable"
     ],
-    "module": "ES2022",
+    "module": "ES2024",
     "moduleResolution": "Node16",
     "strict": true,
     "resolveJsonModule": true,

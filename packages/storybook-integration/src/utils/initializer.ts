@@ -1,9 +1,8 @@
 import type * as imaCore from '@ima/core';
-import { ReactRenderer } from '@storybook/react';
-import { StoryContextForLoaders, StrictArgs } from '@storybook/types';
+import { StoryContext } from '@storybook/react';
 
 export type InitAppConfigCallback = (
-  storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
+  storybookArgs: StoryContext
 ) => Partial<imaCore.InitAppConfig>;
 
 export type ImaInitializers = {
@@ -37,9 +36,7 @@ export function registerImaInitializer(
  * Returns all registered ima boot config initializer factories
  * sorted by priority.
  */
-export function getImaInitializers(
-  storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
-) {
+export function getImaInitializers(storybookArgs: StoryContext) {
   return initializers
     .sort((a, b) => a.priority - b.priority)
     .map(({ initializer }) => initializer)

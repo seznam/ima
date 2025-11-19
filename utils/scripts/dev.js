@@ -5,6 +5,7 @@ const path = require('path');
 
 const chalk = require('chalk');
 const yargs = require('yargs');
+const { hideBin } = require('yargs/helpers');
 
 const { initApp, copyChanges, watchChanges } = require('./utils/utils');
 
@@ -16,7 +17,7 @@ const IGNORED_PACKAGES = [
   'gulp-tasks',
 ];
 
-const cliArgs = yargs
+const cliArgs = yargs(hideBin(process.argv))
   .usage('Usage: npm run dev <destFolder>')
   .example([
     ['npm run dev ~/Desktop/ima-app'],

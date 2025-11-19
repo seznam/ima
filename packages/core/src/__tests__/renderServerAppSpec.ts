@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   defaultCssClasses as cssClassNameProcessor,
   PageRendererFactory,
@@ -95,86 +99,80 @@ describe('render server application', () => {
     }
   }
 
-  beforeAll(() => {
+  beforeAll(async () => {
     const app = createImaApp();
-    const bootConfig = getClientBootConfig(
-      Object.assign(
-        {
-          initServicesApp: (
-            ns: ReturnType<typeof getNamespace>,
-            oc: ObjectContainer
-          ) => {
-            (oc.get(Response) as Response).init(
-              expressResponse as unknown as ExpressResponse
-            );
-          },
-          initRoutes: () => {
-            return;
-          },
-        },
-        {
-          initBindApp: (
-            ns: ReturnType<typeof getNamespace>,
-            oc: ObjectContainer
-          ) => {
-            oc.bind('$CssClasses', function () {
-              return cssClassNameProcessor;
-            });
+    const bootConfig = getClientBootConfig({
+      initServicesApp: (
+        ns: ReturnType<typeof getNamespace>,
+        oc: ObjectContainer
+      ) => {
+        (oc.get(Response) as Response).init(
+          expressResponse as unknown as ExpressResponse
+        );
+      },
+      initRoutes: () => {
+        return;
+      },
+      initBindApp: (
+        ns: ReturnType<typeof getNamespace>,
+        oc: ObjectContainer
+      ) => {
+        oc.bind('$CssClasses', function () {
+          return cssClassNameProcessor;
+        });
 
-            (oc.get(ComponentUtils) as ComponentUtils).register({
-              $CssClasses: '$CssClasses',
-            });
+        (oc.get(ComponentUtils) as ComponentUtils).register({
+          $CssClasses: '$CssClasses',
+        });
 
-            oc.inject(PageRendererFactory, [ComponentUtils]);
-            oc.bind('$PageRendererFactory', PageRendererFactory);
+        oc.inject(PageRendererFactory, [ComponentUtils]);
+        oc.bind('$PageRendererFactory', PageRendererFactory);
 
-            global.$Debug = false;
-            oc.provide(PageRenderer, ServerPageRenderer, [
-              PageRendererFactory,
-              '$Helper',
-              '$Dispatcher',
-              '$Settings',
-              Cache,
-            ]);
-            global.$Debug = true;
+        global.$Debug = false;
+        oc.provide(PageRenderer, ServerPageRenderer, [
+          PageRendererFactory,
+          '$Helper',
+          '$Dispatcher',
+          '$Settings',
+          Cache,
+        ]);
+        global.$Debug = true;
 
-            oc.bind('$PageRenderer', PageRenderer);
+        oc.bind('$PageRenderer', PageRenderer);
 
-            router = oc.get('$Router') as Router;
-            router.init(routerConfig);
-            router.add(
-              'reviveClientApp',
-              '/reviveClientApp',
-              Controller,
-              View,
-              options
-            );
+        router = oc.get('$Router') as Router;
+        router.init(routerConfig);
+        router.add(
+          'reviveClientApp',
+          '/reviveClientApp',
+          Controller,
+          View,
+          options
+        );
 
-            oc.inject(Controller, []);
+        oc.inject(Controller, []);
 
-            if (!oc.has('$Utils')) {
-              oc.constant('$Utils', {});
-            }
-          },
-        },
-        {
-          settings: {
-            $Http: {
-              cacheOptions: {},
-            },
-            $Router: {
-              middlewareTimeout: 30000,
-            },
-            $Page: {
-              $Render: {
-                masterElementId: 'id',
-              },
-            },
-          },
+        if (!oc.has('$Utils')) {
+          oc.constant('$Utils', {});
         }
-      )
-    );
-    bootClientApp(app, bootConfig);
+      },
+      // @ts-expect-error This is intentional
+      settings: {
+        $Http: {
+          cacheOptions: {},
+        },
+        $Router: {
+          middlewareTimeout: 30000,
+        },
+        $Page: {
+          $Render: {
+            masterElementId: 'id',
+          },
+        },
+      },
+    });
+
+    await bootClientApp(app, bootConfig);
 
     jest
       .spyOn(ReactDOM, 'render')

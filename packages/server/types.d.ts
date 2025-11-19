@@ -1,5 +1,5 @@
 import { Emitter } from '@esmj/emitter';
-import { Environment } from '@ima/core';
+import { Environment, ParsedEnvironment } from '@ima/core';
 import { Request } from 'express';
 
 declare module '@ima/server' {
@@ -38,7 +38,7 @@ declare module '@ima/server' {
   export function renderScript(name: string, script: string): string;
   export function environmentFactory(args: {
     applicationFolder: string;
-  }): Environment;
+  }): ParsedEnvironment;
 
   export function urlParserFactory(params: {
     environment: Environment;

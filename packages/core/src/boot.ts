@@ -1,6 +1,6 @@
 import { autoYield, nextFrameYield } from '@esmj/task';
 import { Request as ExpressRequest } from 'express';
-import { PartialDeep } from 'type-fest';
+import { PartialDeep, RequiredDeep } from 'type-fest';
 import { AssetInfo } from 'webpack';
 
 import {
@@ -52,11 +52,39 @@ export interface Resources {
 
 /**
  * App environment for single env key.
+ *
+ * The production environment is used as a base template for other
+ * environment configurations. Meaning that all `dev` or `test` env
+ * definitions are deeply merged into `prod` base config.
+ *
+ * So you can only define other-env specific overrides without the need
+ * to re-define whole custom configuration.
  */
 export interface Environment {
   [key: string]: unknown;
-  $Debug: GlobalImaObject['$Debug'];
-  $Language: Record<string, string>;
+  /**
+   * Enable/disable debug mode. When enabled you can see additional
+   * error messages while this also enable some additional validation
+   * that can produce additional errors.
+   */
+  $Debug?: GlobalImaObject['$Debug'];
+
+  /*
+   * Key-value pairs used for configuring the languages used with
+   * specific hosts or starting paths.
+   *
+   * - Key: Has to start with '//' instead of a protocol, and you can
+   *        define the root path. Optional parameter ":language"
+   *        could be defined at the end to display language in the
+   *        URL.
+   *
+   * - Value: Language to use when the key is matched by the current
+   *          URL. If the ":language" parameter is used, the language
+   *          specified in this value is used as the default language
+   *          when the path part specifying the language is not
+   *          present in the current URL.
+   */
+  $Language?: Record<string, string>;
   $Version: GlobalImaObject['$Version'];
   $App?: GlobalImaObject['$App'];
   $Resources?: (
@@ -64,7 +92,11 @@ export interface Environment {
     manifest: Manifest,
     defaultResources: Resources
   ) => Resources;
-  $Server: {
+  $Server?: {
+    /**
+     * When defined it overrides any other protocol
+     * settings in the urlParser hook.
+     */
     protocol?:
       | GlobalImaObject['$Protocol']
       | (({
@@ -76,6 +108,11 @@ export interface Environment {
           protocol: string;
           req: ExpressRequest;
         }) => GlobalImaObject['$Protocol']);
+
+    /**
+     * When defined it overrides any other
+     * host settings in the urlParser hook.
+     */
     host?:
       | string
       | (({
@@ -87,28 +124,89 @@ export interface Environment {
           host: string;
           req: ExpressRequest;
         }) => string);
-    port: number;
-    staticPath: string;
-    concurrency: number;
-    staticConcurrency: number;
-    overloadConcurrency: number;
-    clusters: null | number;
-    serveSPA: {
-      allow: boolean;
-      blackList?: (userAgent: string) => boolean;
-    };
-    cache: {
-      enabled: boolean | ((req: ExpressRequest) => boolean);
+
+    /**
+     * The port at which the server listens for incoming HTTP connections
+     */
+    port?: number;
+
+    /**
+     * Base path, which serves static files form the build folder,
+     * see https://imajs.io/cli/ima-config-js/#publicpath for more info.
+     * Used in staticPath middleware definition in app.js.
+     */
+    staticPath?: string;
+
+    /**
+     * The number of application instances (not threads) used to handle
+     * concurrent connections within a single thread.
+     */
+    concurrency?: number;
+
+    /**
+     * Define the number of server processes you want to start.
+     * Use `null` for the current number of available CPU cores.
+     */
+    clusters?: null | number;
+
+    /**
+     * Cache configuration.
+     */
+    cache?: {
+      /**
+       * Enable/disable cache for the server.
+       */
+      enabled?: boolean | ((req: ExpressRequest) => boolean);
+
+      /**
+       * Cache key generator function.
+       */
       cacheKeyGenerator?: (req: ExpressRequest) => string;
-      entryTtl: number;
-      unusedEntryTtl: number;
-      maxEntries: number;
+
+      /**
+       * The maximum time a cache entry is kept. [ms]
+       */
+      entryTtl?: number;
+
+      /**
+       * The time after which the unused entries are discarded. [ms]
+       */
+      unusedEntryTtl?: number;
+
+      /**
+       * The maximum entries in cache.
+       */
+      maxEntries?: number;
     };
-    logger: {
-      formatting: 'simple' | 'dev' | 'JSON';
+    logger?: {
+      /**
+       * Use "simple", "JSON" or "dev". "dev" option produces colorful output
+       * with source-mapping of error stacks. This is usefull in development.
+       */
+      formatting?: 'simple' | 'dev' | 'JSON';
+    };
+
+    /**
+     * Degradation functions for the server.
+     */
+    degradation?: {
+      isSPA?: (event: any) => boolean;
+      isSPAPrefetch?: (event: any) => boolean;
+      isOverloaded?: (event: any) => boolean;
+      isStatic?: (event: any) => boolean;
     };
   };
 }
+
+/**
+ * Environment object after it has been processed by the environmentFactory.
+ * It has default values set for all optional properties in the Environment
+ * interface.
+ *
+ * The optional properties are made required since the environmentFactory
+ * sets default values for them.
+ */
+export interface ParsedEnvironment extends RequiredDeep<Environment> {}
 
 /**
  * App Environment structure, used in ./server/config/environment.js
@@ -133,16 +231,27 @@ export interface PageRendererSettings {
  * App settings for single env key.
  */
 export interface Settings {
-  $Http: {
-    defaultRequestOptions: Omit<HttpAgentRequestOptions, 'abortController'>;
-    cacheOptions: HttpAgentImplCacheOptions;
+  $Http?: {
+    defaultRequestOptions?: Omit<HttpAgentRequestOptions, 'abortController'>;
+    cacheOptions?: HttpAgentImplCacheOptions;
   };
   $Router?: {
+    /**
+     * Middleware execution timeout, see https://imajs.io/basic-features/routing/middlewares#execution-timeout
+     * for more information. [ms]
+     */
     middlewareTimeout?: number;
     isSPARouted?: (url: string, action?: RouteAction) => boolean;
   };
   $Cache?: {
+    /**
+     * Default time to live for cached value. [ms]
+     */
     ttl?: number;
+
+    /**
+     * Turn on/off cache for all application. [ms]
+     */
     enabled?: boolean;
   };
   $Page: {
@@ -152,6 +261,11 @@ export interface Settings {
     maxHistoryLength?: number;
   };
 }
+
+/**
+ * Default settings provided by the ima core.
+ */
+export interface DefaultSettings extends Omit<Settings, '$Page'> {}
 
 /**
  * App settings function, used in ./app/config/settings.js
@@ -222,7 +336,6 @@ export function getClientBootConfig(
       router: {
         $Protocol: $IMA.$Protocol,
         $Host: $IMA.$Host,
-        $Path: $IMA.$Path,
         $Root: $IMA.$Root,
         $LanguagePartPath: $IMA.$LanguagePartPath,
       },
@@ -237,7 +350,6 @@ export function getClientBootConfig(
       $Protocol: $IMA.$Protocol,
       $Language: $IMA.$Language,
       $Host: $IMA.$Host,
-      $Path: $IMA.$Path,
       $Root: $IMA.$Root,
       $LanguagePartPath: $IMA.$LanguagePartPath,
     },
@@ -251,14 +363,14 @@ export function getClientBootConfig(
   };
 }
 
-export function bootClientApp(
+export async function bootClientApp(
   app: {
     bootstrap: Bootstrap;
     oc: ObjectContainer;
   },
   bootConfig: BootConfig
 ) {
-  app.bootstrap.run(bootConfig);
+  await app.bootstrap.run(bootConfig);
 
   const cache = app.oc.get('$Cache');
   cache.deserialize(($IMA.Cache || {}) as SerializedData);
@@ -303,7 +415,7 @@ export async function reviveClientApp(
   const bootConfig = getClientBootConfig(initialAppConfigFunctions);
 
   await autoYield();
-  app = bootClientApp(app, bootConfig);
+  app = await bootClientApp(app, bootConfig);
 
   await autoYield();
   return routeClientApp(app, routerRoot).then(pageInfo => {

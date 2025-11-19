@@ -20,7 +20,11 @@ export { CacheEntry, type SerializedCacheEntry } from './cache/CacheEntry';
 export { CacheFactory } from './cache/CacheFactory';
 export { CacheImpl } from './cache/CacheImpl';
 export { AbstractController } from './controller/AbstractController';
-export { Controller, type LoadedResources } from './controller/Controller';
+export {
+  Controller,
+  type LoadedResources,
+  type ControllerResponseType,
+} from './controller/Controller';
 export { ControllerDecorator } from './controller/ControllerDecorator';
 export {
   Dictionary,
@@ -176,6 +180,7 @@ export {
   type ManifestAsset,
   type Resource,
   type Resources,
+  type ParsedEnvironment,
 } from './boot';
 export {
   type Utils,

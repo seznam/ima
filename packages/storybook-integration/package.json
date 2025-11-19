@@ -1,6 +1,6 @@
 {
   "name": "@ima/storybook-integration",
-  "version": "19.6.3",
+  "version": "20.0.0-rc.0",
   "description": "Storybook integration addon for IMA.js applications.",
   "type": "module",
   "keywords": [
@@ -20,7 +20,7 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest --config jest.config.cjs"
@@ -48,16 +48,16 @@
     }
   },
   "devDependencies": {
-    "@storybook/core-webpack": "^7.0.4",
-    "@storybook/react": "^7.0.4",
-    "@storybook/types": "^7.0.4",
-    "@types/webpack": "^5.28.1"
+    "@storybook/core-webpack": "^9.1.16",
+    "@storybook/react": "^9.1.16",
+    "@storybook/types": "^8.6.14",
+    "@types/webpack": "^5.28.5"
   },
   "peerDependencies": {
-    "@ima/cli": ">=19.4.0",
-    "@ima/core": ">=19.0.0",
+    "@ima/cli": ">=20.0.0-rc.0",
+    "@ima/core": ">=20.0.0-rc.0",
     "@ima/dev-utils": ">=19.0.0",
-    "@ima/react-page-renderer": ">=19.0.0",
+    "@ima/react-page-renderer": ">=20.0.0-rc.0",
     "webpack": ">=5.x"
   },
   "publishConfig": {
@@ -65,7 +65,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "ts-deepmerge": "^6.0.3"
+    "chalk": "^5.6.2",
+    "ts-deepmerge": "^7.0.3"
   }
 }

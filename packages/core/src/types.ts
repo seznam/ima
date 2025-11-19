@@ -56,7 +56,6 @@ export interface GlobalImaObject {
   $Debug: boolean;
   $Protocol: 'http:' | 'https:';
   $Host: string;
-  $Path: string;
   $Root: string;
   $LanguagePartPath: string;
   Runner: object;
@@ -71,10 +70,8 @@ export interface GlobalImaObject {
 }
 
 declare global {
-  /* eslint-disable no-var */
   var $Debug: boolean;
   var $IMA: GlobalImaObject;
-  /* eslint-enable no-var */
 
   interface Window {
     $IMA: GlobalImaObject;
