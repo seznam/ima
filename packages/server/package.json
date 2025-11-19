@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@esmj/emitter": "^0.4.3",
-    "@esmj/monitor": "^0.6.1",
+    "@esmj/monitor": "^0.7.0",
     "chalk": "^4.1.2",
     "ejs": "^3.1.10",
     "http-proxy-middleware": "^3.0.5",
