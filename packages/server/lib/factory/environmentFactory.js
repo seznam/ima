@@ -33,7 +33,7 @@ const defaultEnvironment = {
       port: 3001,
       staticPath: '/static',
       // Max number of app instances to recycle (pool size)
-      concurrency: 100,
+      concurrency: 5,
       clusters: null,
       cache: {
         enabled: false,
