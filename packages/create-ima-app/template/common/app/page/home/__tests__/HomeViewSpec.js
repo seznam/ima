@@ -1,10 +1,3 @@
-// FIXME
-// describe('Home page', () => {
-//   it('can render component', () => {
-//     expect(true).toBe(true);
-//   });
-// });
-
 /**
  * @jest-environment node
  */
