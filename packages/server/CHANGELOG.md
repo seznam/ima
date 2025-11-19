@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.2
+
+### Patch Changes
+
+- 274bbd3: Fixed degradation export
+
 ## 20.0.0-rc.1
 
 ### Major Changes

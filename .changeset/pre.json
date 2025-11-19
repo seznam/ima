@@ -19,12 +19,14 @@
     "@ima/docs": "0.0.0"
   },
   "changesets": [
+    "early-pianos-act",
     "fifty-bikes-hide",
     "giant-bears-know",
     "gold-drinks-act",
     "lazy-garlics-teach",
     "nine-hotels-matter",
     "purple-trees-decide",
+    "quick-crews-cut",
     "shiny-bananas-hide",
     "short-rules-begin",
     "wet-dingos-brush"

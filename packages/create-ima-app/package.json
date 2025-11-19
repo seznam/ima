@@ -1,6 +1,6 @@
 {
   "name": "create-ima-app",
-  "version": "20.0.0-rc.0",
+  "version": "20.0.0-rc.1",
   "description": "Create a IMA.js App easily.",
   "type": "module",
   "keywords": [
