@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.2
+
+### Patch Changes
+
+- 8cba9ff: Bump version of plugin-testing-integration with support for new degradation methods
+
 ## 20.0.0-rc.1
 
 ### Patch Changes

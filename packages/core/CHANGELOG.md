@@ -1,5 +1,14 @@
 # Change Log
 
+## 20.0.0-rc.2
+
+### Patch Changes
+
+- 54d471e: Fix AbstractPageManager
+  - **What?** Fix AbstractPageManager when there is new routing during BEFORE_HANDLE_ROUTE phase.
+  - **Why?** The process of handling stuck when there is new routing during BEFORE_HANDLE_ROUTE phase.
+  - **How?** Nothing.
+
 ## 20.0.0-rc.1
 
 ### Patch Changes
