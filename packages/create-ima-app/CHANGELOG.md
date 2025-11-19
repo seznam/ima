@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.3
+
+### Patch Changes
+
+- 67e6a38: Changed degradation order pattern
+
 ## 20.0.0-rc.2
 
 ### Patch Changes
