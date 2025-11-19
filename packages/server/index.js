@@ -59,10 +59,15 @@ function createIMAServer({
     return devUtils.manifestRequire(`server/locale/${language}.js`).default;
   }
 
+  logger =
+    logger ||
+    (typeof environment?.$Server?.loggerFactory === 'function'
+      ? environment.$Server.loggerFactory({ environment })
+      : console);
+
   emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
-  logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
 
   const concurrentRequestsMetric =
     require('./lib/metric/concurrentRequestsMetricFactory.js')({

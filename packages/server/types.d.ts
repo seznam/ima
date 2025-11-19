@@ -3,6 +3,14 @@ import { Environment, ParsedEnvironment } from '@ima/core';
 import { Request } from 'express';
 
 declare module '@ima/server' {
+  export interface Logger {
+    log(...args: any[]): void;
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+    debug(...args: any[]): void;
+    trace(...args: any[]): void;
+  }
   export enum Event {
     BeforeError = 'ima.server.beforeError',
     Error = 'ima.server.error',

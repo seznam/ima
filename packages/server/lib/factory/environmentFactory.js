@@ -2,6 +2,8 @@ const path = require('path');
 
 const helpers = require('@ima/helpers');
 
+const loggerFactory = require('./loggerFactory');
+
 const prod = 'prod';
 const dev = 'dev';
 
@@ -42,9 +44,7 @@ const defaultEnvironment = {
         unusedEntryTtl: 15 * 60 * 1000,
         maxEntries: 500,
       },
-      logger: {
-        formatting: 'simple',
-      },
+      loggerFactory,
     },
   },
 
@@ -56,9 +56,7 @@ const defaultEnvironment = {
     $Server: {
       // Max number of app instances to recycle (pool size)
       concurrency: 1,
-      logger: {
-        formatting: 'dev',
-      },
+      loggerFactory: () => console,
     },
   },
 };

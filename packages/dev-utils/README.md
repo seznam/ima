@@ -26,6 +26,23 @@ import { parseCompileError } from '@ima/dev-utils/compileErrorParser';
 - `helpers` - general regexps and other helpers.
 - `sourceFragment` - utility to create source fragment object containing X number of lines of code around highlighted line from provided source.
 - `sourceMapUtils` - utils to extract source map URL from file contents.
+- `devLogger` - development logger with pretty formatting for easier debugging during development.
+
+To use devLogger in your application, you can import it in environment definition from @ima/dev-utils:
+
+```js
+import { createDevServerLogger } from '@ima/dev-utils';
+
+...
+    <environment_name>: {
+        $Server: {
+            ...
+            logger: createDevServerLogger(),
+        },
+    },
+...
+```
+
 
 ---
 
