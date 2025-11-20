@@ -139,8 +139,8 @@ export const imaLoader: Loader = async args => {
   } = await import('app/main');
 
   lastImaParams = { ...parameters?.ima };
-  app = ima.createImaApp();
-  bootConfig = ima.getClientBootConfig(
+  app = await ima.createImaApp();
+  bootConfig = await ima.getClientBootConfig(
     extendBootConfig(args, getInitialAppConfigFunctions(), {
       initBindApp: parameters?.ima?.initBindApp,
       initRoutes: parameters?.ima?.initRoutes,
@@ -150,7 +150,7 @@ export const imaLoader: Loader = async args => {
   );
 
   // Init app
-  ima.bootClientApp(app, bootConfig);
+  await ima.bootClientApp(app, bootConfig);
 
   // Update page state
   updateState(app, parameters);
