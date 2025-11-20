@@ -1,6 +1,6 @@
 {
   "name": "@ima/error-overlay",
-  "version": "19.0.2",
+  "version": "20.0.0-rc.0",
   "description": "IMA.js error-overlay used in development mode for error reporting.",
   "keywords": [
     "IMA.js",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@ima/dev-utils": "^20.0.0-rc.0",
-    "@ima/hmr-client": "^19.0.1",
+    "@ima/hmr-client": "^20.0.0-rc.0",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",

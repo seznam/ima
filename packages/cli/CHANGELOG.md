@@ -1,5 +1,14 @@
 # Change Log
 
+## 20.0.0-rc.3
+
+### Patch Changes
+
+- Updated dependencies [35e4b9a]
+  - @ima/error-overlay@20.0.0-rc.0
+  - @ima/helpers@20.0.0-rc.0
+  - @ima/hmr-client@20.0.0-rc.0
+
 ## 20.0.0-rc.2
 
 ### Patch Changes

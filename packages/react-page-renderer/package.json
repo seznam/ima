@@ -1,6 +1,6 @@
 {
   "name": "@ima/react-page-renderer",
-  "version": "20.0.0-rc.1",
+  "version": "20.0.0-rc.2",
   "description": "IMA.js React page renderer.",
   "keywords": [
     "IMA.js",
@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@esmj/task": "^0.5.2",
-    "@ima/helpers": "^19.0.4",
+    "@ima/helpers": "^20.0.0-rc.0",
     "classnames": "^2.5.1",
     "memoize-one": "^6.0.0"
   },

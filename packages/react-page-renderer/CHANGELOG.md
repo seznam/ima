@@ -1,5 +1,12 @@
 # Change Log
 
+## 20.0.0-rc.2
+
+### Patch Changes
+
+- Updated dependencies [35e4b9a]
+  - @ima/helpers@20.0.0-rc.0
+
 ## 20.0.0-rc.1
 
 ### Major Changes
