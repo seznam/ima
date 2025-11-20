@@ -198,7 +198,82 @@ ima.onLoad().then(async () => {
 });
 ```
 
-### 5. Remove `$IMA.$Path` ⚠️ BREAKING
+### 5. Add Required Server Template: overloaded.ejs ⚠️ BREAKING
+
+IMA.js 20 introduces a new server degradation system that requires an additional server template file for handling overload scenarios.
+
+#### Create the overloaded.ejs template
+
+Create a new file at `server/template/overloaded.ejs` in your application root:
+
+```ejs
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Service Temporarily Unavailable</title>
+  </head>
+  <body>
+    <h1>Service Temporarily Unavailable</h1>
+  </body>
+</html>
+```
+
+This template is automatically used when the server degradation system detects an overload condition based on your `isOverloaded` degradation function.
+
+#### Custom template path (optional)
+
+If you want to use a custom path for your overloaded template, configure it in your environment settings:
+
+```javascript
+// server/config/environment.js
+module.exports = {
+  prod: {
+    $Server: {
+      template: {
+        overloaded: './custom/path/to/overloaded.ejs',
+        // You can also customize other templates
+        spa: './custom/path/to/spa.ejs',
+        '500': './custom/path/to/500.ejs',
+        '400': './custom/path/to/400.ejs',
+      },
+    },
+  },
+};
+```
+
+#### Understanding the degradation flow
+
+The degradation system works in the following order (from most to least severe):
+
+1. **Overloaded (503)**: Returns the `overloaded.ejs` template immediately
+2. **Static Error Pages**: Serves pre-rendered static HTML for error routes
+3. **SPA Mode**: Sends minimal HTML shell, client renders everything
+4. **SPA Prefetch**: Server-side renders but optimized for client hydration
+5. **Full SSR**: Normal server-side rendering (default)
+
+#### Required template files summary
+
+Ensure your `server/template/` directory contains all required template files:
+
+```
+your-app/
+├── server/
+│   └── template/
+│       ├── spa.ejs          ← SPA shell template
+│       ├── 500.ejs          ← Server error template
+│       ├── 400.ejs          ← Client error template
+│       └── overloaded.ejs   ← Overloaded template (NEW in v20!)
+└── app/
+    └── config/
+```
+
+[Learn more about Performance & Degradation →](../server/performance.md)
+
+
+### 6. Remove `$IMA.$Path` ⚠️ BREAKING
 
 The `$IMA.$Path` global has been **removed without replacement** due to security concerns (exposed application file paths to the client).
 
@@ -225,7 +300,7 @@ $IMA.$Path = "...";
 If your application relied on `$IMA.$Path`, you'll need to find alternative approaches. In most cases, this value wasn't actually needed in client code.
 :::
 
-### 6. Update Environment Configuration ⚠️ BREAKING
+### 7. Update Environment Configuration ⚠️ BREAKING
 
 IMA.js 20 includes significant changes to default configuration. **Many settings that were in your template are now in core with sensible defaults.**
 
@@ -350,7 +425,7 @@ export const initSettings = (ns, oc, config) => {
 The `$Page.$Render` settings are still **required** as they're specific to your application (your DocumentView and root element).
 :::
 
-### 7. Update Degradation Configuration ⚠️ BREAKING
+### 8. Update Degradation Configuration ⚠️ BREAKING
 
 The server degradation system has been completely refactored with more flexible function-based approach.
 
@@ -437,7 +512,7 @@ degradation: {
 
 [Learn more about Performance & Degradation →](../server/performance.md)
 
-### 8. Update `@ima/plugin-cli` Watch Paths ⚠️ BREAKING
+### 9. Update `@ima/plugin-cli` Watch Paths ⚠️ BREAKING
 
 Chokidar v4 no longer supports globs in watch paths.
 
@@ -590,6 +665,7 @@ module.exports = {
 
 ### @ima/server
 
+- **Required Template File**: New `overloaded.ejs` template file is required in `server/template/` directory for handling server overload scenarios (503 errors).
 - **SPA Config**: SPA configuration was completely removed and replaced with degradation functions (see [Update Degradation Configuration](#7-update-degradation-configuration--breaking) for more information).
 - **Degradation Config**: Complete rewrite - see [Update Degradation Configuration](#7-update-degradation-configuration--breaking).
 

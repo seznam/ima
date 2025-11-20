@@ -99,14 +99,6 @@ module.exports = function hooksFactory({
     return isDegraded('isSPAPrefetch', event);
   }
 
-  function _hasToLoadApp(event) {
-    const { environment } = event;
-
-    return !(
-      environment.$Server.concurrency === 0 || process.env.IMA_CLI_FORCE_SPA
-    );
-  }
-
   function _isValidResponse(event) {
     const { res, context } = event;
     const isRedirectResponse =
@@ -239,12 +231,6 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      if (_hasToLoadApp(event)) {
-        event.context?.timing?.start('hooks.importAppMain');
-        await _importAppMainAsync(event);
-        event.context?.timing?.end('hooks.importAppMain');
-      }
-
       _addImaToResponse(event);
     });
   }
@@ -255,6 +241,8 @@ module.exports = function hooksFactory({
         concurrentRequests: instanceRecycler.getConcurrentRequests(),
         hasReachedMax: instanceRecycler.hasReachedMaxConcurrentRequests(),
       });
+
+      event.threats = event?.performance?.severity.getThreats();
 
       if (_isServerOverloaded(event)) {
         event.context?.timing?.end('hooks.performanceCheck', {
@@ -288,6 +276,15 @@ module.exports = function hooksFactory({
         });
       }
 
+      if (_hasToServeSPA(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveSPA',
+        });
+        event.stopPropagation();
+
+        return renderStaticSPAPage(event);
+      }
+
       if (_hasToServeSPAPrefetch(event)) {
         event.context?.timing?.end('hooks.performanceCheck', {
           result: 'serveSPAPrefetch',
@@ -305,15 +302,6 @@ module.exports = function hooksFactory({
         return;
       }
 
-      if (_hasToServeSPA(event)) {
-        event.context?.timing?.end('hooks.performanceCheck', {
-          result: 'serveSPA',
-        });
-        event.stopPropagation();
-
-        return renderStaticSPAPage(event);
-      }
-
       event.context?.timing?.end('hooks.performanceCheck', {
         result: 'passed',
       });
@@ -322,6 +310,10 @@ module.exports = function hooksFactory({
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
+      event.context?.timing?.start('hooks.importAppMain');
+      await _importAppMainAsync(event);
+      event.context?.timing?.end('hooks.importAppMain');
+
       event.context?.timing?.start('hooks.initApp');
       await _initApp(event);
       event.context?.timing?.end('hooks.initApp');

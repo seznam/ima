@@ -51,7 +51,6 @@ module.exports = function serverAppFactory({
     renderStaticClientErrorPage,
   } = staticPageFactory({
     applicationFolder,
-    instanceRecycler,
     createBootConfig,
     environment,
   });
