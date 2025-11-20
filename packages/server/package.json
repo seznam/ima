@@ -35,7 +35,6 @@
   },
   "peerDependencies": {
     "@ima/core": ">=20.0.0-rc.0",
-    "@ima/dev-utils": ">=19.0.0",
     "@ima/helpers": ">=19.0.3",
     "express": ">=4.0.0"
   },
