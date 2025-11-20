@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.4
+
+### Patch Changes
+
+- 0f1012a: Fixed invalid versions in package.json
+
 ## 20.0.0-rc.3
 
 ### Patch Changes

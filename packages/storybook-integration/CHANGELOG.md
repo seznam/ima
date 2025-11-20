@@ -1,5 +1,13 @@
 # Change Log
 
+## 20.0.0-rc.1
+
+### Patch Changes
+
+- 9b52dcc: Await async ima methods in storybook loader, add awaits for more methods which can be async in future
+- Updated dependencies [fcb8017]
+  - @ima/dev-utils@20.0.0-rc.0
+
 ## 20.0.0-rc.0
 
 ### Patch Changes

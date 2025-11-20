@@ -1,5 +1,12 @@
 # Change Log
 
+## 20.0.0-rc.1
+
+### Patch Changes
+
+- Updated dependencies [fcb8017]
+  - @ima/dev-utils@20.0.0-rc.0
+
 ## 20.0.0-rc.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.4
+
+### Major Changes
+
+- fcb8017: Production logger is now simple json logger without colors, default dev logger is console
+
 ## 20.0.0-rc.3
 
 ### Patch Changes

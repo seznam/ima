@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "20.0.0-rc.1",
+  "version": "20.0.0-rc.2",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -35,7 +35,7 @@
     "@babel/parser": "^7.28.5",
     "@babel/traverse": "^7.28.5",
     "@babel/types": "^7.28.5",
-    "@ima/dev-utils": "^19.0.1",
+    "@ima/dev-utils": "^20.0.0-rc.0",
     "@ima/error-overlay": "^19.0.2",
     "@ima/helpers": "^19.0.4",
     "@ima/hmr-client": "^19.0.1",

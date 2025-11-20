@@ -1,6 +1,6 @@
 {
   "name": "@ima/storybook-integration",
-  "version": "20.0.0-rc.0",
+  "version": "20.0.0-rc.1",
   "description": "Storybook integration addon for IMA.js applications.",
   "type": "module",
   "keywords": [
@@ -56,7 +56,7 @@
   "peerDependencies": {
     "@ima/cli": ">=20.0.0-rc.0",
     "@ima/core": ">=20.0.0-rc.0",
-    "@ima/dev-utils": ">=19.0.0",
+    "@ima/dev-utils": ">=20.0.0-rc.0",
     "@ima/react-page-renderer": ">=20.0.0-rc.0",
     "webpack": ">=5.x"
   },
