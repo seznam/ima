@@ -3,6 +3,8 @@
  * Provides JSON-based logging for production environments
  */
 
+const STDERR_LEVELS = ['error', 'trace'];
+
 /**
  * Private method to write log messages with JSON formatting
  * @param {string} level - Log level (log, info, warn, error)
@@ -14,7 +16,7 @@ function _writeLog(level, data) {
     data: typeof data === 'string' ? { message: data } : data,
   });
 
-  if (level === 'error' || level === 'trace') {
+  if (STDERR_LEVELS.includes(level)) {
     process.stderr.write(logData); // use direct write to avoid extra formatting (e.g., from console.error)
   } else {
     process.stdout.write(logData); // use direct write to avoid extra formatting (e.g., from console.log)
