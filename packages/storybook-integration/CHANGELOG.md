@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.2
+
+### Patch Changes
+
+- 30c7410: Re-release with storybook fix
+
 ## 20.0.0-rc.1
 
 ### Patch Changes
