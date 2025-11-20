@@ -14,7 +14,7 @@ function _writeLog(level, data) {
     data: typeof data === 'string' ? { message: data } : data,
   });
 
-  if (level === 'error') {
+  if (level === 'error' || level === 'trace') {
     process.stderr.write(logData); // use direct write to avoid extra formatting (e.g., from console.error)
   } else {
     process.stdout.write(logData); // use direct write to avoid extra formatting (e.g., from console.log)
@@ -25,7 +25,7 @@ function _writeLog(level, data) {
  * Create production logger with JSON output
  * @returns {import('@ima/server').Logger}
  */
-function createProdLogger() {
+function loggerFactory() {
   return {
     log: (...args) => _writeLog('log', args),
     info: (...args) => _writeLog('info', args),
@@ -36,4 +36,4 @@ function createProdLogger() {
   };
 }
 
-module.exports = createProdLogger;
+module.exports = loggerFactory;
