@@ -2,7 +2,7 @@ const path = require('path');
 
 const helpers = require('@ima/helpers');
 
-const loggerFactory = require('./loggerFactory');
+const createJSONLogger = require('./loggerFactory');
 
 const prod = 'prod';
 const dev = 'dev';
@@ -44,7 +44,7 @@ const defaultEnvironment = {
         unusedEntryTtl: 15 * 60 * 1000,
         maxEntries: 500,
       },
-      loggerFactory,
+      loggerFactory: createJSONLogger,
     },
   },
 

@@ -3,39 +3,34 @@
  * Provides JSON-based logging for production environments
  */
 
-const STDERR_LEVELS = ['error', 'trace'];
-
 /**
  * Private method to write log messages with JSON formatting
+ * @param {string} channel - Log channel (process.stdout, process.stderr, etc.)
  * @param {string} level - Log level (log, info, warn, error)
  * @param {any[]} data - data to log
  */
-function _writeLog(level, data) {
+function _writeLog(channel, level, data) {
   const logData = JSON.stringify({
     level,
     data: typeof data === 'string' ? { message: data } : data,
   });
 
-  if (STDERR_LEVELS.includes(level)) {
-    process.stderr.write(logData); // use direct write to avoid extra formatting (e.g., from console.error)
-  } else {
-    process.stdout.write(logData); // use direct write to avoid extra formatting (e.g., from console.log)
-  }
+  channel.write(logData); // use direct write to avoid extra formatting (e.g., from console.error)
 }
 
 /**
  * Create production logger with JSON output
  * @returns {import('@ima/server').Logger}
  */
-function loggerFactory() {
+function createJSONLogger() {
   return {
-    log: (...args) => _writeLog('log', args),
-    info: (...args) => _writeLog('info', args),
-    warn: (...args) => _writeLog('warn', args),
-    error: (...args) => _writeLog('error', args),
-    trace: (...args) => _writeLog('trace', args),
-    debug: (...args) => _writeLog('debug', args),
+    log: (...args) => _writeLog(process.stdout, 'log', args),
+    info: (...args) => _writeLog(process.stdout, 'info', args),
+    warn: (...args) => _writeLog(process.stdout, 'warn', args),
+    error: (...args) => _writeLog(process.stderr, 'error', args),
+    trace: (...args) => _writeLog(process.stderr, 'trace', args),
+    debug: (...args) => _writeLog(process.stdout, 'debug', args),
   };
 }
 
-module.exports = loggerFactory;
+module.exports = createJSONLogger;
