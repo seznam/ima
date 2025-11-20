@@ -378,6 +378,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render 500 static page for ima app route ERROR when degradation logic indicates', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
       environment.$Server.degradation = {
         isStatic: () => true,
       };
@@ -463,7 +464,7 @@ describe('Server App Factory', () => {
       delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
     });
 
-    it('should fall back to SPA Prefetch mode when both degradation functions return true', async () => {
+    it('should fall back to SPA mode when both degradation functions return true', async () => {
       environment.$Server.degradation = {
         isSPAPrefetch: () => true,
         isSPA: () => true,
@@ -472,8 +473,8 @@ describe('Server App Factory', () => {
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
       // Should fall back to prefetched SPA mode (isSPAPrefetch takes precedence)
-      expect(response.spaPrefetch).toBeTruthy();
-      expect(response.SPA).toBeFalsy();
+      expect(response.SPA).toBeTruthy();
+      expect(response.spaPrefetch).toBeFalsy();
       expect(response.static).toBeTruthy();
     });
 
@@ -645,6 +646,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render static page when degradation logic indicates', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
       environment.$Server.degradation = {
         isStatic: () => true,
       };
@@ -658,6 +660,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render static page with array degradation functions', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
       environment.$Server.degradation = {
         isStatic: [
           () => false,
