@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.5
+
+### Patch Changes
+
+- c95d170: Fixed CIA dependencies to target latest RC versions of IMA 20
+
 ## 20.0.0-rc.4
 
 ### Patch Changes
