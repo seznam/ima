@@ -1,6 +1,6 @@
 {
   "name": "@ima/hmr-client",
-  "version": "20.0.0-rc.0",
+  "version": "20.0.0-rc.1",
   "description": "IMA.js hmr client used to connect app with error overlay.",
   "keywords": [
     "IMA.js",

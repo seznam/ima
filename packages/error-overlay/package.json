@@ -1,6 +1,6 @@
 {
   "name": "@ima/error-overlay",
-  "version": "20.0.0-rc.0",
+  "version": "20.0.0-rc.1",
   "description": "IMA.js error-overlay used in development mode for error reporting.",
   "keywords": [
     "IMA.js",
