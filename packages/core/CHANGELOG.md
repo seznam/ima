@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.0-rc.5
+
+### Patch Changes
+
+- b54035e: Remove MessageChannel polyfill for jest.
+
 ## 20.0.0-rc.4
 
 ### Patch Changes
