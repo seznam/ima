@@ -2,6 +2,8 @@ const path = require('path');
 
 const helpers = require('@ima/helpers');
 
+const createJSONLogger = require('./loggerFactory');
+
 const prod = 'prod';
 const dev = 'dev';
 
@@ -20,6 +22,54 @@ if (env === 'production') {
   env = prod;
 }
 
+/**
+ * Env default values
+ */
+const defaultEnvironment = {
+  prod: {
+    $Debug: false,
+    $Language: {
+      '//*:*': 'en',
+    },
+    $Server: {
+      port: 3001,
+      staticPath: '/static',
+      // Max number of app instances to recycle (pool size)
+      concurrency: 5,
+      clusters: null,
+      cache: {
+        enabled: false,
+        cacheKeyGenerator: null,
+        entryTtl: 60 * 60 * 1000,
+        unusedEntryTtl: 15 * 60 * 1000,
+        maxEntries: 500,
+      },
+      loggerFactory: createJSONLogger,
+    },
+  },
+
+  dev: {
+    $Debug: true,
+    $Language: {
+      '//*:*': 'en',
+    },
+    $Server: {
+      // Max number of app instances to recycle (pool size)
+      concurrency: 1,
+      loggerFactory: () => console,
+    },
+  },
+};
+
+/**
+ * @param {{
+ *   applicationFolder: string,
+ *   processEnvironment: (
+ *     env: import('@ima/core').ParsedEnvironment
+ *   ) => import('@ima/core').ParsedEnvironment
+ * }} config
+ * @returns {import('@ima/core').ParsedEnvironment}
+ */
 module.exports = function environmentFactory({
   applicationFolder,
   processEnvironment,
@@ -28,15 +78,18 @@ module.exports = function environmentFactory({
     path.resolve(applicationFolder, './server/config/environment.js')
   );
 
-  let currentEnvironment = environmentConfig[env] || {};
+  // Merge defaults with resolved env config
+  const baseEnvConfig = helpers.assignRecursively(
+    defaultEnvironment,
+    environmentConfig
+  );
+
+  let currentEnvironment = baseEnvConfig[env] || {};
   const $Language =
     currentEnvironment.$Language &&
     Object.assign({}, currentEnvironment.$Language);
 
-  currentEnvironment = helpers.resolveEnvironmentSetting(
-    environmentConfig,
-    env
-  );
+  currentEnvironment = helpers.resolveEnvironmentSetting(baseEnvConfig, env);
 
   if ($Language) {
     currentEnvironment.$Language = $Language;

@@ -10,13 +10,15 @@ module.exports = function IMAInternalFactory({
   const GLOBAL = {
     APP_MAIN: 'appMain',
     DUMMY_APP: 'dummyApp',
+    DUMMY_APP_PROMISE: 'dummyAppPromise',
   };
 
-  function _createDummyApp({ environment, language }) {
+  async function _createDummyApp({ environment, language }) {
     // TODO IMA@18 doc dummy APP
     // BETTER 404 detection
     const event = createEvent('createDummyApp', {
       context: {},
+      imaInternal: {},
       environment,
       res: {
         app: {},
@@ -89,33 +91,31 @@ module.exports = function IMAInternalFactory({
       appMain.ima.getInitialPluginConfig(),
       appMain.ima.getInitialImaConfigFunctions()
     );
-    event.context.app.bootstrap.run(bootConfig);
+
+    await event.context.app.bootstrap.run(bootConfig);
 
     return event.context.app;
   }
 
-  function _getRouteInfo({ req, res }) {
+  function _getRouteInfo({ req, res, imaInternal }) {
     let routeInfo = null;
 
     if (!serverGlobal.has(GLOBAL.DUMMY_APP)) {
       return routeInfo;
     }
 
+    if (imaInternal?.routeInfo) {
+      return imaInternal.routeInfo;
+    }
+
     const dummyApp = serverGlobal.get(GLOBAL.DUMMY_APP);
-    const {
-      protocol,
-      host,
-      path: urlPath,
-      root,
-      languagePartPath,
-    } = res.locals;
+    const { protocol, host, root, languagePartPath } = res.locals;
 
     dummyApp.oc.get('$Request').init(req);
     dummyApp.oc.get('$Response').init(res);
     dummyApp.oc.get('$Router').init({
       $Protocol: protocol,
       $Host: host,
-      $Path: urlPath,
       $Root: root,
       $LanguagePartPath: languagePartPath,
     });
@@ -128,13 +128,15 @@ module.exports = function IMAInternalFactory({
       });
     }
 
+    imaInternal.routeInfo = routeInfo;
+
     return routeInfo;
   }
 
-  function _addImaToResponse({ req, res }) {
+  function _addImaToResponse({ req, res, imaInternal }) {
     let routeName = 'other';
 
-    let routeInfo = _getRouteInfo({ req, res });
+    let routeInfo = _getRouteInfo({ req, res, imaInternal });
     if (routeInfo) {
       routeName = routeInfo.route.getName();
     }
@@ -142,28 +144,37 @@ module.exports = function IMAInternalFactory({
     res.locals.routeName = routeName;
   }
 
-  function _importAppMainSync({ res, environment, context = {} }) {
+  async function _importAppMainAsync({ res, environment, context = {} }) {
     let appMain = serverGlobal.has(GLOBAL.APP_MAIN)
       ? serverGlobal.get(GLOBAL.APP_MAIN)
       : appFactory();
 
     if (environment.$Env === 'dev') {
       appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? appFactory() : appMain;
+      serverGlobal.delete(GLOBAL.DUMMY_APP_PROMISE);
+      serverGlobal.delete(GLOBAL.DUMMY_APP);
 
       instanceRecycler.clear();
     }
 
     if (!instanceRecycler.isInitialized()) {
       serverGlobal.set(GLOBAL.APP_MAIN, appMain);
-      serverGlobal.set(
-        GLOBAL.DUMMY_APP,
-        _createDummyApp({ environment, language: res.locals.language })
-      );
 
-      instanceRecycler.init(
-        appMain.ima.createImaApp,
-        environment.$Server.concurrency
-      );
+      if (!serverGlobal.has(GLOBAL.DUMMY_APP_PROMISE)) {
+        serverGlobal.set(
+          GLOBAL.DUMMY_APP_PROMISE,
+          _createDummyApp({ environment, language: res.locals.language })
+        );
+      }
+      const dummyApp = await serverGlobal.get(GLOBAL.DUMMY_APP_PROMISE);
+      serverGlobal.set(GLOBAL.DUMMY_APP, dummyApp);
+
+      if (!instanceRecycler.isInitialized()) {
+        instanceRecycler.init(
+          appMain.ima.createImaApp,
+          environment.$Server.concurrency
+        );
+      }
     }
 
     context.appMain = appMain;
@@ -177,7 +188,6 @@ module.exports = function IMAInternalFactory({
     let languagePartPath = res.locals.languagePartPath;
     let host = res.locals.host;
     let root = res.locals.root;
-    let urlPath = res.locals.path;
     let protocol = res.locals.protocol;
 
     let dictionary = language ? languageLoader(language) : {};
@@ -194,7 +204,6 @@ module.exports = function IMAInternalFactory({
         router: {
           $Protocol: protocol,
           $Host: host,
-          $Path: urlPath,
           $Root: root,
           $LanguagePartPath: languagePartPath,
         },
@@ -208,7 +217,6 @@ module.exports = function IMAInternalFactory({
         $Protocol: protocol,
         $Language: language,
         $Host: host,
-        $Path: urlPath,
         $Root: root,
         $LanguagePartPath: languagePartPath,
       },
@@ -224,7 +232,7 @@ module.exports = function IMAInternalFactory({
     return event.context.bootConfig;
   }
 
-  function _initApp(event) {
+  async function _initApp(event) {
     let { context } = event;
     let bootConfig = createBootConfig(event);
     context.app = instanceRecycler.getInstance();
@@ -238,7 +246,7 @@ module.exports = function IMAInternalFactory({
       context.appMain.ima.getInitialImaConfigFunctions()
     );
 
-    context.app.bootstrap.run(bootConfig);
+    await context.app.bootstrap.run(bootConfig);
 
     return context.app;
   }
@@ -261,6 +269,7 @@ module.exports = function IMAInternalFactory({
 
       instanceRecycler.clearInstance(context.app);
       context.app = null;
+      delete context.internal;
     }
   }
 
@@ -268,7 +277,7 @@ module.exports = function IMAInternalFactory({
     _initApp,
     _clearApp,
     createBootConfig,
-    _importAppMainSync,
+    _importAppMainAsync,
     _createDummyApp,
     _getRouteInfo,
     _addImaToResponse,

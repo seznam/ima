@@ -9,7 +9,6 @@ function loadTemplateFile(path) {
 
 module.exports = function staticTemplateFactory({
   applicationFolder,
-  instanceRecycler,
   createBootConfig,
   environment,
 }) {
@@ -26,12 +25,33 @@ module.exports = function staticTemplateFactory({
         path.join(applicationFolder, './server/template/500.ejs')
     )
   );
+  const templateOverloaded = ejs.compile(
+    loadTemplateFile(
+      environment?.$Server?.template?.['overloaded'] ??
+        path.join(applicationFolder, './server/template/overloaded.ejs')
+    )
+  );
   const template400 = ejs.compile(
     loadTemplateFile(
       environment?.$Server?.template?.['400'] ??
         path.join(applicationFolder, './server/template/400.ejs')
     )
   );
+
+  const overloadedResponse = {
+    status: 503,
+    SPA: false,
+    static: true,
+    content: templateOverloaded(),
+    error: new Error('Service Unavailable'),
+    page: {
+      state: {},
+      cache: null,
+      cookie: new Map(),
+      headers: {},
+    },
+    cache: false,
+  };
 
   function renderStaticServerErrorPage(event) {
     const error500 = {
@@ -99,21 +119,34 @@ module.exports = function staticTemplateFactory({
     };
   }
 
-  function renderOverloadedPage(event) {
-    const requests = instanceRecycler.getConcurrentRequests() + 2;
-    const error = new Error(
-      `The server is overloaded with ${requests} concurrency requests.`
-    );
+  /**
+   * Renders the SPA prefetch page. Similar to SPA static page renderer,
+   * but since the app is already booted, we do not need to re-create
+   * the boot config again.
+   */
+  function renderStaticSPAPrefetchPage(event) {
+    const content = templateSPA(event);
 
-    let page = renderStaticServerErrorPage({ ...event, error });
-    page.status = 503;
+    return {
+      content,
+      static: true,
+      spaPrefetch: true,
+    };
+  }
 
-    return page;
+  function renderOverloadedPage() {
+    return {
+      ...overloadedResponse,
+      page: {
+        ...overloadedResponse.page,
+      },
+    };
   }
 
   return {
     renderOverloadedPage,
     renderStaticSPAPage,
+    renderStaticSPAPrefetchPage,
     renderStaticServerErrorPage,
     renderStaticClientErrorPage,
   };

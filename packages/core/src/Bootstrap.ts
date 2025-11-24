@@ -1,3 +1,4 @@
+import { autoYield } from '@esmj/task';
 import * as helpers from '@ima/helpers';
 import {
   Response as ExpressResponse,
@@ -6,7 +7,7 @@ import {
 import { PartialDeep } from 'type-fest';
 
 import { DictionaryConfig } from '.';
-import { AppSettings, Settings } from './boot';
+import { AppSettings, DefaultSettings, Settings } from './boot';
 import { Namespace, ns } from './Namespace';
 import { BindingState } from './oc/BindingState';
 import { ObjectContainer } from './oc/ObjectContainer';
@@ -89,7 +90,6 @@ export type BootSettings = Pick<
   | '$Protocol'
   | '$Language'
   | '$Host'
-  | '$Path'
   | '$Root'
   | '$LanguagePartPath'
 >;
@@ -102,7 +102,6 @@ export interface BootServices {
   router: {
     $Protocol: GlobalImaObject['$Protocol'];
     $Host: GlobalImaObject['$Host'];
-    $Path: GlobalImaObject['$Path'];
     $Root: GlobalImaObject['$Root'];
     $LanguagePartPath: GlobalImaObject['$LanguagePartPath'];
   };
@@ -150,12 +149,19 @@ export class Bootstrap {
    * @param config The application environment
    *        configuration for the current environment.
    */
-  run(config: BootConfig) {
+  async run(config: BootConfig) {
     this._config = config;
 
+    await autoYield();
     this._initSettings();
-    this._bindDependencies();
-    this._initServices();
+
+    await autoYield();
+    await this._bindDependencies();
+
+    await autoYield();
+    await this._initServices();
+
+    await autoYield();
     this._initRoutes();
   }
 
@@ -166,13 +172,18 @@ export class Bootstrap {
    * @param name Plugin name.
    * @param plugin Plugin interface (object with init functions).
    */
-  initPlugin(name: string, plugin?: InitPluginConfig) {
+  async initPlugin(name: string, plugin?: InitPluginConfig) {
     if (!plugin) {
       return;
     }
 
+    await autoYield();
     this._initPluginSettings(name, plugin);
+
+    await autoYield();
     this._bindPluginDependencies(name, plugin);
+
+    await autoYield();
     this._initPluginServices(plugin);
   }
 
@@ -184,7 +195,38 @@ export class Bootstrap {
    * as default values for configuration items in other environments.
    */
   _initSettings() {
-    const currentApplicationSettings: Settings = {} as Settings;
+    /**
+     * Default settings for the application.
+     */
+    const currentApplicationSettings: DefaultSettings = {
+      $Http: {
+        defaultRequestOptions: {
+          timeout: 15000,
+          repeatRequest: 1,
+          ttl: 60000,
+          fetchOptions: {
+            mode: 'cors',
+            headers: {
+              Accept: 'application/json',
+            },
+          },
+          validateCookies: false,
+          cache: true,
+        },
+        cacheOptions: {
+          prefix: 'http.',
+        },
+      },
+      $Router: {
+        middlewareTimeout: 30000,
+      },
+      $Cache: {
+        enabled: true,
+        ttl: 60000,
+      },
+    };
+
+    const settings = {} as Settings;
     const plugins = this._config.plugins.concat([
       {
         name: BindingState.App,
@@ -203,6 +245,7 @@ export class Bootstrap {
         );
 
         helpers.assignRecursivelyWithTracking(name)(
+          settings,
           currentApplicationSettings,
           helpers.resolveEnvironmentSetting(
             allPluginSettings,
@@ -213,7 +256,7 @@ export class Bootstrap {
 
     this._config.bind = {
       ...this._config.bind,
-      ...currentApplicationSettings,
+      ...settings,
       ...this._config.settings,
     };
   }
@@ -263,7 +306,7 @@ export class Bootstrap {
    * Binds the constants, service providers and class dependencies to the
    * object container.
    */
-  _bindDependencies() {
+  async _bindDependencies() {
     this._oc.setBindingState(BindingState.IMA);
     this._config.initBindIma(
       ns,
@@ -272,12 +315,15 @@ export class Bootstrap {
       BindingState.IMA
     );
 
-    this._config.plugins
-      .filter(({ plugin }) => typeof plugin.initBind === 'function')
-      .forEach(({ name, plugin }) => {
-        this._oc.setBindingState(BindingState.Plugin, name);
-        plugin.initBind!(ns, this._oc, this._config.bind!, false);
-      });
+    const filteredPlugins = this._config.plugins.filter(
+      ({ plugin }) => typeof plugin.initBind === 'function'
+    );
+
+    for (const { name, plugin } of filteredPlugins) {
+      await autoYield();
+      this._oc.setBindingState(BindingState.Plugin, name);
+      plugin.initBind!(ns, this._oc, this._config.bind!, false);
+    }
 
     this._oc.setBindingState(BindingState.App);
     this._config.initBindApp(
@@ -316,14 +362,17 @@ export class Bootstrap {
   /**
    * Initializes the basic application services.
    */
-  _initServices() {
+  async _initServices() {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
-    this._config.plugins
-      .filter(({ plugin }) => typeof plugin.initServices === 'function')
-      .forEach(({ plugin }) => {
-        plugin.initServices!(ns, this._oc, this._config.services, false);
-      });
+    const filteredPlugins = this._config.plugins.filter(
+      ({ plugin }) => typeof plugin.initServices === 'function'
+    );
+
+    for (const { plugin } of filteredPlugins) {
+      await autoYield();
+      plugin.initServices!(ns, this._oc, this._config.services, false);
+    }
 
     this._config.initServicesApp(ns, this._oc, this._config.services);
   }

@@ -39,9 +39,9 @@
           'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))() && !!Object.values',
         ],
         esScripts: [
-          // es2022 env test scripts
-          'return [1,1].findLast(e => e === 1)',
-          'return Object.hasOwn({a:1}, "a")',
+          // es2024 env test scripts
+          'return typeof Promise.withResolvers === "function"',
+          'return typeof Object.groupBy === "function"',
         ]
       },
 

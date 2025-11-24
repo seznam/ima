@@ -7,6 +7,8 @@ The IMA.js server exposes `emitter` and `Event` objects that can be used to hand
 
 You can listen to any of the events below by calling `emitter.on(eventName, event => {})`. See the [`@esmj/emitter` documentation](https://github.com/mjancarik/esmj-emitter) for more details.
 
+> **Note:** All IMA server events have built-in [Performance Tracking](./performance-tracking.md) support. You can access the performance tracker via `event.context.perf` to measure and monitor your server operations.
+
 ## Special Events
 
 ### `CreateBootConfig`
@@ -95,3 +97,26 @@ Emitted after the response cleanup. This is the place to do your own cleanup.
 ### `AfterResponseSend`
 
 The last event emitted after the response is sent to the client. It is guaranteed that this event will be emitted even if the response sending fails. This is your last chance to do something after the response is sent.
+
+## Performance Tracking with Events
+
+All IMA server events have access to the performance tracker through `event.context.perf`. This allows you to measure and monitor your operations:
+
+```javascript
+import { Event } from '@ima/server';
+
+emitter.on(Event.BeforeRequest, async (event) => {
+  const { perf } = event.context;
+
+  // Track custom operations
+  perf.start('database.connect');
+  await connectToDatabase();
+  perf.end('database.connect');
+
+  // Wrap functions for automatic tracking
+  const trackedQuery = perf.wrap('database.query', queryFn);
+  const users = await trackedQuery('SELECT * FROM users');
+});
+```
+
+See [Performance Tracking](./performance-tracking.md) for complete documentation.

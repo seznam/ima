@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { urlParserFactory } from '@ima/server';
 import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
@@ -30,7 +30,7 @@ export async function createDevServer({
   port: number;
   rootDir: string;
   publicUrl: string;
-  environment: Environment;
+  environment: ParsedEnvironment;
 }): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!compiler) {
@@ -57,7 +57,7 @@ export async function createDevServer({
         return config.devServer.origin;
       }
 
-      return `${getProtocol(req)}//localhost:${environment.$Server.port}`;
+      return `${getProtocol(req as any)}//localhost:${environment.$Server.port}`;
     }
 
     app

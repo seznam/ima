@@ -6,7 +6,6 @@ import { logger } from '@ima/dev-utils/logger';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { ParserConfig } from '@swc/core';
 import CompressionPlugin from 'compression-webpack-plugin';
-// eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
@@ -96,7 +95,7 @@ export default async (
           type: 'es6',
         },
         jsc: {
-          ...(isClient ? {} : { target: 'es2022' }),
+          ...(isClient ? {} : { target: 'es2024' }),
           parser: {
             syntax: syntax ?? 'ecmascript',
             decorators: false,
@@ -215,7 +214,7 @@ export default async (
     target: isServer
       ? 'node18'
       : isClientES
-        ? ['web', 'es2022']
+        ? ['web', 'es2024']
         : ['web', 'es2018'],
     mode,
     devtool: useHMR
@@ -573,6 +572,18 @@ export default async (
               client: !isServer,
               ctx: ctx.name,
             },
+          },
+        },
+        {
+          /**
+           * This loader strips server-only controller logic from client bundles
+           * based on the 'use server' directive.
+           */
+          test: /\.(js|mjs|jsx|cjs|ts|tsx)$/,
+          loader: 'use-server-loader',
+          include: appDir,
+          options: {
+            environment: isServer ? 'server' : 'client',
           },
         },
         {

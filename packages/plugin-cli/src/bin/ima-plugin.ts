@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 import { build, watch } from '../utils/commands';
 
-yargs
+yargs(hideBin(process.argv))
   .scriptName(chalk.green.bold('ima-plugin'))
   // .description('CLI helper to build ima plugins')
   .usage('Usage: $0 <command>')
@@ -51,7 +52,7 @@ yargs
   })
   .option('additionalWatchPaths', {
     alias: 'w',
-    desc: 'Array of additional watch paths to use when linking package.',
+    desc: 'Array of additional watch paths to use when linking package. Can be either directories or files (globs are not supported).',
     type: 'array',
   })
   .command('build', 'Build ima plugin at current directory', {}, build)

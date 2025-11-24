@@ -3,6 +3,7 @@ import path from 'path';
 
 import chalk from 'chalk';
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 // Normalize NODE_ENV
 switch (process.env.NODE_ENV) {
@@ -17,7 +18,7 @@ switch (process.env.NODE_ENV) {
 }
 
 // Init CLI
-yargs
+yargs(hideBin(process.argv))
   .scriptName(chalk.green.bold('ima'))
   .usage('Usage: $0 <command>')
   .commandDir(path.resolve(__dirname, '../commands'))

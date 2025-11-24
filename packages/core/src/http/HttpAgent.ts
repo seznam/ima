@@ -28,11 +28,30 @@ export interface ImaRequestInit extends Omit<RequestInit, 'body'> {
 }
 
 export interface HttpAgentRequestOptions {
-  timeout: number;
-  ttl: number;
-  repeatRequest: number;
-  fetchOptions: ImaRequestInit;
-  cache: boolean;
+  /**
+   * Specifies the request timeout in milliseconds.
+   */
+  timeout?: number;
+
+  /**
+   * Specified how long the request may be cached in milliseconds.
+   */
+  ttl?: number;
+
+  /**
+   * Specifies the maximum number of tries to repeat the request if the request fails.
+   */
+  repeatRequest?: number;
+
+  /**
+   * Default fetch options.
+   */
+  fetchOptions?: ImaRequestInit;
+
+  /**
+   * Enable caching for the requests.
+   */
+  cache?: boolean;
   cacheFailedRequest?: boolean;
   responseType?: 'json' | 'blob' | 'text' | 'arrayBuffer' | 'formData';
   postProcessors?: (<B = unknown>(
@@ -40,6 +59,11 @@ export interface HttpAgentRequestOptions {
   ) => HttpAgentResponse<B>)[];
   abortController?: AbortController;
   keepSensitiveHeaders?: boolean;
+
+  /**
+   * Validate cookies when parsing from Set-Cookie header
+   * and when sending cookies from the server.
+   */
   validateCookies?: boolean;
 }
 

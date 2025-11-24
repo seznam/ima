@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`PageMetaHandlerSpec handlePostManagedState should render meta tags from meta manager into document.head 1`] = `"<title>Page Title</title><link data-ima-meta="" rel="stylesheet" href="https://styles.css"><meta data-ima-meta="" name="description" content="Test Page" value="value"><meta data-ima-meta="" property="og:title" content="Test Page" with="additional-params">"`;
 

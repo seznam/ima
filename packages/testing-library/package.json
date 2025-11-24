@@ -1,6 +1,6 @@
 {
   "name": "@ima/testing-library",
-  "version": "19.11.1",
+  "version": "20.0.0-rc.1",
   "description": "Testing library for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -63,14 +63,14 @@
     }
   },
   "dependencies": {
-    "@messageformat/core": "^3.0.1",
+    "@messageformat/core": "^3.4.0",
     "globby": "^11.1.0"
   },
   "peerDependencies": {
-    "@ima/cli": ">=19.0.0",
-    "@ima/core": ">=19.0.0",
-    "@ima/server": ">=19.0.0",
-    "@ima/react-page-renderer": ">=19.0.0",
+    "@ima/cli": ">=20.0.0-rc.0",
+    "@ima/core": ">=20.0.0-rc.0",
+    "@ima/server": ">=20.0.0-rc.0",
+    "@ima/react-page-renderer": ">=20.0.0-rc.0",
     "@testing-library/dom": ">=10.0.0",
     "@testing-library/jest-dom": ">=6.0.0",
     "@testing-library/react": ">=12.0.0",

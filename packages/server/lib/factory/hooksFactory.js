@@ -2,15 +2,46 @@ const { RouteNames } = require('@ima/core');
 
 const { Event } = require('../emitter.js');
 
+/**
+ * Looks at the degradation configuration, processes potential degradation functions
+ * in order to determine if the degradation was triggered or not.
+ *
+ * @returns {boolean} true when the degradation was triggered, false otherwise.
+ */
+function isDegraded(lookupKey, event) {
+  const { environment } = event;
+  const degradationFn = environment.$Server.degradation?.[lookupKey];
+
+  if (!degradationFn) {
+    return false;
+  }
+
+  /**
+   * Degradation function can be an array of functions.
+   */
+  if (Array.isArray(degradationFn)) {
+    for (const fn of degradationFn) {
+      if (fn(event)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return degradationFn(event);
+}
+
 module.exports = function hooksFactory({
   renderOverloadedPage,
   renderStaticSPAPage,
   renderStaticServerErrorPage,
   renderStaticClientErrorPage,
+  renderStaticSPAPrefetchPage,
   urlParser,
   _initApp,
+  _importAppMainAsync,
   _clearApp,
-  _importAppMainSync,
   _addImaToResponse,
   _getRouteInfo,
   _generateAppResponse,
@@ -23,16 +54,49 @@ module.exports = function hooksFactory({
   environment,
 }) {
   function _isServerOverloaded(event) {
-    const { environment } = event;
-    if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isOverloaded?.(event) ?? false;
+    return isDegraded('isOverloaded', event);
+  }
+
+  function _hasToServeStatic(event) {
+    return isDegraded('isStatic', event);
+  }
+
+  function _hasToServeStaticBadRequest(event) {
+    const { req, res, imaInternal } = event;
+    const routeInfo = _getRouteInfo({ req, res, imaInternal });
+
+    const isBadRequest =
+      routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
+
+    return isBadRequest && _hasToServeStatic(event);
+  }
+
+  function _hasToServeStaticServerError(event) {
+    const { req, res, imaInternal } = event;
+    const routeInfo = _getRouteInfo({ req, res, imaInternal });
+
+    const isServerError =
+      routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
+
+    return isServerError && _hasToServeStatic(event);
+  }
+
+  function _hasToServeSPA(event) {
+    if (process.env.IMA_CLI_FORCE_SPA) {
+      return true;
     }
 
-    return (
-      environment.$Server.overloadConcurrency !== undefined &&
-      instanceRecycler.getConcurrentRequests() + 1 >
-        environment.$Server.overloadConcurrency
-    );
+    // Fallback to concurency check when degradation is not defined
+    return isDegraded('isSPA', event);
+  }
+
+  function _hasToServeSPAPrefetch(event) {
+    if (process.env.IMA_CLI_FORCE_SPA_PREFETCH) {
+      return true;
+    }
+
+    // Serve SPA prefetch when degradation logic indicates
+    return isDegraded('isSPAPrefetch', event);
   }
 
   function _isValidResponse(event) {
@@ -47,77 +111,6 @@ module.exports = function hooksFactory({
     }
 
     return true;
-  }
-
-  function _hasToServeSPA(event) {
-    if (process.env.IMA_CLI_FORCE_SPA) {
-      return true;
-    }
-    const { req, environment } = event;
-
-    const spaConfig = environment.$Server.serveSPA;
-    const isAllowedServeSPA = spaConfig.allow;
-    let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
-
-    if (environment.$Server.degradation) {
-      isServerBusy = environment.$Server.degradation?.isSPA?.(event) ?? false;
-
-      return isAllowedServeSPA && isServerBusy;
-    }
-
-    const userAgent = req.headers['user-agent'] || '';
-    const isAllowedUserAgent = !(
-      spaConfig.blackList &&
-      typeof spaConfig.blackList === 'function' &&
-      spaConfig.blackList(userAgent)
-    );
-
-    return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
-  }
-
-  function _hasToLoadApp(event) {
-    const { environment } = event;
-
-    return !(
-      (environment.$Server.serveSPA?.allow &&
-        environment.$Server.concurrency === 0) ||
-      process.env.IMA_CLI_FORCE_SPA
-    );
-  }
-
-  function _hasToServeStatic(event) {
-    const { environment } = event;
-
-    if (environment.$Server.degradation) {
-      return environment.$Server.degradation?.isStatic?.(event) ?? false;
-    }
-
-    return (
-      environment.$Server.staticConcurrency !== undefined &&
-      instanceRecycler.getConcurrentRequests() + 1 >
-        environment.$Server.staticConcurrency
-    );
-  }
-
-  function _hasToServeStaticBadRequest(event) {
-    const { req, res } = event;
-    const routeInfo = _getRouteInfo({ req, res });
-
-    const isBadRequest =
-      routeInfo && routeInfo.route.getName() === RouteNames.NOT_FOUND;
-
-    // TODO IMA@19 documentation badRequestConcurrency
-    return isBadRequest && _hasToServeStatic(event);
-  }
-
-  function _hasToServeStaticServerError(event) {
-    const { req, res } = event;
-    const routeInfo = _getRouteInfo({ req, res });
-
-    const isServerError =
-      routeInfo && routeInfo.route.getName() === RouteNames.ERROR;
-
-    return isServerError && _hasToServeStatic(event);
   }
 
   async function _applyError(event) {
@@ -184,11 +177,19 @@ module.exports = function hooksFactory({
   }
 
   async function renderError(event = {}) {
+    event.context?.timing?.start('hooks.renderError', {
+      errorType: event.error?.constructor?.name,
+      isClientError: event.error?.isClientError?.(),
+      isRedirection: event.error?.isRedirection?.(),
+    });
+
     if (
       environment.$Debug &&
       process.env.IMA_CLI_WATCH &&
       !event.error.isRedirection?.()
     ) {
+      event.context?.timing?.end('hooks.renderError');
+
       return devErrorPage(event);
     } else {
       try {
@@ -198,15 +199,24 @@ module.exports = function hooksFactory({
           context.app.oc.get('$Cache').clear();
         }
 
+        let result;
         if (error.isClientError?.()) {
-          return _applyNotFound(event);
+          context?.timing?.track('hooks.renderError.applyNotFound');
+          result = await _applyNotFound(event);
         } else if (error.isRedirection?.()) {
-          return _applyRedirect(event);
+          context?.timing?.track('hooks.renderError.applyRedirect');
+          result = await _applyRedirect(event);
         } else {
-          return _applyError(event);
+          context?.timing?.track('hooks.renderError.applyError');
+          result = await _applyError(event);
         }
+
+        context?.timing?.end('hooks.renderError');
+
+        return result;
       } catch (e) {
         e.cause = event.error;
+        event.context?.timing?.end('hooks.renderError');
 
         return renderStaticServerErrorPage({ ...event, error: e });
       }
@@ -221,30 +231,43 @@ module.exports = function hooksFactory({
 
   function useIMAInitializationRequestHook() {
     emitter.on(Event.Request, async event => {
-      _hasToLoadApp(event) && _importAppMainSync(event);
       _addImaToResponse(event);
     });
   }
 
   function userPerformanceOptimizationRequestHook() {
     emitter.on(Event.Request, async event => {
-      if (_hasToServeSPA(event)) {
-        event.stopPropagation();
-        return renderStaticSPAPage(event);
-      }
+      event.context?.timing?.start('hooks.performanceCheck', {
+        concurrentRequests: instanceRecycler.getConcurrentRequests(),
+        hasReachedMax: instanceRecycler.hasReachedMaxConcurrentRequests(),
+      });
+
+      event.threats = event?.performance?.severity.getThreats();
 
       if (_isServerOverloaded(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveOverloaded',
+        });
         event.stopPropagation();
+
         return renderOverloadedPage(event);
       }
 
       if (_hasToServeStaticBadRequest(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveStaticBadRequest',
+        });
         event.stopPropagation();
+
         return renderStaticClientErrorPage(event);
       }
 
       if (_hasToServeStaticServerError(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveStaticServerError',
+        });
         event.stopPropagation();
+
         return renderStaticServerErrorPage({
           ...event,
           error:
@@ -252,15 +275,54 @@ module.exports = function hooksFactory({
             new Error('The App error route exceed static thresholds.'),
         });
       }
+
+      if (_hasToServeSPA(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveSPA',
+        });
+        event.stopPropagation();
+
+        return renderStaticSPAPage(event);
+      }
+
+      if (_hasToServeSPAPrefetch(event)) {
+        event.context?.timing?.end('hooks.performanceCheck', {
+          result: 'serveSPAPrefetch',
+        });
+
+        // Track SPA prefetch render mode
+        event.context = {
+          ...event.context,
+          flags: {
+            ...event.context.flags,
+            spaPrefetch: true,
+          },
+        };
+
+        return;
+      }
+
+      event.context?.timing?.end('hooks.performanceCheck', {
+        result: 'passed',
+      });
     });
   }
 
   function useIMAHandleRequestHook() {
     emitter.on(Event.Request, async event => {
-      _initApp(event);
+      event.context?.timing?.start('hooks.importAppMain');
+      await _importAppMainAsync(event);
+      event.context?.timing?.end('hooks.importAppMain');
 
+      event.context?.timing?.start('hooks.initApp');
+      await _initApp(event);
+      event.context?.timing?.end('hooks.initApp');
+
+      event.context?.timing?.start('hooks.generateAppResponse');
       event.stopPropagation();
-      return _generateAppResponse(event);
+      const result = _generateAppResponse(event);
+      event.context?.timing?.end('hooks.generateAppResponse');
+      return result;
     });
   }
 
@@ -276,7 +338,9 @@ module.exports = function hooksFactory({
 
   function useUrlParserBeforeRequestHook() {
     emitter.on(Event.BeforeRequest, async event => {
+      event.context?.timing?.start('hooks.urlParser');
       urlParser(event);
+      event.context?.timing?.end('hooks.urlParser');
     });
   }
 
@@ -286,14 +350,72 @@ module.exports = function hooksFactory({
         return event.result;
       }
 
+      event.context?.timing?.start('hooks.createContentVariables');
+      const variables = createContentVariables(event);
+      event.context?.timing?.end('hooks.createContentVariables');
+
       return {
         ...event.result,
-        ...createContentVariables(event),
+        ...variables,
       };
     });
   }
 
   function useResponseHook() {
+    /**
+     * Special hook for handling JSON responses defined using
+     * $responseType property on the controller.
+     */
+    emitter.prependListener(Event.BeforeResponse, async event => {
+      if (!_isValidResponse(event)) {
+        return;
+      }
+
+      event.context?.timing?.start('hooks.checkJsonResponse');
+      const { context, req, res, imaInternal } = event;
+      const isAppExists = context.app && typeof context.app !== 'function';
+
+      if (!isAppExists) {
+        event.context?.timing?.end('hooks.checkJsonResponse');
+
+        return;
+      }
+
+      const routeInfo = await _getRouteInfo({ req, res, imaInternal });
+
+      if (!routeInfo?.route?.getController) {
+        event.context?.timing?.end('hooks.checkJsonResponse');
+
+        return;
+      }
+
+      const controller = await routeInfo.route.getController();
+      const responseType = controller.$responseType;
+
+      // Bail when the response type is not JSON.
+      if (responseType !== 'json') {
+        event.context?.timing?.end('hooks.checkJsonResponse');
+
+        return;
+      }
+
+      event.context?.timing?.end('hooks.checkJsonResponse');
+
+      context?.timing?.start('hooks.serializeJsonResponse');
+      const state = context.app.oc.get('$PageStateManager').getState();
+
+      res.setHeader('Content-Type', 'application/json');
+      context.response.content = JSON.stringify(state);
+      context?.timing?.end('hooks.serializeJsonResponse');
+
+      event.stopPropagation();
+      event.context?.timing?.track('hooks.checkJsonResponse.complete');
+    });
+
+    /**
+     * Serialize the page state and cache, when SPA-prefetch is enabled
+     * we also render the SPA template for the prefetch page.
+     */
     emitter.on(Event.BeforeResponse, async event => {
       if (!_isValidResponse(event)) {
         return;
@@ -303,8 +425,13 @@ module.exports = function hooksFactory({
       const isAppExists = context.app && typeof context.app !== 'function';
 
       if (isAppExists) {
+        context?.timing?.start('hooks.serializePageState');
         const state = context.app.oc.get('$PageStateManager').getState();
+
+        context?.timing?.start('hooks.serializeCache');
         const cache = context.app.oc.get('$Cache').serialize();
+        context?.timing?.end('hooks.serializeCache');
+
         const { headers, cookie } = context.app.oc
           .get('$Response')
           .getResponseParams();
@@ -313,8 +440,27 @@ module.exports = function hooksFactory({
           ...context.response.page,
           ...{ state, cache, headers, cookie },
         };
+
+        context?.timing?.end('hooks.serializePageState');
       }
 
+      // Handle SPA prefetch
+      if (context?.flags?.spaPrefetch) {
+        context?.timing?.start('hooks.renderStaticSPAPrefetchPage');
+
+        context.response = {
+          ...context.response,
+          ...renderStaticSPAPrefetchPage(event),
+        };
+
+        context?.timing?.end('hooks.renderStaticSPAPrefetchPage');
+      }
+    });
+
+    /**
+     * Handle server SPA templates Content Variables preprocessing.
+     */
+    emitter.on(Event.BeforeResponse, async event => {
       // Store copy of BeforeResponse result before emitting new event
       const beforeResponseResult = { ...event.result };
 
@@ -328,7 +474,9 @@ module.exports = function hooksFactory({
       event.result = beforeResponseResult;
 
       // Interpolate contentVariables into the response content
+      event.context?.timing?.start('hooks.processContent');
       event.context.response.content = processContent(event);
+      event.context?.timing?.end('hooks.processContent');
     });
 
     emitter.on(Event.Response, async event => {
@@ -337,6 +485,11 @@ module.exports = function hooksFactory({
         return;
       }
 
+      context?.timing?.start('hooks.sendResponse', {
+        status: context.response.status,
+        contentLength: context.response.content?.length || 0,
+      });
+
       sendResponseHeaders({ res, context });
 
       if (
@@ -344,16 +497,40 @@ module.exports = function hooksFactory({
         context.response.status < 400 &&
         context.response.url
       ) {
+        context?.timing?.track('hooks.sendRedirect', {
+          status: context.response.status,
+          url: context.response.url,
+        });
+
         res.redirect(context.response.status, context.response.url);
+
+        context?.timing?.end('hooks.sendResponse', {
+          type: 'redirect',
+          url: context.response.url,
+        });
+
         return;
       }
 
       res.status(context.response.status);
       res.send(context.response.content);
+
+      context?.timing?.end('hooks.sendResponse', {
+        type: 'content',
+        contentLength: context.response.content?.length || 0,
+        status: context.response.status,
+        static: context.response.static,
+        spa: context.response.SPA,
+        cache: context.response.page.cache,
+        spaPrefetch: context.response.spaPrefetch,
+        error: context.response.error,
+      });
     });
 
     emitter.on(Event.AfterResponse, async event => {
+      event.context?.timing?.start('hooks.clearApp');
       _clearApp(event);
+      event.context?.timing?.end('hooks.clearApp');
     });
   }
 

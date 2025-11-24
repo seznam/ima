@@ -53,6 +53,7 @@ jest.mock('../devErrorPageFactory.js', () => {
       error,
       content: 'dev error page',
       status: 500,
+      imaInternal: {},
     }));
   };
 });
@@ -88,13 +89,9 @@ describe('Server App Factory', () => {
       },
       $Server: {
         concurrency: 1,
-        staticConcurrency: 100,
         protocol: 'http',
         cache: {
           enabled: true,
-        },
-        serveSPA: {
-          allow: true,
         },
       },
     };
@@ -109,6 +106,7 @@ describe('Server App Factory', () => {
       error,
       content: 'dev error page',
       status: 500,
+      imaInternal: {},
     }));
     languageLoader = jest.fn();
     OCCleared = jest.fn();
@@ -225,6 +223,7 @@ describe('Server App Factory', () => {
       status: jest.fn(),
       send: jest.fn(),
       set: jest.fn(),
+      setHeader: jest.fn(),
       redirect: jest.fn(),
       locals: {},
       headerSent: false,
@@ -319,7 +318,7 @@ describe('Server App Factory', () => {
     it('should render 500 ima app page', async () => {
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Custom error messages')));
+        .mockRejectedValue(new Error('Custom error messages'));
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -330,8 +329,10 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
-    it('should render 500 static page', async () => {
-      environment.$Server.staticConcurrency = 0;
+    it('should render 500 static page when degradation logic indicates and then 200 ima app page', async () => {
+      environment.$Server.degradation = {
+        isStatic: () => true,
+      };
       jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
         route: {
           getName() {
@@ -341,29 +342,7 @@ describe('Server App Factory', () => {
       });
       jest
         .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
-
-      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
-
-      expect(response.SPA).toBeFalsy();
-      expect(response.static).toBeTruthy();
-      expect(response.status).toBe(500);
-      expect(response.content).toBe('read file content');
-      expect(response.cache).toBeFalsy();
-    });
-
-    it('should render 500 static page and then 200 ima app page', async () => {
-      environment.$Server.staticConcurrency = 0;
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
-        route: {
-          getName() {
-            return 'home ';
-          },
-        },
-      });
-      jest
-        .spyOn(router, 'route')
-        .mockReturnValue(Promise.reject(new Error('Static 500 error')));
+        .mockRejectedValue(new Error('Static 500 error'));
       pageStateManager.getState.mockImplementation(() => {
         throw new Error('State error');
       });
@@ -378,6 +357,10 @@ describe('Server App Factory', () => {
       expect(OCCleared).toHaveBeenCalledTimes(1);
 
       jest.resetAllMocks();
+      // Clear degradation for second request
+      environment.$Server.degradation = {
+        isStatic: () => false,
+      };
 
       jest.spyOn(router, 'route').mockReturnValue({
         status: 200,
@@ -394,8 +377,11 @@ describe('Server App Factory', () => {
       expect(OCCleared).toHaveBeenCalledTimes(1);
     });
 
-    it('should render 500 static page for ima app route ERROR which exceeds static thresholds', async () => {
-      environment.$Server.staticConcurrency = 0;
+    it('should render 500 static page for ima app route ERROR when degradation logic indicates', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
+      environment.$Server.degradation = {
+        isStatic: () => true,
+      };
       jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
         route: {
           getName() {
@@ -414,10 +400,10 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
-    it('should render SPA page without cache', async () => {
-      jest
-        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-        .mockReturnValue(true);
+    it('should render SPA page without cache when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isSPA: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -426,11 +412,11 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
-    it('should render SPA page without creating IMA app ', async () => {
+    it('should render SPA page without creating IMA app when degradation logic indicates', async () => {
       environment.$Server.concurrency = 0;
-      jest
-        .spyOn(instanceRecycler, 'hasReachedMaxConcurrentRequests')
-        .mockReturnValue(true);
+      environment.$Server.degradation = {
+        isSPA: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -441,8 +427,155 @@ describe('Server App Factory', () => {
       expect(appFactory).not.toHaveBeenCalled();
     });
 
-    it('should render overloaded message', async () => {
-      environment.$Server.overloadConcurrency = 0;
+    it('should render SPA prefetch page when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => true,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.page.state).toEqual({ page: 'state' });
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render SPA prefetch page with forced flag', async () => {
+      process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+
+      delete process.env.IMA_CLI_FORCE_SPA_PREFETCH;
+    });
+
+    it('should fall back to SPA mode when both degradation functions return true', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => true,
+        isSPA: () => true,
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should fall back to prefetched SPA mode (isSPAPrefetch takes precedence)
+      expect(response.SPA).toBeTruthy();
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.static).toBeTruthy();
+    });
+
+    it('should not render SPA prefetch without degradation logic', async () => {
+      // No degradation config set - should not render SPA prefetch
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should not render SPA prefetch when degradation is not defined
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('app html');
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should not render SPA prefetch when degradation logic returns false', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: () => false,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      // Should render normal page, not SPA prefetch
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render SPA prefetch page with array degradation functions - first returns true', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: [
+          () => true, // First function returns true
+          () => false, // Second function should not be called
+        ],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render SPA prefetch page with array degradation functions - second returns true', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: [
+          () => false, // First function returns false
+          () => true, // Second function returns true
+        ],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeTruthy();
+      expect(response.static).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should not render SPA prefetch when all array degradation functions return false', async () => {
+      environment.$Server.degradation = {
+        isSPAPrefetch: [() => false, () => false, () => false],
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.spaPrefetch).toBeFalsy();
+      expect(response.status).toBe(200);
+      expect(appFactory).toHaveBeenCalled();
+    });
+
+    it('should render overloaded message when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isOverloaded: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -452,23 +585,105 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
     });
 
-    it('should render 404 static page for exceed staticConcurrency', async () => {
-      environment.$Server.staticConcurrency = 0;
+    it('should not render overloaded message when degradation logic returns false', async () => {
+      environment.$Server.degradation = {
+        isOverloaded: () => false,
+      };
+
+      jest.spyOn(router, 'route').mockReturnValue({
+        status: 200,
+        content: 'app html',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.status).toBe(200);
+      expect(response.content).toBe('app html');
+    });
+
+    it('should render overloaded message with array degradation functions', async () => {
+      environment.$Server.degradation = {
+        isOverloaded: [
+          () => false,
+          () => true, // Second function triggers overload
+        ],
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(503);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render SPA page when degradation logic indicates', async () => {
+      environment.$Server.degradation = {
+        isSPA: () => true,
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render SPA page with array degradation functions', async () => {
+      environment.$Server.degradation = {
+        isSPA: [
+          () => false,
+          () => false,
+          () => true, // Third function triggers SPA
+        ],
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeTruthy();
+      expect(response.status).toBe(200);
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render static page when degradation logic indicates', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
+      environment.$Server.degradation = {
+        isStatic: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
       expect(response.SPA).toBeFalsy();
       expect(response.status).toBe(404);
-      expect(response.cache).toBeFalsy();
       expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
     });
 
-    it('should render 404 app page for not exceed staticConcurrency', async () => {
+    it('should render static page with array degradation functions', async () => {
+      serverGlobal.set('dummyApp', appFactory().ima.createImaApp());
+      environment.$Server.degradation = {
+        isStatic: [
+          () => false,
+          () => true, // Second function triggers static
+        ],
+      };
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.SPA).toBeFalsy();
+      expect(response.status).toBe(404);
+      expect(response.static).toBeTruthy();
+      expect(response.cache).toBeFalsy();
+    });
+
+    it('should render 404 app page when degradation logic returns false', async () => {
       jest.spyOn(router, 'route').mockReturnValue({
         status: 404,
         content: '404 page',
       });
-      environment.$Server.staticConcurrency = 100;
+      environment.$Server.degradation = {
+        isStatic: () => false,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -479,14 +694,12 @@ describe('Server App Factory', () => {
       expect(response.content).toBe('404 page');
     });
 
-    it('should redirect page with 301 status for exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
+    it('should redirect page with 301 status when degradation logic indicates static', async () => {
+      jest.spyOn(router, 'route').mockRejectedValue(
+        new GenericError('Redirect', {
+          status: 301,
+          url: 'https://imajs.io',
+        })
       );
       jest.spyOn(router, 'isRedirection').mockReturnValue(true);
       jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
@@ -497,7 +710,9 @@ describe('Server App Factory', () => {
         },
       });
 
-      environment.$Server.staticConcurrency = 0;
+      environment.$Server.degradation = {
+        isStatic: () => true,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -509,17 +724,18 @@ describe('Server App Factory', () => {
       expect(RES.redirect).toHaveBeenCalled();
     });
 
-    it('should redirect page with 301 status for not exceed staticConcurrency', async () => {
-      jest.spyOn(router, 'route').mockReturnValue(
-        Promise.reject(
-          new GenericError('Redirect', {
-            status: 301,
-            url: 'https://imajs.io',
-          })
-        )
+    it('should redirect page with 301 status when degradation logic returns false', async () => {
+      jest.spyOn(router, 'route');
+      jest.spyOn(router, 'route').mockRejectedValue(
+        new GenericError('Redirect', {
+          status: 301,
+          url: 'https://imajs.io',
+        })
       );
       jest.spyOn(router, 'isRedirection').mockReturnValue(true);
-      environment.$Server.staticConcurrency = 100;
+      environment.$Server.degradation = {
+        isStatic: () => false,
+      };
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -574,6 +790,38 @@ describe('Server App Factory', () => {
       expect(response.content).toBeNull();
       expect(RES.send).not.toHaveBeenCalled();
       expect(RES.status).not.toHaveBeenCalled();
+    });
+
+    it('should return JSON response for controllers with json response type', async () => {
+      const state = { json: 'data' };
+      pageStateManager.getState.mockReturnValue(state);
+
+      const controller = { $responseType: 'json' };
+
+      const route = {
+        getName() {
+          return 'jsonRoute';
+        },
+        getController: jest.fn().mockResolvedValue(controller),
+      };
+
+      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({ route });
+      jest.spyOn(router, 'route').mockResolvedValue({
+        status: 200,
+        content: 'html content that should be ignored',
+      });
+
+      const response = await serverApp.requestHandlerMiddleware(REQ, RES);
+
+      expect(response.status).toBe(200);
+      expect(response.content).toBe(JSON.stringify(state));
+      expect(response.SPA).toBeFalsy();
+      expect(response.static).toBeFalsy();
+      expect(response.cache).toBeFalsy();
+      expect(RES.setHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/json'
+      );
     });
   });
 

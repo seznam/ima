@@ -5,7 +5,7 @@ import {
   getLanguageEntryPoints,
   resolveEnvironment,
 } from '@ima/cli';
-import { Options } from '@storybook/types';
+import { Options } from '@storybook/core-webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration, RuleSetRule } from 'webpack';
 

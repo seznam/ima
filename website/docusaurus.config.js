@@ -11,8 +11,11 @@ const config = {
   tagline: 'A Javascript framework for creating isomorphic applications.',
   url: 'https://imajs.io/',
   baseUrl: '/',
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/favicon.ico',
   organizationName: 'seznam',
   projectName: 'ima',
@@ -35,9 +38,7 @@ const config = {
         exclude: 'index',
         readme: 'none',
         out: '../docs/api',
-        sidebar: {
-          fullNames: true,
-        },
+        sidebar: {},
       },
     ],
   ],

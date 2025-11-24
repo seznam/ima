@@ -5,6 +5,14 @@ const path = require('path');
 const defaultApplicationFolder = path.resolve('.');
 const { createMonitoring } = require('@esmj/monitor');
 
+const {
+  createUserAgentDegradation,
+  createPathDegradation,
+  createHeaderDegradation,
+  combineAnd,
+  combineOr,
+  invert,
+} = require('./lib/degradation.js');
 const { Emitter, Event } = require('./lib/emitter.js');
 const environmentFactory = require('./lib/factory/environmentFactory');
 const urlParserFactory = require('./lib/factory/urlParserFactory');
@@ -13,6 +21,8 @@ const {
   renderStyles,
   renderScript,
 } = require('./lib/factory/utils/resourcesUtils');
+const { instrumentEmitterWithTimings } = require('./lib/metric/timingMonitor');
+const { TimingTracker } = require('./lib/metric/TimingTracker');
 
 function createIMAServer({
   environment,
@@ -49,10 +59,15 @@ function createIMAServer({
     return devUtils.manifestRequire(`server/locale/${language}.js`).default;
   }
 
+  logger =
+    logger ||
+    (typeof environment?.$Server?.loggerFactory === 'function'
+      ? environment.$Server.loggerFactory({ environment })
+      : console);
+
   emitter = emitter || new Emitter({ logger, debug: false });
   const instanceRecycler = require('./lib/instanceRecycler.js');
   const serverGlobal = require('./lib/serverGlobal.js');
-  logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
 
   const concurrentRequestsMetric =
     require('./lib/metric/concurrentRequestsMetricFactory.js')({
@@ -77,7 +92,6 @@ function createIMAServer({
     require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
-
   serverApp.useIMADefaultHook();
 
   // Lazy init app factory
@@ -103,5 +117,13 @@ module.exports = {
   environmentFactory,
   urlParserFactory,
   sanitizeValue,
+  TimingTracker,
+  instrumentEmitterWithTimings,
   Event,
+  createUserAgentDegradation,
+  createPathDegradation,
+  createHeaderDegradation,
+  combineAnd,
+  combineOr,
+  invert,
 };

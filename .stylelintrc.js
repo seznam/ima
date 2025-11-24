@@ -29,6 +29,7 @@ module.exports = {
     'no-empty-source': null,
     'declaration-empty-line-before': null,
     'no-duplicate-selectors': null,
+    'color-function-alias-notation': null,
     'no-descending-specificity': null,
     'declaration-no-important': [true, { severity: 'warning' }],
     'declaration-property-value-no-unknown': null,

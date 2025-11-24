@@ -29,6 +29,10 @@ class ServerGlobal {
 
     return this._global.get(name);
   }
+
+  delete(name) {
+    return this._global.delete(name);
+  }
 }
 
 const serverGlobal = new ServerGlobal();

@@ -2,11 +2,11 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-import { Environment } from '@ima/core';
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
-import { Configuration } from 'webpack';
+import { MultiConfiguration } from 'webpack';
 
 import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../../types';
 import webpackConfig from '../config';
@@ -22,7 +22,7 @@ const TS_CONFIG_PATHS = ['tsconfig.build.json', 'tsconfig.json'];
  */
 export function resolveEnvironment(
   rootDir: ImaCliArgs['rootDir'] = process.cwd()
-): Environment {
+): ParsedEnvironment {
   return environmentFactory({ applicationFolder: rootDir });
 }
 
@@ -325,8 +325,8 @@ export function createContexts(
     }
   }
 
-  // es2018 targets (taken from 'browserslist-generator')
-  const targets = [
+  // targets (taken from 'browserslist-generator')
+  const es2018Targets = [
     'and_chr >= 63',
     'chrome >= 63',
     'and_ff >= 58',
@@ -370,7 +370,7 @@ export function createContexts(
     lessGlobalsPath,
     useSourceMaps,
     devtool,
-    targets: name === 'client' ? targets : [],
+    targets: name === 'client' ? es2018Targets : [],
   }));
 }
 
@@ -379,14 +379,13 @@ export function createContexts(
  * Additionally it applies all existing configuration overrides from cli plugins
  * and app overrides in this order cli -> plugins -> app.
  *
- * @param {ImaCliArgs} args Parsed CLI and build arguments.
- * @param {ImaConfig} imaConfig Loaded ima config.
- * @returns {Promise<Configuration[]>}
+ * @param args Parsed CLI and build arguments.
+ * @param imaConfig Loaded ima config.
  */
 export async function createWebpackConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
-): Promise<Configuration[]> {
+): Promise<MultiConfiguration> {
   // Create configuration contexts
   logger.info(
     `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
@@ -454,13 +453,13 @@ export async function createWebpackConfig(
         config = await imaConfig.webpack(config, ctx, imaConfig);
       }
 
-      return config;
+      return config as MultiConfiguration;
     })
   ).then(config => {
     // Print elapsed time
     logger.endTracking();
 
-    return config;
+    return config as unknown as MultiConfiguration;
   });
 }
 

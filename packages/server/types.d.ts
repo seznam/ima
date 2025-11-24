@@ -1,8 +1,16 @@
 import { Emitter } from '@esmj/emitter';
-import { Environment } from '@ima/core';
+import { Environment, ParsedEnvironment } from '@ima/core';
 import { Request } from 'express';
 
 declare module '@ima/server' {
+  export interface Logger {
+    log(...args: any[]): void;
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+    debug(...args: any[]): void;
+    trace(...args: any[]): void;
+  }
   export enum Event {
     BeforeError = 'ima.server.beforeError',
     Error = 'ima.server.error',
@@ -38,7 +46,7 @@ declare module '@ima/server' {
   export function renderScript(name: string, script: string): string;
   export function environmentFactory(args: {
     applicationFolder: string;
-  }): Environment;
+  }): ParsedEnvironment;
 
   export function urlParserFactory(params: {
     environment: Environment;

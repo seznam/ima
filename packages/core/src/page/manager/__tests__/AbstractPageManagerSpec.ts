@@ -209,7 +209,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       jest
         .spyOn(pageManager, '_hasOnlyUpdate' as never)
         .mockReturnValue(false as never);
-      jest.spyOn(pageManager, '_getInitialManagedPage' as never);
       jest
         .spyOn(pageManager, '_runPreManageHandlers' as never)
         .mockReturnValue(Promise.resolve() as never);
@@ -246,11 +245,45 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(pageManager['_destroyPageSource']).toHaveBeenCalled();
       expect(pageStateManager.clear).toHaveBeenCalled();
       expect(pageManager._clearComponentState).toHaveBeenCalledWith(options);
-      expect(pageManager['_getInitialManagedPage']).toHaveBeenCalled();
       expect(pageManager['_constructManagedPageValue']).toHaveBeenCalled();
       expect(pageManager['_initPageSource']).toHaveBeenCalled();
       expect(pageManager['_loadPageSource']).toHaveBeenCalled();
       expect(pageManager['_runPostManageHandlers']).toHaveBeenCalled();
+    });
+
+    it('should not get stuck if there is new handling during actual handling', async () => {
+      jest
+        .spyOn(pageManager, 'getViewController' as any)
+        .mockImplementation(async () => {
+          await wait(100);
+          return { controller: controllerMock, view: '' };
+        });
+
+      await pageManager.preManage();
+      jest.useRealTimers();
+
+      //new handling during BeforeHandleRoute phase
+      const preManagePromise = new Promise<boolean>(resolve => {
+        setTimeout(async () => {
+          // in Jest there is probelm catch async cancellation rejection
+          pageManager['_previousManagedPage'].state.abort = undefined;
+          await pageManager.preManage();
+          resolve(true);
+        }, 0);
+      });
+
+      const managePromise = pageManager.manage({
+        route,
+        options,
+      });
+      await managePromise;
+
+      await pageManager.postManage();
+
+      const result = await preManagePromise;
+      expect(result).toBe(true);
+
+      jest.useFakeTimers();
     });
 
     it('should cancel loading of async handlers', async () => {
@@ -369,11 +402,20 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(pageFactory.createController).toHaveBeenCalledTimes(1);
     });
 
-    it('should clear previously managed page after successful handling', async () => {
+    it('should clear previously managed page in postManage after successful handling', async () => {
       await pageManager.manage({
         route,
         options,
       });
+
+      // Resolve page promise in timeout
+      jest.runOnlyPendingTimers();
+
+      expect(JSON.stringify(pageManager['_previousManagedPage'])).not.toBe(
+        JSON.stringify(pageManager['_getInitialManagedPage']())
+      );
+
+      await pageManager.postManage();
 
       // Resolve page promise in timeout
       jest.runOnlyPendingTimers();

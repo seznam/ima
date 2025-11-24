@@ -51,6 +51,7 @@ const sidebars = {
         },
         'basic-features/extensions',
         'basic-features/object-container',
+        'basic-features/json-controllers',
         'basic-features/rendering-process',
         'basic-features/handling-scripts-and-styles',
         'basic-features/page-manager',
@@ -92,7 +93,7 @@ const sidebars = {
       type: 'category',
       label: 'Server',
       collapsed: false,
-      items: ['server/events'],
+      items: ['server/events', 'server/performance', 'server/timing-tracking'],
     },
     {
       type: 'category',
@@ -121,6 +122,7 @@ const sidebars = {
         'migration/migration-17.0.0',
         'migration/migration-18.0.0',
         'migration/migration-19.0.0',
+        'migration/migration-20.0.0',
       ],
     },
     {
