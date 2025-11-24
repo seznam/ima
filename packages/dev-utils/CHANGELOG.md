@@ -1,5 +1,16 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- fcb8017: Production logger is now simple json logger without colors, default dev logger is console
+
+### Patch Changes
+
+- 0437d18: RC release.
+
 ## 20.0.0-rc.1
 
 ### Patch Changes

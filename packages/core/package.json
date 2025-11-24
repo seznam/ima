@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "20.0.0-rc.5",
+  "version": "20.0.0",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@esmj/task": "^0.5.2",
-    "@ima/helpers": "^20.0.0-rc.0",
+    "@ima/helpers": "^20.0.0",
     "@types/node": "^24.10.1",
     "@types/webpack": "^5.28.5",
     "@types/yargs": "^17.0.34",
@@ -70,7 +70,7 @@
     "type-fest": "^5.2.0"
   },
   "devDependencies": {
-    "@ima/plugin-cli": "^20.0.0-rc.0",
+    "@ima/plugin-cli": "^20.0.0",
     "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
     "@types/merge-deep": "^3.0.3",

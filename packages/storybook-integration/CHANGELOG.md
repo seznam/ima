@@ -1,5 +1,17 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+
+### Patch Changes
+
+- 30c7410: Re-release with storybook fix
+- 0437d18: RC release.
+- 9b52dcc: Await async ima methods in storybook loader, add awaits for more methods which can be async in future
+
 ## 20.0.0-rc.3
 
 ### Patch Changes

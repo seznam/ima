@@ -1,5 +1,18 @@
 # @ima/testing-library
 
+## 20.0.0
+
+### Major Changes
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 3f6ee97: Moved most of the default settings and environemnt config from the CIA template to the core. This means that most of the settings have defaults and don't need to be defined in the config.
+
+  This is not necessarily a breaking change, but it is a major change because it changes the default behavior of the app.
+
+### Patch Changes
+
+- 0437d18: RC release.
+
 ## 20.0.0-rc.1
 
 ### Patch Changes

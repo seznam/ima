@@ -1,5 +1,27 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 3f6ee97: Moved most of the default settings and environemnt config from the CIA template to the core. This means that most of the settings have defaults and don't need to be defined in the config.
+
+  This is not necessarily a breaking change, but it is a major change because it changes the default behavior of the app.
+
+### Minor Changes
+
+- b2e0eee: Added support for 'json' response type in controllers, enabling direct JSON responses from server-side routes without rendering HTML. Introduced the 'use server' directive in the CLI to strip server-only code (e.g., controllers with 'use server') from client bundles, optimizing bundle size and preventing server code leakage to the client. Currently, its main purpose is for JSON controllers, but it effectively stubs any exports from the file and removes the implementation in client bundles.
+
+### Patch Changes
+
+- 274bbd3: Fixed degradation export
+- 67e6a38: Changed degradation order pattern
+- c95d170: Fixed CIA dependencies to target latest RC versions of IMA 20
+- 0f1012a: Fixed invalid versions in package.json
+- 0437d18: RC release.
+- 8cba9ff: Bump version of plugin-testing-integration with support for new degradation methods
+
 ## 20.0.0-rc.6
 
 ### Patch Changes

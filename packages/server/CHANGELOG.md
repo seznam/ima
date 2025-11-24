@@ -1,5 +1,128 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- f9120bf: ### Asynchronous application bootstrap
+
+  The application bootstrap process has been refactored to be fully asynchronous.
+
+  **BREAKING CHANGE:** The entire application bootstrap process is now asynchronous.
+  - The `bootstrap.run()` method now returns a `Promise`.
+  - The client-side `bootClientApp()` and `reviveClientApp()` functions are now `async` and must be `await`ed.
+  - On the server-side, the application initialization is also asynchronous. If you have custom hooks for `CreateImaApp` or `Request` events, they may need to be updated to handle asynchronous operations.
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 167d0e1: - Added new SPA Prefetch render mode, for more information see the documentation.
+
+  ## BREAKING CHANGES
+
+  The degradation logic has been completely refactored. The old concurrency-based and SPA configuration options have been removed in favor of a more flexible degradation function system.
+
+  #### Removed Environment Options
+
+  The following environment configuration options have been **removed**:
+  - `$Server.staticConcurrency` - Removed, use `degradation.isStatic` function instead
+  - `$Server.overloadConcurrency` - Removed, use `degradation.isOverloaded` function instead
+  - `$Server.serveSPA.allow` - Removed, use `degradation.isSPA` function instead
+  - `$Server.serveSPA.blackList` - Removed, use `degradation.isSPA` with user agent degradation instead
+
+  #### Migration Guide
+
+  **Before (old configuration):**
+
+  ```javascript
+  module.exports = {
+    prod: {
+      $Server: {
+        staticConcurrency: 100,
+        overloadConcurrency: 100,
+        serveSPA: {
+          allow: true,
+          blackList: (userAgent) =>
+            new RegExp("Googlebot|SeznamBot").test(userAgent),
+        },
+      },
+    },
+  };
+  ```
+
+  **After (new configuration):**
+
+  ```javascript
+  const {
+    createUserAgentDegradation,
+    invert,
+  } = require("@ima/server/degradation");
+
+  module.exports = {
+    prod: {
+      $Server: {
+        degradation: {
+          // Replace serveSPA.blackList: serve SPA for all user agents EXCEPT bots
+          isSPA: invert(createUserAgentDegradation(/Googlebot|SeznamBot/i)),
+
+          // Replace staticConcurrency: serve static pages when needed
+          isStatic: (event) => {
+            // Your custom logic here
+            return false;
+          },
+
+          // Replace overloadConcurrency: show overload message when needed
+          isOverloaded: (event) => {
+            // Your custom logic here
+            return false;
+          },
+        },
+      },
+    },
+  };
+  ```
+
+  #### Replacing SPA Blacklist
+
+  To replace the old `serveSPA.blackList` functionality, use the `invert` helper with `createUserAgentDegradation`:
+
+  ```javascript
+  const {
+    createUserAgentDegradation,
+    invert,
+  } = require("@ima/server/degradation");
+
+  module.exports = {
+    prod: {
+      $Server: {
+        degradation: {
+          // Old: blackList: userAgent => /Googlebot|SeznamBot/.test(userAgent)
+          // New: Serve SPA for all requests EXCEPT those matching the blacklist pattern
+          isSPA: invert(createUserAgentDegradation(/Googlebot|SeznamBot/i)),
+        },
+      },
+    },
+  };
+  ```
+
+  For more information and examples, see the [Performance & Degradation documentation](/docs/server/performance).
+
+- a03390d: Removed $IMA.$Path without any replacements since it imposed security riscs
+- 3f6ee97: Moved most of the default settings and environemnt config from the CIA template to the core. This means that most of the settings have defaults and don't need to be defined in the config.
+
+  This is not necessarily a breaking change, but it is a major change because it changes the default behavior of the app.
+
+- fcb8017: Production logger is now simple json logger without colors, default dev logger is console
+
+### Minor Changes
+
+- b2e0eee: Added support for 'json' response type in controllers, enabling direct JSON responses from server-side routes without rendering HTML. Introduced the 'use server' directive in the CLI to strip server-only code (e.g., controllers with 'use server') from client bundles, optimizing bundle size and preventing server code leakage to the client. Currently, its main purpose is for JSON controllers, but it effectively stubs any exports from the file and removes the implementation in client bundles.
+- cdb1471: Added new TimingTracker class for tracking timing performance. Including instrumentEmitterWithTimings function for automatic integration with the IMA.js event system.
+
+### Patch Changes
+
+- 274bbd3: Fixed degradation export
+- 67e6a38: Changed degradation order pattern
+- 0437d18: RC release.
+
 ## 20.0.0-rc.6
 
 ### Patch Changes

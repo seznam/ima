@@ -1,5 +1,21 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- 605f998: Updated `chokidar` to version 4. This comes with breaking change where globs are NO LONGER SUPPORTED, in the `additionalWatchPaths` option. Just use base paths to directories, all their contents will be watched automatically or paths to files.
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 01d15d8: ES build is now ES2024 instead of ES2022
+
+### Patch Changes
+
+- 0437d18: RC release.
+- Updated dependencies [8b10a9b]
+- Updated dependencies [0437d18]
+- Updated dependencies [fcb8017]
+  - @ima/dev-utils@20.0.0
+
 ## 20.0.0-rc.2
 
 ### Patch Changes

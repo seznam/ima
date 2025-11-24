@@ -1,5 +1,45 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- f9120bf: ### Asynchronous application bootstrap
+
+  The application bootstrap process has been refactored to be fully asynchronous.
+
+  **BREAKING CHANGE:** The entire application bootstrap process is now asynchronous.
+  - The `bootstrap.run()` method now returns a `Promise`.
+  - The client-side `bootClientApp()` and `reviveClientApp()` functions are now `async` and must be `await`ed.
+  - On the server-side, the application initialization is also asynchronous. If you have custom hooks for `CreateImaApp` or `Request` events, they may need to be updated to handle asynchronous operations.
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 01d15d8: ES build is now ES2024 instead of ES2022
+- a03390d: Removed $IMA.$Path without any replacements since it imposed security riscs
+- 3f6ee97: Moved most of the default settings and environemnt config from the CIA template to the core. This means that most of the settings have defaults and don't need to be defined in the config.
+
+  This is not necessarily a breaking change, but it is a major change because it changes the default behavior of the app.
+
+### Minor Changes
+
+- b2e0eee: Added support for 'json' response type in controllers, enabling direct JSON responses from server-side routes without rendering HTML. Introduced the 'use server' directive in the CLI to strip server-only code (e.g., controllers with 'use server') from client bundles, optimizing bundle size and preventing server code leakage to the client. Currently, its main purpose is for JSON controllers, but it effectively stubs any exports from the file and removes the implementation in client bundles.
+- cac7d53: Minor cache serialization/deserialization performance improvements
+
+### Patch Changes
+
+- 0437d18: RC release.
+- 54d471e: Fix AbstractPageManager
+  - **What?** Fix AbstractPageManager when there is new routing during BEFORE_HANDLE_ROUTE phase.
+  - **Why?** The process of handling stuck when there is new routing during BEFORE_HANDLE_ROUTE phase.
+  - **How?** Nothing.
+
+- 274bbd3: Fixed setting types with defaults
+- b54035e: Remove MessageChannel polyfill for jest.
+- Updated dependencies [35e4b9a]
+- Updated dependencies [8b10a9b]
+- Updated dependencies [0437d18]
+  - @ima/helpers@20.0.0
+
 ## 20.0.0-rc.5
 
 ### Patch Changes

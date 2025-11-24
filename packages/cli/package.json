@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "20.0.0-rc.4",
+  "version": "20.0.0",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -35,10 +35,10 @@
     "@babel/parser": "^7.28.5",
     "@babel/traverse": "^7.28.5",
     "@babel/types": "^7.28.5",
-    "@ima/dev-utils": "^20.0.0-rc.0",
-    "@ima/error-overlay": "^20.0.0-rc.0",
-    "@ima/helpers": "^20.0.0-rc.0",
-    "@ima/hmr-client": "^20.0.0-rc.0",
+    "@ima/dev-utils": "^20.0.0",
+    "@ima/error-overlay": "^20.0.0",
+    "@ima/helpers": "^20.0.0",
+    "@ima/hmr-client": "^20.0.0",
     "@messageformat/core": "^3.4.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "@swc/core": "^1.15.1",
@@ -88,8 +88,8 @@
     "@types/express": "^5.0.5"
   },
   "peerDependencies": {
-    "@ima/core": ">=20.0.0-rc.0",
-    "@ima/server": ">=20.0.0-rc.0",
+    "@ima/core": ">=20.0.0",
+    "@ima/server": ">=20.0.0",
     "express": ">=4"
   },
   "publishConfig": {

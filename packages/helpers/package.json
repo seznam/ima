@@ -1,6 +1,6 @@
 {
   "name": "@ima/helpers",
-  "version": "20.0.0-rc.1",
+  "version": "20.0.0",
   "description": "Various helpers for the IMA.js framework.",
   "keywords": [
     "ima",

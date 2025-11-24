@@ -1,5 +1,119 @@
 # Change Log
 
+## 20.0.0
+
+### Major Changes
+
+- 8b10a9b: Follow v20.0.0 migration guide [here](https://imajs.io/migration/migration-20.0.0).
+- 167d0e1: - Added new SPA Prefetch render mode, for more information see the documentation.
+
+  ## BREAKING CHANGES
+
+  The degradation logic has been completely refactored. The old concurrency-based and SPA configuration options have been removed in favor of a more flexible degradation function system.
+
+  #### Removed Environment Options
+
+  The following environment configuration options have been **removed**:
+  - `$Server.staticConcurrency` - Removed, use `degradation.isStatic` function instead
+  - `$Server.overloadConcurrency` - Removed, use `degradation.isOverloaded` function instead
+  - `$Server.serveSPA.allow` - Removed, use `degradation.isSPA` function instead
+  - `$Server.serveSPA.blackList` - Removed, use `degradation.isSPA` with user agent degradation instead
+
+  #### Migration Guide
+
+  **Before (old configuration):**
+
+  ```javascript
+  module.exports = {
+    prod: {
+      $Server: {
+        staticConcurrency: 100,
+        overloadConcurrency: 100,
+        serveSPA: {
+          allow: true,
+          blackList: (userAgent) =>
+            new RegExp("Googlebot|SeznamBot").test(userAgent),
+        },
+      },
+    },
+  };
+  ```
+
+  **After (new configuration):**
+
+  ```javascript
+  const {
+    createUserAgentDegradation,
+    invert,
+  } = require("@ima/server/degradation");
+
+  module.exports = {
+    prod: {
+      $Server: {
+        degradation: {
+          // Replace serveSPA.blackList: serve SPA for all user agents EXCEPT bots
+          isSPA: invert(createUserAgentDegradation(/Googlebot|SeznamBot/i)),
+
+          // Replace staticConcurrency: serve static pages when needed
+          isStatic: (event) => {
+            // Your custom logic here
+            return false;
+          },
+
+          // Replace overloadConcurrency: show overload message when needed
+          isOverloaded: (event) => {
+            // Your custom logic here
+            return false;
+          },
+        },
+      },
+    },
+  };
+  ```
+
+  #### Replacing SPA Blacklist
+
+  To replace the old `serveSPA.blackList` functionality, use the `invert` helper with `createUserAgentDegradation`:
+
+  ```javascript
+  const {
+    createUserAgentDegradation,
+    invert,
+  } = require("@ima/server/degradation");
+
+  module.exports = {
+    prod: {
+      $Server: {
+        degradation: {
+          // Old: blackList: userAgent => /Googlebot|SeznamBot/.test(userAgent)
+          // New: Serve SPA for all requests EXCEPT those matching the blacklist pattern
+          isSPA: invert(createUserAgentDegradation(/Googlebot|SeznamBot/i)),
+        },
+      },
+    },
+  };
+  ```
+
+  For more information and examples, see the [Performance & Degradation documentation](/docs/server/performance).
+
+- 01d15d8: ES build is now ES2024 instead of ES2022
+
+### Minor Changes
+
+- b2e0eee: Added support for 'json' response type in controllers, enabling direct JSON responses from server-side routes without rendering HTML. Introduced the 'use server' directive in the CLI to strip server-only code (e.g., controllers with 'use server') from client bundles, optimizing bundle size and preventing server code leakage to the client. Currently, its main purpose is for JSON controllers, but it effectively stubs any exports from the file and removes the implementation in client bundles.
+
+### Patch Changes
+
+- 0437d18: RC release.
+- Updated dependencies [35e4b9a]
+- Updated dependencies [8b10a9b]
+- Updated dependencies [0437d18]
+- Updated dependencies [fcb8017]
+  - @ima/error-overlay@20.0.0
+  - @ima/helpers@20.0.0
+  - @ima/hmr-client@20.0.0
+  - @ima/dev-utils@20.0.0
+
 ## 20.0.0-rc.4
 
 ### Patch Changes
