@@ -1,5 +1,4 @@
 ---
-"@ima/devtools-scripts": major
 "@ima/error-overlay": major
 "@ima/helpers": major
 "@ima/hmr-client": major

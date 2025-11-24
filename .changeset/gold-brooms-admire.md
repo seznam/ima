@@ -3,8 +3,6 @@
 "@ima/cli": major
 "create-ima-app": major
 "@ima/dev-utils": major
-"@ima/devtools": major
-"@ima/devtools-scripts": major
 "@ima/error-overlay": major
 "@ima/helpers": major
 "@ima/hmr-client": major

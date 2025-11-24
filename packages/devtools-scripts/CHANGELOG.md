@@ -1,17 +1,5 @@
 # Change Log
 
-## 20.0.0-rc.1
-
-### Patch Changes
-
-- 0437d18: RC release.
-
-## 20.0.0-rc.0
-
-### Major Changes
-
-- 35e4b9a: IMA @20 RC version
-
 ## 19.0.0
 
 ### Major Changes

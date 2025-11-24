@@ -1,11 +1,5 @@
 # Change Log
 
-## 1.0.1-rc.0
-
-### Patch Changes
-
-- 0437d18: RC release.
-
 ## 1.0.0
 
 ### Major Changes
