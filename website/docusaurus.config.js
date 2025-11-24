@@ -11,6 +11,7 @@ const config = {
   tagline: 'A Javascript framework for creating isomorphic applications.',
   url: 'https://imajs.io/',
   baseUrl: '/',
+  onBrokenLinks: 'warn',
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: 'warn',
