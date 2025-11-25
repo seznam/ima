@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.1
+
+### Patch Changes
+
+- b9dc7da: Remove language settings from default dev environment
+
 ## 20.0.0
 
 ### Major Changes
