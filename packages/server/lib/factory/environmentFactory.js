@@ -50,9 +50,6 @@ const defaultEnvironment = {
 
   dev: {
     $Debug: true,
-    $Language: {
-      '//*:*': 'en',
-    },
     $Server: {
       // Max number of app instances to recycle (pool size)
       concurrency: 1,
