@@ -121,6 +121,8 @@ If using additional packages:
 
 ```bash
 npm install @ima/plugin-cli@20
+
+npm install @ima/storybook-integration@20
 ```
 
 ### 2. Update Node.js & Build Tools
