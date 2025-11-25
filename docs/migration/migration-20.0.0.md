@@ -114,13 +114,15 @@ Settings that now have defaults:
 Update all IMA.js packages to version 20.x.x:
 
 ```bash
-npm install @ima/core@20 @ima/server@20 @ima/cli@20 @ima/react-page-renderer@20 @ima/testing-library@20
+npm install @ima/core@20 @ima/server@20 @ima/cli@20 @ima/react-page-renderer@20 @ima/testing-library@20 @ima/helpers@20
 ```
 
 If using additional packages:
 
 ```bash
 npm install @ima/plugin-cli@20
+
+npm install @ima/storybook-integration@20
 ```
 
 ### 2. Update Node.js & Build Tools
