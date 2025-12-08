@@ -389,14 +389,13 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
 
     if (!this._hydrated && this._viewContainer.children.length) {
       this._hydrateViewAdapter();
-      this._hydrated = true;
-
-      return this._mounted;
     } else {
       this._renderViewAdapter(this._getRenderCallback());
-
-      return this._mounted;
     }
+
+    this._hydrated = true;
+
+    return this._mounted;
   }
 
   /**
