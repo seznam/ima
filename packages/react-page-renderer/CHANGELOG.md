@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.1
+
+### Patch Changes
+
+- 961232f: Fix the second React render for SPA and SPAPrefetch modes, which tried to hydrate components instead of rendering them.
+
 ## 20.0.0
 
 ### Major Changes
