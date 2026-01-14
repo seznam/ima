@@ -80,7 +80,9 @@ module.exports = function environmentFactory({
 
   let currentEnvironment = baseEnvConfig[env] || {};
 
-  const $Language = Object.assign({}, currentEnvironment.$Language);
+  const $Language =
+    currentEnvironment.$Language &&
+    Object.assign({}, currentEnvironment.$Language);
 
   currentEnvironment = helpers.resolveEnvironmentSetting(baseEnvConfig, env);
 
@@ -89,7 +91,7 @@ module.exports = function environmentFactory({
       '//*:*': 'en',
     };
   } else {
-    if (Object.keys($Language).length > 0) {
+    if ($Language) {
       currentEnvironment.$Language = $Language;
     }
   }
