@@ -18,14 +18,14 @@ const IGNORED_PACKAGES = [
 ];
 
 const cliArgs = yargs(hideBin(process.argv))
-  .usage('Usage: npm run dev <destFolder>')
+  .usage('Usage: pnpm run dev <destFolder>')
   .example([
-    ['npm run dev ~/Desktop/ima-app'],
-    ['npm run dev ~/Desktop/ima-app -- --watch=core cli hmr-client'],
-    ['npm run dev ~/Desktop/ima-app -- --force'],
-    ['npm run dev ~/Desktop/ima-app -- --force --watch=server core'],
-    ['npm run dev ~/Desktop/ima-app -- --build'],
-    ['npm run dev ~/Desktop/ima-app -- --watch'],
+    ['pnpm run dev ~/Desktop/ima-app'],
+    ['pnpm run dev ~/Desktop/ima-app --watch=core cli hmr-client'],
+    ['pnpm run dev ~/Desktop/ima-app --force'],
+    ['pnpm run dev ~/Desktop/ima-app --force --watch=server core'],
+    ['pnpm run dev ~/Desktop/ima-app --build'],
+    ['pnpm run dev ~/Desktop/ima-app --watch'],
   ])
   .positional('destFolder', {
     type: 'string',

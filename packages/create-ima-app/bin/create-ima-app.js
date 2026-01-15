@@ -55,5 +55,6 @@ if (nodeMajorVersion > MAX_NODE_VERSION) {
 // Run create script
 create(
   process.argv[2],
-  process.argv.includes('--typescript') || process.argv.includes('-ts')
+  process.argv.includes('--typescript') || process.argv.includes('-ts'),
+  process.argv.includes('--pnpm')
 );

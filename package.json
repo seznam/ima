@@ -28,25 +28,24 @@
   ],
   "scripts": {
     "dev": "node ./utils/scripts/dev.js",
-    "build": "npm run build --workspaces --if-present",
-    "commit": "echo 'This command has been replaced with \"npm run changeset\"'",
+    "build": "pnpm run --recursive --if-present build",
+    "commit": "echo 'This command has been replaced with \"pnpm run changeset\"'",
     "changeset": "changeset add",
-    "postinstall": "npm run build",
     "lint": "eslint --cache --cache-location=node_modules/.cache/ './**/*.{js,jsx,ts,tsx,mjs}'",
     "prepare": "husky",
-    "release": "npm run release:prepare && npm run release:push",
-    "release:prepare": "npm run check:uncommited:changes && changeset version && npm i --package-lock-only --ignore-scripts",
-    "release:push": "git add .changeset package-lock.json packages/*/CHANGELOG.md packages/*/package.json && git commit -m 'Publish' && changeset tag && git push --follow-tags",
-    "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
-    "release:graduate": "npm run check:uncommited:changes && changeset pre exit && node utils/changesets/config-base-branch-replace.js master && changeset version && npm i --package-lock-only --ignore-scripts && npm run release:push",
+    "release": "pnpm run release:prepare && pnpm run release:push",
+    "release:prepare": "pnpm run check:uncommited:changes && changeset version && pnpm i --lockfile-only --ignore-scripts",
+    "release:push": "git add .changeset pnpm-lock.yaml packages/*/CHANGELOG.md packages/*/package.json && git commit -m 'Publish' && changeset tag && git push --follow-tags",
+    "release:devtools": "pnpm run --filter ./packages/devtools publish-webstore",
+    "release:graduate": "pnpm run check:uncommited:changes && changeset pre exit && node utils/changesets/config-base-branch-replace.js master && changeset version && pnpm i --lockfile-only --ignore-scripts && pnpm run release:push",
     "release:next:init": "changeset pre enter rc && node utils/changesets/config-base-branch-replace.js next",
     "release:publish": "changeset publish --no-git-tag",
     "stylelint": "stylelint --cache --cache-location=node_modules/.cache/ './**/*.{css,less}'",
     "test": "jest --changedSince `test -f '.changeset/pre.json' && echo 'next' || echo 'master'`",
     "test:all": "jest --colors",
     "test:create-ima-app": "utils/tests/testRunner.sh",
-    "test:size": "npm run test:size --workspaces --if-present",
-    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/common/package.json",
+    "test:size": "pnpm run --recursive --if-present test:size",
+    "version": "pnpm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/common/package.json",
     "check:uncommited:changes": "test \"`git status . --porcelain`\" && echo 'There are uncommitted changes. Aborting release.' && exit 1 || exit 0"
   },
   "lint-staged": {
@@ -88,7 +87,7 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^29.1.0",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "fs-extra": "^11.3.2",
@@ -107,7 +106,7 @@
     "postcss-less": "6.0.0",
     "postcss-loader": "^8.2.0",
     "postcss-preset-env": "^10.4.0",
-    "prettier": "^3.6.2",
+    "prettier": "3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rollup": "^4.53.2",
@@ -126,8 +125,8 @@
     "webpack-cli": "^6.0.1",
     "yargs": "^18.0.0"
   },
-  "overrides": {
-    "enzyme": {
+  "pnpm": {
+    "overrides": {
       "cheerio": "1.0.0-rc.12"
     }
   }
