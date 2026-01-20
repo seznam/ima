@@ -305,6 +305,7 @@ export default async (
       minimize: ctx.command === 'build' && !isServer,
       minimizer: [
         new TerserPlugin({
+          exclude: /server\/runner\.js$/,
           minify: TerserPlugin.swcMinify,
           terserOptions: {
             ecma: isServer || isClientES ? 2020 : 2018,
