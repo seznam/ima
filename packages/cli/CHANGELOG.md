@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.1
+
+### Patch Changes
+
+- 27190d2: The server/runner.js file ensures that IIFE functions are preserved and avoids generating global variables.
+
 ## 20.0.0
 
 ### Major Changes
