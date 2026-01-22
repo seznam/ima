@@ -29,9 +29,10 @@
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "publish-webstore": "npm run build && npm run upload",
+    "publish-webstore": "pnpm run build && pnpm run upload",
     "stylelint": "stylelint './**/*.less'",
-    "upload": "chrome-webstore-upload upload --source ./dist --auto-publish"
+    "upload": "chrome-webstore-upload upload --source ./dist --auto-publish",
+    "prepare": "pnpm run build"
   },
   "devDependencies": {
     "@ima/devtools-scripts": "^19.0.0",
