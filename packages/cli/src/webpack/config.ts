@@ -26,8 +26,6 @@ import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { ManifestPlugin } from './plugins/ManifestPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
-  createCacheKey,
-  IMA_CONF_FILENAME,
   createPolyfillEntry,
   createDevServerConfig,
   getCurrentCoreJsVersion,
@@ -283,24 +281,7 @@ export default async (
       hotUpdateMainFilename: `${outputFolders.hot}/[runtime].[fullhash].hot-update.json`,
       ...(isServer && { library: { type: 'commonjs2' } }),
     },
-    cache: {
-      type: 'filesystem',
-      name: `${name}-${ctx.command}-${mode}`,
-      version: createCacheKey(ctx, imaConfig, {
-        ...devServerConfig,
-        $Debug: isDebug,
-        coreJsVersion: 'core-js',
-        devtool,
-      }),
-      store: 'pack',
-      hashAlgorithm: 'xxhash64',
-      memoryCacheUnaffected: true,
-      buildDependencies: {
-        imaCli: [require.resolve('@ima/cli')],
-        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)],
-        defaultConfig: [__filename],
-      },
-    },
+    cache: { type: 'memory' },
     optimization: {
       minimize: ctx.command === 'build' && !isServer,
       minimizer: [
