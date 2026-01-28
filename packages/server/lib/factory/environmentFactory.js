@@ -39,7 +39,7 @@ const defaultEnvironment = {
         cacheKeyGenerator: null,
         entryTtl: 15 * 1000,
         unusedEntryTtl: 10 * 1000,
-        maxEntries: 500,
+        maxEntries: 200,
       },
       loggerFactory: createJSONLogger,
     },
