@@ -15,7 +15,7 @@ function _writeLog(channel, level, data) {
     data: typeof data === 'string' ? { message: data } : data,
   });
 
-  channel.write(logData); // use direct write to avoid extra formatting (e.g., from console.error)
+  channel.write(logData + '\n'); // use direct write to avoid extra formatting (e.g., from console.error)
 }
 
 /**
