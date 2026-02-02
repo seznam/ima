@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.1
+
+### Patch Changes
+
+- 76167dc: Fix type definition of $Sever: add loggerFactory definition and remove obsolete logger definition.
+
 ## 20.0.0
 
 ### Major Changes

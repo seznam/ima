@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.4
+
+### Patch Changes
+
+- 2e4effa: Fix missing production logging newline
+
 ## 20.0.3
 
 ### Patch Changes
