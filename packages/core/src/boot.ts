@@ -178,12 +178,18 @@ export interface Environment {
        */
       maxEntries?: number;
     };
-    logger?: {
-      /**
-       * Use "simple", "JSON" or "dev". "dev" option produces colorful output
-       * with source-mapping of error stacks. This is usefull in development.
-       */
-      formatting?: 'simple' | 'dev' | 'JSON';
+
+    /**
+     * Logger factory function that returns a logger instance with console-like methods.
+     * The function may optionally accept environment parameters.
+     */
+    loggerFactory?: (params?: { environment: Environment }) => {
+      log: (...args: any[]) => void;
+      info: (...args: any[]) => void;
+      warn: (...args: any[]) => void;
+      error: (...args: any[]) => void;
+      debug: (...args: any[]) => void;
+      [key: string]: any;
     };
 
     /**
