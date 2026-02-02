@@ -450,7 +450,7 @@ module.exports = {
 
 #### New configuration:
 ```javascript
-const { createUserAgentDegradation, invert } = require('@ima/server/degradation');
+const { createUserAgentDegradation, invert } = require('@ima/server');
 
 module.exports = {
   prod: {
