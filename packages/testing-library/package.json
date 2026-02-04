@@ -23,7 +23,8 @@
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js"
+    "test": "jest -c jest.config.js",
+    "prepare": "pnpm run build"
   },
   "exports": {
     ".": {
@@ -61,6 +62,9 @@
       "import": "./dist/esm/jestSetupFileAfterEnv.js",
       "default": "./dist/cjs/jestSetupFileAfterEnv.js"
     }
+  },
+  "devDependencies": {
+    "@ima/plugin-cli": "^20.0.0"
   },
   "dependencies": {
     "@messageformat/core": "^3.4.0",

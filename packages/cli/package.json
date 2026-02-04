@@ -28,7 +28,8 @@
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest -c jest.config.js",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "pnpm run test --watch",
+    "prepare": "pnpm run build"
   },
   "dependencies": {
     "@babel/generator": "^7.28.5",

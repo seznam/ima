@@ -21,19 +21,19 @@ jobs:
       - uses: ./.github/actions/prepare-workspace
 
       - name: Run Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run Stylelint
-        run: npm run stylelint
+        run: pnpm run stylelint
 
       - name: Run Tests
-        run: npm run test:all
+        run: pnpm run test:all
 
       - name: Run Bundle Size Test
-        run: npm run test:size
+        run: pnpm run test:size
 
       - name: Run Create IMA App Test
-        run: npm run test:create-ima-app
+        run: pnpm run test:create-ima-app
 
   release:
     if: github.ref_name == 'master' || github.ref_name == 'next'
@@ -50,7 +50,7 @@ jobs:
       - name: Release new versions
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm run release:publish
+        run: pnpm run release:publish
 
       - name: Create GitHub Releases
         uses: seznam/changeset-create-release@main

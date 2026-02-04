@@ -15,7 +15,7 @@
     "typeRoots": [
       "./types",
       "./node_modules/@types",
-      "./node_modules/@ima"
+      "./node_modules/@ima",
     ],
-  }
+  },
 }
