@@ -13,8 +13,10 @@ export async function getIMAResponseContent(): Promise<string> {
     manifestRequire: () => ({}),
   };
 
+  await serverConfig.beforeCreateIMAServer();
+
   // Prepare serverApp with environment override
-  const { serverApp } = await createIMAServer({
+  const imaServer = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
     processEnvironment: currentEnvironment =>
@@ -31,8 +33,10 @@ export async function getIMAResponseContent(): Promise<string> {
       }),
   });
 
+  await serverConfig.afterCreateIMAServer(imaServer);
+
   // Generate request response
-  const response = await serverApp.requestHandler(
+  const response = await imaServer.serverApp.requestHandler(
     {
       get: () => '',
       headers: () => '',
