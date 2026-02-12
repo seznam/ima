@@ -1,5 +1,14 @@
 # Change Log
 
+## 20.0.5
+
+### Patch Changes
+
+- 6c86a0b: Fix starting of monitoring.
+  - **What** Use `start` instead of `monitor.start`. Method `start` will start both monitor and shortMonitor.
+  - **Why** ShortMonitor was not started and we were not collecting shortMetrics.
+  - **How** Nothing.
+
 ## 20.0.4
 
 ### Patch Changes
