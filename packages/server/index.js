@@ -75,7 +75,7 @@ function createIMAServer({
     });
   performance = performance || createMonitoring();
   performance.monitor.add(concurrentRequestsMetric);
-  performance.monitor.start();
+  performance.start();
 
   const serverApp = require('./lib/factory/serverAppFactory.js')({
     environment,
