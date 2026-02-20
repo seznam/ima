@@ -17,12 +17,12 @@ const IGNORED = [
   'rollup.config.mjs',
   'jest.config.js',
   'src',
-  '**/*.tgz',
-  '**/tsconfig.build.tsbuildinfo/**',
-  '**/node_modules/**',
-  '**/typings/**',
-  '**/__mocks__/**',
-  '**/__tests__/**',
+  '*.tgz',
+  'tsconfig.build.tsbuildinfo',
+  'node_modules',
+  'typings',
+  '__mocks__',
+  '__tests__',
 ];
 
 let runningProcesses = [];

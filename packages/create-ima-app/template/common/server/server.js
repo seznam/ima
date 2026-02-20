@@ -1,7 +1,8 @@
 const cluster = require('cluster');
 const os = require('os');
 
-const { imaServer, app } = require('./app');
+const { createApp } = require('./app');
+const { app, imaServer } = createApp();
 const { environment, logger } = imaServer;
 
 if (environment.$Env !== 'dev') {

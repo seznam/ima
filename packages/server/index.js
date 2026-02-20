@@ -32,6 +32,7 @@ function createIMAServer({
   devUtils,
   applicationFolder = defaultApplicationFolder,
   processEnvironment,
+  vite,
 } = {}) {
   environment =
     environment ||
@@ -41,7 +42,7 @@ function createIMAServer({
     });
   devUtils =
     devUtils ||
-    require('./lib/factory/devUtilsFactory.js')({ applicationFolder });
+    require('./lib/factory/devUtilsFactory.js')({ applicationFolder, vite });
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};

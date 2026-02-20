@@ -1,84 +1,29 @@
 import path from 'path';
 
-import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
-import open from 'better-opn';
+import { Event } from '@ima/server';
 import chalk from 'chalk';
 import kill from 'kill-port';
-import nodemon from 'nodemon';
-import webpack, { MultiConfiguration } from 'webpack';
+import { createServer } from 'vite';
 import { CommandBuilder } from 'yargs';
 
-import { createDevServer } from '../dev-server/devServer';
 import {
   handlerFactory,
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { watchCompiler, handleError } from '../lib/compiler';
-import { ImaCliArgs, HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/languages';
+import { HandlerFn, ViteConfigWithEnvironments } from '../types';
+import { compileLanguages } from '../vite/languages';
+import { createManifestForDev } from '../lib/manifest';
 import {
   cleanup,
   createDevServerConfig,
-  createWebpackConfig,
+  createViteConfig,
   resolveEnvironment,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils/utils';
-
-/**
- * Starts ima server with nodemon to watch for server-side changes
- * (all changes in server/ folder), to automatically restart the application
- * server in case any change is detected.
- */
-function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
-  let serverHasStarted = false;
-
-  nodemon({
-    script: path.join(args.rootDir, 'server/server.js'),
-    watch: ['server', 'build/static/public/spa.html'].map(p =>
-      path.join(args.rootDir, p)
-    ),
-    args: args.verbose ? [`--verbose=${args.verbose}`] : [],
-    nodeArgs: args.inspect ? [`--inspect`] : [],
-    cwd: args.rootDir,
-  })
-    .on('start', () => {
-      logger.info(
-        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-          !serverHasStarted && args.forceSPA
-            ? ` in ${chalk.black.bgCyan('SPA mode')}`
-            : args.forceSPAPrefetch
-              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
-              : ''
-        }...`
-      );
-
-      if (
-        process.env.IMA_CLI_OPEN !== 'false' &&
-        args.open &&
-        !serverHasStarted
-      ) {
-        serverHasStarted = true;
-
-        const port = environment.$Server.port;
-        const openUrl =
-          args.openUrl ??
-          process.env.IMA_CLI_OPEN_URL ??
-          `http://localhost:${port}`;
-
-        try {
-          open(openUrl);
-        } catch (error) {
-          logger.error(`Could not open ${openUrl} inside a browser, ${error}`);
-        }
-      }
-    })
-    .on('crash', () => {
-      logger.error('Application watcher crashed unexpectedly.');
-    });
-}
+} from '../vite/utils/utils';
+import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 
 /**
  * Builds ima application in watch mode
@@ -144,11 +89,24 @@ const dev: HandlerFn = async args => {
     await compileLanguages(imaConfig, args.rootDir, true);
     logger.endTracking();
 
-    // Generate webpack config
-    const config = await createWebpackConfig(args, imaConfig);
+    // Generate vite config
+    const config = await createViteConfig(args, imaConfig);
+
+    // Vite dev server requires us to use `client` and `ssr` environments
+    const configWithMappedEnvironments: ViteConfigWithEnvironments = {
+      ...config,
+      environments: {
+        client: config.environments.modern,
+        ssr: config.environments?.server,
+      }
+    }
+
+    // @TODO: This is a dev manifest, its pretty much static and does not change, but it feels a bit hacky so lets review this later
+    logger.info(`Generating dev manifest...`);
+    await createManifestForDev(imaConfig, configWithMappedEnvironments);
 
     logger.info(
-      `Running webpack watch compiler${
+      `Running vite watch compiler${
         args.legacy
           ? ` ${chalk.black.bgCyan(
               `in${args.forceLegacy ? ' forced' : ''} legacy mode`
@@ -157,44 +115,31 @@ const dev: HandlerFn = async args => {
       }...`
     );
 
-    // Create compiler
-    const compiler = webpack(config as MultiConfiguration);
+    // Start the Vite dev server
+    const vite = await createServer({
+      ...configWithMappedEnvironments,
+      appType: 'custom',
+    });
 
-    if (!compiler) {
-      throw new Error('Failed to create compiler');
-    }
+    // Start the application server
+    const {app, imaServer} = (await import(path.resolve(args.rootDir, 'server/app.js'))).createApp(vite);
 
-    if (!compiler) {
-      throw new Error('Failed to create webpack compiler');
-    }
+    imaServer.emitter.prependListener(Event.Response, async (event: any) => {
+      event.context.response.content = await vite.transformIndexHtml(event.req.url, event.context.response.content);
+    });
 
-    // Start watch compiler & HMR dev server
-    await Promise.all([
-      watchCompiler(compiler, args, imaConfig),
-      createDevServer({
-        args,
-        config: imaConfig,
-        compiler: compiler.compilers.find(
-          ({ name }) =>
-            // Run dev server only for client compiler with HMR enabled
-            name === 'client.es'
-        ),
-        hostname: devServerConfig.hostname,
-        port: devServerConfig.port,
-        publicUrl: devServerConfig.publicUrl,
-        rootDir: args.rootDir,
-        environment,
-      }),
-    ]);
+    app.listen(environment.$Server.port, () => {
+      logger.info('The app is running at http://localhost:' + environment.$Server.port);
+    })
 
-    // Start nodemon and application server
-    startNodemon(args, environment);
+    // @TODO: Review logging
+    vite.watcher.on('all', (...args) => {
+      console.log(...args)
+    });
+
+    vite.bindCLIShortcuts({ print: true })
   } catch (error) {
-    if (args.verbose) {
-      console.error(error);
-    } else {
-      handleError(error);
-    }
+    console.error(error);
 
     process.exit(1);
   }

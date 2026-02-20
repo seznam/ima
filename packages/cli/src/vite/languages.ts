@@ -80,17 +80,18 @@ export function getLanguageEntryPoints(
       export default message;
     `;
 
-    if (useHMR) {
-      content += `
-      if (module.hot) {
-        module.hot.accept('./${path.basename(modulePath)}', () => {
-          $IMA.i18n = message;
+    // @TODO: We need to fix the HMR logic with Vite for language files
+    // if (useHMR) {
+    //   content += `
+    //   if (module.hot) {
+    //     module.hot.accept('./${path.basename(modulePath)}', () => {
+    //       $IMA.i18n = message;
 
-          window.__IMA_HMR.emitter.emit('update', { type: 'languages' })
-        });
-      }
-      `;
-    }
+    //       window.__IMA_HMR.emitter.emit('update', { type: 'languages' })
+    //     });
+    //   }
+    //   `;
+    // }
 
     if (!fs.existsSync(entryPath)) {
       fs.mkdirSync(path.dirname(entryPath), { recursive: true });

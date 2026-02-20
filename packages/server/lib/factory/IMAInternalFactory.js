@@ -147,10 +147,10 @@ module.exports = function IMAInternalFactory({
   async function _importAppMainAsync({ res, environment, context = {} }) {
     let appMain = serverGlobal.has(GLOBAL.APP_MAIN)
       ? serverGlobal.get(GLOBAL.APP_MAIN)
-      : appFactory();
+      : await appFactory();
 
     if (environment.$Env === 'dev') {
-      appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? appFactory() : appMain;
+      appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? await appFactory() : appMain;
       serverGlobal.delete(GLOBAL.DUMMY_APP_PROMISE);
       serverGlobal.delete(GLOBAL.DUMMY_APP);
 

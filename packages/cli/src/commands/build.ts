@@ -1,5 +1,5 @@
 import { logger } from '@ima/dev-utils/logger';
-import webpack from 'webpack';
+import { createBuilder, ViteBuilder } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 import {
@@ -7,15 +7,15 @@ import {
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { runCompiler, handleError } from '../lib/compiler';
 import { HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/languages';
+import { compileLanguages } from '../vite/languages';
 import {
   cleanup,
-  createWebpackConfig,
+  createViteConfig,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils/utils';
+} from '../vite/utils/utils';
+import { createManifestFileFromOutput } from '../lib/manifest';
 
 /**
  * Builds ima application.
@@ -39,21 +39,36 @@ const build: HandlerFn = async args => {
     await compileLanguages(imaConfig, args.rootDir);
     logger.endTracking();
 
-    // Generate webpack config
-    const config = await createWebpackConfig(args, imaConfig);
+    // Generate vite config
+    const config = await createViteConfig(args, imaConfig);
+    const outputs: { config: string; output: Awaited<ReturnType<ViteBuilder['build']>> }[] = [];
 
-    logger.info('Running webpack compiler...');
+    logger.info('Running vite compiler...', { trackTime: true });
+    const builder = await createBuilder({ ...config, builder: {
+        // By specifying buildApp, we can build all environments in parallel
+        // Without this, Vite would build environments one by one, which should be slower
+        buildApp: async (builder) => {
+          // There is also default `client` environment, that we are skipping here
+          const buildEnvironments = ['server', 'modern', 'legacy'];
+          const envs = Object.values(builder.environments).filter(env => buildEnvironments.includes(env.name));
 
-    // Run webpack compiler
-    const compiler = webpack(config);
+          await Promise.all(envs.map(async env => {
+            const output = await builder.build(env)
 
-    if (!compiler) {
-      throw new Error('Failed to create webpack compiler');
-    }
+            outputs.push({ config: env.name, output });
+          }));
+        }
+      }});
 
-    await runCompiler(compiler, args, imaConfig);
+    await builder.buildApp();
+
+    logger.endTracking();
+
+    // Create manifest file from output
+    await createManifestFileFromOutput(outputs, imaConfig);
+    logger.info('Vite build finished successfully.');
   } catch (error) {
-    handleError(error);
+    console.error(error);
     process.exit(1);
   }
 };
