@@ -418,7 +418,7 @@ export async function createViteConfig(
  * Extracts major.minor version string of currently resolved
  * core-js from node_modules.
  */
-export async function getCurrentCoreJsVersion() {
+export async function getCurrentCoreJsVersion(): Promise<string> {
   return JSON.parse(
     (
       await fs.promises.readFile(

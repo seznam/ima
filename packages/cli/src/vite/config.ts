@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react';
 import compression from 'vite-plugin-compression2';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import viteLegacyPlugin from '@vitejs/plugin-legacy';
+import babel from '@rollup/plugin-babel';
 
 import { imaRunnerPlugin } from './plugins/imaRunnerPlugin';
 
@@ -13,6 +13,7 @@ import { BuildEnvironmentOptions } from 'vite';
 import { getLanguageEntryPoints } from './languages';
 import { ImaConfigurationContext, ImaConfig, ViteConfigWithEnvironments } from '../types';
 import { imaSkipCssPlugin } from './plugins/imaSkipCssPlugin';
+import { getCurrentCoreJsVersion } from './utils/utils';
 
 /**
  * Creates Vite configuration object based on input ConfigurationContext
@@ -35,6 +36,7 @@ export default async (
     isDevEnv,
     targets,
   } = ctx;
+  const coreJsVersion = await getCurrentCoreJsVersion();
 
   function getRolldownOutputConfig(outputJsFolder: string, appType: 'server' | 'client'): NonNullable<BuildEnvironmentOptions['rolldownOptions']>['output'] {
     const appSuffix = appType === 'server' ? 'server' : isDevEnv ? 'client' : 'bundle';
@@ -76,20 +78,9 @@ export default async (
               dest: 'static/public/'
             }
           ],
-          environment: ctx.command === 'build' ? 'modern' : 'client', // Copy only for one client build, since both share the same public dir
+          // Copy only for one client build, since both share the same public dir
+          environment: ctx.command === 'build' ? 'modern' : 'client',
         }),
-        viteLegacyPlugin({
-            modernTargets: targets,
-            renderLegacyChunks: false, // Our legacy build is still modern enough
-            modernPolyfills: true, // @TODO: Polyfills are not generated probably due to compatibility issues with environments API
-          }).map(plugin => {
-            return {
-              ...plugin,
-              applyToEnvironment(environment: any) {
-                // We need to handle only build command, since legacy plugin does nothing in dev mode
-                return environment.name === 'legacy';
-              },
-          }}),
         imaRunnerPlugin({ context: ctx, imaConfig }),
         imaSkipCssPlugin({ environments: ['legacy', 'server'] }),
       ],
@@ -142,8 +133,28 @@ export default async (
         legacy: {
           consumer: 'client',
           build: {
+            target: 'es2018',
             cssTarget: false, // We build CSS only in modern build
             rolldownOptions: {
+              plugins: [
+                // @TODO: This would be nice to replace with oxc polyfill injection
+                // Using Babel to handle polyfill injection
+                babel({
+                  babelHelpers: 'bundled',
+                  exclude: /node_modules\/core-js/,
+                  // Note: We only use babel for polyfills to keep it fast
+                  plugins: [
+                    ['polyfill-corejs3', {
+                      targets: targets.join(', '), // ES2018 baseline
+                      version: coreJsVersion,
+                      method: 'usage-global',
+                    }]
+                  ],
+                  extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx'],
+                  babelrc: false,
+                  configFile: false,
+                })
+              ],
               output: {
                 ...getRolldownOutputConfig('static/js', 'client'),
               }
@@ -156,10 +167,11 @@ export default async (
             target: 'es2024',
             cssTarget: 'es2023', // CSS target es2024 is not yet supported, once it is, we can remove this line
             rolldownOptions: {
+              external: [],
               output: {
                 ...getRolldownOutputConfig('static/js.es', 'client'),
               }
-            }
+            },
           },
         },
         server: {
@@ -220,29 +232,22 @@ export default async (
 
       // Server configuration (for dev mode)
       server: {
-        // port: ctx.port || 3101,
-        // host: ctx.hostname || 'localhost',
         port: 3101,
         host: 'localhost',
         middlewareMode: true,
         allowedHosts: true, // @TODO: Disable, this is useful when connecting from docker to your local server
-        // strictPort: false,
         // @TODO: Maybe hmr: true is enough? Or maybe not mention it at all?
         ...(useHMR && {
           hmr: {
             protocol: 'ws',
             host: 'localhost',
-            // clientPort: 3101,
           },
         }),
       },
 
-      // @TODO: Do we need this?
-      // Optimization
-      // optimizeDeps: {
-      //   include: ['react', 'react-dom'],
-      //   exclude: ['@ima/core', '@ima/server'],
-      // },
+      optimizeDeps: {
+        include: ['core-js'],
+      },
 
       // Logging
       logLevel: ctx.verbose ? 'info' : 'warn',
