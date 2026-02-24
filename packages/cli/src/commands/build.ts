@@ -8,7 +8,6 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { HandlerFn } from '../types';
-import { compileLanguages } from '../vite/languages';
 import {
   cleanup,
   createViteConfig,
@@ -33,11 +32,6 @@ const build: HandlerFn = async args => {
 
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
-
-    // Compile language files
-    logger.info(`Compiling language files...`, { trackTime: true });
-    await compileLanguages(imaConfig, args.rootDir);
-    logger.endTracking();
 
     // Generate vite config
     const config = await createViteConfig(args, imaConfig);

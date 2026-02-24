@@ -53,7 +53,7 @@ module.exports = function staticTemplateFactory({
     cache: false,
   };
 
-  function renderStaticServerErrorPage(event) {
+  async function renderStaticServerErrorPage(event) {
     const error500 = {
       status: 500,
       SPA: false,
@@ -68,7 +68,7 @@ module.exports = function staticTemplateFactory({
     };
 
     try {
-      createBootConfig(event);
+      await createBootConfig(event);
 
       const content = template500(event);
 
@@ -88,10 +88,10 @@ module.exports = function staticTemplateFactory({
     }
   }
 
-  function renderStaticClientErrorPage(event) {
+  async function renderStaticClientErrorPage(event) {
     const status = 404;
 
-    createBootConfig(event);
+    await createBootConfig(event);
 
     const content = template400(event);
 
@@ -104,10 +104,10 @@ module.exports = function staticTemplateFactory({
     };
   }
 
-  function renderStaticSPAPage(event) {
+  async function renderStaticSPAPage(event) {
     const status = 200;
 
-    createBootConfig(event);
+    await createBootConfig(event);
 
     const content = templateSPA(event);
 
@@ -124,7 +124,7 @@ module.exports = function staticTemplateFactory({
    * but since the app is already booted, we do not need to re-create
    * the boot config again.
    */
-  function renderStaticSPAPrefetchPage(event) {
+  async function renderStaticSPAPrefetchPage(event) {
     const content = templateSPA(event);
 
     return {

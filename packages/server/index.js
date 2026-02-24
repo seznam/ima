@@ -47,8 +47,8 @@ function createIMAServer({
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
 
-  function appFactory() {
-    devUtils.manifestRequire('server/vendors.js', {
+  async function appFactory() {
+    await devUtils.manifestRequire('server/vendors.js', {
       optional: true,
       dependencies: ['server/app.server.js'],
     });
@@ -56,8 +56,8 @@ function createIMAServer({
     return devUtils.manifestRequire('server/app.server.js');
   }
 
-  function languageLoader(language) {
-    return devUtils.manifestRequire(`server/locale/${language}.js`).default;
+  async function languageLoader(language) {
+    return (await devUtils.manifestRequire(`server/locale/${language}.js`)).default;
   }
 
   logger =

@@ -16,4 +16,11 @@ export {
   createViteConfig,
   runImaPluginsHook,
 } from './vite/utils/utils';
-export { compileLanguages, getLanguageEntryPoints } from './vite/languages';
+export {
+  imaLanguagesPlugin,
+  getVirtualLanguageEntryPoints,
+} from './vite/plugins/imaLanguagesPlugin';
+export {
+  getDictionaryKeyFromFileName,
+  generateTypeDeclarations,
+} from './vite/languages';

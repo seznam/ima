@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function devUtilsFactory({ applicationFolder, vite }) {
-  function manifestRequire(module, options = {}) {
+  async function manifestRequire(module, options = {}) {
     const manifest = JSON.parse(
       fs.readFileSync(path.resolve(applicationFolder, './build/manifest.json'))
     );
@@ -13,18 +13,17 @@ module.exports = function devUtilsFactory({ applicationFolder, vite }) {
     }
 
     if (Array.isArray(options?.dependencies)) {
-      options?.dependencies.forEach(dependency => {
-          if (vite) {
-            vite.ssrLoadModule(assets[dependency].fileName);
-          } else {
-            require(
-              path.resolve(
-                path.join(applicationFolder, './build', assets[dependency].fileName)
-              )
+      for (const dependency of options.dependencies) {
+        if (vite) {
+          await vite.ssrLoadModule(assets[dependency].fileName);
+        } else {
+          require(
+            path.resolve(
+              path.join(applicationFolder, './build', assets[dependency].fileName)
             )
-          }
+          )
         }
-      );
+      }
     }
 
     if (vite) {

@@ -22,7 +22,17 @@ interface Manifest {
     publicPath: string;
 }
 
-function getDevLanguageAssets(prefix: string, config: ViteConfigWithEnvironments): Manifest['assets'] {
+function getDevLanguageAssets(
+  prefix: string,
+  config: ViteConfigWithEnvironments,
+  /**
+   * In dev mode Vite serves virtual modules at `/@id/<moduleId>`.
+   * Client-side `<script>` tags need this URL form, while server-side
+   * `ssrLoadModule()` calls accept the bare virtual module ID directly,
+   * so the `/@id/` prefix should only be applied for client assets.
+   */
+  useViteIdPrefix = false
+): Manifest['assets'] {
   return Object.entries(config.build?.rolldownOptions?.input ?? {})
     .map(([inputKey, inputValue]) => {
       if (!inputKey.startsWith('locale/')) {
@@ -30,8 +40,10 @@ function getDevLanguageAssets(prefix: string, config: ViteConfigWithEnvironments
       }
 
       const name = `${prefix}/${inputKey}.js`;
+      const rawId = inputValue as string;
+      const fileName = useViteIdPrefix ? `@id/${rawId}` : rawId;
 
-      return [name, { fileName: inputValue as string, name }] as const;
+      return [name, { fileName, name }] as const;
     })
     .filter(
       (entry): entry is readonly [string, { readonly fileName: string; readonly name: string }] =>
@@ -56,14 +68,14 @@ export async function createManifestForDev(imaConfig: ImaConfig, config: ViteCon
             fileName: 'app/main.js',
             name: 'static/js/app.client.js',
         },
-        ...getDevLanguageAssets('static/js', config),
+        ...getDevLanguageAssets('static/js', config, true),
     };
     const clientEsAssets = {
         'static/js.es/app.client.js': {
             fileName: 'app/main.js',
             name: 'static/js.es/app.client.js',
         },
-        ...getDevLanguageAssets('static/js.es', config),
+        ...getDevLanguageAssets('static/js.es', config, true),
     };
     const manifest: Manifest = {
         assets: {
@@ -78,6 +90,8 @@ export async function createManifestForDev(imaConfig: ImaConfig, config: ViteCon
         },
         publicPath: imaConfig.publicPath,
     };
+
+    await fs.mkdir(path.join(process.cwd(), 'build'), { recursive: true });
 
     await fs.writeFile(
         path.join(process.cwd(), 'build', 'manifest.json'),

@@ -183,7 +183,7 @@ module.exports = function serverAppFactory({
     } catch (error) {
       error.cause = event.error;
 
-      event.context.response = renderStaticServerErrorPage({
+      event.context.response = await renderStaticServerErrorPage({
         ...event,
         error,
       });
@@ -201,7 +201,7 @@ module.exports = function serverAppFactory({
         return context.response;
       }
 
-      context.response = renderStaticServerErrorPage({
+      context.response = await renderStaticServerErrorPage({
         ...event,
         error,
       });

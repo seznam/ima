@@ -7,10 +7,12 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import babel from '@rollup/plugin-babel';
 
 import { imaRunnerPlugin } from './plugins/imaRunnerPlugin';
+import {
+  imaLanguagesPlugin,
+  getVirtualLanguageEntryPoints,
+} from './plugins/imaLanguagesPlugin';
 
 import { BuildEnvironmentOptions } from 'vite';
-
-import { getLanguageEntryPoints } from './languages';
 import { ImaConfigurationContext, ImaConfig, ViteConfigWithEnvironments } from '../types';
 import { imaSkipCssPlugin } from './plugins/imaSkipCssPlugin';
 import { getCurrentCoreJsVersion } from './utils/utils';
@@ -82,6 +84,7 @@ export default async (
           environment: ctx.command === 'build' ? 'modern' : 'client',
         }),
         imaRunnerPlugin({ context: ctx, imaConfig }),
+        imaLanguagesPlugin(imaConfig, rootDir),
         imaSkipCssPlugin({ environments: ['legacy', 'server'] }),
       ],
 
@@ -99,7 +102,7 @@ export default async (
         rolldownOptions: {
           input: {
             app: 'app/main.js',
-            ...getLanguageEntryPoints(imaConfig.languages, rootDir, useHMR)
+            ...getVirtualLanguageEntryPoints(imaConfig.languages),
           },
           output: {
             manualChunks: (id) => {
@@ -243,10 +246,6 @@ export default async (
             host: 'localhost',
           },
         }),
-      },
-
-      optimizeDeps: {
-        include: ['core-js'],
       },
 
       // Logging
