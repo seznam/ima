@@ -450,7 +450,7 @@ module.exports = function hooksFactory({
 
         context.response = {
           ...context.response,
-          ...renderStaticSPAPrefetchPage(event),
+          ...(await renderStaticSPAPrefetchPage(event)),
         };
 
         context?.timing?.end('hooks.renderStaticSPAPrefetchPage');

@@ -6,7 +6,6 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IMA_CLI_WATCH?: string;
-      IMA_CLI_WRITE_TO_DISK?: string;
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_FORCE_SPA_PREFETCH?: string;
       IMA_CLI_LAZY_SERVER?: string;
@@ -38,7 +37,6 @@ export interface ImaCliArgs {
   ignoreWarnings?: boolean;
   open?: boolean;
   openUrl?: string;
-  legacy?: boolean;
   forceSPA?: boolean;
   forceSPAPrefetch?: boolean;
   profile?: boolean;
@@ -47,9 +45,7 @@ export interface ImaCliArgs {
   paths?: string | string[];
   publicUrl?: string;
   environment: 'development' | 'production' | string;
-  writeToDisk?: boolean;
   reactRefresh?: boolean;
-  forceLegacy?: boolean;
   lazyServer?: boolean;
   server?: string;
   preRenderMode?: 'spa' | 'ssr';
@@ -77,11 +73,9 @@ export interface ImaConfigurationContext extends ImaCliArgs {
   appDir: string;
   lessGlobalsPath: string;
   mode: ViteConfig['mode'];
-  useHMR: boolean;
   useSourceMaps: boolean;
   isDevEnv: boolean;
   targets: string[];
-  // devtool: Configuration['devtool'];
 }
 
 export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
@@ -220,14 +214,6 @@ export type ImaConfig = {
      * this is used for CORS configuration.
      */
     origin?: string;
-
-    /**
-     * Custom filtr for files which should be always written to disk,
-     * even if we're serving static files from memory. This is used for
-     * example to always save runner.js to disk, since it's used on server-side too.
-     */
-    // @TODO: Is write to disk supported by Vite?
-    writeToDiskFilter?: (filePath: string) => boolean;
   };
 
   /**

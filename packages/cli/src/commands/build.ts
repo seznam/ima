@@ -7,7 +7,7 @@ import {
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { HandlerFn } from '../types';
+import { HandlerFn, ImaConfig } from '../types';
 import {
   cleanup,
   createViteConfig,
@@ -16,6 +16,8 @@ import {
 } from '../vite/utils/utils';
 import { createManifestFileFromOutput } from '../lib/manifest';
 
+type ImaOutputs = { config: string; output: Awaited<ReturnType<ViteBuilder['build']>> }[];
+
 /**
  * Builds ima application.
  *
@@ -23,6 +25,25 @@ import { createManifestFileFromOutput } from '../lib/manifest';
  * @returns {Promise<void>}
  */
 const build: HandlerFn = async args => {
+  function buildAppFactory(outputs: ImaOutputs, imaConfig: ImaConfig) {
+    return async function buildApp(builder: ViteBuilder) {
+      // There is also default `client` environment, that we are skipping here
+      const buildEnvironments = ['server', 'modern'];
+
+      if (!imaConfig.disableLegacyBuild) {
+        buildEnvironments.push('legacy');
+      }
+
+      const envs = Object.values(builder.environments).filter(env => buildEnvironments.includes(env.name));
+
+      await Promise.all(envs.map(async env => {
+        const output = await builder.build(env)
+
+        outputs.push({ config: env.name, output });
+      }));
+    }
+  }
+
   try {
     // Do cleanup
     await cleanup(args);
@@ -35,30 +56,17 @@ const build: HandlerFn = async args => {
 
     // Generate vite config
     const config = await createViteConfig(args, imaConfig);
-    const outputs: { config: string; output: Awaited<ReturnType<ViteBuilder['build']>> }[] = [];
+    const outputs: ImaOutputs = []; // Needed for manifest generation after build finishes
 
     logger.info('Running vite compiler...', { trackTime: true });
     const builder = await createBuilder({ ...config, builder: {
-        // By specifying buildApp, we can build all environments in parallel
-        // Without this, Vite would build environments one by one, which should be slower
-        buildApp: async (builder) => {
-          // There is also default `client` environment, that we are skipping here
-          const buildEnvironments = ['server', 'modern', 'legacy'];
-          const envs = Object.values(builder.environments).filter(env => buildEnvironments.includes(env.name));
-
-          await Promise.all(envs.map(async env => {
-            const output = await builder.build(env)
-
-            outputs.push({ config: env.name, output });
-          }));
-        }
-      }});
+      buildApp: buildAppFactory(outputs, imaConfig),
+    }});
 
     await builder.buildApp();
 
     logger.endTracking();
 
-    // Create manifest file from output
     await createManifestFileFromOutput(outputs, imaConfig);
     logger.info('Vite build finished successfully.');
   } catch (error) {

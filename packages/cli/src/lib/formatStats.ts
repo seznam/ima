@@ -1,3 +1,4 @@
+// @TODO: Fix pretty prints to work with Vite
 import fs from 'fs';
 import path from 'path';
 
@@ -217,13 +218,7 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
     )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
   );
   args.command === 'dev' &&
-    logger.info(
-      `Client assets are served from ${
-        args.writeToDisk
-          ? chalk.blueBright('disk')
-          : chalk.yellowBright('memory')
-      }`
-    );
+    logger.info(`Client assets are served from ${chalk.yellowBright('memory')}`);
   logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
   // Print info about emitted assets

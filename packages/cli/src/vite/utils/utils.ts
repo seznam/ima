@@ -103,8 +103,6 @@ export function createCacheKey(
   hash.update(
     JSON.stringify({
       command: ctx.command,
-      legacy: ctx.legacy,
-      forceLegacy: ctx.forceLegacy,
       profile: ctx.profile,
       rootDir: ctx.rootDir,
       environment: ctx.environment,
@@ -278,7 +276,7 @@ export function createContexts(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): ImaConfigurationContext {
-  const { rootDir, environment, command } = args;
+  const { rootDir, environment } = args;
   const useSourceMaps =
     !!imaConfig.sourcemap || args.environment === 'development';
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -286,12 +284,6 @@ export function createContexts(
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
   const isDevEnv = environment === 'development';
   const mode = environment === 'production' ? 'production' : 'development';
-  // @TODO: Review the devtool setting and its purpose
-  // const devtool = useSourceMaps
-  //   ? typeof imaConfig.sourcemap === 'string'
-  //     ? imaConfig.sourcemap
-  //     : 'source-map'
-  //   : false;
 
   let tsconfigPath: string | undefined = undefined;
 
@@ -331,12 +323,10 @@ export function createContexts(
     },
     imaEnvironment,
     appDir,
-    useHMR: command === 'dev',
     mode,
     isDevEnv,
     lessGlobalsPath,
     useSourceMaps,
-    // devtool,
     targets: es2018Targets,
   };
 }

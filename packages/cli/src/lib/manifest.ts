@@ -132,7 +132,7 @@ function extendManifestFromOutput(manifest: Manifest, config: string, output: Aw
         return manifest;
     }
 
-    const isServer = config === 'server';// config.build?.ssr === true;
+    const isServer = config === 'server';
     const compilerName = isServer ? 'server' : config === 'legacy' ? 'client' : 'client.es';
 
     if (!manifest.assetsByCompiler[compilerName]) {

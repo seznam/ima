@@ -30,7 +30,6 @@ export default async (
     rootDir,
     outputFolders,
     appDir,
-    useHMR,
     mode,
     lessGlobalsPath,
     useSourceMaps,
@@ -236,21 +235,6 @@ export default async (
       //     'process.env.IMA_PUBLIC_PATH': JSON.stringify(process.env.IMA_PUBLIC_PATH),
       //   }),
       // },
-
-      // Server configuration (for dev mode)
-      server: {
-        port: 3101,
-        host: 'localhost',
-        middlewareMode: true,
-        allowedHosts: true, // @TODO: Disable, this is useful when connecting from docker to your local server
-        // @TODO: Maybe hmr: true is enough? Or maybe not mention it at all?
-        ...(useHMR && {
-          hmr: {
-            protocol: 'ws',
-            host: 'localhost',
-          },
-        }),
-      },
 
       // Logging
       logLevel: ctx.verbose ? 'info' : 'warn',

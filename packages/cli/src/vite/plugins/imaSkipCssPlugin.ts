@@ -5,7 +5,7 @@ type ImaSkipCssPluginOptions = {
 }
 
 /**
- * Plugin to prevent CSS file emission in legacy builds
+ * Plugin to prevent CSS file emission in selected environments
  */
 export function imaSkipCssPlugin(options: ImaSkipCssPluginOptions = {}): Plugin {
   return {

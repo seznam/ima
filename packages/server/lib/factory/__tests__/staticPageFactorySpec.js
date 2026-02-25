@@ -69,7 +69,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
   });
 
   describe('renderStaticSPAPrefetchPage', () => {
-    it('should render SPA prefetch page with correct flags', () => {
+    it('should render SPA prefetch page with correct flags', async () => {
       const event = {
         req: {
           headers: {
@@ -83,7 +83,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
         spaPrefetch: true,
       };
 
-      const result = staticPageFactory.renderStaticSPAPrefetchPage(event);
+      const result = await staticPageFactory.renderStaticSPAPrefetchPage(event);
 
       expect(result).toHaveProperty('content');
       expect(result).toHaveProperty('static', true);
@@ -91,7 +91,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
       expect(result.content).toContain('SPA Prefetch');
     });
 
-    it('should not call createBootConfig (app already initialized)', () => {
+    it('should not call createBootConfig (app already initialized)', async () => {
       const event = {
         req: {
           headers: {
@@ -107,14 +107,14 @@ describe('Static Page Factory - SPA Prefetch', () => {
         spaPrefetch: true,
       };
 
-      staticPageFactory.renderStaticSPAPrefetchPage(event);
+      await staticPageFactory.renderStaticSPAPrefetchPage(event);
 
       // createBootConfig should NOT be called for prefetch page
       // since the app is already initialized
       expect(createBootConfig).not.toHaveBeenCalled();
     });
 
-    it('should render using the same SPA template', () => {
+    it('should render using the same SPA template', async () => {
       const spaEvent = {
         req: { headers: {} },
         res: {},
@@ -129,16 +129,16 @@ describe('Static Page Factory - SPA Prefetch', () => {
         spaPrefetch: true,
       };
 
-      const spaResult = staticPageFactory.renderStaticSPAPage(spaEvent);
+      const spaResult = await staticPageFactory.renderStaticSPAPage(spaEvent);
       const prefetchResult =
-        staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
+        await staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
 
       // Both should use the same template, but with different context
       expect(spaResult.content).toContain('SPA');
       expect(prefetchResult.content).toContain('SPA Prefetch');
     });
 
-    it('should return correct response structure', () => {
+    it('should return correct response structure', async () => {
       const event = {
         req: { headers: {} },
         res: {},
@@ -146,7 +146,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
         spaPrefetch: true,
       };
 
-      const result = staticPageFactory.renderStaticSPAPrefetchPage(event);
+      const result = await staticPageFactory.renderStaticSPAPrefetchPage(event);
 
       // Verify the response structure
       expect(result).toMatchObject({
@@ -162,7 +162,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
   });
 
   describe('renderStaticSPAPage vs renderStaticSPAPrefetchPage', () => {
-    it('should have different response structures', () => {
+    it('should have different response structures', async () => {
       const spaEvent = {
         req: { headers: {} },
         res: {},
@@ -177,9 +177,9 @@ describe('Static Page Factory - SPA Prefetch', () => {
         spaPrefetch: true,
       };
 
-      const spaResult = staticPageFactory.renderStaticSPAPage(spaEvent);
+      const spaResult = await staticPageFactory.renderStaticSPAPage(spaEvent);
       const prefetchResult =
-        staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
+        await staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
 
       // SPA page has more properties
       expect(spaResult).toMatchObject({
@@ -201,7 +201,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
       expect(prefetchResult.status).toBeUndefined();
     });
 
-    it('should call createBootConfig only for SPA page', () => {
+    it('should call createBootConfig only for SPA page', async () => {
       const spaEvent = {
         req: { headers: {} },
         res: {},
@@ -217,17 +217,17 @@ describe('Static Page Factory - SPA Prefetch', () => {
       };
 
       createBootConfig.mockClear();
-      staticPageFactory.renderStaticSPAPage(spaEvent);
+      await staticPageFactory.renderStaticSPAPage(spaEvent);
       expect(createBootConfig).toHaveBeenCalledTimes(1);
 
       createBootConfig.mockClear();
-      staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
+      await staticPageFactory.renderStaticSPAPrefetchPage(prefetchEvent);
       expect(createBootConfig).not.toHaveBeenCalled();
     });
   });
 
   describe('Custom SPA template', () => {
-    it('should use custom SPA template path if provided', () => {
+    it('should use custom SPA template path if provided', async () => {
       const customTemplatePath = '/custom/template/spa.ejs';
       environment.$Server.template.spa = customTemplatePath;
 
@@ -246,13 +246,13 @@ describe('Static Page Factory - SPA Prefetch', () => {
       };
 
       // This should not throw, as our mock handles any path with 'spa.ejs'
-      const result = customStaticPageFactory.renderStaticSPAPrefetchPage(event);
+      const result = await customStaticPageFactory.renderStaticSPAPrefetchPage(event);
       expect(result).toHaveProperty('content');
     });
   });
 
   describe('Error pages should not be affected', () => {
-    it('should render 500 error page normally', () => {
+    it('should render 500 error page normally', async () => {
       const event = {
         req: { headers: {} },
         res: {},
@@ -260,7 +260,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
         context: {},
       };
 
-      const result = staticPageFactory.renderStaticServerErrorPage(event);
+      const result = await staticPageFactory.renderStaticServerErrorPage(event);
 
       expect(result).toMatchObject({
         status: 500,
@@ -270,7 +270,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
       expect(result.content).toContain('500 Error');
     });
 
-    it('should render 404 error page normally', () => {
+    it('should render 404 error page normally', async () => {
       const event = {
         req: { headers: {} },
         res: {},
@@ -278,7 +278,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
         context: {},
       };
 
-      const result = staticPageFactory.renderStaticClientErrorPage(event);
+      const result = await staticPageFactory.renderStaticClientErrorPage(event);
 
       expect(result).toMatchObject({
         status: 404,
@@ -288,14 +288,14 @@ describe('Static Page Factory - SPA Prefetch', () => {
       expect(result.content).toContain('404 Error');
     });
 
-    it('should render overloaded page normally', () => {
+    it('should render overloaded page normally', async () => {
       const event = {
         req: { headers: {} },
         res: {},
         context: {},
       };
 
-      const result = staticPageFactory.renderOverloadedPage(event);
+      const result = await staticPageFactory.renderOverloadedPage(event);
 
       expect(result).toMatchObject({
         status: 503,

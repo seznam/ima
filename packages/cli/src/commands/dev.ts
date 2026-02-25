@@ -2,6 +2,7 @@ import path from 'path';
 
 import { logger } from '@ima/dev-utils/logger';
 import { Event } from '@ima/server';
+import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
 import { createServer } from 'vite';
@@ -34,11 +35,6 @@ import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 const dev: HandlerFn = async args => {
   process.env.IMA_CLI_WATCH = 'true';
 
-  // Set write to disk flag, so we can disable static proxy in the application
-  if (args.writeToDisk) {
-    process.env.IMA_CLI_WRITE_TO_DISK = 'true';
-  }
-
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     process.env.IMA_CLI_FORCE_SPA = 'true';
@@ -52,11 +48,6 @@ const dev: HandlerFn = async args => {
   // Set lazy server flag according to CLI args
   if (args.lazyServer) {
     process.env.IMA_CLI_LAZY_SERVER = 'true';
-  }
-
-  // Set legacy argument to true by default when we're forcing legacy
-  if (args.forceLegacy) {
-    args.legacy = true;
   }
 
   try {
@@ -91,31 +82,27 @@ const dev: HandlerFn = async args => {
       ...config,
       environments: {
         client: config.environments.modern,
-        ssr: config.environments?.server,
-      }
+        ssr: config.environments.server,
+      },
+      server: {
+        port: devServerConfig.port,
+        host: devServerConfig.host,
+        middlewareMode: true,
+      },
     }
 
     // @TODO: This is a dev manifest, its pretty much static and does not change, but it feels a bit hacky so lets review this later
     logger.info(`Generating dev manifest...`);
     await createManifestForDev(imaConfig, configWithMappedEnvironments);
 
-    logger.info(
-      `Running vite watch compiler${
-        args.legacy
-          ? ` ${chalk.black.bgCyan(
-              `in${args.forceLegacy ? ' forced' : ''} legacy mode`
-            )}`
-          : ''
-      }...`
-    );
-
     // Start the Vite dev server
+    logger.info('Starting vite dev HMR server...');
     const vite = await createServer({
       ...configWithMappedEnvironments,
       appType: 'custom',
     });
 
-    // Start the application server
+    // Initialize application server with additional hooks for development
     const {app, imaServer} = (await import(path.resolve(args.rootDir, 'server/app.js'))).createApp(vite);
 
     imaServer.emitter.prependListener(Event.Response, async (event: any) => {
@@ -123,6 +110,32 @@ const dev: HandlerFn = async args => {
     });
 
     app.listen(environment.$Server.port, () => {
+      logger.info(
+        `Starting application server${
+          args.forceSPA
+            ? ` in ${chalk.black.bgCyan('SPA mode')}`
+            : args.forceSPAPrefetch
+              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
+              : ''
+        }...`
+      );
+
+      if (
+        process.env.IMA_CLI_OPEN !== 'false' &&
+        args.open
+      ) {
+        const port = environment.$Server.port;
+        const openUrl =
+          args.openUrl ??
+          process.env.IMA_CLI_OPEN_URL ??
+          `http://localhost:${port}`;
+
+        try {
+          open(openUrl);
+        } catch (error) {
+          logger.error(`Could not open ${openUrl} inside a browser, ${error}`);
+        }
+      }
       logger.info('The app is running at http://localhost:' + environment.$Server.port);
     })
 
@@ -154,16 +167,6 @@ export const builder: CommandBuilder = {
     desc: 'Custom URL used when opening browser window ',
     type: 'string',
   },
-  legacy: {
-    desc: 'Runs application in legacy mode',
-    type: 'boolean',
-    default: false,
-  },
-  forceLegacy: {
-    desc: 'Forces runner.js to execute legacy client code',
-    type: 'boolean',
-    default: false,
-  },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
@@ -171,11 +174,6 @@ export const builder: CommandBuilder = {
   },
   forceSPAPrefetch: {
     desc: 'Forces application to run in SPA prefetch mode',
-    type: 'boolean',
-    default: false,
-  },
-  writeToDisk: {
-    desc: 'Write static files to disk, instead of serving it from memory',
     type: 'boolean',
     default: false,
   },
