@@ -142,8 +142,14 @@ export default async (
                 // Using Babel to handle polyfill injection
                 babel({
                   babelHelpers: 'bundled',
-                  exclude: /node_modules\/core-js/,
-                  // Note: We only use babel for polyfills to keep it fast
+                  exclude: [
+                    // The `usage-global` method is designed for source code only
+                    // We need to exclude minified dependencies, as they cause build issues
+                    /node_modules\/core-js/,
+                    /node_modules\/react/,
+                    /node_modules\/react-dom/,
+                  ],
+                  // Note: We only use babel for polyfills
                   plugins: [
                     ['polyfill-corejs3', {
                       targets: targets.join(', '), // ES2018 baseline
