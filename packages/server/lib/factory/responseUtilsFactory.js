@@ -12,8 +12,8 @@ const {
 module.exports = function responseUtilsFactory({ applicationFolder }) {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
   const runnerPath = path.resolve(
-    applicationFolder,
-    './build/server/runner.js'
+    __dirname,
+    '../../polyfill/runner.js'
   );
   const manifestPath = path.resolve(applicationFolder, './build/manifest.json');
   const uuidPrefix = `${Date.now().toString(36)}-${(

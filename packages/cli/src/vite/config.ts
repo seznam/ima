@@ -6,7 +6,6 @@ import compression from 'vite-plugin-compression2';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import babel from '@rollup/plugin-babel';
 
-import { imaRunnerPlugin } from './plugins/imaRunnerPlugin';
 import {
   imaLanguagesPlugin,
   getVirtualLanguageEntryPoints,
@@ -83,7 +82,6 @@ export default async (
           // Copy only for one client build, since both share the same public dir
           environment: ctx.command === 'build' ? 'modern' : 'client',
         }),
-        imaRunnerPlugin({ context: ctx, imaConfig }),
         imaLanguagesPlugin(imaConfig, rootDir),
         imaSkipCssPlugin({ environments: ['legacy', 'server'] }),
       ],

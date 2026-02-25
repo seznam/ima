@@ -1,4 +1,4 @@
-// @TODO: We should transform this into a Vite plugin
+// @TODO: Maybe we should transform this into a Vite plugin
 import { build } from 'vite';
 import fs from 'fs/promises';
 import path from 'path';
@@ -40,8 +40,7 @@ function getDevLanguageAssets(
       }
 
       const name = `${prefix}/${inputKey}.js`;
-      const rawId = inputValue as string;
-      const fileName = useViteIdPrefix ? `@id/${rawId}` : rawId;
+      const fileName = useViteIdPrefix ? `@id/${inputValue}` : inputValue;
 
       return [name, { fileName, name }] as const;
     })

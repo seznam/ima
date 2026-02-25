@@ -116,7 +116,6 @@
         if (
           runner.scriptResources.esScripts &&
           runner.testScripts.esScripts.every(testScript)
-          <% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>
         ) {
           runner.isEsVersion = true;
           Array.prototype.push.apply(runner.scripts, runner.scriptResources.esScripts);
@@ -146,17 +145,6 @@
         var runner = root.$IMA.Runner;
 
         try {
-          /**
-           * We need to wrap both runtime codes in a string and execute the function
-           * since the code can contain some legacy incompatible syntax, which would
-           * break the legacy (not supported) JS interpreters.
-           */
-          if (runner.isEsVersion<% if (forceLegacy) {%>&& !<%- forceLegacy %><%}%>) {
-            new Function('<%- esRuntime %>')();
-          } else {
-            new Function('<%- runtime %>')();
-          }
-
           runner.onRun();
         } catch (error) {
           runner.onError(error);
