@@ -1,11 +1,11 @@
 import path from 'path';
 
+import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
-import { Event } from '@ima/server';
 import open from 'better-opn';
 import chalk from 'chalk';
 import kill from 'kill-port';
-import { createServer } from 'vite';
+import nodemon from 'nodemon';
 import { CommandBuilder } from 'yargs';
 
 import {
@@ -13,17 +13,73 @@ import {
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { HandlerFn, ViteConfigWithEnvironments } from '../types';
-import { createManifestForDev } from '../lib/manifest';
+import { HandlerFn, ImaCliArgs } from '../types';
 import {
   cleanup,
-  createDevServerConfig,
-  createViteConfig,
   resolveEnvironment,
   resolveImaConfig,
   runImaPluginsHook,
 } from '../vite/utils/utils';
 import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
+
+
+/**
+ * Starts ima server with nodemon to watch for server-side changes
+ * (all changes in server/ folder), to automatically restart the application
+ * server in case any change is detected.
+ */
+function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
+  let serverHasStarted = false;
+
+  // The dev-server script lives alongside this file in dist/lib/dev-server.js
+  const devServerScript = path.join(__dirname, '../lib/dev-server.js');
+
+  nodemon({
+    script: devServerScript,
+    watch: ['server'].map(p => path.join(args.rootDir, p)),
+    args: [],
+    nodeArgs: args.inspect ? ['--inspect'] : [],
+    cwd: args.rootDir,
+    env: {
+      ...process.env,
+      IMA_CLI_ARGS: JSON.stringify(args),
+    },
+  })
+    .on('start', () => {
+      logger.info(
+        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
+          !serverHasStarted && args.forceSPA
+            ? ` in ${chalk.black.bgCyan('SPA mode')}`
+            : args.forceSPAPrefetch
+              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
+              : ''
+        }...`
+      );
+
+      if (
+        process.env.IMA_CLI_OPEN !== 'false' &&
+        args.open &&
+        !serverHasStarted
+      ) {
+        serverHasStarted = true;
+
+        const port = environment.$Server.port;
+        const openUrl =
+          args.openUrl ??
+          process.env.IMA_CLI_OPEN_URL ??
+          `http://localhost:${port}`;
+
+        try {
+          open(openUrl);
+        } catch (error) {
+          logger.error(`Could not open ${openUrl} inside a browser, ${error}`);
+        }
+      }
+    })
+    .on('crash', () => {
+      logger.error('Application watcher crashed unexpectedly.');
+    });
+}
 
 /**
  * Builds ima application in watch mode
@@ -54,97 +110,16 @@ const dev: HandlerFn = async args => {
     // Do cleanup
     await cleanup(args);
 
-    // Load ima config & env
-    const imaConfig = await resolveImaConfig(args);
     const environment = resolveEnvironment(args.rootDir);
-
-    /**
-     * Set public env variable which is used to load assets in the SSR error view.
-     * CLI Args should always override the config values.
-     */
-    const devServerConfig = createDevServerConfig({ imaConfig, args });
-    process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL = devServerConfig.publicUrl;
 
     // Kill processes running on the same port
     await Promise.all([
       kill(environment.$Server.port),
-      kill(devServerConfig.port),
     ]);
 
-    // Run preProcess hook on IMA CLI Plugins
-    await runImaPluginsHook(args, imaConfig, 'preProcess');
-
-    // Generate vite config
-    const config = await createViteConfig(args, imaConfig);
-
-    // Vite dev server requires us to use `client` and `ssr` environments
-    const configWithMappedEnvironments: ViteConfigWithEnvironments = {
-      ...config,
-      environments: {
-        client: config.environments.modern,
-        ssr: config.environments.server,
-      },
-      server: {
-        port: devServerConfig.port,
-        host: devServerConfig.host,
-        middlewareMode: true,
-      },
-    }
-
-    // @TODO: This is a dev manifest, its pretty much static and does not change, but it feels a bit hacky so lets review this later
-    logger.info(`Generating dev manifest...`);
-    await createManifestForDev(imaConfig, configWithMappedEnvironments);
-
-    // Start the Vite dev server
-    logger.info('Starting vite dev HMR server...');
-    const vite = await createServer({
-      ...configWithMappedEnvironments,
-      appType: 'custom',
-    });
-
-    // Initialize application server with additional hooks for development
-    const {app, imaServer} = (await import(path.resolve(args.rootDir, 'server/app.js'))).createApp(vite);
-
-    imaServer.emitter.prependListener(Event.Response, async (event: any) => {
-      event.context.response.content = await vite.transformIndexHtml(event.req.url, event.context.response.content);
-    });
-
-    app.listen(environment.$Server.port, () => {
-      logger.info(
-        `Starting application server${
-          args.forceSPA
-            ? ` in ${chalk.black.bgCyan('SPA mode')}`
-            : args.forceSPAPrefetch
-              ? ` in ${chalk.black.bgYellow('SPA prefetch mode')}`
-              : ''
-        }...`
-      );
-
-      if (
-        process.env.IMA_CLI_OPEN !== 'false' &&
-        args.open
-      ) {
-        const port = environment.$Server.port;
-        const openUrl =
-          args.openUrl ??
-          process.env.IMA_CLI_OPEN_URL ??
-          `http://localhost:${port}`;
-
-        try {
-          open(openUrl);
-        } catch (error) {
-          logger.error(`Could not open ${openUrl} inside a browser, ${error}`);
-        }
-      }
-      logger.info('The app is running at http://localhost:' + environment.$Server.port);
-    })
-
-    // @TODO: Review logging
-    vite.watcher.on('all', (...args) => {
-      console.log(...args)
-    });
-
-    vite.bindCLIShortcuts({ print: true })
+    // Start the application server (and Vite HMR server) via nodemon so that
+    // any changes inside server/ automatically trigger a server restart.
+    startNodemon(args, environment);
   } catch (error) {
     console.error(error);
 

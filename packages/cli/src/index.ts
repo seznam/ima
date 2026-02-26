@@ -9,7 +9,6 @@ export {
 export {
   IMA_CONF_FILENAME,
   createCacheKey,
-  createDevServerConfig,
   getCurrentCoreJsVersion,
   resolveEnvironment,
   resolveImaConfig,

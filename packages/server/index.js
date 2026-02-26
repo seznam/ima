@@ -89,8 +89,6 @@ function createIMAServer({
     instanceRecycler,
     serverGlobal,
   });
-  const memStaticProxy =
-    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
   serverApp.useIMADefaultHook();
@@ -104,7 +102,6 @@ function createIMAServer({
     logger,
     cache,
     instanceRecycler,
-    memStaticProxy,
     emitter,
     performance,
     Event,

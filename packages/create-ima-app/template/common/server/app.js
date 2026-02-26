@@ -138,7 +138,6 @@ function createApp(viteDevServer) {
     // )
     .use(
       environment.$Server.staticPath,
-      imaServer.memStaticProxy,
       expressStaticGzip(path.resolve(path.join(__dirname, '../build')), {
         enableBrotli: true,
         index: false,

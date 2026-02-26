@@ -26,48 +26,6 @@ export function resolveEnvironment(
 }
 
 /**
- * Creates hmr dev server configuration from provided contexts
- * and arguments with this priority args -> ctx -> imaConfig -> [defaults].
- */
-export function createDevServerConfig({
-  args,
-  ctx,
-  imaConfig,
-}: {
-  args?: ImaCliArgs;
-  ctx?: ImaConfigurationContext;
-  imaConfig: ImaConfig;
-}): {
-  port: number;
-  host: string;
-  publicUrl: string;
-} {
-  const port = args?.port ?? ctx?.port ?? imaConfig?.devServer?.port ?? 3101;
-  const hostname =
-    args?.hostname ??
-    ctx?.hostname ??
-    imaConfig?.devServer?.hostname ??
-    'localhost';
-  let publicUrl =
-    args?.publicUrl ?? ctx?.publicUrl ?? imaConfig?.devServer?.publicUrl;
-
-  // Clean public url (remove last slash)
-  publicUrl = publicUrl ?? `${hostname}:${port}`;
-  publicUrl = publicUrl?.replace(/\/$/, '');
-
-  // Preppend http
-  if (!publicUrl?.startsWith('http')) {
-    publicUrl = `http://${publicUrl}`;
-  }
-
-  return {
-    port,
-    host: hostname,
-    publicUrl,
-  };
-}
-
-/**
  * Creates hash representing current webpack environment.
  *
  * @param {ImaConfigurationContext} ctx Current configuration context.
