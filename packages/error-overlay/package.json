@@ -23,7 +23,8 @@
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "stylelint": "stylelint './**/*.less'"
+    "stylelint": "stylelint './**/*.less'",
+    "prepare": "pnpm run build"
   },
   "devDependencies": {
     "@ima/dev-utils": "^20.0.0",

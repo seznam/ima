@@ -10,11 +10,11 @@ import type {
   UnknownParameters,
 } from '@ima/core';
 import type { ReactRenderer } from '@storybook/react';
-import type { StoryContextForLoaders, StrictArgs } from '@storybook/types';
+import type { StoryContext, StrictArgs } from 'storybook/internal/types';
 
 export interface ImaStorybookArgs {}
 
-declare module '@storybook/types' {
+declare module 'storybook/internal/types' {
   interface Parameters {
     ima?: {
       initBindApp?: (
@@ -22,26 +22,26 @@ declare module '@storybook/types' {
         oc: ObjectContainer,
         config: Required<BootConfig>['bind'],
         state: BindingState,
-        storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
+        storybookArgs: StoryContext<ReactRenderer, StrictArgs>
       ) => void;
       initRoutes?: (
         ns: Namespace,
         oc: ObjectContainer,
         routes: UnknownParameters | undefined,
         router: Router,
-        storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
+        storybookArgs: StoryContext<ReactRenderer, StrictArgs>
       ) => void;
       initServicesApp?: (
         ns: Namespace,
         oc: ObjectContainer,
         config: BootConfig['services'],
-        storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
+        storybookArgs: StoryContext<ReactRenderer, StrictArgs>
       ) => void;
       initSettings?: (
         ns: Namespace,
         oc: ObjectContainer,
         config: BootConfig['settings'],
-        storybookArgs: StoryContextForLoaders<ReactRenderer, StrictArgs>
+        storybookArgs: StoryContext<ReactRenderer, StrictArgs>
       ) => AppSettings;
       $IMA?: GlobalImaObject;
       state?: PageState;
