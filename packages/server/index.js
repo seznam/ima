@@ -88,6 +88,7 @@ function createIMAServer({
     performance,
     instanceRecycler,
     serverGlobal,
+    vite,
   });
 
   const cache = require('./lib/cache.js')({ environment });

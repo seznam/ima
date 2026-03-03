@@ -14,6 +14,7 @@ import {
 import { BuildEnvironmentOptions } from 'vite';
 import { ImaConfigurationContext, ImaConfig, ViteConfigWithEnvironments } from '../types';
 import { imaSkipCssPlugin } from './plugins/imaSkipCssPlugin';
+import { imaHmrPlugin } from './plugins/imaHmrPlugin';
 import { getCurrentCoreJsVersion } from './utils/utils';
 
 /**
@@ -64,8 +65,8 @@ export default async (
         // @TODO: @ima/core is not using React, should we make it possible to extend configuration from other plugins like @ima/react-page-renderer?
         react({}),
         (
-          // applyToEnvironment does not work for some reason, so we need to use an alternative approach
-          // compression plugin seems to customize the applyToEnvironment method internally
+          // applyToEnvironment does not work here, so we need to use an alternative approach
+          // compression plugin customizes the applyToEnvironment method internally
           ctx.command === 'build' && imaConfig.compress ? compression({
             exclude: /^server\/(?!runner\.js$)/
           }) : null
@@ -83,6 +84,7 @@ export default async (
         }),
         imaLanguagesPlugin(imaConfig, rootDir),
         imaSkipCssPlugin({ environments: ['legacy', 'server'] }),
+        imaHmrPlugin(),
       ],
 
       resolve: {

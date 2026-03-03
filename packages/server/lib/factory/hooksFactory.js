@@ -52,6 +52,7 @@ module.exports = function hooksFactory({
   instanceRecycler,
   devErrorPage,
   environment,
+  vite,
 }) {
   function _isServerOverloaded(event) {
     return isDegraded('isOverloaded', event);
@@ -114,6 +115,8 @@ module.exports = function hooksFactory({
   }
 
   async function _applyError(event) {
+    vite?.ssrFixStacktrace(event.error);
+
     if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticServerErrorPage(event);
     }
@@ -124,11 +127,15 @@ module.exports = function hooksFactory({
         .get('$Router')
         .handleError({ error })
         .catch(e => {
+          vite?.ssrFixStacktrace(e);
+
           e.cause = error;
 
           return renderStaticServerErrorPage({ ...event, error: e });
         });
     } catch (e) {
+      vite?.ssrFixStacktrace(e);
+
       e.cause = event.error;
 
       return renderStaticServerErrorPage({ ...event, error: e });

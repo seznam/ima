@@ -12,7 +12,8 @@ import {
   resolveImaConfig,
   runImaPluginsHook,
 } from '../vite/utils/utils';
-import { createManifestForDev } from './manifest';
+import { createManifestForDev } from '../lib/manifest';
+import { addDevServerMiddlewaresFactory } from './addDevServerMiddlewares';
 
 /**
  * Standalone dev-server entry point started (and restarted) by nodemon.
@@ -74,7 +75,12 @@ async function main() {
   const { createApp } = await import(
     path.resolve(args.rootDir, 'server/app.js')
   );
-  const { app, imaServer } = createApp(vite);
+  const { app, imaServer } = createApp(vite, addDevServerMiddlewaresFactory({
+    args,
+    config: imaConfig,
+    environment,
+    vite,
+  }));
 
   imaServer.emitter.prependListener(Event.Response, async (event: any) => {
     event.context.response.content = await vite.transformIndexHtml(

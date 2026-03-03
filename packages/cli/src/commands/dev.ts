@@ -14,12 +14,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { HandlerFn, ImaCliArgs } from '../types';
-import {
-  cleanup,
-  resolveEnvironment,
-  resolveImaConfig,
-  runImaPluginsHook,
-} from '../vite/utils/utils';
+import { cleanup, resolveEnvironment } from '../vite/utils/utils';
 import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 
 
@@ -31,8 +26,8 @@ import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
-  // The dev-server script lives alongside this file in dist/lib/dev-server.js
-  const devServerScript = path.join(__dirname, '../lib/dev-server.js');
+  // The dev-server script lives alongside this file in dist/lib/devServer.js
+  const devServerScript = path.join(__dirname, '../dev-server/devServer.js');
 
   nodemon({
     script: devServerScript,
