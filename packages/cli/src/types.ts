@@ -1,3 +1,5 @@
+import { ParseResult } from '@babel/parser';
+import { File } from '@babel/types';
 import { Environment } from '@ima/core';
 import { UserConfig as ViteConfig } from 'vite';
 import { CommandBuilder } from 'yargs';
@@ -272,3 +274,5 @@ export type ImaConfig = {
     css?: boolean; // Enables webpack native CSS support
   };
 };
+
+export type UseServerProcessor = (ast: ParseResult<File>) => ParseResult<File>;

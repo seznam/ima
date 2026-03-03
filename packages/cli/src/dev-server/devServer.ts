@@ -83,6 +83,11 @@ async function main() {
   }));
 
   imaServer.emitter.prependListener(Event.Response, async (event: any) => {
+    // Skip controllers with $responseType: 'json'
+    if (event.res.getHeader('Content-Type') === 'application/json') {
+      return;
+    }
+
     event.context.response.content = await vite.transformIndexHtml(
       event.req.url,
       event.context.response.content

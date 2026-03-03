@@ -15,6 +15,7 @@ import { BuildEnvironmentOptions } from 'vite';
 import { ImaConfigurationContext, ImaConfig, ViteConfigWithEnvironments } from '../types';
 import { imaSkipCssPlugin } from './plugins/imaSkipCssPlugin';
 import { imaHmrPlugin } from './plugins/imaHmrPlugin';
+import { imaUseServerPlugin } from './plugins/imaUseServerPlugin';
 import { getCurrentCoreJsVersion } from './utils/utils';
 
 /**
@@ -84,6 +85,7 @@ export default async (
         }),
         imaLanguagesPlugin(imaConfig, rootDir),
         imaSkipCssPlugin({ environments: ['legacy', 'server'] }),
+        imaUseServerPlugin(ctx),
         imaHmrPlugin(),
       ],
 
