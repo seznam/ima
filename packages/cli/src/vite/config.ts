@@ -134,6 +134,19 @@ export default async (
       },
 
       environments: {
+        modern: {
+          consumer: 'client',
+          build: {
+            target: 'es2024',
+            cssTarget: 'es2023', // CSS target es2024 is not yet supported, once it is, we can remove this line
+            rolldownOptions: {
+              external: [],
+              output: {
+                ...getRolldownOutputConfig('static/js.es', 'client'),
+              }
+            },
+          },
+        },
         legacy: {
           consumer: 'client',
           build: {
@@ -170,19 +183,6 @@ export default async (
               }
             }
           }
-        },
-        modern: {
-          consumer: 'client',
-          build: {
-            target: 'es2024',
-            cssTarget: 'es2023', // CSS target es2024 is not yet supported, once it is, we can remove this line
-            rolldownOptions: {
-              external: [],
-              output: {
-                ...getRolldownOutputConfig('static/js.es', 'client'),
-              }
-            },
-          },
         },
         server: {
           consumer: 'server',
