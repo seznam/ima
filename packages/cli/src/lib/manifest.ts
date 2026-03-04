@@ -144,7 +144,7 @@ function extendManifestFromOutput(manifest: Manifest, env: string, output: ViteB
             continue;
         }
         // assetKey is chunk.fileName without the hash before extension. Hash is always 16 characters long. If there is 16 characters inbetween last 2 dots, remove them.
-        const assetKey = chunk.fileName.replace(/\.([a-zA-Z0-9_-]{16})(\.[^.]+)$/, '$2');
+        const assetKey = chunk.fileName.replace(/\.([a-zA-Z0-9_-]{16})(\.[^.]+)$/, '$2').replace(/\.mjs$/, '.js');
 
         if (chunk.fileName === assetKey) {
             // No hash found, use full fileName

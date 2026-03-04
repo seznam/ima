@@ -48,14 +48,14 @@ export default async (
     return {
       entryFileNames: (chunkInfo) => {
         if (chunkInfo.name === 'app') {
-          return `${outputJsFolder}/app.${appSuffix}.[hash:16].js`;
+          return `${outputJsFolder}/app.${appSuffix}.[hash:16].mjs`;
         }
 
-        return `${outputJsFolder}/[name].[hash:16].js`;
+        return `${outputJsFolder}/[name].[hash:16].mjs`;
       },
 
       // Vendor location
-      chunkFileNames: `${outputJsFolder}/[name].[hash:16].js`,
+      chunkFileNames: `${outputJsFolder}/[name].[hash:16].mjs`,
     }
   }
 

@@ -73,7 +73,7 @@ export function formatViteStats(
       if (RELATED_EXTENSIONS.some(ext => name.endsWith(ext))) {
         return false;
       }
-      if (!name.endsWith('.js') && !name.endsWith('.css')) {
+      if (!name.endsWith('.js') && !name.endsWith('.mjs') && !name.endsWith('.css')) {
         return envName === 'modern';
       }
       return true;
