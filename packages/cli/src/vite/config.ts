@@ -6,6 +6,8 @@ import compression from 'vite-plugin-compression2';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import babel from '@rollup/plugin-babel';
 
+import lessPluginGlob from 'less-plugin-glob';
+
 import {
   imaLanguagesPlugin,
   getVirtualLanguageEntryPoints,
@@ -205,21 +207,15 @@ export default async (
 
       // CSS configuration
       css: {
-        // @TODO: This used to be conditionally linked to `.module.css` files only, review if this is needed or safe
         modules: {
           generateScopedName: isDevEnv
             ? '[path][name]__[local]--[hash:base64:5]'
             : '[hash:base64]',
-          localsConvention: 'camelCaseOnly',
         },
         preprocessorOptions: {
           less: {
             javascriptEnabled: true,
-            // @TODO: Do we neeed this plugins part? AI suggested this, but I don't understand the use case yet
-            // plugins: [
-            //   // @ts-expect-error - less-plugin-glob types are incomplete
-            //   require('less-plugin-glob'),
-            // ],
+            plugins: [lessPluginGlob],
             // Import globals.less automatically
             ...(fs.existsSync(lessGlobalsPath) && {
               additionalData: `@import "${lessGlobalsPath}";\n`,
