@@ -1,8 +1,7 @@
 // @TODO: Maybe we should transform this into a Vite plugin
-import { build } from 'vite';
 import fs from 'fs/promises';
 import path from 'path';
-import { ImaConfig, ViteConfigWithEnvironments } from '../types';
+import { ImaConfig, ImaBuildOutput, ViteBuildOutput, ViteConfigWithEnvironments } from '../types';
 
 interface Manifest {
     assets: {
@@ -99,7 +98,7 @@ export async function createManifestForDev(imaConfig: ImaConfig, config: ViteCon
     );
 }
 
-export async function createManifestFileFromOutput(results: { config: string, output: Awaited<ReturnType<typeof build>> }[], imaConfig: ImaConfig) {
+export async function createManifestFileFromOutput(results: ImaBuildOutput[], imaConfig: ImaConfig) {
     const manifest: Manifest = {
         assets: {},
         assetsByCompiler: {},
@@ -107,7 +106,7 @@ export async function createManifestFileFromOutput(results: { config: string, ou
     };
 
     for (const result of results) {
-        extendManifestFromOutput(manifest, result.config, result.output, imaConfig);
+        extendManifestFromOutput(manifest, result.env, result.output, imaConfig);
     }
 
     await fs.writeFile(
@@ -117,11 +116,11 @@ export async function createManifestFileFromOutput(results: { config: string, ou
     );
 }
 
-function extendManifestFromOutput(manifest: Manifest, config: string, output: Awaited<ReturnType<typeof build>>, imaConfig: ImaConfig): Manifest {
+function extendManifestFromOutput(manifest: Manifest, env: string, output: ViteBuildOutput, imaConfig: ImaConfig): Manifest {
     // Handle array of outputs
     if (Array.isArray(output)) {
         for (const singleOutput of output) {
-            extendManifestFromOutput(manifest, config, singleOutput, imaConfig);
+            extendManifestFromOutput(manifest, env, singleOutput, imaConfig);
         }
         return manifest;
     }
@@ -132,8 +131,8 @@ function extendManifestFromOutput(manifest: Manifest, config: string, output: Aw
         return manifest;
     }
 
-    const isServer = config === 'server';
-    const compilerName = isServer ? 'server' : config === 'legacy' ? 'client' : 'client.es';
+    const isServer = env === 'server';
+    const compilerName = isServer ? 'server' : env === 'legacy' ? 'client' : 'client.es';
 
     if (!manifest.assetsByCompiler[compilerName]) {
         manifest.assetsByCompiler[compilerName] = {};

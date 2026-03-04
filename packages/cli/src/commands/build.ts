@@ -1,5 +1,5 @@
 import { logger } from '@ima/dev-utils/logger';
-import { createBuilder, ViteBuilder } from 'vite';
+import { createBuilder, createLogger, ViteBuilder } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 import {
@@ -15,8 +15,8 @@ import {
   runImaPluginsHook,
 } from '../vite/utils/utils';
 import { createManifestFileFromOutput } from '../lib/manifest';
-
-type ImaOutputs = { config: string; output: Awaited<ReturnType<ViteBuilder['build']>> }[];
+import { formatViteStats } from '../lib/formatStats';
+import { ImaBuildOutput } from '../types';
 
 /**
  * Builds ima application.
@@ -25,7 +25,7 @@ type ImaOutputs = { config: string; output: Awaited<ReturnType<ViteBuilder['buil
  * @returns {Promise<void>}
  */
 const build: HandlerFn = async args => {
-  function buildAppFactory(outputs: ImaOutputs, imaConfig: ImaConfig) {
+  function buildAppFactory(outputs: ImaBuildOutput[], imaConfig: ImaConfig) {
     return async function buildApp(builder: ViteBuilder) {
       // There is also default `client` environment, that we are skipping here
       const buildEnvironments = ['server', 'modern'];
@@ -37,9 +37,10 @@ const build: HandlerFn = async args => {
       const envs = Object.values(builder.environments).filter(env => buildEnvironments.includes(env.name));
 
       await Promise.all(envs.map(async env => {
-        const output = await builder.build(env)
+        const start = Date.now();
+        const output = await builder.build(env);
 
-        outputs.push({ config: env.name, output });
+        outputs.push({ env: env.name, output, time: Date.now() - start });
       }));
     }
   }
@@ -56,18 +57,22 @@ const build: HandlerFn = async args => {
 
     // Generate vite config
     const config = await createViteConfig(args, imaConfig);
-    const outputs: ImaOutputs = []; // Needed for manifest generation after build finishes
+    const outputs: ImaBuildOutput[] = []; // Needed for manifest generation after build finishes
 
     logger.info('Running vite compiler...', { trackTime: true });
-    const builder = await createBuilder({ ...config, builder: {
-      buildApp: buildAppFactory(outputs, imaConfig),
-    }});
+    const builder = await createBuilder({
+      ...config,
+      builder: {
+        buildApp: buildAppFactory(outputs, imaConfig),
+      },
+    });
 
     await builder.buildApp();
 
     logger.endTracking();
 
     await createManifestFileFromOutput(outputs, imaConfig);
+    formatViteStats(outputs, args.rootDir);
     logger.info('Vite build finished successfully.');
   } catch (error) {
     console.error(error);

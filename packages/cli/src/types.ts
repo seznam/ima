@@ -1,7 +1,7 @@
 import { ParseResult } from '@babel/parser';
 import { File } from '@babel/types';
 import { Environment } from '@ima/core';
-import { UserConfig as ViteConfig } from 'vite';
+import { UserConfig as ViteConfig, ViteBuilder } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 declare global {
@@ -276,3 +276,11 @@ export type ImaConfig = {
 };
 
 export type UseServerProcessor = (ast: ParseResult<File>) => ParseResult<File>;
+
+export type ViteBuildOutput = Awaited<ReturnType<ViteBuilder['build']>>;
+
+export type ImaBuildOutput = {
+  env: string;
+  output: ViteBuildOutput;
+  time: number;
+};

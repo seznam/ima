@@ -1,271 +1,143 @@
-// @TODO: Fix pretty prints to work with Vite
 import fs from 'fs';
 import path from 'path';
 
-import { formatError, parseError } from '@ima/dev-utils/cliUtils';
 import { logger } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';
-import { MultiStats, StatsAsset } from 'webpack';
 
-import { ImaCliArgs } from '../types';
-
-const warningsCache = new Set<string>();
+import { ImaBuildOutput, ViteBuildOutput } from '../types';
 
 /**
- * Prints formatted webpack errors (stripped from duplicates) into console.
+ * Extracts a flat list of file names from a Vite build result,
+ * handling both single RolldownOutput and arrays, and skipping watchers.
  */
-async function formatWebpackErrors(
-  stats: MultiStats | undefined,
-  args: ImaCliArgs
-): Promise<void> {
-  if (!stats?.hasErrors()) {
-    return;
+function collectViteChunkFileNames(output: ViteBuildOutput): string[] {
+  if (Array.isArray(output)) {
+    return output.flatMap(o => collectViteChunkFileNames(o));
   }
 
-  // Raw verbose
-  if (args.verbose) {
-    return logger.write(stats.toString({ all: false, errors: true }));
+  // Handle RolldownWatcher
+  // @TODO: Remove this with vite v8
+  if (!('output' in output)) {
+    return [];
   }
 
-  const { errors } = stats.toJson({ all: false, errors: true });
-
-  if (!Array.isArray(errors)) {
-    return;
-  }
-
-  const uniqueErrorTracker: string[] = [];
-
-  for (const error of errors) {
-    // Format error
-    try {
-      const parsedErrorData = await parseError(error, 'compile');
-      const formattedError = await formatError(
-        parsedErrorData,
-        args.rootDir,
-        uniqueErrorTracker
-      );
-
-      // Print unique error
-      formattedError && logger.error(formattedError);
-    } catch {
-      // Fallback to original error messsage
-      logger.error(
-        await formatError(
-          {
-            name: error?.name,
-            message: error?.message,
-            fileUri: error?.file,
-            stack: error?.stack,
-          },
-          args.rootDir,
-          uniqueErrorTracker
-        )
-      );
-    }
-  }
+  return output.output.map(chunk => chunk.fileName);
 }
 
 /**
- * Prints cleaned up webpack warnings.
- */
-function formatWebpackWarnings(
-  stats: MultiStats | undefined,
-  args: ImaCliArgs
-): void {
-  if (args.ignoreWarnings) {
-    return;
-  }
-
-  if (!stats?.hasWarnings()) {
-    return;
-  }
-
-  const { warnings } = stats.toJson({ all: false, warnings: true });
-  const newWarnings = [];
-
-  // Cache unique warnings
-  if (Array.isArray(warnings)) {
-    for (const warning of warnings) {
-      // Ignore source-map-loader warnings
-      if (warning.message.includes('Failed to parse source map')) {
-        continue;
-      }
-
-      if (!warningsCache.has(warning.message)) {
-        warningsCache.add(warning.message);
-        newWarnings.push(warning);
-      }
-    }
-  }
-
-  if (newWarnings.length === 0) {
-    return;
-  }
-
-  // Minimal (default) verbose
-  newWarnings?.forEach(warning => {
-    logger.warn(`at ${chalk.blueBright.bold.underline(warning.moduleName)}`);
-    const lines = warning.message.split('\n');
-    logger.write(chalk.underline(lines.shift()));
-    logger.write(lines.join('\n'));
-  });
-}
-
-/**
- * Extracts asset paths from it's name (containing basePath)
- * and output directory.
- */
-function extractAssetPaths(
-  name: string,
-  outDir: string
-): { fileName: string; fullPath: string; basePath: string } {
-  const fullPath = path.join(outDir, name);
-  const lastSlashIndex = fullPath.lastIndexOf('/');
-  const fileName = fullPath.substring(lastSlashIndex + 1);
-  const basePath = fullPath
-    .substring(0, lastSlashIndex + 1)
-    .replace(outDir, '');
-
-  return {
-    fileName,
-    fullPath,
-    basePath,
-  };
-}
-
-/**
- * Print formatted info about given asset
- */
-function printAssetInfo(
-  asset: StatsAsset | undefined,
-  outDir: string,
-  isLastItem = false
-): void {
-  let result = '';
-
-  if (!asset || !asset.name) {
-    return;
-  }
-
-  const assetPaths = extractAssetPaths(asset.name, outDir);
-
-  // Print output
-  result += chalk.gray(isLastItem ? ' └ ' : ' ├ ');
-  result += chalk.gray(assetPaths.basePath);
-  result += chalk.bold.cyan(assetPaths.fileName);
-  result += ` ${chalk.green.bold(prettyBytes(asset.size))}`;
-
-  // Prints brotli and gzip sizes
-  Object.values(asset?.info?.related ?? {})
-    .map(assetName => extractAssetPaths(assetName?.toString() ?? '', outDir))
-    .filter(({ fullPath }) => fs.existsSync(fullPath))
-    .forEach(({ fileName, fullPath }) => {
-      result += '\n';
-      result += chalk.gray(isLastItem ? '     ' : ' ǀ   ');
-      result += fileName;
-      result += chalk.yellow(
-        ` ${prettyBytes(fs.statSync(path.join(fullPath)).size)}`
-      );
-    });
-
-  logger.write(result);
-}
-
-/**
- * Handles stats logging during webpack build and watch tasks.
+ * Prints a formatted summary of Vite build outputs, closely mirroring
+ * the original webpack-based formatStats output.
  *
- * @param {MultiStats|undefined} stats Webpack stats object.
- * @param {ImaCliArgs} args Cli and build args.
- * @returns {void}
+ * @param outputs  Array of per-environment build results, including timing.
+ * @param rootDir  Project root directory (used to resolve the build/ folder).
  */
-function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
-  if (!stats) {
-    return logger.error('Unknown error, stats are empty');
-  }
+export function formatViteStats(
+  outputs: ImaBuildOutput[],
+  rootDir: string
+): void {
+  const outDir = path.join(rootDir, 'build');
 
-  // Print raw webpack log
-  if (args?.verbose) {
-    return logger.write(
-      stats.toString({
-        warnings: !args.ignoreWarnings,
-        colors: true,
-      })
-    );
-  }
+  // Maps internal Vite environment names to the labels shown in the log
+  const envDisplayNames: Record<string, string> = {
+    server: 'server',
+    modern: 'client.es',
+    legacy: 'client',
+  };
 
-  const jsonStats = stats.toJson({
-    all: false,
-    assets: true,
-    timings: true,
-    version: true,
-    outputPath: true,
-    chunkGroups: true,
-  });
+  const RELATED_EXTENSIONS = ['.map', '.br', '.gz'];
 
-  if (!Array.isArray(jsonStats.children) || jsonStats.children?.length === 0) {
-    return;
-  }
-
-  let totalAssetCount = 0;
-  let chunkAssetsCount = 0;
-  const outDir = jsonStats.children[0].outputPath ?? '';
-
-  logger.info(
-    `Compilation was ${chalk.green(
-      'successful'
-    )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
+  // Canonical display order: server → legacy (client) → modern (client.es)
+  const ENV_ORDER = ['server', 'legacy', 'modern'];
+  const sortedOutputs = [...outputs].sort(
+    (a, b) => ENV_ORDER.indexOf(a.env) - ENV_ORDER.indexOf(b.env)
   );
-  args.command === 'dev' &&
-    logger.info(`Client assets are served from ${chalk.yellowBright('memory')}`);
+
+  let additionalAssetCount = 0;
+
   logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
-  // Print info about emitted assets
-  jsonStats.children?.forEach(child => {
-    logger.write(
-      `${chalk.underline.bold(child.name)} ${chalk.gray(
-        `[${prettyMs(child.time ?? 0)}]`
-      )}`
-    );
+  for (const { env: envName, output, time } of sortedOutputs) {
+    const displayName = envDisplayNames[envName] ?? envName;
+    const allFileNames = collectViteChunkFileNames(output);
 
-    // Count total number of generated assets
-    totalAssetCount +=
-      child?.assets?.reduce((acc, cur) => {
-        acc += cur?.filteredRelated ?? 0 + 1;
-
-        return acc;
-      }, 0) ?? 0;
-
-    if (!(child.name && child.namedChunkGroups?.[child.name])) {
-      return;
+    if (allFileNames.length === 0) {
+      continue;
     }
 
-    // Child assets
-    const filteredAssets =
-      child.namedChunkGroups?.[child.name]?.assets?.map(({ name }) =>
-        child?.assets?.find(childAsset => childAsset.name === name)
-      ) ?? [];
+    // Split into primary files (JS/CSS/assets) and secondary (maps, compressed)
+    // Static assets (images, fonts, etc.) are emitted by every environment, so
+    // only show them for the modern build to avoid duplicates.
+    const primaryFiles = allFileNames.filter(name => {
+      if (RELATED_EXTENSIONS.some(ext => name.endsWith(ext))) {
+        return false;
+      }
+      if (!name.endsWith('.js') && !name.endsWith('.css')) {
+        return envName === 'modern';
+      }
+      return true;
+    });
+    const relatedFiles = new Set(
+      allFileNames.filter(name =>
+        RELATED_EXTENSIONS.some(ext => name.endsWith(ext))
+      )
+    );
 
-    // Print chunk assets
-    filteredAssets?.forEach((asset, index) => {
-      // Count also related (plugin generated) files
-      chunkAssetsCount += asset?.filteredRelated ?? 0;
-      printAssetInfo(asset, outDir, index === filteredAssets?.length - 1);
+    additionalAssetCount += relatedFiles.size;
+
+    logger.write(
+      `${chalk.underline.bold(displayName)} ${chalk.gray(`[${prettyMs(time)}]`)}`
+    );
+
+    primaryFiles.forEach((fileName, index) => {
+      const isLast = index === primaryFiles.length - 1;
+      const fullPath = path.join(outDir, fileName);
+      const lastSlash = fileName.lastIndexOf('/');
+      const basePath = lastSlash >= 0 ? '/' + fileName.substring(0, lastSlash + 1) : '/';
+      const shortName = lastSlash >= 0 ? fileName.substring(lastSlash + 1) : fileName;
+
+      // File size from disk (may not exist if build writes to memory first)
+      let sizeStr = '';
+      try {
+        const size = fs.statSync(fullPath).size;
+        sizeStr = ` ${chalk.green.bold(prettyBytes(size))}`;
+      } catch {
+        // ignore — file may not be on disk
+      }
+
+      let line = chalk.gray(isLast ? ' └ ' : ' ├ ');
+      line += chalk.gray(basePath);
+      line += chalk.bold.cyan(shortName);
+      line += sizeStr;
+      logger.write(line);
+
+      // Print related files (.map, .br, .gz) as indented sub-items
+      const indent = chalk.gray(isLast ? '     ' : ' ǀ   ');
+      RELATED_EXTENSIONS.forEach(ext => {
+        const relatedName = fileName + ext;
+        if (!relatedFiles.has(relatedName)) {
+          return;
+        }
+
+        const relatedPath = path.join(outDir, relatedName);
+        const relatedShortName = shortName + ext;
+        let relatedSizeStr = '';
+        try {
+          const size = fs.statSync(relatedPath).size;
+          relatedSizeStr = chalk.yellow(` ${prettyBytes(size)}`);
+        } catch {
+          // ignore
+        }
+
+        logger.write(`${indent}${relatedShortName}${relatedSizeStr}`);
+      });
     });
 
     logger.write('');
-  });
+  }
 
-  // Total number of additional assets
-  const additionalAssetsCount = totalAssetCount - chunkAssetsCount;
-
-  // Print more information for build task
   logger.write(
-    `The compilation generated ${chalk.green.bold(
-      additionalAssetsCount
-    )} additional assets.\n`
+    `The compilation generated ${chalk.green.bold(additionalAssetCount)} additional assets.\n`
   );
 }
-
-export { formatWebpackErrors, formatWebpackWarnings, formatStats };
