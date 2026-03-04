@@ -13,7 +13,7 @@ const expressStaticGzip = require('express-static-gzip');
 const helmet = require('helmet');
 const favicon = require('serve-favicon');
 
-function createApp(viteDevServer) {
+function createApp(viteDevServer, addDevServerHooks) {
   const imaServer = createIMAServer({
     vite: viteDevServer,
   });
@@ -117,8 +117,8 @@ function createApp(viteDevServer) {
   }
   const app = express();
 
-  if (viteDevServer) {
-    app.use(viteDevServer.middlewares);
+  if (addDevServerHooks) {
+    addDevServerHooks(app);
   }
 
   app
