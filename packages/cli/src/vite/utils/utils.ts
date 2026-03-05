@@ -26,6 +26,28 @@ export function resolveEnvironment(
 }
 
 /**
+ * Returns polyfill entry point for current es version if the file exists.
+ * The function looks for app/polyfill.js and app/polyfill.es.js files.
+ *
+ * @param {ImaConfigurationContext} ctx Current configuration context.
+ * @returns {Record<string, string>} Entry object or empty object.
+ */
+export function createPolyfillEntry(
+  ctx: ImaConfigurationContext,
+  fileName: string
+): Record<string, string> {
+  const { rootDir } = ctx;
+
+  const polyfillPath = path.join(rootDir, 'app', fileName);
+
+  if (!fs.existsSync(polyfillPath)) {
+    return {};
+  }
+
+  return { polyfill: `app/${fileName}` };
+}
+
+/**
  * Creates hash representing current webpack environment.
  *
  * @param {ImaConfigurationContext} ctx Current configuration context.
@@ -101,13 +123,7 @@ export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       en: ['./app/**/*EN.json'],
     },
     imageInlineSizeLimit: 8192,
-    // @TODO: What is the Vite equivalent?
-    // watchOptions: {
-    //   ignored: ['**/node_modules'],
-    //   aggregateTimeout: 5,
-    // },
-    swc: async config => config,
-    swcVendor: async config => config,
+    chunkSizeWarningLimit: 1000,
     postcss: async config => config,
     cssBrowsersTarget: '>0.3%, not dead, not op_mini all',
   };
@@ -116,10 +132,6 @@ export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   const imaConfigWithDefaults = {
     ...defaultImaConfig,
     ...imaConfig,
-    // watchOptions: {
-    //   ...defaultImaConfig.watchOptions,
-    //   ...imaConfig?.watchOptions,
-    // },
     experiments: {
       ...defaultImaConfig.experiments,
       ...imaConfig?.experiments,

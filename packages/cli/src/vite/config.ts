@@ -18,7 +18,7 @@ import { ImaConfigurationContext, ImaConfig, ViteConfigWithEnvironments } from '
 import { imaSkipCssPlugin } from './plugins/imaSkipCssPlugin';
 import { imaHmrPlugin } from './plugins/imaHmrPlugin';
 import { imaUseServerPlugin } from './plugins/imaUseServerPlugin';
-import { getCurrentCoreJsVersion } from './utils/utils';
+import { createPolyfillEntry, getCurrentCoreJsVersion } from './utils/utils';
 
 /**
  * Creates Vite configuration object based on input ConfigurationContext
@@ -94,6 +94,11 @@ export default async (
       resolve: {
         alias: {
           app: appDir,
+          ...(ctx.profile && {
+            'react-dom$': 'react-dom/profiling',
+            'scheduler/tracing': 'scheduler/tracing-profiling',
+          }),
+          ...(imaConfig.viteAliases || {}),
         },
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
       },
@@ -102,6 +107,8 @@ export default async (
         outDir: 'build',
         emptyOutDir: false, // We are generating localization files before build
         sourcemap: useSourceMaps,
+        assetsInlineLimit: imaConfig.imageInlineSizeLimit,
+        chunkSizeWarningLimit: imaConfig.chunkSizeWarningLimit,
         rolldownOptions: {
           input: {
             app: 'app/main.js',
@@ -117,7 +124,6 @@ export default async (
                 return 'app';
               }
             },
-            // @TODO: I don't understand this part, let's get back to this later
             assetFileNames: (assetInfo) => {
               const name = assetInfo.name || '';
               
@@ -142,7 +148,7 @@ export default async (
             target: 'es2024',
             cssTarget: 'es2023', // CSS target es2024 is not yet supported, once it is, we can remove this line
             rolldownOptions: {
-              external: [],
+              input: createPolyfillEntry(ctx, 'polyfill.es.js'),
               output: {
                 ...getRolldownOutputConfig('static/js.es', 'client'),
               }
@@ -155,6 +161,7 @@ export default async (
             target: 'es2018',
             cssTarget: false, // We build CSS only in modern build
             rolldownOptions: {
+              input: createPolyfillEntry(ctx, 'polyfill.js'),
               plugins: [
                 // @TODO: This would be nice to replace with oxc polyfill injection
                 // Using Babel to handle polyfill injection
@@ -163,9 +170,9 @@ export default async (
                   exclude: [
                     // The `usage-global` method is designed for source code only
                     // We need to exclude minified dependencies, as they cause build issues
-                    /node_modules\/core-js/,
-                    /node_modules\/react/,
-                    /node_modules\/react-dom/,
+                    /node_modules\/core-js\//,
+                    /node_modules\/react\//,
+                    /node_modules\/react-dom\//,
                   ],
                   // Note: We only use babel for polyfills
                   plugins: [
@@ -222,19 +229,26 @@ export default async (
             }),
           },
         },
+        postcss: await imaConfig.postcss(
+          {
+            plugins: [
+              require('postcss-flexbugs-fixes'),
+              require('postcss-preset-env')({
+                browsers: imaConfig.cssBrowsersTarget,
+                autoprefixer: { flexbox: 'no-2009', grid: 'autoplace' },
+                stage: 1,
+              }),
+            ],
+          },
+          ctx
+        ),
         devSourcemap: useSourceMaps,
       },
 
-      // Define global constants
-      // @TODO: This looks dangerous, review if we need this
-      //        I tested this and it seems to be working `IMA_PUBLIC_PATH="https://www.seznam.cz/" NODE_ENV=production npm start`
-      //        The public path url did not work, but the browser requested a fallback so its all working as expected.
-      // define: {
-      //   'process.env.NODE_ENV': JSON.stringify(mode === 'production' ? 'production' : 'development'),
-      //   ...(process.env.IMA_PUBLIC_PATH && {
-      //     'process.env.IMA_PUBLIC_PATH': JSON.stringify(process.env.IMA_PUBLIC_PATH),
-      //   }),
-      // },
+      server: {
+        middlewareMode: true,
+        ...(imaConfig.watchOptions ? { watch: imaConfig.watchOptions } : {}),
+      },
 
       // Logging
       logLevel: ctx.verbose ? 'info' : 'warn',

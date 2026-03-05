@@ -1,7 +1,7 @@
 import { ParseResult } from '@babel/parser';
 import { File } from '@babel/types';
 import { Environment } from '@ima/core';
-import { UserConfig as ViteConfig, ViteBuilder } from 'vite';
+import { UserConfig as ViteConfig, ViteBuilder, AliasOptions, WatchOptions, CSSOptions } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 declare global {
@@ -15,7 +15,7 @@ declare global {
       IMA_CLI_OPEN?: string;
       IMA_CLI_OPEN_URL?: string;
 
-      // Used to pass env publicPath settings to webpack
+      // Used to pass env publicPath settings to vite
       IMA_PUBLIC_PATH?: string;
     }
   }
@@ -104,10 +104,10 @@ export interface ImaCliPlugin {
   preProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
 
   /**
-   * Called right before creating vite configurations after preProcess call.
-   * This hook lets you customize configuration contexts for each vite config
-   * that will be generated. This is usefull when you need to overrite configuration
-   * contexts for values that are not editable anywhere else (like output folders).
+   * Called right before creating the vite configuration after preProcess call.
+   * This hook lets you customize the configuration context before the vite config
+   * is generated. This is useful when you need to override configuration
+   * context values that are not editable anywhere else (like output folders).
    */
   prepareConfigurations?(
     configurations: ImaConfigurationContext,
@@ -146,40 +146,19 @@ export type ImaConfig = {
   ) => Promise<ViteConfigWithEnvironments>;
 
   /**
-   * Function which receives default app swc-loader config and current context,
-   * this can be used for additional customization or returning completely different config.
+   * Function which receives the default PostCSS config and current context. Can be used
+   * to customize the existing default PostCSS plugins or completely replace them with a custom config.
    */
-  // @TODO: Not sure if this will be still needed with Vite?
-  swc: (
-    config: Record<string, unknown>,
-    ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
-
-  /**
-   * Function which receives default vendor swc-loader config and current context,
-   * this can be used for additional customization of vendor processed files.
-   */
-  // @TODO: Not sure if this will be still needed with Vite?
-  swcVendor: (
-    config: Record<string, unknown>,
-    ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
-
-  /**
-   * Function which receives postcss-loader config and current context, this can be used
-   * to customize existing default postcss config or completely replace it with a custom one.
-   */
-  // @TODO: Not sure if this will be still needed with Vite?
   postcss: (
-    config: Record<string, unknown>,
+    config: CSSOptions['postcss'],
     ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
+  ) => Promise<CSSOptions['postcss']>;
 
   /**
-   * Called right before creating vite configurations after preProcess call.
-   * This hook lets you customize configuration contexts for each vite config
-   * that will be generated. This is usefull when you need to overrite configuration
-   * contexts for values that are not editable anywhere else (like output folders).
+   * Called right before creating the vite configuration after preProcess call.
+   * This hook lets you customize the configuration context before the vite config
+   * is generated. This is useful when you need to override configuration
+   * context values that are not editable anywhere else (like output folders).
    */
   prepareConfigurations?(
     configurations: ImaConfigurationContext,
@@ -194,18 +173,19 @@ export type ImaConfig = {
 
   /**
    * Optional IMA cli plugins that can be used to easily extend
-   * webpack config and cli with additional features.
+   * vite config and cli with additional features.
    */
   plugins?: ImaCliPlugin[];
 
   /**
-   * Webpack assets public path [default='']
+   * Vite assets public path [default='']
    */
   publicPath: string;
 
   /**
    * HMR dev server settings.
    */
+  // @TODO: Should we keep dev server configurable like this?
   devServer?: {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]
@@ -219,11 +199,12 @@ export type ImaConfig = {
   };
 
   /**
-   * Custom options passed to webpack watch api interface. For more information see:
-   * https://webpack.js.org/configuration/watch/#watchoptions
+   * File system watcher options passed to chokidar (used by Vite's dev server for HMR).
+   * For more information see: https://vite.dev/config/server-options#server-watch
+   * For build watch mode see: https://vite.dev/config/build-options#build-watch (uses Rollup WatcherOptions)
    */
-  // @TODO: Is there Vite alternative?
-  // watchOptions: Watching['watchOptions'];
+  // @TODO: Should we remove this? Users can change watch options via the `vite` configuration already
+  watchOptions?: WatchOptions;
 
   /**
    * Passed to vite `build.sourcemap` option (https://vite.dev/config/build-options#build-sourcemap).
@@ -241,9 +222,16 @@ export type ImaConfig = {
   imageInlineSizeLimit: number;
 
   /**
-   * Optional custom webpack aliases
+   * Chunk size warning limit in kbs for Rollup.
+   * This is not a hard limit, just a warning that is printed when the chunk size exceeds the defined value.
+   * [default=1000]
    */
-  // webpackAliases?: ResolveOptions['alias'];
+  chunkSizeWarningLimit: number;
+
+  /**
+   * Optional custom Vite aliases
+   */
+  viteAliases?: AliasOptions;
 
   /**
    * Supported languages with glob paths of the files with translations
@@ -256,23 +244,10 @@ export type ImaConfig = {
   disableLegacyBuild?: boolean;
 
   /**
-   * Advanced functionality allowing you to include/exclude custom vendor paths that go through
-   * swc loader (configured using swcVendor function). Use this if you're using dependencies
-   * that don't meet the lowest supported ES version target (ES9 by default). all packages in
-   * @ima namespace are included by default.
-   */
-  transformVendorPaths?: {
-    include?: RegExp[];
-    exclude?: RegExp[];
-  };
-
-  /**
    * Experimental configurations which can be enabled individually on specific applications.
    * Some of these may find a way to default configuration in future versions of IMA.js.
    */
-  experiments?: {
-    css?: boolean; // Enables webpack native CSS support
-  };
+  experiments?: {};
 };
 
 export type UseServerProcessor = (ast: ParseResult<File>) => ParseResult<File>;

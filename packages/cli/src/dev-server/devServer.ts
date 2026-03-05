@@ -44,9 +44,6 @@ async function main() {
       client: config.environments.modern,
       ssr: config.environments.server,
     },
-    server: {
-      middlewareMode: true,
-    },
   };
 
   // Dev manifest is referencing the input files instead of output,

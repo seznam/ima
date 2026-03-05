@@ -21,15 +21,19 @@ interface Manifest {
     publicPath: string;
 }
 
+const POLYFILL_ENTRY_KEY = 'polyfill';
+
+/**
+ * @param prefix - The asset path prefix.
+ * @param config - The Vite configuration object.
+ * @param useViteIdPrefix - In dev mode Vite serves virtual modules at `/@id/<moduleId>`.
+ *   Client-side `<script>` tags need this URL form, while server-side
+ *   `ssrLoadModule()` calls accept the bare virtual module ID directly,
+ *   so the `/@id/` prefix should only be applied for client assets.
+ */
 function getDevLanguageAssets(
   prefix: string,
   config: ViteConfigWithEnvironments,
-  /**
-   * In dev mode Vite serves virtual modules at `/@id/<moduleId>`.
-   * Client-side `<script>` tags need this URL form, while server-side
-   * `ssrLoadModule()` calls accept the bare virtual module ID directly,
-   * so the `/@id/` prefix should only be applied for client assets.
-   */
   useViteIdPrefix = false
 ): Manifest['assets'] {
   return Object.entries(config.build?.rolldownOptions?.input ?? {})
@@ -53,6 +57,18 @@ function getDevLanguageAssets(
     }, {} as Record<string, { fileName: string, name: string }>);
 }
 
+function getPolyfillAssets(outputDir: string, config: ViteConfigWithEnvironments): Manifest['assets'] {
+  const polyfillAssets: Manifest['assets'] = {};
+  const input = config.environments?.client?.build?.rolldownOptions?.input;
+
+  if (input && typeof input === 'object' && POLYFILL_ENTRY_KEY in input) {
+    const assetFilePath = path.join(outputDir, path.basename(input[POLYFILL_ENTRY_KEY]))
+    polyfillAssets[assetFilePath] = { fileName: input[POLYFILL_ENTRY_KEY], name: assetFilePath };
+  }
+
+  return polyfillAssets;
+}
+
 export async function createManifestForDev(imaConfig: ImaConfig, config: ViteConfigWithEnvironments) {
     const serverAssets = {
         'server/app.server.js': {
@@ -61,29 +77,21 @@ export async function createManifestForDev(imaConfig: ImaConfig, config: ViteCon
         },
         ...getDevLanguageAssets('server', config),
     };
-    const clientAssets = {
-        'static/js/app.client.js': {
-            fileName: 'app/main.js',
-            name: 'static/js/app.client.js',
-        },
-        ...getDevLanguageAssets('static/js', config, true),
-    };
     const clientEsAssets = {
         'static/js.es/app.client.js': {
             fileName: 'app/main.js',
             name: 'static/js.es/app.client.js',
         },
         ...getDevLanguageAssets('static/js.es', config, true),
+        ...getPolyfillAssets('static/js.es', config),
     };
     const manifest: Manifest = {
         assets: {
           ...serverAssets,
-          ...clientAssets,
           ...clientEsAssets,
         },
         assetsByCompiler: {
           server: serverAssets,
-          client: clientAssets,
           'client.es': clientEsAssets,
         },
         publicPath: imaConfig.publicPath,
