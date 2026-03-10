@@ -34,6 +34,8 @@ function createIMAServer({
   processEnvironment,
   vite,
 } = {}) {
+  const memStaticProxy =
+    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({
@@ -103,6 +105,7 @@ function createIMAServer({
     logger,
     cache,
     instanceRecycler,
+    memStaticProxy,
     emitter,
     performance,
     Event,

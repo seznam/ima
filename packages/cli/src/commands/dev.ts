@@ -15,8 +15,6 @@ import {
 } from '../lib/cli';
 import { HandlerFn, ImaCliArgs } from '../types';
 import { cleanup, resolveEnvironment } from '../vite/utils/utils';
-import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
-
 
 /**
  * Starts ima server with nodemon to watch for server-side changes

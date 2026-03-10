@@ -13,7 +13,7 @@ const expressStaticGzip = require('express-static-gzip');
 const helmet = require('helmet');
 const favicon = require('serve-favicon');
 
-function createApp(viteDevServer, addDevServerHooks) {
+function createApp(viteDevServer) {
   const imaServer = createIMAServer({
     vite: viteDevServer,
   });
@@ -117,10 +117,6 @@ function createApp(viteDevServer, addDevServerHooks) {
   }
   const app = express();
 
-  if (addDevServerHooks) {
-    addDevServerHooks(app);
-  }
-
   app
     .set('trust proxy', true)
     .use(timeout('30s'))
@@ -138,6 +134,7 @@ function createApp(viteDevServer, addDevServerHooks) {
     // )
     .use(
       environment.$Server.staticPath,
+      imaServer.memStaticProxy,
       expressStaticGzip(path.resolve(path.join(__dirname, '../build')), {
         enableBrotli: true,
         index: false,

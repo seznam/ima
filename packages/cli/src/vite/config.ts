@@ -64,6 +64,7 @@ export default async (
       base: imaConfig.publicPath,
       mode: mode,
       publicDir: false,
+      clearScreen: false,
       plugins: [
         // @TODO: @ima/core is not using React, should we make it possible to extend configuration from other plugins like @ima/react-page-renderer?
         react({}),
@@ -92,14 +93,17 @@ export default async (
       ],
 
       resolve: {
-        alias: {
-          app: appDir,
-          ...(ctx.profile && {
-            'react-dom$': 'react-dom/profiling',
-            'scheduler/tracing': 'scheduler/tracing-profiling',
-          }),
-          ...(imaConfig.viteAliases || {}),
-        },
+        alias: [
+          { find: 'app', replacement: appDir },
+          ...(ctx.profile ? [
+            { find: /^react-dom$/, replacement: 'react-dom/profiling' },
+            { find: 'scheduler/tracing', replacement: 'scheduler/tracing-profiling' },
+          ] : []),
+          ...(Array.isArray(imaConfig.viteAliases)
+            ? imaConfig.viteAliases
+            : Object.entries(imaConfig.viteAliases || {}).map(([find, replacement]) => ({ find, replacement }))
+          ),
+        ],
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
       },
 
@@ -179,7 +183,7 @@ export default async (
                     ['polyfill-corejs3', {
                       targets: targets.join(', '), // ES2018 baseline
                       version: coreJsVersion,
-                      method: 'usage-global',
+                      method: 'usage-pure',
                     }]
                   ],
                   extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx'],
@@ -223,6 +227,9 @@ export default async (
           less: {
             javascriptEnabled: true,
             plugins: [lessPluginGlob],
+            // Allow Less to resolve Vite aliases (e.g. 'app' → '<rootDir>/app')
+            // by searching from rootDir, mirroring Vite's alias configuration.
+            paths: [rootDir],
             // Import globals.less automatically
             ...(fs.existsSync(lessGlobalsPath) && {
               additionalData: `@import "${lessGlobalsPath}";\n`,
@@ -247,7 +254,14 @@ export default async (
 
       server: {
         middlewareMode: true,
+        hmr: {
+          overlay: false,
+        },
         ...(imaConfig.watchOptions ? { watch: imaConfig.watchOptions } : {}),
+      },
+
+      define: {
+        global: {},
       },
 
       // Logging
