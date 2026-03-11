@@ -124,11 +124,11 @@ app
       filter: req => req.baseUrl !== environment.$Server.staticPath,
     })
   )
-  // .use(
-  //   favicon(
-  //     path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
-  //   )
-  // )
+  .use(
+    favicon(
+      path.resolve(path.join(__dirname, '../app/public/favicon.ico'))
+    )
+  )
   .use(
     environment.$Server.staticPath,
     imaServer.memStaticProxy,

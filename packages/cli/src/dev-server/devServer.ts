@@ -1,8 +1,5 @@
 import path from 'path';
 
-import { logger } from '@ima/dev-utils/logger';
-import { Event } from '@ima/server';
-
 import { ImaCliArgs } from '../types';
 import {
   createDevServerConfig,

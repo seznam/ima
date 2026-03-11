@@ -150,7 +150,7 @@ export default async (
           consumer: 'client',
           build: {
             target: 'es2024',
-            cssTarget: 'es2023', // CSS target es2024 is not yet supported, once it is, we can remove this line
+            cssTarget: 'es2018', // CSS target should mimic legacy JS target
             rolldownOptions: {
               input: createPolyfillEntry(ctx, 'polyfill.es.js'),
               output: {
