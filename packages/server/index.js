@@ -32,7 +32,6 @@ function createIMAServer({
   devUtils,
   applicationFolder = defaultApplicationFolder,
   processEnvironment,
-  vite,
 } = {}) {
   const memStaticProxy =
     require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
@@ -44,7 +43,7 @@ function createIMAServer({
     });
   devUtils =
     devUtils ||
-    require('./lib/factory/devUtilsFactory.js')({ applicationFolder, vite });
+    require('./lib/factory/devUtilsFactory.js')({ applicationFolder });
 
   global.$Debug = environment.$Debug;
   global.$IMA = global.$IMA || {};
@@ -90,7 +89,6 @@ function createIMAServer({
     performance,
     instanceRecycler,
     serverGlobal,
-    vite,
   });
 
   const cache = require('./lib/cache.js')({ environment });

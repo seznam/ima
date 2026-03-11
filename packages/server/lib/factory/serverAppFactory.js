@@ -18,7 +18,6 @@ module.exports = function serverAppFactory({
   instanceRecycler,
   serverGlobal,
   logger,
-  vite,
 }) {
   const devErrorPage = devErrorPageFactory({ logger });
   const {
@@ -90,7 +89,6 @@ module.exports = function serverAppFactory({
     instanceRecycler,
     devErrorPage,
     environment,
-    vite,
   });
 
   const defaultResponse = {
@@ -169,7 +167,9 @@ module.exports = function serverAppFactory({
   }
 
   async function errorHandler(error, event) {
-    vite?.ssrFixStacktrace(error);
+    if (process.env.IMA_CLI_WATCH) {
+      $IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+    }
 
     try {
       event = { ...event, error };
@@ -185,7 +185,9 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
-      vite?.ssrFixStacktrace(error);
+      if (process.env.IMA_CLI_WATCH) {
+        $IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+      }
 
       error.cause = event.error;
 
@@ -198,7 +200,9 @@ module.exports = function serverAppFactory({
     try {
       event = await responseHandler(event);
     } catch (error) {
-      vite?.ssrFixStacktrace(error);
+      if (process.env.IMA_CLI_WATCH) {
+        $IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+      }
 
       error.cause = event.error;
       const { res, context } = event;
@@ -220,7 +224,9 @@ module.exports = function serverAppFactory({
       try {
         await emitter.emitParallel(Event.AfterResponseSend, event);
       } catch (error) {
-        vite?.ssrFixStacktrace(error);
+        if (process.env.IMA_CLI_WATCH) {
+          $IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+        }
 
         logger.error('Error in AfterResponseSend', { error });
       }

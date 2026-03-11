@@ -52,7 +52,6 @@ module.exports = function hooksFactory({
   instanceRecycler,
   devErrorPage,
   environment,
-  vite,
 }) {
   function _isServerOverloaded(event) {
     return isDegraded('isOverloaded', event);
@@ -115,7 +114,9 @@ module.exports = function hooksFactory({
   }
 
   async function _applyError(event) {
-    vite?.ssrFixStacktrace(event.error);
+    if (process.env.IMA_CLI_WATCH) {
+      $IMA_SERVER.viteDevServer.ssrFixStacktrace(event.error);
+    }
 
     if (!event.context?.app || _hasToServeStatic(event)) {
       return renderStaticServerErrorPage(event);
@@ -127,14 +128,18 @@ module.exports = function hooksFactory({
         .get('$Router')
         .handleError({ error })
         .catch(e => {
-          vite?.ssrFixStacktrace(e);
+          if (process.env.IMA_CLI_WATCH) {
+            $IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
+          }
 
           e.cause = error;
 
           return renderStaticServerErrorPage({ ...event, error: e });
         });
     } catch (e) {
-      vite?.ssrFixStacktrace(e);
+      if (process.env.IMA_CLI_WATCH) {
+        $IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
+      }
 
       e.cause = event.error;
 
@@ -482,7 +487,7 @@ module.exports = function hooksFactory({
 
       // Interpolate contentVariables into the response content
       event.context?.timing?.start('hooks.processContent');
-      event.context.response.content = processContent(event);
+      event.context.response.content = await processContent(event);
       event.context?.timing?.end('hooks.processContent');
     });
 

@@ -49,34 +49,15 @@ async function main() {
     environment,
   });
 
-  // Initialize application server with additional hooks for development
-  const { createApp } = await import(
-    path.resolve(args.rootDir, 'server/app.js')
-  );
-  const { app, imaServer } = createApp(vite);
+  global.$IMA_SERVER = {
+    viteDevServer: vite,
+  };
 
-  imaServer.emitter.prependListener(Event.Response, async (event: any) => {
-    // Skip controllers with $responseType: 'json'
-    if (event.res.getHeader('Content-Type') === 'application/json') {
-      return;
-    }
-
-    event.context.response.content = await vite.transformIndexHtml(
-      event.req.url,
-      event.context.response.content
-    );
-  });
-
-
-  const httpServer = app.listen(environment.$Server.port, () => {
-    logger.info(
-      `The app is running at http://localhost:${environment.$Server.port}`
-    );
-  });
+  // This will start the server
+  await import(path.resolve(args.rootDir, 'server/server.js'));
 
   // Graceful shutdown – nodemon sends SIGTERM before restarting the process
   process.once('SIGTERM', async () => {
-    httpServer.close();
     await vite.close();
   });
 }

@@ -174,7 +174,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
    * @param event IMA hooks server event.
    * @returns string Processed response content.
    */
-  function processContent({ context }) {
+  async function processContent({ context, req }) {
     const { response, bootConfig } = context;
 
     if (!response?.content || !bootConfig) {
@@ -189,6 +189,13 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
       response.content = response.content.replace(
         contentInterpolationRe,
         interpolate
+      );
+    }
+
+    if (process.env.IMA_CLI_WATCH) {
+      return await $IMA_SERVER.viteDevServer.transformIndexHtml(
+        req.url,
+        response.content
       );
     }
 

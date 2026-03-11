@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function devUtilsFactory({ applicationFolder, vite }) {
+module.exports = function devUtilsFactory({ applicationFolder }) {
   async function manifestRequire(module, options = {}) {
     const manifest = JSON.parse(
       fs.readFileSync(path.resolve(applicationFolder, './build/manifest.json'))
@@ -14,8 +14,8 @@ module.exports = function devUtilsFactory({ applicationFolder, vite }) {
 
     if (Array.isArray(options?.dependencies)) {
       for (const dependency of options.dependencies) {
-        if (vite) {
-          await vite.ssrLoadModule(assets[dependency].fileName);
+        if (process.env.IMA_CLI_WATCH) {
+          await $IMA_SERVER.viteDevServer.ssrLoadModule(assets[dependency].fileName);
         } else {
           require(
             path.resolve(
@@ -26,8 +26,8 @@ module.exports = function devUtilsFactory({ applicationFolder, vite }) {
       }
     }
 
-    if (vite) {
-      return vite.ssrLoadModule(assets[module].fileName);
+    if (process.env.IMA_CLI_WATCH) {
+      return $IMA_SERVER.viteDevServer.ssrLoadModule(assets[module].fileName);
     }
 
     return require(

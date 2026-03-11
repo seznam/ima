@@ -1,7 +1,7 @@
 import { ParseResult } from '@babel/parser';
 import { File } from '@babel/types';
 import { Environment } from '@ima/core';
-import { UserConfig as ViteConfig, ViteBuilder, AliasOptions, WatchOptions, CSSOptions } from 'vite';
+import { UserConfig as ViteConfig, ViteBuilder, ViteDevServer, AliasOptions, WatchOptions, CSSOptions } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 declare global {
@@ -19,6 +19,10 @@ declare global {
       IMA_PUBLIC_PATH?: string;
     }
   }
+
+  var $IMA_SERVER: {
+    viteDevServer: ViteDevServer;
+  };
 }
 
 /**
