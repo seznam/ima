@@ -172,11 +172,9 @@ export default async (
                 babel({
                   babelHelpers: 'bundled',
                   exclude: [
-                    // The `usage-global` method is designed for source code only
-                    // We need to exclude minified dependencies, as they cause build issues
-                    /node_modules\/core-js\//,
-                    /node_modules\/react\//,
-                    /node_modules\/react-dom\//,
+                    // usage-pure is designed for source code only — exclude the polyfill
+                    // library itself to prevent circular polyfilling and rolldown CJS interop issues
+                    /node_modules\/core-js-pure\//,
                   ],
                   // Note: We only use babel for polyfills
                   plugins: [
