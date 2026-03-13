@@ -8,6 +8,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -15,6 +16,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -22,6 +24,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
   ],
@@ -40,6 +43,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -47,6 +51,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -54,6 +59,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
   ],
@@ -70,6 +76,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/app.client.2106a34c6b8bbad8.js",
+        "type": "module",
       },
     ],
     [
@@ -78,6 +85,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/locale/en.371127fdbfbe93d2.js",
+        "type": "module",
       },
     ],
     [
@@ -86,6 +94,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js.es/vendors.a873907f25297544.js",
+        "type": "module",
       },
     ],
   ],
@@ -106,6 +115,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/app.client.8dc14fd2c9e52eef.js",
+        "type": "module",
       },
     ],
     [
@@ -114,6 +124,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/locale/en.3c6a5e7a55bb2ab4.js",
+        "type": "module",
       },
     ],
     [
@@ -122,6 +133,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
         "async": "",
         "crossorigin": "anonymous",
         "fallback": "/pro/static/static/js/vendors.0e456297851f0a3a.js",
+        "type": "module",
       },
     ],
   ],
@@ -137,6 +149,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -144,6 +157,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -151,6 +165,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
   ],
@@ -169,6 +184,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -176,6 +192,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -183,6 +200,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
   ],
@@ -198,6 +216,7 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -205,6 +224,7 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
     [
@@ -212,6 +232,7 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
       {
         "async": "",
         "crossorigin": "anonymous",
+        "type": "module",
       },
     ],
   ],

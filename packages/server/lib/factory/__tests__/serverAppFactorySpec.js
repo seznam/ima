@@ -829,6 +829,11 @@ describe('Server App Factory', () => {
     it('should render dev error page for $Debug mode', async () => {
       environment.$Debug = true;
       process.env.IMA_CLI_WATCH = 'true';
+      global.$IMA_SERVER = {
+        viteDevServer: {
+          ssrFixStacktrace: jest.fn(),
+        },
+      };
       const error = new Error('Custom');
 
       const response = await serverApp.errorHandlerMiddleware(error, REQ, RES);
@@ -840,6 +845,9 @@ describe('Server App Factory', () => {
       expect(response.static).toBeFalsy();
       expect(response.content).toBe('dev error page');
       expect(response.error).toEqual(error);
+      expect(global.$IMA_SERVER.viteDevServer.ssrFixStacktrace).toHaveBeenCalledWith(error);
+
+      delete global.$IMA_SERVER;
     });
 
     it('should render static error page for non $Debug mode without initialized app in context', async () => {
