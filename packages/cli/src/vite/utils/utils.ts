@@ -431,7 +431,7 @@ export async function getCurrentCoreJsVersion(): Promise<string> {
   return JSON.parse(
     (
       await fs.promises.readFile(
-        path.resolve(require.resolve('core-js'), '../package.json')
+        path.resolve(require.resolve('core-js-pure'), '../package.json')
       )
     ).toString()
   )

@@ -10,12 +10,9 @@
       "kill-port",
       "core",
       "better-opn",
-      "preprocess",
       "jest",
       "server",
-      "less-plugin-glob",
-      "webpack-env",
-      "webpack"
+      "less-plugin-glob"
     ]
   },
   "include": [
