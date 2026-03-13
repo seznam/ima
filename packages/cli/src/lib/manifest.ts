@@ -1,4 +1,3 @@
-// @TODO: Maybe we should transform this into a Vite plugin
 import fs from 'fs/promises';
 import path from 'path';
 import { ImaConfig, ImaBuildOutput, ViteBuildOutput, ViteConfigWithEnvironments } from '../types';
@@ -36,27 +35,24 @@ function getDevLanguageAssets(
   config: ViteConfigWithEnvironments,
   useViteIdPrefix = false
 ): Manifest['assets'] {
-  return Object.entries(config.build?.rolldownOptions?.input ?? {})
-    .map(([inputKey, inputValue]) => {
-      if (!inputKey.startsWith('locale/')) {
-        return null;
-      }
+  return Object.fromEntries(
+    Object.entries(config.build?.rolldownOptions?.input ?? {})
+      .flatMap(([inputKey, inputValue]) => {
+        if (!inputKey.startsWith('locale/')) {
+          return [];
+        }
 
-      const name = `${prefix}/${inputKey}.js`;
-      const fileName = useViteIdPrefix ? `@id/${inputValue}` : inputValue;
+        const name = `${prefix}/${inputKey}.js`;
+        const fileName = useViteIdPrefix ? `@id/${inputValue}` : inputValue;
 
-      return [name, { fileName, name }] as const;
-    })
-    .filter(
-      (entry): entry is readonly [string, { readonly fileName: string; readonly name: string }] =>
-        entry !== null
-    )
-    .reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, { fileName: string, name: string }>);
+        return [[name, { fileName, name }]];
+      })
+  );
 }
 
+/**
+ * Checks if the Vite config has a polyfill entry and returns it as an asset if it exists
+ */
 function getPolyfillAssets(outputDir: string, config: ViteConfigWithEnvironments): Manifest['assets'] {
   const polyfillAssets: Manifest['assets'] = {};
   const input = config.environments?.client?.build?.rolldownOptions?.input;
@@ -69,7 +65,10 @@ function getPolyfillAssets(outputDir: string, config: ViteConfigWithEnvironments
   return polyfillAssets;
 }
 
-export async function createManifestForDev(imaConfig: ImaConfig, config: ViteConfigWithEnvironments) {
+/**
+ * Creates a manifest.json file in the build output directory based on the Vite config
+ */
+export async function createManifestFileForDev(imaConfig: ImaConfig, config: ViteConfigWithEnvironments) {
     const serverAssets = {
         'server/app.server.js': {
             fileName: 'app/main.js',
@@ -106,6 +105,10 @@ export async function createManifestForDev(imaConfig: ImaConfig, config: ViteCon
     );
 }
 
+/**
+ * Creates a manifest.json file in the build output directory based on the Vite build output
+ * and the Vite config. This is used in production builds to map the original asset names to the hashed file names.
+ */
 export async function createManifestFileFromOutput(results: ImaBuildOutput[], imaConfig: ImaConfig) {
     const manifest: Manifest = {
         assets: {},
@@ -124,6 +127,9 @@ export async function createManifestFileFromOutput(results: ImaBuildOutput[], im
     );
 }
 
+/**
+ * Extends the manifest with the assets from the Vite build output.
+ */
 function extendManifestFromOutput(manifest: Manifest, env: string, output: ViteBuildOutput, imaConfig: ImaConfig): Manifest {
     // Handle array of outputs
     if (Array.isArray(output)) {
@@ -147,17 +153,16 @@ function extendManifestFromOutput(manifest: Manifest, env: string, output: ViteB
     }
 
     for (const chunk of output.output) {
-        // Skip compressed assets and source maps
-        if (chunk.fileName.endsWith('.gz') || chunk.fileName.endsWith('.br') || chunk.fileName.endsWith('.map')) {
+        // Process only JS and CSS files, skip other assets like source maps or compressed versions
+        if (!chunk.fileName.endsWith('.js') && !chunk.fileName.endsWith('.mjs') && !chunk.fileName.endsWith('.css')) {
             continue;
         }
-        // assetKey is chunk.fileName without the hash before extension. Hash is always 16 characters long. If there is 16 characters inbetween last 2 dots, remove them.
-        const assetKey = chunk.fileName.replace(/\.([a-zA-Z0-9_-]{16})(\.[^.]+)$/, '$2').replace(/\.mjs$/, '.js');
 
-        if (chunk.fileName === assetKey) {
-            // No hash found, use full fileName
-            continue;
-        }
+        const isAsset = chunk.type === 'asset';
+        const assetKey = isAsset ?
+                path.join(path.dirname(chunk.fileName), chunk.names[0])
+            :
+                chunk.preliminaryFileName.replace(/\.!~\{[0-9]{11}\}~\.mjs$/, '.js');
 
         manifest.assets[assetKey] = {
             fileName: chunk.fileName,

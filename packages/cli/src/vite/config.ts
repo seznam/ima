@@ -63,6 +63,7 @@ export default async (
       root: rootDir,
       base: imaConfig.publicPath,
       mode: mode,
+      cacheDir: 'node_modules/.cache/vite',
       publicDir: false,
       clearScreen: false,
       plugins: [
@@ -109,7 +110,7 @@ export default async (
 
       build: {
         outDir: 'build',
-        emptyOutDir: false, // We are generating localization files before build
+        emptyOutDir: false, // We do our own cleanup
         sourcemap: useSourceMaps,
         assetsInlineLimit: imaConfig.imageInlineSizeLimit,
         chunkSizeWarningLimit: imaConfig.chunkSizeWarningLimit,
@@ -153,9 +154,7 @@ export default async (
             cssTarget: 'es2018', // CSS target should mimic legacy JS target
             rolldownOptions: {
               input: createPolyfillEntry(ctx, 'polyfill.es.js'),
-              output: {
-                ...getRolldownOutputConfig('static/js.es', 'client'),
-              }
+              output: getRolldownOutputConfig(outputFolders.es, 'client'),
             },
           },
         },
@@ -167,8 +166,8 @@ export default async (
             rolldownOptions: {
               input: createPolyfillEntry(ctx, 'polyfill.js'),
               plugins: [
-                // @TODO: This would be nice to replace with oxc polyfill injection
-                // Using Babel to handle polyfill injection
+                // @TODO: This would be nice to eventually replace with oxc once it is supported,
+                // since this babel polyfill injection is quite slow
                 babel({
                   babelHelpers: 'bundled',
                   exclude: [
@@ -189,9 +188,7 @@ export default async (
                   configFile: false,
                 })
               ],
-              output: {
-                ...getRolldownOutputConfig('static/js', 'client'),
-              }
+              output: getRolldownOutputConfig(outputFolders.js, 'client'),
             }
           }
         },
@@ -223,7 +220,6 @@ export default async (
         },
         preprocessorOptions: {
           less: {
-            javascriptEnabled: true,
             plugins: [lessPluginGlob],
             // Allow Less to resolve Vite aliases (e.g. 'app' → '<rootDir>/app')
             // by searching from rootDir, mirroring Vite's alias configuration.
@@ -251,15 +247,16 @@ export default async (
       },
 
       server: {
-        middlewareMode: true,
+        middlewareMode: true, // We run our own HMR server and attach Vite as middleware
         hmr: {
-          overlay: false,
+          overlay: false, // We have our own custom error overlay
         },
         ...(imaConfig.watchOptions ? { watch: imaConfig.watchOptions } : {}),
       },
 
       define: {
-        global: {},
+        // Backwards webpack compatibility for global variable, since some packages are using it
+        global: 'globalThis',
       },
 
       // Logging

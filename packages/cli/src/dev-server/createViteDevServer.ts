@@ -9,7 +9,7 @@ import expressStaticGzip from 'express-static-gzip';
 import { createServer, ViteDevServer } from 'vite';
 
 import { createViteConfig } from '../vite/utils/utils';
-import { createManifestForDev } from '../lib/manifest';
+import { createManifestFileForDev } from '../lib/manifest';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 import { ImaCliArgs, ImaConfig, ViteConfigWithEnvironments } from '../types';
@@ -29,7 +29,7 @@ export async function createViteDevServer({
   rootDir: string;
   publicUrl: string;
   environment: ParsedEnvironment;
-}): Promise<{ vite: ViteDevServer}> {
+}): Promise<{ vite: ViteDevServer }> {
   return new Promise(async (resolve, reject) => {
     // Vite dev server requires us to use `client` and `ssr` environments
     const viteConfig = await createViteConfig(args, config);
@@ -43,7 +43,7 @@ export async function createViteDevServer({
 
     // Dev manifest is referencing the input files instead of output,
     // so we can create it before the dev server starts
-    await createManifestForDev(config, viteConfigWithMappedEnvironments);
+    await createManifestFileForDev(config, viteConfigWithMappedEnvironments);
     // Start the Vite dev server
     const vite = await createServer({
       ...viteConfigWithMappedEnvironments,

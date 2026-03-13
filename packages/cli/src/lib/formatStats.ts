@@ -9,8 +9,7 @@ import prettyMs from 'pretty-ms';
 import { ImaBuildOutput, ViteBuildOutput } from '../types';
 
 /**
- * Extracts a flat list of file names from a Vite build result,
- * handling both single RolldownOutput and arrays, and skipping watchers.
+ * Extracts a flat list of file names from a Vite build result
  */
 function collectViteChunkFileNames(output: ViteBuildOutput): string[] {
   if (Array.isArray(output)) {
@@ -27,8 +26,7 @@ function collectViteChunkFileNames(output: ViteBuildOutput): string[] {
 }
 
 /**
- * Prints a formatted summary of Vite build outputs, closely mirroring
- * the original webpack-based formatStats output.
+ * Prints a formatted summary of Vite build outputs
  *
  * @param outputs  Array of per-environment build results, including timing.
  * @param rootDir  Project root directory (used to resolve the build/ folder).
@@ -96,15 +94,8 @@ export function formatViteStats(
       const lastSlash = fileName.lastIndexOf('/');
       const basePath = lastSlash >= 0 ? '/' + fileName.substring(0, lastSlash + 1) : '/';
       const shortName = lastSlash >= 0 ? fileName.substring(lastSlash + 1) : fileName;
-
-      // File size from disk (may not exist if build writes to memory first)
-      let sizeStr = '';
-      try {
-        const size = fs.statSync(fullPath).size;
-        sizeStr = ` ${chalk.green.bold(prettyBytes(size))}`;
-      } catch {
-        // ignore — file may not be on disk
-      }
+      const size = fs.statSync(fullPath).size;
+      const sizeStr = ` ${chalk.green.bold(prettyBytes(size))}`;
 
       let line = chalk.gray(isLast ? ' └ ' : ' ├ ');
       line += chalk.gray(basePath);
@@ -122,13 +113,8 @@ export function formatViteStats(
 
         const relatedPath = path.join(outDir, relatedName);
         const relatedShortName = shortName + ext;
-        let relatedSizeStr = '';
-        try {
-          const size = fs.statSync(relatedPath).size;
-          relatedSizeStr = chalk.yellow(` ${prettyBytes(size)}`);
-        } catch {
-          // ignore
-        }
+        const size = fs.statSync(relatedPath).size;
+        const relatedSizeStr = chalk.yellow(` ${prettyBytes(size)}`);
 
         logger.write(`${indent}${relatedShortName}${relatedSizeStr}`);
       });

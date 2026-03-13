@@ -310,7 +310,7 @@ export function createContexts(
   // targets (taken from 'browserslist-generator')
   const es2018Targets = [
     'and_chr >= 63',
-    'chrome >= 50',
+    'chrome >= 63',
     'and_ff >= 58',
     'android >= 103',
     'edge >= 79',
@@ -328,6 +328,8 @@ export function createContexts(
       public: 'static/public',
       media: 'static/media',
       css: 'static/css',
+      js: 'static/js',
+      es: 'static/js.es',
     },
     typescript: {
       enabled: !!tsconfigPath,

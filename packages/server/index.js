@@ -33,8 +33,6 @@ function createIMAServer({
   applicationFolder = defaultApplicationFolder,
   processEnvironment,
 } = {}) {
-  const memStaticProxy =
-    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
   environment =
     environment ||
     require('./lib/factory/environmentFactory.js')({
@@ -90,6 +88,8 @@ function createIMAServer({
     instanceRecycler,
     serverGlobal,
   });
+  const memStaticProxy =
+    require('./lib/middlewares/memStaticProxyMiddlewareFactory')();
 
   const cache = require('./lib/cache.js')({ environment });
   serverApp.useIMADefaultHook();

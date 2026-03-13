@@ -4,7 +4,6 @@ import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
-import kill from 'kill-port';
 import nodemon from 'nodemon';
 import { CommandBuilder } from 'yargs';
 
@@ -24,13 +23,9 @@ import { cleanup, resolveEnvironment } from '../vite/utils/utils';
 function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
-  // The dev-server script lives alongside this file in dist/lib/devServer.js
-  const devServerScript = path.join(__dirname, '../dev-server/devServer.js');
-
   nodemon({
-    script: devServerScript,
+    script: path.join(__dirname, '../dev-server/devServer.js'),
     watch: ['server'].map(p => path.join(args.rootDir, p)),
-    args: [],
     nodeArgs: args.inspect ? ['--inspect'] : [],
     cwd: args.rootDir,
     env: {
@@ -104,11 +99,6 @@ const dev: HandlerFn = async args => {
     await cleanup(args);
 
     const environment = resolveEnvironment(args.rootDir);
-
-    // Kill processes running on the same port
-    await Promise.all([
-      kill(environment.$Server.port),
-    ]);
 
     // Start the application server (and Vite HMR server) via nodemon so that
     // any changes inside server/ automatically trigger a server restart.

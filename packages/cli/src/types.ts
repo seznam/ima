@@ -12,6 +12,7 @@ declare global {
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_FORCE_SPA_PREFETCH?: string;
       IMA_CLI_LAZY_SERVER?: string;
+      IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
       IMA_CLI_OPEN?: string;
       IMA_CLI_OPEN_URL?: string;
 
@@ -70,6 +71,8 @@ export interface ImaConfigurationContext extends ImaCliArgs {
     hot: string;
     css: string;
     public: string;
+    js: string;
+    es: string;
   };
   typescript: {
     enabled: boolean;
@@ -189,7 +192,6 @@ export type ImaConfig = {
   /**
    * HMR dev server settings.
    */
-  // @TODO: Should we keep dev server configurable like this?
   devServer?: {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]

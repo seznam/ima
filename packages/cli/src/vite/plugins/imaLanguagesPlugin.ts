@@ -16,7 +16,7 @@ import {
 } from '../languages';
 
 export const VIRTUAL_LOCALE_PREFIX = 'virtual:ima-locale/';
-const RESOLVED_LOCALE_PREFIX = '\0virtual:ima-locale/';
+const RESOLVED_LOCALE_PREFIX = '\0' + VIRTUAL_LOCALE_PREFIX;
 
 /**
  * Returns virtual module entry points for the Vite input config,
@@ -54,6 +54,16 @@ export function imaLanguagesPlugin(
   let initialized = false;
 
   /**
+   * Helper to get absolute file paths for a given glob pattern
+   */
+  async function getLanguagePaths(glob: string): Promise<string[]> {
+    return await globby(glob, {
+      cwd: rootDir,
+      absolute: true,
+    });
+  }
+
+  /**
    * Compile all JSON files for a given locale and return the JS module
    * source together with the runtime `$IMA.i18n` assignment.
    */
@@ -70,32 +80,38 @@ export function imaLanguagesPlugin(
     const files = new Set<string>();
 
     for (const glob of imaConfig.languages[locale]) {
-      const languagePaths = await globby(glob, {
-        cwd: rootDir,
-        absolute: true,
-      });
+      const languagePaths = await getLanguagePaths(glob);
 
-      for (const languagePath of languagePaths) {
-        files.add(languagePath);
-        addWatchFile?.(languagePath);
+      const entries = await Promise.all(
+        languagePaths.map(async (languagePath) => {
+          files.add(languagePath);
+          addWatchFile?.(languagePath);
 
-        const dictionaryKey = getDictionaryKeyFromFileName(
-          locale,
-          languagePath
+          const dictionaryKey = getDictionaryKeyFromFileName(
+            locale,
+            languagePath
+          );
+
+          try {
+            const content = JSON.parse(
+              (await fs.promises.readFile(languagePath)).toString()
+            );
+            return { dictionaryKey, content };
+          } catch (error) {
+            throw new Error(
+              `Unable to parse language file at location: ${languagePath}\n\n${
+                (error as Error)?.message
+              }`
+            );
+          }
+        })
+      );
+
+      for (const { dictionaryKey, content } of entries) {
+        messages[dictionaryKey] = assignRecursively(
+          (messages[dictionaryKey] as Record<string, unknown>) ?? {},
+          content
         );
-
-        try {
-          messages[dictionaryKey] = assignRecursively(
-            (messages[dictionaryKey] as Record<string, unknown>) ?? {},
-            JSON.parse((await fs.promises.readFile(languagePath)).toString())
-          );
-        } catch (error) {
-          throw new Error(
-            `Unable to parse language file at location: ${languagePath}\n\n${
-              (error as Error)?.message
-            }`
-          );
-        }
       }
     }
 
@@ -134,6 +150,10 @@ if (import.meta.hot) {
   return {
     name: 'ima:languages',
 
+    /**
+     * On build start, compile all language modules and generate type declarations,
+     * but only for the first built environment to avoid redundant work during build time.
+     */
     async buildStart() {
       if (initialized) {
         return;
@@ -159,6 +179,9 @@ if (import.meta.hot) {
       }
     },
 
+    /**
+     * Get the compiled module code for the requested locale.
+     */
     async load(id) {
       if (!id.startsWith(RESOLVED_LOCALE_PREFIX)) {
         return;
@@ -197,7 +220,7 @@ if (import.meta.hot) {
       // Also handle newly added files that match a locale glob
       for (const locale of Object.keys(imaConfig.languages)) {
         for (const glob of imaConfig.languages[locale]) {
-          const paths = await globby(glob, { cwd: rootDir, absolute: true });
+          const paths = await getLanguagePaths(glob);
           if (paths.includes(file)) {
             moduleCache.delete(locale);
             const moduleId = RESOLVED_LOCALE_PREFIX + locale;

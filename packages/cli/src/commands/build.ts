@@ -1,5 +1,5 @@
 import { logger } from '@ima/dev-utils/logger';
-import { createBuilder, createLogger, ViteBuilder } from 'vite';
+import { createBuilder, ViteBuilder } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 import {
