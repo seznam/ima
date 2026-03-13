@@ -71,7 +71,11 @@ export function formatViteStats(
       if (RELATED_EXTENSIONS.some(ext => name.endsWith(ext))) {
         return false;
       }
-      if (!name.endsWith('.js') && !name.endsWith('.mjs') && !name.endsWith('.css')) {
+      if (
+        !name.endsWith('.js') &&
+        !name.endsWith('.mjs') &&
+        !name.endsWith('.css')
+      ) {
         return envName === 'modern';
       }
       return true;
@@ -92,8 +96,10 @@ export function formatViteStats(
       const isLast = index === primaryFiles.length - 1;
       const fullPath = path.join(outDir, fileName);
       const lastSlash = fileName.lastIndexOf('/');
-      const basePath = lastSlash >= 0 ? '/' + fileName.substring(0, lastSlash + 1) : '/';
-      const shortName = lastSlash >= 0 ? fileName.substring(lastSlash + 1) : fileName;
+      const basePath =
+        lastSlash >= 0 ? '/' + fileName.substring(0, lastSlash + 1) : '/';
+      const shortName =
+        lastSlash >= 0 ? fileName.substring(lastSlash + 1) : fileName;
       const size = fs.statSync(fullPath).size;
       const sizeStr = ` ${chalk.green.bold(prettyBytes(size))}`;
 

@@ -7,16 +7,15 @@ import {
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { HandlerFn, ImaConfig } from '../types';
+import { formatViteStats } from '../lib/formatStats';
+import { createManifestFileFromOutput } from '../lib/manifest';
+import { HandlerFn, ImaConfig, ImaBuildOutput } from '../types';
 import {
   cleanup,
   createViteConfig,
   resolveImaConfig,
   runImaPluginsHook,
 } from '../vite/utils/utils';
-import { createManifestFileFromOutput } from '../lib/manifest';
-import { formatViteStats } from '../lib/formatStats';
-import { ImaBuildOutput } from '../types';
 
 /**
  * Builds ima application.
@@ -34,15 +33,19 @@ const build: HandlerFn = async args => {
         buildEnvironments.push('legacy');
       }
 
-      const envs = Object.values(builder.environments).filter(env => buildEnvironments.includes(env.name));
+      const envs = Object.values(builder.environments).filter(env =>
+        buildEnvironments.includes(env.name)
+      );
 
-      await Promise.all(envs.map(async env => {
-        const start = Date.now();
-        const output = await builder.build(env);
+      await Promise.all(
+        envs.map(async env => {
+          const start = Date.now();
+          const output = await builder.build(env);
 
-        outputs.push({ env: env.name, output, time: Date.now() - start });
-      }));
-    }
+          outputs.push({ env: env.name, output, time: Date.now() - start });
+        })
+      );
+    };
   }
 
   try {

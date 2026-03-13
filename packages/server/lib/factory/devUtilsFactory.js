@@ -15,19 +15,27 @@ module.exports = function devUtilsFactory({ applicationFolder }) {
     if (Array.isArray(options?.dependencies)) {
       for (const dependency of options.dependencies) {
         if (process.env.IMA_CLI_WATCH) {
-          await $IMA_SERVER.viteDevServer.ssrLoadModule(assets[dependency].fileName);
+          await global.$IMA_SERVER.viteDevServer.ssrLoadModule(
+            assets[dependency].fileName
+          );
         } else {
           require(
             path.resolve(
-              path.join(applicationFolder, './build', assets[dependency].fileName)
+              path.join(
+                applicationFolder,
+                './build',
+                assets[dependency].fileName
+              )
             )
-          )
+          );
         }
       }
     }
 
     if (process.env.IMA_CLI_WATCH) {
-      return $IMA_SERVER.viteDevServer.ssrLoadModule(assets[module].fileName);
+      return global.$IMA_SERVER.viteDevServer.ssrLoadModule(
+        assets[module].fileName
+      );
     }
 
     return require(

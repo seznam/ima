@@ -7,7 +7,12 @@ import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
 
-import { ImaConfigurationContext, ImaConfig, ImaCliArgs, ViteConfigWithEnvironments } from '../../types';
+import {
+  ImaConfigurationContext,
+  ImaConfig,
+  ImaCliArgs,
+  ViteConfigWithEnvironments,
+} from '../../types';
 import viteConfig from '../config';
 
 export const IMA_CONF_FILENAME = 'ima.config.js';
@@ -414,7 +419,7 @@ export async function createViteConfig(
 
   // Print elapsed time
   logger.endTracking();
-  
+
   return config;
 }
 

@@ -115,7 +115,7 @@ module.exports = function hooksFactory({
 
   async function _applyError(event) {
     if (process.env.IMA_CLI_WATCH) {
-      $IMA_SERVER.viteDevServer.ssrFixStacktrace(event.error);
+      global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(event.error);
     }
 
     if (!event.context?.app || _hasToServeStatic(event)) {
@@ -129,7 +129,7 @@ module.exports = function hooksFactory({
         .handleError({ error })
         .catch(e => {
           if (process.env.IMA_CLI_WATCH) {
-            $IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
+            global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
           }
 
           e.cause = error;
@@ -138,7 +138,7 @@ module.exports = function hooksFactory({
         });
     } catch (e) {
       if (process.env.IMA_CLI_WATCH) {
-        $IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
+        global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(e);
       }
 
       e.cause = event.error;

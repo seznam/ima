@@ -56,7 +56,8 @@ function createIMAServer({
   }
 
   async function languageLoader(language) {
-    return (await devUtils.manifestRequire(`server/locale/${language}.js`)).default;
+    return (await devUtils.manifestRequire(`server/locale/${language}.js`))
+      .default;
   }
 
   logger =

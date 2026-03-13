@@ -83,7 +83,7 @@ export function imaLanguagesPlugin(
       const languagePaths = await getLanguagePaths(glob);
 
       const entries = await Promise.all(
-        languagePaths.map(async (languagePath) => {
+        languagePaths.map(async languagePath => {
           files.add(languagePath);
           addWatchFile?.(languagePath);
 
@@ -188,7 +188,10 @@ if (import.meta.hot) {
       }
 
       const locale = id.slice(RESOLVED_LOCALE_PREFIX.length);
-      const { code } = await buildLocaleModule(locale, this.addWatchFile.bind(this));
+      const { code } = await buildLocaleModule(
+        locale,
+        this.addWatchFile.bind(this)
+      );
 
       return { code, moduleSideEffects: true };
     },

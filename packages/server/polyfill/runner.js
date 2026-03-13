@@ -42,7 +42,7 @@
           // es2024 env test scripts
           'return typeof Promise.withResolvers === "function"',
           'return typeof Object.groupBy === "function"',
-        ]
+        ],
       },
 
       /**
@@ -118,12 +118,18 @@
           runner.testScripts.esScripts.every(testScript)
         ) {
           runner.isEsVersion = true;
-          Array.prototype.push.apply(runner.scripts, runner.scriptResources.esScripts);
+          Array.prototype.push.apply(
+            runner.scripts,
+            runner.scriptResources.esScripts
+          );
         } else if (
           runner.scriptResources.scripts &&
           runner.testScripts.scripts.every(testScript)
         ) {
-          Array.prototype.push.apply(runner.scripts, runner.scriptResources.scripts);
+          Array.prototype.push.apply(
+            runner.scripts,
+            runner.scriptResources.scripts
+          );
         } else {
           // Don't create scripts and execute runtime on unsupported environments.
           return runner.onUnsupported();
@@ -186,14 +192,16 @@
        * for es and legacy version fails, which means that the APP runtime
        * code is never executed.
        */
-      onUnsupported: function() {
-        console.warn('Unsupported environment, the app runtime was not executed.');
+      onUnsupported: function () {
+        console.warn(
+          'Unsupported environment, the app runtime was not executed.'
+        );
       },
 
       /**
        * Optional onRun handler. Triggered when the app runtime code is executed
        */
-      onRun: function() {},
+      onRun: function () {},
     },
     root.$IMA.Runner || {}
   );

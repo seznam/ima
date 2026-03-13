@@ -9,16 +9,17 @@
  */
 
 import path from 'path';
+
 import kill from 'kill-port';
 
 import { ImaCliArgs } from '../types';
+import { createViteDevServer } from './createViteDevServer';
 import {
   createDevServerConfig,
   resolveEnvironment,
   resolveImaConfig,
   runImaPluginsHook,
 } from '../vite/utils/utils';
-import { createViteDevServer } from './createViteDevServer';
 import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 
 const args: ImaCliArgs = JSON.parse(process.env.IMA_CLI_ARGS!);

@@ -8,11 +8,11 @@ import express, { NextFunction, Request, Response } from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { createServer, ViteDevServer } from 'vite';
 
-import { createViteConfig } from '../vite/utils/utils';
-import { createManifestFileForDev } from '../lib/manifest';
 import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
+import { createManifestFileForDev } from '../lib/manifest';
 import { ImaCliArgs, ImaConfig, ViteConfigWithEnvironments } from '../types';
+import { createViteConfig } from '../vite/utils/utils';
 
 export async function createViteDevServer({
   args,
@@ -30,38 +30,38 @@ export async function createViteDevServer({
   publicUrl: string;
   environment: ParsedEnvironment;
 }): Promise<{ vite: ViteDevServer }> {
-  return new Promise(async (resolve, reject) => {
-    // Vite dev server requires us to use `client` and `ssr` environments
-    const viteConfig = await createViteConfig(args, config);
-    const viteConfigWithMappedEnvironments: ViteConfigWithEnvironments = {
-      ...viteConfig,
-      environments: {
-        client: viteConfig.environments.modern,
-        ssr: viteConfig.environments.server,
-      },
-    };
+  // Vite dev server requires us to use `client` and `ssr` environments
+  const viteConfig = await createViteConfig(args, config);
+  const viteConfigWithMappedEnvironments: ViteConfigWithEnvironments = {
+    ...viteConfig,
+    environments: {
+      client: viteConfig.environments.modern,
+      ssr: viteConfig.environments.server,
+    },
+  };
 
-    // Dev manifest is referencing the input files instead of output,
-    // so we can create it before the dev server starts
-    await createManifestFileForDev(config, viteConfigWithMappedEnvironments);
-    // Start the Vite dev server
-    const vite = await createServer({
-      ...viteConfigWithMappedEnvironments,
-      appType: 'custom',
-    });
+  // Dev manifest is referencing the input files instead of output,
+  // so we can create it before the dev server starts
+  await createManifestFileForDev(config, viteConfigWithMappedEnvironments);
+  // Start the Vite dev server
+  const vite = await createServer({
+    ...viteConfigWithMappedEnvironments,
+    appType: 'custom',
+  });
 
-    vite.watcher.on('add', (filePath) => {
-      logger.info(`${filePath} ${chalk.green('(new file)')}`);
-    });
+  vite.watcher.on('add', filePath => {
+    logger.info(`${filePath} ${chalk.green('(new file)')}`);
+  });
 
-    vite.watcher.on('change', (filePath) => {
-      logger.info(`${filePath} ${chalk.yellow('(changed)')}`);
-    });
+  vite.watcher.on('change', filePath => {
+    logger.info(`${filePath} ${chalk.yellow('(changed)')}`);
+  });
 
-    vite.watcher.on('unlink', (filePath) => {
-      logger.info(`${filePath} ${chalk.red('(deleted)')}`);
-    });
+  vite.watcher.on('unlink', filePath => {
+    logger.info(`${filePath} ${chalk.red('(deleted)')}`);
+  });
 
+  return new Promise((resolve, reject) => {
     const app = express();
 
     const staticDir = path.join(

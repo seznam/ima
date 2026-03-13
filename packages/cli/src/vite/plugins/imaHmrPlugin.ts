@@ -22,11 +22,11 @@ declare module 'vite/types/customEvent.d.ts' {
  *   });
  * }
  * ```
- * 
+ *
  * This is used by devErrorView in @ima/server.
- * 
+ *
  * Original idea was to use native vite events like `vite:afterUpdate`, or `vite:beforeFullReload`,
- * but they are not triggered in some cases (oddly, after a server restart, 
+ * but they are not triggered in some cases (oddly, after a server restart,
  * when the first server render is an error page, then followup update events are not sent to the client).
  * If we can find a way to make vite's native events work in all cases, we can remove this plugin and
  * update the devErrorView to listen to those events instead.

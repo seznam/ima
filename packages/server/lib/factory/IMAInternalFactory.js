@@ -150,7 +150,9 @@ module.exports = function IMAInternalFactory({
       : await appFactory();
 
     if (environment.$Env === 'dev') {
-      appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? await appFactory() : appMain;
+      appMain = serverGlobal.has(GLOBAL.APP_MAIN)
+        ? await appFactory()
+        : appMain;
       serverGlobal.delete(GLOBAL.DUMMY_APP_PROMISE);
       serverGlobal.delete(GLOBAL.DUMMY_APP);
 

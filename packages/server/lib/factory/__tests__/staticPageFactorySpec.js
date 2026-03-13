@@ -246,7 +246,8 @@ describe('Static Page Factory - SPA Prefetch', () => {
       };
 
       // This should not throw, as our mock handles any path with 'spa.ejs'
-      const result = await customStaticPageFactory.renderStaticSPAPrefetchPage(event);
+      const result =
+        await customStaticPageFactory.renderStaticSPAPrefetchPage(event);
       expect(result).toHaveProperty('content');
     });
   });
