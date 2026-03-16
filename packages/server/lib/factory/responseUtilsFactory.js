@@ -190,7 +190,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
     }
 
     if (process.env.IMA_CLI_WATCH) {
-      return await global.$IMA_SERVER.viteDevServer.transformIndexHtml(
+      return await global.$IMA_SERVER?.viteDevServer?.transformIndexHtml(
         req.url,
         response.content
       );

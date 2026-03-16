@@ -46,7 +46,6 @@
     "express": "^5.1.0",
     "express-http-proxy": "^2.1.2",
     "express-static-gzip": "^2.2.0",
-    "extensionless": "2.0.6",
     "helmet": "^3.23.3",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

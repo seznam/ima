@@ -845,7 +845,9 @@ describe('Server App Factory', () => {
       expect(response.static).toBeFalsy();
       expect(response.content).toBe('dev error page');
       expect(response.error).toEqual(error);
-      expect(global.$IMA_SERVER.viteDevServer.ssrFixStacktrace).toHaveBeenCalledWith(error);
+      expect(
+        global.$IMA_SERVER.viteDevServer.ssrFixStacktrace
+      ).toHaveBeenCalledWith(error);
 
       delete global.$IMA_SERVER;
     });

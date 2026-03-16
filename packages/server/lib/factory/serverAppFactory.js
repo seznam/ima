@@ -168,7 +168,7 @@ module.exports = function serverAppFactory({
 
   async function errorHandler(error, event) {
     if (process.env.IMA_CLI_WATCH) {
-      global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+      global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
     }
 
     try {
@@ -186,7 +186,7 @@ module.exports = function serverAppFactory({
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
       if (process.env.IMA_CLI_WATCH) {
-        global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+        global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
       }
 
       error.cause = event.error;
@@ -201,7 +201,7 @@ module.exports = function serverAppFactory({
       event = await responseHandler(event);
     } catch (error) {
       if (process.env.IMA_CLI_WATCH) {
-        global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+        global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
       }
 
       error.cause = event.error;
@@ -225,7 +225,7 @@ module.exports = function serverAppFactory({
         await emitter.emitParallel(Event.AfterResponseSend, event);
       } catch (error) {
         if (process.env.IMA_CLI_WATCH) {
-          global.$IMA_SERVER.viteDevServer.ssrFixStacktrace(error);
+          global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
         }
 
         logger.error('Error in AfterResponseSend', { error });

@@ -141,7 +141,7 @@ describe('responseUtilsFactory', () => {
     it('should return original content without any boot config', async () => {
       event.context.response.content = 'content';
 
-      expect(await processContent(event)).toBe('content');
+      await expect(processContent(event)).resolves.toBe('content');
     });
 
     it('should interpolate revival scripts into page content', async () => {

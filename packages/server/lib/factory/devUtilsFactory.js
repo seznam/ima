@@ -15,7 +15,7 @@ module.exports = function devUtilsFactory({ applicationFolder }) {
     if (Array.isArray(options?.dependencies)) {
       for (const dependency of options.dependencies) {
         if (process.env.IMA_CLI_WATCH) {
-          await global.$IMA_SERVER.viteDevServer.ssrLoadModule(
+          await global.$IMA_SERVER?.viteDevServer?.ssrLoadModule(
             assets[dependency].fileName
           );
         } else {
@@ -33,7 +33,7 @@ module.exports = function devUtilsFactory({ applicationFolder }) {
     }
 
     if (process.env.IMA_CLI_WATCH) {
-      return global.$IMA_SERVER.viteDevServer.ssrLoadModule(
+      return global.$IMA_SERVER?.viteDevServer?.ssrLoadModule(
         assets[module].fileName
       );
     }
