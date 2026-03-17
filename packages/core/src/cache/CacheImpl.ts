@@ -182,12 +182,11 @@ export class CacheImpl<V> extends Cache<V> {
       }
     }
 
-    const serialized = JSON.stringify(dataToSerialize);
-
-    // Use pre-compiled regex and only replace if needed
-    return serialized.includes('</script')
-      ? serialized.replace(CacheImpl.SCRIPT_TAG_REGEX, '<\\/script')
-      : serialized;
+    // Use pre-compiled regex
+    return JSON.stringify(dataToSerialize).replace(
+      CacheImpl.SCRIPT_TAG_REGEX,
+      '<\\/script'
+    );
   }
 
   /**

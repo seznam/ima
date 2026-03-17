@@ -1,5 +1,32 @@
 # Change Log
 
+## 20.0.5
+
+### Patch Changes
+
+- 6c86a0b: Fix starting of monitoring.
+  - **What** Use `start` instead of `monitor.start`. Method `start` will start both monitor and shortMonitor.
+  - **Why** ShortMonitor was not started and we were not collecting shortMetrics.
+  - **How** Nothing.
+
+## 20.0.4
+
+### Patch Changes
+
+- 2e4effa: Fix missing production logging newline
+
+## 20.0.3
+
+### Patch Changes
+
+- ed8572c: Fixed default cache TTL values in environment.
+
+## 20.0.2
+
+### Patch Changes
+
+- 1349b4d: Fix $Language property resolution in server environment where adding the default '//*:*' value could override custom configurations due to incorrect merge order. Fix $IMA.$Root property resolution on client where default $Language settings were overriding all other language configurations instead of serving as fallback.
+
 ## 20.0.1
 
 ### Patch Changes

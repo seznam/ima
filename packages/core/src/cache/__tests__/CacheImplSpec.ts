@@ -192,6 +192,24 @@ describe('ima.core.cache.CacheImpl', () => {
     );
   });
 
+  it.each(['</script', '</Script'])(
+    'should serialize and escape %s tag',
+    value => {
+      cache.clear();
+      cache.set('key', value, 60000);
+      const serialization = cache.serialize();
+
+      expect(serialization).toBe(
+        JSON.stringify({
+          key: {
+            value: '</script',
+            ttl: 60000,
+          },
+        }).replace(/<\/script/g, '<\\/script')
+      );
+    }
+  );
+
   it('should deserialize "Infinity" string value ttl to javascript Infinity value', () => {
     const serialization = {
       key: {
