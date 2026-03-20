@@ -1,36 +1,29 @@
 'use strict';
+/* eslint-disable import/order */
+
+const mock = require('mock-require');
+const manifestMock = require('../__mocks__/manifest.json');
+
+mock('crypto', {
+  randomUUID: () => 'UUID',
+});
+
+mock('fs', {
+  existsSync: vi.fn().mockReturnValue(true),
+  readFileSync: vi.fn().mockImplementation(filePath => {
+    if (filePath.endsWith('manifest.json')) {
+      return JSON.stringify(manifestMock);
+    }
+
+    return 'runner#{scriptResources}';
+  }),
+});
 
 const responseUtilsFactory = require('../responseUtilsFactory.js');
 
-const manifestMock = require('../__mocks__/manifest.json');
-
-jest.mock('crypto', () => ({
-  randomUUID: () => 'UUID',
-}));
-
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
-
-  return {
-    ...toMockedInstance(originalModule, {
-      existsSync() {
-        return true;
-      },
-      readFileSync(path) {
-        if (path.endsWith('manifest.json')) {
-          return JSON.stringify(manifestMock);
-        }
-
-        return 'runner#{scriptResources}';
-      },
-    }),
-  };
-});
-
 describe('responseUtilsFactory', () => {
-  const nowMock = jest.spyOn(global.Date, 'now').mockReturnValue('now');
-  const randomMock = jest.spyOn(global.Math, 'random').mockReturnValue(0);
+  const nowMock = vi.spyOn(global.Date, 'now').mockReturnValue('now');
+  const randomMock = vi.spyOn(global.Math, 'random').mockReturnValue(0);
 
   const {
     processContent,
@@ -47,8 +40,8 @@ describe('responseUtilsFactory', () => {
   beforeEach(() => {
     event = {
       res: {
-        cookie: jest.fn(),
-        set: jest.fn(),
+        cookie: vi.fn(),
+        set: vi.fn(),
         locals: {},
       },
       context: {
@@ -68,7 +61,7 @@ describe('responseUtilsFactory', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('_prepareCookieOptionsForExpress', () => {

@@ -22,7 +22,7 @@
   "types": "./types.d.ts",
   "scripts": {
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest"
+    "test": "vitest run -c vitest.config.ts"
   },
   "dependencies": {
     "@esmj/emitter": "^0.4.3",

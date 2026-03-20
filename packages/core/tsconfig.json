@@ -6,12 +6,9 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "types": ["hmr-client", "express", "jest", "to-mock", "node"]
+    "types": ["hmr-client", "express", "vitest/globals", "to-mock", "node"]
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "**/__tests__/**"
   ]
 }

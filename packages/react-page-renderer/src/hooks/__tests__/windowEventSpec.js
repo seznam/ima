@@ -5,27 +5,27 @@ import { useWindowEvent } from '../windowEvent';
 describe('useWindowEvent', () => {
   let contextValue;
   let windowMock = {
-    dispatchEvent: jest.fn(),
+    dispatchEvent: vi.fn(),
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(async () => {
     contextValue = await getContextValue();
 
     contextValue.$Utils.$Window = {
-      getWindow: jest.fn().mockReturnValue(windowMock),
-      createCustomEvent: jest.fn(),
-      bindEventListener: jest.fn(),
-      unbindEventListener: jest.fn(),
+      getWindow: vi.fn().mockReturnValue(windowMock),
+      createCustomEvent: vi.fn(),
+      bindEventListener: vi.fn(),
+      unbindEventListener: vi.fn(),
     };
   });
 
   it('should return window and utility functions', async () => {
     const { result } = await renderHookWithContext(
-      () => useWindowEvent('custom-target', 'custom-event', jest.fn()),
+      () => useWindowEvent('custom-target', 'custom-event', vi.fn()),
       { contextValue }
     );
 
@@ -41,7 +41,7 @@ describe('useWindowEvent', () => {
   });
 
   it('should bind events correctly', async () => {
-    let cb = jest.fn();
+    let cb = vi.fn();
 
     await renderHookWithContext(
       () => useWindowEvent('custom-target', 'custom-event', cb, true),

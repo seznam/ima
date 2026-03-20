@@ -1,28 +1,23 @@
 const path = require('path');
 
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
+const mock = require('mock-require');
 
-  return {
-    ...toMockedInstance(originalModule, {
-      existsSync() {
-        return true;
-      },
-      readFileSync(filePath) {
-        if (filePath.includes('spa.ejs')) {
-          return '<html><body><div id="app">SPA <%= typeof spaPrefetch !== "undefined" && spaPrefetch ? "Prefetch" : "" %></div></body></html>';
-        }
-        if (filePath.includes('500.ejs')) {
-          return '<html><body>500 Error</body></html>';
-        }
-        if (filePath.includes('400.ejs')) {
-          return '<html><body>404 Error</body></html>';
-        }
-        return 'file content';
-      },
-    }),
-  };
+mock('fs', {
+  existsSync() {
+    return true;
+  },
+  readFileSync(filePath) {
+    if (filePath.includes('spa.ejs')) {
+      return '<html><body><div id="app">SPA <%= typeof spaPrefetch !== "undefined" && spaPrefetch ? "Prefetch" : "" %></div></body></html>';
+    }
+    if (filePath.includes('500.ejs')) {
+      return '<html><body>500 Error</body></html>';
+    }
+    if (filePath.includes('400.ejs')) {
+      return '<html><body>404 Error</body></html>';
+    }
+    return 'file content';
+  },
 });
 
 describe('Static Page Factory - SPA Prefetch', () => {
@@ -32,7 +27,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
   let createBootConfig;
   let applicationFolder;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     applicationFolder = path.join(__dirname, '../../../');
     environment = {
       $Server: {
@@ -45,10 +40,10 @@ describe('Static Page Factory - SPA Prefetch', () => {
     };
 
     instanceRecycler = {
-      getConcurrentRequests: jest.fn().mockReturnValue(5),
+      getConcurrentRequests: vi.fn().mockReturnValue(5),
     };
 
-    createBootConfig = jest.fn(event => {
+    createBootConfig = vi.fn(event => {
       event.context = event.context || {};
       event.context.bootConfig = {
         services: {},
@@ -56,7 +51,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
       };
     });
 
-    staticPageFactory = require('../staticPageFactory.js')({
+    staticPageFactory = (await import('../staticPageFactory.js')).default({
       applicationFolder,
       instanceRecycler,
       createBootConfig,
@@ -65,7 +60,7 @@ describe('Static Page Factory - SPA Prefetch', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('renderStaticSPAPrefetchPage', () => {

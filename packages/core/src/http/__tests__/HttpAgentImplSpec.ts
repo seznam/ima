@@ -20,7 +20,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   let httpConfig = null;
   const helper = {
     ...Helper,
-    clone: jest.fn(),
+    clone: vi.fn(),
   };
 
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           credentials: 'include',
         },
         postProcessors: [
-          jest
+          vi
             .fn()
             .mockImplementation(
               (agentResponse: HttpAgentResponse<unknown>) => agentResponse
@@ -78,7 +78,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe.each([['get', 'post', 'put', 'patch', 'delete']])(
@@ -89,11 +89,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should return resolved promise with data', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(false);
+        vi.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(false);
 
         // @ts-ignore
         await http[method](
@@ -121,7 +121,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should be rejected with error', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.reject(new GenericError('', data.params));
         });
 
@@ -146,7 +146,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         data.params.options.repeatRequest = 10;
         data.params.options.abortController = new AbortController();
 
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           data.params.options?.abortController?.abort();
 
           return Promise.reject(new GenericError('', data.params));
@@ -170,12 +170,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should set cookie to response', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
-        jest
-          .spyOn(cookie, 'parseFromSetCookieHeader')
+        vi.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
+        vi.spyOn(cookie, 'parseFromSetCookieHeader')
 
           .mockImplementation(() => {});
 
@@ -190,15 +189,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should compose fetchOptions correctly from defaults and options', async () => {
-        const proxyMock = jest
-          .spyOn(proxy, 'request')
-          .mockImplementation(() => {
-            return Promise.resolve(data);
-          });
+        const proxyMock = vi.spyOn(proxy, 'request').mockImplementation(() => {
+          return Promise.resolve(data);
+        });
 
-        jest
-          .spyOn(cookie, 'getCookiesStringForCookieHeader')
-          .mockImplementation(() => 'someCookie=value');
+        vi.spyOn(cookie, 'getCookiesStringForCookieHeader').mockImplementation(
+          () => 'someCookie=value'
+        );
 
         const customOptions = {
           ...data.params.options,
@@ -233,7 +230,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should call postProcessors function', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
@@ -252,7 +249,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should call clear response from postProcessors and abortController', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
@@ -273,10 +270,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should not set Cookie header if request fetchOptions.credentials is not "include"', async () => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        jest.spyOn(cookie, 'getCookiesStringForCookieHeader');
+        vi.spyOn(cookie, 'getCookiesStringForCookieHeader');
 
         // @ts-ignore
         await http[method](
@@ -290,34 +287,22 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      /* eslint-disable jest/no-done-callback */
-      it('should clone result from _internalCacheOfPromises', done => {
-        jest.spyOn(proxy, 'request').mockImplementation(() => {
+      it('should clone result from _internalCacheOfPromises', async () => {
+        vi.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        //the first call without a response in the _internalCacheOfPromises
-        // @ts-ignore
-        http[method](
-          data.params.url,
-          data.params.data,
-          data.params.options
-        ).then(() => {
-          expect(helper.clone).not.toHaveBeenCalled();
-        });
+        await Promise.all([
+          //the first call without a response in the _internalCacheOfPromises
+          // @ts-ignore
+          http[method](data.params.url, data.params.data, data.params.options),
+          //the second call from the _internalCacheOfPromises is cloned
+          // @ts-ignore
+          http[method](data.params.url, data.params.data, data.params.options),
+        ]);
 
-        //the second call from the _internalCacheOfPromises is cloned
-        // @ts-ignore
-        http[method](
-          data.params.url,
-          data.params.data,
-          data.params.options
-        ).then(() => {
-          expect(helper.clone).toHaveBeenCalled();
-          done();
-        });
+        expect(helper.clone).toHaveBeenCalledTimes(1);
       });
-      /* eslint-enable jest/no-done-callback */
     }
   );
 
@@ -337,10 +322,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
 
         it('should cache failed request', async () => {
-          jest.spyOn(proxy, 'request').mockImplementation(() => {
+          vi.spyOn(proxy, 'request').mockImplementation(() => {
             return Promise.reject(error);
           });
-          jest.spyOn(cache, 'set');
+          vi.spyOn(cache, 'set');
 
           // @ts-ignore
           await http[method](data.params.url, data.params.data, options).catch(
@@ -371,8 +356,8 @@ describe('ima.core.http.HttpAgentImpl', () => {
             errorParams: data.params,
           };
 
-          jest.spyOn(cache, 'has').mockReturnValue(true);
-          jest.spyOn(cache, 'get').mockReturnValue(cachedErrorData);
+          vi.spyOn(cache, 'has').mockReturnValue(true);
+          vi.spyOn(cache, 'get').mockReturnValue(cachedErrorData);
 
           // @ts-ignore
           await http[method](data.params.url, data.params.data, options).catch(

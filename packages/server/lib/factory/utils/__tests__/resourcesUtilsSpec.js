@@ -1,30 +1,26 @@
+// eslint-disable-next-line import/order
+const manifestMock = require('../../__mocks__/manifest.json');
+
+const mock = require('mock-require');
+
+mock('fs', {
+  existsSync() {
+    return true;
+  },
+  readFileSync(path) {
+    if (path.endsWith('manifest.json')) {
+      return JSON.stringify(manifestMock);
+    }
+
+    return 'runner#{source}';
+  },
+});
+
 const {
   renderStyles,
   prepareDefaultResources,
   renderScript,
 } = require('../resourcesUtils');
-
-const manifestMock = require('../../__mocks__/manifest.json');
-
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
-
-  return {
-    ...toMockedInstance(originalModule, {
-      existsSync() {
-        return true;
-      },
-      readFileSync(path) {
-        if (path.endsWith('manifest.json')) {
-          return JSON.stringify(manifestMock);
-        }
-
-        return 'runner#{source}';
-      },
-    }),
-  };
-});
 
 describe('resourcesUtils', () => {
   describe('renderStyles', () => {

@@ -27,7 +27,7 @@ describe('ima.core.event.Observable', () => {
     it('should subscribe to event', () => {
       expect(observable['_observers'].size).toBe(0);
 
-      const observer = jest.fn();
+      const observer = vi.fn();
       observable.subscribe(event, observer);
 
       expect(observable['_observers'].size).toBe(1);
@@ -39,7 +39,7 @@ describe('ima.core.event.Observable', () => {
 
     it('should subscribe to event and get data if already fired', () => {
       dispatcher.fire(event, eventData);
-      const observer = jest.fn();
+      const observer = vi.fn();
       observable.subscribe(event, observer);
 
       expect(observer).toHaveBeenCalledWith(eventData);
@@ -51,7 +51,7 @@ describe('ima.core.event.Observable', () => {
 
     it('should subscribe to event and get data if already fired multiple times', () => {
       dispatcher.fire(event, eventData);
-      const observer = jest.fn();
+      const observer = vi.fn();
       observable.subscribe(event, observer);
 
       expect(observer).toHaveBeenCalledWith(eventData);
@@ -74,7 +74,7 @@ describe('ima.core.event.Observable', () => {
       dispatcher.fire(event, { 1: 2 });
       dispatcher.fire(event, { 3: 4 });
 
-      const observer = jest.fn();
+      const observer = vi.fn();
       observable2.subscribe(event, observer);
 
       expect(observer).not.toHaveBeenCalledWith(eventData);
@@ -84,7 +84,7 @@ describe('ima.core.event.Observable', () => {
 
     it('should work with scope', () => {
       class Foo {
-        foo = jest.fn();
+        foo = vi.fn();
 
         bar() {
           this.foo();
@@ -108,7 +108,7 @@ describe('ima.core.event.Observable', () => {
 
   describe('unsubscribe method', () => {
     it('should unsubscribe from event', () => {
-      const observer = jest.fn();
+      const observer = vi.fn();
       observable.subscribe(event, observer);
       dispatcher.fire(event, eventData);
 
@@ -129,17 +129,17 @@ describe('ima.core.event.Observable', () => {
     dispatcher.fire('foo', 'bar');
     dispatcher.fire(RouterEvents.BEFORE_HANDLE_ROUTE, { bhr: true });
 
-    const eventObserver = jest.fn();
+    const eventObserver = vi.fn();
     observable.subscribe(event, eventObserver);
 
     expect(eventObserver).toHaveBeenCalledWith(eventData);
 
-    const bhrObserver = jest.fn();
+    const bhrObserver = vi.fn();
     observable.subscribe(RouterEvents.BEFORE_HANDLE_ROUTE, bhrObserver);
 
     expect(bhrObserver).toHaveBeenCalledWith({ bhr: true });
 
-    const fooObserver = jest.fn();
+    const fooObserver = vi.fn();
     observable.subscribe('foo', fooObserver);
 
     expect(fooObserver).not.toHaveBeenCalled();

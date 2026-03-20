@@ -4,5 +4,5 @@ import {
   setGlobalMockMethod,
 } from 'to-mock';
 
-setGlobalMockMethod(jest.fn);
+setGlobalMockMethod(vi.fn);
 setGlobalKeepUnmock(objectKeepUnmock);

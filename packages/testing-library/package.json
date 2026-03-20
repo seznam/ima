@@ -23,7 +23,7 @@
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest -c jest.config.js"
+    "test": "vitest run -c vitest.config.ts"
   },
   "exports": {
     ".": {
@@ -51,15 +51,15 @@
       "import": "./dist/esm/server/*.js",
       "default": "./dist/cjs/server/*.js"
     },
-    "./jest-preset": {
-      "types": "./dist/esm/jest-preset.d.ts",
-      "import": "./dist/esm/jest-preset.js",
-      "default": "./dist/cjs/jest-preset.js"
+    "./vitest-preset": {
+      "types": "./dist/esm/vitest-preset.d.ts",
+      "import": "./dist/esm/vitest-preset.js",
+      "default": "./dist/cjs/vitest-preset.js"
     },
-    "./jestSetupFileAfterEnv": {
-      "types": "./dist/esm/jestSetupFileAfterEnv.d.ts",
-      "import": "./dist/esm/jestSetupFileAfterEnv.js",
-      "default": "./dist/cjs/jestSetupFileAfterEnv.js"
+    "./vitestSetupFileAfterEnv": {
+      "types": "./dist/esm/vitestSetupFileAfterEnv.d.ts",
+      "import": "./dist/esm/vitestSetupFileAfterEnv.js",
+      "default": "./dist/cjs/vitestSetupFileAfterEnv.js"
     }
   },
   "dependencies": {
@@ -74,6 +74,7 @@
     "@testing-library/dom": ">=10.0.0",
     "@testing-library/jest-dom": ">=6.0.0",
     "@testing-library/react": ">=12.0.0",
+    "vitest": ">=4.0.0",
     "express": ">=4.0.0"
   },
   "publishConfig": {

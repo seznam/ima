@@ -62,7 +62,7 @@ describe('ima.core.ObjectContainer', () => {
   });
 
   it('should be clear entries', () => {
-    jest.spyOn(oc['_entries'], 'clear').mockImplementation();
+    vi.spyOn(oc['_entries'], 'clear').mockImplementation(() => {});
 
     oc.clear();
 
@@ -99,7 +99,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be set constant value', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.constant(constantName, constantValue);
 
@@ -132,7 +132,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new instance of entry and set it to entries', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.inject(ClassConstructor, dependencies);
 
@@ -150,7 +150,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should set instance of entry from aliases to the entries', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.bind(alias, ClassConstructor, dependencies);
       oc.inject(ClassConstructor, dependencies);
@@ -199,7 +199,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new entry for defined dependencies', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.bind(alias, ClassConstructor, dependencies);
 
@@ -212,7 +212,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be use entry from entries which was defined by inject method', () => {
       oc.inject(ClassConstructor, dependencies);
 
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.bind(alias, ClassConstructor);
 
@@ -225,7 +225,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be use entry from entries which was defined by provide method', () => {
       oc.provide(ClassParent, ClassConstructor, dependencies);
 
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.bind(alias, ClassParent);
 
@@ -240,7 +240,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, ClassParent);
       const aliasEntry = oc['_entries'].get(alias);
 
-      jest.spyOn(oc, '_updateEntryValues');
+      vi.spyOn(oc, '_updateEntryValues');
 
       oc.bind(
         alias,
@@ -265,7 +265,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.inject(ClassConstructor, dependencies);
       oc.bind(alias, ClassConstructor);
 
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.bind(alias2, ClassConstructor, []);
 
@@ -298,7 +298,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new Entry and set it to entries', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc.provide(ClassParent, ClassConstructor, dependencies);
 
@@ -365,16 +365,16 @@ describe('ima.core.ObjectContainer', () => {
     it('should return shared instance', () => {
       entry.sharedInstance = false;
 
-      jest.spyOn(oc, '_getEntry').mockReturnValue(entry);
-      jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
+      vi.spyOn(oc, '_getEntry').mockReturnValue(entry);
+      vi.spyOn(oc, '_createInstanceFromEntry').mockImplementation(() => {});
 
       expect(oc.get('entry')).toStrictEqual(entry.sharedInstance);
       expect(oc._createInstanceFromEntry).toHaveBeenCalledTimes(0);
     });
 
     it('should create new instance', () => {
-      jest.spyOn(oc, '_getEntry').mockReturnValue(entry);
-      jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
+      vi.spyOn(oc, '_getEntry').mockReturnValue(entry);
+      vi.spyOn(oc, '_createInstanceFromEntry').mockImplementation(() => {});
 
       oc.get('entry');
 
@@ -619,7 +619,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
       (namespace as UnknownParameters).ObjectContainer = ClassDependency;
 
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
@@ -631,7 +631,7 @@ describe('ima.core.ObjectContainer', () => {
       const constant = { a: 1 };
       (namespace as UnknownParameters).ObjectContainer = constant;
 
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       const entry = oc._getEntryFromNamespace(namespacePathOC) as Entry;
 
@@ -663,7 +663,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should set class to entries if class has defined $dependencies', () => {
-      jest.spyOn(oc, '_createEntry');
+      vi.spyOn(oc, '_createEntry');
 
       oc._getEntryFromClassConstructor(ClassConstructorWithDependencies);
 

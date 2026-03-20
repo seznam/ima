@@ -10,7 +10,7 @@
       "kill-port",
       "core",
       "better-opn",
-      "jest",
+      "vitest/globals",
       "server",
       "less-plugin-glob"
     ]

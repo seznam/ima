@@ -24,7 +24,7 @@ describe('ima.storage.CookieStorage', () => {
   const cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
   let request: Request;
-  let requestGetCookieHeaderSpy: jest.SpyInstance;
+  let requestGetCookieHeaderSpy: vi.SpyInstance;
   let response: Response;
   let cookie: CookieStorage;
   let win: ServerWindow;
@@ -46,10 +46,10 @@ describe('ima.storage.CookieStorage', () => {
     request.init({} as ExpressRequest);
     response.init({} as ExpressResponse, transformFunction);
 
-    requestGetCookieHeaderSpy = jest.spyOn(request, 'getCookieHeader');
+    requestGetCookieHeaderSpy = vi.spyOn(request, 'getCookieHeader');
     requestGetCookieHeaderSpy.mockReturnValue(cookieString);
 
-    jest.spyOn(response, 'setCookie').mockImplementation();
+    vi.spyOn(response, 'setCookie').mockImplementation(() => {});
 
     cookie.init({ secure: false }, transformFunction);
   });
@@ -99,7 +99,7 @@ describe('ima.storage.CookieStorage', () => {
   });
 
   it('should be get cookies string', () => {
-    jest.spyOn(cookie['_transformFunction'], 'encode');
+    vi.spyOn(cookie['_transformFunction'], 'encode');
 
     expect(cookie.getCookiesStringForCookieHeader()).toBe(
       cookiesStringForCookieHeader
@@ -170,7 +170,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('set method', () => {
     it('should set cookie as expired for undefined value', () => {
-      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
+      vi.spyOn(cookie, 'getExpirationAsDate').mockImplementation(() => {});
 
       cookie.set('cok2', undefined);
 
@@ -178,7 +178,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should prefer maxAge before expires', () => {
-      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
+      vi.spyOn(cookie, 'getExpirationAsDate').mockImplementation(() => {});
 
       cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
 
@@ -186,7 +186,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should set session cookie', () => {
-      jest.spyOn(cookie, 'getExpirationAsDate').mockImplementation();
+      vi.spyOn(cookie, 'getExpirationAsDate').mockImplementation(() => {});
 
       cookie.set('cok2222', 'val2');
 
@@ -196,7 +196,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('parseFromSetCookieHeader method', () => {
     it('should parse cookie from Set-Cookie header string', () => {
-      jest.spyOn(cookie, 'set').mockImplementation();
+      vi.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieString);
 
@@ -207,7 +207,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string for cookie name with first letter uppercase', () => {
-      jest.spyOn(cookie, 'set').mockImplementation();
+      vi.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithFirstLetterUppercase);
 
@@ -218,7 +218,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with defined domain', () => {
-      jest.spyOn(cookie, 'set').mockImplementation();
+      vi.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
 
@@ -230,7 +230,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with complex options', () => {
-      jest.spyOn(cookie, 'set').mockImplementation();
+      vi.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
 
@@ -246,7 +246,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with Max-Age option', () => {
-      jest.spyOn(cookie, 'set').mockImplementation();
+      vi.spyOn(cookie, 'set').mockImplementation(() => {});
 
       cookie.parseFromSetCookieHeader(setCookieStringWithMaxAge);
 

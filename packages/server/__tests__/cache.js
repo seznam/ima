@@ -1,4 +1,4 @@
-const CacheFactory = require('../lib/cache.js');
+import CacheFactory from '../lib/cache.js';
 
 describe('cache', () => {
   describe('set method', () => {
@@ -20,7 +20,7 @@ describe('cache', () => {
         },
       });
 
-      jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
+      vi.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
     it('should be set page to cache', () => {

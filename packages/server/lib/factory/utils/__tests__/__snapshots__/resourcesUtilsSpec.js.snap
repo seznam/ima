@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
+exports[`resourcesUtils > prepareDefaultResources > should add fallbacks when IMA_PUBLIC_PATH is defined 1`] = `
 {
   "esScripts": [
     [
@@ -67,7 +67,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
 }
 `;
 
-exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath 1`] = `
+exports[`resourcesUtils > prepareDefaultResources > should add fallbacks when IMA_PUBLIC_PATH is defined, with proper custom config publicPath 1`] = `
 {
   "esScripts": [
     [
@@ -141,7 +141,7 @@ exports[`resourcesUtils prepareDefaultResources should add fallbacks when IMA_PU
 }
 `;
 
-exports[`resourcesUtils prepareDefaultResources should prepare default sources structure from provided manifest file 1`] = `
+exports[`resourcesUtils > prepareDefaultResources > should prepare default sources structure from provided manifest file 1`] = `
 {
   "esScripts": [
     [
@@ -208,7 +208,7 @@ exports[`resourcesUtils prepareDefaultResources should prepare default sources s
 }
 `;
 
-exports[`resourcesUtils prepareDefaultResources should skip compilations without assets 1`] = `
+exports[`resourcesUtils > prepareDefaultResources > should skip compilations without assets 1`] = `
 {
   "esScripts": [
     [
@@ -250,4 +250,4 @@ exports[`resourcesUtils prepareDefaultResources should skip compilations without
 }
 `;
 
-exports[`resourcesUtils renderScript should wrap script contents in script tag 1`] = `"<script id="ima-revival-settings">function () {}</script>"`;
+exports[`resourcesUtils > renderScript > should wrap script contents in script tag 1`] = `"<script id="ima-revival-settings">function () {}</script>"`;

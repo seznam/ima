@@ -43,7 +43,7 @@ describe('ima.storage.SessionMapStorage', () => {
   });
 
   it('should set promise value only to map storage', () => {
-    jest.spyOn(sessionStorage, 'set').mockImplementation();
+    vi.spyOn(sessionStorage, 'set').mockImplementation(() => {});
 
     sessionMap.set('promise', Promise.resolve(1));
 
@@ -85,15 +85,15 @@ describe('ima.storage.SessionMapStorage', () => {
     for (const item of sessionMap.keys()) {
       switch (index++) {
         case 0:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item1');
           break;
         case 1:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item2');
           break;
         default:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item3');
           break;
       }

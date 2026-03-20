@@ -25,8 +25,3 @@ export function getOptions() {
 export function source(ast) {
   return ast.toSource(getOptions());
 }
-
-module.exports = {
-  getOptions,
-  source,
-};

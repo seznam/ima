@@ -38,7 +38,7 @@ describe('ima.core.router.ServerRouter', () => {
   });
 
   it('should be return actual path', () => {
-    jest.spyOn(request, 'getPath').mockReturnValue('');
+    vi.spyOn(request, 'getPath').mockReturnValue('');
 
     router.getPath();
 
@@ -52,7 +52,7 @@ describe('ima.core.router.ServerRouter', () => {
       headers: { 'Custom-header': 'Some custom value' },
     };
 
-    jest.spyOn(response, 'redirect').mockImplementation();
+    vi.spyOn(response, 'redirect').mockImplementation(() => {});
 
     router.redirect(url, options);
 

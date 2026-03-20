@@ -22,10 +22,10 @@ describe('bootstrap', () => {
 
     plugin = {
       // @ts-expect-error
-      initSettings: jest.fn(() => ({ prod: { pluginSettings: true } })),
-      initBind: jest.fn(() => {}),
+      initSettings: vi.fn(() => ({ prod: { pluginSettings: true } })),
+      initBind: vi.fn(() => {}),
       //@ts-ignore
-      initServices: jest.fn(() => {}),
+      initServices: vi.fn(() => {}),
     };
 
     bootConfig = {
@@ -56,10 +56,10 @@ describe('bootstrap', () => {
 
   describe('run method', () => {
     beforeEach(async () => {
-      jest.spyOn(bootstrap, '_initSettings').mockImplementation();
-      jest.spyOn(bootstrap, '_bindDependencies').mockImplementation();
-      jest.spyOn(bootstrap, '_initServices').mockImplementation();
-      jest.spyOn(bootstrap, '_initRoutes').mockImplementation();
+      vi.spyOn(bootstrap, '_initSettings').mockImplementation(() => {});
+      vi.spyOn(bootstrap, '_bindDependencies').mockImplementation(() => {});
+      vi.spyOn(bootstrap, '_initServices').mockImplementation(() => {});
+      vi.spyOn(bootstrap, '_initRoutes').mockImplementation(() => {});
 
       await bootstrap.run(bootConfig);
     });
@@ -85,12 +85,14 @@ describe('bootstrap', () => {
     let plugin: InitPluginConfig;
 
     beforeEach(() => {
-      jest.spyOn(bootstrap, '_initPluginSettings').mockImplementation();
-      jest.spyOn(bootstrap, '_bindPluginDependencies').mockImplementation();
-      jest.spyOn(bootstrap, '_initPluginServices').mockImplementation();
+      vi.spyOn(bootstrap, '_initPluginSettings').mockImplementation(() => {});
+      vi.spyOn(bootstrap, '_bindPluginDependencies').mockImplementation(
+        () => {}
+      );
+      vi.spyOn(bootstrap, '_initPluginServices').mockImplementation(() => {});
 
       // @ts-ignore
-      plugin = jest.fn(() => {});
+      plugin = vi.fn(() => {});
       bootstrap.initPlugin('plugin-name', plugin);
     });
 
@@ -115,7 +117,7 @@ describe('bootstrap', () => {
 
   describe('_initSettings method', () => {
     it('should call initSettings method for app', () => {
-      jest.spyOn(bootConfig, 'initSettings');
+      vi.spyOn(bootConfig, 'initSettings');
 
       bootstrap._initSettings();
 
@@ -166,7 +168,7 @@ describe('bootstrap', () => {
 
   describe('_bindDependencies method', () => {
     it('should set ima binding state to object container', async () => {
-      jest.spyOn(objectContainer, 'setBindingState');
+      vi.spyOn(objectContainer, 'setBindingState');
 
       await bootstrap._bindDependencies();
 
@@ -176,7 +178,7 @@ describe('bootstrap', () => {
     });
 
     it('should set plugin binding state to object container', async () => {
-      jest.spyOn(objectContainer, 'setBindingState');
+      vi.spyOn(objectContainer, 'setBindingState');
 
       await bootstrap._bindDependencies();
 
@@ -187,7 +189,7 @@ describe('bootstrap', () => {
     });
 
     it('should set app binding state to object container', async () => {
-      jest.spyOn(objectContainer, 'setBindingState');
+      vi.spyOn(objectContainer, 'setBindingState');
 
       await bootstrap._bindDependencies();
 
@@ -197,7 +199,7 @@ describe('bootstrap', () => {
     });
 
     it('should bind ima', async () => {
-      jest.spyOn(bootConfig, 'initBindIma');
+      vi.spyOn(bootConfig, 'initBindIma');
 
       await bootstrap._bindDependencies();
 
@@ -221,7 +223,7 @@ describe('bootstrap', () => {
     });
 
     it('should bind app', async () => {
-      jest.spyOn(bootConfig, 'initBindApp');
+      vi.spyOn(bootConfig, 'initBindApp');
 
       await bootstrap._bindDependencies();
 
@@ -236,7 +238,7 @@ describe('bootstrap', () => {
 
   describe('_bindPluginDependencies method', () => {
     beforeEach(() => {
-      jest.spyOn(objectContainer, 'setBindingState');
+      vi.spyOn(objectContainer, 'setBindingState');
     });
 
     it('should ignore invalid plugins', () => {
@@ -278,8 +280,8 @@ describe('bootstrap', () => {
     it('should initialize app route', () => {
       const router = {};
 
-      jest.spyOn(bootConfig, 'initRoutes');
-      jest.spyOn(objectContainer, 'get').mockReturnValue(router);
+      vi.spyOn(bootConfig, 'initRoutes');
+      vi.spyOn(objectContainer, 'get').mockReturnValue(router);
 
       bootstrap._initRoutes();
 

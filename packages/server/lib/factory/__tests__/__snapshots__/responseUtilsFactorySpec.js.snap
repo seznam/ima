@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`responseUtilsFactory createContentVariables should generate base set of content variables 1`] = `
+exports[`responseUtilsFactory > createContentVariables > should generate base set of content variables 1`] = `
 {
   "_": {
     "manifest": {
@@ -423,7 +423,7 @@ exports[`responseUtilsFactory createContentVariables should generate base set of
 }
 `;
 
-exports[`responseUtilsFactory processContent should allow overrides through custom $Source definition 1`] = `
+exports[`responseUtilsFactory > processContent > should allow overrides through custom $Source definition 1`] = `
 "<html><script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};
@@ -444,7 +444,7 @@ exports[`responseUtilsFactory processContent should allow overrides through cust
     </script><script id="ima-runner">runner{\\"esScripts\\":[[\\"/static/js/app.client.8dc14fd2c9e52eef.js\\",{\\"async\\":\\"\\",\\"crossorigin\\":\\"anonymous\\",\\"type\\":\\"module\\"}],[\\"/static/js/locale/en.3c6a5e7a55bb2ab4.js\\",{\\"async\\":\\"\\",\\"crossorigin\\":\\"anonymous\\",\\"type\\":\\"module\\"}],[\\"/static/js/vendors.0e456297851f0a3a.js\\",{\\"async\\":\\"\\",\\"crossorigin\\":\\"anonymous\\",\\"type\\":\\"module\\"}],\\"custom-script-src\\"]}</script></html>"
 `;
 
-exports[`responseUtilsFactory processContent should interpolate revival scripts into page content 1`] = `
+exports[`responseUtilsFactory > processContent > should interpolate revival scripts into page content 1`] = `
 "<html><link as="style" href="/static/css/app.d0ad44d05f82db5f.css" rel="preload" type="text/css" /><link href="/static/css/app.d0ad44d05f82db5f.css" rel="stylesheet" /><script id="ima-revival-settings">(function (root) {
       root.$Debug = true;
       root.$IMA = root.$IMA || {};

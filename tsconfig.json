@@ -14,6 +14,7 @@
     "jsx": "react-jsx",
     "typeRoots": [
       "./types",
+      "./node_modules",
       "./node_modules/@types",
       "./node_modules/@ima"
     ],
