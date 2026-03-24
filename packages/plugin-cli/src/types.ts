@@ -62,7 +62,6 @@ export interface ImaPluginConfig {
   plugins?: Plugin[];
   jsxRuntime?: ReactConfig['runtime'];
   transformers?: TransformerDefinition[] | '...';
-  sourceMaps?: boolean;
   additionalWatchPaths?: string[];
 }
 

@@ -209,11 +209,6 @@ export default async (
       },
       server: {
         consumer: 'server',
-        resolve: {
-          // @TODO: IMA.js packages do not have valid ESM build, this is a workaround to build them
-          noExternal: [/^@ima\//], // Bundle all @ima/* packages
-          external: true,
-        },
         build: {
           ssr: true,
           target: 'node18',

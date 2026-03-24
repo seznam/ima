@@ -22,20 +22,18 @@ export function createSwcTransformer({
   syntax,
   development,
   jsxRuntime,
-  sourceMaps,
 }: {
   type: ModuleConfig['type'];
   target: JscTarget;
   syntax?: ParserConfig['syntax'];
   development?: boolean;
   jsxRuntime: ReactConfig['runtime'];
-  sourceMaps?: boolean;
 }) {
   return swcTransformer({
     isModule: true,
-    sourceMaps: sourceMaps ?? true,
     module: {
       type: type ?? 'es6',
+      resolveFully: true,
     },
     jsc: {
       target,
@@ -59,17 +57,18 @@ export function createSwcTransformer({
 export function swcTransformer(options: SWCTransformerOptions): Transformer {
   return async ({ source, context }) => {
     const newFilename = context.fileName.replace(EXTENSION_TRANSFORM_RE, '.js');
-    const { code, map } = await transform(source.code, {
+    const { code } = await transform(source.code, {
       ...options,
-      filename: newFilename,
-      sourceFileName: newFilename,
-      inputSourceMap: source.map,
+      filename: context.filePath,
+      jsc: {
+        ...options.jsc,
+        baseUrl: context.inputDir, // We need to get the path from context
+      },
     });
 
     return {
       fileName: newFilename,
-      code: map ? code + `\n//# sourceMappingURL=${newFilename}.map` : code,
-      map,
+      code,
     };
   };
 }
