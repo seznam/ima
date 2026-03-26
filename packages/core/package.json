@@ -55,7 +55,7 @@
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:vitest && npm run test:size",
-    "test:vitest": "vitest run -c vitest.config.ts",
+    "test:vitest": "vitest run",
     "test:size": "size-limit",
     "preversion": "npm test"
   },

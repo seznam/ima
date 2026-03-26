@@ -27,8 +27,8 @@
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "vitest run -c vitest.config.ts",
-    "test:watch": "vitest -c vitest.config.ts"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@babel/generator": "^7.28.5",

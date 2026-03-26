@@ -23,7 +23,7 @@
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "vitest run -c vitest.config.ts"
+    "test": "vitest run"
   },
   "exports": {
     ".": {

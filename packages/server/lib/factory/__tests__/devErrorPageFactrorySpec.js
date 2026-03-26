@@ -1,5 +1,6 @@
 'use strict';
 /* eslint-disable import/order */
+import { toMock } from 'to-mock';
 
 const mock = require('mock-require');
 
@@ -7,8 +8,6 @@ mock('fs', {
   readFileSync: vi.fn().mockReturnValue('read file content'),
   existsSync: vi.fn().mockReturnValue(true),
 });
-
-const { toMock } = require('to-mock');
 
 const devErrorPageFactory = require('../devErrorPageFactory.js');
 

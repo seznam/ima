@@ -23,7 +23,7 @@
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "vitest run -c vitest.config.ts"
+    "test": "vitest run"
   },
   "exports": {
     ".": {
@@ -51,10 +51,10 @@
       "import": "./dist/esm/server/*.js",
       "default": "./dist/cjs/server/*.js"
     },
-    "./vitest-preset": {
-      "types": "./dist/esm/vitest-preset.d.ts",
-      "import": "./dist/esm/vitest-preset.js",
-      "default": "./dist/cjs/vitest-preset.js"
+    "./vitest": {
+      "types": "./dist/esm/vitest.d.ts",
+      "import": "./dist/esm/vitest.js",
+      "default": "./dist/cjs/vitest.js"
     },
     "./vitestSetupFileAfterEnv": {
       "types": "./dist/esm/vitestSetupFileAfterEnv.d.ts",

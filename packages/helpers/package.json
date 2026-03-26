@@ -20,7 +20,7 @@
   "module": "./dist/esm/index.js",
   "types": "./types.d.ts",
   "scripts": {
-    "test": "vitest run -c vitest.config.ts",
+    "test": "vitest run",
     "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
