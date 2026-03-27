@@ -27,28 +27,10 @@ export interface ServerConfiguration {
   ) => Promise<void> | void;
 }
 
-export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
+const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
 
-const serverConfiguration: ServerConfiguration = resolveDefaultConfiguration();
-
-/**
- * Get the current serverConfiguration.
- */
-export function getImaTestingLibraryServerConfig() {
-  return serverConfiguration;
-}
-
-/**
- * Modify the current serverConfiguration.
- */
-export function setImaTestingLibraryServerConfig(
-  config: Partial<ServerConfiguration>
-) {
-  Object.assign(serverConfiguration, config);
-}
-
-function resolveDefaultConfiguration() {
-  const serverConfiguration: ServerConfiguration = {
+export function resolveDefaultServerConfiguration(): ServerConfiguration {
+  const config: ServerConfiguration = {
     protocol: 'https:',
     host: 'imajs.io',
     processEnvironment: env => env,
@@ -58,8 +40,8 @@ function resolveDefaultConfiguration() {
   };
 
   if (!fs.existsSync(path.resolve('.', 'server/config/environment.js'))) {
-    serverConfiguration.applicationFolder = FALLBACK_APPLICATION_FOLDER;
+    config.applicationFolder = FALLBACK_APPLICATION_FOLDER;
   }
 
-  return serverConfiguration;
+  return config;
 }

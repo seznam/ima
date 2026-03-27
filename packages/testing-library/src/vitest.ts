@@ -1,39 +1,35 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { UserConfig } from 'vitest/config';
+import type { ViteUserConfig } from 'vitest/config';
 
 import {
-  getIMAResponseContent,
-  getImaTestingLibraryServerConfig,
-} from './server';
+  resolveDefaultServerConfiguration,
+  type ServerConfiguration,
+} from './server/configuration';
+import { getIMAResponseContent } from './server/content';
+
+/**
+ * Options for configuring the IMA.js testing environment.
+ * Passed directly to `defineImaConfig()` in your `vitest.config.ts`.
+ */
+export type ImaTestingConfig = ServerConfiguration;
 
 /**
  * Returns a Vitest UserConfig pre-configured with the IMA.js jsdom environment.
- *
- * Consumers should merge this with their own config using mergeConfig():
- *
- * ```ts
- * // vitest.config.ts
- * import { defineConfig, mergeConfig } from 'vitest/config';
- * import { getVitestConfig } from '@ima/testing-library/vitest-preset';
- *
- * export default defineConfig(async () => {
- *   return mergeConfig(await getVitestConfig(), {
- *     test: {
- *       // project-specific overrides
- *     },
- *   });
- * });
- * ```
  */
-export async function getVitestConfig(): Promise<UserConfig> {
-  const serverConfig = getImaTestingLibraryServerConfig();
+export async function defineImaConfig(
+  imaConfig?: Partial<ImaTestingConfig>
+): Promise<ViteUserConfig> {
+  const config: ServerConfiguration = {
+    ...resolveDefaultServerConfiguration(),
+    ...imaConfig,
+  };
 
   let html: string;
 
   try {
-    html = await getIMAResponseContent();
+    html = await getIMAResponseContent(config);
   } catch (error: any) {
     // Some async errors are swallowed by Vitest, so log them manually
     console.error(error.stack ?? error);
@@ -59,7 +55,7 @@ export async function getVitestConfig(): Promise<UserConfig> {
       environmentOptions: {
         jsdom: {
           html,
-          url: `${serverConfig.protocol}//${serverConfig.host}/`,
+          url: `${config.protocol}//${config.host}/`,
         },
       },
     },

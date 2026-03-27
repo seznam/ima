@@ -1,26 +1,26 @@
 import { createIMAServer } from '@ima/server';
 
-import { getImaTestingLibraryServerConfig } from './configuration';
-
-const serverConfig = getImaTestingLibraryServerConfig();
+import type { ServerConfiguration } from './configuration';
 
 /**
  * Get response content from @ima/server.
  */
-export async function getIMAResponseContent(): Promise<string> {
+export async function getIMAResponseContent(
+  config: ServerConfiguration
+): Promise<string> {
   // Mock devUtils to override manifest loading
   const devUtils = {
     manifestRequire: () => ({}),
   };
 
-  await serverConfig.beforeCreateIMAServer();
+  await config.beforeCreateIMAServer();
 
   // Prepare serverApp with environment override
   const imaServer = await createIMAServer({
     devUtils,
-    applicationFolder: serverConfig.applicationFolder,
+    applicationFolder: config.applicationFolder,
     processEnvironment: currentEnvironment =>
-      serverConfig.processEnvironment({
+      config.processEnvironment({
         ...currentEnvironment,
         $Server: {
           ...currentEnvironment.$Server,
@@ -33,15 +33,15 @@ export async function getIMAResponseContent(): Promise<string> {
       }),
   });
 
-  await serverConfig.afterCreateIMAServer(imaServer);
+  await config.afterCreateIMAServer(imaServer);
 
   // Generate request response
   const response = await imaServer.serverApp.requestHandler(
     {
       get: () => '',
       headers: () => '',
-      originalUrl: serverConfig.host,
-      protocol: serverConfig.protocol.replace(':', ''),
+      originalUrl: config.host,
+      protocol: config.protocol.replace(':', ''),
     },
     {
       status: () => 200,

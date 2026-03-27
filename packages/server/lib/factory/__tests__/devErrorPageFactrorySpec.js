@@ -1,5 +1,5 @@
 'use strict';
-/* eslint-disable import/order */
+
 import { toMock } from 'to-mock';
 
 const mock = require('mock-require');

@@ -23,54 +23,52 @@ npm install -D @ima/testing-library @testing-library/dom @testing-library/jest-d
 Configure vitest in your `vitest.config.ts` file.
 
 ```typescript
-import { defineConfig, mergeConfig } from 'vitest/config';
-import { getVitestConfig } from '@ima/testing-library/vitest';
+import { defineImaConfig } from '@ima/testing-library/vitest';
 
-export default defineConfig(async () => {
-  return mergeConfig(await getVitestConfig(), {
-    test: {
-      // project-specific overrides
-    },
-  });
-});
+export default defineImaConfig();
 ```
 
 Everything should start working out of the box for a typical IMA.js application. If you are trying to setup this library in a monorepo or an npm package, you might have to do some tweaks with the configuration.
 
 ### Configuration
 
-There are 2 config functions that you can use to adjust the IMA Testing Library to your specific needs.
+**IMA Configuration**
 
-**Server Configuration**
+Pass options directly to `defineImaConfig()` in your `vitest.config.ts`. These values are used to initialize the JSDOM environment in which the tests are running.
 
-This configuration should be called before `getVitestConfig()` in your `vitest.config.ts`. Its config values are used to initialize the JSDOM environment in which the tests are running.
+```typescript
+import path from 'node:path';
+import { defineImaConfig } from '@ima/testing-library/vitest';
+
+export default defineImaConfig({
+  applicationFolder: path.resolve('./__tests__/'), // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
+});
+```
+
+See [src/vitest.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/vitest.ts) for the full list of available `ImaConfig` options.
+
+**Vitest Overrides**
+
+For project-specific Vitest configuration on top of the IMA defaults, use `mergeConfig()` from `vitest/config`:
 
 ```typescript
 import path from 'node:path';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import { getVitestConfig } from '@ima/testing-library/vitest';
-import { setImaTestingLibraryServerConfig } from '@ima/testing-library/server';
+import { defineImaConfig } from '@ima/testing-library/vitest';
 
-setImaTestingLibraryServerConfig({
-  // your custom config
-  applicationFolder: path.resolve('./__tests__/') // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
-});
-
-export default defineConfig(async () => {
-  return mergeConfig(await getVitestConfig(), {
+export default defineConfig(async () =>
+  mergeConfig(await defineImaConfig({ applicationFolder: path.resolve('./__tests__/') }), {
     test: {
-      // The preset automatically sets up resolve.alias for the IMA.js application, but you can override it if you need to.
+      // project-specific overrides
     },
     resolve: {
       alias: {
         'app/main': './app/main.test.js', // You can tell vitest to use a different main file for the tests
       },
     },
-  });
-});
+  })
+);
 ```
-
-See [src/server/configuration.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/server/configuration.ts) for the full list of available options.
 
 **Client Configuration**
 
