@@ -12,7 +12,7 @@ exports[`Card can render 1`] = `
   >
     <h3>
       Test card
-      »
+       »
     </h3>
   </a>
   <p
