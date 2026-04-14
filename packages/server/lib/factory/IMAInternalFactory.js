@@ -79,7 +79,7 @@ module.exports = function IMAInternalFactory({
       },
     });
 
-    const bootConfig = createBootConfig(event);
+    const bootConfig = await createBootConfig(event);
     const appMain = serverGlobal.get(GLOBAL.APP_MAIN);
     event.context.app = appMain.ima.createImaApp();
 
@@ -147,10 +147,12 @@ module.exports = function IMAInternalFactory({
   async function _importAppMainAsync({ res, environment, context = {} }) {
     let appMain = serverGlobal.has(GLOBAL.APP_MAIN)
       ? serverGlobal.get(GLOBAL.APP_MAIN)
-      : appFactory();
+      : await appFactory();
 
     if (environment.$Env === 'dev') {
-      appMain = serverGlobal.has(GLOBAL.APP_MAIN) ? appFactory() : appMain;
+      appMain = serverGlobal.has(GLOBAL.APP_MAIN)
+        ? await appFactory()
+        : appMain;
       serverGlobal.delete(GLOBAL.DUMMY_APP_PROMISE);
       serverGlobal.delete(GLOBAL.DUMMY_APP);
 
@@ -182,7 +184,7 @@ module.exports = function IMAInternalFactory({
     return context.appMain;
   }
 
-  function createBootConfig(event) {
+  async function createBootConfig(event) {
     const { req, res, environment } = event;
     let language = res.locals.language;
     let languagePartPath = res.locals.languagePartPath;
@@ -190,7 +192,7 @@ module.exports = function IMAInternalFactory({
     let root = res.locals.root;
     let protocol = res.locals.protocol;
 
-    let dictionary = language ? languageLoader(language) : {};
+    let dictionary = language ? await languageLoader(language) : {};
 
     event.context.bootConfig = {
       services: {
@@ -234,7 +236,7 @@ module.exports = function IMAInternalFactory({
 
   async function _initApp(event) {
     let { context } = event;
-    let bootConfig = createBootConfig(event);
+    let bootConfig = await createBootConfig(event);
     context.app = instanceRecycler.getInstance();
 
     emitter.emit(Event.CreateImaApp, event);

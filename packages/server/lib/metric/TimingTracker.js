@@ -245,9 +245,7 @@ class TimingTracker {
           ? chalk.magenta.bold(entry.name)
           : chalk.bold(entry.name);
 
-        const marker = entry.isImaEvent
-          ? chalk.magenta('▶')
-          : chalk.green('▶');
+        const marker = entry.isImaEvent ? chalk.magenta('▶') : chalk.green('▶');
         console.log(
           `${chalk.cyan(timestamp)} ${chalk.dim('│')} ${marker} ${indent}${eventName}`
         );
@@ -286,9 +284,7 @@ class TimingTracker {
           entry.isDurationSlow
         );
 
-        const marker = entry.isImaEvent
-          ? chalk.magenta('◼')
-          : chalk.blue('◼');
+        const marker = entry.isImaEvent ? chalk.magenta('◼') : chalk.blue('◼');
         let line = `${chalk.cyan(timestamp)} ${chalk.dim('│')} ${marker} ${indent}${eventName} ${chalk.dim('→')} ${durationColored}`;
 
         if (entry.isDurationSlow) {

@@ -6,10 +6,14 @@ import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import { environmentFactory } from '@ima/server';
 import chalk from 'chalk';
-import { MultiConfiguration } from 'webpack';
 
-import { ImaConfigurationContext, ImaConfig, ImaCliArgs } from '../../types';
-import webpackConfig from '../config';
+import {
+  ImaConfigurationContext,
+  ImaConfig,
+  ImaCliArgs,
+  ViteConfigWithEnvironments,
+} from '../../types';
+import viteConfig from '../config';
 
 export const IMA_CONF_FILENAME = 'ima.config.js';
 const TS_CONFIG_PATHS = ['tsconfig.build.json', 'tsconfig.json'];
@@ -34,11 +38,11 @@ export function resolveEnvironment(
  * @returns {Record<string, string>} Entry object or empty object.
  */
 export function createPolyfillEntry(
-  ctx: ImaConfigurationContext
+  ctx: ImaConfigurationContext,
+  fileName: string
 ): Record<string, string> {
-  const { isClientES, rootDir } = ctx;
+  const { rootDir } = ctx;
 
-  const fileName = `polyfill${isClientES ? '.es' : ''}.js`;
   const polyfillPath = path.join(rootDir, 'app', fileName);
 
   if (!fs.existsSync(polyfillPath)) {
@@ -126,8 +130,6 @@ export function createCacheKey(
   hash.update(
     JSON.stringify({
       command: ctx.command,
-      legacy: ctx.legacy,
-      forceLegacy: ctx.forceLegacy,
       profile: ctx.profile,
       rootDir: ctx.rootDir,
       environment: ctx.environment,
@@ -168,12 +170,7 @@ export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       en: ['./app/**/*EN.json'],
     },
     imageInlineSizeLimit: 8192,
-    watchOptions: {
-      ignored: ['**/node_modules'],
-      aggregateTimeout: 5,
-    },
-    swc: async config => config,
-    swcVendor: async config => config,
+    chunkSizeWarningLimit: 1000,
     postcss: async config => config,
     cssBrowsersTarget: '>0.3%, not dead, not op_mini all',
   };
@@ -182,10 +179,6 @@ export async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   const imaConfigWithDefaults = {
     ...defaultImaConfig,
     ...imaConfig,
-    watchOptions: {
-      ...defaultImaConfig.watchOptions,
-      ...imaConfig?.watchOptions,
-    },
     experiments: {
       ...defaultImaConfig.experiments,
       ...imaConfig?.experiments,
@@ -297,23 +290,17 @@ export async function runImaPluginsHook(
  * @returns {ImaConfigurationContext[]}
  */
 export function createContexts(
-  configurationNames: ImaConfigurationContext['name'][],
   args: ImaCliArgs,
   imaConfig: ImaConfig
-): ImaConfigurationContext[] {
-  const { rootDir, environment, command } = args;
+): ImaConfigurationContext {
+  const { rootDir, environment } = args;
   const useSourceMaps =
-    !!imaConfig.sourceMaps || args.environment === 'development';
+    !!imaConfig.sourcemap || args.environment === 'development';
   const imaEnvironment = resolveEnvironment(rootDir);
   const appDir = path.join(rootDir, 'app');
   const lessGlobalsPath = path.join(rootDir, 'app/less/globals.less');
   const isDevEnv = environment === 'development';
   const mode = environment === 'production' ? 'production' : 'development';
-  const devtool = useSourceMaps
-    ? typeof imaConfig.sourceMaps === 'string'
-      ? imaConfig.sourceMaps
-      : 'source-map'
-    : false;
 
   let tsconfigPath: string | undefined = undefined;
 
@@ -339,24 +326,15 @@ export function createContexts(
     'firefox >= 58',
   ];
 
-  return configurationNames.map(name => ({
+  return {
     ...args,
-    name,
-    isServer: name === 'server',
-    isClient: name === 'client',
-    isClientES: name === 'client.es',
-    processCss: name === 'client.es',
     outputFolders: {
       hot: 'static/hot',
       public: 'static/public',
       media: 'static/media',
       css: 'static/css',
-      js:
-        name === 'server'
-          ? 'server'
-          : name === 'client'
-            ? 'static/js'
-            : 'static/js.es',
+      js: 'static/js',
+      es: 'static/js.es',
     },
     typescript: {
       enabled: !!tsconfigPath,
@@ -364,14 +342,12 @@ export function createContexts(
     },
     imaEnvironment,
     appDir,
-    useHMR: command === 'dev' && name === 'client.es',
     mode,
     isDevEnv,
     lessGlobalsPath,
     useSourceMaps,
-    devtool,
-    targets: name === 'client' ? es2018Targets : [],
-  }));
+    targets: es2018Targets,
+  };
 }
 
 /**
@@ -382,27 +358,18 @@ export function createContexts(
  * @param args Parsed CLI and build arguments.
  * @param imaConfig Loaded ima config.
  */
-export async function createWebpackConfig(
+export async function createViteConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
-): Promise<MultiConfiguration> {
+): Promise<ViteConfigWithEnvironments> {
   // Create configuration contexts
   logger.info(
     `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
     { trackTime: true }
   );
 
-  // Create array of webpack build configurations based on current context.
-  const configurationNames = [
-    'server',
-    (args.command === 'build' || args.legacy) &&
-      !imaConfig.disableLegacyBuild &&
-      'client',
-    'client.es',
-  ].filter(Boolean) as ImaConfigurationContext['name'][];
-
   // Create configuration contexts
-  let contexts = createContexts(configurationNames, args, imaConfig);
+  let context = createContexts(args, imaConfig);
 
   // Call configuration overrides on plugins
   if (Array.isArray(imaConfig.plugins)) {
@@ -411,67 +378,60 @@ export async function createWebpackConfig(
         continue;
       }
 
-      contexts = await plugin.prepareConfigurations(contexts, imaConfig, args);
+      context = await plugin.prepareConfigurations(context, imaConfig, args);
     }
   }
 
   // Call configuration overrides on ima.config.js
   if (imaConfig.prepareConfigurations) {
-    contexts = await imaConfig.prepareConfigurations(contexts, imaConfig, args);
+    context = await imaConfig.prepareConfigurations(context, imaConfig, args);
   }
 
   /**
    * Process configuration contexts with optional webpack function extensions
    * from ima plugins and imaConfig.
    */
-  return Promise.all(
-    contexts.map(async ctx => {
-      // Create webpack config for given configuration context
-      let config = await webpackConfig(ctx, imaConfig);
+  let config = await viteConfig(context, imaConfig);
 
-      // Run webpack function overrides from ima plugins
-      if (Array.isArray(imaConfig.plugins)) {
-        for (const plugin of imaConfig.plugins) {
-          if (typeof plugin?.webpack !== 'function') {
-            continue;
-          }
-
-          try {
-            config = await plugin.webpack(config, ctx, imaConfig);
-          } catch (error) {
-            logger.error(
-              `There was an error while running webpack config for '${plugin.name}' plugin.`
-            );
-            console.error(error);
-            process.exit(1);
-          }
-        }
+  // Run vite function overrides from ima plugins
+  if (Array.isArray(imaConfig.plugins)) {
+    for (const plugin of imaConfig.plugins) {
+      if (typeof plugin?.vite !== 'function') {
+        continue;
       }
 
-      // Run webpack function overrides from imaConfig
-      if (typeof imaConfig.webpack === 'function') {
-        config = await imaConfig.webpack(config, ctx, imaConfig);
+      try {
+        config = await plugin.vite(config, context, imaConfig);
+      } catch (error) {
+        logger.error(
+          `There was an error while running vite config for '${plugin.name}' plugin.`
+        );
+        console.error(error);
+        process.exit(1);
       }
+    }
+  }
 
-      return config as MultiConfiguration;
-    })
-  ).then(config => {
-    // Print elapsed time
-    logger.endTracking();
+  // Run vite function overrides from imaConfig
+  if (typeof imaConfig.vite === 'function') {
+    config = await imaConfig.vite(config, context, imaConfig);
+  }
 
-    return config as unknown as MultiConfiguration;
-  });
+  // Print elapsed time
+  logger.endTracking();
+
+  return config;
 }
 
 /**
  * Extracts major.minor version string of currently resolved
  * core-js from node_modules.
  */
-export async function getCurrentCoreJsVersion() {
+export async function getCurrentCoreJsVersion(): Promise<string> {
   return JSON.parse(
     (
       await fs.promises.readFile(
-        path.resolve(require.resolve('core-js'), '../package.json')
+        path.resolve(require.resolve('core-js-pure'), '../package.json')
       )
     ).toString()
   )

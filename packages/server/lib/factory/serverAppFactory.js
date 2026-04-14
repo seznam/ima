@@ -167,6 +167,10 @@ module.exports = function serverAppFactory({
   }
 
   async function errorHandler(error, event) {
+    if (process.env.IMA_CLI_WATCH) {
+      global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
+    }
+
     try {
       event = { ...event, error };
 
@@ -181,9 +185,13 @@ module.exports = function serverAppFactory({
 
       event = await emitter.emit(Event.AfterError, event);
     } catch (error) {
+      if (process.env.IMA_CLI_WATCH) {
+        global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
+      }
+
       error.cause = event.error;
 
-      event.context.response = renderStaticServerErrorPage({
+      event.context.response = await renderStaticServerErrorPage({
         ...event,
         error,
       });
@@ -192,6 +200,10 @@ module.exports = function serverAppFactory({
     try {
       event = await responseHandler(event);
     } catch (error) {
+      if (process.env.IMA_CLI_WATCH) {
+        global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
+      }
+
       error.cause = event.error;
       const { res, context } = event;
 
@@ -201,7 +213,7 @@ module.exports = function serverAppFactory({
         return context.response;
       }
 
-      context.response = renderStaticServerErrorPage({
+      context.response = await renderStaticServerErrorPage({
         ...event,
         error,
       });
@@ -212,6 +224,10 @@ module.exports = function serverAppFactory({
       try {
         await emitter.emitParallel(Event.AfterResponseSend, event);
       } catch (error) {
+        if (process.env.IMA_CLI_WATCH) {
+          global.$IMA_SERVER?.viteDevServer?.ssrFixStacktrace(error);
+        }
+
         logger.error('Error in AfterResponseSend', { error });
       }
     }

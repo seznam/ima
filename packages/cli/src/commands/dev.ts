@@ -4,28 +4,16 @@ import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
 import open from 'better-opn';
 import chalk from 'chalk';
-import kill from 'kill-port';
 import nodemon from 'nodemon';
-import webpack, { MultiConfiguration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { createDevServer } from '../dev-server/devServer';
 import {
   handlerFactory,
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { watchCompiler, handleError } from '../lib/compiler';
-import { ImaCliArgs, HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/languages';
-import {
-  cleanup,
-  createDevServerConfig,
-  createWebpackConfig,
-  resolveEnvironment,
-  resolveImaConfig,
-  runImaPluginsHook,
-} from '../webpack/utils/utils';
+import { HandlerFn, ImaCliArgs } from '../types';
+import { cleanup, resolveEnvironment } from '../vite/utils/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
@@ -36,13 +24,14 @@ function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
   nodemon({
-    script: path.join(args.rootDir, 'server/server.js'),
-    watch: ['server', 'build/static/public/spa.html'].map(p =>
-      path.join(args.rootDir, p)
-    ),
-    args: args.verbose ? [`--verbose=${args.verbose}`] : [],
-    nodeArgs: args.inspect ? [`--inspect`] : [],
+    script: path.join(__dirname, '../dev-server/devServer.js'),
+    watch: ['server'].map(p => path.join(args.rootDir, p)),
+    nodeArgs: args.inspect ? ['--inspect'] : [],
     cwd: args.rootDir,
+    env: {
+      ...process.env,
+      IMA_CLI_ARGS: JSON.stringify(args),
+    },
   })
     .on('start', () => {
       logger.info(
@@ -90,11 +79,6 @@ function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
 const dev: HandlerFn = async args => {
   process.env.IMA_CLI_WATCH = 'true';
 
-  // Set write to disk flag, so we can disable static proxy in the application
-  if (args.writeToDisk) {
-    process.env.IMA_CLI_WRITE_TO_DISK = 'true';
-  }
-
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     process.env.IMA_CLI_FORCE_SPA = 'true';
@@ -110,91 +94,17 @@ const dev: HandlerFn = async args => {
     process.env.IMA_CLI_LAZY_SERVER = 'true';
   }
 
-  // Set legacy argument to true by default when we're forcing legacy
-  if (args.forceLegacy) {
-    args.legacy = true;
-  }
-
   try {
     // Do cleanup
     await cleanup(args);
 
-    // Load ima config & env
-    const imaConfig = await resolveImaConfig(args);
     const environment = resolveEnvironment(args.rootDir);
 
-    /**
-     * Set public env variable which is used to load assets in the SSR error view.
-     * CLI Args should always override the config values.
-     */
-    const devServerConfig = createDevServerConfig({ imaConfig, args });
-    process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL = devServerConfig.publicUrl;
-
-    // Kill processes running on the same port
-    await Promise.all([
-      kill(environment.$Server.port),
-      kill(devServerConfig.port),
-    ]);
-
-    // Run preProcess hook on IMA CLI Plugins
-    await runImaPluginsHook(args, imaConfig, 'preProcess');
-
-    // Compile language files
-    logger.info(`Compiling language files...`, { trackTime: true });
-    await compileLanguages(imaConfig, args.rootDir, true);
-    logger.endTracking();
-
-    // Generate webpack config
-    const config = await createWebpackConfig(args, imaConfig);
-
-    logger.info(
-      `Running webpack watch compiler${
-        args.legacy
-          ? ` ${chalk.black.bgCyan(
-              `in${args.forceLegacy ? ' forced' : ''} legacy mode`
-            )}`
-          : ''
-      }...`
-    );
-
-    // Create compiler
-    const compiler = webpack(config as MultiConfiguration);
-
-    if (!compiler) {
-      throw new Error('Failed to create compiler');
-    }
-
-    if (!compiler) {
-      throw new Error('Failed to create webpack compiler');
-    }
-
-    // Start watch compiler & HMR dev server
-    await Promise.all([
-      watchCompiler(compiler, args, imaConfig),
-      createDevServer({
-        args,
-        config: imaConfig,
-        compiler: compiler.compilers.find(
-          ({ name }) =>
-            // Run dev server only for client compiler with HMR enabled
-            name === 'client.es'
-        ),
-        hostname: devServerConfig.hostname,
-        port: devServerConfig.port,
-        publicUrl: devServerConfig.publicUrl,
-        rootDir: args.rootDir,
-        environment,
-      }),
-    ]);
-
-    // Start nodemon and application server
+    // Start the application server (and Vite HMR server) via nodemon so that
+    // any changes inside server/ automatically trigger a server restart.
     startNodemon(args, environment);
   } catch (error) {
-    if (args.verbose) {
-      console.error(error);
-    } else {
-      handleError(error);
-    }
+    console.error(error);
 
     process.exit(1);
   }
@@ -215,16 +125,6 @@ export const builder: CommandBuilder = {
     desc: 'Custom URL used when opening browser window ',
     type: 'string',
   },
-  legacy: {
-    desc: 'Runs application in legacy mode',
-    type: 'boolean',
-    default: false,
-  },
-  forceLegacy: {
-    desc: 'Forces runner.js to execute legacy client code',
-    type: 'boolean',
-    default: false,
-  },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
@@ -232,11 +132,6 @@ export const builder: CommandBuilder = {
   },
   forceSPAPrefetch: {
     desc: 'Forces application to run in SPA prefetch mode',
-    type: 'boolean',
-    default: false,
-  },
-  writeToDisk: {
-    desc: 'Write static files to disk, instead of serving it from memory',
     type: 'boolean',
     default: false,
   },

@@ -1,12 +1,21 @@
+import { ParseResult } from '@babel/parser';
+import { File } from '@babel/types';
 import { Environment } from '@ima/core';
-import { Configuration, ResolveOptions, Watching } from 'webpack';
+import {
+  UserConfig as ViteConfig,
+  ViteBuilder,
+  ViteDevServer,
+  AliasOptions,
+  WatchOptions,
+  CSSOptions,
+} from 'vite';
 import { CommandBuilder } from 'yargs';
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      IMA_CLI_ARGS?: string;
       IMA_CLI_WATCH?: string;
-      IMA_CLI_WRITE_TO_DISK?: string;
       IMA_CLI_FORCE_SPA?: string;
       IMA_CLI_FORCE_SPA_PREFETCH?: string;
       IMA_CLI_LAZY_SERVER?: string;
@@ -14,10 +23,14 @@ declare global {
       IMA_CLI_OPEN?: string;
       IMA_CLI_OPEN_URL?: string;
 
-      // Used to pass env publicPath settings to webpack
+      // Used to pass env publicPath settings to vite
       IMA_PUBLIC_PATH?: string;
     }
   }
+
+  var $IMA_SERVER: {
+    viteDevServer: ViteDevServer;
+  };
 }
 
 /**
@@ -38,7 +51,6 @@ export interface ImaCliArgs {
   ignoreWarnings?: boolean;
   open?: boolean;
   openUrl?: string;
-  legacy?: boolean;
   forceSPA?: boolean;
   forceSPAPrefetch?: boolean;
   profile?: boolean;
@@ -47,29 +59,27 @@ export interface ImaCliArgs {
   paths?: string | string[];
   publicUrl?: string;
   environment: 'development' | 'production' | string;
-  writeToDisk?: boolean;
   reactRefresh?: boolean;
-  forceLegacy?: boolean;
   lazyServer?: boolean;
   server?: string;
   preRenderMode?: 'spa' | 'ssr';
 }
 
+export type ViteConfigWithEnvironments = ViteConfig & {
+  environments: NonNullable<ViteConfig['environments']>;
+};
+
 /**
  * CLI arguments merged with concrete configuration context.
  */
 export interface ImaConfigurationContext extends ImaCliArgs {
-  name: 'server' | 'client' | 'client.es';
-  isServer: boolean;
-  isClient: boolean;
-  isClientES: boolean;
-  processCss: boolean; // Flag indicating that this context should process CSS assets
   outputFolders: {
     media: string;
     hot: string;
     css: string;
-    js: string;
     public: string;
+    js: string;
+    es: string;
   };
   typescript: {
     enabled: boolean;
@@ -78,19 +88,17 @@ export interface ImaConfigurationContext extends ImaCliArgs {
   imaEnvironment: Environment;
   appDir: string;
   lessGlobalsPath: string;
-  mode: Configuration['mode'];
-  useHMR: boolean;
+  mode: ViteConfig['mode'];
   useSourceMaps: boolean;
   isDevEnv: boolean;
   targets: string[];
-  devtool: Configuration['devtool'];
 }
 
 export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
 
 /**
  * Interface for ima/cli plugins that can be defined in plugins field in ima.conf.js. These can be used
- * to extend functionality of default CLI with custom cli arguments and webpack config overrides.
+ * to extend functionality of default CLI with custom cli arguments and vite config overrides.
  */
 export interface ImaCliPlugin {
   /**
@@ -105,30 +113,30 @@ export interface ImaCliPlugin {
 
   /**
    * Optional plugin hook to do some pre processing right after the cli args are processed
-   * and the imaConfig is loaded, before the webpack config creation and compiler run.
+   * and the imaConfig is loaded, before the vite config creation and compiler run.
    */
   preProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
 
   /**
-   * Called right before creating webpack configurations after preProcess call.
-   * This hook lets you customize configuration contexts for each webpack config
-   * that will be generated. This is usefull when you need to overrite configuration
-   * contexts for values that are not editable anywhere else (like output folders).
+   * Called right before creating the vite configuration after preProcess call.
+   * This hook lets you customize the configuration context before the vite config
+   * is generated. This is useful when you need to override configuration
+   * context values that are not editable anywhere else (like output folders).
    */
   prepareConfigurations?(
-    configurations: ImaConfigurationContext[],
+    configurations: ImaConfigurationContext,
     imaConfig: ImaConfig,
     args: ImaCliArgs
-  ): Promise<ImaConfigurationContext[]>;
+  ): Promise<ImaConfigurationContext>;
 
   /**
-   * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
+   * Vite callback function used by plugins to customize/extend ima vite config before it's run.
    */
-  webpack?(
-    config: Configuration,
+  vite?(
+    config: ViteConfigWithEnvironments,
     ctx: ImaConfigurationContext,
     imaConfig: ImaConfig
-  ): Promise<Configuration>;
+  ): Promise<ViteConfigWithEnvironments>;
 
   /**
    * Optional plugin hook to do some custom processing after the compilation has finished.
@@ -143,52 +151,34 @@ export interface ImaCliPlugin {
  */
 export type ImaConfig = {
   /**
-   * Webpack callback function can be used to completely customize default webpack config before it's run.
+   * Vite callback function can be used to completely customize default vite config before it's run.
    */
-  webpack?: (
-    config: Configuration,
+  vite?: (
+    config: ViteConfigWithEnvironments,
     ctx: ImaConfigurationContext,
     imaConfig: ImaConfig
-  ) => Promise<Configuration>;
+  ) => Promise<ViteConfigWithEnvironments>;
 
   /**
-   * Function which receives default app swc-loader config and current context,
-   * this can be used for additional customization or returning completely different config.
-   */
-  swc: (
-    config: Record<string, unknown>,
-    ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
-
-  /**
-   * Function which receives default vendor swc-loader config and current context,
-   * this can be used for additional customization of vendor processed files.
-   */
-  swcVendor: (
-    config: Record<string, unknown>,
-    ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
-
-  /**
-   * Function which receives postcss-loader config and current context, this can be used
-   * to customize existing default postcss config or completely replace it with a custom one.
+   * Function which receives the default PostCSS config and current context. Can be used
+   * to customize the existing default PostCSS plugins or completely replace them with a custom config.
    */
   postcss: (
-    config: Record<string, unknown>,
+    config: CSSOptions['postcss'],
     ctx: ImaConfigurationContext
-  ) => Promise<Record<string, unknown>>;
+  ) => Promise<CSSOptions['postcss']>;
 
   /**
-   * Called right before creating webpack configurations after preProcess call.
-   * This hook lets you customize configuration contexts for each webpack config
-   * that will be generated. This is usefull when you need to overrite configuration
-   * contexts for values that are not editable anywhere else (like output folders).
+   * Called right before creating the vite configuration after preProcess call.
+   * This hook lets you customize the configuration context before the vite config
+   * is generated. This is useful when you need to override configuration
+   * context values that are not editable anywhere else (like output folders).
    */
   prepareConfigurations?(
-    configurations: ImaConfigurationContext[],
+    configurations: ImaConfigurationContext,
     imaConfig: ImaConfig,
     args: ImaCliArgs
-  ): Promise<ImaConfigurationContext[]>;
+  ): Promise<ImaConfigurationContext>;
 
   /**
    * Browserslist configuration string for postcss-preset-env.
@@ -197,12 +187,12 @@ export type ImaConfig = {
 
   /**
    * Optional IMA cli plugins that can be used to easily extend
-   * webpack config and cli with additional features.
+   * vite config and cli with additional features.
    */
   plugins?: ImaCliPlugin[];
 
   /**
-   * Webpack assets public path [default='']
+   * Vite assets public path [default='']
    */
   publicPath: string;
 
@@ -219,58 +209,20 @@ export type ImaConfig = {
      * this is used for CORS configuration.
      */
     origin?: string;
-
-    /**
-     * Custom filtr for files which should be always written to disk,
-     * even if we're serving static files from memory. This is used for
-     * example to always save runner.js to disk, since it's used on server-side too.
-     */
-    writeToDiskFilter?: (filePath: string) => boolean;
   };
 
   /**
-   * Custom options passed to webpack watch api interface. For more information see:
-   * https://webpack.js.org/configuration/watch/#watchoptions
+   * File system watcher options passed to chokidar (used by Vite's dev server for HMR).
+   * For more information see: https://vite.dev/config/server-options#server-watch
+   * For build watch mode see: https://vite.dev/config/build-options#build-watch (uses Rollup WatcherOptions)
    */
-  watchOptions: Watching['watchOptions'];
+  // @TODO: Should we remove this? Users can change watch options via the `vite` configuration already
+  watchOptions?: WatchOptions;
 
   /**
-   * Set to true (or any preset from https://webpack.js.org/configuration/devtool/#devtool)
-   * to enable source maps for production build. (dev/watch tasks always generate
-   * source maps to work properly with error overlay).
+   * Passed to vite `build.sourcemap` option (https://vite.dev/config/build-options#build-sourcemap).
    */
-  sourceMaps?:
-    | boolean
-    | 'eval'
-    | 'eval-cheap-source-map'
-    | 'eval-cheap-module-source-map'
-    | 'eval-source-map'
-    | 'cheap-source-map'
-    | 'cheap-module-source-map'
-    | 'source-map'
-    | 'inline-cheap-source-map'
-    | 'inline-cheap-module-source-map'
-    | 'inline-source-map'
-    | 'eval-nosources-cheap-source-map'
-    | 'eval-nosources-cheap-module-source-map'
-    | 'eval-nosources-source-map'
-    | 'inline-nosources-cheap-source-map'
-    | 'inline-nosources-cheap-module-source-map'
-    | 'inline-nosources-source-map'
-    | 'nosources-cheap-source-map'
-    | 'nosources-cheap-module-source-map'
-    | 'nosources-source-map'
-    | 'hidden-nosources-cheap-source-map'
-    | 'hidden-nosources-cheap-module-source-map'
-    | 'hidden-nosources-source-map'
-    | 'hidden-cheap-source-map'
-    | 'hidden-cheap-module-source-map'
-    | 'hidden-source-map';
-
-  /**
-   * Set custom jsxRuntime, the default is 'automatic'.
-   */
-  jsxRuntime?: 'classic' | 'automatic';
+  sourcemap?: boolean | 'inline' | 'hidden';
 
   /**
    * Enable brotli and gzip compression for production assets [default=true].
@@ -283,9 +235,16 @@ export type ImaConfig = {
   imageInlineSizeLimit: number;
 
   /**
-   * Optional custom webpack aliases
+   * Chunk size warning limit in kbs for Rollup.
+   * This is not a hard limit, just a warning that is printed when the chunk size exceeds the defined value.
+   * [default=1000]
    */
-  webpackAliases?: ResolveOptions['alias'];
+  chunkSizeWarningLimit: number;
+
+  /**
+   * Optional custom Vite aliases
+   */
+  viteAliases?: AliasOptions;
 
   /**
    * Supported languages with glob paths of the files with translations
@@ -298,21 +257,18 @@ export type ImaConfig = {
   disableLegacyBuild?: boolean;
 
   /**
-   * Advanced functionality allowing you to include/exclude custom vendor paths that go through
-   * swc loader (configured using swcVendor function). Use this if you're using dependencies
-   * that don't meet the lowest supported ES version target (ES9 by default). all packages in
-   * @ima namespace are included by default.
-   */
-  transformVendorPaths?: {
-    include?: RegExp[];
-    exclude?: RegExp[];
-  };
-
-  /**
    * Experimental configurations which can be enabled individually on specific applications.
    * Some of these may find a way to default configuration in future versions of IMA.js.
    */
-  experiments?: {
-    css?: boolean; // Enables webpack native CSS support
-  };
+  experiments?: {};
+};
+
+export type UseServerProcessor = (ast: ParseResult<File>) => ParseResult<File>;
+
+export type ViteBuildOutput = Awaited<ReturnType<ViteBuilder['build']>>;
+
+export type ImaBuildOutput = {
+  env: string;
+  output: ViteBuildOutput;
+  time: number;
 };

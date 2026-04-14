@@ -13,8 +13,6 @@ export {
   getCurrentCoreJsVersion,
   resolveEnvironment,
   resolveImaConfig,
-  createWebpackConfig,
+  createViteConfig,
   runImaPluginsHook,
-} from './webpack/utils/utils';
-export { findRules } from './webpack/utils/findRules';
-export { compileLanguages, getLanguageEntryPoints } from './webpack/languages';
+} from './vite/utils/utils';

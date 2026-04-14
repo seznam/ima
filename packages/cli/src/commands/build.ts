@@ -1,5 +1,5 @@
 import { logger } from '@ima/dev-utils/logger';
-import webpack from 'webpack';
+import { createBuilder, ViteBuilder } from 'vite';
 import { CommandBuilder } from 'yargs';
 
 import {
@@ -7,15 +7,15 @@ import {
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
-import { runCompiler, handleError } from '../lib/compiler';
-import { HandlerFn } from '../types';
-import { compileLanguages } from '../webpack/languages';
+import { formatViteStats } from '../lib/formatStats';
+import { createManifestFileFromOutput } from '../lib/manifest';
+import { HandlerFn, ImaConfig, ImaBuildOutput } from '../types';
 import {
   cleanup,
-  createWebpackConfig,
+  createViteConfig,
   resolveImaConfig,
   runImaPluginsHook,
-} from '../webpack/utils/utils';
+} from '../vite/utils/utils';
 
 /**
  * Builds ima application.
@@ -24,6 +24,30 @@ import {
  * @returns {Promise<void>}
  */
 const build: HandlerFn = async args => {
+  function buildAppFactory(outputs: ImaBuildOutput[], imaConfig: ImaConfig) {
+    return async function buildApp(builder: ViteBuilder) {
+      // There is also default `client` environment, that we are skipping here
+      const buildEnvironments = ['server', 'modern'];
+
+      if (!imaConfig.disableLegacyBuild) {
+        buildEnvironments.push('legacy');
+      }
+
+      const envs = Object.values(builder.environments).filter(env =>
+        buildEnvironments.includes(env.name)
+      );
+
+      await Promise.all(
+        envs.map(async env => {
+          const start = Date.now();
+          const output = await builder.build(env);
+
+          outputs.push({ env: env.name, output, time: Date.now() - start });
+        })
+      );
+    };
+  }
+
   try {
     // Do cleanup
     await cleanup(args);
@@ -34,26 +58,27 @@ const build: HandlerFn = async args => {
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
 
-    // Compile language files
-    logger.info(`Compiling language files...`, { trackTime: true });
-    await compileLanguages(imaConfig, args.rootDir);
+    // Generate vite config
+    const config = await createViteConfig(args, imaConfig);
+    const outputs: ImaBuildOutput[] = []; // Needed for manifest generation after build finishes
+
+    logger.info('Running vite compiler...', { trackTime: true });
+    const builder = await createBuilder({
+      ...config,
+      builder: {
+        buildApp: buildAppFactory(outputs, imaConfig),
+      },
+    });
+
+    await builder.buildApp();
+
     logger.endTracking();
 
-    // Generate webpack config
-    const config = await createWebpackConfig(args, imaConfig);
-
-    logger.info('Running webpack compiler...');
-
-    // Run webpack compiler
-    const compiler = webpack(config);
-
-    if (!compiler) {
-      throw new Error('Failed to create webpack compiler');
-    }
-
-    await runCompiler(compiler, args, imaConfig);
+    await createManifestFileFromOutput(outputs, imaConfig);
+    formatViteStats(outputs, args.rootDir);
+    logger.info('Vite build finished successfully.');
   } catch (error) {
-    handleError(error);
+    console.error(error);
     process.exit(1);
   }
 };

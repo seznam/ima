@@ -1,5 +1,6 @@
 *
 !lib/**/*
+!polyfill/**/*
 !package.json
 !index.js
 !types.d.ts

@@ -138,20 +138,20 @@ describe('responseUtilsFactory', () => {
   });
 
   describe('processContent', () => {
-    it('should return original content without any boot config', () => {
+    it('should return original content without any boot config', async () => {
       event.context.response.content = 'content';
 
-      expect(processContent(event)).toBe('content');
+      await expect(processContent(event)).resolves.toBe('content');
     });
 
-    it('should interpolate revival scripts into page content', () => {
+    it('should interpolate revival scripts into page content', async () => {
       event.context.response.contentVariables = createContentVariables(event);
 
-      const content = processContent(event);
+      const content = await processContent(event);
       expect(content).toMatchSnapshot();
     });
 
-    it('should allow overrides through custom $Source definition', () => {
+    it('should allow overrides through custom $Source definition', async () => {
       event.context.bootConfig.settings.$Resources = (
         context,
         manifest,
@@ -164,12 +164,12 @@ describe('responseUtilsFactory', () => {
       };
       event.context.response.contentVariables = createContentVariables(event);
 
-      const content = processContent(event);
+      const content = await processContent(event);
 
       expect(content).toMatchSnapshot();
     });
 
-    it('should interpolate deep embedded variables', () => {
+    it('should interpolate deep embedded variables', async () => {
       event.context.response.content = '<html>#{v1}</html>';
       event.context.response.contentVariables = {
         v1: '#{v2}',
@@ -181,19 +181,19 @@ describe('responseUtilsFactory', () => {
         v7: 'final v7 content',
       };
 
-      const content = processContent(event);
+      const content = await processContent(event);
 
       expect(content).toBe('<html>final v7 content</html>');
     });
 
-    it('should allow interpolation of settings variables from bootConfig', () => {
+    it('should allow interpolation of settings variables from bootConfig', async () => {
       event.context.bootConfig.settings.$Version = '1.0.0';
       event.context.response.content = '<html>#{c1}: #{$Version}</html>';
       event.context.response.contentVariables = {
         c1: 'content-variable',
       };
 
-      const content = processContent(event);
+      const content = await processContent(event);
 
       expect(content).toBe('<html>content-variable: 1.0.0</html>');
     });

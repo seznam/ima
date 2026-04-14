@@ -1,7 +1,7 @@
 import traverse, { NodePath } from '@babel/traverse';
 import * as b from '@babel/types';
 
-import { UseServerProcessor } from '../types';
+import { UseServerProcessor } from '../../../types';
 
 /**
  * Checks if the import path is for the super class.

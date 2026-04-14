@@ -11,10 +11,7 @@ const {
 
 module.exports = function responseUtilsFactory({ applicationFolder }) {
   const contentInterpolationRe = /#{([\w\d\-._$]+)}/g;
-  const runnerPath = path.resolve(
-    applicationFolder,
-    './build/server/runner.js'
-  );
+  const runnerPath = path.resolve(__dirname, '../../polyfill/runner.js');
   const manifestPath = path.resolve(applicationFolder, './build/manifest.json');
   const uuidPrefix = `${Date.now().toString(36)}-${(
     Math.random() * 2057
@@ -174,7 +171,7 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
    * @param event IMA hooks server event.
    * @returns string Processed response content.
    */
-  function processContent({ context }) {
+  async function processContent({ context, req }) {
     const { response, bootConfig } = context;
 
     if (!response?.content || !bootConfig) {
@@ -189,6 +186,13 @@ module.exports = function responseUtilsFactory({ applicationFolder }) {
       response.content = response.content.replace(
         contentInterpolationRe,
         interpolate
+      );
+    }
+
+    if (process.env.IMA_CLI_WATCH) {
+      return await global.$IMA_SERVER?.viteDevServer?.transformIndexHtml(
+        req.url,
+        response.content
       );
     }
 
