@@ -20,7 +20,6 @@ import {
   resolveImaConfig,
   runImaPluginsHook,
 } from '../vite/utils/utils';
-import 'extensionless/register'; // @TODO: tmp hotfix of invalid esm builds
 
 const args: ImaCliArgs = JSON.parse(process.env.IMA_CLI_ARGS!);
 
