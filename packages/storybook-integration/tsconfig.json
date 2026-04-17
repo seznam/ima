@@ -15,7 +15,7 @@
       "cli",
       "react-page-renderer",
       "less-plugin-glob",
-      "jest"
+      "vitest/globals"
     ]
   },
   "include": [

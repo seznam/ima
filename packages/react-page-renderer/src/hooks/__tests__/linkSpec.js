@@ -6,9 +6,7 @@ describe('useLink', () => {
   it('should return shortcut to $Router.link utility', async () => {
     const contextValue = await getContextValue();
 
-    contextValue.$Utils.$Router.link = jest
-      .fn()
-      .mockReturnValue('$Router.link');
+    contextValue.$Utils.$Router.link = vi.fn().mockReturnValue('$Router.link');
 
     const { result } = await renderHookWithContext(() => useLink(), {
       contextValue,

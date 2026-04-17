@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import {
@@ -22,15 +22,15 @@ import {
   Window,
 } from '../index';
 
-jest.mock('fs');
-jest.mock('path', () => {
-  const original = jest.requireActual('path');
+vi.mock('fs');
+vi.mock('path', async () => {
+  const original = await vi.importActual<typeof import('path')>('path');
   const resolve = (...args: unknown[]) => {
     if (args[1] === undefined && args[0] === '@ima/core') {
       return original.join(process.cwd(), 'index.js');
     }
 
-    return original.resolve(...args);
+    return original.resolve(...(args as Parameters<typeof original.resolve>));
   };
 
   return Object.assign({}, original, { resolve });

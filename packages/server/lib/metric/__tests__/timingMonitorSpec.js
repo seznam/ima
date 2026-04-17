@@ -12,9 +12,9 @@ describe('timingTracker', () => {
   beforeEach(() => {
     // Create mock emitter with jest spies
     mockEmitter = {
-      prependListener: jest.fn(),
-      on: jest.fn(),
-      listeners: jest.fn().mockReturnValue([]),
+      prependListener: vi.fn(),
+      on: vi.fn(),
+      listeners: vi.fn().mockReturnValue([]),
     };
 
     // Mock event context
@@ -31,13 +31,13 @@ describe('timingTracker', () => {
     };
 
     // Mock console methods
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('instrumentEmitterWithTimings function', () => {
@@ -53,7 +53,7 @@ describe('timingTracker', () => {
     });
 
     it('should apply sampling rate and skip when random > rate', () => {
-      jest.spyOn(Math, 'random').mockReturnValue(0.8); // 0.8 > 0.5
+      vi.spyOn(Math, 'random').mockReturnValue(0.8); // 0.8 > 0.5
 
       const result = instrumentEmitterWithTimings(mockEmitter, {
         samplingRate: 0.5,
@@ -67,7 +67,7 @@ describe('timingTracker', () => {
     });
 
     it('should apply sampling rate and continue when random <= rate', () => {
-      jest.spyOn(Math, 'random').mockReturnValue(0.3); // 0.3 <= 0.5
+      vi.spyOn(Math, 'random').mockReturnValue(0.3); // 0.3 <= 0.5
 
       const result = instrumentEmitterWithTimings(mockEmitter, {
         samplingRate: 0.5,
@@ -228,8 +228,8 @@ describe('timingTracker', () => {
     it('should not track events when autoTrackEvents is false', () => {
       // Create a fresh mock emitter for this test
       const freshMockEmitter = {
-        prependListener: jest.fn(),
-        on: jest.fn(),
+        prependListener: vi.fn(),
+        on: vi.fn(),
       };
 
       instrumentEmitterWithTimings(freshMockEmitter, {
@@ -285,12 +285,12 @@ describe('timingTracker', () => {
     });
 
     it('should call onComplete callback with report on last event', () => {
-      const mockCallback = jest.fn();
+      const mockCallback = vi.fn();
 
       // Create a fresh mock emitter for this test
       const freshMockEmitter = {
-        prependListener: jest.fn(),
-        on: jest.fn(),
+        prependListener: vi.fn(),
+        on: vi.fn(),
       };
 
       instrumentEmitterWithTimings(freshMockEmitter, {
@@ -328,8 +328,8 @@ describe('timingTracker', () => {
     it('should use DEFAULT_OPTIONS when no user options provided', () => {
       // Create a fresh mock emitter for this test
       const freshMockEmitter = {
-        prependListener: jest.fn(),
-        on: jest.fn(),
+        prependListener: vi.fn(),
+        on: vi.fn(),
       };
 
       instrumentEmitterWithTimings(freshMockEmitter);
@@ -354,8 +354,8 @@ describe('timingTracker', () => {
 
       // Create a fresh mock emitter for this test
       const freshMockEmitter = {
-        prependListener: jest.fn(),
-        on: jest.fn(),
+        prependListener: vi.fn(),
+        on: vi.fn(),
       };
 
       instrumentEmitterWithTimings(freshMockEmitter, {

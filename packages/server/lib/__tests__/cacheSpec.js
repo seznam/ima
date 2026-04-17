@@ -24,7 +24,7 @@ describe('Cache', () => {
         },
       });
 
-      jest.spyOn(cache, '_keyGenerator').mockReturnValue('key');
+      vi.spyOn(cache, '_keyGenerator').mockReturnValue('key');
     });
 
     it('should set page to cache', () => {

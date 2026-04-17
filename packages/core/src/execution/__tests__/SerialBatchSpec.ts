@@ -44,8 +44,8 @@ describe('ima.core.execution.SerialBatch', () => {
     });
 
     it('should call each job in the order they were specified', async () => {
-      const fnA = jest.fn(asyncFunction);
-      const fnB = jest.fn(asyncFunction);
+      const fnA = vi.fn(asyncFunction);
+      const fnB = vi.fn(asyncFunction);
 
       serialBatch.append([fnA, fnB]);
 
@@ -68,7 +68,7 @@ describe('ima.core.execution.SerialBatch', () => {
       serialBatch.append(rejectingFunction);
 
       await serialBatch.execute().catch(error => {
-        /* eslint-disable-next-line jest/no-conditional-expect */
+        /* eslint-disable-next-line vitest/no-conditional-expect */
         expect(error).toBe(error);
       });
     });

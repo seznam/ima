@@ -1,21 +1,15 @@
 'use strict';
 
-const { toMock } = require('to-mock');
+import { toMock } from 'to-mock';
+
+const mock = require('mock-require');
+
+mock('fs', {
+  readFileSync: vi.fn().mockReturnValue('read file content'),
+  existsSync: vi.fn().mockReturnValue(true),
+});
 
 const devErrorPageFactory = require('../devErrorPageFactory.js');
-
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
-
-  return {
-    ...toMockedInstance(originalModule, {
-      readFileSync() {
-        return 'read file content';
-      },
-    }),
-  };
-});
 
 describe('devErrorPageFactory', () => {
   const logger = toMock(console);
@@ -26,8 +20,8 @@ describe('devErrorPageFactory', () => {
   const REQ = Object.freeze({});
 
   const RES = Object.freeze({
-    status: jest.fn(),
-    send: jest.fn(),
+    status: vi.fn(),
+    send: vi.fn(),
     locals: {},
   });
 
@@ -35,7 +29,7 @@ describe('devErrorPageFactory', () => {
 
   describe("Method's behavior", () => {
     afterAll(() => {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
     });
 
     it('should render error page for defined error', async () => {

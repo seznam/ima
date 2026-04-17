@@ -1,7 +1,7 @@
 const babelParser = require('@babel/eslint-parser');
 const js = require('@eslint/js');
+const vitest = require('@vitest/eslint-plugin');
 const importPlugin = require('eslint-plugin-import');
-const jest = require('eslint-plugin-jest');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const reactPlugin = require('eslint-plugin-react');
 const globals = require('globals');
@@ -23,10 +23,38 @@ module.exports = typescriptEslint.config(
   js.configs.recommended,
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
-  jest.configs['flat/recommended'],
-  jest.configs['flat/style'],
   eslintPluginPrettierRecommended,
   importPlugin.flatConfigs.recommended,
+  // Vitest globals and rules scoped to test files and vitest configs
+  {
+    files: [
+      '**/__tests__/**/*.{js,ts,tsx}',
+      '**/setupVitest.{js,ts}',
+      '**/vitest.config.{js,ts}',
+      '**/vitest.workspace.{js,ts}',
+    ],
+    plugins: { vitest },
+    languageOptions: {
+      globals: {
+        ...vitest.configs.env.languageOptions.globals,
+      },
+    },
+    rules: {
+      ...vitest.configs.recommended.rules,
+      'vitest/no-mocks-import': 'off',
+      'vitest/valid-title': 'off',
+      'vitest/no-done-callback': 'warn',
+      'vitest/no-disabled-tests': 'warn',
+      'vitest/no-conditional-expect': 'warn',
+      'vitest/prefer-expect-resolves': 'warn',
+      'vitest/prefer-lowercase-title': [
+        'warn',
+        {
+          ignore: ['describe'],
+        },
+      ],
+    },
+  },
   {
     rules: {
       'no-console': [
@@ -56,20 +84,6 @@ module.exports = typescriptEslint.config(
           jsxSingleQuote: true,
           bracketSameLine: false,
           arrowParens: 'avoid',
-        },
-      ],
-
-      // Jest plugin overrides
-      'jest/no-mocks-import': 'off',
-      'jest/valid-title': 'off',
-      'jest/no-done-callback': 'warn',
-      'jest/no-disabled-tests': 'warn',
-      'jest/no-conditional-expect': 'warn',
-      'jest/prefer-expect-resolves': 'warn',
-      'jest/prefer-lowercase-title': [
-        'warn',
-        {
-          ignore: ['describe'],
         },
       ],
 
@@ -234,6 +248,16 @@ module.exports = typescriptEslint.config(
       globals: {
         chrome: true,
         FB: true,
+        // devtools and create-ima-app still use Jest
+        jest: true,
+        describe: true,
+        it: true,
+        test: true,
+        expect: true,
+        beforeEach: true,
+        afterEach: true,
+        beforeAll: true,
+        afterAll: true,
       },
     },
   },

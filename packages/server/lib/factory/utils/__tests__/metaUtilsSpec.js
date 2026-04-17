@@ -8,8 +8,8 @@ describe('metaUtils', () => {
 
     it('should generate meta tags while filtering out invalid values', () => {
       const meta = renderMeta({
-        getTitle: jest.fn().mockReturnValue('Page title'),
-        getMetaNamesIterator: jest.fn().mockReturnValue(
+        getTitle: vi.fn().mockReturnValue('Page title'),
+        getMetaNamesIterator: vi.fn().mockReturnValue(
           new Map([
             ['description', { content: 'meta description' }],
             [
@@ -21,7 +21,7 @@ describe('metaUtils', () => {
             ],
           ]).entries()
         ),
-        getMetaPropertiesIterator: jest.fn().mockReturnValue(
+        getMetaPropertiesIterator: vi.fn().mockReturnValue(
           new Map([
             ['og:description', { content: null }],
             [
@@ -34,7 +34,7 @@ describe('metaUtils', () => {
             ],
           ]).entries()
         ),
-        getLinksIterator: jest
+        getLinksIterator: vi
           .fn()
           .mockReturnValue(
             new Map([
@@ -52,12 +52,12 @@ describe('metaUtils', () => {
 
     it('should return empty string for empty meta manager', () => {
       const meta = renderMeta({
-        getTitle: jest.fn().mockReturnValue(''),
-        getMetaNamesIterator: jest.fn().mockReturnValue(new Map([]).entries()),
-        getMetaPropertiesIterator: jest
+        getTitle: vi.fn().mockReturnValue(''),
+        getMetaNamesIterator: vi.fn().mockReturnValue(new Map([]).entries()),
+        getMetaPropertiesIterator: vi
           .fn()
           .mockReturnValue(new Map([]).entries()),
-        getLinksIterator: jest.fn().mockReturnValue(new Map([]).entries()),
+        getLinksIterator: vi.fn().mockReturnValue(new Map([]).entries()),
       });
 
       expect(meta).toBe('<title></title>');
@@ -65,8 +65,8 @@ describe('metaUtils', () => {
 
     it('should generate meta tags while prevent XSS', () => {
       const meta = renderMeta({
-        getTitle: jest.fn().mockReturnValue('<script>alert(1)</script>'),
-        getMetaNamesIterator: jest.fn().mockReturnValue(
+        getTitle: vi.fn().mockReturnValue('<script>alert(1)</script>'),
+        getMetaNamesIterator: vi.fn().mockReturnValue(
           new Map([
             ['description', { content: '"><script>alert(1)</script>' }],
             [
@@ -85,7 +85,7 @@ describe('metaUtils', () => {
             ],
           ]).entries()
         ),
-        getMetaPropertiesIterator: jest.fn().mockReturnValue(
+        getMetaPropertiesIterator: vi.fn().mockReturnValue(
           new Map([
             ['og:description', { content: null }],
             [
@@ -98,7 +98,7 @@ describe('metaUtils', () => {
             ],
           ]).entries()
         ),
-        getLinksIterator: jest.fn().mockReturnValue(
+        getLinksIterator: vi.fn().mockReturnValue(
           new Map([
             [
               'stylesheet',

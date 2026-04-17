@@ -1,23 +1,25 @@
 /* eslint-disable no-console */
+const mock = require('mock-require');
+
 // Mock performance API
 let mockTimeCounter = 0;
 const mockPerformance = {
-  now: jest.fn(),
-  mark: jest.fn(),
-  measure: jest.fn(),
-  getEntries: jest.fn(),
-  getEntriesByType: jest.fn(),
-  clearMarks: jest.fn(),
-  clearMeasures: jest.fn(),
+  now: vi.fn(),
+  mark: vi.fn(),
+  measure: vi.fn(),
+  getEntries: vi.fn(),
+  getEntriesByType: vi.fn(),
+  clearMarks: vi.fn(),
+  clearMeasures: vi.fn(),
 };
 
-jest.mock('perf_hooks', () => ({
+mock('perf_hooks', {
   performance: mockPerformance,
-}));
+});
 
 // Mock chalk for console output tests
-const mockChalkFn = jest.fn(text => text);
-jest.mock('chalk', () => ({
+const mockChalkFn = vi.fn(text => text);
+mock('chalk', {
   cyan: mockChalkFn,
   bold: Object.assign(mockChalkFn, {
     cyan: mockChalkFn,
@@ -30,7 +32,7 @@ jest.mock('chalk', () => ({
   blue: mockChalkFn,
   gray: mockChalkFn,
   dim: mockChalkFn,
-}));
+});
 
 const { TimingTracker, DEFAULT_OPTIONS } = require('../TimingTracker');
 
@@ -47,12 +49,12 @@ describe('TimingTracker', () => {
 
     mockChalkFn.mockImplementation(text => text);
 
-    jest.spyOn(console, 'log').mockImplementation(() => {});
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('constructor', () => {
@@ -212,7 +214,9 @@ describe('TimingTracker', () => {
     });
 
     it('should warn and return null when ending without matching start', () => {
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
 
       const result = tracker.end('nonexistentOp');
 
@@ -243,7 +247,7 @@ describe('TimingTracker', () => {
     });
 
     it('should measure synchronous function execution', () => {
-      const mockFn = jest.fn(() => 'result');
+      const mockFn = vi.fn(() => 'result');
 
       const result = tracker.measure('syncOp', mockFn, { category: 'test' });
 
@@ -259,7 +263,7 @@ describe('TimingTracker', () => {
     });
 
     it('should measure asynchronous function execution', async () => {
-      const mockFn = jest.fn(() => Promise.resolve('async result'));
+      const mockFn = vi.fn(() => Promise.resolve('async result'));
 
       const result = await tracker.measure('asyncOp', mockFn);
 
@@ -271,7 +275,7 @@ describe('TimingTracker', () => {
     });
 
     it('should handle synchronous function errors', () => {
-      const mockFn = jest.fn(() => {
+      const mockFn = vi.fn(() => {
         throw new Error('sync error');
       });
 
@@ -284,7 +288,7 @@ describe('TimingTracker', () => {
 
     it('should return original function when disabled', () => {
       tracker = new TimingTracker({ enabled: false });
-      const mockFn = jest.fn(() => 'result');
+      const mockFn = vi.fn(() => 'result');
 
       const result = tracker.measure('disabledOp', mockFn);
 
@@ -300,7 +304,7 @@ describe('TimingTracker', () => {
     });
 
     it('should return wrapped function that tracks each call', () => {
-      const originalFn = jest.fn(() => 'result');
+      const originalFn = vi.fn(() => 'result');
       const wrappedFn = tracker.wrap('wrappedOp', originalFn, {
         static: 'data',
       });
@@ -319,7 +323,7 @@ describe('TimingTracker', () => {
     });
 
     it('should increment call count on each call', () => {
-      const originalFn = jest.fn(() => 'result');
+      const originalFn = vi.fn(() => 'result');
       const wrappedFn = tracker.wrap('multiCallOp', originalFn);
 
       wrappedFn();
@@ -333,7 +337,7 @@ describe('TimingTracker', () => {
     });
 
     it('should handle async wrapped functions', async () => {
-      const originalFn = jest.fn(() => Promise.resolve('async result'));
+      const originalFn = vi.fn(() => Promise.resolve('async result'));
       const wrappedFn = tracker.wrap('asyncWrappedOp', originalFn);
 
       const result = await wrappedFn();
@@ -344,7 +348,7 @@ describe('TimingTracker', () => {
     });
 
     it('should handle errors in wrapped functions', () => {
-      const originalFn = jest.fn(() => {
+      const originalFn = vi.fn(() => {
         throw new Error('wrapped error');
       });
       const wrappedFn = tracker.wrap('errorWrappedOp', originalFn);
@@ -358,7 +362,7 @@ describe('TimingTracker', () => {
 
     it('should return original function when disabled', () => {
       tracker = new TimingTracker({ enabled: false });
-      const originalFn = jest.fn(() => 'result');
+      const originalFn = vi.fn(() => 'result');
 
       const wrappedFn = tracker.wrap('disabledWrap', originalFn);
 
@@ -556,7 +560,7 @@ describe('TimingTracker', () => {
   describe('edge cases and error handling', () => {
     it('should handle measure with non-promise return value', () => {
       tracker = new TimingTracker();
-      const mockFn = jest.fn(() => ({ then: 'not a function' }));
+      const mockFn = vi.fn(() => ({ then: 'not a function' }));
 
       const result = tracker.measure('edgeCase', mockFn);
 

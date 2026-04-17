@@ -13,7 +13,7 @@ describe('Degradation Helpers', () => {
       const degradation = createUserAgentDegradation(/Googlebot|Bingbot/i);
       const event = {
         req: {
-          get: jest
+          get: vi
             .fn()
             .mockReturnValue('Mozilla/5.0 (compatible; Googlebot/2.1)'),
         },
@@ -27,7 +27,7 @@ describe('Degradation Helpers', () => {
       const degradation = createUserAgentDegradation(/Googlebot/i);
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('Mozilla/5.0 Chrome/91.0'),
+          get: vi.fn().mockReturnValue('Mozilla/5.0 Chrome/91.0'),
         },
       };
 
@@ -38,7 +38,7 @@ describe('Degradation Helpers', () => {
       const degradation = createUserAgentDegradation(ua => ua.includes('Bot'));
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('MyCustomBot'),
+          get: vi.fn().mockReturnValue('MyCustomBot'),
         },
       };
 
@@ -49,7 +49,7 @@ describe('Degradation Helpers', () => {
       const degradation = createUserAgentDegradation(/Bot/i);
       const event = {
         req: {
-          get: jest.fn().mockReturnValue(''),
+          get: vi.fn().mockReturnValue(''),
         },
       };
 
@@ -98,7 +98,7 @@ describe('Degradation Helpers', () => {
       const degradation = createHeaderDegradation('authorization');
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('Bearer token123'),
+          get: vi.fn().mockReturnValue('Bearer token123'),
         },
       };
 
@@ -112,7 +112,7 @@ describe('Degradation Helpers', () => {
       );
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('application/json'),
+          get: vi.fn().mockReturnValue('application/json'),
         },
       };
 
@@ -126,7 +126,7 @@ describe('Degradation Helpers', () => {
       );
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('Mozilla/5.0 (Android; Mobile)'),
+          get: vi.fn().mockReturnValue('Mozilla/5.0 (Android; Mobile)'),
         },
       };
 
@@ -140,7 +140,7 @@ describe('Degradation Helpers', () => {
       );
       const event = {
         req: {
-          get: jest.fn().mockReturnValue('very-long-header-value'),
+          get: vi.fn().mockReturnValue('very-long-header-value'),
         },
       };
 
@@ -150,9 +150,9 @@ describe('Degradation Helpers', () => {
 
   describe('combineAnd', () => {
     it('should return true when all functions return true', () => {
-      const fn1 = jest.fn().mockReturnValue(true);
-      const fn2 = jest.fn().mockReturnValue(true);
-      const fn3 = jest.fn().mockReturnValue(true);
+      const fn1 = vi.fn().mockReturnValue(true);
+      const fn2 = vi.fn().mockReturnValue(true);
+      const fn3 = vi.fn().mockReturnValue(true);
 
       const combined = combineAnd(fn1, fn2, fn3);
       const event = { test: 'data' };
@@ -164,9 +164,9 @@ describe('Degradation Helpers', () => {
     });
 
     it('should return false when any function returns false', () => {
-      const fn1 = jest.fn().mockReturnValue(true);
-      const fn2 = jest.fn().mockReturnValue(false);
-      const fn3 = jest.fn().mockReturnValue(true);
+      const fn1 = vi.fn().mockReturnValue(true);
+      const fn2 = vi.fn().mockReturnValue(false);
+      const fn3 = vi.fn().mockReturnValue(true);
 
       const combined = combineAnd(fn1, fn2, fn3);
       expect(combined({})).toBe(false);
@@ -175,18 +175,18 @@ describe('Degradation Helpers', () => {
 
   describe('combineOr', () => {
     it('should return true when any function returns true', () => {
-      const fn1 = jest.fn().mockReturnValue(false);
-      const fn2 = jest.fn().mockReturnValue(true);
-      const fn3 = jest.fn().mockReturnValue(false);
+      const fn1 = vi.fn().mockReturnValue(false);
+      const fn2 = vi.fn().mockReturnValue(true);
+      const fn3 = vi.fn().mockReturnValue(false);
 
       const combined = combineOr(fn1, fn2, fn3);
       expect(combined({})).toBe(true);
     });
 
     it('should return false when all functions return false', () => {
-      const fn1 = jest.fn().mockReturnValue(false);
-      const fn2 = jest.fn().mockReturnValue(false);
-      const fn3 = jest.fn().mockReturnValue(false);
+      const fn1 = vi.fn().mockReturnValue(false);
+      const fn2 = vi.fn().mockReturnValue(false);
+      const fn3 = vi.fn().mockReturnValue(false);
 
       const combined = combineOr(fn1, fn2, fn3);
       expect(combined({})).toBe(false);
@@ -195,14 +195,14 @@ describe('Degradation Helpers', () => {
 
   describe('invert', () => {
     it('should invert true to false', () => {
-      const fn = jest.fn().mockReturnValue(true);
+      const fn = vi.fn().mockReturnValue(true);
       const inverted = invert(fn);
 
       expect(inverted({})).toBe(false);
     });
 
     it('should invert false to true', () => {
-      const fn = jest.fn().mockReturnValue(false);
+      const fn = vi.fn().mockReturnValue(false);
       const inverted = invert(fn);
 
       expect(inverted({})).toBe(true);
@@ -220,7 +220,7 @@ describe('Degradation Helpers', () => {
       // Bot + GET = true
       const event1 = {
         req: {
-          get: jest.fn().mockReturnValue('Googlebot'),
+          get: vi.fn().mockReturnValue('Googlebot'),
           originalUrl: '/home',
           method: 'GET',
         },
@@ -230,7 +230,7 @@ describe('Degradation Helpers', () => {
       // Products + GET = true
       const event2 = {
         req: {
-          get: jest.fn().mockReturnValue('Chrome'),
+          get: vi.fn().mockReturnValue('Chrome'),
           originalUrl: '/products/item',
           method: 'GET',
         },
@@ -240,7 +240,7 @@ describe('Degradation Helpers', () => {
       // Bot + POST = false (method mismatch)
       const event3 = {
         req: {
-          get: jest.fn().mockReturnValue('Googlebot'),
+          get: vi.fn().mockReturnValue('Googlebot'),
           originalUrl: '/home',
           method: 'POST',
         },
@@ -250,7 +250,7 @@ describe('Degradation Helpers', () => {
       // Neither bot nor products path = false
       const event4 = {
         req: {
-          get: jest.fn().mockReturnValue('Chrome'),
+          get: vi.fn().mockReturnValue('Chrome'),
           originalUrl: '/home',
           method: 'GET',
         },
@@ -267,7 +267,7 @@ describe('Degradation Helpers', () => {
 
       const event1 = {
         req: {
-          get: jest.fn().mockReturnValue(''),
+          get: vi.fn().mockReturnValue(''),
           originalUrl: '/heavy-operation',
         },
       };
@@ -275,7 +275,7 @@ describe('Degradation Helpers', () => {
 
       const event2 = {
         req: {
-          get: jest.fn().mockReturnValue('Bearer token'),
+          get: vi.fn().mockReturnValue('Bearer token'),
           originalUrl: '/heavy-operation',
         },
       };

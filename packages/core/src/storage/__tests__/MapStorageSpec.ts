@@ -68,15 +68,15 @@ describe('ima.storage.Map', () => {
     for (const item of map.keys()) {
       switch (index++) {
         case 0:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item1');
           break;
         case 1:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item2');
           break;
         default:
-          // eslint-disable-next-line jest/no-conditional-expect
+          // eslint-disable-next-line vitest/no-conditional-expect
           expect(item).toBe('item3');
           break;
       }

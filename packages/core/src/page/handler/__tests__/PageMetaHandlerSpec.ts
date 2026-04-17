@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { ClientWindow, MetaManager, MetaManagerImpl, Window } from '../../../';
@@ -28,7 +28,7 @@ describe('PageMetaHandlerSpec', () => {
 
   afterEach(() => {
     global.document.head.innerHTML = '';
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('handlePreManagedState', () => {

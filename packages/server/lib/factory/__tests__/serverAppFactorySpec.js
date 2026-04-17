@@ -1,3 +1,36 @@
+// eslint-disable-next-line import/order
+const mock = require('mock-require');
+
+mock('fs', {
+  existsSync() {
+    return true;
+  },
+  readFileSync(path) {
+    if (path.endsWith('manifest.json')) {
+      return JSON.stringify(manifestMock);
+    }
+
+    return 'read file content';
+  },
+});
+mock('../devErrorPageFactory.js', () =>
+  vi.fn(({ error }) => ({
+    SPA: false,
+    static: false,
+    page: {
+      state: {},
+      cache: null,
+      cookie: new Map(),
+      headers: {},
+    },
+    cache: false,
+    error,
+    content: 'dev error page',
+    status: 500,
+    imaInternal: {},
+  }))
+);
+
 const { createMonitoring } = require('@esmj/monitor');
 const {
   GenericError,
@@ -17,46 +50,6 @@ const serverGlobal = require('../../serverGlobal.js');
 const serverAppFactory = require('../serverAppFactory.js');
 
 const manifestMock = require('../__mocks__/manifest.json');
-
-jest.mock('fs', () => {
-  const { toMockedInstance } = jest.requireActual('to-mock');
-  const originalModule = jest.requireActual('fs');
-
-  return {
-    ...toMockedInstance(originalModule, {
-      existsSync() {
-        return true;
-      },
-      readFileSync(path) {
-        if (path.endsWith('manifest.json')) {
-          return JSON.stringify(manifestMock);
-        }
-
-        return 'read file content';
-      },
-    }),
-  };
-});
-
-jest.mock('../devErrorPageFactory.js', () => {
-  return () => {
-    return jest.fn(({ error }) => ({
-      SPA: false,
-      static: false,
-      page: {
-        state: {},
-        cache: null,
-        cookie: new Map(),
-        headers: {},
-      },
-      cache: false,
-      error,
-      content: 'dev error page',
-      status: 500,
-      imaInternal: {},
-    }));
-  };
-});
 
 describe('Server App Factory', () => {
   let logger = null;
@@ -95,7 +88,7 @@ describe('Server App Factory', () => {
         },
       },
     };
-    devErrorPage = jest.fn(({ error }) => ({
+    devErrorPage = vi.fn(({ error }) => ({
       SPA: false,
       static: false,
       page: {
@@ -108,8 +101,8 @@ describe('Server App Factory', () => {
       status: 500,
       imaInternal: {},
     }));
-    languageLoader = jest.fn();
-    OCCleared = jest.fn();
+    languageLoader = vi.fn();
+    OCCleared = vi.fn();
     applicationFolder = '';
 
     router = toMockedInstance(ServerRouter, {
@@ -120,7 +113,7 @@ describe('Server App Factory', () => {
           status: 500,
           content: '500 app html',
         }),
-      getCurrentRouteInfo: jest.fn(() => {
+      getCurrentRouteInfo: vi.fn(() => {
         return {
           route: {
             getName() {
@@ -132,7 +125,7 @@ describe('Server App Factory', () => {
     });
 
     cache = toMockedInstance(Cache, {
-      serialize: jest
+      serialize: vi
         .fn()
         .mockReturnValue(JSON.stringify({ cacheKey: 'cacheValue' })),
     });
@@ -141,18 +134,18 @@ describe('Server App Factory', () => {
 
     pageManager = toMockedInstance(PageManager);
     pageStateManager = toMockedInstance(PageStateManager, {
-      getState: jest.fn().mockReturnValue({ page: 'state' }),
+      getState: vi.fn().mockReturnValue({ page: 'state' }),
     });
     pageRenderer = toMockedInstance(PageRenderer);
 
-    appFactory = jest.fn(() => {
+    appFactory = vi.fn(() => {
       return {
-        getInitialAppConfigFunctions: jest.fn(),
+        getInitialAppConfigFunctions: vi.fn(),
         ima: {
-          createImaApp: jest.fn(() => {
+          createImaApp: vi.fn(() => {
             return {
               bootstrap: {
-                run: jest.fn(),
+                run: vi.fn(),
               },
               oc: {
                 get(name) {
@@ -162,13 +155,13 @@ describe('Server App Factory', () => {
 
                   if (name === '$Request') {
                     return {
-                      init: jest.fn(),
+                      init: vi.fn(),
                     };
                   }
 
                   if (name === '$Response') {
                     return {
-                      init: jest.fn(),
+                      init: vi.fn(),
                       getResponseParams() {
                         return {
                           cookie: new Map(),
@@ -204,8 +197,8 @@ describe('Server App Factory', () => {
               },
             };
           }),
-          getInitialPluginConfig: jest.fn(),
-          getInitialImaConfigFunctions: jest.fn(),
+          getInitialPluginConfig: vi.fn(),
+          getInitialImaConfigFunctions: vi.fn(),
         },
       };
     });
@@ -220,11 +213,11 @@ describe('Server App Factory', () => {
       originalUrl: 'http://www.example.com/',
     };
     RES = {
-      status: jest.fn(),
-      send: jest.fn(),
-      set: jest.fn(),
-      setHeader: jest.fn(),
-      redirect: jest.fn(),
+      status: vi.fn(),
+      send: vi.fn(),
+      set: vi.fn(),
+      setHeader: vi.fn(),
+      redirect: vi.fn(),
       locals: {},
       headerSent: false,
     };
@@ -246,7 +239,7 @@ describe('Server App Factory', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     emitter.removeAllListeners();
     instanceRecycler.clear();
     serverGlobal.clear();
@@ -272,7 +265,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render 200 ima app page', async () => {
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -287,7 +280,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render 200 ima app page with custom content variables', async () => {
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: '#{myID} app html #{myVariable}',
       });
@@ -316,9 +309,9 @@ describe('Server App Factory', () => {
     });
 
     it('should render 500 ima app page', async () => {
-      jest
-        .spyOn(router, 'route')
-        .mockRejectedValue(new Error('Custom error messages'));
+      vi.spyOn(router, 'route').mockRejectedValue(
+        new Error('Custom error messages')
+      );
 
       const response = await serverApp.requestHandlerMiddleware(REQ, RES);
 
@@ -333,16 +326,16 @@ describe('Server App Factory', () => {
       environment.$Server.degradation = {
         isStatic: () => true,
       };
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+      vi.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
         route: {
           getName() {
             return 'home ';
           },
         },
       });
-      jest
-        .spyOn(router, 'route')
-        .mockRejectedValue(new Error('Static 500 error'));
+      vi.spyOn(router, 'route').mockRejectedValue(
+        new Error('Static 500 error')
+      );
       pageStateManager.getState.mockImplementation(() => {
         throw new Error('State error');
       });
@@ -356,13 +349,13 @@ describe('Server App Factory', () => {
       expect(response.cache).toBeFalsy();
       expect(OCCleared).toHaveBeenCalledTimes(1);
 
-      jest.resetAllMocks();
+      vi.resetAllMocks();
       // Clear degradation for second request
       environment.$Server.degradation = {
         isStatic: () => false,
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -382,7 +375,7 @@ describe('Server App Factory', () => {
       environment.$Server.degradation = {
         isStatic: () => true,
       };
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+      vi.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
         route: {
           getName() {
             return RouteNames.ERROR;
@@ -432,7 +425,7 @@ describe('Server App Factory', () => {
         isSPAPrefetch: () => true,
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -449,7 +442,7 @@ describe('Server App Factory', () => {
     it('should render SPA prefetch page with forced flag', async () => {
       process.env.IMA_CLI_FORCE_SPA_PREFETCH = 'true';
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -481,7 +474,7 @@ describe('Server App Factory', () => {
     it('should not render SPA prefetch without degradation logic', async () => {
       // No degradation config set - should not render SPA prefetch
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -500,7 +493,7 @@ describe('Server App Factory', () => {
         isSPAPrefetch: () => false,
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -521,7 +514,7 @@ describe('Server App Factory', () => {
         ],
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -542,7 +535,7 @@ describe('Server App Factory', () => {
         ],
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -560,7 +553,7 @@ describe('Server App Factory', () => {
         isSPAPrefetch: [() => false, () => false, () => false],
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -590,7 +583,7 @@ describe('Server App Factory', () => {
         isOverloaded: () => false,
       };
 
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 200,
         content: 'app html',
       });
@@ -677,7 +670,7 @@ describe('Server App Factory', () => {
     });
 
     it('should render 404 app page when degradation logic returns false', async () => {
-      jest.spyOn(router, 'route').mockReturnValue({
+      vi.spyOn(router, 'route').mockReturnValue({
         status: 404,
         content: '404 page',
       });
@@ -695,14 +688,14 @@ describe('Server App Factory', () => {
     });
 
     it('should redirect page with 301 status when degradation logic indicates static', async () => {
-      jest.spyOn(router, 'route').mockRejectedValue(
+      vi.spyOn(router, 'route').mockRejectedValue(
         new GenericError('Redirect', {
           status: 301,
           url: 'https://imajs.io',
         })
       );
-      jest.spyOn(router, 'isRedirection').mockReturnValue(true);
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
+      vi.spyOn(router, 'isRedirection').mockReturnValue(true);
+      vi.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({
         route: {
           getName() {
             return 'home ';
@@ -725,14 +718,14 @@ describe('Server App Factory', () => {
     });
 
     it('should redirect page with 301 status when degradation logic returns false', async () => {
-      jest.spyOn(router, 'route');
-      jest.spyOn(router, 'route').mockRejectedValue(
+      vi.spyOn(router, 'route');
+      vi.spyOn(router, 'route').mockRejectedValue(
         new GenericError('Redirect', {
           status: 301,
           url: 'https://imajs.io',
         })
       );
-      jest.spyOn(router, 'isRedirection').mockReturnValue(true);
+      vi.spyOn(router, 'isRedirection').mockReturnValue(true);
       environment.$Server.degradation = {
         isStatic: () => false,
       };
@@ -802,11 +795,11 @@ describe('Server App Factory', () => {
         getName() {
           return 'jsonRoute';
         },
-        getController: jest.fn().mockResolvedValue(controller),
+        getController: vi.fn().mockResolvedValue(controller),
       };
 
-      jest.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({ route });
-      jest.spyOn(router, 'route').mockResolvedValue({
+      vi.spyOn(router, 'getCurrentRouteInfo').mockReturnValue({ route });
+      vi.spyOn(router, 'route').mockResolvedValue({
         status: 200,
         content: 'html content that should be ignored',
       });
@@ -831,7 +824,7 @@ describe('Server App Factory', () => {
       process.env.IMA_CLI_WATCH = 'true';
       global.$IMA_SERVER = {
         viteDevServer: {
-          ssrFixStacktrace: jest.fn(),
+          ssrFixStacktrace: vi.fn(),
         },
       };
       const error = new Error('Custom');

@@ -47,15 +47,15 @@
         "require": "./dist/cjs/index.js"
       }
     },
-    "./setupJest.js": "./setupJest.js"
+    "./setupVitest.js": "./setupVitest.js"
   },
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "npm run test:jest && npm run test:size",
-    "test:jest": "jest -c jest.config.js",
+    "test": "npm run test:vitest && npm run test:size",
+    "test:vitest": "vitest run",
     "test:size": "size-limit",
     "preversion": "npm test"
   },
@@ -72,7 +72,6 @@
   "devDependencies": {
     "@ima/plugin-cli": "^20.0.0",
     "@types/express": "^5.0.5",
-    "@types/jest": "^30.0.0",
     "@types/merge-deep": "^3.0.3",
     "@types/multer": "^2.0.0",
     "jscodeshift": "^17.3.0"

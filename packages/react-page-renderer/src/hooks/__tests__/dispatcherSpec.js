@@ -9,9 +9,9 @@ import { useDispatcher } from '../dispatcher';
  */
 function mockDispatcher(contextValue) {
   const dispatcher = {
-    fire: jest.fn(),
-    listen: jest.fn(),
-    unlisten: jest.fn(),
+    fire: vi.fn(),
+    listen: vi.fn(),
+    unlisten: vi.fn(),
   };
 
   contextValue.$Utils.$Dispatcher = dispatcher;

@@ -23,7 +23,7 @@
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "jest --config jest.config.cjs"
+    "test": "vitest run"
   },
   "exports": {
     ".": {

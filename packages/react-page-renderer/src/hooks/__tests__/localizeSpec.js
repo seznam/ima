@@ -6,7 +6,7 @@ describe('useLocalize', () => {
   it('should return shortcut to $Dictionary.get utility', async () => {
     const contextValue = await getContextValue();
 
-    contextValue.$Utils.$Dictionary.get = jest
+    contextValue.$Utils.$Dictionary.get = vi
       .fn()
       .mockReturnValue('$Dictionary.get');
 

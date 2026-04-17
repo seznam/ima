@@ -21,15 +21,15 @@ import {
 } from '../index';
 import { Response } from '../router/Response';
 
-jest.mock('fs');
-jest.mock('path', () => {
-  const original = jest.requireActual('path');
+vi.mock('fs');
+vi.mock('path', async () => {
+  const original = await vi.importActual<typeof import('path')>('path');
   const resolve = (...args: unknown[]) => {
     if (args[1] === undefined && args[0] === '@ima/core') {
       return original.join(process.cwd(), 'index.js');
     }
 
-    return original.resolve(...args);
+    return original.resolve(...(args as Parameters<typeof original.resolve>));
   };
 
   return Object.assign({}, original, { resolve });
@@ -170,9 +170,9 @@ describe('render server application', () => {
 
     await bootClientApp(app, bootConfig);
 
-    jest
-      .spyOn(ReactDOM, 'render')
-      .mockImplementation(() => ({ setState: () => undefined }));
+    vi.spyOn(ReactDOM, 'render').mockImplementation(() => ({
+      setState: () => undefined,
+    }));
   });
 
   it('should response with status code 200 and page state', async () => {

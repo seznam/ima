@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -140,12 +140,12 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     );
 
     (
-      jest.spyOn(controllerInstance, 'getExtensions') as jest.SpyInstance
+      vi.spyOn(controllerInstance, 'getExtensions') as vi.SpyInstance
     ).mockReturnValue([extensionInstance]);
   });
 
   it('should be listening for all custom events', () => {
-    jest.spyOn(eventBusInterface, 'listenAll').mockImplementation();
+    vi.spyOn(eventBusInterface, 'listenAll').mockImplementation(() => {});
 
     pageManager.init();
 
@@ -171,7 +171,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   it('should unlisten for all custom events', async () => {
-    jest.spyOn(eventBusInterface, 'unlistenAll').mockImplementation();
+    vi.spyOn(eventBusInterface, 'unlistenAll').mockImplementation(() => {});
 
     await pageManager.destroy();
 
@@ -190,25 +190,23 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     };
 
     beforeEach(() => {
-      jest
-        .spyOn(pageManager, '_parseCustomEvent')
-        .mockReturnValue(parsedCustomEvent);
+      vi.spyOn(pageManager, '_parseCustomEvent').mockReturnValue(
+        parsedCustomEvent
+      );
 
-      jest.spyOn(console, 'warn').mockImplementation();
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
     });
 
     it('should handle event only with controller', () => {
-      jest
-        .spyOn(pageManager, '_handleEventWithController')
-        .mockReturnValue(true);
+      vi.spyOn(pageManager, '_handleEventWithController').mockReturnValue(true);
 
-      jest
-        .spyOn(pageManager, '_handleEventWithExtensions')
-        .mockImplementation();
+      vi.spyOn(pageManager, '_handleEventWithExtensions').mockImplementation(
+        () => {}
+      );
 
       pageManager._onCustomEventHandler(event as CustomEvent);
 
@@ -226,13 +224,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     });
 
     it('should handle event with some extension', () => {
-      jest
-        .spyOn(pageManager, '_handleEventWithController')
-        .mockReturnValue(false);
+      vi.spyOn(pageManager, '_handleEventWithController').mockReturnValue(
+        false
+      );
 
-      jest
-        .spyOn(pageManager, '_handleEventWithExtensions')
-        .mockReturnValue(true);
+      vi.spyOn(pageManager, '_handleEventWithExtensions').mockReturnValue(true);
 
       pageManager._onCustomEventHandler(event as CustomEvent);
 
@@ -258,13 +254,13 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('manage method', () => {
     it('should activate page source after loading all resources', async () => {
-      jest
-        .spyOn(pageManager, '_activatePageSource' as never)
-        .mockImplementation();
+      vi.spyOn(pageManager, '_activatePageSource' as never).mockImplementation(
+        () => {}
+      );
       //@ts-ignore
-      jest
-        .spyOn(AbstractPageManager.prototype, 'manage')
-        .mockReturnValue(Promise.resolve({ status: 200 }));
+      vi.spyOn(AbstractPageManager.prototype, 'manage').mockReturnValue(
+        Promise.resolve({ status: 200 })
+      );
 
       await pageManager
         .manage({
@@ -314,11 +310,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         },
       };
 
-      jest
+      vi
         // @ts-ignore
         .spyOn(pageManager['_managedPage'].controllerInstance, 'onMethod')
         // @ts-ignore
-        .mockImplementation();
+        .mockImplementation(() => {});
 
       expect(
         pageManager._handleEventWithController('', 'onMethod', data)
@@ -340,11 +336,11 @@ describe('ima.core.page.manager.ClientPageManager', () => {
           .constructor as typeof Controller
       ).$name = 'CustomController';
 
-      jest
+      vi
         // @ts-ignore
         .spyOn(pageManager['_managedPage'].controllerInstance, 'onMethod')
         // @ts-ignore
-        .mockImplementation();
+        .mockImplementation(() => {});
 
       expect(
         pageManager._handleEventWithController(
@@ -384,7 +380,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         },
       };
 
-      jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
+      vi.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation(() => {});
 
       expect(
         pageManager._handleEventWithExtensions('', 'onMethod', data)
@@ -413,10 +409,10 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         },
       };
 
-      jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
-      jest
-        .spyOn(dumpExtensionInstanceWithPrefix, 'onMethod')
-        .mockImplementation();
+      vi.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation(() => {});
+      vi.spyOn(dumpExtensionInstanceWithPrefix, 'onMethod').mockImplementation(
+        () => {}
+      );
 
       expect(
         pageManager._handleEventWithExtensions(
@@ -436,7 +432,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     it('should call setState', () => {
       const state = { state: 'state' };
 
-      jest.spyOn(pageRenderer, 'setState').mockImplementation();
+      vi.spyOn(pageRenderer, 'setState').mockImplementation(() => {});
 
       pageManager['_onChangeStateHandler'](state);
 
