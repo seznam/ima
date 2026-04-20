@@ -1,5 +1,11 @@
 # @ima/testing-library
 
+## 20.1.0
+
+### Minor Changes
+
+- 4ab1c91: Added `beforeCreateIMAServer` and `afterCreateIMAServer` hooks to `ServerConfiguration` interface, allowing custom logic execution before and after IMA server creation. You can use this new options in `setImaTestingLibraryServerConfig`. If you have some IMA server hooks, that need to be executed in tests, you can now attach them using these new configurations.
+
 ## 20.0.0
 
 ### Major Changes

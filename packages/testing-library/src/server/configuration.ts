@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import type { Environment } from '@ima/core';
+import type { createIMAServer } from '@ima/server';
 
 export interface ServerConfiguration {
   /**
@@ -20,6 +21,10 @@ export interface ServerConfiguration {
    * The path to the application folder.
    */
   applicationFolder: string | undefined;
+  beforeCreateIMAServer: () => Promise<void> | void;
+  afterCreateIMAServer: (
+    imaServer: ReturnType<typeof createIMAServer>
+  ) => Promise<void> | void;
 }
 
 export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
@@ -48,6 +53,8 @@ function resolveDefaultConfiguration() {
     host: 'imajs.io',
     processEnvironment: env => env,
     applicationFolder: undefined,
+    beforeCreateIMAServer: () => {},
+    afterCreateIMAServer: () => {},
   };
 
   if (!fs.existsSync(path.resolve('.', 'server/config/environment.js'))) {

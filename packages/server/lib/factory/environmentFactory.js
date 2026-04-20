@@ -28,9 +28,6 @@ if (env === 'production') {
 const defaultEnvironment = {
   prod: {
     $Debug: false,
-    $Language: {
-      '//*:*': 'en',
-    },
     $Server: {
       port: 3001,
       staticPath: '/static',
@@ -40,9 +37,9 @@ const defaultEnvironment = {
       cache: {
         enabled: false,
         cacheKeyGenerator: null,
-        entryTtl: 60 * 60 * 1000,
-        unusedEntryTtl: 15 * 60 * 1000,
-        maxEntries: 500,
+        entryTtl: 15 * 1000,
+        unusedEntryTtl: 10 * 1000,
+        maxEntries: 200,
       },
       loggerFactory: createJSONLogger,
     },
@@ -82,14 +79,21 @@ module.exports = function environmentFactory({
   );
 
   let currentEnvironment = baseEnvConfig[env] || {};
+
   const $Language =
     currentEnvironment.$Language &&
     Object.assign({}, currentEnvironment.$Language);
 
   currentEnvironment = helpers.resolveEnvironmentSetting(baseEnvConfig, env);
 
-  if ($Language) {
-    currentEnvironment.$Language = $Language;
+  if (!currentEnvironment.$Language) {
+    currentEnvironment.$Language = {
+      '//*:*': 'en',
+    };
+  } else {
+    if ($Language) {
+      currentEnvironment.$Language = $Language;
+    }
   }
 
   currentEnvironment['$Env'] = env;
