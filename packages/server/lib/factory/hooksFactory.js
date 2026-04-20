@@ -242,7 +242,7 @@ module.exports = function hooksFactory({
         hasReachedMax: instanceRecycler.hasReachedMaxConcurrentRequests(),
       });
 
-      event.threats = event?.performance?.severity.getThreats();
+      event.threats = event?.performance?.severity.getThreats(event.req);
 
       if (_isServerOverloaded(event)) {
         event.context?.timing?.end('hooks.performanceCheck', {
