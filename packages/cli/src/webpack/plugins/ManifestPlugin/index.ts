@@ -102,15 +102,19 @@ class ManifestPlugin {
         }
 
         const fileName = `${asset.name}`;
-        const name = `${assetName.replace(
-          `.${asset?.info?.contenthash as string}`,
-          ''
-        )}`;
+        // Extract contenthash directly from filename to handle different hash functions
+        // Match pattern: filename.{hash}.ext or filename.{id}.{hash}.ext
+        const hashMatch = assetName.match(/\.([a-f0-9]+)\.(js|css)$/i);
+        const extractedHash = hashMatch ? hashMatch[1] : undefined;
+        const name = assetName.replace(/\.[a-f0-9]+\.(js|css)$/i, '.$1');
 
         const assetWithInfo = {
           name,
           fileName,
           ...asset?.info,
+          // Override contenthash with the actual hash from the filename
+          // to ensure consistency across different hash functions
+          ...(extractedHash && { contenthash: extractedHash }),
         };
 
         seed.assetsByCompiler[compilationName][name] = assetWithInfo;
