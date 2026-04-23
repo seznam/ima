@@ -156,17 +156,15 @@ function watchChanges(destFolder, pkgDirs) {
 
     // Spawn watch
     if (pkgJson.scripts.dev) {
-      const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+      const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
       runningProcesses.push(
         child.spawn(
-          npm,
+          pnpm,
           [
             'run',
             'dev',
             // Silent output since we provide our own
-            ...(pkgJson.scripts.dev.includes('ima-plugin')
-              ? ['--', '--silent']
-              : []),
+            ...(pkgJson.scripts.dev.includes('ima-plugin') ? ['--silent'] : []),
           ],
           {
             stdio: 'inherit',
@@ -192,7 +190,7 @@ function copyChanges(destDir, pkgDirs) {
     const destPkgDir = path.join(destNodeModules, pkgJson.name);
 
     // Build package
-    pkgJson.scripts.build && shell('npm run build', pkgDir);
+    pkgJson.scripts.build && shell('pnpm run build', pkgDir);
 
     // Copy source files to app node_modules directory.
     fs.readdirSync(pkgDir)
@@ -255,7 +253,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
     pkgDirs.forEach(pkgDir => {
       const pkgJson = require(path.join(pkgDir, 'package.json'));
 
-      pkgJson.scripts.build && shell('npm run build', pkgDir);
+      pkgJson.scripts.build && shell('pnpm run build', pkgDir);
       shell('npm pack', pkgDir);
 
       // eslint-disable-next-line no-unused-vars
@@ -263,7 +261,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
       const packFilePath = path.join(pkgDir, packFileName);
 
-      shell(`npm install ${packFilePath} --force`, destDir);
+      shell(`pnpm install --force ${packFilePath}`, destDir);
       packFiles.push(packFilePath);
     });
 
