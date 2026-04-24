@@ -1,6 +1,4 @@
-/* @if client **
-export class Request {};
-/* @else */
+'use server';
 import { Request as ExpressRequest } from 'express';
 
 /**
@@ -105,4 +103,3 @@ export class Request {
     return this._request;
   }
 }
-// @endif

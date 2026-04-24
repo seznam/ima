@@ -4,7 +4,7 @@ import path from 'path';
 
 import { logger } from '@ima/dev-utils/logger';
 
-import { Plugin } from '../types';
+import { Plugin } from '../types.js';
 
 export interface TypescriptDeclarationsPluginOptions {
   additionalArgs?: string[];
@@ -49,7 +49,7 @@ export function typescriptDeclarationsPlugin(
         options?.tscPath ? options.tscPath : 'tsc',
         [
           '--outDir',
-          context.config.output[0].dir,
+          context.config.outDir,
           '--project',
           tsConfigPath,
           '--emitDeclarationOnly',

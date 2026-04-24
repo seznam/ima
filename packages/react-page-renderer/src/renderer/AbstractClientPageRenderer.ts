@@ -1,6 +1,3 @@
-/* @if server **
-export class AbstractClientPageRenderer {};
-/* @else */
 import { autoYield, forceYield } from '@esmj/task';
 import {
   Controller,
@@ -423,4 +420,3 @@ export abstract class AbstractClientPageRenderer extends AbstractPageRenderer {
     return { promises, values };
   }
 }
-/* @endif */

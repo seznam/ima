@@ -1,6 +1,11 @@
-import generate from '@babel/generator';
+import _generate from '@babel/generator';
 import { parse } from '@babel/parser';
 import { Plugin } from 'vite';
+
+// https://github.com/babel/babel/issues/13855
+// This can be removed with @babel/generator v8 when the package will be ESM-only
+const generate = (_generate as unknown as { default: typeof _generate })
+  .default;
 
 import { serverControllerProcessor } from './useServerProcessors/serverControllerProcessor';
 import { stubProcessor } from './useServerProcessors/stubProcessor';

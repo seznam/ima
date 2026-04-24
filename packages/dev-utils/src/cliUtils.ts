@@ -6,9 +6,9 @@ import { SourceMapConsumer, RawSourceMap } from 'source-map-js';
 import * as stackTraceParser from 'stacktrace-parser';
 import { StatsError } from 'webpack';
 
-import { parseCompileError } from './compileErrorParser';
-import { createSourceFragment, FragmentLine } from './sourceFragment';
-import { extractSourceMappingUrl } from './sourceMapUtils';
+import { parseCompileError } from './compileErrorParser.js';
+import { createSourceFragment, FragmentLine } from './sourceFragment.js';
+import { extractSourceMappingUrl } from './sourceMapUtils.js';
 
 export type ParsedErrorData = {
   fileUri?: string;

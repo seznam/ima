@@ -3,11 +3,10 @@ import chalk from 'chalk';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { build, watch } from '../utils/commands';
+import { build, watch } from '../utils/commands.js';
 
 yargs(hideBin(process.argv))
   .scriptName(chalk.green.bold('ima-plugin'))
-  // .description('CLI helper to build ima plugins')
   .usage('Usage: $0 <command>')
   .demandCommand(1, 'You need to run at least one command to move on')
   .help()
@@ -26,16 +25,6 @@ yargs(hideBin(process.argv))
     'generated-value': chalk.gray('generated-value'),
     default: chalk.magenta('default'),
     required: chalk.yellow('required'),
-  })
-  .option('clientServerConfig', {
-    desc: 'Use client/server build configuration instead of the default one',
-    type: 'boolean',
-    default: false,
-  })
-  .option('nodeConfig', {
-    desc: 'Use node build configuration instead of the default one',
-    type: 'boolean',
-    default: false,
   })
   .option('silent', {
     alias: 's',

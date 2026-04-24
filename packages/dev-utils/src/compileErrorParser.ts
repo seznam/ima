@@ -6,7 +6,7 @@ import {
   swcLoaderErrorParser,
   webpackErrorParser,
   CompileError,
-} from './parsers';
+} from './parsers/index.js';
 
 export const COMPILE_ERROR_NEEDLES_RE = [
   /error:\s?module/i,

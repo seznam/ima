@@ -4,6 +4,8 @@ import path from 'path';
 import babel from '@rollup/plugin-babel';
 import react from '@vitejs/plugin-react';
 import lessPluginGlob from 'less-plugin-glob';
+import postcssFlexbugsFixes from 'postcss-flexbugs-fixes';
+import postcssPresetEnv from 'postcss-preset-env';
 import { BuildEnvironmentOptions } from 'vite';
 import compression from 'vite-plugin-compression2';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -243,8 +245,8 @@ export default async (
       postcss: await imaConfig.postcss(
         {
           plugins: [
-            require('postcss-flexbugs-fixes'),
-            require('postcss-preset-env')({
+            postcssFlexbugsFixes,
+            postcssPresetEnv({
               browsers: imaConfig.cssBrowsersTarget,
               autoprefixer: { flexbox: 'no-2009', grid: 'autoplace' },
               stage: 1,

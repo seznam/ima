@@ -1,6 +1,3 @@
-/* @if server **
-export class ClientPageManager {};
-/* @else */
 import { autoYield } from '@esmj/task';
 
 import { AbstractPageManager } from './AbstractPageManager';
@@ -281,4 +278,3 @@ export class ClientPageManager extends AbstractPageManager {
     }
   }
 }
-// @endif

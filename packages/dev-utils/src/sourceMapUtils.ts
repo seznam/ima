@@ -1,4 +1,4 @@
-import { RE_SOURCE_MAPPING_URL } from './helpers';
+import { RE_SOURCE_MAPPING_URL } from './helpers.js';
 
 /**
  * Extracts sourceMappingURL from the provided file contents.

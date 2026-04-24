@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { StringStructure } from '@messageformat/core/lib/compile-module';
+import { StringStructure } from '@messageformat/core/lib/compile-module.js';
 
 const TMP_BASEPATH = './build/tmp';
 

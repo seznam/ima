@@ -1,6 +1,4 @@
-/* @if client **
-export class ServerPageManager {};
-/* @else */
+'use server';
 import { AbstractPageManager } from './AbstractPageManager';
 import { Dependencies } from '../..';
 import { Dispatcher } from '../../event/Dispatcher';
@@ -22,4 +20,3 @@ export class ServerPageManager extends AbstractPageManager {
     ];
   }
 }
-// @endif
