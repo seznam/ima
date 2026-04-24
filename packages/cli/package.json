@@ -24,8 +24,8 @@
     "ima": "./dist/bin/ima.js"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w --preserveWatchOutput",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest -c jest.config.js",
     "test:watch": "npm run test -- --watch"
@@ -65,6 +65,7 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
+    "@ima/plugin-cli": "^20.0.0",
     "@types/cli-progress": "^3.11.6",
     "@types/express": "^5.0.5"
   },
@@ -76,5 +77,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "type": "module"
 }

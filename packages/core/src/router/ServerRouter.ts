@@ -1,6 +1,4 @@
-/* @if client **
-export class ServerRouter {};
-/* @else */
+'use server';
 import { AbstractRouter } from './AbstractRouter';
 import { Request } from './Request';
 import { Response } from './Response';
@@ -88,4 +86,3 @@ export class ServerRouter extends AbstractRouter {
     this.#response.redirect(url, { httpStatus: 302, ...options });
   }
 }
-// @endif

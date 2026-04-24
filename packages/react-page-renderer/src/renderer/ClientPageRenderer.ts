@@ -1,6 +1,3 @@
-/* @if server **
-export class ClientPageRenderer {};
-/* @else */
 import { RendererEvents } from '@ima/core';
 import { ReactElement } from 'react';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
@@ -60,4 +57,3 @@ export class ClientPageRenderer extends AbstractClientPageRenderer {
     );
   }
 }
-/* @endif */

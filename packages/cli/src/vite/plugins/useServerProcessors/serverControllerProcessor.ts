@@ -1,8 +1,12 @@
-import traverse, { NodePath } from '@babel/traverse';
+import _traverse, { NodePath } from '@babel/traverse';
 import * as b from '@babel/types';
 
-import { UseServerProcessor } from '../../../types';
+// https://github.com/babel/babel/issues/13855
+// This can be removed with @babel/traverse v8 when the package will be ESM-only
+const traverse = (_traverse as unknown as { default: typeof _traverse })
+  .default;
 
+import { UseServerProcessor } from '../../../types';
 /**
  * Checks if a class is a controller class. We really look at the
  * existence of `controller` substring in the parent class name,

@@ -1,6 +1,4 @@
-/* @if client **
-export class ServerWindow {};
-/* @else */
+'use server';
 import { Window } from './Window';
 import { GenericError } from '../error/GenericError';
 
@@ -202,4 +200,3 @@ export class ServerWindow extends Window {
     return;
   }
 }
-// @endif

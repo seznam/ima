@@ -32,11 +32,10 @@
   },
   "dependencies": {
     "@ima/dev-utils": "^20.0.0",
-    "@swc/core": "^1.15.1",
     "chalk": "^4.1.2",
     "chokidar": "^4.0.3",
     "globby": "^11.1.0",
-    "preprocess": "^3.2.0",
+    "rolldown": "^1.0.0-rc.17",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
@@ -54,5 +53,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "type": "module"
 }

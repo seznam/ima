@@ -2,7 +2,7 @@ import type * as imaCore from '@ima/core';
 import { Loader, Parameters, StoryContext } from '@storybook/react';
 import { merge } from 'ts-deepmerge';
 
-import { getImaInitializers } from '../utils/initializer.js';
+import { getImaInitializers } from '../utils/initializer';
 
 let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;

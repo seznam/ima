@@ -1,44 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 
-import { logger, time, printTime } from '@ima/dev-utils/logger';
-import anymatch, { Matcher as AnymatchMatcher } from 'anymatch';
+import { logger, time } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 import { watch as chokidarWatch } from 'chokidar';
-import globby from 'globby';
 import { Arguments } from 'yargs';
 
+import { parseConfigFile, runPlugins } from './process.js';
+import { cleanOutput, createBatcher } from './utils.js';
 import {
-  createProcessingPipeline,
-  parseConfigFile,
-  runPlugins,
-} from './process';
-import { cleanOutput, createBatcher, processOutput } from './utils';
-import { Args, Context, ImaPluginConfig } from '../types';
+  rolldownBuild,
+  rolldownBuildWatch,
+} from '../builder/rolldownBuilder.js';
+import { Args, Context } from '../types.js';
 
 function parseArgs(args: Arguments) {
   const [command] = args._ as [Args['command']];
 
   return { ...args, command } as unknown as Args;
-}
-
-/**
- * Returns the upmost common part of output dir path of all output options.
- */
-function getBaseCommonOutputDir(output: ImaPluginConfig['output']): string {
-  const [firstOutputDirParts, ...otherOutputDirsParts] = output.map(output =>
-    output.dir.split('/')
-  );
-
-  return firstOutputDirParts
-    .reduce<string[]>((acc, cur, index) => {
-      if (otherOutputDirsParts.every(part => part[index] === cur) && cur) {
-        acc.push(cur);
-      }
-
-      return acc;
-    }, [])
-    .join('/');
 }
 
 /**
@@ -75,54 +54,22 @@ export async function build(args: Arguments) {
   logger.setSilent(parsedArgs.silent);
   logger.info(`Building ${chalk.bold.magenta(pkgJson.name)}`);
 
-  // Spawn compilation for each config
   await Promise.all(
     configurations.map(async config => {
-      const inputDir = path.resolve(cwd, config.inputDir);
-
-      config.output.forEach(({ dir, format }) => {
-        logger.info(
-          `${config.inputDir} ${chalk.blue('→')} ${chalk.green(
-            dir
-          )} ${chalk.red(`[${format}]`)}`
-        );
-      });
-
-      // Clean output directories
-      await cleanOutput(config, cwd);
-
-      // Get file paths at input directory
-      let files = await globby(
-        path.posix.join(inputDir.replace(/\\/g, '/'), './**/*'),
-        {
-          cwd: cwd.replace(/\\/g, '/'),
-        }
+      logger.info(
+        `${config.inputDir} ${chalk.blue('→')} ${chalk.green(config.outDir)} ${chalk.red('[esm]')}`
       );
 
-      // Filter files using exclude settings
-      if (config?.exclude) {
-        const matcher =
-          typeof config.exclude === 'function'
-            ? config.exclude
-            : anymatch(config.exclude as AnymatchMatcher);
-
-        files = files.filter(filePath => !matcher(filePath));
-      }
+      await cleanOutput(config, cwd);
 
       const context: Context = {
         command: 'build',
-        inputDir,
+        inputDir: path.resolve(cwd, config.inputDir),
         config,
         cwd,
       };
 
-      // Init processing pipeline
-      const process = await createProcessingPipeline(context);
-
-      // Process each file with loaded pipeline
-      files.forEach(process);
-
-      // Run plugins
+      await rolldownBuild(config, cwd);
       await runPlugins(context);
     })
   ).catch(error => {
@@ -134,7 +81,7 @@ export async function build(args: Arguments) {
 }
 
 /**
- * Dev/link command function handler
+ * Dev/link command function handler.
  */
 export async function watch(args: Arguments) {
   const cwd = process.cwd();
@@ -155,18 +102,15 @@ export async function watch(args: Arguments) {
     )} ${chalk.cyan(linkedPkgJson.name)}`;
   }
 
-  // Batch file events
   const batch = createBatcher(title);
   logger.setSilent(parsedArgs.silent);
 
-  // Spawn watch for each config
-  configurations.forEach(async config => {
+  for (const config of configurations) {
     const inputDir = path.resolve(cwd, config.inputDir);
+    const outDir = path.resolve(cwd, config.outDir);
 
-    // Cleanup
     await cleanOutput(config, cwd);
 
-    // Processing pipeline context
     const context: Context = {
       command,
       inputDir,
@@ -174,125 +118,45 @@ export async function watch(args: Arguments) {
       cwd,
     };
 
-    // Init processing pipeline
-    const process = await createProcessingPipeline(context);
+    // Start Rolldown watch build
+    await rolldownBuildWatch(config, cwd);
 
-    // Dev watcher
-    chokidarWatch([path.resolve(inputDir)], {
-      ignoreInitial: false,
-      ignored: config.exclude,
-      persistent: true,
-    })
-      .on('error', errorHandler)
-      .on('all', async (eventName, filePath) => {
-        const contextPath = path.relative(inputDir, filePath);
-        const fileName = path.basename(filePath);
-
-        // Skip unsupported event names
-        if (
-          eventName === 'all' ||
-          eventName === 'ready' ||
-          eventName === 'raw' ||
-          eventName === 'error'
-        ) {
-          return;
-        }
-
-        batch(async () => {
-          switch (eventName) {
-            case 'add':
-            case 'change':
-              await process(filePath);
-              break;
-
-            case 'unlink':
-            case 'unlinkDir':
-              await processOutput(
-                config,
-                async outputPath => {
-                  const outputContextPath = path.join(outputPath, contextPath);
-
-                  if (fs.existsSync(outputContextPath)) {
-                    logger.write(
-                      `${printTime()} ${chalk.green('Unlink')}: ${fileName}`
-                    );
-                    await fs.promises.rm(outputContextPath, {
-                      recursive: true,
-                    });
-                  }
-                },
-                cwd
-              );
-
-              break;
-
-            default:
-              return;
-          }
-        }, eventName);
-      })
-      .on('ready', async () => {
-        await runPlugins(context);
-      });
+    // Run plugins once after initial build settles
+    await runPlugins(context);
 
     /**
-     * Link watcher, there's only one instance per pkg, it watches the root dist
-     * directory and copies changes to the linked path.
+     * Link watcher — watches the dist output and copies changed files
+     * into the linked project's node_modules.
      */
     if (command === 'link' && linkPath) {
-      const distBaseDir = getBaseCommonOutputDir(config.output);
-      const outputDir = path.join(cwd, distBaseDir);
       const linkedPath = path.resolve(linkPath);
       const linkedBasePath = path.resolve(
         linkedPath,
         'node_modules',
         pkgJson.name
       );
-      const linkedDistPath = path.join(linkedBasePath, distBaseDir);
+      const linkedDistPath = path.join(linkedBasePath, config.outDir);
 
-      // Create package.json link to be able to link new packages or changes package keys (like bin, main, etc.)
-      if (!config.additionalWatchPaths) {
-        config.additionalWatchPaths = ['./package.json'];
-      } else {
-        config.additionalWatchPaths = [
-          ...config.additionalWatchPaths,
-          './package.json',
-        ];
-      }
+      // Always include package.json in watch paths
+      const extraWatchPaths = [
+        './package.json',
+        ...(config.additionalWatchPaths ?? []),
+        ...(Array.isArray(parsedArgs.additionalWatchPaths)
+          ? parsedArgs.additionalWatchPaths
+          : []),
+      ].map(p => path.resolve(cwd, p));
 
-      chokidarWatch(
-        [
-          path.join(cwd, distBaseDir),
-          Array.isArray(parsedArgs?.additionalWatchPaths) &&
-            parsedArgs?.additionalWatchPaths,
-          Array.isArray(config?.additionalWatchPaths) &&
-            config?.additionalWatchPaths,
-        ].filter(Boolean) as string[],
-        {
-          ignoreInitial: false,
-          persistent: true,
-          ignored: [
-            '**/tsconfig.build.tsbuildinfo/**',
-            '**/node_modules/**',
-            '**/.DS_Store/**',
-          ],
-        }
-      )
+      chokidarWatch([outDir, ...extraWatchPaths], {
+        ignoreInitial: false,
+        persistent: true,
+        ignored: [
+          '**/tsconfig.build.tsbuildinfo/**',
+          '**/node_modules/**',
+          '**/.DS_Store/**',
+        ],
+      })
         .on('error', errorHandler)
         .on('all', (eventName, filePath) => {
-          // Handler to link additional non-dist files
-          const isAdditionalFile = !filePath.startsWith(outputDir);
-          const contextPath = path.relative(
-            isAdditionalFile ? cwd : outputDir,
-            filePath
-          );
-          const linkedOutputPath = path.join(
-            isAdditionalFile ? linkedBasePath : linkedDistPath,
-            contextPath
-          );
-          const linkedOutputDir = path.dirname(linkedOutputPath);
-
-          // Skip unsupported event names
           if (
             eventName === 'all' ||
             eventName === 'ready' ||
@@ -302,14 +166,23 @@ export async function watch(args: Arguments) {
             return;
           }
 
+          const isAdditionalFile = !filePath.startsWith(outDir);
+          const contextPath = path.relative(
+            isAdditionalFile ? cwd : outDir,
+            filePath
+          );
+          const linkedOutputPath = path.join(
+            isAdditionalFile ? linkedBasePath : linkedDistPath,
+            contextPath
+          );
+          const linkedOutputDir = path.dirname(linkedOutputPath);
+
           batch(async () => {
             switch (eventName) {
               case 'add':
               case 'change':
                 if (!fs.existsSync(linkedOutputDir)) {
-                  await fs.promises.mkdir(linkedOutputDir, {
-                    recursive: true,
-                  });
+                  await fs.promises.mkdir(linkedOutputDir, { recursive: true });
                 }
 
                 await fs.promises.copyFile(filePath, linkedOutputPath);
@@ -326,5 +199,5 @@ export async function watch(args: Arguments) {
           }, eventName);
         });
     }
-  });
+  }
 }

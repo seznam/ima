@@ -41,5 +41,6 @@
   },
   "peerDependencies": {
     "webpack": "^5.70.0"
-  }
+  },
+  "type": "module"
 }

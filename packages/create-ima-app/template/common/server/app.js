@@ -1,7 +1,8 @@
 const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
-const reactPageRendererHook = require('@ima/react-page-renderer/hook/server');
+const reactPageRendererHook =
+  require('@ima/react-page-renderer/hook/server').default;
 const { createIMAServer } = require('@ima/server');
 const compression = require('compression');
 const timeout = require('connect-timeout');

@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
+import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils.js';
 
 /**
  * less-loader errors line hook

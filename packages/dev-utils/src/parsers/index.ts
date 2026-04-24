@@ -1,11 +1,11 @@
-export { cssLoaderErrorParser } from './cssLoaderErrorParser';
-export { lessLoaderErrorParser } from './lessLoaderErrorParser';
-export { swcLoaderErrorParser } from './swcLoaderErrorParser';
-export { webpackErrorParser } from './webpackErrorParser';
+export { cssLoaderErrorParser } from './cssLoaderErrorParser.js';
+export { lessLoaderErrorParser } from './lessLoaderErrorParser.js';
+export { swcLoaderErrorParser } from './swcLoaderErrorParser.js';
+export { webpackErrorParser } from './webpackErrorParser.js';
 
 export {
   type CompileError,
   RE_FILE_PATH_REGEX,
   extractErrorLoc,
   extractFileUri,
-} from './parserUtils';
+} from './parserUtils.js';

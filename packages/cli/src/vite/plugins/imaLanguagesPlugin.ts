@@ -5,7 +5,7 @@ import { assignRecursively } from '@ima/helpers';
 import MessageFormat from '@messageformat/core';
 import compileModule, {
   StringStructure,
-} from '@messageformat/core/lib/compile-module';
+} from '@messageformat/core/lib/compile-module.js';
 import globby from 'globby';
 import { Plugin } from 'vite';
 

@@ -1,8 +1,12 @@
-import traverse, { NodePath } from '@babel/traverse';
+import _traverse, { NodePath } from '@babel/traverse';
 import * as b from '@babel/types';
 
-import { UseServerProcessor } from '../../../types';
+// https://github.com/babel/babel/issues/13855
+// This can be removed with @babel/traverse v8 when the package will be ESM-only
+const traverse = (_traverse as unknown as { default: typeof _traverse })
+  .default;
 
+import { UseServerProcessor } from '../../../types';
 /**
  * Checks if the import path is for the super class.
  */
@@ -137,12 +141,64 @@ function createFunctionStubExpression(
  * General use server processor, that will stub out all server-only code.
  * Handles functions and classes, while having special handling for
  * $dependencies static fields.
+ *
+ * Supports two patterns:
+ *  1. `export class Foo {}` / `export function foo(){}` (tsc output)
+ *  2. `var/let/const Foo = class {}; export { Foo }` (Rolldown preserveModules output)
  */
 export const stubProcessor: UseServerProcessor = ast => {
   const stubExports: (b.ExportDefaultDeclaration | b.ExportNamedDeclaration)[] =
     [];
 
   const imports = new Set();
+
+  // Build a map of top-level variable declarations by identifier name
+  // so we can look up `var/let/const Foo = class {}` when we see `export { Foo }`.
+  const topLevelVarDeclarators = new Map<
+    string,
+    { declarator: b.VariableDeclarator; declaration: b.VariableDeclaration }
+  >();
+  for (const node of ast.program.body) {
+    if (b.isVariableDeclaration(node)) {
+      for (const declarator of node.declarations) {
+        if (b.isIdentifier(declarator.id)) {
+          topLevelVarDeclarators.set(declarator.id.name, {
+            declarator,
+            declaration: node,
+          });
+        }
+      }
+    }
+  }
+
+  /**
+   * Collect the import for the super class of a class declaration.
+   */
+  function collectSuperImport(
+    superClass: b.Expression | null | undefined,
+    path: NodePath
+  ) {
+    if (!superClass || !b.isIdentifier(superClass)) {
+      return;
+    }
+    const superName = superClass.name;
+    const program = path.findParent(p => b.isProgram(p.node));
+    if (!program) {
+      return;
+    }
+    program.traverse({
+      ImportDeclaration(importPath: { node: b.ImportDeclaration }) {
+        if (
+          isImportsForSuperClass(
+            importPath as unknown as NodePath<b.ImportDeclaration>,
+            superName
+          )
+        ) {
+          imports.add(importPath.node);
+        }
+      },
+    });
+  }
 
   /**
    * We're looking for export declarations and stubbing out the code
@@ -153,69 +209,130 @@ export const stubProcessor: UseServerProcessor = ast => {
       const { node } = path;
       const declaration = node.declaration;
 
-      if (!declaration) {
-        return;
-      }
+      // Pattern 1: `export class Foo {}` or `export function foo() {}`
+      if (declaration) {
+        if (b.isClassDeclaration(declaration)) {
+          collectSuperImport(declaration.superClass, path);
+          const stub = createClassStubDeclaration(declaration);
+          stubExports.push(b.exportNamedDeclaration(stub, []));
+          return;
+        }
 
-      if (b.isClassDeclaration(declaration)) {
-        if (declaration.superClass && b.isIdentifier(declaration.superClass)) {
-          const superName = declaration.superClass.name;
-          const program = path.findParent(p => b.isProgram(p.node));
+        if (b.isFunctionDeclaration(declaration)) {
+          const stub = createFunctionStubDeclaration(declaration);
+          stubExports.push(b.exportNamedDeclaration(stub, []));
+          return;
+        }
 
-          if (!program) {
-            return;
+        if (b.isVariableDeclaration(declaration)) {
+          const newDeclarations = [];
+
+          for (const declarator of declaration.declarations) {
+            let init = declarator.init;
+            let stubbed = false;
+
+            if (b.isClassExpression(init)) {
+              init = createClassStubExpression(init);
+              stubbed = true;
+            } else if (
+              b.isFunctionExpression(init) ||
+              b.isArrowFunctionExpression(init)
+            ) {
+              init = createFunctionStubExpression(init);
+              stubbed = true;
+            }
+
+            if (stubbed) {
+              newDeclarations.push(b.variableDeclarator(declarator.id, init));
+            }
           }
 
-          program.traverse({
-            ImportDeclaration(importPath) {
-              if (isImportsForSuperClass(importPath, superName)) {
-                imports.add(importPath.node);
-              }
-            },
-          });
+          if (newDeclarations.length > 0) {
+            const newVar = b.variableDeclaration(
+              declaration.kind,
+              newDeclarations
+            );
+            stubExports.push(b.exportNamedDeclaration(newVar, []));
+          }
+          return;
         }
-        const stub = createClassStubDeclaration(declaration);
-        stubExports.push(b.exportNamedDeclaration(stub, []));
 
         return;
       }
 
-      if (b.isFunctionDeclaration(declaration)) {
-        const stub = createFunctionStubDeclaration(declaration);
-        stubExports.push(b.exportNamedDeclaration(stub, []));
+      // Pattern 2: `export { Foo }` — look up the variable declaration
+      if (node.specifiers.length > 0 && !node.source) {
+        const newSpecifiers: (
+          | b.ExportSpecifier
+          | b.ExportDefaultSpecifier
+          | b.ExportNamespaceSpecifier
+        )[] = [];
 
-        return;
-      }
+        for (const specifier of node.specifiers) {
+          if (!b.isExportSpecifier(specifier)) {
+            newSpecifiers.push(specifier);
+            continue;
+          }
 
-      if (b.isVariableDeclaration(declaration)) {
-        const newDeclarations = [];
+          const localName = b.isIdentifier(specifier.local)
+            ? specifier.local.name
+            : null;
 
-        for (const declarator of declaration.declarations) {
-          let init = declarator.init;
-          let stubbed = false;
+          if (!localName) {
+            newSpecifiers.push(specifier);
+            continue;
+          }
+
+          const entry = topLevelVarDeclarators.get(localName);
+          if (!entry) {
+            newSpecifiers.push(specifier);
+            continue;
+          }
+
+          const { declarator } = entry;
+          const init = declarator.init;
 
           if (b.isClassExpression(init)) {
-            init = createClassStubExpression(init);
-            stubbed = true;
+            collectSuperImport(init.superClass, path);
+            const stubbed = createClassStubExpression(init);
+            stubExports.push(
+              b.exportNamedDeclaration(
+                b.variableDeclaration(entry.declaration.kind, [
+                  b.variableDeclarator(declarator.id, stubbed),
+                ]),
+                []
+              )
+            );
+            // keep the re-export specifier
+            newSpecifiers.push(specifier);
           } else if (
             b.isFunctionExpression(init) ||
             b.isArrowFunctionExpression(init)
           ) {
-            init = createFunctionStubExpression(init);
-            stubbed = true;
-          }
-
-          if (stubbed) {
-            newDeclarations.push(b.variableDeclarator(declarator.id, init));
+            const stubbed = createFunctionStubExpression(init);
+            stubExports.push(
+              b.exportNamedDeclaration(
+                b.variableDeclaration(entry.declaration.kind, [
+                  b.variableDeclarator(declarator.id, stubbed),
+                ]),
+                []
+              )
+            );
+            newSpecifiers.push(specifier);
+          } else {
+            // Not a stubbable value — keep as-is
+            newSpecifiers.push(specifier);
           }
         }
 
-        if (newDeclarations.length > 0) {
-          const newVar = b.variableDeclaration(
-            declaration.kind,
-            newDeclarations
-          );
-          stubExports.push(b.exportNamedDeclaration(newVar, []));
+        // Replace original export specifiers node with only the kept ones
+        // (stubbed ones are re-emitted above as var decl + export)
+        if (newSpecifiers.length !== node.specifiers.length) {
+          if (newSpecifiers.length === 0) {
+            path.remove();
+          } else {
+            node.specifiers = newSpecifiers;
+          }
         }
       }
     },
@@ -228,20 +345,7 @@ export const stubProcessor: UseServerProcessor = ast => {
         node.declaration.superClass &&
         b.isIdentifier(node.declaration.superClass)
       ) {
-        const superName = node.declaration.superClass.name;
-        const program = path.findParent(p => b.isProgram(p.node));
-
-        if (!program) {
-          return;
-        }
-
-        program.traverse({
-          ImportDeclaration(importPath) {
-            if (isImportsForSuperClass(importPath, superName)) {
-              imports.add(importPath.node);
-            }
-          },
-        });
+        collectSuperImport(node.declaration.superClass, path);
       }
 
       if (b.isClassDeclaration(node.declaration)) {
