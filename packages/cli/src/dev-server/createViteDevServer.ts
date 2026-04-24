@@ -1,4 +1,5 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
@@ -65,7 +66,7 @@ export async function createViteDevServer({
     const app = express();
 
     const staticDir = path.join(
-      path.dirname(require.resolve('@ima/error-overlay')),
+      path.dirname(fileURLToPath(import.meta.resolve('@ima/error-overlay'))),
       '..'
     );
 

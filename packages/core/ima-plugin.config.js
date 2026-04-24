@@ -1,9 +1,9 @@
-const { clientServerConfig } = require('@ima/plugin-cli');
+import { defaultConfig } from '@ima/plugin-cli';
 
 /**
- * @type import('@ima/plugin-cli').ImaPluginConfig
+ * @type {import('@ima/plugin-cli').ImaPluginConfig}
  */
-module.exports = {
-  ...clientServerConfig,
+export default {
+  ...defaultConfig,
   additionalWatchPaths: ['./transform', './polyfill', './setupJest.js'],
 };

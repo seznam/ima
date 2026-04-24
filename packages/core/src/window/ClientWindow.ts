@@ -1,6 +1,3 @@
-/* @if server **
-export class ClientWindow {};
-/* @else */
 import { Window } from './Window';
 
 /**
@@ -341,4 +338,3 @@ export class ClientWindow extends Window {
     return typeof options === 'boolean' ? options : (options.capture ?? false);
   }
 }
-// @endif

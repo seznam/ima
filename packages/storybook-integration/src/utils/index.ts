@@ -1,1 +1,1 @@
-export * from './initializer.js';
+export * from './initializer';

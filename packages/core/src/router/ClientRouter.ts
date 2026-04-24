@@ -1,6 +1,3 @@
-/* @if server **
-export class ClientRouter {};
-/* @else */
 import { RouteParams } from './AbstractRoute';
 import { AbstractRouter } from './AbstractRouter';
 import { ActionTypes } from './ActionTypes';
@@ -513,4 +510,3 @@ export class ClientRouter extends AbstractRouter {
     );
   }
 }
-// @endif

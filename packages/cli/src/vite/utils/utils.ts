@@ -1,6 +1,8 @@
 import { createHash } from 'crypto';
 import fs from 'fs';
+import { createRequire } from 'module';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { ParsedEnvironment } from '@ima/core';
 import { logger } from '@ima/dev-utils/logger';
@@ -147,9 +149,10 @@ export function createCacheKey(
  * Requires imaConfig from given root directory (default to cwd).
  *
  * @param {string} [rootDir=process.cwd()] App root directory.
- * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
+ * @returns {ImaConfig | null} Config or null in case the config file doesn't exist.
  */
 export function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
+  const require = createRequire(import.meta.url);
   const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
 
   return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : null;
@@ -431,7 +434,7 @@ export async function getCurrentCoreJsVersion(): Promise<string> {
   return JSON.parse(
     (
       await fs.promises.readFile(
-        path.resolve(require.resolve('core-js-pure'), '../package.json')
+        fileURLToPath(import.meta.resolve('core-js-pure/package.json'))
       )
     ).toString()
   )

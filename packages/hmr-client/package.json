@@ -19,9 +19,15 @@
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "main": "./dist/client.js",
   "types": "./dist/types.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w --preserveWatchOutput",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "publishConfig": {
@@ -36,5 +42,6 @@
   },
   "dependencies": {
     "@esmj/emitter": "^0.4.3"
-  }
+  },
+  "type": "module"
 }

@@ -1,7 +1,11 @@
 import { parse } from 'stacktrace-parser';
 import { StatsError } from 'webpack';
 
-import { CompileError, extractErrorLoc, extractFileUri } from './parserUtils';
+import {
+  CompileError,
+  extractErrorLoc,
+  extractFileUri,
+} from './parserUtils.js';
 
 /**
  * General webpack compile error parser which tries to parse all remaining

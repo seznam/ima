@@ -1,8 +1,5 @@
-/* @if client **
-export class ServerPageRenderer {};
-/* @else */
+'use server';
 import type {
-  UnknownParameters,
   UnknownPromiseParameters,
   RouteOptions,
   Settings,
@@ -50,8 +47,8 @@ export class ServerPageRenderer extends AbstractPageRenderer {
     routeOptions: RouteOptions
   ): Promise<void | PageData> {
     return this._helpers.allPromiseHash(pageResources).then(pageState => {
-      controller.setState(pageState as UnknownParameters);
-      controller.setMetaParams(pageState as UnknownParameters);
+      controller.setState(pageState);
+      controller.setMetaParams(pageState);
 
       this._prepareViewAdapter(controller, pageView, routeOptions);
 
@@ -89,4 +86,3 @@ export class ServerPageRenderer extends AbstractPageRenderer {
     // nothing to do
   }
 }
-/* @endif */

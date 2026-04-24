@@ -21,7 +21,7 @@ switch (process.env.NODE_ENV) {
 yargs(hideBin(process.argv))
   .scriptName(chalk.green.bold('ima'))
   .usage('Usage: $0 <command>')
-  .commandDir(path.resolve(__dirname, '../commands'))
+  .commandDir(path.resolve(import.meta.dirname, '../commands'))
   .demandCommand(1, 'You need to run at least one command to move on')
   .help()
   .updateStrings({

@@ -2,11 +2,16 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": [
-      "ES2022",
+      "ES2022"
     ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "dist",
     "sourceMap": true,
-    "types": ["preprocess"]
+    "typeRoots": [
+      "../../types",
+      "../../node_modules/@types"
+    ]
   },
   "include": [
     "src"

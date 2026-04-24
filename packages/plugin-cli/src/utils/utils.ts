@@ -4,7 +4,7 @@ import path from 'path';
 import { logger, printTime } from '@ima/dev-utils/logger';
 import chalk from 'chalk';
 
-import { ImaPluginConfig } from '../types';
+import { ImaPluginConfig } from '../types.js';
 
 export type BatchedCallback = () => Promise<void> | void;
 export type BatchEventName =
@@ -15,36 +15,17 @@ export type BatchEventName =
   | 'unlinkDir';
 
 /**
- * Clean output directories
+ * Clean the output directory.
  */
 export async function cleanOutput(
   config: ImaPluginConfig,
   cwd = process.cwd()
-): Promise<void[]> {
-  return processOutput(
-    config,
-    async outputPath => {
-      if (fs.existsSync(outputPath)) {
-        await fs.promises.rm(outputPath, { recursive: true });
-      }
-    },
-    cwd
-  );
-}
+): Promise<void> {
+  const outDir = path.resolve(cwd, config.outDir);
 
-/**
- * Run processor over each defined output directory
- */
-export async function processOutput(
-  config: ImaPluginConfig,
-  outputProcessor: (outputPath: string) => Promise<void>,
-  cwd = process.cwd()
-): Promise<void[]> {
-  return Promise.all(
-    config.output
-      .map(output => path.resolve(cwd, output.dir))
-      .map(async outputDir => await outputProcessor(outputDir))
-  );
+  if (fs.existsSync(outDir)) {
+    await fs.promises.rm(outDir, { recursive: true });
+  }
 }
 
 export function createBatcher(title: string, timeout = 150) {
