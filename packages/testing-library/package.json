@@ -41,6 +41,11 @@
       "import": "./dist/esm/server/index.js",
       "default": "./dist/cjs/server/index.js"
     },
+    "./integration": {
+      "types": "./dist/esm/integration/index.d.ts",
+      "import": "./dist/esm/integration/index.js",
+      "default": "./dist/cjs/integration/index.js"
+    },
     "./fallback/app/main": {
       "types": "./dist/esm/client/app/main.d.ts",
       "import": "./dist/esm/client/app/main.js",
@@ -55,6 +60,10 @@
       "types": "./dist/esm/jest-preset.d.ts",
       "import": "./dist/esm/jest-preset.js",
       "default": "./dist/cjs/jest-preset.js"
+    },
+    "./jest-preset-integration/jest-preset": {
+      "require": "./jest-preset-integration/jest-preset.js",
+      "default": "./jest-preset-integration/jest-preset.js"
     },
     "./jestSetupFileAfterEnv": {
       "types": "./dist/esm/jestSetupFileAfterEnv.d.ts",

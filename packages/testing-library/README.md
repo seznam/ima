@@ -69,7 +69,7 @@ const { setImaTestingLibraryClientConfig } = require('@ima/testing-library/clien
 
 setImaTestingLibraryClientConfig({
   // your custom config
-  imaConfigPath: 'path/to/your/ima.config.js',
+  rootDir: '/path/to/your/project',
 });
 ```
 

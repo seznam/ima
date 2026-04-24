@@ -1,4 +1,6 @@
 *
 !dist/**/*
 !jest-preset.js
+!jest-preset-integration/
+!jest-preset-integration/jest-preset.js
 !package.json
