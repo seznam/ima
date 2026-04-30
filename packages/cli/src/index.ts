@@ -16,3 +16,8 @@ export {
   createViteConfig,
   runImaPluginsHook,
 } from './vite/utils/utils';
+
+export {
+  VIRTUAL_LOCALE_PREFIX,
+  getVirtualLanguageEntryPoints,
+} from './vite/plugins/imaLanguagesPlugin';

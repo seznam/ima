@@ -44,17 +44,15 @@
     }
   },
   "devDependencies": {
-    "@storybook/core-webpack": "^10.3.5",
-    "@storybook/react": "^10.3.5",
-    "@storybook/types": "^8.6.14",
-    "@types/webpack": "^5.28.5"
+    "@storybook/builder-vite": "^10.3.6",
+    "@storybook/react": "^10.3.6"
   },
   "peerDependencies": {
     "@ima/cli": ">=20.0.0",
     "@ima/core": ">=20.0.0",
     "@ima/dev-utils": ">=20.0.0",
     "@ima/react-page-renderer": ">=20.0.0",
-    "webpack": ">=5.x"
+    "vite": ">=8.x"
   },
   "publishConfig": {
     "access": "public",

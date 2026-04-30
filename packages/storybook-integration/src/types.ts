@@ -10,11 +10,14 @@ import type {
   UnknownParameters,
 } from '@ima/core';
 import type { ReactRenderer } from '@storybook/react';
-import type { StoryContextForLoaders, StrictArgs } from '@storybook/types';
+import type {
+  StoryContextForLoaders,
+  StrictArgs,
+} from 'storybook/internal/types';
 
 export interface ImaStorybookArgs {}
 
-declare module '@storybook/types' {
+declare module 'storybook/internal/types' {
   interface Parameters {
     ima?: {
       initBindApp?: (

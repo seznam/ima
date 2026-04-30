@@ -6,7 +6,7 @@ import { getImaInitializers } from '../utils/initializer';
 
 let app: ReturnType<typeof imaCore.createImaApp> | null = null;
 let bootConfig: imaCore.BootConfig | null = null;
-let lastImaParams: Parameters = {};
+let lastImaParams: Parameters['ima'] = {};
 
 /**
  * Utility to destroy old instance before creating a new one.
@@ -100,15 +100,17 @@ export const imaLoader: Loader = async args => {
   initRevivalSettings(parameters);
 
   // Create new ima app if any of the params change
+  const imaParamKeys: Array<keyof NonNullable<Parameters['ima']>> = [
+    'initBindApp',
+    'initRoutes',
+    'initServicesApp',
+    'initSettings',
+    '$IMA',
+    'args',
+  ];
+
   if (
-    [
-      'initBindApp',
-      'initRoutes',
-      'initServicesApp',
-      'initSettings',
-      '$IMA',
-      'args',
-    ].some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
+    imaParamKeys.some(key => lastImaParams?.[key] !== parameters?.ima?.[key])
   ) {
     // Destroy old instance
     await destroyInstance(app);
