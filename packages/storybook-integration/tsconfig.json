@@ -9,7 +9,6 @@
     ],
     "outDir": "dist",
     "types": [
-      "webpack",
       "core",
       "cli",
       "react-page-renderer",

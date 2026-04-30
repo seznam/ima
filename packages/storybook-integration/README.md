@@ -8,52 +8,78 @@
 
 ---
 
-## Init Storybook
+## Getting started
 
-First init storybook inside your application using official [installation guide](https://storybook.js.org/docs/react/get-started/install/). **Skip babel init (installing dependencies and creating .babelrc) when asked, we replace babel with SWC.**
+### 1. Init Storybook
+
+Run the official [Storybook](https://storybook.js.org) initializer inside your IMA.js app:
 
 ```bash
 npx storybook@latest init
 ```
 
-## Installation
+When prompted to select a framework, choose **React** and then **Vite** (`@storybook/react-vite`).
+
+### 2. Install `@ima/storybook-integration`
 
 ```bash
 npm install @ima/storybook-integration -D
 ```
 
-## Usage
+### 3. Register the preset in `.storybook/main.js`
 
-Register addon in config in `.storybook/main.js`. Optionally you can set custom language, for loading language files, or set CLI plugins to skip (some plugins might not work well with Storybook, such as minimizers/scramblers).
+Add `@ima/storybook-integration/preset` to the `presets` array:
 
 ```js
-const config = {
-  // ...
-  addons: [
-    {
-      name: "@ima/storybook-integration",
-      options: {
-        language: 'cs',
-        skipPlugins: ['ScrambleCssPlugin']
-      }
-    }
-  ],
-  // ....
-};
-
-export default config;
+presets: ['@ima/storybook-integration/preset'],
 ```
 
-### Overriding boot config, $IMA global object and `PageState`
+#### Preset options
 
-You can easily override boot config functions, global window.$IMA and set page state using `parameters.ima`:
+To control language file loading or skip CLI plugins incompatible with Storybook (e.g. CSS scramblers):
+
+```js
+presets: [
+  {
+    name: '@ima/storybook-integration/preset',
+    options: {
+      language: 'cs',                     // Language for loading language files (default: first available)
+      skipPlugins: ['ScrambleCssPlugin'], // CLI plugin class names to exclude from the Vite build
+    },
+  },
+],
+```
+
+### 4. Import the preview setup in `.storybook/preview.js`
+
+The preset automatically registers the global `withPageContext` decorator, `imaLoader`, and imports your app's `app/main` for every story. If you need to add project-wide story configuration (e.g. global args or `registerImaInitializer` calls), you can still create a `.storybook/preview.js`:
+
+```js
+import { registerImaInitializer } from '@ima/storybook-integration';
+
+// any project-wide story configuration here
+```
+
+---
+
+## How it works
+
+The preset hooks into Storybook's `viteFinal` to run `@ima/cli`'s full Vite config pipeline, applying all IMA aliases, CSS config, define constants, and plugins (e.g. language virtual modules) inside Storybook. It also injects mocked `$IMA` revival settings into the page so the app boots correctly without a real server.
+
+---
+
+## Per-story configuration
+
+### Overriding boot config, `$IMA` and `PageState`
+
+Use `parameters.ima` to override boot config functions, the global `window.$IMA` object, or set page state on a per-story basis:
 
 ```js
 export const Story = {
   parameters: {
     ima: {
-      state: { posts: [] }, // IMA PageState
-      $IMA: { $Root: '' }, // window.$IMA object
+      state: { posts: [] },   // IMA PageState
+      $IMA: { $Root: '' },    // window.$IMA overrides
       initBindApp: (...args) => {},
       initRoutes: (...args) => {},
       initServicesApp: (...args) => {},
@@ -71,15 +97,13 @@ export const Story = {
 };
 ```
 
-Where settings are deeply merged with the ones from app settings function. You can use this on per-story basis or define global overrides.
+Settings returned from `initSettings` are deeply merged with the application's own settings function.
 
 ### Overriding boot config using initializers
 
-Since `parameters` are deeply merged across storybook stories and configurations, if you want to create some global overrides and still be able to override certain things on story-basis, you can use `initializers` instead.
+Because `parameters` are deeply merged across all story configurations, use `registerImaInitializer` when you need global overrides that can still be individually overridden at story level.
 
-Initializers are functions that are called after boot config is created, but before the story boot config params. This allows you to register multiple initializers, with certain priority and make sure that all of them are called before story boot config is created.
-
-Register your initializers in preview.ts file:
+Initializers are called after the boot config is created but before per-story `parameters.ima` is applied. Register them in your `preview.js`/`preview.ts`:
 
 ```js
 import { registerImaInitializer } from '@ima/storybook-integration';
@@ -93,16 +117,19 @@ registerImaInitializer(storybookArgs => {
       }
     },
   };
-}, 100); // Execution priority
+}, 100); // Execution priority (higher = runs later)
 ```
+
+---
+
+## Utilities
 
 ### `isStorybook` helper
 
-You can use this helper to check if you are within storybook environment. This is useful for example when you want to render something only in storybook.
+Check at runtime whether the code is running inside Storybook:
 
 ```js
 import { isStorybook } from '@ima/storybook-integration/helpers';
-
 
 export function Header() {
   return (
@@ -114,14 +141,14 @@ export function Header() {
       )}
     </div>
   );
-};
+}
 ```
 
-**This pattern should be used only as last resort**, you should use storybook native features like [args](https://storybook.js.org/docs/react/writing-stories/args) or [decorators](https://storybook.js.org/docs/react/writing-stories/decorators) when possible.
+> **Note:** Prefer native Storybook features like [args](https://storybook.js.org/docs/writing-stories/args) and [decorators](https://storybook.js.org/docs/writing-stories/decorators) over `isStorybook()` checks wherever possible.
 
-### Decorators & other utilities
+### `withPageContext` decorator
 
-The package also exports some additional utilities and decorates you can use in your stories. All are available from default export.
+The decorator is applied globally by `@ima/storybook-integration/preview`. You only need to import it explicitly in niche cases where you want to apply it to a single story manually:
 
 ```js
 import { withPageContext } from '@ima/storybook-integration';
@@ -131,16 +158,16 @@ export const Story = {
 };
 ```
 
-- `withPageContext` - adds `pageContext` to your story. It is used already as root decorator when using `ima` storybook-integration. So this is usefull only in niche cases.
+---
 
 ## TypeScript support
 
-Add following to your `tsconfig.json`. Since we are not importing anything from this packaged (in default state), the types would not be loaded automatically without following option.
+To enable augmented `parameters.ima` types in your stories, add the package to `compilerOptions.types` in your `tsconfig.json`:
 
 ```json
 {
   "compilerOptions": {
-    "types": ["./node_modules/@ima/storybook-integration/dist/index.d.ts"],
+    "types": ["@ima/storybook-integration"]
   }
 }
 ```
