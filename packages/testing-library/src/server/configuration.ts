@@ -27,7 +27,10 @@ export interface ServerConfiguration {
   ) => Promise<void> | void;
 }
 
-export const FALLBACK_APPLICATION_FOLDER = path.resolve(__dirname, '..');
+export const FALLBACK_APPLICATION_FOLDER = path.resolve(
+  import.meta.dirname,
+  '..'
+);
 
 const serverConfiguration: ServerConfiguration = resolveDefaultConfiguration();
 

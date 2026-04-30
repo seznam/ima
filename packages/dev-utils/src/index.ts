@@ -1,7 +1,7 @@
 // This is used just for typedoc generation. Use /dist/* specific entry points to concrete utility files.
-export * from './compileErrorParser';
-export * from './cliUtils';
-export * from './helpers';
-export * from './logger';
-export * from './sourceFragment';
-export * from './sourceMapUtils';
+export * from './compileErrorParser.js';
+export * from './cliUtils.js';
+export * from './helpers.js';
+export * from './logger.js';
+export * from './sourceFragment.js';
+export * from './sourceMapUtils.js';

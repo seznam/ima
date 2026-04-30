@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2018",
-    "module": "Node16",
     "lib": [
       "ES2022",
       "DOM",

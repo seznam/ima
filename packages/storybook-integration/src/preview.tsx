@@ -1,6 +1,6 @@
-import { withPageContext } from './decorators/withPageContext.js';
-import { setStorybookEnv } from './helpers/storybookHelper.js';
-import { imaLoader } from './loaders/imaLoader.js';
+import { withPageContext } from './decorators/withPageContext';
+import { setStorybookEnv } from './helpers/storybookHelper';
+import { imaLoader } from './loaders/imaLoader';
 
 setStorybookEnv(true);
 

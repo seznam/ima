@@ -20,36 +20,32 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w --preserveWatchOutput",
+    "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
+    "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "jest --config jest.config.cjs"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./preset": {
       "types": "./dist/preset.d.ts",
-      "import": "./dist/preset.js",
       "default": "./dist/preset.js"
     },
     "./preview": {
       "types": "./dist/preview.d.ts",
-      "import": "./dist/preview.js",
       "default": "./dist/preview.js"
     },
     "./helpers": {
       "types": "./dist/helpers/index.d.ts",
-      "import": "./dist/helpers/index.js",
       "default": "./dist/helpers/index.js"
     }
   },
   "devDependencies": {
-    "@storybook/core-webpack": "^9.1.16",
-    "@storybook/react": "^9.1.16",
+    "@storybook/core-webpack": "^10.3.5",
+    "@storybook/react": "^10.3.5",
     "@storybook/types": "^8.6.14",
     "@types/webpack": "^5.28.5"
   },

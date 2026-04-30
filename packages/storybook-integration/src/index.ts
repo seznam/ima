@@ -1,3 +1,3 @@
-export * from './types.js';
-export * from './decorators/index.js';
-export * from './utils/index.js';
+export * from './types';
+export * from './decorators/index';
+export * from './utils/index';

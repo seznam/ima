@@ -24,7 +24,7 @@ function startNodemon(args: ImaCliArgs, environment: ParsedEnvironment) {
   let serverHasStarted = false;
 
   nodemon({
-    script: path.join(__dirname, '../dev-server/devServer.js'),
+    script: path.join(import.meta.dirname, '../dev-server/devServer.js'),
     watch: ['server'].map(p => path.join(args.rootDir, p)),
     nodeArgs: args.inspect ? ['--inspect'] : [],
     cwd: args.rootDir,

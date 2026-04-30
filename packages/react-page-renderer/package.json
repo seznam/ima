@@ -16,32 +16,21 @@
   },
   "license": "MIT",
   "author": "Matěj Marčišovský <matej.marcisovsky@firma.seznam.cz>",
-  "main": "./dist/cjs/index.js",
-  "types": "./dist/esm/client/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/esm/client/index.d.ts",
-      "node": {
-        "import": "./dist/esm/server/index.js",
-        "require": "./dist/cjs/index.js"
-      },
-      "default": {
-        "import": "./dist/esm/client/index.js",
-        "require": "./dist/cjs/index.js"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./renderer/*": {
-      "types": "./dist/esm/client/renderer/*.d.ts",
-      "node": {
-        "import": "./dist/esm/server/renderer/*.js",
-        "require": "./dist/cjs/renderer/*.js"
-      },
-      "default": {
-        "import": "./dist/esm/client/renderer/*.js",
-        "require": "./dist/cjs/renderer/*.js"
-      }
+      "types": "./dist/renderer/*.d.ts",
+      "default": "./dist/renderer/*.js"
     },
-    "./hook/*": "./dist/hook/*.js"
+    "./hook/*": {
+      "types": "./dist/hook/*.d.ts",
+      "default": "./dist/hook/*.js"
+    }
   },
   "scripts": {
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
@@ -74,7 +63,7 @@
     "@ima/server": ">=20.0.0",
     "@ima/core": ">=20.0.0",
     "react": ">=16 <19",
-    "react-dom": ">=16 <19",
-    "webpack": "^5.70.0"
-  }
+    "react-dom": ">=16 <19"
+  },
+  "type": "module"
 }

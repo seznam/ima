@@ -1,19 +1,9 @@
 export {
   type ImaPluginConfig,
-  type Source,
-  type PipeContext,
   type Command,
   type Plugin,
   type Context,
-  type Transformer,
-  type TransformerOptions,
-} from './types';
+} from './types.js';
 
-export { preprocessTransformer } from './transformers/preprocessTransformer';
-export { swcTransformer } from './transformers/swcTransformer';
-export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin';
-export {
-  defaultConfig,
-  clientServerConfig,
-  nodeConfig,
-} from './utils/configurations';
+export { typescriptDeclarationsPlugin } from './plugins/typescriptDeclarationsPlugin.js';
+export { defaultConfig } from './utils/configurations.js';

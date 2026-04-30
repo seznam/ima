@@ -1,6 +1,3 @@
-/* @if server **
-export class LegacyClientPageRenderer {};
-/* @else */
 import { ReactElement } from 'react';
 import { hydrate, render, unmountComponentAtNode } from 'react-dom';
 
@@ -34,4 +31,3 @@ export class LegacyClientPageRenderer extends AbstractClientPageRenderer {
     );
   }
 }
-/* @endif */

@@ -1,1 +1,1 @@
-export { isStorybook } from './storybookHelper.js';
+export { isStorybook } from './storybookHelper';

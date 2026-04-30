@@ -1,5 +1,5 @@
 import { Emitter } from '@esmj/emitter';
-import { Event } from '@ima/server/lib/emitter';
+import { Event } from '@ima/server/lib/emitter.js';
 import * as react from 'react';
 import * as reactDOM from 'react-dom/server';
 
@@ -16,11 +16,7 @@ type RendererContext = {
   };
 };
 
-module.exports = function createReactRenderer({
-  emitter,
-}: {
-  emitter: Emitter;
-}) {
+export default function createReactRenderer({ emitter }: { emitter: Emitter }) {
   emitter.prependListener(Event.BeforeError, event => {
     const context = event.context as RendererContext;
 
@@ -57,4 +53,4 @@ module.exports = function createReactRenderer({
     (event.context as RendererContext).response.content =
       '<!doctype html>\n' + appMarkup;
   });
-};
+}

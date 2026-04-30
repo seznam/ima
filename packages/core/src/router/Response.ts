@@ -1,6 +1,4 @@
-/* @if client **
-export class Response {};
-/* @else */
+'use server';
 import { Response as ExpressResponse, CookieOptions } from 'express';
 
 import { RouteOptions } from './Router';
@@ -183,4 +181,3 @@ export class Response {
     return this._response;
   }
 }
-// @endif
