@@ -41,6 +41,11 @@
       "import": "./dist/esm/server/index.js",
       "default": "./dist/cjs/server/index.js"
     },
+    "./integration": {
+      "types": "./dist/esm/integration/index.d.ts",
+      "import": "./dist/esm/integration/index.js",
+      "default": "./dist/cjs/integration/index.js"
+    },
     "./fallback/app/main": {
       "types": "./dist/esm/client/app/main.d.ts",
       "import": "./dist/esm/client/app/main.js",
@@ -64,11 +69,13 @@
   },
   "dependencies": {
     "@messageformat/core": "^3.4.0",
-    "globby": "^11.1.0"
+    "globby": "^11.1.0",
+    "to-aop": "^0.5.5"
   },
   "peerDependencies": {
     "@ima/cli": ">=20.0.0",
     "@ima/core": ">=20.0.0",
+    "@ima/helpers": ">=20.0.0",
     "@ima/server": ">=20.0.0",
     "@ima/react-page-renderer": ">=20.0.0",
     "@testing-library/dom": ">=10.0.0",
