@@ -15,6 +15,14 @@ export interface ClientConfiguration {
    */
   rootDir: string;
   /**
+   * Optional feature flags consumed by integration-level test utilities
+   * (e.g. `initImaApp` wrappers) to toggle login, popup-window mocks, etc.
+   * The testing-library itself does not interpret these values — they are
+   * kept here so consumers can share configuration through a single
+   * `setImaTestingLibraryClientConfig` call.
+   */
+  features: Record<string, boolean>;
+  /**
    * The function that will be called before the IMA application is initialized.
    */
   beforeInitImaApp: () => void | Promise<void>;
@@ -55,6 +63,7 @@ export interface ClientConfiguration {
 const clientConfiguration: ClientConfiguration = {
   useFakeDictionary: true,
   rootDir: process.cwd(),
+  features: {},
   beforeInitImaApp: () => {},
   afterInitImaApp: () => {},
   getContextValue: app => ({

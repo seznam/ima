@@ -69,11 +69,46 @@ const { setImaTestingLibraryClientConfig } = require('@ima/testing-library/clien
 
 setImaTestingLibraryClientConfig({
   // your custom config
-  imaConfigPath: 'path/to/your/ima.config.js',
+  rootDir: '/path/to/your/project',
 });
 ```
 
 See [src/client/configuration.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/client/configuration.ts) for the full list of available options.
+
+## Integration Testing
+
+The `./integration` sub-path provides utilities for booting the real IMA application in jsdom — without mocking `app/main` — so you can run full integration tests against a live router and object container.
+
+```javascript
+const {
+  initImaApp,
+  clearImaApp,
+  setIntegrationConfig,
+} = require('@ima/testing-library/integration');
+
+// Configure once per suite (e.g. in jestSetup.js)
+setIntegrationConfig({
+  rootDir: __dirname,
+  appMainPath: 'app/main.js', // relative to rootDir or absolute
+  environment: 'test',
+});
+
+let app;
+
+beforeAll(async () => {
+  app = await initImaApp();
+});
+
+afterAll(() => {
+  clearImaApp(app);
+});
+```
+
+See [src/integration/configuration.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/integration/configuration.ts) for the full list of `setIntegrationConfig` options.
+
+`initImaApp` also accepts optional per-call boot config overrides (`initSettings`, `initBindApp`, `initServicesApp`, `initRoutes`) that are merged on top of the suite-level config.
+
+**Important:** always call `clearImaApp(app)` in `afterAll`/`afterEach`. It restores the global timer wrappers, clears all AOP hooks, and calls `app.oc.clear()`. Forgetting to call it will leak state into subsequent test suites.
 
 ## Usage
 
