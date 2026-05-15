@@ -53,8 +53,8 @@ export async function bootImaApp({
   environment,
   onLoad = false,
 }: BootImaAppOptions): Promise<ImaApp> {
-  if (typeof window.$IMA === 'object' && environment !== undefined) {
-    window.$IMA.$Env = environment;
+  if (environment !== undefined) {
+    setImaEnvironment(environment);
   }
 
   await generateDictionary();
@@ -69,4 +69,29 @@ export async function bootImaApp({
   await ima.bootClientApp(app, bootConfig);
 
   return app;
+}
+
+function setImaEnvironment(environment: keyof AppEnvironment): void {
+  const windowIma =
+    typeof window !== 'undefined' &&
+    typeof window.$IMA === 'object' &&
+    window.$IMA !== null
+      ? window.$IMA
+      : undefined;
+  const globalIma =
+    typeof globalThis.$IMA === 'object' && globalThis.$IMA !== null
+      ? globalThis.$IMA
+      : undefined;
+
+  if (windowIma) {
+    windowIma.$Env = environment;
+  } else if (globalIma && typeof window !== 'undefined') {
+    window.$IMA = globalIma;
+  }
+
+  if (globalIma) {
+    globalIma.$Env = environment;
+  } else if (windowIma) {
+    globalThis.$IMA = windowIma;
+  }
 }

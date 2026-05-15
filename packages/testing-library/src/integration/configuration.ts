@@ -1,5 +1,6 @@
 import type { AppEnvironment } from '@ima/core';
 
+import { setImaTestingLibraryServerConfig } from '../server/configuration';
 import type { ImaApp } from '../types';
 
 export interface TestPageRenderer {
@@ -76,4 +77,8 @@ export function setIntegrationConfig(
   config: Partial<IntegrationConfiguration>
 ): void {
   configuration = { ...configuration, ...config };
+
+  if (config.environment !== undefined) {
+    setImaTestingLibraryServerConfig({ environment: config.environment });
+  }
 }

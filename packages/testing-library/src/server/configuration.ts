@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { Environment } from '@ima/core';
+import type { AppEnvironment, Environment } from '@ima/core';
 import type { createIMAServer } from '@ima/server';
 
 export interface ServerConfiguration {
@@ -13,6 +13,11 @@ export interface ServerConfiguration {
    * The host of the application.
    */
   host: string;
+  /**
+   * IMA environment used to generate the jsdom HTML template. When omitted,
+   * @ima/server resolves it from IMA_ENV/NODE_ENV.
+   */
+  environment: keyof AppEnvironment | undefined;
   /**
    * The process environment configuration. This allows you to change the environment configuration that will be available in jsdom.
    */
@@ -51,6 +56,7 @@ function resolveDefaultConfiguration() {
   const serverConfiguration: ServerConfiguration = {
     protocol: 'https:',
     host: 'imajs.io',
+    environment: undefined,
     processEnvironment: env => env,
     applicationFolder: undefined,
     beforeCreateIMAServer: () => {},

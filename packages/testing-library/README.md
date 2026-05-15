@@ -46,6 +46,7 @@ const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/serve
 
 setImaTestingLibraryServerConfig({
   // your custom config
+  environment: 'test', // Use a specific IMA environment when generating the jsdom HTML template.
   applicationFolder: path.resolve('./__tests__/') // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
 });
 
@@ -107,6 +108,8 @@ afterAll(() => {
 See [src/integration/configuration.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/integration/configuration.ts) for the full list of `setIntegrationConfig` options.
 
 `initImaApp` also accepts optional per-call boot config overrides (`initSettings`, `initBindApp`, `initServicesApp`, `initRoutes`) that are merged on top of the suite-level config.
+
+When the selected environment must also affect the generated jsdom HTML template, configure it in the Jest config via `setImaTestingLibraryServerConfig({ environment })`. Jest setup files run after the preset has generated the template.
 
 **Important:** always call `clearImaApp(app)` in `afterAll`/`afterEach`. It restores the global timer wrappers, clears all AOP hooks, and calls `app.oc.clear()`. Forgetting to call it will leak state into subsequent test suites.
 

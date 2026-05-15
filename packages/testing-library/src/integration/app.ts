@@ -27,11 +27,31 @@ let timers: Array<{
   clear: () => void;
 }> = [];
 
+type BootConfigMethodName =
+  | 'initSettings'
+  | 'initBindApp'
+  | 'initServicesApp'
+  | 'initRoutes';
+type BootConfigMethod = (...args: unknown[]) => unknown;
+type BootConfigMethods = Partial<
+  Record<BootConfigMethodName, BootConfigMethod>
+>;
+
 /**
  * Clears an IMA application instance from the environment.
  * Call this in afterEach/afterAll to clean up between tests.
  */
-export function clearImaApp(app: ImaApp & Record<string, unknown>): void {
+export function clearImaApp(
+  app?: (ImaApp & Record<string, unknown>) | null
+): void {
+  restoreIntegrationEnvironment();
+
+  if (app) {
+    app.oc.clear();
+  }
+}
+
+function restoreIntegrationEnvironment(): void {
   global.setInterval = setIntervalNative;
   global.setTimeout = setTimeoutNative;
   global.setImmediate = setImmediateNative;
@@ -43,7 +63,6 @@ export function clearImaApp(app: ImaApp & Record<string, unknown>): void {
   timers.forEach(({ clear }) => clear());
   timers = [];
   unAopAll();
-  app.oc.clear();
 }
 
 /**
@@ -63,86 +82,89 @@ export function clearImaApp(app: ImaApp & Record<string, unknown>): void {
  * @param bootConfigMethods - Optional boot config methods that extend the defaults from setIntegrationConfig.
  */
 export async function initImaApp(
-  bootConfigMethods: {
-    initSettings?: (...args: unknown[]) => unknown;
-    initBindApp?: (...args: unknown[]) => unknown;
-    initServicesApp?: (...args: unknown[]) => unknown;
-    initRoutes?: (...args: unknown[]) => unknown;
-  } = {}
+  bootConfigMethods: BootConfigMethods = {}
 ): Promise<ImaApp & Record<string, unknown>> {
   validateJsdomEnvironment();
 
   const config = getIntegrationConfig();
   const { TestPageRenderer } = config;
   const pageRendererResults: unknown[] = [];
+  let app: (ImaApp & Record<string, unknown>) | null = null;
+  let result: (ImaApp & Record<string, unknown>) | null = null;
+  let defaultBootConfigMethods: BootConfigMethods = {};
 
-  // Setup global assert for XPath selectors
-  global.console.assert = assert;
+  try {
+    // Setup global assert for XPath selectors
+    global.console.assert = assert;
 
-  _installTimerWrappers();
+    _installTimerWrappers();
 
-  await config.prebootScript();
+    await config.prebootScript();
 
-  // Configure @ima/testing-library with project root so generateDictionary
-  // resolves language files relative to the correct rootDir.
-  setImaTestingLibraryClientConfig({
-    rootDir: config.rootDir,
-  });
+    // Configure @ima/testing-library with project root so generateDictionary
+    // resolves language files relative to the correct rootDir.
+    setImaTestingLibraryClientConfig({
+      rootDir: config.rootDir,
+    });
 
-  const clientConfig = getImaTestingLibraryClientConfig();
+    const clientConfig = getImaTestingLibraryClientConfig();
 
-  await clientConfig.beforeInitImaApp();
+    await clientConfig.beforeInitImaApp();
 
-  const appMainPath = path.isAbsolute(config.appMainPath)
-    ? config.appMainPath
-    : path.resolve(config.rootDir, config.appMainPath);
-  const mainModule = await import(appMainPath);
-  const getInitialAppConfigFunctions =
-    mainModule.getInitialAppConfigFunctions ||
-    mainModule.default?.getInitialAppConfigFunctions;
+    const appMainPath = path.isAbsolute(config.appMainPath)
+      ? config.appMainPath
+      : path.resolve(config.rootDir, config.appMainPath);
+    const mainModule = await import(appMainPath);
+    const getInitialAppConfigFunctions =
+      mainModule.getInitialAppConfigFunctions ||
+      mainModule.default?.getInitialAppConfigFunctions;
 
-  if (!getInitialAppConfigFunctions) {
-    throw new Error(
-      `Cannot find getInitialAppConfigFunctions in ${config.appMainPath}. ` +
-        `Make sure the file exports getInitialAppConfigFunctions function.`
-    );
+    if (!getInitialAppConfigFunctions) {
+      throw new Error(
+        `Cannot find getInitialAppConfigFunctions in ${config.appMainPath}. ` +
+          `Make sure the file exports getInitialAppConfigFunctions function.`
+      );
+    }
+
+    // Prefer the project's @ima/core export to ensure we use the same pluginLoader
+    // singleton. This is critical when the package is npm-linked, as the link would
+    // otherwise resolve to a separate @ima/core instance.
+    const ima = mainModule.ima || mainModule.default?.ima || imaFallback;
+
+    defaultBootConfigMethods =
+      typeof getInitialAppConfigFunctions === 'function'
+        ? ((await getInitialAppConfigFunctions()) as BootConfigMethods)
+        : (getInitialAppConfigFunctions as BootConfigMethods);
+
+    app = await bootImaApp({
+      ima,
+      appConfigFunctions: {
+        initSettings: _mergeBootConfigMethod('initSettings'),
+        initBindApp: _mergeBootConfigMethod('initBindApp'),
+        initServicesApp: _mergeBootConfigMethod('initServicesApp'),
+        initRoutes: _mergeBootConfigMethod('initRoutes'),
+      },
+      environment: config.environment,
+      onLoad: true,
+    });
+
+    // To use IMA route handler in jsdom
+    (app.oc.get('$Router') as any).listen();
+
+    result = Object.assign(
+      {},
+      app,
+      ...pageRendererResults,
+      config.extendAppObject(app)
+    ) as ImaApp & Record<string, unknown>;
+
+    await clientConfig.afterInitImaApp(result);
+
+    return result;
+  } catch (error) {
+    clearImaApp(result ?? app);
+    throw error;
   }
-
-  // Prefer the project's @ima/core export to ensure we use the same pluginLoader
-  // singleton. This is critical when the package is npm-linked, as the link would
-  // otherwise resolve to a separate @ima/core instance.
-  const ima = mainModule.ima || mainModule.default?.ima || imaFallback;
-
-  const defaultBootConfigMethods =
-    typeof getInitialAppConfigFunctions === 'function'
-      ? await getInitialAppConfigFunctions()
-      : getInitialAppConfigFunctions;
-
-  const app = await bootImaApp({
-    ima,
-    appConfigFunctions: {
-      initSettings: _mergeBootConfigMethod('initSettings'),
-      initBindApp: _mergeBootConfigMethod('initBindApp'),
-      initServicesApp: _mergeBootConfigMethod('initServicesApp'),
-      initRoutes: _mergeBootConfigMethod('initRoutes'),
-    },
-    environment: config.environment,
-    onLoad: true,
-  });
-
-  // To use IMA route handler in jsdom
-  (app.oc.get('$Router') as any).listen();
-
-  const result = Object.assign(
-    {},
-    app,
-    ...pageRendererResults,
-    config.extendAppObject(app)
-  ) as ImaApp & Record<string, unknown>;
-
-  await clientConfig.afterInitImaApp(result);
-
-  return result;
 
   /**
    * Wraps the global timer methods to collect their return values
@@ -175,9 +197,7 @@ export async function initImaApp(
    * Returns a merged boot config method combining default, TestPageRenderer,
    * router bind hook, config-level override, and per-call override.
    */
-  function _mergeBootConfigMethod(
-    method: 'initSettings' | 'initBindApp' | 'initServicesApp' | 'initRoutes'
-  ) {
+  function _mergeBootConfigMethod(method: BootConfigMethodName) {
     return (...args: unknown[]) => {
       const results: unknown[] = [];
 

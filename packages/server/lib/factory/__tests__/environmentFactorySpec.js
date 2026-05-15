@@ -440,6 +440,68 @@ describe('environmentFactory', () => {
         });
       });
     });
+
+    it('should resolve environment when factory is called, not when module is loaded', () => {
+      process.env.NODE_ENV = 'production';
+
+      jest.isolateModules(() => {
+        const mockConfig = {
+          prod: {
+            $Debug: false,
+            $Server: { port: 8080 },
+          },
+          dev: {
+            $Debug: true,
+            $Server: { port: 3000 },
+          },
+        };
+
+        jest.doMock(mockConfigPath, () => mockConfig, {
+          virtual: true,
+        });
+
+        const factory = require('../environmentFactory.js');
+
+        process.env.NODE_ENV = 'development';
+
+        const result = factory({
+          applicationFolder: __dirname,
+        });
+
+        expect(result.$Debug).toBe(true);
+        expect(result.$Env).toBe('dev');
+      });
+    });
+
+    it('should prefer explicit environment over process environment variables', () => {
+      process.env.NODE_ENV = 'production';
+
+      jest.isolateModules(() => {
+        const mockConfig = {
+          prod: {
+            $Debug: false,
+            $Server: { port: 8080 },
+          },
+          dev: {
+            $Debug: true,
+            $Server: { port: 3000 },
+          },
+        };
+
+        jest.doMock(mockConfigPath, () => mockConfig, {
+          virtual: true,
+        });
+
+        const factory = require('../environmentFactory.js');
+        const result = factory({
+          applicationFolder: __dirname,
+          environment: 'dev',
+        });
+
+        expect(result.$Debug).toBe(true);
+        expect(result.$Env).toBe('dev');
+      });
+    });
   });
 
   describe('processEnvironment callback', () => {
