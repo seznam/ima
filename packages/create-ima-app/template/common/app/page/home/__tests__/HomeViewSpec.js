@@ -1,7 +1,4 @@
-/**
- * @jest-environment node
- */
-import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
+import { initImaApp, clearImaApp } from '@ima/testing-library/integration';
 
 import cards from '../../../public/cards.json';
 

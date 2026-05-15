@@ -19,6 +19,7 @@ export async function getIMAResponseContent(): Promise<string> {
   const imaServer = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
+    environmentName: serverConfig.environment,
     processEnvironment: currentEnvironment =>
       serverConfig.processEnvironment({
         ...currentEnvironment,

@@ -8,21 +8,6 @@ const prod = 'prod';
 const dev = 'dev';
 
 /**
- * IMA_ENV has always the highest priority. This allows you to
- * combine NODE_ENV with different IMA environments to resolve
- * app and environment configurations.
- */
-let env = process.env.IMA_ENV || process.env.NODE_ENV || dev;
-
-if (env === 'development') {
-  env = dev;
-}
-
-if (env === 'production') {
-  env = prod;
-}
-
-/**
  * Env default values
  */
 const defaultEnvironment = {
@@ -58,6 +43,7 @@ const defaultEnvironment = {
 /**
  * @param {{
  *   applicationFolder: string,
+ *   environment?: keyof import('@ima/core').AppEnvironment,
  *   processEnvironment: (
  *     env: import('@ima/core').ParsedEnvironment
  *   ) => import('@ima/core').ParsedEnvironment
@@ -66,8 +52,10 @@ const defaultEnvironment = {
  */
 module.exports = function environmentFactory({
   applicationFolder,
+  environment,
   processEnvironment,
 }) {
+  const env = resolveEnvironmentName(environment);
   const environmentConfig = require(
     path.resolve(applicationFolder, './server/config/environment.js')
   );
@@ -104,3 +92,17 @@ module.exports = function environmentFactory({
 
   return currentEnvironment;
 };
+
+function resolveEnvironmentName(environment) {
+  let env = environment || process.env.IMA_ENV || process.env.NODE_ENV || dev;
+
+  if (env === 'development') {
+    env = dev;
+  }
+
+  if (env === 'production') {
+    env = prod;
+  }
+
+  return env;
+}
