@@ -23,7 +23,7 @@ This list is updated manually, so there can be situations where it doesn't match
 - [**plugin-analytic-fb-pixel**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-fb-pixel) - Facebook Pixel analytics.
 - [**plugin-analytic-google**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-google) - UA and GA4 google analytics.
 - [**plugin-halson-rest-client**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-halson-rest-client) - HAL+JSON REST API client for IMA applications, based on [@ima/plugin-rest-client](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-rest-client).
-- [**plugin-less-constants**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/cli-plugin-less-constants) - Adds preprocessor which converts theme values defined in the JS file, to their LESS variable counterparts.
+- [**plugin-less-constants**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/cli-plugin-less-constants) - Adds preprocessor which converts theme values defined in the JS file, to their LESS and CSS variable counterparts.
 - [**plugin-logger**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-logger) - A logging tool for IMA.js framework.
 - [**plugin-resource-loader**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-resource-loader) - Plugin for loading scripts and styles.
 - [**plugin-rest-client**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-rest-client) - Generic REST API client plugin.
