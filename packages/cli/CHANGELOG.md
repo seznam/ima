@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.3
+
+### Patch Changes
+
+- 6afff9e: Fix race condition in `parseLanguageFiles` where language files sharing the same dictionary key (e.g. multiple `buttonsEN.json` files in different directories) could overwrite each other instead of being deep-merged. File reads still run in parallel, but the merge into the shared messages dictionary is now performed sequentially after all reads complete.
+
 ## 20.0.2
 
 ### Patch Changes
