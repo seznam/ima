@@ -162,30 +162,38 @@ export async function parseLanguageFiles(
   languagePaths: string | string[],
   outputPath: string
 ): Promise<void | never> {
-  // Load language JSON files and parse them into messages dictionary
-  await Promise.all(
-    (Array.isArray(languagePaths) ? languagePaths : [languagePaths]).map(
-      async languagePath => {
-        try {
-          const dictionaryKey = getDictionaryKeyFromFileName(
-            locale,
-            languagePath
-          );
+  const paths = Array.isArray(languagePaths) ? languagePaths : [languagePaths];
 
-          messages[dictionaryKey] = assignRecursively(
-            messages[dictionaryKey] ?? {},
-            JSON.parse((await fs.promises.readFile(languagePath)).toString())
-          );
-        } catch (error) {
-          throw new Error(
-            `Unable to parse language file at location: ${chalk.magenta(
-              languagePath
-            )}\n\n${(error as Error)?.message}`
-          );
-        }
+  // Read & parse files in parallel (I/O can safely overlap).
+  const parsedFiles = await Promise.all(
+    paths.map(async languagePath => {
+      try {
+        const dictionaryKey = getDictionaryKeyFromFileName(
+          locale,
+          languagePath
+        );
+        const content = JSON.parse(
+          (await fs.promises.readFile(languagePath)).toString()
+        );
+
+        return { dictionaryKey, content };
+      } catch (error) {
+        throw new Error(
+          `Unable to parse language file at location: ${chalk.magenta(
+            languagePath
+          )}\n\n${(error as Error)?.message}`
+        );
       }
-    )
+    })
   );
+
+  // Merge sequentially to avoid race condition on shared dictionary keys.
+  for (const { dictionaryKey, content } of parsedFiles) {
+    messages[dictionaryKey] = assignRecursively(
+      messages[dictionaryKey] ?? {},
+      content
+    );
+  }
 
   // Write changes to language JS module
   const compiledModule = compileModule(new MessageFormat(locale), messages);
