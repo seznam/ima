@@ -9,7 +9,11 @@ import { AbstractRouter } from '../AbstractRouter';
 import { ActionTypes } from '../ActionTypes';
 import { RouteFactory } from '../RouteFactory';
 import { RouteNames } from '../RouteNames';
-import { RouteAction } from '../Router';
+import {
+  RouteAction,
+  MIDDLEWARE_ABORT_ROUTE,
+  MIDDLEWARE_STOP_PROPAGATION,
+} from '../Router';
 import { RouterEvents } from '../RouterEvents';
 
 class MockedAbstractRouter extends AbstractRouter {
@@ -291,6 +295,59 @@ describe('ima.core.router.AbstractRouter', () => {
         expect(params.error instanceof GenericError).toBe(true);
       });
     });
+
+    it('should not call _handle when global middleware aborts with MIDDLEWARE_ABORT_ROUTE', async () => {
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route,
+        middlewares: [
+          (_params, _locals, next) => next!(MIDDLEWARE_ABORT_ROUTE),
+        ],
+      });
+      jest.spyOn(router, '_handle').mockImplementation();
+
+      await router.route(path, options, action);
+
+      expect(router._handle).not.toHaveBeenCalled();
+    });
+
+    it('should still call _handle when global middleware uses MIDDLEWARE_STOP_PROPAGATION', async () => {
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route,
+        middlewares: [
+          (_params, _locals, next) => next!(MIDDLEWARE_STOP_PROPAGATION),
+        ],
+      });
+      jest.spyOn(router, '_handle').mockImplementation();
+      jest.spyOn(route, 'extractParameters').mockReturnValue({});
+
+      await router.route(path, options, action);
+
+      expect(router._handle).toHaveBeenCalled();
+    });
+
+    it('should not call _handle when route-level middleware aborts with MIDDLEWARE_ABORT_ROUTE', async () => {
+      const abortRoute = routeFactory.createRoute(
+        routeName,
+        path,
+        Controller,
+        View,
+        {
+          middlewares: [
+            (_params, _locals, next) => next!(MIDDLEWARE_ABORT_ROUTE),
+          ],
+        }
+      );
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route: abortRoute,
+        middlewares: [],
+      });
+      jest.spyOn(abortRoute, 'extractParameters').mockReturnValue({});
+      jest.spyOn(router, '_handle').mockImplementation();
+
+      await router.route(path, options, action);
+
+      expect(router._handle).not.toHaveBeenCalled();
+    });
   });
 
   describe('handleError method', () => {
@@ -376,6 +433,29 @@ describe('ima.core.router.AbstractRouter', () => {
         expect(reason instanceof GenericError).toBe(true);
       });
     });
+
+    it('should still call _handle even when middleware passes MIDDLEWARE_ABORT_ROUTE', async () => {
+      const params = { error: new GenericError('test') };
+      const abortingMiddleware = jest.fn((_params, _locals, next) =>
+        next!(MIDDLEWARE_ABORT_ROUTE)
+      );
+
+      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(
+        routeFactory.createRoute(RouteNames.ERROR, path, Controller, View, {
+          ...options,
+          middlewares: [abortingMiddleware],
+        })
+      );
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route: originalRoute,
+        middlewares: [],
+      });
+      jest.spyOn(router, '_handle').mockImplementation();
+
+      await router.handleError(params, options);
+
+      expect(router._handle).toHaveBeenCalled();
+    });
   });
 
   describe('handleNotFound method', () => {
@@ -460,6 +540,29 @@ describe('ima.core.router.AbstractRouter', () => {
       await router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
       });
+    });
+
+    it('should still call _handle even when middleware passes MIDDLEWARE_ABORT_ROUTE', async () => {
+      const params = { error: new GenericError('test') };
+      const abortingMiddleware = jest.fn((_params, _locals, next) =>
+        next!(MIDDLEWARE_ABORT_ROUTE)
+      );
+
+      jest.spyOn(router['_routeHandlers'], 'get').mockReturnValue(
+        routeFactory.createRoute(RouteNames.NOT_FOUND, path, Controller, View, {
+          ...options,
+          middlewares: [abortingMiddleware],
+        })
+      );
+      jest.spyOn(router, 'getRouteHandlersByPath').mockReturnValue({
+        route: originalRoute,
+        middlewares: [],
+      });
+      jest.spyOn(router, '_handle').mockImplementation();
+
+      await router.handleNotFound(params, options);
+
+      expect(router._handle).toHaveBeenCalled();
     });
   });
 
@@ -921,6 +1024,83 @@ describe('ima.core.router.AbstractRouter', () => {
       });
 
       const middlewaresPromise = router._runMiddlewares([m1], {}, {});
+      jest.advanceTimersByTime(50_000);
+
+      await expect(middlewaresPromise).rejects.toBeInstanceOf(GenericError);
+
+      jest.useRealTimers();
+    });
+
+    it('should return undefined when all middlewares complete normally', async () => {
+      const m1 = jest.fn().mockResolvedValue({ a: 1 });
+      const result = await router._runMiddlewares([m1], {}, {});
+      expect(result).toBeUndefined();
+    });
+
+    it('should return MIDDLEWARE_ABORT_ROUTE and stop chain when 3-arg middleware calls next(MIDDLEWARE_ABORT_ROUTE)', async () => {
+      const m1 = jest.fn((params, locals, next) =>
+        next(MIDDLEWARE_ABORT_ROUTE)
+      );
+      const m2 = jest.fn();
+
+      const middlewareResult = await router._runMiddlewares([m1, m2], {}, {});
+
+      expect(middlewareResult).toBe(MIDDLEWARE_ABORT_ROUTE);
+      expect(m2).not.toHaveBeenCalled();
+    });
+
+    it('should return undefined and stop chain when 3-arg middleware calls next(MIDDLEWARE_STOP_PROPAGATION)', async () => {
+      const m1 = jest.fn((params, locals, next) =>
+        next(MIDDLEWARE_STOP_PROPAGATION)
+      );
+      const m2 = jest.fn();
+
+      const middlewareResult = await router._runMiddlewares([m1, m2], {}, {});
+
+      expect(middlewareResult).toBeUndefined();
+      expect(m2).not.toHaveBeenCalled();
+    });
+
+    it('should not spread MIDDLEWARE_ABORT_ROUTE into locals when aborting', async () => {
+      let capturedLocals: unknown;
+      const m1 = jest.fn((params, locals, next) =>
+        next(MIDDLEWARE_ABORT_ROUTE)
+      );
+      const m2 = jest.fn((params, locals) => {
+        capturedLocals = locals;
+      });
+
+      await router._runMiddlewares([m1, m2], {}, {});
+
+      // m2 was never called so capturedLocals stays undefined — the symbol
+      // was not spread into locals before the chain stopped
+      expect(m2).not.toHaveBeenCalled();
+      expect(capturedLocals).toBeUndefined();
+    });
+
+    it('should not spread MIDDLEWARE_STOP_PROPAGATION into locals when stopping', async () => {
+      let capturedLocals: unknown;
+      const m1 = jest.fn((params, locals, next) =>
+        next(MIDDLEWARE_STOP_PROPAGATION)
+      );
+      const m2 = jest.fn((params, locals) => {
+        capturedLocals = locals;
+      });
+
+      await router._runMiddlewares([m1, m2], {}, {});
+
+      expect(m2).not.toHaveBeenCalled();
+      expect(capturedLocals).toBeUndefined();
+    });
+
+    it('should reject with timeout when 3-arg middleware never calls next', async () => {
+      jest.useFakeTimers();
+
+      const hanging = jest.fn((_params, _locals, _next) => {
+        // intentionally never calls next
+      });
+
+      const middlewaresPromise = router._runMiddlewares([hanging], {}, {});
       jest.advanceTimersByTime(50_000);
 
       await expect(middlewaresPromise).rejects.toBeInstanceOf(GenericError);

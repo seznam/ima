@@ -10,6 +10,8 @@ import { ActionTypes } from './ActionTypes';
 import { RouteFactory } from './RouteFactory';
 import { RouteNames } from './RouteNames';
 import {
+  MIDDLEWARE_ABORT_ROUTE,
+  MIDDLEWARE_STOP_PROPAGATION,
   Router,
   RouteOptions,
   RouterMiddleware,
@@ -393,12 +395,23 @@ export abstract class AbstractRouter extends Router {
       return this.handleNotFound(params, {}, locals);
     }
 
-    await this._runMiddlewares(middlewares, params, locals);
+    if (
+      (await this._runMiddlewares(middlewares, params, locals)) ===
+      MIDDLEWARE_ABORT_ROUTE
+    )
+      return {};
     params = {
       ...params,
       ...route.extractParameters(path, this.getBaseUrl()),
     };
-    await this._runMiddlewares(route.getOptions().middlewares, params, locals);
+    if (
+      (await this._runMiddlewares(
+        route.getOptions().middlewares,
+        params,
+        locals
+      )) === MIDDLEWARE_ABORT_ROUTE
+    )
+      return {};
 
     return this._handle(route, params, options, action);
   }
@@ -680,52 +693,72 @@ export abstract class AbstractRouter extends Router {
    *        mutated by middlewares.
    * @param locals The locals param is used to pass local data
    *        between middlewares.
+   * @returns Promise resolving to `MIDDLEWARE_ABORT_ROUTE` if a middleware aborted the
+   *          entire routing pipeline, or `void` if all middlewares completed
+   *          normally (including early stop via `MIDDLEWARE_STOP_PROPAGATION`).
    */
   async _runMiddlewares(
     middlewares: RouterMiddleware[] | undefined,
     params: RouteParams,
     locals: RouteLocals
-  ): Promise<void> {
+  ): Promise<typeof MIDDLEWARE_ABORT_ROUTE | void> {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise<void>(async (resolve, reject) => {
-      const rejectTimeout = setTimeout(() => {
-        reject(
-          new GenericError(
-            'Middleware execution timeout, check your middlewares for any unresolved time consuming promises.' +
-              ` All middlewares should finish execution within ${this._middlewareTimeout}ms timeframe.`
-          )
-        );
-      }, this._middlewareTimeout);
-      for (const middleware of middlewares) {
-        try {
-          await autoYield();
-          /**
-           * When middleware uses next() function we await in indefinitely
-           * until the function is called. Otherwise we just await the middleware
-           * async function.
-           */
-          const result = await (middleware.length === 3
-            ? new Promise<ReturnType<RouterMiddleware>>(resolve =>
-                middleware(params, locals, resolve)
-              )
-            : middleware(params, locals));
+    return new Promise<typeof MIDDLEWARE_ABORT_ROUTE | void>(
+      // eslint-disable-next-line no-async-promise-executor
+      async (resolve, reject) => {
+        const rejectTimeout = setTimeout(() => {
+          reject(
+            new GenericError(
+              'Middleware execution timeout, check your middlewares for any unresolved time consuming promises.' +
+                ` All middlewares should finish execution within ${this._middlewareTimeout}ms timeframe.`
+            )
+          );
+        }, this._middlewareTimeout);
+        for (const middleware of middlewares) {
+          try {
+            await autoYield();
+            /**
+             * When middleware uses next() function we await indefinitely
+             * until the function is called. Otherwise we just await the middleware
+             * async function.
+             */
+            const result = await (middleware.length === 3
+              ? new Promise<
+                  | UnknownParameters
+                  | typeof MIDDLEWARE_ABORT_ROUTE
+                  | typeof MIDDLEWARE_STOP_PROPAGATION
+                  | void
+                >(resolve => middleware(params, locals, resolve))
+              : middleware(params, locals));
 
-          locals = {
-            ...locals,
-            ...result,
-          };
-        } catch (error) {
-          reject(error);
+            if (result === MIDDLEWARE_ABORT_ROUTE) {
+              clearTimeout(rejectTimeout);
+              resolve(MIDDLEWARE_ABORT_ROUTE);
+              return;
+            }
+
+            if (result === MIDDLEWARE_STOP_PROPAGATION) {
+              clearTimeout(rejectTimeout);
+              resolve();
+              return;
+            }
+
+            locals = {
+              ...locals,
+              ...result,
+            };
+          } catch (error) {
+            reject(error);
+          }
         }
-      }
 
-      clearTimeout(rejectTimeout);
-      resolve();
-    });
+        clearTimeout(rejectTimeout);
+        resolve();
+      }
+    );
   }
 
   /**
