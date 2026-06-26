@@ -115,6 +115,52 @@ async (params, locals, next) => {
 ```
 :::
 
+### Pipeline control tokens
+
+You can also pass special tokens to `next()` to control the pipeline more explicitly:
+
+#### `MIDDLEWARE_ABORT_ROUTE`
+
+Stops all remaining middlewares **and** skips the route handler entirely. Only effective in `route()`; ignored in `handleError()` and `handleNotFound()` so a misbehaving global middleware cannot prevent error/404 pages from rendering.
+
+Useful for silent aborts where you've already handled the response (e.g. a redirect).
+
+```js
+import { MIDDLEWARE_ABORT_ROUTE } from '@ima/core';
+
+router.use(async (params, locals, next) => {
+  if (!isAuthenticated()) {
+    oc.get('$Router').redirect('/login');
+    return next(MIDDLEWARE_ABORT_ROUTE); // abort — router.redirect() handles it
+  }
+  next();
+});
+```
+
+#### `MIDDLEWARE_STOP_PROPAGATION`
+
+Stops all remaining middlewares in the current batch but **still proceeds** to the route handler. Useful when a middleware wants to short-circuit other middlewares but not prevent the page from rendering.
+
+```js
+import { MIDDLEWARE_STOP_PROPAGATION } from '@ima/core';
+
+router.use(async (params, locals, next) => {
+  if (shouldSkipRemainingMiddlewares()) {
+    return next(MIDDLEWARE_STOP_PROPAGATION); // skip rest, but render route
+  }
+  next();
+});
+```
+
+#### Comparison
+
+| `next()` call | Remaining middlewares | `route()` handler | `handleError/NotFound` handler |
+|---|---|---|---|
+| `next()` | run | runs | runs |
+| `next(MIDDLEWARE_STOP_PROPAGATION)` | skipped | runs | runs |
+| `next(MIDDLEWARE_ABORT_ROUTE)` | skipped | skipped | **runs** (abort ignored) |
+| *(never called)* | skipped | skipped (timeout after 30s) | skipped (timeout after 30s) |
+
 ## Execution order
 
 Middleware functions are resolved **from top to bottom sequentially**. In case of the code above, when routing to `home` route, following things would have happened:

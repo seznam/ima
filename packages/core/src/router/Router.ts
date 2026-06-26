@@ -26,10 +26,50 @@ export interface RouteLocals {
   route?: InstanceType<typeof AbstractRoute>;
 }
 
+/**
+ * Pass this token to the `next()` callback in a 3-argument middleware to
+ * abort the entire routing pipeline — no further middlewares and no route
+ * handler will be executed.
+ *
+ * Only honoured in `route()`. Ignored in `handleError()` and
+ * `handleNotFound()` so a misbehaving middleware cannot produce a blank page.
+ *
+ * @example
+ * function authMiddleware(params, locals, next) {
+ *   isAuthenticated() ? next() : next(MIDDLEWARE_ABORT_ROUTE);
+ * }
+ */
+export const MIDDLEWARE_ABORT_ROUTE: unique symbol = Symbol(
+  'MIDDLEWARE_ABORT_ROUTE'
+);
+
+/**
+ * Pass this token to the `next()` callback in a 3-argument middleware to
+ * stop processing the remaining middlewares in the current batch while
+ * still allowing normal route handling to continue.
+ *
+ * @example
+ * function loggingMiddleware(params, locals, next) {
+ *   if (shouldSkipRest()) {
+ *     next(MIDDLEWARE_STOP_PROPAGATION); // skip remaining middlewares, but route still renders
+ *   } else {
+ *     next();
+ *   }
+ * }
+ */
+export const MIDDLEWARE_STOP_PROPAGATION: unique symbol = Symbol(
+  'MIDDLEWARE_STOP_PROPAGATION'
+);
+
 export type RouterMiddleware = (
   params: RouteParams,
   locals: RouteLocals,
-  next?: (result: UnknownParameters) => void
+  next?: (
+    result?:
+      | UnknownParameters
+      | typeof MIDDLEWARE_ABORT_ROUTE
+      | typeof MIDDLEWARE_STOP_PROPAGATION
+  ) => void
 ) => UnknownParameters | void | Promise<UnknownParameters | void>;
 
 export interface RouteFactoryOptions {

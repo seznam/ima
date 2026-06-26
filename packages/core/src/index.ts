@@ -135,6 +135,8 @@ export { Response, type CookieTransformFunction } from './router/Response';
 export { RouteFactory } from './router/RouteFactory';
 export { RouteNames } from './router/RouteNames';
 export {
+  MIDDLEWARE_ABORT_ROUTE,
+  MIDDLEWARE_STOP_PROPAGATION,
   Router,
   type RouteOptions,
   type RouteFactoryOptions,
