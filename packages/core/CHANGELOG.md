@@ -1,5 +1,17 @@
 # Change Log
 
+## 20.1.0
+
+### Minor Changes
+
+- e86fef6: Add middleware pipeline control tokens to `AbstractRouter`
+
+  Two new exported symbols from `@ima/core`:
+  - `MIDDLEWARE_ABORT_ROUTE` — pass to `next()` in a 3-argument middleware to stop all remaining middlewares and skip the route handler. Only honoured in `route()`; ignored in `handleError()` and `handleNotFound()` so a misbehaving global middleware cannot prevent error/404 pages from rendering.
+  - `MIDDLEWARE_STOP_PROPAGATION` — pass to `next()` to stop remaining middlewares in the current batch while still proceeding to the route handler.
+
+  The `_runMiddlewares()` return type changes from `Promise<boolean>` to `Promise<typeof MIDDLEWARE_ABORT_ROUTE | void>`.
+
 ## 20.0.2
 
 ### Patch Changes
@@ -21,7 +33,6 @@
   The application bootstrap process has been refactored to be fully asynchronous.
 
   **BREAKING CHANGE:** The entire application bootstrap process is now asynchronous.
-
   - The `bootstrap.run()` method now returns a `Promise`.
   - The client-side `bootClientApp()` and `reviveClientApp()` functions are now `async` and must be `await`ed.
   - On the server-side, the application initialization is also asynchronous. If you have custom hooks for `CreateImaApp` or `Request` events, they may need to be updated to handle asynchronous operations.
@@ -42,7 +53,6 @@
 
 - 0437d18: RC release.
 - 54d471e: Fix AbstractPageManager
-
   - **What?** Fix AbstractPageManager when there is new routing during BEFORE_HANDLE_ROUTE phase.
   - **Why?** The process of handling stuck when there is new routing during BEFORE_HANDLE_ROUTE phase.
   - **How?** Nothing.
@@ -97,7 +107,6 @@
   The application bootstrap process has been refactored to be fully asynchronous.
 
   **BREAKING CHANGE:** The entire application bootstrap process is now asynchronous.
-
   - The `bootstrap.run()` method now returns a `Promise`.
   - The client-side `bootClientApp()` and `reviveClientApp()` functions are now `async` and must be `await`ed.
   - On the server-side, the application initialization is also asynchronous. If you have custom hooks for `CreateImaApp` or `Request` events, they may need to be updated to handle asynchronous operations.
@@ -151,13 +160,11 @@
 ### Minor Changes
 
 - 25a1777: Added support for custom event targets in Router's listen methods. This enables better control over routing behavior by allowing you to:
-
   - Scope navigation handling to specific parts of your application
   - Handle multiple independent routed sections on a page
   - Better integrate IMA.js routing into existing applications
 
   Changes:
-
   - Modified `listen(target?: EventTarget)` method to allow for optional target
   - Modified `unlisten(target?: EventTarget)` method to allow for optional target
   - Added new `unlistenAll()` method to cleanup all event listeners at once
@@ -827,7 +834,6 @@
 ### Major Changes
 
 - 91c4c409: ### Bug Fixes
-
   - 🐛 crash watch mode after server crashed ([ca798bf](https://github.com/seznam/ima/commit/ca798bf8d971fff654faf1bc1426b3bfbfa71519))
   - 🐛 Fixed broken build ([e070f36](https://github.com/seznam/ima/commit/e070f36aec7a347237eb9d20092d3a8bb3faaad5))
   - 🐛 Fixed lint hangup on docs pkg ([0104200](https://github.com/seznam/ima/commit/0104200678b3ac8d84247465a95dfc892a3185ea))
@@ -914,12 +920,10 @@
   - broken test infrastructure for new create-ima-app apps ([#183](https://github.com/seznam/ima/issues/183)) ([53832c7](https://github.com/seznam/ima/commit/53832c79d83f7ed0532eb82abca1fcee0896a79a))
 
   ### Code Refactoring
-
   - 💡 keep same interface for mount and update methods ([fbdd705](https://github.com/seznam/ima/commit/fbdd7056b9ad5599bdc9e7b03ee7d29dbc44ed1f))
   - 💡 remove deprectecated clearState method ([7cab3af](https://github.com/seznam/ima/commit/7cab3af498ee100071ab9bc444683dcade7e9ddf))
 
   ### Features
-
   - 🎸 Added option to disable non-es build completely ([f15edee](https://github.com/seznam/ima/commit/f15edee847874e150d2fd44a2c09de34ed4b8058))
   - 🎸 Finished CLI documentation and tweaked CIL plugins ([7ae9395](https://github.com/seznam/ima/commit/7ae9395fc847de25f54931ad755f4a5bf0be6e43))
   - 🎸 Migrated from es5, es11 to es9 and es13 versions ([#237](https://github.com/seznam/ima/issues/237)) ([20b108f](https://github.com/seznam/ima/commit/20b108f7de172fd3c40f8b090e40c8a9f4c7de35))
@@ -1025,7 +1029,6 @@
   - 🎸 WebpackManifestPlugin, es5 hot reload ([d8e1f85](https://github.com/seznam/ima/commit/d8e1f853fc666867c82676ff72497cc84fffa666))
 
   ### Performance Improvements
-
   - ⚡️ Usebuiltins for react build ([ad9a456](https://github.com/seznam/ima/commit/ad9a45624e08bf0c8360a53587b247ba8cdac215))
   - ⚡️ improved watch and build performance ([cf7ff71](https://github.com/seznam/ima/commit/cf7ff71da8fc227c474fa629bb1f4698811ad6f9))
   - ⚡️ Added opt-in enableCssModules option to enable CSSmod ([c56c5f2](https://github.com/seznam/ima/commit/c56c5f2533674133ee717338b34f569150e0415a))
@@ -1042,7 +1045,6 @@
   - ⚡️ watching and devserver are now initialzed in parallel ([a318cf2](https://github.com/seznam/ima/commit/a318cf2449345390f4cb0079e9218038b4e618d6))
 
   ### BREAKING CHANGES
-
   - 🧨 HttpAgent feature internalCacheOfPromise returns cloned response
   - 🧨 Resolved promises from load method are set to view in batches
 
@@ -1306,7 +1308,6 @@
 ### Major Changes
 
 - 7b003ac1: ### Bug Fixes
-
   - 🐛 crash watch mode after server crashed ([ca798bf](https://github.com/seznam/ima/commit/ca798bf8d971fff654faf1bc1426b3bfbfa71519))
   - 🐛 Fixed broken build ([e070f36](https://github.com/seznam/ima/commit/e070f36aec7a347237eb9d20092d3a8bb3faaad5))
   - 🐛 Fixed lint hangup on docs pkg ([0104200](https://github.com/seznam/ima/commit/0104200678b3ac8d84247465a95dfc892a3185ea))
@@ -1393,12 +1394,10 @@
   - broken test infrastructure for new create-ima-app apps ([#183](https://github.com/seznam/ima/issues/183)) ([53832c7](https://github.com/seznam/ima/commit/53832c79d83f7ed0532eb82abca1fcee0896a79a))
 
   ### Code Refactoring
-
   - 💡 keep same interface for mount and update methods ([fbdd705](https://github.com/seznam/ima/commit/fbdd7056b9ad5599bdc9e7b03ee7d29dbc44ed1f))
   - 💡 remove deprectecated clearState method ([7cab3af](https://github.com/seznam/ima/commit/7cab3af498ee100071ab9bc444683dcade7e9ddf))
 
   ### Features
-
   - 🎸 Added option to disable non-es build completely ([f15edee](https://github.com/seznam/ima/commit/f15edee847874e150d2fd44a2c09de34ed4b8058))
   - 🎸 Finished CLI documentation and tweaked CIL plugins ([7ae9395](https://github.com/seznam/ima/commit/7ae9395fc847de25f54931ad755f4a5bf0be6e43))
   - 🎸 Migrated from es5, es11 to es9 and es13 versions ([#237](https://github.com/seznam/ima/issues/237)) ([20b108f](https://github.com/seznam/ima/commit/20b108f7de172fd3c40f8b090e40c8a9f4c7de35))
@@ -1504,7 +1503,6 @@
   - 🎸 WebpackManifestPlugin, es5 hot reload ([d8e1f85](https://github.com/seznam/ima/commit/d8e1f853fc666867c82676ff72497cc84fffa666))
 
   ### Performance Improvements
-
   - ⚡️ Usebuiltins for react build ([ad9a456](https://github.com/seznam/ima/commit/ad9a45624e08bf0c8360a53587b247ba8cdac215))
   - ⚡️ improved watch and build performance ([cf7ff71](https://github.com/seznam/ima/commit/cf7ff71da8fc227c474fa629bb1f4698811ad6f9))
   - ⚡️ Added opt-in enableCssModules option to enable CSSmod ([c56c5f2](https://github.com/seznam/ima/commit/c56c5f2533674133ee717338b34f569150e0415a))
@@ -1521,7 +1519,6 @@
   - ⚡️ watching and devserver are now initialzed in parallel ([a318cf2](https://github.com/seznam/ima/commit/a318cf2449345390f4cb0079e9218038b4e618d6))
 
   ### BREAKING CHANGES
-
   - 🧨 HttpAgent feature internalCacheOfPromise returns cloned response
   - 🧨 Resolved promises from load method are set to view in batches
 
