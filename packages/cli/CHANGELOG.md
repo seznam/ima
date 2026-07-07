@@ -1,5 +1,11 @@
 # Change Log
 
+## 20.0.4
+
+### Patch Changes
+
+- cb82620: add missing dependency
+
 ## 20.0.3
 
 ### Patch Changes
