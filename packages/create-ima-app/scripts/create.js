@@ -10,7 +10,7 @@ import fsExtra from 'fs-extra/esm';
 
 import { info, error, mergePkgJson } from './utils.js';
 
-export async function create(projDir, useTS) {
+export async function create(projDir, useTS, usePNPM) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
   info(
@@ -74,16 +74,19 @@ export async function create(projDir, useTS) {
   pkgJson.name = projName;
   await fs.promises.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
-  // Run npm install
+  // Determine package manager
+  const pkgManager = usePNPM ? 'pnpm' : 'npm';
+
+  // Run package manager install
   info(
     `Running ${chalk.magenta(
-      'npm install'
+      `${pkgManager} install`
     )} inside app directory, this might take a while...`
   );
 
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
-  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const npm = process.platform === 'win32' ? `${pkgManager}.cmd` : pkgManager;
   spawnSync(npm, ['install'], {
     stdio: 'inherit',
     cwd: appRoot,
@@ -97,24 +100,24 @@ export async function create(projDir, useTS) {
 
 From there you can run several commands:
 
-  ${chalk.blue('npm run test')}
+  ${chalk.blue(`${pkgManager} run test`)}
     To run test runners.
 
-  ${chalk.blue('npm run lint')}
+  ${chalk.blue(`${pkgManager} run lint`)}
     To run eslint on your application source files.
 
-  ${chalk.blue('npm run dev')}
+  ${chalk.blue(`${pkgManager} run dev`)}
     To start development server.
 
-  ${chalk.blue('npm run build')}
+  ${chalk.blue(`${pkgManager} run build`)}
     To build the application.
 
-  ${chalk.blue('npm run start')}
+  ${chalk.blue(`${pkgManager} run start`)}
     To start IMA.js application server.
 
 We suggest that you start with:
 
   ${chalk.blue('cd')} ${projDir}
-  ${chalk.blue('npm run dev')}
+  ${chalk.blue(`${pkgManager} run dev`)}
 `);
 }

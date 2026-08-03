@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# @TODO: We should test both - npm and pnpm created apps
+
 set -e
 
 ROOT_DIR_IMA=`pwd`
@@ -19,7 +21,7 @@ for PACKAGE in $PACKAGES ; do
     echo "Working on $PACKAGE"
 
     # Pack from local filesystem
-    npm pack -w $PACKAGE
+    pnpm pack --filter $PACKAGE
 
     # Get the generated tarball path in the root directory
     SANITIZED_PACKAGE_NAME=$(echo "$PACKAGE" | sed 's#@ima/#ima-#g')
@@ -38,16 +40,16 @@ cd "$ROOT_DIR_IMA"
 
 # Link current create-ima-app version to global scope
 cd "$CREATE_IMA_APP_DIR"
-npm link
+pnpm link
 
 # Setup JS template from create-ima-app
 ROOT_DIR_IMA_APP="$ROOT_DIR/ima-js-app"
 
 cd "$ROOT_DIR"
-npx create-ima-app $ROOT_DIR_IMA_APP
+create-ima-app $ROOT_DIR_IMA_APP
 cd "$ROOT_DIR_IMA_APP"
 
-npm run build
+pnpm run build
 
 # Run tests
 source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"
@@ -56,10 +58,10 @@ source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"
 ROOT_DIR_IMA_APP="$ROOT_DIR/ima-ts-app"
 
 cd "$ROOT_DIR"
-npx create-ima-app $ROOT_DIR_IMA_APP --typescript
+create-ima-app $ROOT_DIR_IMA_APP --typescript
 cd "$ROOT_DIR_IMA_APP"
 
-npm run build
+pnpm run build
 
 # Run tests
 source "$ROOT_DIR_IMA/utils/tests/createImaAppTests.sh"

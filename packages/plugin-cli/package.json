@@ -28,7 +28,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "prepare": "pnpm run build"
   },
   "dependencies": {
     "@ima/dev-utils": "^20.0.0",

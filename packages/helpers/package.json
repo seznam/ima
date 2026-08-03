@@ -24,7 +24,11 @@
     "lint": "eslint './**/*.{js,jsx,ts,tsx,mjs}'",
     "dev": "node ../plugin-cli/dist/bin/ima-plugin.js dev",
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
-    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link"
+    "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
+    "prepare": "pnpm run build"
+  },
+  "devDependencies": {
+    "@ima/plugin-cli": "^20.0.0"
   },
   "dependencies": {
     "clone": "^2.1.2"

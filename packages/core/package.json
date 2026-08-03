@@ -54,10 +54,11 @@
     "build": "node ../plugin-cli/dist/bin/ima-plugin.js build",
     "link": "node ../plugin-cli/dist/bin/ima-plugin.js link",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
-    "test": "npm run test:jest && npm run test:size",
+    "test": "pnpm run test:jest && pnpm run test:size",
     "test:jest": "jest -c jest.config.js",
     "test:size": "size-limit",
-    "preversion": "npm test"
+    "preversion": "pnpm run test",
+    "prepare": "pnpm run build"
   },
   "dependencies": {
     "@esmj/task": "^0.5.2",

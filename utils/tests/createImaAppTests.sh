@@ -23,7 +23,7 @@ kill $IMA_SKELETON_SERVER_PID
 cd "$ROOT_DIR_IMA_APP"
 
 echo "Run lint for create-ima-app"
-npm run lint
+pnpm run lint
 
 echo "Test unit and integration tests for create-ima-app"
-npm run test
+pnpm run test
