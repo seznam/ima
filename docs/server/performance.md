@@ -89,10 +89,10 @@ module.exports = {
 
         // Serve SPA when server is under heavy load
         isSPA: (event) => {
-          const { environment, context } = event;
+          const { environment, threats } = event;
 
           // Example using @esmj/monitor - https://github.com/mjancarik/esmj-monitor
-          const { level } = context.performance.severity.getThreats();
+          const { level } = threats; // or alternative event.performance.severity.getThreats(event.req); 
 
           return level === 'high' || level === 'critical';
         },
