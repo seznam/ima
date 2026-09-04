@@ -42,12 +42,10 @@ export class PageRendererFactory {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = documentView.prototype;
 
-      if (
-        !(
-          componentPrototype instanceof PureComponent ||
-          this._isFunctionalComponent(documentView)
-        )
-      ) {
+      if (!(
+        componentPrototype instanceof PureComponent ||
+        this._isFunctionalComponent(documentView)
+      )) {
         throw new Error(
           'The document view component must extend React.PureComponent or be a functional component.'
         );
@@ -73,12 +71,10 @@ export class PageRendererFactory {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const componentPrototype = managedRootView.prototype;
 
-      if (
-        !(
-          componentPrototype instanceof Component ||
-          this._isFunctionalComponent(managedRootView)
-        )
-      ) {
+      if (!(
+        componentPrototype instanceof Component ||
+        this._isFunctionalComponent(managedRootView)
+      )) {
         throw new Error(
           'The managed root view component must extend React.Component or be a functional component.'
         );

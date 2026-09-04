@@ -1,5 +1,5 @@
 import { Emitter } from '@esmj/emitter';
-import { AppEnvironment, Environment, ParsedEnvironment } from '@ima/core';
+import { Environment, ParsedEnvironment } from '@ima/core';
 import { Request } from 'express';
 
 declare module '@ima/server' {
@@ -35,7 +35,6 @@ declare module '@ima/server' {
     applicationFolder?: string;
     processEnvironment?: (environment: Environment) => Environment;
     environment?: Environment;
-    environmentName?: keyof AppEnvironment;
     logger?: any;
     emitter?: Emitter;
     performance?: any;
@@ -47,8 +46,6 @@ declare module '@ima/server' {
   export function renderScript(name: string, script: string): string;
   export function environmentFactory(args: {
     applicationFolder: string;
-    environment?: keyof AppEnvironment;
-    processEnvironment?: (environment: Environment) => Environment;
   }): ParsedEnvironment;
 
   export function urlParserFactory(params: {

@@ -8,11 +8,7 @@ import { ImaPluginConfig } from '../types';
 
 export type BatchedCallback = () => Promise<void> | void;
 export type BatchEventName =
-  | 'add'
-  | 'addDir'
-  | 'change'
-  | 'unlink'
-  | 'unlinkDir';
+  'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir';
 
 /**
  * Clean output directories

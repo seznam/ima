@@ -299,13 +299,7 @@ export class HttpAgentImpl extends HttpAgent {
 
     if (this._cache.has(cacheKey)) {
       const cacheData = this._cache.get(cacheKey) as
-        | HttpAgentResponse<B>
-        | ErrorCacheData
-        | null;
-
-      if (cacheData === null) {
-        return null;
-      }
+        HttpAgentResponse<B> | ErrorCacheData;
 
       if ('cachedError' in cacheData) {
         const error = new GenericError(
