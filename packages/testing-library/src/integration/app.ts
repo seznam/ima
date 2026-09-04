@@ -1,23 +1,25 @@
 import { strict as assert } from 'node:assert';
-import path from 'node:path';
 
 import * as imaFallback from '@ima/core';
+import type {
+  ClientRouter,
+  InitAppConfig,
+  PageManager,
+  PageRenderer,
+} from '@ima/core';
 import { assignRecursively } from '@ima/helpers';
 
 import { bootImaApp, validateJsdomEnvironment } from '../boot';
 import { unAopAll } from './aop';
-import { initBindApp } from './bind';
-import {
-  getImaTestingLibraryClientConfig,
-  setImaTestingLibraryClientConfig,
-} from '../client/configuration';
+import { initBindApp, initRouter } from './bind';
+import { getImaTestingLibraryClientConfig } from '../client/configuration';
 import type { ImaApp } from '../types';
-import { getIntegrationConfig } from './configuration';
 
 const setIntervalNative = global.setInterval;
 const setTimeoutNative = global.setTimeout;
 const setImmediateNative = global.setImmediate;
 const consoleAssertNative = global.console?.assert;
+let windowScrollToNative: typeof window.scrollTo | undefined;
 
 let timers: Array<{
   timer:
@@ -27,27 +29,80 @@ let timers: Array<{
   clear: () => void;
 }> = [];
 
+// Kept so a not awaited clearImaApp still finishes before the next application boots.
+let pendingCleanup: Promise<void> | undefined;
+// Guards the module level environment shims against a second overlapping boot.
+let bootInProgress = false;
+
 type BootConfigMethodName =
-  | 'initSettings'
-  | 'initBindApp'
-  | 'initServicesApp'
-  | 'initRoutes';
+  'initSettings' | 'initBindApp' | 'initServicesApp' | 'initRoutes';
 type BootConfigMethod = (...args: unknown[]) => unknown;
-type BootConfigMethods = Partial<
-  Record<BootConfigMethodName, BootConfigMethod>
->;
+type BootConfigMethods = Partial<InitAppConfig>;
+type ImaAppExtended = ImaApp & Record<string, unknown>;
+type EventListenerArguments = [
+  type: string,
+  listener: EventListenerOrEventListenerObject,
+  options?: boolean | AddEventListenerOptions,
+];
+
+interface TrackedEventTarget {
+  target: EventTarget;
+  addEventListener: EventTarget['addEventListener'];
+  removeEventListener: EventTarget['removeEventListener'];
+  listeners: EventListenerArguments[];
+}
+
+let trackedEventTargets: TrackedEventTarget[] = [];
+
+/**
+ * Returns the boot config method when the config actually provides one.
+ */
+function getBootConfigMethod(
+  bootConfigMethods: BootConfigMethods,
+  method: BootConfigMethodName
+): BootConfigMethod | undefined {
+  const bootConfigMethod = bootConfigMethods[method];
+
+  return typeof bootConfigMethod === 'function'
+    ? (bootConfigMethod as BootConfigMethod)
+    : undefined;
+}
 
 /**
  * Clears an IMA application instance from the environment.
  * Call this in afterEach/afterAll to clean up between tests.
  */
-export function clearImaApp(
-  app?: (ImaApp & Record<string, unknown>) | null
-): void {
-  restoreIntegrationEnvironment();
+export async function clearImaApp(app?: ImaApp | null): Promise<void> {
+  const cleanup = pendingCleanup
+    ? pendingCleanup.catch(() => undefined).then(() => clearImaAppInternal(app))
+    : clearImaAppInternal(app);
 
-  if (app) {
-    app.oc.clear();
+  pendingCleanup = cleanup;
+  void cleanup.then(clearPendingCleanup, clearPendingCleanup);
+
+  return cleanup;
+
+  function clearPendingCleanup(): void {
+    if (pendingCleanup === cleanup) {
+      pendingCleanup = undefined;
+    }
+  }
+}
+
+async function clearImaAppInternal(app?: ImaApp | null): Promise<void> {
+  try {
+    if (app) {
+      const router = app.oc.get('$Router') as ClientRouter;
+      const pageRenderer = app.oc.get('$PageRenderer') as PageRenderer;
+      const pageManager = app.oc.get('$PageManager') as PageManager;
+
+      router.unlistenAll();
+      pageRenderer.unmount();
+      await pageManager.destroy();
+    }
+  } finally {
+    app?.oc.clear();
+    restoreIntegrationEnvironment();
   }
 }
 
@@ -60,69 +115,115 @@ function restoreIntegrationEnvironment(): void {
     global.console.assert = consoleAssertNative;
   }
 
+  if (windowScrollToNative) {
+    window.scrollTo = windowScrollToNative;
+    windowScrollToNative = undefined;
+  }
+
   timers.forEach(({ clear }) => clear());
   timers = [];
+  restoreTrackedEventListeners();
   unAopAll();
+}
+
+function installEventListenerTracking(): void {
+  restoreTrackedEventListeners();
+
+  [window, document].forEach(target => {
+    if (
+      typeof target.addEventListener !== 'function' ||
+      typeof target.removeEventListener !== 'function'
+    ) {
+      return;
+    }
+
+    const addEventListener = target.addEventListener;
+    const removeEventListener = target.removeEventListener;
+    const listeners: EventListenerArguments[] = [];
+
+    target.addEventListener = ((...args: EventListenerArguments) => {
+      listeners.push(args);
+      addEventListener.apply(target, args);
+    }) as EventTarget['addEventListener'];
+
+    trackedEventTargets.push({
+      target,
+      addEventListener,
+      removeEventListener,
+      listeners,
+    });
+  });
+}
+
+function restoreTrackedEventListeners(): void {
+  trackedEventTargets.forEach(
+    ({ target, addEventListener, removeEventListener, listeners }) => {
+      listeners.forEach(args => {
+        removeEventListener.apply(target, args);
+      });
+      target.addEventListener = addEventListener;
+    }
+  );
+  trackedEventTargets = [];
 }
 
 /**
  * Initializes an IMA application for integration testing.
  *
  * Compared to the unit-testing initImaApp from @ima/testing-library, this variant:
- * - Dynamically imports the app's main module from a configurable path
+ * - Dynamically imports the app's main module through the app/main alias
  * - Wraps global timers so they can be cleaned up after each test
  * - Runs a prebootScript before booting
- * - Supports TestPageRenderer and boot config method overrides via setIntegrationConfig
+ * - Supports boot config method overrides through the client configuration
  * - Calls $Router.listen() so IMA's route handler is active in jsdom
  *
- * **Side effect:** overwrites the shared `rootDir` in `@ima/testing-library` client config
- * with the value from `IntegrationConfiguration`. Call `setImaTestingLibraryClientConfig`
- * afterwards if you need a different value.
- *
- * @param bootConfigMethods - Optional boot config methods that extend the defaults from setIntegrationConfig.
+ * @param bootConfigMethods - Optional boot config methods that extend the configured defaults.
  */
 export async function initImaApp(
   bootConfigMethods: BootConfigMethods = {}
-): Promise<ImaApp & Record<string, unknown>> {
+): Promise<ImaAppExtended> {
   validateJsdomEnvironment();
 
-  const config = getIntegrationConfig();
-  const { TestPageRenderer } = config;
-  const pageRendererResults: unknown[] = [];
-  let app: (ImaApp & Record<string, unknown>) | null = null;
-  let result: (ImaApp & Record<string, unknown>) | null = null;
-  let defaultBootConfigMethods: BootConfigMethods = {};
+  // A rejected cleanup must not mask the boot, clearImaApp already reported it.
+  await pendingCleanup?.catch(() => undefined);
+
+  if (bootInProgress) {
+    throw new Error(
+      'Another integration application is already booting. Await the previous ' +
+        'initImaApp call before starting a new one.'
+    );
+  }
+
+  const clientConfig = getImaTestingLibraryClientConfig();
+  const integrationConfig = clientConfig.integration;
+  let environmentRestored = false;
+
+  bootInProgress = true;
 
   try {
     // Setup global assert for XPath selectors
     global.console.assert = assert;
 
     _installTimerWrappers();
+    installEventListenerTracking();
+    windowScrollToNative = window.scrollTo;
+    window.scrollTo = () => {};
 
-    await config.prebootScript();
-
-    // Configure @ima/testing-library with project root so generateDictionary
-    // resolves language files relative to the correct rootDir.
-    setImaTestingLibraryClientConfig({
-      rootDir: config.rootDir,
-    });
-
-    const clientConfig = getImaTestingLibraryClientConfig();
+    await integrationConfig.prebootScript();
 
     await clientConfig.beforeInitImaApp();
 
-    const appMainPath = path.isAbsolute(config.appMainPath)
-      ? config.appMainPath
-      : path.resolve(config.rootDir, config.appMainPath);
-    const mainModule = await import(appMainPath);
+    // Imported dynamically, not as a top level import like in rtl.tsx, so that the
+    // module evaluation of app/main happens after prebootScript.
+    const mainModule = await import('app/main');
     const getInitialAppConfigFunctions =
       mainModule.getInitialAppConfigFunctions ||
       mainModule.default?.getInitialAppConfigFunctions;
 
     if (!getInitialAppConfigFunctions) {
       throw new Error(
-        `Cannot find getInitialAppConfigFunctions in ${config.appMainPath}. ` +
-          `Make sure the file exports getInitialAppConfigFunctions function.`
+        'Cannot find getInitialAppConfigFunctions in app/main. ' +
+          'Make sure the module exports getInitialAppConfigFunctions.'
       );
     }
 
@@ -131,39 +232,60 @@ export async function initImaApp(
     // otherwise resolve to a separate @ima/core instance.
     const ima = mainModule.ima || mainModule.default?.ima || imaFallback;
 
-    defaultBootConfigMethods =
+    const defaultBootConfigMethods =
       typeof getInitialAppConfigFunctions === 'function'
         ? ((await getInitialAppConfigFunctions()) as BootConfigMethods)
         : (getInitialAppConfigFunctions as BootConfigMethods);
 
-    app = await bootImaApp({
+    const app = await bootImaApp({
       ima,
       appConfigFunctions: {
-        initSettings: _mergeBootConfigMethod('initSettings'),
-        initBindApp: _mergeBootConfigMethod('initBindApp'),
-        initServicesApp: _mergeBootConfigMethod('initServicesApp'),
-        initRoutes: _mergeBootConfigMethod('initRoutes'),
+        initSettings: _mergeBootConfigMethod(
+          'initSettings',
+          defaultBootConfigMethods
+        ),
+        initBindApp: _mergeBootConfigMethod(
+          'initBindApp',
+          defaultBootConfigMethods
+        ),
+        initServicesApp: _mergeBootConfigMethod(
+          'initServicesApp',
+          defaultBootConfigMethods
+        ),
+        initRoutes: _mergeBootConfigMethod(
+          'initRoutes',
+          defaultBootConfigMethods
+        ),
       },
-      environment: config.environment,
       onLoad: true,
     });
 
-    // To use IMA route handler in jsdom
-    (app.oc.get('$Router') as any).listen();
+    try {
+      (app.oc.get('$Router') as ClientRouter).listen();
 
-    result = Object.assign(
-      {},
-      app,
-      ...pageRendererResults,
-      config.extendAppObject(app)
-    ) as ImaApp & Record<string, unknown>;
+      const result = Object.assign(
+        app,
+        integrationConfig.extendAppObject(app)
+      ) as ImaAppExtended;
 
-    await clientConfig.afterInitImaApp(result);
+      await clientConfig.afterInitImaApp(result);
 
-    return result;
+      return result;
+    } catch (error) {
+      // The application is already booted, so it needs the full teardown, which
+      // restores the environment as well.
+      environmentRestored = true;
+      await clearImaApp(app);
+      throw error;
+    }
   } catch (error) {
-    clearImaApp(result ?? app);
+    if (!environmentRestored) {
+      restoreIntegrationEnvironment();
+    }
+
     throw error;
+  } finally {
+    bootInProgress = false;
   }
 
   /**
@@ -194,38 +316,41 @@ export async function initImaApp(
   }
 
   /**
-   * Returns a merged boot config method combining default, TestPageRenderer,
-   * router bind hook, config-level override, and per-call override.
+   * Returns a merged boot config method combining defaults, the integration
+   * bindings, client configuration, and the per-call override.
    */
-  function _mergeBootConfigMethod(method: BootConfigMethodName) {
+  function _mergeBootConfigMethod(
+    method: BootConfigMethodName,
+    defaultBootConfigMethods: BootConfigMethods
+  ) {
     return (...args: unknown[]) => {
       const results: unknown[] = [];
+      const isBindApp = method === 'initBindApp';
 
-      if (typeof defaultBootConfigMethods[method] === 'function') {
-        results.push(defaultBootConfigMethods[method](...args) ?? {});
+      function invoke(methods: BootConfigMethods): void {
+        const bootConfigMethod = getBootConfigMethod(methods, method);
+
+        if (bootConfigMethod) {
+          results.push(bootConfigMethod(...args) ?? {});
+        }
       }
 
-      if (method === 'initBindApp') {
-        if (TestPageRenderer) {
-          const rendererResult = TestPageRenderer.initTestPageRenderer(...args);
-          pageRendererResults.push(rendererResult);
-        }
+      invoke(defaultBootConfigMethods);
 
+      // Runs after the application bindings so that the configured $PageRenderer
+      // is the one wrapped for React Testing Library.
+      if (isBindApp) {
         initBindApp(...(args as Parameters<typeof initBindApp>));
       }
 
-      if (typeof config[method] === 'function') {
-        results.push(
-          (config[method] as (...a: unknown[]) => unknown)(...args) ?? {}
-        );
-      }
+      invoke(integrationConfig);
+      invoke(bootConfigMethods);
 
-      if (typeof bootConfigMethods[method] === 'function') {
-        results.push(
-          (bootConfigMethods[method] as (...a: unknown[]) => unknown)(
-            ...args
-          ) ?? {}
-        );
+      // Runs last so that the hook is applied to the final $Router implementation.
+      if (isBindApp) {
+        const [, oc] = args as Parameters<typeof initBindApp>;
+
+        initRouter(oc);
       }
 
       if (method === 'initSettings') {

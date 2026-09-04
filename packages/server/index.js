@@ -26,7 +26,6 @@ const { TimingTracker } = require('./lib/metric/TimingTracker');
 
 function createIMAServer({
   environment,
-  environmentName,
   logger,
   emitter,
   performance,
@@ -38,7 +37,6 @@ function createIMAServer({
     environment ||
     require('./lib/factory/environmentFactory.js')({
       applicationFolder,
-      environment: environmentName,
       processEnvironment,
     });
   devUtils =

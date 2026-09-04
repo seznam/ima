@@ -56,7 +56,7 @@ function resolveDefaultConfiguration() {
   const serverConfiguration: ServerConfiguration = {
     protocol: 'https:',
     host: 'imajs.io',
-    environment: undefined,
+    environment: 'test',
     processEnvironment: env => env,
     applicationFolder: undefined,
     beforeCreateIMAServer: () => {},

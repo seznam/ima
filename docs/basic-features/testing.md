@@ -105,6 +105,74 @@ async function renderHookWithContext<TResult, TProps>(
 
 `renderHookWithContext` is a wrapper around [`renderHook` from `@testing-library/react`](https://testing-library.com/docs/react-testing-library/api#renderhook). It uses the same logic as `renderWithContext` to provide the IMA.js context. See [the `renderWithContext` section](#renderwithcontext) for more information.
 
+## Integration testing
+
+The `@ima/testing-library/integration` entry point boots the whole application instead of a single component. It reuses the JSDOM prepared by the Jest preset, so no additional DOM implementation is initialized, and it renders IMA pages through React Testing Library. Queries from `@ima/testing-library` therefore work against the rendered page.
+
+```javascript
+import { screen } from '@ima/testing-library';
+import { clearImaApp, initImaApp } from '@ima/testing-library/integration';
+
+describe('Home page', () => {
+  let app;
+
+  beforeAll(async () => {
+    app = await initImaApp();
+
+    await app.oc.get('$Router').route('/');
+  });
+
+  afterAll(async () => {
+    await clearImaApp(app);
+  });
+
+  it('renders the home page', () => {
+    expect(screen.getByRole('heading', { name: 'Home' })).toBeVisible();
+  });
+});
+```
+
+`initImaApp` loads the application entry point mapped as `app/main`, so make sure `moduleNameMapper` resolves `^app/main$` when your entry point is not at the default location. It accepts optional `initSettings`, `initBindApp`, `initServicesApp` and `initRoutes` overrides that are merged on top of the application boot config.
+
+Always call `clearImaApp` when the suite finishes. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped global timers, `console.assert`, `window.scrollTo`, the event listeners registered during the boot and all AOP hooks registered through the integration `aop` helper. Awaiting it is recommended, but a pending cleanup is always finished before the next `initImaApp` boots an application. Only one application can boot at a time, so overlapping `initImaApp` calls are rejected.
+
+### Shared integration configuration
+
+Hooks shared by all integration suites belong to the `integration` key of the client configuration.
+
+```javascript
+// jestSetup.js
+import { setImaTestingLibraryClientConfig } from '@ima/testing-library/client';
+
+setImaTestingLibraryClientConfig({
+  integration: {
+    prebootScript: async () => {
+      // Runs before app/main is imported, use it for global mocks
+    },
+    extendAppObject: app => ({
+      // Additional properties available on the object returned from initImaApp
+    }),
+  },
+});
+```
+
+### Environment
+
+The IMA environment used by tests is resolved when the JSDOM HTML template is generated, which happens before setup files run. It can only be configured in the Jest config through `@ima/testing-library/server`, defaults to `test`, and is applied as `IMA_ENV`, so it takes precedence over an `IMA_ENV` value coming from the shell.
+
+```javascript
+// jest.config.js
+const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/server');
+
+setImaTestingLibraryServerConfig({
+  environment: 'test',
+});
+
+module.exports = {
+  preset: '@ima/testing-library',
+};
+```
+
 ## Extending IMA boot config methods
 
 You can extend IMA boot config by using [IMA `pluginLoader.register`](https://imajs.io/api/classes/ima_core.PluginLoader/#register) method. Use the same approach as in IMA plugins.

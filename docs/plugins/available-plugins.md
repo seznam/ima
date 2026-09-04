@@ -36,6 +36,5 @@ This list is updated manually, so there can be situations where it doesn't match
 - [**plugin-useragent**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-useragent) - Parses useragent from client and server requests.
 - [**plugin-xhr**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-xhr) - Helper plugin simplifying the usage of the XMLHttpRequest API.
 - [**plugin-local-storage**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-local-storage) - `localstorage` implementation of `Storage` interface for IMA.js applications.
-- [**plugin-testing-integration**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-testing-integration) - This is a plugin for integration testing of any IMA.js based application.
 - [**plugin-websocket**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-websocket) - Allows creating socket server and connected clients can send broadcast message.
 - [**plugin-merkur**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-merkur) - For easier integrations of [merkur](https://merkur.js.org/) widget to ima application.

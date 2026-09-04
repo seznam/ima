@@ -15,8 +15,7 @@ class ProgressTracker {
   private _elapsed: ReturnType<typeof time> | null;
   private _trackedEntries: number;
   private _percentageTracker:
-    | Record<ImaConfigurationContext['name'], number>
-    | Record<string, never>;
+    Record<ImaConfigurationContext['name'], number> | Record<string, never>;
   private _progressBar: cliProgress.SingleBar;
 
   constructor() {

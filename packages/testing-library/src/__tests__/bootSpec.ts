@@ -6,51 +6,47 @@ jest.mock('../localization', () => ({
 }));
 
 describe('bootImaApp', () => {
-  const originalWindow = (globalThis as any).window;
-  const originalIma = globalThis.$IMA;
-
   afterEach(() => {
-    if (originalWindow === undefined) {
-      delete (globalThis as any).window;
-    } else {
-      (globalThis as any).window = originalWindow;
-    }
-
-    if (originalIma === undefined) {
-      delete (globalThis as any).$IMA;
-    } else {
-      globalThis.$IMA = originalIma;
-    }
-
     jest.clearAllMocks();
   });
 
-  it('propagates environment override to both window and global $IMA objects before boot config is read', async () => {
-    const windowIma = { $Env: 'prod' } as any;
-    const globalIma = { $Env: 'prod' } as any;
+  it('boots the application with the generated JSDOM environment', async () => {
     const app = { oc: { clear: jest.fn() }, bootstrap: {} } as any;
     const ima = {
       createImaApp: jest.fn(() => Promise.resolve(app)),
-      getClientBootConfig: jest.fn(() => {
-        expect(windowIma.$Env).toBe('dev');
-        expect(globalIma.$Env).toBe('dev');
-
-        return {};
-      }),
+      getClientBootConfig: jest.fn(() => ({})),
       onLoad: jest.fn(() => Promise.resolve()),
       bootClientApp: jest.fn(() => Promise.resolve(app)),
     } as any;
 
-    (globalThis as any).window = { $IMA: windowIma };
-    globalThis.$IMA = globalIma;
-
     await bootImaApp({
       ima,
       appConfigFunctions: {} as any,
-      environment: 'dev',
+      onLoad: true,
     });
 
     expect(generateDictionary).toHaveBeenCalledTimes(1);
     expect(ima.getClientBootConfig).toHaveBeenCalledTimes(1);
+    expect(ima.onLoad).toHaveBeenCalledTimes(1);
+    expect(ima.bootClientApp).toHaveBeenCalledTimes(1);
+  });
+
+  it('clears the object container when booting fails after app creation', async () => {
+    const app = { oc: { clear: jest.fn() }, bootstrap: {} } as any;
+    const ima = {
+      createImaApp: jest.fn(() => Promise.resolve(app)),
+      getClientBootConfig: jest.fn(() => ({})),
+      onLoad: jest.fn(() => Promise.resolve()),
+      bootClientApp: jest.fn(() => Promise.reject(new Error('boot failed'))),
+    } as any;
+
+    await expect(
+      bootImaApp({
+        ima,
+        appConfigFunctions: {} as any,
+      })
+    ).rejects.toThrow('boot failed');
+
+    expect(app.oc.clear).toHaveBeenCalledTimes(1);
   });
 });
