@@ -24,7 +24,8 @@ export interface ClientConfiguration {
    */
   useFakeDictionary: boolean;
   /**
-   * The path to the IMA configuration file. This can be only configured once before first `initImaApp` call and cannot be reconfigured later.
+   * The path to the project root directory. This can only be configured once
+   * before the first `initImaApp` call and cannot be reconfigured later.
    */
   rootDir: string;
   /**
