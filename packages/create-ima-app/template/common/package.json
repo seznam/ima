@@ -21,6 +21,7 @@
     "@ima/cli": "^20.0.2",
     "@ima/testing-library": "^20.1.0",
     "@swc-contrib/mut-cjs-exports": "^13.0.0",
+    "@swc/core": "~1.15.1",
     "@swc/jest": "^0.2.39",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

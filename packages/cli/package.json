@@ -41,7 +41,7 @@
     "@ima/hmr-client": "^20.0.0",
     "@messageformat/core": "^3.4.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
-    "@swc/core": "^1.15.1",
+    "@swc/core": "~1.15.1",
     "@types/webpack-env": "^1.18.8",
     "@types/webpack-hot-middleware": "2.25.12",
     "@types/yargs": "^17.0.34",
