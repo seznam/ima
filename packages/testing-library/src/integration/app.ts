@@ -12,6 +12,7 @@ import { assignRecursively } from '@ima/helpers';
 import { bootImaApp, validateJsdomEnvironment } from '../boot';
 import { unAopAll } from './aop';
 import { initBindApp, initRouter } from './bind';
+import { trackWindowEventListeners } from './events';
 import { getImaTestingLibraryClientConfig } from '../client/configuration';
 import type { ImaApp } from '../types';
 
@@ -39,20 +40,7 @@ type BootConfigMethodName =
 type BootConfigMethod = (...args: unknown[]) => unknown;
 type BootConfigMethods = Partial<InitAppConfig>;
 type ImaAppExtended = ImaApp & Record<string, unknown>;
-type EventListenerArguments = [
-  type: string,
-  listener: EventListenerOrEventListenerObject,
-  options?: boolean | AddEventListenerOptions,
-];
-
-interface TrackedEventTarget {
-  target: EventTarget;
-  addEventListener: EventTarget['addEventListener'];
-  removeEventListener: EventTarget['removeEventListener'];
-  listeners: EventListenerArguments[];
-}
-
-let trackedEventTargets: TrackedEventTarget[] = [];
+let clearWindowEventListeners: (() => void) | undefined;
 
 /**
  * Returns the boot config method when the config actually provides one.
@@ -122,49 +110,9 @@ function restoreIntegrationEnvironment(): void {
 
   timers.forEach(({ clear }) => clear());
   timers = [];
-  restoreTrackedEventListeners();
+  clearWindowEventListeners?.();
+  clearWindowEventListeners = undefined;
   unAopAll();
-}
-
-function installEventListenerTracking(): void {
-  restoreTrackedEventListeners();
-
-  [window, document].forEach(target => {
-    if (
-      typeof target.addEventListener !== 'function' ||
-      typeof target.removeEventListener !== 'function'
-    ) {
-      return;
-    }
-
-    const addEventListener = target.addEventListener;
-    const removeEventListener = target.removeEventListener;
-    const listeners: EventListenerArguments[] = [];
-
-    target.addEventListener = ((...args: EventListenerArguments) => {
-      listeners.push(args);
-      addEventListener.apply(target, args);
-    }) as EventTarget['addEventListener'];
-
-    trackedEventTargets.push({
-      target,
-      addEventListener,
-      removeEventListener,
-      listeners,
-    });
-  });
-}
-
-function restoreTrackedEventListeners(): void {
-  trackedEventTargets.forEach(
-    ({ target, addEventListener, removeEventListener, listeners }) => {
-      listeners.forEach(args => {
-        removeEventListener.apply(target, args);
-      });
-      target.addEventListener = addEventListener;
-    }
-  );
-  trackedEventTargets = [];
 }
 
 /**
@@ -205,7 +153,6 @@ export async function initImaApp(
     global.console.assert = assert;
 
     _installTimerWrappers();
-    installEventListenerTracking();
     windowScrollToNative = window.scrollTo;
     window.scrollTo = () => {};
 
@@ -350,6 +297,9 @@ export async function initImaApp(
       if (isBindApp) {
         const [, oc] = args as Parameters<typeof initBindApp>;
 
+        clearWindowEventListeners = trackWindowEventListeners(
+          oc.get('$Window')
+        );
         initRouter(oc);
       }
 

@@ -134,7 +134,7 @@ describe('Home page', () => {
 
 `initImaApp` loads the application entry point mapped as `app/main`, so make sure `moduleNameMapper` resolves `^app/main$` when your entry point is not at the default location. It accepts optional `initSettings`, `initBindApp`, `initServicesApp` and `initRoutes` overrides that are merged on top of the application boot config.
 
-Always call `clearImaApp` when the suite finishes. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped global timers, `console.assert`, `window.scrollTo`, the event listeners registered during the boot and all AOP hooks registered through the integration `aop` helper. Awaiting it is recommended, but a pending cleanup is always finished before the next `initImaApp` boots an application. Only one application can boot at a time, so overlapping `initImaApp` calls are rejected.
+Always call `clearImaApp` when the suite finishes. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped global timers, `console.assert`, `window.scrollTo`, and all AOP hooks registered through the integration `aop` helper. It removes application-owned listeners registered through `$Window.bindEventListener` without removing React's document listeners. Direct native listeners must be removed by their owner during teardown. Awaiting cleanup is recommended, but a pending cleanup is always finished before the next `initImaApp` boots an application. Only one application can boot at a time, so overlapping `initImaApp` calls are rejected.
 
 ### Shared integration configuration
 
@@ -158,7 +158,7 @@ setImaTestingLibraryClientConfig({
 
 ### Environment
 
-The IMA environment used by tests is resolved when the JSDOM HTML template is generated, which happens before setup files run. It can only be configured in the Jest config through `@ima/testing-library/server`, defaults to `test`, and is applied as `IMA_ENV`, so it takes precedence over an `IMA_ENV` value coming from the shell.
+The IMA environment used by tests is resolved when the JSDOM HTML template is generated, which happens before setup files run. Configure it in the Jest config through `@ima/testing-library/server`. It defaults to `test` and is passed explicitly to `createIMAServer` as `environmentName`, taking precedence over shell variables and earlier server imports without changing `process.env`. This requires `@ima/server` 20.1 or newer.
 
 ```javascript
 // jest.config.js

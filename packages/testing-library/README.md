@@ -16,6 +16,8 @@ The `@ima/testing-library` contains utilities for testing IMA.js applications. I
 
 Install the new dependencies. Note that RTL dependencies are only peer dependencies and you should specify them in your project.
 
+This version requires `@ima/server` 20.1 or newer for explicit environment selection.
+
 ```bash
 npm install -D @ima/testing-library @testing-library/dom @testing-library/jest-dom @testing-library/react jest-environment-jsdom
 ```
@@ -110,9 +112,9 @@ afterAll(async () => {
 
 Configure shared integration hooks through `setImaTestingLibraryClientConfig({ integration: { ... } })`. `initImaApp` also accepts per-call `initSettings`, `initBindApp`, `initServicesApp`, and `initRoutes` overrides. Map `^app/main$` in Jest when the application entry is not available at the default path.
 
-Configure the environment only through `setImaTestingLibraryServerConfig({ environment })` in the Jest config. It defaults to `test`, is applied as `IMA_ENV` while the JSDOM HTML is generated, and therefore takes precedence over an `IMA_ENV` value coming from the shell.
+Configure the environment through `setImaTestingLibraryServerConfig({ environment })` in the Jest config. It defaults to `test` and is passed as `environmentName` to `createIMAServer`, so it takes precedence over shell variables and earlier server imports without changing `process.env`.
 
-**Important:** always `await clearImaApp(app)` in `afterAll`/`afterEach`. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped timers, `console.assert`, `window.scrollTo`, the event listeners registered during the boot, and all AOP hooks. Forgetting to call it will leak state into subsequent test suites.
+**Important:** always `await clearImaApp(app)` in `afterAll`/`afterEach`. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped timers, `console.assert`, `window.scrollTo`, and all AOP hooks. It also removes listeners registered through the application's `$Window.bindEventListener`, while preserving React's document-level listeners. Directly registered native listeners must be removed by their owner during teardown. Forgetting cleanup will leak state into subsequent tests.
 
 ## Usage
 

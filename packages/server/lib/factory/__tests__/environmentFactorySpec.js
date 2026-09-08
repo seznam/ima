@@ -228,6 +228,56 @@ describe('environmentFactory', () => {
   });
 
   describe('environment resolution', () => {
+    it('resolves explicit environments independently of import order', () => {
+      process.env.IMA_ENV = 'prod';
+
+      jest.isolateModules(() => {
+        jest.doMock(
+          mockConfigPath,
+          () => ({
+            prod: { $App: { selected: 'prod' } },
+            test: { $App: { selected: 'test' } },
+            regression: { $App: { selected: 'regression' } },
+          }),
+          { virtual: true }
+        );
+
+        const factory = require('../environmentFactory.js');
+        process.env.IMA_ENV = 'dev';
+
+        const results = ['test', 'regression'].map(environmentName => {
+          const environment = factory({
+            applicationFolder: __dirname,
+            environmentName,
+          });
+
+          return [environment.$Env, environment.$App.selected];
+        });
+
+        expect(results).toEqual([
+          ['test', 'test'],
+          ['regression', 'regression'],
+        ]);
+        expect(factory({ applicationFolder: __dirname }).$Env).toBe('prod');
+        expect(process.env.IMA_ENV).toBe('dev');
+      });
+    });
+
+    it.each([
+      ['development', 'dev'],
+      ['production', 'prod'],
+    ])('normalizes explicit %s to %s', (environmentName, expected) => {
+      jest.isolateModules(() => {
+        jest.doMock(mockConfigPath, () => ({}), { virtual: true });
+
+        const factory = require('../environmentFactory.js');
+
+        expect(
+          factory({ applicationFolder: __dirname, environmentName }).$Env
+        ).toBe(expected);
+      });
+    });
+
     it('should resolve production environment with NODE_ENV=production', () => {
       process.env.NODE_ENV = 'production';
 
