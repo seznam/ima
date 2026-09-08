@@ -342,7 +342,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should fire router events for async route handlers', async () => {
-      jest.useRealTimers();
       const pagePromise = pageManager.manage({
         route: routeFactory.createRoute(
           routeName,
@@ -353,6 +352,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         options,
       });
 
+      await jest.runAllTimersAsync();
       const response = await pagePromise;
       pageManager.postManage();
       jest.runOnlyPendingTimers();
