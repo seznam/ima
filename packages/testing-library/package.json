@@ -72,11 +72,14 @@
     "globby": "^11.1.0",
     "to-aop": "^0.5.5"
   },
+  "devDependencies": {
+    "@ima/server": "*"
+  },
   "peerDependencies": {
     "@ima/cli": ">=20.0.0",
     "@ima/core": ">=20.0.0",
     "@ima/helpers": ">=20.0.0",
-    "@ima/server": ">=20.0.0",
+    "@ima/server": ">=20.1.0",
     "@ima/react-page-renderer": ">=20.0.0",
     "@testing-library/dom": ">=10.0.0",
     "@testing-library/jest-dom": ">=6.0.0",

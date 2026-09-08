@@ -1,3 +1,5 @@
+import { createIMAServer } from '@ima/server';
+
 import { getImaTestingLibraryServerConfig } from './configuration';
 
 const serverConfig = getImaTestingLibraryServerConfig();
@@ -6,28 +8,6 @@ const serverConfig = getImaTestingLibraryServerConfig();
  * Get response content from @ima/server.
  */
 export async function getIMAResponseContent(): Promise<string> {
-  const previousImaEnv = process.env.IMA_ENV;
-
-  if (serverConfig.environment) {
-    process.env.IMA_ENV = serverConfig.environment;
-  }
-
-  try {
-    return await renderIMAResponseContent();
-  } finally {
-    if (previousImaEnv === undefined) {
-      delete process.env.IMA_ENV;
-    } else {
-      process.env.IMA_ENV = previousImaEnv;
-    }
-  }
-}
-
-async function renderIMAResponseContent(): Promise<string> {
-  // @ima/server resolves IMA_ENV during its module evaluation, so it must not be
-  // imported before getIMAResponseContent applies the configured environment.
-  const { createIMAServer } = await import('@ima/server');
-
   // Mock devUtils to override manifest loading
   const devUtils = {
     manifestRequire: () => ({}),
@@ -39,6 +19,7 @@ async function renderIMAResponseContent(): Promise<string> {
   const server = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
+    environmentName: serverConfig.environment,
     processEnvironment: currentEnvironment =>
       serverConfig.processEnvironment({
         ...currentEnvironment,

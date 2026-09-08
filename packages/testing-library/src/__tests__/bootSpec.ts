@@ -49,4 +49,30 @@ describe('bootImaApp', () => {
 
     expect(app.oc.clear).toHaveBeenCalledTimes(1);
   });
+
+  it('preserves boot and cleanup errors when both operations fail', async () => {
+    const bootError = new Error('boot failed');
+    const cleanupError = new Error('cleanup failed');
+    const app = {
+      oc: {
+        clear: jest.fn(() => {
+          throw cleanupError;
+        }),
+      },
+      bootstrap: {},
+    } as any;
+    const ima = {
+      createImaApp: jest.fn(() => Promise.resolve(app)),
+      getClientBootConfig: jest.fn(() => ({})),
+      onLoad: jest.fn(() => Promise.resolve()),
+      bootClientApp: jest.fn(() => Promise.reject(bootError)),
+    } as any;
+
+    await expect(
+      bootImaApp({
+        ima,
+        appConfigFunctions: {} as any,
+      })
+    ).rejects.toMatchObject({ errors: [bootError, cleanupError] });
+  });
 });

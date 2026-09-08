@@ -67,7 +67,7 @@ describe('integration initImaApp', () => {
     expect(clearTimeoutSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('removes event listeners registered during initialization', async () => {
+  it('leaves native event listeners under their owners control', async () => {
     const windowAddEventListener = jest.fn();
     const windowRemoveEventListener = jest.fn();
     const documentAddEventListener = jest.fn();
@@ -100,18 +100,8 @@ describe('integration initImaApp', () => {
 
     await expect(initImaApp()).rejects.toThrow('preboot failed');
 
-    expect(windowRemoveEventListener).toHaveBeenCalledWith(
-      'resize',
-      windowListener
-    );
-    expect(windowRemoveEventListener).not.toHaveBeenCalledWith(
-      'preexisting',
-      preexistingListener
-    );
-    expect(documentRemoveEventListener).toHaveBeenCalledWith(
-      'visibilitychange',
-      documentListener
-    );
+    expect(windowRemoveEventListener).not.toHaveBeenCalled();
+    expect(documentRemoveEventListener).not.toHaveBeenCalled();
     expect(window.addEventListener).toBe(windowAddEventListener);
     expect(document.addEventListener).toBe(documentAddEventListener);
   });

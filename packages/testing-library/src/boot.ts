@@ -63,7 +63,15 @@ export async function bootImaApp({
 
     return app;
   } catch (error) {
-    app.oc.clear();
+    try {
+      app.oc.clear();
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [error, cleanupError],
+        'IMA application boot and cleanup both failed.'
+      );
+    }
+
     throw error;
   }
 }
