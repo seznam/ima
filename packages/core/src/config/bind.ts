@@ -90,8 +90,7 @@ export interface OCAliasMap {
   $CookieTransformFunction: CookieTransformFunction;
   $CookieStorage: CookieStorage;
   $SessionStorage:
-    | InstanceType<typeof SessionStorage>
-    | InstanceType<typeof MapStorage>;
+    InstanceType<typeof SessionStorage> | InstanceType<typeof MapStorage>;
   $MapStorage: InstanceType<typeof MapStorage>;
   $WeakMapStorage: WeakMapStorage;
   $SessionMapStorage: InstanceType<typeof SessionMapStorage>;

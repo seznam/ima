@@ -15,10 +15,11 @@ export async function getIMAResponseContent(): Promise<string> {
 
   await serverConfig.beforeCreateIMAServer();
 
-  // Prepare serverApp with environment override
-  const imaServer = await createIMAServer({
+  // Prepare serverApp for SPA-only test rendering.
+  const server = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
+    environmentName: serverConfig.environment,
     processEnvironment: currentEnvironment =>
       serverConfig.processEnvironment({
         ...currentEnvironment,
@@ -33,10 +34,10 @@ export async function getIMAResponseContent(): Promise<string> {
       }),
   });
 
-  await serverConfig.afterCreateIMAServer(imaServer);
+  await serverConfig.afterCreateIMAServer(server);
 
   // Generate request response
-  const response = await imaServer.serverApp.requestHandler(
+  const response = await server.serverApp.requestHandler(
     {
       get: () => '',
       headers: () => '',

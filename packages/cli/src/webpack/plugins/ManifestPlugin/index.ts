@@ -80,8 +80,7 @@ class ManifestPlugin {
    */
   generate(assets: Compilation['assets'], compilation: Compilation): void {
     const compilationName = compilation?.name as
-      | ImaConfigurationContext['name']
-      | undefined;
+      ImaConfigurationContext['name'] | undefined;
 
     if (!compilationName) {
       return;

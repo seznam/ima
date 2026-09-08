@@ -1,3 +1,5 @@
+import type { InitAppConfig } from '@ima/core';
+
 import type {
   ContextValue,
   ImaApp,
@@ -5,15 +7,31 @@ import type {
   ImaRenderHookResult,
 } from '../types';
 
+export type IntegrationConfiguration = Partial<InitAppConfig> & {
+  /**
+   * Extends the application object returned from the integration initImaApp.
+   */
+  extendAppObject: (app: ImaApp) => Record<string, unknown>;
+  /**
+   * Runs before the IMA application is booted.
+   */
+  prebootScript: () => Promise<void> | void;
+};
+
 export interface ClientConfiguration {
   /**
    * If true, the fake dictionary will be used. The real dictionary degrades the performance of the tests so disable this with caution.
    */
   useFakeDictionary: boolean;
   /**
-   * The path to the IMA configuration file. This can be only configured once before first `initImaApp` call and cannot be reconfigured later.
+   * The path to the project root directory. This can only be configured once
+   * before the first `initImaApp` call and cannot be reconfigured later.
    */
   rootDir: string;
+  /**
+   * Configuration used only by the integration initImaApp implementation.
+   */
+  integration: IntegrationConfiguration;
   /**
    * The function that will be called before the IMA application is initialized.
    */
@@ -52,9 +70,20 @@ export interface ClientConfiguration {
   }: ImaRenderHookResult<TResult, TProps>): void | Promise<void>;
 }
 
+export type ClientConfigurationOverride = Omit<
+  Partial<ClientConfiguration>,
+  'integration'
+> & {
+  integration?: Partial<IntegrationConfiguration>;
+};
+
 const clientConfiguration: ClientConfiguration = {
   useFakeDictionary: true,
   rootDir: process.cwd(),
+  integration: {
+    extendAppObject: () => ({}),
+    prebootScript: () => {},
+  },
   beforeInitImaApp: () => {},
   afterInitImaApp: () => {},
   getContextValue: app => ({
@@ -77,7 +106,13 @@ export function getImaTestingLibraryClientConfig() {
  * Modify the current clientConfiguration.
  */
 export function setImaTestingLibraryClientConfig(
-  config: Partial<ClientConfiguration>
+  config: ClientConfigurationOverride
 ) {
-  Object.assign(clientConfiguration, config);
+  const { integration, ...clientConfig } = config;
+
+  Object.assign(clientConfiguration, clientConfig);
+
+  if (integration) {
+    Object.assign(clientConfiguration.integration, integration);
+  }
 }

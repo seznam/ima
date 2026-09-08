@@ -12,15 +12,8 @@ const dev = 'dev';
  * combine NODE_ENV with different IMA environments to resolve
  * app and environment configurations.
  */
-let env = process.env.IMA_ENV || process.env.NODE_ENV || dev;
-
-if (env === 'development') {
-  env = dev;
-}
-
-if (env === 'production') {
-  env = prod;
-}
+const defaultEnvironmentName =
+  process.env.IMA_ENV || process.env.NODE_ENV || dev;
 
 /**
  * Env default values
@@ -58,6 +51,7 @@ const defaultEnvironment = {
 /**
  * @param {{
  *   applicationFolder: string,
+ *   environmentName?: string,
  *   processEnvironment: (
  *     env: import('@ima/core').ParsedEnvironment
  *   ) => import('@ima/core').ParsedEnvironment
@@ -66,8 +60,19 @@ const defaultEnvironment = {
  */
 module.exports = function environmentFactory({
   applicationFolder,
+  environmentName = defaultEnvironmentName,
   processEnvironment,
 }) {
+  let env = environmentName;
+
+  if (env === 'development') {
+    env = dev;
+  }
+
+  if (env === 'production') {
+    env = prod;
+  }
+
   const environmentConfig = require(
     path.resolve(applicationFolder, './server/config/environment.js')
   );
