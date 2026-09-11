@@ -6,8 +6,8 @@ import type { ReactElement } from 'react';
 // import of app/main is resolved by the jest moduleNameMapper
 import { ima, getInitialAppConfigFunctions } from 'app/main';
 
+import { bootImaApp, validateJsdomEnvironment } from './boot';
 import { getImaTestingLibraryClientConfig } from './client/configuration';
-import { generateDictionary } from './localization';
 import type {
   ContextValue,
   ImaApp,
@@ -20,27 +20,18 @@ import type {
  * Initialize the IMA application for testing.
  */
 export async function initImaApp(): Promise<ImaApp> {
-  if (!document || !window) {
-    throw new Error(
-      'Missing document, or window. Are you running the test in the jsdom environment?'
-    );
-  }
+  validateJsdomEnvironment();
 
   const config = getImaTestingLibraryClientConfig();
 
   await config.beforeInitImaApp();
 
-  // Init language files
-  // This must be initialized before oc.get('$Dictionary').init() is called (usualy part of initServices)
-  await generateDictionary();
-
-  const app = await ima.createImaApp();
-  const bootConfig = await ima.getClientBootConfig(
-    await getInitialAppConfigFunctions()
-  );
-
-  // Init app
-  await ima.bootClientApp(app, bootConfig);
+  const app = await bootImaApp({
+    ima,
+    // Init language files must happen before oc.get('$Dictionary').init() is called
+    // (usually part of initServices), bootImaApp handles generateDictionary internally.
+    appConfigFunctions: await getInitialAppConfigFunctions(),
+  });
 
   await config.afterInitImaApp(app);
 

@@ -77,8 +77,7 @@ export interface RouteFactoryOptions {
   documentView: null | unknown;
   managedRootView: null | unknown;
   onlyUpdate:
-    | boolean
-    | ((controller: RouteController, view: unknown) => boolean);
+    boolean | ((controller: RouteController, view: unknown) => boolean);
   viewAdapter: null | unknown;
   middlewares: RouterMiddleware[];
   extensions?: (

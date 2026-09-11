@@ -16,6 +16,8 @@ The `@ima/testing-library` contains utilities for testing IMA.js applications. I
 
 Install the new dependencies. Note that RTL dependencies are only peer dependencies and you should specify them in your project.
 
+This version requires `@ima/server` 20.1 or newer for explicit environment selection.
+
 ```bash
 npm install -D @ima/testing-library @testing-library/dom @testing-library/jest-dom @testing-library/react jest-environment-jsdom
 ```
@@ -46,6 +48,7 @@ const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/serve
 
 setImaTestingLibraryServerConfig({
   // your custom config
+  environment: 'regression', // The default environment is test.
   applicationFolder: path.resolve('./__tests__/') // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
 });
 
@@ -69,11 +72,49 @@ const { setImaTestingLibraryClientConfig } = require('@ima/testing-library/clien
 
 setImaTestingLibraryClientConfig({
   // your custom config
-  imaConfigPath: 'path/to/your/ima.config.js',
+  rootDir: '/path/to/your/project',
+  integration: {
+    prebootScript: () => {
+      // Run project-specific setup before integration boot.
+    },
+  },
 });
 ```
 
 See [src/client/configuration.ts](https://github.com/seznam/ima/blob/master/packages/testing-library/src/client/configuration.ts) for the full list of available options.
+
+## Integration Testing
+
+The `./integration` sub-path boots the application mapped as `app/main` in the JSDOM created by the Jest preset. IMA page views are rendered by the application page renderer wrapped in React Testing Library's `act`, so Testing Library queries work against the page while the live router and object container remain available for full integration tests.
+
+```javascript
+const {
+  initImaApp,
+  clearImaApp,
+} = require('@ima/testing-library/integration');
+const { screen } = require('@ima/testing-library');
+
+let app;
+
+beforeAll(async () => {
+  app = await initImaApp();
+  await app.oc.get('$Router').route('/');
+});
+
+it('renders the page', () => {
+  expect(screen.getByRole('main')).toBeVisible();
+});
+
+afterAll(async () => {
+  await clearImaApp(app);
+});
+```
+
+Configure shared integration hooks through `setImaTestingLibraryClientConfig({ integration: { ... } })`. `initImaApp` also accepts per-call `initSettings`, `initBindApp`, `initServicesApp`, and `initRoutes` overrides. Map `^app/main$` in Jest when the application entry is not available at the default path.
+
+Configure the environment through `setImaTestingLibraryServerConfig({ environment })` in the Jest config. It defaults to `test` and is passed as `environmentName` to `createIMAServer`, so it takes precedence over shell variables and earlier server imports without changing `process.env`.
+
+**Important:** always `await clearImaApp(app)` in `afterAll`/`afterEach`. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped timers, `console.assert`, `window.scrollTo`, and all AOP hooks. It also removes listeners registered through the application's `$Window.bindEventListener`, while preserving React's document-level listeners. Directly registered native listeners must be removed by their owner during teardown. Forgetting cleanup will leak state into subsequent tests.
 
 ## Usage
 

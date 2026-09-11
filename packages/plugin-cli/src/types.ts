@@ -10,8 +10,7 @@ export type Transformer = ({
 }) => Source | Promise<Source>;
 export type TransformerOptions = { test: RegExp };
 export type TransformerDefinition =
-  | Transformer
-  | [Transformer, TransformerOptions];
+  Transformer | [Transformer, TransformerOptions];
 
 export type Command = 'dev' | 'link' | 'build';
 
