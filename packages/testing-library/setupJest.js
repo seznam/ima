@@ -1,1 +1,1 @@
-require('../core/setupJest.js');
+require('@ima/core/setupJest.js');
