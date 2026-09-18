@@ -13,6 +13,8 @@ describe('integration initImaApp', () => {
   const originalSetInterval = global.setInterval;
   const originalSetTimeout = global.setTimeout;
   const originalSetImmediate = global.setImmediate;
+  const originalClearImmediate = global.clearImmediate;
+  const originalMessageChannel = global.MessageChannel;
   const originalConsoleAssert = global.console.assert;
 
   beforeEach(() => {
@@ -39,6 +41,8 @@ describe('integration initImaApp', () => {
     global.setInterval = originalSetInterval;
     global.setTimeout = originalSetTimeout;
     global.setImmediate = originalSetImmediate;
+    global.clearImmediate = originalClearImmediate;
+    global.MessageChannel = originalMessageChannel;
     global.console.assert = originalConsoleAssert;
     jest.restoreAllMocks();
   });
@@ -65,6 +69,35 @@ describe('integration initImaApp', () => {
     expect(global.console.assert).toBe(originalConsoleAssert);
     expect((globalThis as any).window.scrollTo).toBe(scrollTo);
     expect(clearTimeoutSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('provides and cleans up immediate timers in jsdom', async () => {
+    delete (globalThis as any).setImmediate;
+    delete (globalThis as any).clearImmediate;
+    delete (globalThis as any).MessageChannel;
+    const pendingCallback = jest.fn();
+
+    await jest.isolateModulesAsync(async () => {
+      const { initImaApp: isolatedInitImaApp } = require('../integration/app');
+      const {
+        setImaTestingLibraryClientConfig: configureClient,
+      } = require('../client/configuration');
+      const prebootScript = jest.fn(async () => {
+        await new Promise<void>(resolve => global.setImmediate(resolve));
+        global.setImmediate(pendingCallback);
+        throw new Error('preboot failed');
+      });
+
+      configureClient({ integration: { prebootScript } });
+
+      await expect(isolatedInitImaApp()).rejects.toThrow('preboot failed');
+      expect(prebootScript).toHaveBeenCalledTimes(1);
+      expect(global.setImmediate).toBeUndefined();
+      expect(global.clearImmediate).toBeUndefined();
+    });
+
+    await new Promise<void>(resolve => originalSetImmediate(resolve));
+    expect(pendingCallback).not.toHaveBeenCalled();
   });
 
   it('leaves native event listeners under their owners control', async () => {
@@ -136,12 +169,23 @@ describe('integration initImaApp', () => {
     expect(global.setTimeout).toBe(originalSetTimeout);
   });
 
-  it('tears down application services before clearing the object container', async () => {
-    const router = { unlistenAll: jest.fn() };
-    const pageRenderer = { unmount: jest.fn() };
-    const pageManager = { destroy: jest.fn(() => Promise.resolve()) };
+  it('destroys the page manager before unmounting and clearing the object container', async () => {
+    const lifecycle: string[] = [];
+    const router = {
+      unlistenAll: jest.fn(() => lifecycle.push('unlisten')),
+    };
+    const pageRenderer = {
+      unmount: jest.fn(() => lifecycle.push('unmount')),
+    };
+    const pageManager = {
+      destroy: jest.fn(async () => {
+        lifecycle.push('destroy');
+        await Promise.resolve();
+        lifecycle.push('destroyed');
+      }),
+    };
     const oc = {
-      clear: jest.fn(),
+      clear: jest.fn(() => lifecycle.push('clear')),
       get: jest.fn((alias: string) => {
         if (alias === '$Router') {
           return router;
@@ -160,6 +204,31 @@ describe('integration initImaApp', () => {
     expect(router.unlistenAll).toHaveBeenCalledTimes(1);
     expect(pageRenderer.unmount).toHaveBeenCalledTimes(1);
     expect(pageManager.destroy).toHaveBeenCalledTimes(1);
+    expect(oc.clear).toHaveBeenCalledTimes(1);
+    expect(lifecycle).toEqual([
+      'unlisten',
+      'destroy',
+      'destroyed',
+      'unmount',
+      'clear',
+    ]);
+  });
+
+  it('unmounts and clears the object container when page manager destruction fails', async () => {
+    const error = new Error('destroy failed');
+    const services = {
+      unlistenAll: jest.fn(),
+      unmount: jest.fn(),
+      destroy: jest.fn().mockRejectedValue(error),
+    };
+    const oc = {
+      clear: jest.fn(),
+      get: jest.fn(() => services),
+    };
+
+    await expect(clearImaApp({ oc } as any)).rejects.toBe(error);
+
+    expect(services.unmount).toHaveBeenCalledTimes(1);
     expect(oc.clear).toHaveBeenCalledTimes(1);
   });
 

@@ -1,4 +1,8 @@
 import { strict as assert } from 'node:assert';
+import {
+  clearImmediate as clearImmediateFallback,
+  setImmediate as setImmediateFallback,
+} from 'node:timers';
 
 import * as imaFallback from '@ima/core';
 import type {
@@ -19,6 +23,7 @@ import type { ImaApp } from '../types';
 const setIntervalNative = global.setInterval;
 const setTimeoutNative = global.setTimeout;
 const setImmediateNative = global.setImmediate;
+const clearImmediateNative = global.clearImmediate;
 const consoleAssertNative = global.console?.assert;
 let windowScrollToNative: typeof window.scrollTo | undefined;
 
@@ -85,8 +90,11 @@ async function clearImaAppInternal(app?: ImaApp | null): Promise<void> {
       const pageManager = app.oc.get('$PageManager') as PageManager;
 
       router.unlistenAll();
-      pageRenderer.unmount();
-      await pageManager.destroy();
+      try {
+        await pageManager.destroy();
+      } finally {
+        pageRenderer.unmount();
+      }
     }
   } finally {
     app?.oc.clear();
@@ -98,6 +106,7 @@ function restoreIntegrationEnvironment(): void {
   global.setInterval = setIntervalNative;
   global.setTimeout = setTimeoutNative;
   global.setImmediate = setImmediateNative;
+  global.clearImmediate = clearImmediateNative;
 
   if (global.console && consoleAssertNative) {
     global.console.assert = consoleAssertNative;
@@ -252,11 +261,12 @@ export async function initImaApp(
       return timer;
     }) as typeof setTimeout;
 
+    global.clearImmediate = clearImmediateNative ?? clearImmediateFallback;
     global.setImmediate = ((...args: Parameters<typeof setImmediate>) => {
-      const timer = setImmediateNative(...args);
+      const timer = (setImmediateNative ?? setImmediateFallback)(...args);
       timers.push({
         timer,
-        clear: () => global.clearImmediate(timer),
+        clear: () => (clearImmediateNative ?? clearImmediateFallback)(timer),
       });
       return timer;
     }) as typeof setImmediate;

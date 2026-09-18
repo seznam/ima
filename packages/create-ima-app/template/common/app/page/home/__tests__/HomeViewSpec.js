@@ -24,8 +24,8 @@ describe('Home page', () => {
     await app.oc.get('$Router').route('/');
   });
 
-  afterEach(() => {
-    clearImaApp(app);
+  afterEach(async () => {
+    await clearImaApp(app);
   });
 
   it('can render component', () => {
