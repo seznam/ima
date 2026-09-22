@@ -17,13 +17,24 @@ import {
 } from '@ima/react-page-renderer';
 import { ClientPageRenderer } from '@ima/react-page-renderer/renderer/ClientPageRenderer';
 import { screen } from '@testing-library/dom';
-import { render, type RenderResult } from '@testing-library/react/pure';
+import { cleanup, render } from '@testing-library/react/pure';
 import { createElement, type ComponentType } from 'react';
+import * as reactDomClient from 'react-dom/client';
 
 import {
   createTestingLibraryClientPageRenderer,
   type PageRendererConstructor,
 } from '../integration/TestingLibraryClientPageRenderer';
+
+jest.mock('react-dom/client', () => {
+  const original = jest.requireActual('react-dom/client');
+
+  return {
+    ...original,
+    createRoot: jest.fn(original.createRoot),
+    hydrateRoot: jest.fn(original.hydrateRoot),
+  };
+});
 
 const TestingLibraryClientPageRenderer = createTestingLibraryClientPageRenderer(
   ClientPageRenderer as unknown as PageRendererConstructor
@@ -80,6 +91,44 @@ describe('TestingLibraryClientPageRenderer', () => {
 
   const PageView = (({ title }: { title: string }) =>
     createElement('h1', null, title)) as unknown as ComponentType;
+
+  it('does not retain discarded application roots in Testing Library cleanup', async () => {
+    const createRoot = jest.mocked(reactDomClient.createRoot);
+    const hydrateRoot = jest.mocked(reactDomClient.hydrateRoot);
+    const unmounts: jest.SpyInstance[] = [];
+
+    try {
+      for (const title of ['First application', 'Second application']) {
+        createRoot.mockClear();
+        hydrateRoot.mockClear();
+        document.body.innerHTML = '<main id="page"></main>';
+        const renderer = createRenderer();
+        const state = { title };
+
+        await renderer.mount(
+          createController(state),
+          PageView,
+          state as unknown as Record<string, Promise<unknown>>,
+          routeOptions
+        );
+
+        const root =
+          createRoot.mock.results.at(-1)?.value ??
+          hydrateRoot.mock.results.at(-1)?.value;
+        unmounts.push(jest.spyOn(root, 'unmount'));
+        renderer.unmount();
+      }
+
+      cleanup();
+
+      for (const unmount of unmounts) {
+        expect(unmount).toHaveBeenCalledTimes(1);
+      }
+    } finally {
+      createRoot.mockClear();
+      hydrateRoot.mockClear();
+    }
+  });
 
   it('renders and updates an IMA page through React Testing Library', async () => {
     document.body.innerHTML = '<main id="page"></main>';
@@ -139,90 +188,6 @@ describe('TestingLibraryClientPageRenderer', () => {
     ).toBeVisible();
 
     secondRenderer.unmount();
-  });
-
-  it('reuses a non-hydrating root across page renderer instances', async () => {
-    document.body.innerHTML = '<main id="page"></main>';
-
-    const firstRenderer = createRenderer();
-    const firstState = { title: 'First application' };
-
-    await firstRenderer.mount(
-      createController(firstState),
-      PageView,
-      firstState as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
-
-    const secondRenderer = createRenderer();
-    const secondState = { title: 'Second application' };
-
-    await secondRenderer.mount(
-      createController(secondState),
-      PageView,
-      secondState as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
-
-    expect(
-      screen.getByRole('heading', { name: 'Second application' })
-    ).toBeVisible();
-
-    const firstUnmountCallback = jest.spyOn(
-      firstRenderer as unknown as { _runUnmountCallback(): void },
-      '_runUnmountCallback'
-    );
-
-    firstRenderer.unmount();
-
-    expect(firstUnmountCallback).not.toHaveBeenCalled();
-    expect(
-      screen.getByRole('heading', { name: 'Second application' })
-    ).toBeVisible();
-
-    secondRenderer.unmount();
-  });
-
-  it('keeps root ownership when another renderer fails to rerender', async () => {
-    document.body.innerHTML = '<main id="page"></main>';
-
-    const firstRenderer = createRenderer();
-    const firstState = { title: 'First application' };
-
-    await firstRenderer.mount(
-      createController(firstState),
-      PageView,
-      firstState as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
-
-    const viewContainer = document.getElementById('page');
-    const renderResult = (
-      firstRenderer as unknown as {
-        _testingLibraryRenderResult: RenderResult;
-      }
-    )._testingLibraryRenderResult;
-    jest.spyOn(renderResult, 'rerender').mockImplementationOnce(() => {
-      throw new Error('rerender failed');
-    });
-
-    const secondRenderer = createRenderer();
-    const secondState = { title: 'Second application' };
-
-    await expect(
-      secondRenderer.mount(
-        createController(secondState),
-        PageView,
-        secondState as unknown as Record<string, Promise<unknown>>,
-        routeOptions
-      )
-    ).rejects.toThrow('rerender failed');
-
-    firstRenderer.unmount();
-    const rootWasReleased = document.getElementById('page') !== viewContainer;
-    secondRenderer.unmount();
-
-    expect(rootWasReleased).toBe(true);
   });
 
   it('restores the original server markup after unmounting', async () => {

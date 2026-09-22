@@ -1,4 +1,8 @@
-import { initImaApp, clearImaApp } from '@ima/testing-library/integration';
+import {
+  initImaApp,
+  routeImaApp,
+  clearImaApp,
+} from '@ima/testing-library/integration';
 
 import cards from '../../../public/cards.json';
 
@@ -21,7 +25,7 @@ describe('Home page', () => {
       },
     });
 
-    await app.oc.get('$Router').route('/');
+    await routeImaApp(app, '/');
   });
 
   afterEach(async () => {

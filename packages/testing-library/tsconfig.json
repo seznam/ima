@@ -10,9 +10,17 @@
     ],
     "outDir": "dist",
     "paths": {
-      "app/main": ["./src/client/app/main"],
+      "app/main": [
+        "./src/client/app/main"
+      ],
     },
-    "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob", "to-aop"]
+    "types": [
+      "webpack",
+      "core",
+      "cli",
+      "react-page-renderer",
+      "less-plugin-glob"
+    ]
   },
   "include": [
     "src"

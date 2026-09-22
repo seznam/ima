@@ -5,6 +5,7 @@ import {
 } from 'node:timers';
 
 import * as imaFallback from '@ima/core';
+import { routeClientApp } from '@ima/core';
 import type {
   ClientRouter,
   InitAppConfig,
@@ -14,26 +15,25 @@ import type {
 import { assignRecursively } from '@ima/helpers';
 
 import { bootImaApp, validateJsdomEnvironment } from '../boot';
-import { unAopAll } from './aop';
-import { initBindApp, initRouter } from './bind';
+import { initBindApp } from './bind';
 import { trackWindowEventListeners } from './events';
 import { getImaTestingLibraryClientConfig } from '../client/configuration';
 import type { ImaApp } from '../types';
 
-const setIntervalNative = global.setInterval;
-const setTimeoutNative = global.setTimeout;
-const setImmediateNative = global.setImmediate;
-const clearImmediateNative = global.clearImmediate;
-const consoleAssertNative = global.console?.assert;
-let windowScrollToNative: typeof window.scrollTo | undefined;
+interface EnvironmentNatives {
+  setInterval: typeof setInterval;
+  setTimeout: typeof setTimeout;
+  setImmediate: typeof setImmediate;
+  clearImmediate: typeof clearImmediate;
+  consoleAssert?: typeof console.assert;
+  windowScrollTo?: typeof window.scrollTo;
+  windowRequestAnimationFrame?: typeof window.requestAnimationFrame;
+}
 
-let timers: Array<{
-  timer:
-    | ReturnType<typeof setInterval>
-    | ReturnType<typeof setTimeout>
-    | ReturnType<typeof setImmediate>;
-  clear: () => void;
-}> = [];
+// Captured when the shims are installed so Jest fake timers installed by the test
+// are wrapped instead of being replaced by the real implementations.
+let environmentNatives: EnvironmentNatives | undefined;
+let pendingTimerCleanups: Array<() => void> = [];
 
 // Kept so a not awaited clearImaApp still finishes before the next application boots.
 let pendingCleanup: Promise<void> | undefined;
@@ -103,25 +103,32 @@ async function clearImaAppInternal(app?: ImaApp | null): Promise<void> {
 }
 
 function restoreIntegrationEnvironment(): void {
-  global.setInterval = setIntervalNative;
-  global.setTimeout = setTimeoutNative;
-  global.setImmediate = setImmediateNative;
-  global.clearImmediate = clearImmediateNative;
+  if (environmentNatives) {
+    global.setInterval = environmentNatives.setInterval;
+    global.setTimeout = environmentNatives.setTimeout;
+    global.setImmediate = environmentNatives.setImmediate;
+    global.clearImmediate = environmentNatives.clearImmediate;
 
-  if (global.console && consoleAssertNative) {
-    global.console.assert = consoleAssertNative;
+    if (global.console && environmentNatives.consoleAssert) {
+      global.console.assert = environmentNatives.consoleAssert;
+    }
+
+    if (environmentNatives.windowScrollTo) {
+      window.scrollTo = environmentNatives.windowScrollTo;
+    }
+
+    if (environmentNatives.windowRequestAnimationFrame) {
+      window.requestAnimationFrame =
+        environmentNatives.windowRequestAnimationFrame;
+    }
+
+    environmentNatives = undefined;
   }
 
-  if (windowScrollToNative) {
-    window.scrollTo = windowScrollToNative;
-    windowScrollToNative = undefined;
-  }
-
-  timers.forEach(({ clear }) => clear());
-  timers = [];
+  pendingTimerCleanups.forEach(clear => clear());
+  pendingTimerCleanups = [];
   clearWindowEventListeners?.();
   clearWindowEventListeners = undefined;
-  unAopAll();
 }
 
 /**
@@ -129,10 +136,11 @@ function restoreIntegrationEnvironment(): void {
  *
  * Compared to the unit-testing initImaApp from @ima/testing-library, this variant:
  * - Dynamically imports the app's main module through the app/main alias
- * - Wraps global timers so they can be cleaned up after each test
+ * - Wraps global timers and animation frames so they can be cleaned up after each test
  * - Runs a prebootScript before booting
  * - Supports boot config method overrides through the client configuration
- * - Calls $Router.listen() so IMA's route handler is active in jsdom
+ *
+ * The booted application is not routed, use routeImaApp for the initial navigation.
  *
  * @param bootConfigMethods - Optional boot config methods that extend the configured defaults.
  */
@@ -158,12 +166,7 @@ export async function initImaApp(
   bootInProgress = true;
 
   try {
-    // Setup global assert for XPath selectors
-    global.console.assert = assert;
-
-    _installTimerWrappers();
-    windowScrollToNative = window.scrollTo;
-    window.scrollTo = () => {};
+    _installEnvironmentShims();
 
     await integrationConfig.prebootScript();
 
@@ -217,8 +220,6 @@ export async function initImaApp(
     });
 
     try {
-      (app.oc.get('$Router') as ClientRouter).listen();
-
       const result = Object.assign(
         app,
         integrationConfig.extendAppObject(app)
@@ -245,31 +246,63 @@ export async function initImaApp(
   }
 
   /**
-   * Wraps the global timer methods to collect their return values
-   * so they can be cleared in clearImaApp.
+   * Overrides the globals an IMA application relies on but jsdom does not provide,
+   * and wraps the scheduling globals so pending work can be cleared in clearImaApp.
    */
-  function _installTimerWrappers(): void {
+  function _installEnvironmentShims(): void {
+    const setIntervalNative = global.setInterval;
+    const setTimeoutNative = global.setTimeout;
+    const setImmediateNative = global.setImmediate;
+    const clearImmediateNative = global.clearImmediate;
+    const requestAnimationFrameNative = window.requestAnimationFrame;
+    const cancelAnimationFrameNative = window.cancelAnimationFrame;
+
+    environmentNatives = {
+      setInterval: setIntervalNative,
+      setTimeout: setTimeoutNative,
+      setImmediate: setImmediateNative,
+      clearImmediate: clearImmediateNative,
+      consoleAssert: global.console?.assert,
+      windowScrollTo: window.scrollTo,
+      windowRequestAnimationFrame: requestAnimationFrameNative,
+    };
+
+    // node:assert reports the failing expression, which the XPath selectors rely on.
+    global.console.assert = assert;
+    window.scrollTo = () => {};
+
     global.setInterval = ((...args: Parameters<typeof setInterval>) => {
       const timer = setIntervalNative(...args);
-      timers.push({ timer, clear: () => global.clearInterval(timer) });
+      pendingTimerCleanups.push(() => global.clearInterval(timer));
       return timer;
     }) as typeof setInterval;
 
     global.setTimeout = ((...args: Parameters<typeof setTimeout>) => {
       const timer = setTimeoutNative(...args);
-      timers.push({ timer, clear: () => global.clearTimeout(timer) });
+      pendingTimerCleanups.push(() => global.clearTimeout(timer));
       return timer;
     }) as typeof setTimeout;
 
     global.clearImmediate = clearImmediateNative ?? clearImmediateFallback;
     global.setImmediate = ((...args: Parameters<typeof setImmediate>) => {
       const timer = (setImmediateNative ?? setImmediateFallback)(...args);
-      timers.push({
-        timer,
-        clear: () => (clearImmediateNative ?? clearImmediateFallback)(timer),
-      });
+      pendingTimerCleanups.push(() =>
+        (clearImmediateNative ?? clearImmediateFallback)(timer)
+      );
       return timer;
     }) as typeof setImmediate;
+
+    // PageNavigationHandler scrolls through a double animation frame, which would
+    // otherwise call the restored jsdom window.scrollTo after the test finished.
+    if (typeof requestAnimationFrameNative === 'function') {
+      window.requestAnimationFrame = (callback => {
+        const handle = requestAnimationFrameNative.call(window, callback);
+        pendingTimerCleanups.push(() =>
+          cancelAnimationFrameNative?.call(window, handle)
+        );
+        return handle;
+      }) as typeof window.requestAnimationFrame;
+    }
   }
 
   /**
@@ -303,14 +336,13 @@ export async function initImaApp(
       invoke(integrationConfig);
       invoke(bootConfigMethods);
 
-      // Runs last so that the hook is applied to the final $Router implementation.
+      // Runs last so that the final $Window instance is the tracked one.
       if (isBindApp) {
         const [, oc] = args as Parameters<typeof initBindApp>;
 
         clearWindowEventListeners = trackWindowEventListeners(
           oc.get('$Window')
         );
-        initRouter(oc);
       }
 
       if (method === 'initSettings') {
@@ -320,4 +352,28 @@ export async function initImaApp(
       return null;
     };
   }
+}
+
+/**
+ * Performs the initial navigation of a booted application through IMA's own
+ * routeClientApp, which starts the router listeners and routes to the current path.
+ *
+ * The address bar is updated before routing because IMA expects the browser to have
+ * navigated already - PageNavigationHandler deliberately ignores the first
+ * pre-manage call and leaves the URL untouched.
+ *
+ * @param app - The application returned from initImaApp.
+ * @param path - Path to navigate to. Defaults to the current jsdom location.
+ * @param routerRoot - Optional additional event target the router listens on.
+ */
+export async function routeImaApp(
+  app: ImaApp,
+  path?: string,
+  routerRoot?: EventTarget
+): Promise<unknown> {
+  if (path !== undefined) {
+    window.history.replaceState(null, '', path);
+  }
+
+  return routeClientApp(app, routerRoot);
 }

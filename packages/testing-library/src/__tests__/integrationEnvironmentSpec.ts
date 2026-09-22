@@ -7,7 +7,7 @@ import { clearImaApp, initImaApp } from '../integration';
 const clientConfig = getImaTestingLibraryClientConfig();
 const defaultIntegrationConfig = { ...clientConfig.integration };
 
-describe('integration initImaApp', () => {
+describe('integration environment', () => {
   const originalDocument = (globalThis as any).document;
   const originalWindow = (globalThis as any).window;
   const originalSetInterval = global.setInterval;
@@ -76,28 +76,62 @@ describe('integration initImaApp', () => {
     delete (globalThis as any).clearImmediate;
     delete (globalThis as any).MessageChannel;
     const pendingCallback = jest.fn();
-
-    await jest.isolateModulesAsync(async () => {
-      const { initImaApp: isolatedInitImaApp } = require('../integration/app');
-      const {
-        setImaTestingLibraryClientConfig: configureClient,
-      } = require('../client/configuration');
-      const prebootScript = jest.fn(async () => {
-        await new Promise<void>(resolve => global.setImmediate(resolve));
-        global.setImmediate(pendingCallback);
-        throw new Error('preboot failed');
-      });
-
-      configureClient({ integration: { prebootScript } });
-
-      await expect(isolatedInitImaApp()).rejects.toThrow('preboot failed');
-      expect(prebootScript).toHaveBeenCalledTimes(1);
-      expect(global.setImmediate).toBeUndefined();
-      expect(global.clearImmediate).toBeUndefined();
+    const prebootScript = jest.fn(async () => {
+      await new Promise<void>(resolve => global.setImmediate(resolve));
+      global.setImmediate(pendingCallback);
+      throw new Error('preboot failed');
     });
+
+    setImaTestingLibraryClientConfig({ integration: { prebootScript } });
+
+    await expect(initImaApp()).rejects.toThrow('preboot failed');
+
+    expect(prebootScript).toHaveBeenCalledTimes(1);
+    expect(global.setImmediate).toBeUndefined();
+    expect(global.clearImmediate).toBeUndefined();
 
     await new Promise<void>(resolve => originalSetImmediate(resolve));
     expect(pendingCallback).not.toHaveBeenCalled();
+  });
+
+  it('wraps the timers installed by the test instead of the real ones', async () => {
+    const fakeSetTimeout = jest.fn(originalSetTimeout);
+    global.setTimeout = fakeSetTimeout as unknown as typeof setTimeout;
+
+    setImaTestingLibraryClientConfig({
+      integration: {
+        prebootScript: () => {
+          setTimeout(() => {}, 1000);
+          throw new Error('preboot failed');
+        },
+      },
+    });
+
+    await expect(initImaApp()).rejects.toThrow('preboot failed');
+
+    expect(fakeSetTimeout).toHaveBeenCalledTimes(1);
+    expect(global.setTimeout).toBe(fakeSetTimeout);
+  });
+
+  it('cancels the animation frames scheduled during the test', async () => {
+    const requestAnimationFrame = jest.fn(() => 42);
+    const cancelAnimationFrame = jest.fn();
+    (globalThis as any).window.requestAnimationFrame = requestAnimationFrame;
+    (globalThis as any).window.cancelAnimationFrame = cancelAnimationFrame;
+
+    setImaTestingLibraryClientConfig({
+      integration: {
+        prebootScript: () => {
+          window.requestAnimationFrame(() => {});
+          throw new Error('preboot failed');
+        },
+      },
+    });
+
+    await expect(initImaApp()).rejects.toThrow('preboot failed');
+
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(42);
+    expect(window.requestAnimationFrame).toBe(requestAnimationFrame);
   });
 
   it('leaves native event listeners under their owners control', async () => {

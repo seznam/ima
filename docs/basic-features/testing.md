@@ -107,11 +107,15 @@ async function renderHookWithContext<TResult, TProps>(
 
 ## Integration testing
 
-The `@ima/testing-library/integration` entry point boots the whole application instead of a single component. It reuses the JSDOM prepared by the Jest preset, so no additional DOM implementation is initialized, and it renders IMA pages through React Testing Library. Queries from `@ima/testing-library` therefore work against the rendered page.
+The `@ima/testing-library/integration` entry point boots the whole application instead of a single component. It reuses the JSDOM prepared by the Jest preset, so no additional DOM implementation is initialized. The application page renderer runs inside React Testing Library's `act` boundary and owns its roots, allowing teardown without retaining containers in RTL's global registry or unmounting unrelated renders. Testing Library queries work against the rendered page.
 
 ```javascript
 import { screen } from '@ima/testing-library';
-import { clearImaApp, initImaApp } from '@ima/testing-library/integration';
+import {
+  clearImaApp,
+  initImaApp,
+  routeImaApp,
+} from '@ima/testing-library/integration';
 
 describe('Home page', () => {
   let app;
@@ -119,7 +123,7 @@ describe('Home page', () => {
   beforeAll(async () => {
     app = await initImaApp();
 
-    await app.oc.get('$Router').route('/');
+    await routeImaApp(app, '/');
   });
 
   afterAll(async () => {
@@ -132,9 +136,13 @@ describe('Home page', () => {
 });
 ```
 
-`initImaApp` loads the application entry point mapped as `app/main`, so make sure `moduleNameMapper` resolves `^app/main$` when your entry point is not at the default location. It accepts optional `initSettings`, `initBindApp`, `initServicesApp` and `initRoutes` overrides that are merged on top of the application boot config.
+`initImaApp` loads the application entry point mapped as `app/main`, so make sure `moduleNameMapper` resolves `^app/main$` when your entry point is not at the default location. It accepts optional `initSettings`, `initBindApp`, `initServicesApp` and `initRoutes` overrides. They run in addition to the application's own boot config methods, so an `initRoutes` override can only add routes - reusing a route name the application already registered throws.
 
-Always call `clearImaApp` when the suite finishes. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped global timers, `console.assert`, `window.scrollTo`, and all AOP hooks registered through the integration `aop` helper. It removes application-owned listeners registered through `$Window.bindEventListener` without removing React's document listeners. Direct native listeners must be removed by their owner during teardown. Awaiting cleanup is recommended, but a pending cleanup is always finished before the next `initImaApp` boots an application. Only one application can boot at a time, so overlapping `initImaApp` calls are rejected.
+`initImaApp` boots the application without navigating and without starting the router listeners. `routeImaApp(app, path)` sets the address bar and then delegates to IMA's `routeClientApp`, which starts the listeners and routes to the current path. The address bar has to be set first because IMA expects the browser to have navigated already and `PageNavigationHandler` deliberately ignores the first pre-manage call. Later navigations, whether triggered through `app.oc.get('$Router').route(path)` or by interacting with the rendered page, update the address bar through the application's own navigation handler.
+
+The global `$Debug` follows `$IMA.$Debug`, so a suite can opt out of the framework's debug-only code paths by setting `window.$IMA.$Debug = false` before `initImaApp`.
+
+Always call `clearImaApp` when the suite finishes. It unlistens the router, unmounts the page, destroys the page manager, clears the object container, and restores the wrapped global timers, animation frames, `console.assert` and `window.scrollTo`. The timers are wrapped when the application boots, so Jest fake timers installed by the test are wrapped instead of being replaced. It removes application-owned listeners registered through `$Window.bindEventListener` without removing React's document listeners. Direct native listeners must be removed by their owner during teardown. Awaiting cleanup is recommended, but a pending cleanup is always finished before the next `initImaApp` boots an application. Only one application can boot at a time, so overlapping `initImaApp` calls are rejected.
 
 ### Shared integration configuration
 
@@ -159,6 +167,8 @@ setImaTestingLibraryClientConfig({
 ### Environment
 
 The IMA environment used by tests is resolved when the JSDOM HTML template is generated, which happens before setup files run. Configure it in the Jest config through `@ima/testing-library/server`. It defaults to `test` and is passed explicitly to `createIMAServer` as `environmentName`, taking precedence over shell variables and earlier server imports without changing `process.env`. This requires `@ima/server` 20.1 or newer.
+
+This is a breaking default change in `@ima/testing-library` 21 for unit tests too. When upgrading, explicitly configure any environment previously selected through `IMA_ENV` or `NODE_ENV`, or set `environment: undefined` to retain legacy shell-based resolution.
 
 ```javascript
 // jest.config.js

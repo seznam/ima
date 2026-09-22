@@ -50,14 +50,18 @@ export async function bootImaApp({
 }: BootImaAppOptions): Promise<ImaApp> {
   await generateDictionary();
 
+  if (onLoad) {
+    await ima.onLoad();
+  }
+
+  // reviveClientApp derives the global from $IMA before anything reads it, so
+  // tests can opt out of the debug-only code paths of the framework.
+  globalThis.$Debug = !!globalThis.$IMA?.$Debug;
+
   const app = await ima.createImaApp();
 
   try {
     const bootConfig = await ima.getClientBootConfig(appConfigFunctions);
-
-    if (onLoad) {
-      await ima.onLoad();
-    }
 
     await ima.bootClientApp(app, bootConfig);
 
