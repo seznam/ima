@@ -41,7 +41,11 @@ export function validateJsdomEnvironment(): void {
  * Boots an IMA application in a jsdom environment.
  * Handles dictionary initialization, app creation, and boot.
  *
+ * @param options - The IMA core module, the boot config functions and whether to
+ *        await ima.onLoad() first.
  * @returns The booted IMA application instance.
+ * @throws The boot error after clearing the object container, or an
+ *         AggregateError when clearing the object container fails as well.
  */
 export async function bootImaApp({
   ima = imaFallback,
@@ -53,10 +57,6 @@ export async function bootImaApp({
   if (onLoad) {
     await ima.onLoad();
   }
-
-  // reviveClientApp derives the global from $IMA before anything reads it, so
-  // tests can opt out of the debug-only code paths of the framework.
-  globalThis.$Debug = !!globalThis.$IMA?.$Debug;
 
   const app = await ima.createImaApp();
 

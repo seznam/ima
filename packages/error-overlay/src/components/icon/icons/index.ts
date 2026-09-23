@@ -8,7 +8,12 @@ import EditIcon from './EditIcon';
 import OpenEyeIcon from './OpenEyeIcon';
 
 export type IconType =
-  'closedEye' | 'cross' | 'edit' | 'openEye' | 'alert' | 'chevron';
+  | 'closedEye'
+  | 'cross'
+  | 'edit'
+  | 'openEye'
+  | 'alert'
+  | 'chevron';
 
 export type IconComponentProps = {
   className?: string;

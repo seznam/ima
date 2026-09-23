@@ -28,8 +28,6 @@ export async function initImaApp(): Promise<ImaApp> {
 
   const app = await bootImaApp({
     ima,
-    // Init language files must happen before oc.get('$Dictionary').init() is called
-    // (usually part of initServices), bootImaApp handles generateDictionary internally.
     appConfigFunctions: await getInitialAppConfigFunctions(),
   });
 

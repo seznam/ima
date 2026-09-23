@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { AppEnvironment, ParsedEnvironment } from '@ima/core';
+import type { AppEnvironment, Environment } from '@ima/core';
 import type { createIMAServer } from '@ima/server';
 
 export interface ServerConfiguration {
@@ -21,7 +21,7 @@ export interface ServerConfiguration {
   /**
    * The process environment configuration. This allows you to change the environment configuration that will be available in jsdom.
    */
-  processEnvironment: (env: ParsedEnvironment) => ParsedEnvironment;
+  processEnvironment: (env: Environment) => Environment;
   /**
    * The path to the application folder.
    */

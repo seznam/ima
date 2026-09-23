@@ -18,6 +18,13 @@ function matchesListener(
   );
 }
 
+/**
+ * Records the listeners bound through the given $Window instance.
+ *
+ * @param imaWindow - The application's $Window service.
+ * @returns A function that unbinds the listeners still registered and restores
+ *          the original bind methods.
+ */
 export function trackWindowEventListeners(imaWindow: Window): () => void {
   const bindEventListener = imaWindow.bindEventListener;
   const unbindEventListener = imaWindow.unbindEventListener;

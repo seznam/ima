@@ -11,6 +11,7 @@ import {
   RouteNames,
   RouterEvents,
   pluginLoader,
+  type Extension,
 } from '@ima/core';
 import { useComponentUtils } from '@ima/react-page-renderer';
 import { fireEvent, screen, waitFor } from '@testing-library/dom';
@@ -25,6 +26,11 @@ interface LifecycleState {
   message?: string;
 }
 
+// IMA resolves the promises returned from load into the page state.
+type LifecycleResources = Omit<LifecycleState, 'details'> & {
+  details?: string | Promise<string>;
+};
+
 describe('integration application lifecycle', () => {
   const originalIma = window.$IMA;
   const bootStages: string[] = [];
@@ -34,6 +40,7 @@ describe('integration application lifecycle', () => {
   const onViewUnmount = jest.fn(() => lifecycle.push('view:unmount'));
   let app: ImaApp | undefined;
   let deferredDetails: Promise<string> | undefined;
+  let errorPageFails = false;
 
   class LifecycleExtension extends AbstractExtension<
     { message: string },
@@ -72,13 +79,14 @@ describe('integration application lifecycle', () => {
   }
 
   class LifecycleController extends AbstractController<
-    LifecycleState,
+    LifecycleResources,
     { title: string }
   > {
-    private extension = new LifecycleExtension();
+    readonly extension = new LifecycleExtension();
 
-    getExtensions() {
-      return [this.extension];
+    getExtensions(): Extension[] {
+      // The base signature only accepts extensions with an empty state.
+      return [this.extension as unknown as Extension];
     }
 
     init() {
@@ -125,6 +133,10 @@ describe('integration application lifecycle', () => {
 
   class ErrorController extends AbstractController<{ title: string }> {
     load() {
+      if (errorPageFails) {
+        throw new Error('error page failed');
+      }
+
       return { title: 'error page' };
     }
   }
@@ -190,6 +202,7 @@ describe('integration application lifecycle', () => {
     lifecycle.length = 0;
     controllers.length = 0;
     deferredDetails = undefined;
+    errorPageFails = false;
     onViewMount.mockClear();
     onViewUnmount.mockClear();
     document.body.innerHTML = '<main id="page"></main>';
@@ -379,11 +392,41 @@ describe('integration application lifecycle', () => {
     expect(fatalErrorHandler).not.toHaveBeenCalled();
   });
 
+  it('rejects the initial route with a fatal error when the application has no handler', async () => {
+    jest.spyOn(console, 'error').mockImplementation();
+    errorPageFails = true;
+
+    app = await bootApplication('first');
+
+    await expect(routeImaApp(app, '/broken')).rejects.toThrow(
+      'error page failed'
+    );
+    expect(window.$IMA.fatalErrorHandler).toBeUndefined();
+  });
+
+  it('passes fatal routing errors to the application handler', async () => {
+    jest.spyOn(console, 'error').mockImplementation();
+    const fatalErrorHandler = jest.fn();
+    window.$IMA.fatalErrorHandler = fatalErrorHandler;
+    errorPageFails = true;
+
+    app = await bootApplication('first');
+    await routeImaApp(app, '/broken');
+
+    expect(fatalErrorHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining('error page failed'),
+      })
+    );
+  });
+
   it('renders deferred load results and subsequent controller state updates', async () => {
     app = await bootApplication('first');
     await routeImaApp(app);
-    const details = Promise.withResolvers<string>();
-    deferredDetails = details.promise;
+    let resolveDetails = (_details: string) => {};
+    deferredDetails = new Promise<string>(resolve => {
+      resolveDetails = resolve;
+    });
 
     const navigation = app.oc.get('$Router').route('/deferred');
 
@@ -391,7 +434,7 @@ describe('integration application lifecycle', () => {
     expect(screen.getByText('Loading details')).toBeVisible();
     expect(lifecycle).not.toContain('deferred:activate');
 
-    details.resolve('Loaded details');
+    resolveDetails('Loaded details');
     await expect(navigation).resolves.toMatchObject({ status: 200 });
 
     expect(screen.getByText('Loaded details')).toBeVisible();
@@ -423,9 +466,7 @@ describe('integration application lifecycle', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Change message' }));
 
     await screen.findByText('Extension event');
-    expect(controller.getExtensions()[0].getState().message).toBe(
-      'Extension event'
-    );
+    expect(controller.extension.getState().message).toBe('Extension event');
     expect(controller.getState()).toMatchObject({
       title: 'Controller event',
       message: 'Extension event',

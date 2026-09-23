@@ -4,21 +4,11 @@ import { ClientWindow } from '@ima/core';
 import { act, render } from '@testing-library/react/pure';
 import { createElement } from 'react';
 
-import {
-  getImaTestingLibraryClientConfig,
-  setImaTestingLibraryClientConfig,
-} from '../client/configuration';
+import { setImaTestingLibraryClientConfig } from '../client/configuration';
 import { initImaApp } from '../integration';
 import { trackWindowEventListeners } from '../integration/events';
 
 describe('integration React events', () => {
-  const clientConfig = getImaTestingLibraryClientConfig();
-  const defaultIntegrationConfig = { ...clientConfig.integration };
-
-  afterEach(() => {
-    clientConfig.integration = { ...defaultIntegrationConfig };
-  });
-
   it('removes IMA-owned listeners without removing native listeners', () => {
     const imaWindow = new ClientWindow();
     const nativeListener = jest.fn();

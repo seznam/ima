@@ -1,4 +1,4 @@
-import type { ParsedEnvironment } from '@ima/core';
+import type { Environment, ParsedEnvironment } from '@ima/core';
 import { createIMAServer } from '@ima/server';
 
 import {
@@ -7,21 +7,30 @@ import {
 } from '../server/configuration';
 import { getIMAResponseContent } from '../server/content';
 
-let mockImaEnvAtServerCreation: string | undefined;
-
 jest.mock('@ima/server', () => ({
-  createIMAServer: jest.fn(() => {
-    mockImaEnvAtServerCreation = process.env.IMA_ENV;
-
-    return {
-      serverApp: {
-        requestHandler: jest.fn(() =>
-          Promise.resolve({ status: 200, content: '<main></main>' })
-        ),
-      },
-    };
-  }),
+  createIMAServer: jest.fn(() => ({
+    serverApp: {
+      requestHandler: jest.fn(() =>
+        Promise.resolve({ status: 200, content: '<main></main>' })
+      ),
+    },
+  })),
 }));
+
+// Reports the IMA_ENV visible to the factory module, like the real factory captures it.
+jest.mock('@ima/server/lib/factory/environmentFactory.js', () =>
+  jest.fn(
+    ({
+      processEnvironment,
+    }: {
+      processEnvironment: (environment: Environment) => Environment;
+    }) => processEnvironment({ $Env: process.env.IMA_ENV, $Version: 'test' })
+  )
+);
+
+const environmentFactory = jest.requireMock<jest.Mock>(
+  '@ima/server/lib/factory/environmentFactory.js'
+);
 
 describe('getIMAResponseContent', () => {
   const originalImaEnv = process.env.IMA_ENV;
@@ -35,25 +44,54 @@ describe('getIMAResponseContent', () => {
     }
 
     setImaTestingLibraryServerConfig(originalConfiguration);
-    mockImaEnvAtServerCreation = undefined;
     jest.clearAllMocks();
   });
 
-  it('passes the configured environment without changing process variables', async () => {
+  it('resolves the configured environment regardless of IMA_ENV and restores it', async () => {
     process.env.IMA_ENV = 'prod';
     setImaTestingLibraryServerConfig({ environment: 'test' });
 
     await expect(getIMAResponseContent()).resolves.toBe('<main></main>');
 
-    expect(createIMAServer).toHaveBeenCalledTimes(1);
-    expect(createIMAServer).toHaveBeenCalledWith(
-      expect.objectContaining({ environmentName: 'test' })
+    expect(environmentFactory).toHaveBeenCalledWith(
+      expect.objectContaining({
+        applicationFolder: originalConfiguration.applicationFolder,
+      })
     );
-    expect(mockImaEnvAtServerCreation).toBe('prod');
+    expect(createIMAServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environment: expect.objectContaining({ $Env: 'test' }),
+      })
+    );
     expect(process.env.IMA_ENV).toBe('prod');
   });
 
-  it('preserves normalized degradation settings when forcing SPA mode', async () => {
+  it('restores an unset IMA_ENV when resolving the environment fails', async () => {
+    delete process.env.IMA_ENV;
+    environmentFactory.mockImplementationOnce(() => {
+      throw new Error('resolution failed');
+    });
+
+    await expect(getIMAResponseContent()).rejects.toThrow('resolution failed');
+
+    expect(process.env.IMA_ENV).toBeUndefined();
+  });
+
+  it('keeps the @ima/server resolution without a configured environment', async () => {
+    setImaTestingLibraryServerConfig({ environment: undefined });
+
+    await getIMAResponseContent();
+
+    expect(environmentFactory).not.toHaveBeenCalled();
+    expect(createIMAServer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        environment: undefined,
+        processEnvironment: expect.any(Function),
+      })
+    );
+  });
+
+  it('preserves the other degradation callbacks when forcing SPA mode', async () => {
     const degradation = {
       isSPA: () => false,
       isSPAPrefetch: () => true,
@@ -86,7 +124,7 @@ describe('getIMAResponseContent', () => {
       },
     };
     const processEnvironment = jest.fn(
-      (currentEnvironment: ParsedEnvironment) => currentEnvironment
+      (currentEnvironment: Environment) => currentEnvironment
     );
     setImaTestingLibraryServerConfig({ processEnvironment });
 
@@ -105,12 +143,12 @@ describe('getIMAResponseContent', () => {
         degradation: { ...degradation, isSPA: expect.any(Function) },
       },
     });
-    expect(result?.$Server.degradation.isSPA({})).toBe(true);
+    expect(result?.$Server?.degradation?.isSPA?.({})).toBe(true);
     expect(processEnvironment).toHaveBeenCalledWith(result);
     expect(environment.$Server.degradation.isSPA({})).toBe(false);
   });
 
-  it('passes a new environment on each template generation', async () => {
+  it('resolves a new environment on each template generation', async () => {
     setImaTestingLibraryServerConfig({ environment: 'test' });
     await getIMAResponseContent();
 
@@ -119,11 +157,15 @@ describe('getIMAResponseContent', () => {
 
     expect(createIMAServer).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ environmentName: 'test' })
+      expect.objectContaining({
+        environment: expect.objectContaining({ $Env: 'test' }),
+      })
     );
     expect(createIMAServer).toHaveBeenNthCalledWith(
       2,
-      expect.objectContaining({ environmentName: 'regression' })
+      expect.objectContaining({
+        environment: expect.objectContaining({ $Env: 'regression' }),
+      })
     );
   });
 });

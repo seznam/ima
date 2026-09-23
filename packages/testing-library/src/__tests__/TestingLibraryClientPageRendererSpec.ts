@@ -92,6 +92,20 @@ describe('TestingLibraryClientPageRenderer', () => {
   const PageView = (({ title }: { title: string }) =>
     createElement('h1', null, title)) as unknown as ComponentType;
 
+  async function mountPage(title: string) {
+    const renderer = createRenderer();
+    const state = { title };
+
+    await renderer.mount(
+      createController(state),
+      PageView,
+      state as unknown as Record<string, Promise<unknown>>,
+      routeOptions
+    );
+
+    return renderer;
+  }
+
   it('does not retain discarded application roots in Testing Library cleanup', async () => {
     const createRoot = jest.mocked(reactDomClient.createRoot);
     const hydrateRoot = jest.mocked(reactDomClient.hydrateRoot);
@@ -102,15 +116,7 @@ describe('TestingLibraryClientPageRenderer', () => {
         createRoot.mockClear();
         hydrateRoot.mockClear();
         document.body.innerHTML = '<main id="page"></main>';
-        const renderer = createRenderer();
-        const state = { title };
-
-        await renderer.mount(
-          createController(state),
-          PageView,
-          state as unknown as Record<string, Promise<unknown>>,
-          routeOptions
-        );
+        const renderer = await mountPage(title);
 
         const root =
           createRoot.mock.results.at(-1)?.value ??
@@ -133,15 +139,7 @@ describe('TestingLibraryClientPageRenderer', () => {
   it('renders and updates an IMA page through React Testing Library', async () => {
     document.body.innerHTML = '<main id="page"></main>';
 
-    const state = { title: 'Initial title' };
-    const renderer = createRenderer();
-
-    await renderer.mount(
-      createController(state),
-      PageView,
-      state as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
+    const renderer = await mountPage('Initial title');
 
     expect(
       screen.getByRole('heading', { name: 'Initial title' })
@@ -161,27 +159,11 @@ describe('TestingLibraryClientPageRenderer', () => {
   it('can mount a new application after the previous page was cleared', async () => {
     document.body.innerHTML = '<main id="page"></main>';
 
-    const firstRenderer = createRenderer();
-    const firstState = { title: 'First application' };
-
-    await firstRenderer.mount(
-      createController(firstState),
-      PageView,
-      firstState as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
+    const firstRenderer = await mountPage('First application');
 
     firstRenderer.unmount();
 
-    const secondRenderer = createRenderer();
-    const secondState = { title: 'Second application' };
-
-    await secondRenderer.mount(
-      createController(secondState),
-      PageView,
-      secondState as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
+    const secondRenderer = await mountPage('Second application');
 
     expect(
       screen.getByRole('heading', { name: 'Second application' })
@@ -194,15 +176,7 @@ describe('TestingLibraryClientPageRenderer', () => {
     document.body.innerHTML =
       '<main id="page"><h1>Server application</h1></main>';
 
-    const renderer = createRenderer();
-    const state = { title: 'Server application' };
-
-    await renderer.mount(
-      createController(state),
-      PageView,
-      state as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
+    const renderer = await mountPage('Server application');
 
     await renderer.setState({ title: 'Client application' });
     renderer.unmount();
@@ -218,15 +192,7 @@ describe('TestingLibraryClientPageRenderer', () => {
     const unrelatedRender = render(
       createElement('p', null, 'Unrelated render')
     );
-    const renderer = createRenderer();
-    const state = { title: 'IMA application' };
-
-    await renderer.mount(
-      createController(state),
-      PageView,
-      state as unknown as Record<string, Promise<unknown>>,
-      routeOptions
-    );
+    const renderer = await mountPage('IMA application');
 
     renderer.unmount();
 
@@ -240,15 +206,7 @@ describe('TestingLibraryClientPageRenderer', () => {
     beforeAll(async () => {
       document.body.innerHTML = '<main id="page"></main>';
 
-      const state = { title: 'Persisted title' };
-      renderer = createRenderer();
-
-      await renderer.mount(
-        createController(state),
-        PageView,
-        state as unknown as Record<string, Promise<unknown>>,
-        routeOptions
-      );
+      renderer = await mountPage('Persisted title');
     });
 
     afterAll(() => {

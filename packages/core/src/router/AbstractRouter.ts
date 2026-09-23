@@ -95,7 +95,8 @@ export abstract class AbstractRouter extends Router {
   protected _currentlyRoutedPath = '';
   protected _middlewareTimeout: number;
   protected _isSPARouted:
-    NonNullable<Settings['$Router']>['isSPARouted'] | undefined;
+    | NonNullable<Settings['$Router']>['isSPARouted']
+    | undefined;
 
   /**
    * Initializes the router.

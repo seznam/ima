@@ -87,7 +87,8 @@ export abstract class MetaManager {
    * @return [key, value] pairs of named meta information.
    */
   getMetaNamesIterator():
-    IterableIterator<[string, MetaManagerRecord<'content'>]> | never[] {
+    | IterableIterator<[string, MetaManagerRecord<'content'>]>
+    | never[] {
     return [];
   }
 
@@ -137,7 +138,8 @@ export abstract class MetaManager {
    * @return [key, value] pairs of meta information properties.
    */
   getMetaPropertiesIterator():
-    IterableIterator<[string, MetaManagerRecord<'content'>]> | never[] {
+    | IterableIterator<[string, MetaManagerRecord<'content'>]>
+    | never[] {
     return [];
   }
 
@@ -182,7 +184,8 @@ export abstract class MetaManager {
    * @return [key, value] pairs of currently set links.
    */
   getLinksIterator():
-    IterableIterator<[string, MetaManagerRecord<'href'>]> | never[] {
+    | IterableIterator<[string, MetaManagerRecord<'href'>]>
+    | never[] {
     return [];
   }
 

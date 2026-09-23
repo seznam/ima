@@ -4,8 +4,7 @@ import { PageStateDispatcherEvents } from '../page/state/PageStateManagerImpl';
 import { RouterDispatcherEvents } from '../router/AbstractRouter';
 
 export interface DispatcherEventsMap
-  extends
-    PageStateDispatcherEvents,
+  extends PageStateDispatcherEvents,
     PageManagerDispatcherEvents,
     RouterDispatcherEvents,
     PageRendererDispatcherEvents {}

@@ -13,7 +13,7 @@ export type IntegrationConfiguration = Partial<InitAppConfig> & {
    */
   extendAppObject: (app: ImaApp) => Record<string, unknown>;
   /**
-   * Runs before the IMA application is booted.
+   * Runs before app/main is imported and the IMA application is booted.
    */
   prebootScript: () => Promise<void> | void;
 };

@@ -64,7 +64,6 @@
     "memoize-one": "^6.0.0"
   },
   "devDependencies": {
-    "@ima/server": "*",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",
