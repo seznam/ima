@@ -10,11 +10,22 @@
     ],
     "outDir": "dist",
     "paths": {
-      "app/main": ["./src/client/app/main"],
+      "app/main": [
+        "./src/client/app/main"
+      ],
     },
-    "types": ["webpack", "core", "cli", "react-page-renderer", "less-plugin-glob"]
+    "types": [
+      "webpack",
+      "core",
+      "cli",
+      "react-page-renderer",
+      "less-plugin-glob"
+    ]
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "**/__tests__/**"
   ]
 }

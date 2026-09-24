@@ -33,6 +33,8 @@ module.exports = {
     '^@ima/storybook-integration/helpers$':
       '<rootDir>/../storybook-integration/src/helpers/index',
     '^@ima/testing-library$': '<rootDir>/../testing-library/src/index',
+    '^@ima/testing-library/integration$':
+      '<rootDir>/../testing-library/src/integration/index',
     '^@ima/testing-library/client$':
       '<rootDir>/../testing-library/src/client/index',
     '^@ima/testing-library/server$':
