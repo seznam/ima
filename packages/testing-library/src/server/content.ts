@@ -1,55 +1,11 @@
-import path from 'node:path';
-
 import type { Environment } from '@ima/core';
 import { createIMAServer } from '@ima/server';
 
 import { getImaTestingLibraryServerConfig } from './configuration';
 
 type ProcessEnvironment = (environment: Environment) => Environment;
-type EnvironmentFactory = (options: {
-  applicationFolder: string;
-  processEnvironment: ProcessEnvironment;
-}) => Environment;
 
 const serverConfig = getImaTestingLibraryServerConfig();
-
-/**
- * Resolves the named environment through a freshly loaded environmentFactory,
- * because @ima/server reads IMA_ENV only once, when the factory module loads.
- * IMA_ENV and the module cache are restored afterwards.
- */
-function createEnvironment(
-  environmentName: string,
-  applicationFolder: string,
-  processEnvironment: ProcessEnvironment
-): Environment {
-  const factoryPath = require.resolve(
-    '@ima/server/lib/factory/environmentFactory.js'
-  );
-  const cachedFactory = require.cache[factoryPath];
-  const imaEnv = process.env.IMA_ENV;
-
-  try {
-    delete require.cache[factoryPath];
-    process.env.IMA_ENV = environmentName;
-
-    const environmentFactory = require(factoryPath) as EnvironmentFactory;
-
-    return environmentFactory({ applicationFolder, processEnvironment });
-  } finally {
-    if (imaEnv === undefined) {
-      delete process.env.IMA_ENV;
-    } else {
-      process.env.IMA_ENV = imaEnv;
-    }
-
-    if (cachedFactory) {
-      require.cache[factoryPath] = cachedFactory;
-    } else {
-      delete require.cache[factoryPath];
-    }
-  }
-}
 
 /**
  * Get response content from @ima/server.
@@ -80,13 +36,6 @@ export async function getIMAResponseContent(): Promise<string> {
   const imaServer = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
-    environment: serverConfig.environment
-      ? createEnvironment(
-          serverConfig.environment,
-          serverConfig.applicationFolder ?? path.resolve('.'),
-          processEnvironment
-        )
-      : undefined,
     processEnvironment,
   });
 

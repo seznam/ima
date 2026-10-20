@@ -8,6 +8,12 @@ import type { Window } from '@ima/core';
 
 import { trackWindowEventListeners } from './events';
 
+type TimerKey =
+  | 'setInterval'
+  | 'setTimeout'
+  | 'setImmediate'
+  | 'clearImmediate';
+
 interface EnvironmentNatives {
   setInterval: typeof setInterval;
   setTimeout: typeof setTimeout;
@@ -22,6 +28,9 @@ interface EnvironmentNatives {
 // Captured when the shims are installed so Jest fake timers installed by the test
 // are wrapped instead of being replaced by the real implementations.
 let environmentNatives: EnvironmentNatives | undefined;
+// Wrappers installed on the globals. A global is restored only while it still holds
+// its wrapper, so timers replaced later by the test (fake or real) are left intact.
+let installedTimers: Record<TimerKey, unknown> | undefined;
 let pendingTimerCleanups: Array<() => void> = [];
 let clearWindowEventListeners: (() => void) | undefined;
 
@@ -85,6 +94,13 @@ export function installIntegrationEnvironment(): void {
     handle => (clearImmediateNative ?? clearImmediateFallback)(handle)
   ) as typeof setImmediate;
 
+  installedTimers = {
+    setInterval: global.setInterval,
+    setTimeout: global.setTimeout,
+    setImmediate: global.setImmediate,
+    clearImmediate: global.clearImmediate,
+  };
+
   // PageNavigationHandler scrolls through a double animation frame, which would
   // otherwise call the restored jsdom window.scrollTo after the test finished.
   if (typeof requestAnimationFrameNative === 'function') {
@@ -96,16 +112,23 @@ export function installIntegrationEnvironment(): void {
   }
 }
 
+function restoreTimer(key: TimerKey, native: unknown): void {
+  if (global[key] === installedTimers?.[key]) {
+    (global as unknown as Record<TimerKey, unknown>)[key] = native;
+  }
+}
+
 /**
  * Restores the globals replaced by installIntegrationEnvironment and cancels the
  * callbacks and listeners left behind by the application.
  */
 export function restoreIntegrationEnvironment(): void {
   if (environmentNatives) {
-    global.setInterval = environmentNatives.setInterval;
-    global.setTimeout = environmentNatives.setTimeout;
-    global.setImmediate = environmentNatives.setImmediate;
-    global.clearImmediate = environmentNatives.clearImmediate;
+    restoreTimer('setInterval', environmentNatives.setInterval);
+    restoreTimer('setTimeout', environmentNatives.setTimeout);
+    restoreTimer('setImmediate', environmentNatives.setImmediate);
+    restoreTimer('clearImmediate', environmentNatives.clearImmediate);
+    installedTimers = undefined;
     globalThis.$Debug = environmentNatives.debug;
 
     if (global.console && environmentNatives.consoleAssert) {

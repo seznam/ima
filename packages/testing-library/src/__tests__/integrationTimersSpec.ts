@@ -3,7 +3,7 @@
 import { waitFor } from '@testing-library/dom';
 
 import { setImaTestingLibraryClientConfig } from '../client/configuration';
-import { initImaApp } from '../integration';
+import { clearImaApp, initImaApp } from '../integration';
 
 describe('integration timers', () => {
   afterEach(() => {
@@ -31,5 +31,17 @@ describe('integration timers', () => {
     });
 
     await expect(initImaApp()).rejects.toThrow('preboot failed');
+  });
+
+  it('does not restore fake timers over real timers installed after boot', async () => {
+    jest.useFakeTimers({ advanceTimers: true });
+    const app = await initImaApp({ initRoutes: () => {} });
+
+    jest.useRealTimers();
+    const realSetTimeout = global.setTimeout;
+
+    await clearImaApp(app);
+
+    expect(global.setTimeout).toBe(realSetTimeout);
   });
 });

@@ -46,7 +46,6 @@ const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/serve
 
 setImaTestingLibraryServerConfig({
   // your custom config
-  environment: 'regression', // The default environment is test.
   applicationFolder: path.resolve('./__tests__/') // The default application folder is the root of the project, but you can specify a custom one to add some test specific logic.
 });
 
@@ -119,9 +118,7 @@ Import queries from `@testing-library/dom`: the `@ima/testing-library` entry poi
 
 `$Debug` follows `$IMA.$Debug`, so a suite can opt out of the framework's debug-only code paths by setting `window.$IMA.$Debug = false` before `initImaApp`.
 
-Configure the environment through `setImaTestingLibraryServerConfig({ environment })` in the Jest config. It defaults to `test` and takes precedence over `IMA_ENV` and `NODE_ENV`, even when `@ima/server` has already been imported.
-
-Version 21 changes this default for existing unit tests as well as integration tests. Configure the environment previously selected through `IMA_ENV` or `NODE_ENV` explicitly when upgrading. Setting `environment: undefined` retains the legacy server environment resolution.
+The IMA environment follows `IMA_ENV`, then `NODE_ENV`; Jest sets `NODE_ENV=test` when it is unset. Select another environment in the test command, for example `IMA_ENV=regression npm run test`.
 
 **Important:** always `await clearImaApp(app)` in `afterAll`/`afterEach`. It unlistens the router, awaits page-manager destruction before unmounting the page, clears the object container, and restores the wrapped timers, animation frames, `$Debug`, `console.assert`, and `window.scrollTo`. A failing step does not skip the remaining ones. It also removes listeners registered through the application's `$Window.bindEventListener`, while preserving React's document-level listeners. Directly registered native listeners must be removed by their owner during teardown. Forgetting cleanup will leak state into subsequent tests.
 
