@@ -170,28 +170,19 @@ setImaTestingLibraryClientConfig({
 
 ### Environment
 
-The IMA environment used by tests is resolved when the JSDOM HTML template is generated, which happens before setup files run. Configure it in the Jest config through `@ima/testing-library/server`. It defaults to `test` and takes precedence over `IMA_ENV` and `NODE_ENV`, even when `@ima/server` has already been imported. While the environment is resolved, `IMA_ENV` is set to the configured name, so `server/config/environment.js` sees the same environment. The original value is restored afterwards.
+The IMA environment follows `IMA_ENV`, then `NODE_ENV`. Jest sets `NODE_ENV=test` when it is unset, so tests use the `test` environment by default. Select another environment in the command that starts the tests:
 
-This is a breaking default change in `@ima/testing-library` 21 for unit tests too. When upgrading, explicitly configure any environment previously selected through `IMA_ENV` or `NODE_ENV`, or set `environment: undefined` to retain legacy shell-based resolution.
-
-```javascript
-// jest.config.js
-const { setImaTestingLibraryServerConfig } = require('@ima/testing-library/server');
-
-setImaTestingLibraryServerConfig({
-  environment: 'test',
-});
-
-module.exports = {
-  preset: '@ima/testing-library',
-};
+```bash
+IMA_ENV=regression npm run test
 ```
+
+Define environment-specific settings under the named keys in `server/config/environment.js`.
 
 ### Migrating from `@ima/plugin-testing-integration`
 
 - Replace imports from `@ima/plugin-testing-integration` with `@ima/testing-library/integration` and remove `@jest-environment node` docblocks; integration suites run in the JSDOM of the Jest preset.
 - Replace the initial `app.oc.get('$Router').route(path)` call with `await routeImaApp(app, path)`, and await `clearImaApp(app)`.
-- Move `protocol`, `host`, `environment`, `processEnvironment`, `applicationFolder`, `beforeCreateIMAServer` and `afterCreateIMAServer` to `setImaTestingLibraryServerConfig` in the Jest config. Move `rootDir` to `setImaTestingLibraryClientConfig`, and `prebootScript`, `extendAppObject` and the boot config overrides to its `integration` key.
+- Move `protocol`, `host`, `processEnvironment`, `applicationFolder`, `beforeCreateIMAServer` and `afterCreateIMAServer` to `setImaTestingLibraryServerConfig` in the Jest config. Select the environment through `IMA_ENV` or `NODE_ENV` in the test command. Move `rootDir` to `setImaTestingLibraryClientConfig`, and `prebootScript`, `extendAppObject` and the boot config overrides to its `integration` key.
 - Map `^app/main$` in the Jest `moduleNameMapper` instead of configuring `appMainPath`. The `TestPageRenderer`, `locale`, `masterElementId` and `pageScriptEvalFn` options were removed.
 - The plugin always loaded the real dictionary, while the testing library uses a fake one by default. Set `useFakeDictionary: false` in the client configuration when assertions depend on translated texts.
 - The plugin replaced `window.fetch` with the Node.js implementation, but JSDOM does not provide `fetch`. Mock `$Http` in `initBindApp`, or install a `fetch` implementation in `prebootScript`.
