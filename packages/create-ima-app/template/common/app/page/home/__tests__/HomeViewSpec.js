@@ -1,7 +1,8 @@
-/**
- * @jest-environment node
- */
-import { initImaApp, clearImaApp } from '@ima/plugin-testing-integration';
+import {
+  initImaApp,
+  routeImaApp,
+  clearImaApp,
+} from '@ima/testing-library/integration';
 
 import cards from '../../../public/cards.json';
 
@@ -24,11 +25,11 @@ describe('Home page', () => {
       },
     });
 
-    await app.oc.get('$Router').route('/');
+    await routeImaApp(app, '/');
   });
 
-  afterEach(() => {
-    clearImaApp(app);
+  afterEach(async () => {
+    await clearImaApp(app);
   });
 
   it('can render component', () => {

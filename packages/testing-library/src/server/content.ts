@@ -1,6 +1,9 @@
+import type { Environment } from '@ima/core';
 import { createIMAServer } from '@ima/server';
 
 import { getImaTestingLibraryServerConfig } from './configuration';
+
+type ProcessEnvironment = (environment: Environment) => Environment;
 
 const serverConfig = getImaTestingLibraryServerConfig();
 
@@ -15,22 +18,25 @@ export async function getIMAResponseContent(): Promise<string> {
 
   await serverConfig.beforeCreateIMAServer();
 
+  const processEnvironment: ProcessEnvironment = currentEnvironment =>
+    serverConfig.processEnvironment({
+      ...currentEnvironment,
+      $Server: {
+        ...currentEnvironment.$Server,
+        concurrency: 0,
+        degradation: {
+          ...currentEnvironment.$Server?.degradation,
+          isSPA: () => true,
+        },
+      },
+      $Debug: true,
+    });
+
   // Prepare serverApp with environment override
   const imaServer = await createIMAServer({
     devUtils,
     applicationFolder: serverConfig.applicationFolder,
-    processEnvironment: currentEnvironment =>
-      serverConfig.processEnvironment({
-        ...currentEnvironment,
-        $Server: {
-          ...currentEnvironment.$Server,
-          concurrency: 0,
-          degradation: {
-            isSPA: () => true,
-          },
-        },
-        $Debug: true,
-      }),
+    processEnvironment,
   });
 
   await serverConfig.afterCreateIMAServer(imaServer);
